@@ -10,3 +10,5 @@ feedback/logs/
 feedback/msmtp.conf
 feedback/.htpasswd
 .DS_Store
+__pycache__/
+*.pyc

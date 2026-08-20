@@ -1,0 +1,66 @@
+/* VLSC 反馈 Widget — 复用 octen.css 设计变量，缺省时用兜底 */
+.vlsc-feedback{
+  --fb-accent:#22d3ee; --fb-bg:#05070c; --fb-card:#111827; --fb-border:#1f2937;
+  --fb-text:#e5e7eb; --fb-muted:#9ca3af; --fb-gold:#fbbf24;
+  --fb-ok:#34d399; --fb-err:#f87171;
+  background:var(--bg-primary,var(--fb-bg));
+  border-top:1px solid var(--border-color,var(--fb-border));
+  color:var(--text-primary,var(--fb-text));
+  padding:3.5rem 1.25rem 5rem;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+}
+.vlsc-fb-container{max-width:1200px;margin:0 auto}
+.vlsc-fb-head h2{margin:0 0 .25rem;font-size:1.5rem;font-weight:700;
+  color:var(--text-primary,var(--fb-text))}
+.vlsc-fb-head p{margin:0 0 1.5rem;font-size:.9rem;color:var(--text-secondary,var(--fb-muted))}
+.vlsc-fb-list{margin-bottom:2rem}
+.vlsc-fb-muted{color:var(--text-secondary,var(--fb-muted));font-size:.9rem}
+.vlsc-fb-thread{list-style:none;margin:0;padding:0}
+.vlsc-fb-thread.vlsc-fb-child{margin-left:1.25rem;padding-left:1rem;
+  border-left:2px solid var(--border-color,var(--fb-border))}
+.vlsc-fb-item{background:var(--bg-secondary,var(--fb-card));
+  border:1px solid var(--border-color,var(--fb-border));border-radius:10px;
+  padding:.9rem 1rem;margin-bottom:.75rem}
+.vlsc-fb-item.vlsc-fb-admin{border-color:var(--fb-gold)}
+.vlsc-fb-meta{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;
+  font-size:.8rem;color:var(--text-secondary,var(--fb-muted))}
+.vlsc-fb-call{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;
+  color:var(--accent,var(--fb-accent));letter-spacing:.02em}
+.vlsc-fb-badge{background:var(--fb-gold);color:#1f2937;font-size:.68rem;font-weight:700;
+  padding:.12rem .45rem;border-radius:999px}
+.vlsc-fb-time{font-size:.75rem}
+.vlsc-fb-body{margin:.45rem 0 .5rem;line-height:1.6;font-size:.92rem;
+  color:var(--text-primary,var(--fb-text));white-space:pre-wrap;word-break:break-word}
+.vlsc-fb-reply{background:none;border:none;color:var(--accent,var(--fb-accent));
+  cursor:pointer;font-size:.78rem;padding:0}
+.vlsc-fb-reply:hover{text-decoration:underline}
+.vlsc-fb-reply-form{margin:.6rem 0 0}
+.vlsc-fb-reply-form textarea,.vlsc-fb-form textarea,.vlsc-fb-form input{
+  width:100%;box-sizing:border-box;background:var(--bg-primary,var(--fb-bg));
+  border:1px solid var(--border-color,var(--fb-border));border-radius:8px;
+  color:var(--text-primary,var(--fb-text));padding:.6rem .75rem;font-size:.9rem;
+  font-family:inherit}
+.vlsc-fb-reply-form textarea{min-height:60px;margin-bottom:.5rem}
+.vlsc-fb-form{background:var(--bg-secondary,var(--fb-card));
+  border:1px solid var(--border-color,var(--fb-border));border-radius:10px;padding:1.1rem}
+.vlsc-fb-row{display:flex;gap:.75rem;align-items:center;margin-bottom:.75rem;flex-wrap:wrap}
+.vlsc-fb-row label{font-size:.85rem;color:var(--text-secondary,var(--fb-muted));white-space:nowrap}
+.vlsc-fb-row input{width:auto;flex:0 0 13rem;text-transform:uppercase}
+.vlsc-fb-form textarea{margin-bottom:.75rem;min-height:90px}
+.vlsc-fb-hp{position:absolute!important;left:-9999px!important;width:1px!important;
+  height:1px!important;opacity:0!important;pointer-events:none!important}
+.vlsc-fb-actions{display:flex;gap:.75rem;align-items:center}
+.vlsc-fb-btn{background:var(--accent,var(--fb-accent));color:#052e16;font-weight:700;
+  border:none;border-radius:8px;padding:.6rem 1.4rem;cursor:pointer;font-size:.9rem;
+  transition:opacity .2s}
+.vlsc-fb-btn:disabled{opacity:.6;cursor:default}
+.vlsc-fb-status{font-size:.85rem}
+.vlsc-fb-status.vlsc-fb-ok{color:var(--fb-ok)}
+.vlsc-fb-status.vlsc-fb-err{color:var(--fb-err)}
+.vlsc-fb-replying{font-size:.8rem;color:var(--text-secondary,var(--fb-muted));
+  background:var(--bg-primary,var(--fb-bg));border:1px dashed var(--border-color,var(--fb-border));
+  border-radius:6px;padding:.4rem .6rem;margin-bottom:.6rem;display:flex;justify-content:space-between}
+@media(max-width:640px){
+  .vlsc-fb-thread.vlsc-fb-child{margin-left:.4rem;padding-left:.6rem}
+  .vlsc-fb-row input{flex:1 1 100%}
+}

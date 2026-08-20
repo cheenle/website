@@ -1,0 +1,12 @@
+feedback/feedback.db
+feedback/feedback.db.bak
+feedback/feedback.db-wal
+feedback/feedback.db-shm
+feedback/clublog_users.json
+feedback/clublog_users.json.tmp
+feedback/clublog-users.zip
+feedback/.tmp-clublog.zip
+feedback/logs/
+feedback/msmtp.conf
+feedback/.htpasswd
+.DS_Store

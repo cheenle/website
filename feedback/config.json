@@ -1,0 +1,10 @@
+{
+  "owner_email": "cheenle@qq.com",
+  "mail_from": "cheenle@qq.com",
+  "owner_callsign": "BG1SB",
+  "rate_ip_per_hour": 5,
+  "rate_call_per_day": 3,
+  "max_message_len": 2000,
+  "listen_host": "127.0.0.1",
+  "listen_port": 8021
+}

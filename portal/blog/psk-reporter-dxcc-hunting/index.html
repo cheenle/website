@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding New DXCC with PSK Reporter: A Data-Driven DX Hunting Workflow — VLSC Blog</title>
+    <meta name="description" content="How BG1SB finds new DXCC entities by watching what nearby stations decode on PSK Reporter — a real workflow with a live example from an evening on 15 meters.">
+    <meta name="keywords" content="DXCC, PSK Reporter, DX hunting, FT8, propagation, amateur radio, HAM, R1FJZ, DXing">
+    <meta name="author" content="BG1SB">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Finding New DXCC with PSK Reporter: A Data-Driven DX Hunting Workflow">
+    <meta property="og:description" content="Watch what stations a few hundred kilometers away are decoding, and you'll know exactly when a rare DXCC is workable from your QTH. A real evening session included.">
+    <meta property="og:url" content="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/">
+    <meta property="og:site_name" content="VLSC Projects">
+    <link rel="canonical" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/octen.css?v=5">
+    <link rel="stylesheet" href="../../css/blog.css?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Finding New DXCC with PSK Reporter: A Data-Driven DX Hunting Workflow",
+      "description": "How BG1SB finds new DXCC entities by watching what nearby stations decode on PSK Reporter — a real workflow with a live example from an evening on 15 meters.",
+      "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+      "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+      "datePublished": "2026-08-12",
+      "dateModified": "2026-08-12",
+      "keywords": "DXCC, PSK Reporter, DX hunting, FT8, propagation, amateur radio",
+      "articleSection": "Field Notes",
+      "mainEntityOfPage": "https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/"
+    }
+    </script>
+</head>
+<body data-site="portal">
+
+<article class="blog-article">
+
+    <nav class="blog-breadcrumb">
+        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span class="blog-cat">Field Notes</span> › Finding new DXCC with PSK Reporter
+    </nav>
+
+    <header class="blog-header">
+        <div class="blog-cat-badge"><i class="fas fa-globe-asia"></i> Field Notes</div>
+        <h1>Finding New DXCC with PSK Reporter: A Data-Driven DX Hunting Workflow</h1>
+        <p class="blog-subtitle">Stop calling into the void. Watch what stations a few hundred kilometers away are decoding, and you'll know exactly when a rare one is workable from your QTH.</p>
+        <div class="blog-meta">
+            By BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">Aug 12, 2026</time> &nbsp;·&nbsp; ~7 min read
+        </div>
+        <ul class="blog-tags">
+            <li><a href="/blog/">#dxcc</a></li>
+            <li><a href="/blog/">#psk-reporter</a></li>
+            <li><a href="/blog/">#ft8</a></li>
+            <li><a href="/blog/">#propagation</a></li>
+            <li><a href="/blog/">#dxing</a></li>
+        </ul>
+    </header>
+
+    <nav class="blog-toc" id="blog-toc" aria-label="Table of contents"></nav>
+
+    <div class="blog-content">
+
+        <p>DX hunting has a classic loop: watch the cluster, hear <em>DX</em> CQ'd by somebody, tune in, call, call again, give up. It works, but it's blind. You're gambling on propagation you can't see. Over the last year I've switched to a different signal that costs nothing and is far more reliable: <strong>what stations near me are decoding right now.</strong> If a station 500&nbsp;km away is decoding Franz Josef Land on 15 meters, the path from my QTH to the high Arctic is open too — at this exact moment.</p>
+
+        <p>This article is the workflow I actually use, built around a small self-hosted tool that turns <a href="https://pskreporter.info" target="_blank" rel="noopener">PSK Reporter</a>'s public spot data into a short list of DXCC entities I haven't worked yet but realistically can, right now.</p>
+
+        <h2 id="oracle">Your neighbors are a propagation oracle</h2>
+
+        <p>PSK Reporter already publishes millions of decoded-spot records a day: station A decoded callsign B on frequency F with signal strength S at time T. The data is a living map of who is hearing whom across every band, worldwide.</p>
+
+        <p>The trick is that <strong>propagation is regional</strong>. If a station in my propagation zone decodes a DXCC entity, the same opening is almost certainly reaching my antenna too. This is the principle behind propagation beacons — except instead of one beacon, I have thousands of nearby operators, each reporting in real time. The hard part is never the data; it's filtering it down to: <em>"which DXCC do people around me hear that I still need?"</em></p>
+
+        <h2 id="tool">A personal PSK Reporter analysis dashboard</h2>
+
+        <p>To answer that question continuously, I run a small dashboard that ingests PSK Reporter spots into a database, keeps my worked-DXCC list, and recomputes a recommendation set every few minutes. It's the kind of thing that started as a script and grew into a proper page — full-data explorer, a map of nearby spots, and a DXCC recommendation view.</p>
+
+        <p>It runs at <code>radio.vlsc.net</code> and knows my station: Beijing, grid <code>ON80da</code>. Everything downstream is relative to that QTH.</p>
+
+        <h2 id="how">How the recommendation works</h2>
+
+        <p>Under the hood it's a single question, restated as a query:</p>
+
+        <blockquote>
+            <p>Within the last N hours, which DXCC entities were decoded by stations within 1000&nbsp;km of me — that I have not yet confirmed in my log?</p>
+        </blockquote>
+
+        <p>Three parameters control the answer, and all three are knobs I've learned to respect:</p>
+
+        <ul>
+            <li><strong>The time window.</strong> Short windows (1–2 hours) show only what's happening now. Long windows (8 hours) catch entities that were briefly open and may be gone. I usually start with 2 hours for action, 8 hours for planning.</li>
+            <li><strong>The radius.</strong> 1000&nbsp;km is a good default: close enough that propagation correlates, wide enough that there are stations to watch. Widen it and you get more candidates but weaker correlation to your own path.</li>
+            <li><strong>The worked list.</strong> This is what turns a wall of spots into a shortlist. Mine has 163 confirmed entities, and anything not on it is a candidate.</li>
+        </ul>
+
+        <h2 id="reading">Reading the table</h2>
+
+        <p>The recommendation view is a small table — DXCC, band, spot count, distinct calls, average SNR, most recent time, and a status flag. Two columns matter more than the rest:</p>
+
+        <ul>
+            <li><strong>🆕 First seen.</strong> The tool tags an entity the first time it ever appears in my analysis window. That flag is the single highest-value signal in the whole app: rare entities almost always surface first as one quiet spot from one station. When it shows up, drop what you're doing.</li>
+            <li><strong>Most recent time.</strong> Freshness is everything. A spot from twenty minutes ago means the station is probably still on. A spot from eight hours ago is history.</li>
+        </ul>
+
+        <p>Spot count and distinct calls tell you how <em>solid</em> an opening is: five spots from three different German stations means a healthy path; one spot from one station means a fragile but possibly precious one.</p>
+
+        <h2 id="session">A real evening session</h2>
+
+        <p>Here's a live example from tonight. The 2-hour window returned two candidates:</p>
+
+        <table>
+            <thead>
+                <tr><th>DXCC</th><th>Band</th><th>Spots</th><th>Calls</th><th>SNR</th><th>Last heard</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Franz Josef Land (R1FJZ)</td><td>15 m</td><td>1</td><td>1</td><td>−16 dB</td><td>18:49 local</td><td>🆕 First seen</td></tr>
+                <tr><td>Fed. Rep. of Germany (DL)</td><td>15 m</td><td>5</td><td>3</td><td>−14 dB</td><td>18:44 local</td><td>Already appeared</td></tr>
+            </tbody>
+        </table>
+
+        <p>The headline is <strong>Franz Josef Land</strong> — an Arctic entity I've never worked, flagged <em>first seen</em>, one spot, one call, on 15 meters, heard at 18:49 local. A station near me was decoding it twenty minutes before I looked. The Arctic path was open. That's the moment the tool exists for: not "someday workable," but <em>workable right now.</em></p>
+
+        <p>Germany was the volume play — five spots from three calls, a solid but ordinary path to a common entity that still counts toward the DXCC total. And earlier, before it slipped out of the 2-hour window, <strong>Dodecanese</strong> had shown up on 20 meters — a reminder that keeping a couple of windows open catches the ones you'd otherwise miss.</p>
+
+        <p>Behind it all, the propagation backdrop: <strong>F10.7 at 200</strong> (high solar flux — the high bands are alive), <strong>Kp 1.7</strong> (a quiet geomagnetic field), Bz positive. That combination is exactly why the action was on 15 meters rather than 40.</p>
+
+        <h2 id="action">The action sequence</h2>
+
+        <p>The tool narrows the world down to a shortlist; the QSO still happens at the radio. When a candidate looks fresh, my sequence is:</p>
+
+        <ol>
+            <li><strong>Get the callsign.</strong> The recommendation is at DXCC granularity. I open the live map or full-data view filtered to the last few hours to pull the actual callsigns and frequencies.</li>
+            <li><strong>Trust the band.</strong> If the tool says 15 m, I go to 15 m. The band it was decoded on is the band the path supports.</li>
+            <li><strong>Tune and decode.</strong> Set the frequency, let the decoder run, and the first time the call appears, answer. With FT8, being already tuned when the station transmits is half the battle.</li>
+            <li><strong>Log it.</strong> The confirmation goes into the log, which is what makes the worked list — and therefore the whole recommendation engine — accurate.</li>
+        </ol>
+
+        <p>None of this is magic. The tool just makes sure I'm at the right frequency at the right time, and tells me which entity to chase in the first place.</p>
+
+        <h2 id="lessons">What I've learned</h2>
+
+        <ul>
+            <li><strong>First seen beats volume.</strong> One fresh spot from a rare entity is worth more than ten stale spots from a common country.</li>
+            <li><strong>Freshness beats everything.</strong> A single spot from the last half hour is actionable; a burst from last night is a memory.</li>
+            <li><strong>The radius is a patience dial.</strong> Wide radius, more candidates, worse correlation. Start tight, widen when quiet.</li>
+            <li><strong>Your log is the engine.</strong> The recommendations are only as good as the worked list. Logging discipline is what makes the whole loop converge.</li>
+        </ul>
+
+        <h2 id="field-notes">Field notes</h2>
+
+        <p>Tonight's session ended the way most good ones do: a short list, one clear priority, and the clock already past 21:00 local. The 15-meter path to the Arctic that had been open at 18:49 was fading by the time I had the rig warmed. That's the honest part of this workflow — the tool tells you the window exists, but it doesn't hold it open for you. The value isn't in the recommendation itself; it's in being ready when the flag goes up: tuned, decoding, and pointed at the right band.</p>
+
+    </div>
+
+    <footer class="blog-footer">
+        <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+                <h3>BG1SB</h3>
+                <p>Amateur radio operator and the builder of the VLSC open-source remote-control ecosystem (MRRC, MRRC FT-710, SunMRRC, SunsdrMobile, EFHW). <a href="https://github.com/cheenle" target="_blank" rel="noopener" style="color:var(--accent);">GitHub</a></p>
+            </div>
+        </div>
+        <div class="blog-related">
+            <h3>Related articles</h3>
+            <ul>
+                <li><a href="/blog/opus-vs-pcm-remote-audio/">Opus vs PCM for HF Remote Audio</a></li>
+                <li><a href="/blog/ft710-usb-remote-control/">Remote-Controlling a Yaesu FT-710 with Just a USB Cable</a></li>
+            </ul>
+        </div>
+        <div class="blog-prevnext">
+            <a href="/blog/opus-vs-pcm-remote-audio/"><i class="fas fa-arrow-left"></i> Prev: Opus vs PCM</a>
+            <a href="/blog/ft710-usb-remote-control/">Next: FT-710 remote control <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </footer>
+
+</article>
+
+<script>
+(function () {
+  var toc = document.getElementById('blog-toc');
+  var content = document.querySelector('.blog-content');
+  if (!toc || !content) return;
+  var heads = content.querySelectorAll('h2, h3');
+  if (!heads.length) return;
+  var html = '<div class="blog-toc-title">Table of contents</div><ol>';
+  heads.forEach(function (h, i) {
+    var id = h.id || ('sec-' + i);
+    h.id = id;
+    html += '<li class="' + (h.tagName === 'H3' ? 'toc-h3' : '') + '"><a href="#' + id + '">' + h.textContent + '</a></li>';
+  });
+  html += '</ol>';
+  toc.innerHTML = html;
+})();
+</script>
+
+<script src="../../js/global-nav.js?v=5" defer data-gn="1"></script>
+</body>
+</html>

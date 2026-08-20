@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 — VLSC 项目</title>
+    <meta name="description" content="关于 VLSC 项目：由 BG1SB 构建的开源业余无线电远程控制生态。我们的故事、各项目与工程理念。">
+    <meta name="keywords" content="VLSC, BG1SB, 业余无线电, HAM, 开源, 远程电台控制, MRRC, SunMRRC, SunsdrMobile, EFHW">
+    <meta name="author" content="BG1SB">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="关于我们 — VLSC 项目">
+    <meta property="og:url" content="https://www.vlsc.net/zh/about.html">
+    <meta property="og:site_name" content="VLSC Projects">
+    <link rel="canonical" href="https://www.vlsc.net/zh/about.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/octen.css?v=5">
+    <link rel="stylesheet" href="../css/sunsdrmobile.css?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-hero { padding: calc(var(--gn-h) + var(--nav-h) + 72px) 2rem 72px; text-align: center; }
+        .page-hero h1 { font-size: 2.75rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 16px; }
+        .page-hero p { color: var(--text-secondary); font-size: 1.15rem; max-width: 700px; margin: 0 auto; line-height: 1.7; }
+        .tp-section { max-width: 820px; margin: 0 auto; padding: 0 2rem 64px; }
+        .tp-section h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin: 56px 0 18px; }
+        .tp-section h2::before { content: ''; display: block; width: 36px; height: 3px; border-radius: 2px; background: var(--accent); margin-bottom: 14px; }
+        .tp-section p, .tp-section li { color: var(--text-secondary); line-height: 1.85; font-size: 0.98rem; }
+        .tp-section ul { padding-left: 20px; }
+        .tp-section li { margin-bottom: 10px; }
+        .tp-section li strong { color: var(--text-primary); }
+        .tp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+        .tp-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+        .tp-card h3 { font-size: 1.05rem; font-weight: 600; margin: 0 0 8px; }
+        .tp-card p { margin: 0; font-size: 0.9rem; }
+        .tp-callout { border-left: 3px solid var(--accent); background: var(--accent-glow); padding: 16px 20px; border-radius: 0 10px 10px 0; margin: 28px 0; color: var(--text-secondary); line-height: 1.7; }
+        @media (max-width: 768px) { .tp-grid { grid-template-columns: 1fr; } .page-hero { padding-top: calc(var(--gn-h) + var(--nav-h) + 40px); } }
+    </style>
+</head>
+<body data-site="portal">
+
+<nav class="navbar">
+    <div class="container navbar-content">
+        <a href="../index.html" class="logo">
+            <span class="logo-icon"><i class="fas fa-satellite-dish"></i></span>
+            <span>VLSC<span style="color: var(--accent);">·</span>项目</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="../index.html#selector">项目选择</a></li>
+            <li><a href="../index.html#projects">项目</a></li>
+            <li><a href="../index.html#ecosystem">生态系统</a></li>
+            <li><a href="/blog/">博客</a></li>
+            <li><a href="/zh/fde.html">FDE</a></li>
+            <li><a href="https://github.com/cheenle" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub
+            </a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="../about.html" class="lang-btn">English</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+        </div>
+    </div>
+</nav>
+
+<header class="page-hero">
+    <h1>关于 VLSC 项目</h1>
+    <p>一个开源的业余无线电远程控制工具生态，由一位想在任何地方操控电台的 HAM 公开构建。</p>
+</header>
+
+<section class="tp-section">
+    <h2>操作者</h2>
+    <p>VLSC 项目由 <strong>BG1SB</strong> 业余无线电爱好者构建与维护。呼号与你在空中和 GitHub 上看到的是同一个人（<a href="https://github.com/cheenle" target="_blank" rel="noopener" style="color:var(--accent);">github.com/cheenle</a>）。</p>
+    <p>起初只是个人的需求——从另一个房间、乃至另一座城市可靠地控制 HF 电台——逐渐成长为一个开源项目家族。它们共享同一个目标：<strong>让现代电台远程控制成为每个 HAM 都能自己运行、阅读、修改的东西</strong>。</p>
+    <p>工程风格务实且文档化。每个主要子系统都有软件设计文档（SDD），工作流程遵循前置部署工程（FDE）方法论：先构建真正在野外被使用的东西，再将其形式化。没有专有黑盒，没有"请相信我"的硬件。</p>
+
+    <h2>VLSC 为什么存在</h2>
+    <p>商用 HF 电台远程控制方案往往封闭、昂贵，且绑定单一厂商的应用。而电台硬件本身的能力远超大多数方案所暴露出来的部分。VLSC 要回答三个问题：</p>
+    <ul>
+        <li><strong>能否不依赖厂商网卡就通过网络控制现代电台？</strong> —— 能：FT-710 项目直接用一根 USB 线读取电台内部 FT4222 SPI 频谱接口。</li>
+        <li><strong>能否把 SunSDR2 DX 这样的 SDR 提供给任意浏览器和原生 App？</strong> —— 能：SunMRRC + SunsdrMobile 是一对基于 WebSocket 的客户端-服务端组合。</li>
+        <li><strong>天线调谐器能否廉价、自主、且由网络驱动？</strong> —— 能：EFHW 调谐器是一台约 430 元的 ESP32-S3 设备，通过 WebSocket 读取 SWR。</li>
+    </ul>
+
+    <h2>项目一览</h2>
+    <div class="tp-grid">
+        <div class="tp-card"><h3><a href="/mrrc/" style="color:var(--accent);">MRRC</a></h3><p>通过 Hamlib/rigctld 实现对任意电台的通用 HF 远程控制。</p></div>
+        <div class="tp-card"><h3><a href="/mrrc_ft710/" style="color:var(--accent);">MRRC FT-710</a></h3><p>基于 USB 的 Yaesu FT-710 软件 SCU-LAN10 替代方案。</p></div>
+        <div class="tp-card"><h3><a href="/sunmrrc/" style="color:var(--accent);">SunMRRC</a></h3><p>SunSDR2 DX 远程服务器，含 IQ 解调与双编解码音频链路。</p></div>
+        <div class="tp-card"><h3><a href="/sunsdrmobile/" style="color:var(--accent);">SunsdrMobile</a></h3><p>基于 SwiftUI 的 SunSDR2 DX 原生 iOS 客户端。</p></div>
+        <div class="tp-card"><h3><a href="/efhw/" style="color:var(--accent);">EFHW</a></h3><p>针对 EFHW 天线的 ESP32-S3 伺服驱动自动调谐器。</p></div>
+        <div class="tp-card"><h3><a href="/mrrc_ft8/" style="color:var(--accent);">MRRC-FT8</a></h3><p>无头 FT8/FT4 解码与 Spot 服务器。</p></div>
+    </div>
+
+    <h2>社区与联系</h2>
+    <p>所有项目在 GPLv3/MIT 许可下开源。报告 bug、提问或提想法的最佳途径是 GitHub 仓库。完整的联系方式见<a href="../contact.html" style="color:var(--accent);">联系方式</a>页。</p>
+
+    <div class="tp-callout">
+        VLSC 项目是业余爱好者的努力，而非公司。这里的一切都因为它在真实电台、真实电台室里能用而被构建——也正因为其他 HAM 也应该能做到同样的事而被分享。
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>VLSC 项目</h4>
+                <p>开源业余无线电远程控制工具。<br>由 <a href="https://github.com/cheenle" style="color:var(--accent);">BG1SB</a> 构建 · 部署于 <code style="background:var(--bg-tertiary);padding:1px 6px;border-radius:3px;">www.vlsc.net</code></p>
+            </div>
+            <div class="footer-section">
+                <h4>项目</h4>
+                <ul>
+                    <li><a href="/mrrc/">MRRC</a> — 通用 HF 远程</li>
+                    <li><a href="/mrrc_ft710/">MRRC FT-710</a> — FT-710 远程</li>
+                    <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX 服务器</li>
+                    <li><a href="/sunsdrmobile/">SunsdrMobile</a> — iOS 客户端</li>
+                    <li><a href="/efhw/">EFHW</a> — 天线自动调谐器</li>
+                    <li><a href="/mrrc_ft8/">MRRC-FT8</a> — 无头 FT8/FT4 服务器</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>站点</h4>
+                <ul>
+                    <li><a href="/blog/">博客</a></li>
+                    <li><a href="../about.html">关于</a></li>
+                    <li><a href="../contact.html">联系方式</a></li>
+                    <li><a href="../privacy.html">隐私政策</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VLSC 项目 · GPLv3 与 MIT 许可下开源</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+function toggleMobileMenu() { document.querySelector('.nav-links').classList.toggle('active'); }
+</script>
+<script src="../js/global-nav.js?v=5" defer data-gn="1"></script>
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EFHW Projects — End-Fed Half-Wave antenna research and automation. ESP32-S3 Fuchs ATU V3.0 for continuous servo tuning, bias-tee coaxial powered, WiFi WebSocket control, 100W PEP, 40m-10m.">
+    <meta name="keywords" content="EFHW, End-Fed Half-Wave, antenna tuner, Fuchs ATU, ESP32-S3, HAM Radio, Amateur Radio, open source hardware">
+    <meta name="author" content="BG1SB">
+    <meta name="theme-color" content="#0a0e14">
+
+    <title>EFHW Projects — Antenna Research & Auto-Tuning Platform</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/octen.css?v=4">
+    <link rel="stylesheet" href="css/efhw.css?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>📡</text></svg>">
+</head>
+<body data-site="efhw">
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container navbar-content">
+        <a href="#" class="logo">
+            <span class="logo-icon"><i class="fas fa-broadcast-tower"></i></span>
+            <span>EFHW<span style="color: var(--accent);">Projects</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#start">Quick Start</a></li>
+            <li><a href="#specs">Specs</a></li>
+            <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub
+            </a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="zh/index.html" class="lang-btn">中文</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-microchip"></i>
+            <span>V3.0 · Open Source Hardware</span>
+        </div>
+        <h1 class="hero-title">
+            EFHW Antenna<br>
+            <span class="gradient">Auto-Tuning Platform</span>
+        </h1>
+        <p class="hero-subtitle">
+            ESP32-S3 continuous servo tuning adapter for End-Fed Half-Wave antennas.
+            Outdoor, bias-tee coaxial powered, WiFi WebSocket controlled, 100W PEP, 40m–10m full band coverage.
+            Deeply integrated with the MRRC remote radio ecosystem.
+        </p>
+        <div class="hero-actions">
+            <a href="https://github.com/cheenle/efhw-knowledge" class="btn btn-primary btn-large" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="#features" class="btn btn-secondary btn-large">
+                <i class="fas fa-arrow-down"></i> Explore Features
+            </a>
+            <a href="/mrrc/efhw/" class="btn btn-secondary btn-large">
+                <i class="fas fa-book-open"></i> Deep Research
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-value">&lt;10s</span>
+                <span class="stat-label">Full Scan Tune</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">100W</span>
+                <span class="stat-label">PEP SSB/CW</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">40m–10m</span>
+                <span class="stat-label">Band Coverage</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">~¥430</span>
+                <span class="stat-label">BOM Cost</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Features</span>
+            <h2 class="section-title">Fuchs ATU V3.0 — Servo-Driven Precision</h2>
+            <p class="section-subtitle">The third-generation auto-tuner replaces relay banks with continuous servo tuning, delegates SWR sensing to MRRC/ATR1000, and adds WiFi for full remote control — all while reducing failure points from 9 to 2.</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Servo -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-cog"></i></div>
+                <h3>Continuous Servo Tuning</h3>
+                <p>MG996R servo motor driven by ESP32-S3 LEDC PWM at 50Hz. Air variable capacitor (10–500pF) provides precise, continuous capacitance — no discrete relay steps, no dead zones.</p>
+                <ul>
+                    <li>Two-phase scan: 37 coarse steps (5°) + 30 fine steps (1°)</li>
+                    <li>Sub-1s cache recall for known frequencies</li>
+                    <li>Full sweep &lt;10 seconds worst case</li>
+                </ul>
+            </div>
+
+            <!-- Core -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-microchip"></i></div>
+                <h3>ESP32-S3 Core</h3>
+                <p>240MHz dual-core Xtensa LX7 with 16MB flash. Five FreeRTOS tasks orchestrate tuning, WiFi communication, health monitoring, NVS persistence, and servo control in parallel.</p>
+                <ul>
+                    <li>ESP-IDF v5.x C firmware, ~2800 lines</li>
+                    <li>5 FreeRTOS tasks + cJSON protocol parsing</li>
+                    <li>NVS learning cache for frequency→servo mapping</li>
+                </ul>
+            </div>
+
+            <!-- Power -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-bolt"></i></div>
+                <h3>Bias-T Coaxial Power</h3>
+                <p>13.8V DC rides on the same coax carrying RF and control data. No separate power cable to the outdoor unit — a single RG-58 or equivalent coax does everything.</p>
+                <ul>
+                    <li>Indoor bias-tee unit injects DC onto coax</li>
+                    <li>Outdoor IP66 aluminum enclosure</li>
+                    <li>Single coax: RF + DC power + WiFi data</li>
+                </ul>
+            </div>
+
+            <!-- Safety -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-shield-alt"></i></div>
+                <h3>Safety Systems</h3>
+                <p>Multi-layer protection: overpower abort at 120W threshold, high SWR protection via remote ATR1000 sensing, 2.2MΩ ESD bleed resistor, and continuous health monitor with watchdog timer.</p>
+                <ul>
+                    <li>Overpower detection & abort (&gt;120W threshold)</li>
+                    <li>High SWR auto-abort + ATR1000 feedback loop</li>
+                    <li>2.2MΩ ESD bleed + watchdog health monitor</li>
+                </ul>
+            </div>
+
+            <!-- Fuchs Circuit -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-wave-square"></i></div>
+                <h3>Fuchs LC Coupler</h3>
+                <p>Proven parallel LC resonant circuit design. T200-6 Type 6 carbonyl iron toroid (μ=8) with 2:14 turns ratio for 49:1 impedance transformation. Continuous capacitor replaces fixed/switched banks.</p>
+                <ul>
+                    <li>T200-6 toroid — μ=8 carbonyl iron, low loss</li>
+                    <li>2:14 turns → 49:1 impedance ratio</li>
+                    <li>10–500pF air variable capacitor, servo-driven</li>
+                </ul>
+            </div>
+
+            <!-- Integration -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-network-wired"></i></div>
+                <h3>MRRC Ecosystem Integration</h3>
+                <p>WebSocket protocol connects directly to MRRC server. SWR measurement offloaded to ATR1000 for precision. MRRC Web UI provides full ATU control panel — manual tune, band scan, cache management.</p>
+                <ul>
+                    <li>WiFi 2.4GHz WebSocket to MRRC server</li>
+                    <li>ATR1000 SWR sensing — no on-board SWR bridge</li>
+                    <li>MRRC Web UI ATU control panel</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Architecture -->
+<section class="section" id="architecture" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Architecture</span>
+            <h2 class="section-title">System Design</h2>
+            <p class="section-subtitle">Three physical planes — indoor shack, outdoor ATU, and antenna — connected by a single coaxial cable.</p>
+        </div>
+
+        <div class="arch-diagram">
+<svg viewBox="0 0 880 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gBoxIndoor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(16,185,129,0.08)"/><stop offset="100%" stop-color="rgba(16,185,129,0.02)"/>
+    </linearGradient>
+    <linearGradient id="gBoxATU" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(93,173,226,0.08)"/><stop offset="100%" stop-color="rgba(93,173,226,0.02)"/>
+    </linearGradient>
+    <linearGradient id="gBoxAnt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(46,204,113,0.08)"/><stop offset="100%" stop-color="rgba(46,204,113,0.02)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Box 1: Indoor Shack -->
+  <rect x="10" y="15" width="200" height="110" rx="14" fill="url(#gBoxIndoor)" stroke="rgba(16,185,129,0.35)" stroke-width="1.5"/>
+  <text x="110" y="44" text-anchor="middle" fill="#10b981" font-size="15" font-weight="700" font-family="inherit">Indoor Shack</text>
+  <text x="110" y="66" text-anchor="middle" fill="#8899aa" font-size="12" font-family="inherit">MRRC Server + Bias-T</text>
+  <text x="110" y="88" text-anchor="middle" fill="#5c6370" font-size="11" font-family="inherit">ATR1000 SWR Sensing</text>
+  <text x="110" y="107" text-anchor="middle" fill="#5c6370" font-size="11" font-family="inherit">WebSocket Control</text>
+
+  <!-- Box 2: Outdoor ATU -->
+  <rect x="410" y="15" width="240" height="110" rx="14" fill="url(#gBoxATU)" stroke="rgba(93,173,226,0.35)" stroke-width="1.5"/>
+  <text x="530" y="44" text-anchor="middle" fill="#5dade2" font-size="15" font-weight="700" font-family="inherit">EFHW Fuchs ATU V3.0</text>
+  <text x="530" y="66" text-anchor="middle" fill="#8899aa" font-size="12" font-family="inherit">ESP32-S3 · MG996R Servo</text>
+  <text x="530" y="88" text-anchor="middle" fill="#5c6370" font-size="11" font-family="inherit">T200-6 2:14 · 10-500pF Air Cap</text>
+  <text x="530" y="107" text-anchor="middle" fill="#5c6370" font-size="11" font-family="inherit">IP66 Aluminum Enclosure</text>
+
+  <!-- Box 3: Antenna -->
+  <rect x="710" y="60" width="160" height="70" rx="14" fill="url(#gBoxAnt)" stroke="rgba(46,204,113,0.35)" stroke-width="1.5"/>
+  <text x="790" y="84" text-anchor="middle" fill="#2ecc71" font-size="14" font-weight="700" font-family="inherit">EFHW Antenna</text>
+  <text x="790" y="104" text-anchor="middle" fill="#8899aa" font-size="11" font-family="inherit">~20m Wire Radiator</text>
+  <text x="790" y="120" text-anchor="middle" fill="#5c6370" font-size="10" font-family="inherit">40m-10m Multiband</text>
+
+  <!-- Arrow Indoor → ATU (Coax) -->
+  <line x1="210" y1="70" x2="410" y2="70" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
+  <polygon points="402,64 416,70 402,76" fill="rgba(16,185,129,0.5)"/>
+  <polygon points="218,64 204,70 218,76" fill="rgba(16,185,129,0.5)"/>
+  <text x="310" y="62" text-anchor="middle" fill="#10b981" font-size="11" font-weight="600" font-family="inherit">Single Coax</text>
+  <text x="310" y="82" text-anchor="middle" fill="#8899aa" font-size="10" font-family="inherit">RF + DC + WiFi Control</text>
+
+  <!-- Arrow ATU → Antenna (RF) -->
+  <path d="M 650 70 L 650 95 L 710 95" stroke="rgba(93,173,226,0.35)" stroke-width="1.5" fill="none"/>
+  <polygon points="718,91 710,95 718,99" fill="rgba(93,173,226,0.45)"/>
+  <text x="670" y="135" text-anchor="middle" fill="#5dade2" font-size="10" font-weight="600" font-family="inherit">RF 50Ω</text>
+
+  <!-- Labels -->
+  <g transform="translate(10,145)">
+    <rect x="0" y="0" width="185" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    <text x="8" y="15" fill="#10b981" font-size="9" font-family="monospace">WS:// MRRC Server</text>
+    <text x="8" y="29" fill="#8899aa" font-size="9" font-family="inherit">Command · Status · Cache</text>
+  </g>
+  <g transform="translate(205,145)">
+    <rect x="0" y="0" width="185" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    <text x="8" y="15" fill="#5dade2" font-size="9" font-family="monospace">ESP32-S3 FreeRTOS</text>
+    <text x="8" y="29" fill="#8899aa" font-size="9" font-family="inherit">5 Tasks · NVS · LEDC PWM</text>
+  </g>
+  <g transform="translate(400,145)">
+    <rect x="0" y="0" width="185" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    <text x="8" y="15" fill="#2ecc71" font-size="9" font-family="monospace">Fuchs LC Network</text>
+    <text x="8" y="29" fill="#8899aa" font-size="9" font-family="inherit">T200-6 · 10-500pF · 49:1</text>
+  </g>
+  <g transform="translate(595,145)">
+    <rect x="0" y="0" width="185" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    <text x="8" y="15" fill="#e67e22" font-size="9" font-family="monospace">Safety Boundary</text>
+    <text x="8" y="29" fill="#8899aa" font-size="9" font-family="inherit">Overpower · Hi-SWR · ESD · WDT</text>
+  </g>
+</svg>
+        </div>
+
+        <div class="arch-grid">
+            <div class="arch-card">
+                <div class="label">Command & Control</div>
+                <div class="endpoint">WS:// MRRC</div>
+                <div class="dir">Bidirectional</div>
+                <div class="payload">Tune start/stop, servo position, SWR reads, cache ops</div>
+            </div>
+            <div class="arch-card">
+                <div class="label">Tuning Engine</div>
+                <div class="endpoint">Two-Phase Scan</div>
+                <div class="dir">Internal</div>
+                <div class="payload">37-pt coarse (5°) → 30-pt fine (1°) → best match</div>
+            </div>
+            <div class="arch-card">
+                <div class="label">Servo Control</div>
+                <div class="endpoint">LEDC PWM 50Hz</div>
+                <div class="dir">ESP32 → MG996R</div>
+                <div class="payload">500–2500μs pulse width, 0–180° range</div>
+            </div>
+            <div class="arch-card">
+                <div class="label">Health Monitor</div>
+                <div class="endpoint">Watchdog + Telemetry</div>
+                <div class="dir">Periodic</div>
+                <div class="payload">Heartbeat, servo stall detect, WiFi RSSI, uptime</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Research -->
+<section class="section" id="research" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Knowledge Base</span>
+            <h2 class="section-title">EFHW Deep Research</h2>
+            <p class="section-subtitle">Comprehensive antenna theory, transformer design, core material analysis, and practical build guides — 17 chapters of engineering research.</p>
+        </div>
+
+        <div class="perf-grid">
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-magnet"></i></div>
+                <div class="metric-label">Transformer Design<br><small>49:1 vs 64:1, core selection, winding methods</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-chart-line"></i></div>
+                <div class="metric-label">VNA Measurements<br><small>Real performance data, PA3HHO validation</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-microscope"></i></div>
+                <div class="metric-label">Core Materials<br><small>DMEGC Ni-Zn vs FT240-43 comparison</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-project-diagram"></i></div>
+                <div class="metric-label">TX/RX Split<br><small>PA9X architecture for noise isolation</small></div>
+            </div>
+        </div>
+
+        <div style="text-align:center;margin-top:2.5rem;">
+            <a href="/mrrc/efhw/" class="btn btn-primary btn-large">
+                <i class="fas fa-book-open"></i> Read the Full Deep Research
+            </a>
+            <p style="color:var(--text-muted);margin-top:1rem;font-size:0.85rem;">
+                Also available: <a href="/mrrc/efhw/t200-2-guide.html" style="color:var(--accent);">T200-2 Engineering Guide</a> ·
+                <a href="/mrrc/efhw/auto-efhw-tuner-architecture-premium-v2.html" style="color:var(--accent);">ATU Architecture (Premium)</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Design Evolution -->
+<section class="section" id="evolution" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Design Evolution</span>
+            <h2 class="section-title">Three Generations of Refinement</h2>
+            <p class="section-subtitle">Each iteration reduced complexity while adding capability — from 9 failure points down to 2.</p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>V1.0 (Archived)</th>
+                    <th>V2.0 (Archived)</th>
+                    <th>V3.0 (Current)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>MCU</strong></td>
+                    <td>PIC16F1938</td>
+                    <td>STM32F103</td>
+                    <td>ESP32-S3</td>
+                </tr>
+                <tr>
+                    <td><strong>Toroid</strong></td>
+                    <td>T200-2 ×2</td>
+                    <td>T200-2 ×2</td>
+                    <td>T200-6 ×1</td>
+                </tr>
+                <tr>
+                    <td><strong>Capacitor</strong></td>
+                    <td>7 relays / 128 steps</td>
+                    <td>7 relays / 128 steps</td>
+                    <td>Servo continuous 10–500pF</td>
+                </tr>
+                <tr>
+                    <td><strong>SWR Sensing</strong></td>
+                    <td>On-board Tandem Match</td>
+                    <td>On-board Tandem Match</td>
+                    <td>Remote ATR1000</td>
+                </tr>
+                <tr>
+                    <td><strong>Communication</strong></td>
+                    <td>Serial UART</td>
+                    <td>Serial UART</td>
+                    <td>WiFi WebSocket</td>
+                </tr>
+                <tr>
+                    <td><strong>Failure Points</strong></td>
+                    <td>9</td>
+                    <td>9</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td><strong>BOM Cost</strong></td>
+                    <td>~¥375</td>
+                    <td>~¥390</td>
+                    <td>~¥430</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Quick Start -->
+<section class="section" id="start" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Quick Start</span>
+            <h2 class="section-title">Build Your EFHW Auto-Tuner</h2>
+            <p class="section-subtitle">Open source hardware and firmware — build, flash, deploy, and tune in four steps.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <h4><i class="fas fa-shopping-cart"></i> Source Components</h4>
+                <p>Order parts from the BOM — all available on Taobao/JLC. Total cost ~¥430.</p>
+                <code>BOM: T200-6 toroid, ESP32-S3-WROOM-1, MG996R servo, air variable cap 10-500pF, IP66 enclosure</code>
+            </div>
+            <div class="step">
+                <h4><i class="fas fa-microchip"></i> Flash Firmware</h4>
+                <p>Clone the repo, configure WiFi credentials, build and flash with ESP-IDF v5.x.</p>
+                <code>git clone https://github.com/cheenle/efhw-knowledge && cd auto-efhw-tuner/firmware-esp32 && idf.py build flash</code>
+            </div>
+            <div class="step">
+                <h4><i class="fas fa-plug"></i> Connect & Configure</h4>
+                <p>Connect coax from your shack bias-tee to the ATU. The ATU joins your WiFi and registers with MRRC.</p>
+                <code>Single coax: Bias-T (indoor) → RG-58 → ATU (outdoor) → EFHW antenna wire</code>
+            </div>
+            <div class="step">
+                <h4><i class="fas fa-satellite-dish"></i> Tune & Operate</h4>
+                <p>Use the MRRC Web UI ATU panel — select a band, trigger auto-tune, and the servo finds optimal SWR in seconds.</p>
+                <code>MRRC → ATU Panel → Select Band → Auto-Tune → &lt;10s → On Air</code>
+            </div>
+        </div>
+
+        <div style="text-align:center;margin-top:3rem">
+            <a href="https://github.com/cheenle/efhw-knowledge" class="btn btn-primary btn-large" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> View on GitHub
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Specs -->
+<section class="section" id="specs" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Specifications</span>
+            <h2 class="section-title">Technical Specifications</h2>
+            <p class="section-subtitle">EFHW Fuchs ATU V3.0 — complete hardware and firmware specs.</p>
+        </div>
+
+        <table>
+            <thead>
+                <tr><th>Parameter</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>MCU</td><td>ESP32-S3-WROOM-1 (240MHz dual-core, 16MB Flash)</td></tr>
+                <tr><td>Frequency Range</td><td>40m–10m (7–30MHz, full WARC coverage)</td></tr>
+                <tr><td>Power Rating</td><td>100W PEP SSB/CW</td></tr>
+                <tr><td>Toroid Core</td><td>T200-6 (Type 6 carbonyl iron, μ=8)</td></tr>
+                <tr><td>Turns Ratio</td><td>2:14 → 49:1 impedance transformation</td></tr>
+                <tr><td>Capacitor</td><td>Air variable 10–500pF, MG996R servo-driven</td></tr>
+                <tr><td>Tuning Method</td><td>Two-phase scan: 37 coarse (5°) + 30 fine (1°)</td></tr>
+                <tr><td>Tuning Time</td><td>&lt;10s full scan, &lt;1s NVS cache hit</td></tr>
+                <tr><td>Communication</td><td>WiFi 2.4GHz WebSocket to MRRC server</td></tr>
+                <tr><td>SWR Sensing</td><td>Remote via ATR1000 (no on-board SWR bridge)</td></tr>
+                <tr><td>Power Supply</td><td>13.8V DC via bias-tee on coax</td></tr>
+                <tr><td>Protection</td><td>IP66 aluminum enclosure, overpower abort, high SWR abort, 2.2MΩ ESD bleed, watchdog</td></tr>
+                <tr><td>PCB</td><td>140×50mm double-layer (KiCad), off-board RF/HV wiring</td></tr>
+                <tr><td>BOM Cost</td><td>~¥430 (all components via Taobao/JLC)</td></tr>
+                <tr><td>Firmware</td><td>ESP-IDF v5.x C, ~2800 lines, 12 source files</td></tr>
+                <tr><td>License</td><td>Hardware: CERN-OHL-S 2.0 · Firmware: GPL-3.0</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="text-align:center;color:var(--text-primary);margin-top:3rem;margin-bottom:1.5rem">Tech Stack</h3>
+        <div class="tech-stack">
+            <span class="tech-tag">ESP32-S3</span>
+            <span class="tech-tag">ESP-IDF v5.x</span>
+            <span class="tech-tag">FreeRTOS</span>
+            <span class="tech-tag">WebSocket</span>
+            <span class="tech-tag">cJSON</span>
+            <span class="tech-tag">LEDC PWM</span>
+            <span class="tech-tag">NVS</span>
+            <span class="tech-tag">T200-6</span>
+            <span class="tech-tag">MG996R</span>
+            <span class="tech-tag">KiCad</span>
+            <span class="tech-tag">CERN-OHL-S 2.0</span>
+            <span class="tech-tag">GPL-3.0</span>
+        </div>
+    </div>
+</section>
+
+<!-- Resources -->
+<section class="section" id="resources" style="background: var(--bg-secondary);">
+    <div class="container" style="text-align:center">
+        <div class="section-header">
+            <span class="section-label">Resources</span>
+            <h2 class="section-title">Documentation & Links</h2>
+            <p class="section-subtitle">SDD, FDE, reference designs, and community comparison.</p>
+        </div>
+        <div class="demo-grid">
+            <a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener" class="demo-link">
+                <i class="fab fa-github"></i>
+                <span>Knowledge Base</span>
+                <small>EFHW antenna theory + auto-tuner project</small>
+            </a>
+            <a href="https://ybr387rz.mule.page/" target="_blank" rel="noopener" class="demo-link">
+                <i class="fas fa-book"></i>
+                <span>SDD (External)</span>
+                <small>14-chapter Software Design Description</small>
+            </a>
+            <a href="/mrrc/efhw/" class="demo-link">
+                <i class="fas fa-flask"></i>
+                <span>Deep Research</span>
+                <small>17-chapter EFHW engineering research</small>
+            </a>
+            <a href="/mrrc/" class="demo-link">
+                <i class="fas fa-broadcast-tower"></i>
+                <span>MRRC</span>
+                <small>Universal HF remote control platform</small>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>EFHW Projects</h4>
+                <p>
+                    End-Fed Half-Wave Antenna Research<br>
+                    &amp; Auto-Tuning Platform<br>
+                    V3.0 · CERN-OHL-S 2.0 / GPL-3.0
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#research">Research</a></li>
+                    <li><a href="#start">Quick Start</a></li>
+                    <li><a href="#specs">Specifications</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">GitHub Repository</a></li>
+                    <li><a href="https://ybr387rz.mule.page/" target="_blank" rel="noopener">SDD Documentation</a></li>
+                    <li><a href="/mrrc/efhw/">Deep Research</a></li>
+                    <li><a href="/mrrc/">MRRC Platform</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 EFHW Projects. Open Source under CERN-OHL-S 2.0 (Hardware) and GPL-3.0 (Firmware). · Built by <a href="https://github.com/cheenle" style="color:var(--accent);">BG1SB</a></p>
+        </div>
+    </div>
+</footer>
+
+<script>
+function toggleMobileMenu() {
+    document.querySelector('.nav-links').classList.toggle('active');
+}
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+        e.preventDefault();
+        const t = document.querySelector(this.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
+const nav = document.querySelector('.navbar');
+window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 50 ? 'rgba(10,14,20,0.98)' : 'rgba(10,14,20,0.92)';
+});
+</script>
+    <script src="js/global-nav.js?v=5" defer data-gn="1"></script>
+</body>
+</html>

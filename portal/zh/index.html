@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VLSC 项目 — 面向现代 HAM 操作的开源远程控制生态。统一比较 MRRC、MRRC FT-710、SunMRRC 与 SunsdrMobile。">
+    <meta name="keywords" content="HAM Radio, 业余无线电, 远程控制, SunSDR2 DX, SDR, MRRC, FT-710, SunMRRC, SunsdrMobile, iOS, SwiftUI">
+    <meta name="author" content="BG1SB">
+    <meta name="theme-color" content="#000000">
+
+    <title>VLSC 项目 — 开源远程无线电控制生态</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/octen.css?v=5">
+    <link rel="stylesheet" href="../css/sunsdrmobile.css?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f39c12' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>📡</text></svg>">
+</head>
+<body data-site="portal">
+
+<nav class="navbar">
+    <div class="container navbar-content">
+        <a href="../index.html" class="logo">
+            <span class="logo-icon"><i class="fas fa-satellite-dish"></i></span>
+            <span>VLSC<span style="color: var(--accent);">·</span>项目</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#selector">项目选择</a></li>
+            <li><a href="#projects">项目</a></li>
+            <li><a href="#ecosystem">生态系统</a></li>
+            <li><a href="/blog/">博客</a></li>
+            <li><a href="/zh/fde.html">FDE</a></li>
+            <li><a href="https://github.com/cheenle" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub
+            </a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="../index.html" class="lang-btn">English</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-satellite-dish"></i>
+            <span>五个项目 · 一个生态</span>
+        </div>
+        <h1 class="hero-title">
+            业余无线电<br>
+            <span class="gradient">远程控制</span>
+        </h1>
+        <p class="hero-subtitle">
+            面向现代业余无线电操作的开源远程控制生态。
+            用浏览器、手机或 iOS 原生 App，在任何地方控制你的 HF/SDR 电台。
+        </p>
+        <div class="hero-actions">
+            <a href="#selector" class="btn btn-primary btn-large">
+                <i class="fas fa-compass"></i> 选择项目
+            </a>
+            <a href="#projects" class="btn btn-secondary btn-large">
+                <i class="fas fa-arrow-down"></i> 浏览套件
+            </a>
+            <a href="https://github.com/cheenle" class="btn btn-secondary btn-large" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="selector" style="background: var(--bg-primary); padding-top: 4rem; padding-bottom: 4rem;">
+    <div class="container">
+        <div class="section-header" style="margin-bottom: 2rem;">
+            <span class="section-label">快速开始</span>
+            <h2 class="section-title">我该用哪个项目？</h2>
+            <p class="section-subtitle">先按设备类型选择，再按客户端偏好落到具体方案。</p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>我的设备/需求</th>
+                    <th>推荐项目</th>
+                    <th>原因</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>任意支持 CAT 的 HF 电台</td>
+                    <td><a href="/mrrc/">MRRC</a></td>
+                    <td>通过 Hamlib/rigctld 的通用远程控制路径</td>
+                </tr>
+                <tr>
+                    <td>Yaesu FT-710</td>
+                    <td><a href="/mrrc_ft710/">MRRC FT-710</a></td>
+                    <td>软件化 SCU-LAN10 替代，一根 USB 线</td>
+                </tr>
+                <tr>
+                    <td>SunSDR2 DX</td>
+                    <td><a href="/sunmrrc/">SunMRRC</a></td>
+                    <td>UDP IQ 解调 + 实时瀑布图服务端</td>
+                </tr>
+                <tr>
+                    <td>iPhone + SunSDR2 DX</td>
+                    <td><a href="/sunsdrmobile/">SunsdrMobile</a></td>
+                    <td>基于 SunMRRC 协议的原生 iOS 客户端</td>
+                </tr>
+                <tr>
+                    <td>EFHW 天线 + 自动调谐</td>
+                    <td><a href="/efhw/">EFHW</a></td>
+                    <td>ESP32-S3 伺服驱动 Fuchs ATU，偏压器供电，WiFi 控制</td>
+                </tr>
+                <tr>
+                    <td>Headless FT8/FT4 操作</td>
+                    <td><a href="/mrrc_ft8/">MRRC-FT8</a></td>
+                    <td>WSJT-X Improved DSP 核心，受监督 Worker，移动驾驶舱</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="section" id="projects" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">项目</span>
+            <h2 class="section-title">探索项目套件</h2>
+            <p class="section-subtitle">六个开源远程控制项目 —— 通用 HF 电台、SDR 平台、数字模式 DSP 服务器、天线自动化和原生移动应用。</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-broadcast-tower"></i></div>
+                <h3>MRRC</h3>
+                <p>通用 Web 远程收发信机控制系统。通过 Hamlib/rigctld 支持任何 HF 电台。Opus 优化音频、WDSP 降噪、AI 语音助手（Whisper + Qwen TTS）、CW/FT8 数字模式、录音室级 TX 音频处理、三层 PTT 安全系统。</p>
+                <ul>
+                    <li>V5.6.5 · 280+ 提交 · GPLv3</li>
+                    <li>通过 Hamlib/rigctld 支持任意 HF 电台</li>
+                    <li>WDSP NR · PTT 安全 · AI 语音 · FT8</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/mrrc/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
+                    <a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
+                    <a href="https://radio.vlsc.net:8877/mobile_modern.html" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-play"></i> 演示</a>
+                </div>
+            </div>
+
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-microchip"></i></div>
+                <h3>MRRC FT-710</h3>
+                <p>八重洲 FT-710 HF/50MHz 收发信机的软件 SCU-LAN10 替代方案。通过 FT4222 SPI 在 ~21fps 下获取真实频谱瀑布图，双向 Opus 48kHz 音频，4 条 WebSocket 通道完整 CAT 控制——直接串口驱动，无需 Hamlib。</p>
+                <ul>
+                    <li>V1.0 · 180+ 测试 · GPLv3</li>
+                    <li>FT4222 SPI 真实频谱 + S-meter 回退</li>
+                    <li>单 Python 进程 · 一根 USB 线</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/mrrc_ft710/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
+                    <a href="https://github.com/cheenle/mrrc_ft710" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
+                </div>
+            </div>
+
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-server"></i></div>
+                <h3>SunMRRC</h3>
+                <p>SunSDR2 DX 专用 FastAPI 后端服务器。服务器端 IQ 解调、实时 512-bin FFT 频谱瀑布、双编解码 Opus/PCM 音频、基于 Hilbert 变换的 TX SSB 语音调制、波段功率控制、5 路 WebSocket 端点为 Web 和原生客户端提供服务。</p>
+                <ul>
+                    <li>V1.0 · 40+ 提交 · GPLv3</li>
+                    <li>5× WebSocket · IQ DSP · Opus/PCM</li>
+                    <li>逆向工程 SDR 协议</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/sunmrrc/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
+                    <a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
+                    <a href="https://radio.vlsc.net:8889" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-play"></i> 演示</a>
+                </div>
+            </div>
+
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-mobile-alt"></i></div>
+                <h3>SunsdrMobile</h3>
+                <p>SunSDR2 DX 原生 iOS SwiftUI 远程控制应用。连接 SunMRRC 后端，提供实时频谱瀑布、低延迟音频、DSP 降噪、一键 PTT、3×3 频道记忆网格、Keychain 安全自动登录。零第三方依赖 —— 纯 Apple 框架构建。</p>
+                <ul>
+                    <li>V1.0 · 3 提交 · MIT</li>
+                    <li>SwiftUI · AVAudioEngine · 零依赖</li>
+                    <li>单次提交 V1.0 — 协议驱动</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/sunsdrmobile/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
+                    <a href="https://github.com/cheenle/SunsdrMobile" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
+                </div>
+            </div>
+
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-broadcast-tower"></i></div>
+                <h3>EFHW Projects</h3>
+                <p>端馈半波天线研究与自动化。ESP32-S3 连续伺服调谐适配器，偏压器同轴供电，WiFi WebSocket 控制，100W PEP，40m–10m 全覆盖。Fuchs LC 耦合器采用 T200-6 磁环和空气可变电容——与 MRRC 生态系统深度集成。</p>
+                <ul>
+                    <li>V3.0 · ESP32-S3 · GPL-3.0 / CERN-OHL-S 2.0</li>
+                    <li>室外自动调谐器 · 偏压器供电 · IP66</li>
+                    <li>Fuchs LC 耦合器 · 伺服驱动 · NVS 学习</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/efhw/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
+                    <a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
+                    <a href="/mrrc/efhw/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-flask"></i> 研究</a>
+                </div>
+            </div>
+
+            <!-- MRRC-FT8 -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-satellite-dish"></i></div>
+                <h3>MRRC-FT8</h3>
+                <p>基于 WSJT-X 3.0.2 Improved DSP 核心的 headless FT8/FT4 服务器，运行在受监督的独立 Worker 之后。UTC 时隙纪律、按操作者选择自动完成一场标准 QSO 的 sequencer、3 kHz 瀑布图、带 ADIF 导出的持久化 SQLite 日志，以及横屏移动驾驶舱——已在 FT-710 电台上线。</p>
+                <ul>
+                    <li>v0.1.0 · 40 测试 · GPLv3</li>
+                    <li>WSJT-X Improved ft8var OpenMP 解码</li>
+                    <li>单一控制租约 · 通用 STOP TX</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/mrrc_ft8/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
+                    <a href="https://github.com/cheenle/mrrc_ft8" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
+                    <a href="https://radio.vlsc.net:9988" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-play"></i> 在线演示</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">方法论</span>
+            <h2 class="section-title">通过 Forward Deployed Engineering 打磨</h2>
+            <p class="section-subtitle">MRRC 的真实运营周期沉淀了可复用架构资产，并加速了 SunMRRC 与 SunsdrMobile 的交付。</p>
+        </div>
+        <div style="text-align:center;">
+            <a href="/zh/fde.html" class="btn btn-primary btn-large">
+                <i class="fas fa-book"></i> 阅读 FDE 方法论
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="background: var(--bg-primary); padding-top: 4rem;">
+    <div class="container">
+        <div class="section-header" style="margin-bottom: 2.5rem;">
+            <span class="section-label">可信度</span>
+            <h2 class="section-title">工程指标</h2>
+            <p class="section-subtitle">在做部署决策前，先看到项目架构事实与能力边界。</p>
+        </div>
+        <div class="perf-grid">
+            <div class="perf-card">
+                <div class="metric">MRRC</div>
+                <div class="metric-label">通用 HF 路线<br><small>Hamlib + Web 远程栈</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric">FT-710</div>
+                <div class="metric-label">直连 USB 路线<br><small>CAT + FT4222 SPI + 音频</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric">SunSDR2 DX</div>
+                <div class="metric-label">UDP IQ 路线<br><small>服务端解调</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric">iOS 原生</div>
+                <div class="metric-label">移动客户端路线<br><small>SwiftUI + AVAudioEngine</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric">EFHW</div>
+                <div class="metric-label">天线自动化路线<br><small>Fuchs ATU + 伺服调谐</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric">FT-8</div>
+                <div class="metric-label">数字模式 DSP 路线<br><small>WSJT-X Improved + 受监督 Worker</small></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="ecosystem" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">生态系统</span>
+            <h2 class="section-title">三种方案，同一愿景</h2>
+            <p class="section-subtitle">不同硬件需要不同架构。我们的项目覆盖全频谱 —— 从传统 CAT 控制的 HF 电台到直接 IQ 采样的 SDR 收发信机和 USB 原生设备。</p>
+        </div>
+
+        <div class="perf-grid">
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-plug"></i></div>
+                <div class="metric-label">CAT / Hamlib<br><small>通用 HF — 通过 rigctld 支持任意电台</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-microchip"></i></div>
+                <div class="metric-label">直连 USB<br><small>FT-710 — CAT + FT4222 SPI + USB 音频</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-wifi"></i></div>
+                <div class="metric-label">UDP IQ<br><small>SunSDR2 DX — 原始 IQ 流 + 私有协议</small></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-cta" style="background: var(--bg-secondary);">
+    <div class="container" style="text-align: center;">
+        <h2 class="section-title" style="margin-bottom: 1rem;">准备开始探索？</h2>
+        <p class="section-subtitle" style="margin-bottom: 3rem;">
+            所有项目均为开源。阅读文档、试用在线演示，或部署你自己的实例。
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="https://github.com/cheenle" class="btn btn-primary btn-large" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> 查看所有仓库
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>VLSC 项目</h4>
+                <p>
+                    开源业余无线电远程控制工具。<br>
+                    由 <a href="https://github.com/cheenle" style="color:var(--accent);">BG1SB</a> 构建 ·
+                    部署于 <code style="background:var(--bg-tertiary);padding:1px 6px;border-radius:3px;">www.vlsc.net</code>
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>项目</h4>
+                <ul>
+                    <li><a href="/mrrc/">MRRC</a> — 通用 HF 远程</li>
+                    <li><a href="/mrrc_ft710/">MRRC FT-710</a> — FT-710 远程</li>
+                    <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX 服务器</li>
+                    <li><a href="/sunsdrmobile/">SunsdrMobile</a> — iOS 客户端</li>
+                    <li><a href="/efhw/">EFHW</a> — 天线自动调谐器</li>
+                    <li><a href="/mrrc_ft8/">MRRC-FT8</a> — Headless FT8/FT4 服务器</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>资源</h4>
+                <ul>
+                    <li><a href="/blog/">博客</a></li>
+                    <li><a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener">MRRC 仓库</a></li>
+                    <li><a href="https://github.com/cheenle/mrrc_ft710" target="_blank" rel="noopener">FT-710 仓库</a></li>
+                    <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC 仓库</a></li>
+                    <li><a href="https://github.com/cheenle/SunsdrMobile" target="_blank" rel="noopener">SunsdrMobile 仓库</a></li>
+                    <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">EFHW 仓库</a></li>
+                    <li><a href="https://github.com/cheenle/mrrc_ft8" target="_blank" rel="noopener">MRRC-FT8 仓库</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>站点</h4>
+                <ul>
+                    <li><a href="/blog/">博客</a></li>
+                    <li><a href="/zh/about.html">关于</a></li>
+                    <li><a href="/zh/contact.html">联系方式</a></li>
+                    <li><a href="/zh/privacy.html">隐私政策</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VLSC 项目 · 基于 GPLv3 和 MIT 协议开源 · <a href="/zh/about.html" style="color:var(--text-muted);">关于</a> · <a href="/zh/contact.html" style="color:var(--text-muted);">联系</a> · <a href="/zh/privacy.html" style="color:var(--text-muted);">隐私</a></p>
+        </div>
+    </div>
+</footer>
+
+<script>
+function toggleMobileMenu() { document.querySelector('.nav-links').classList.toggle('active'); }
+document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); });
+const nav = document.querySelector('.navbar'); window.addEventListener('scroll', () => { nav.style.background = window.scrollY > 50 ? 'rgba(0,0,0,0.98)' : 'rgba(0,0,0,0.92)'; });
+</script>
+    <script src="../js/global-nav.js?v=5" defer data-gn="1"></script>
+</body>
+</html>

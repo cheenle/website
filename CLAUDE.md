@@ -1,0 +1,271 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Overview
+
+This is a workspace grouping HAM radio project websites. All are pure static HTML/CSS/JS — no frameworks, no build tools, no npm.
+
+**Landing page:**
+- **portal/** — Unified landing page at `https://www.vlsc.net/` introducing all five projects and their ecosystem relationship. Deploys to the DocumentRoot (`/var/www/vlsc.net/`). Uses octen.css cyan/teal theme.
+
+**Project sub-sites (symlinks):**
+- **MRRC** (`mrrc/` → `/Users/cheenle/UHRR/MRRC/website/`) — Website for the MRRC (Mobile Remote Radio Control) project. Deployed to `https://www.vlsc.net/mrrc/`.
+- **MRRC FT-710** (`mrrc_ft710/` → `/Users/cheenle/HAM/mrrc_ft710/website/`) — Website for the MRRC FT-710 (Software SCU-LAN10 replacement for Yaesu FT-710). Deployed to `https://www.vlsc.net/mrrc_ft710/`. Uses octen.css with amber (`#f0a030`) brand overrides in `css/ft710.css`.
+- **SunMRRC** (`sunmrrc/` → `/Users/cheenle/HAM/sunsdr/sunmrrc/website/`) — Website for the SunMRRC (SunSDR2 DX Mobile Radio Control) project. Deployed to `https://www.vlsc.net/sunmrrc/`.
+- **SunsdrMobile** (`SunsdrMobile/` → `/Users/cheenle/HAM/sunsdr/SunsdrMobile/website/`) — Promotional website for the SunsdrMobile native iOS app for SunSDR2 DX. Deployed to `https://www.vlsc.net/sunsdrmobile/`.
+- **EFHW** (`efhw/`) — Product website for the EFHW Fuchs ATU V3.0 and EFHW antenna knowledge ecosystem. Deployed to `https://www.vlsc.net/efhw/`. Uses octen.css with emerald green (`#10b981`) brand overrides in `css/efhw.css`.
+
+**Infrastructure:**
+- **nginx/** — nginx server block config (`vlsc.net.conf`) replacing the old Apache vhost.
+
+All sites are bilingual (EN/CN), share the same Octen dark theme design system (`css/octen.css`), and deploy to nginx on `www.vlsc.net`.
+
+## Common patterns across all five sites
+
+- **Design**: `css/octen.css` — dark theme with cyan/teal accent (`#22d3ee`), Inter + JetBrains Mono fonts, responsive. Font Awesome 6.4 for icons. Embedded SVG favicons.
+- **i18n**: Chinese translations live in `zh/` mirroring the EN file structure. MRRC uses `js/i18n.js` for runtime language switching; SunMRRC has separate `zh/index.html`.
+- **Deployment**: Each site has a `deploy.sh` that `tar` + `scp` to `www.vlsc.net`, extracts under `/var/www/vlsc.net/<project>/`, sets `www-data` ownership, then reloads nginx. Requires SSH access. Scripts ask for confirmation before deploying and auto-create backups.
+- **No build step**: Edit HTML/CSS/JS directly. The exception is SunMRRC's SDD docs (see below).
+
+## MRRC-specific (`mrrc/`)
+
+```
+mrrc/
+├── index.html           # Landing page (EN)
+├── fde.html             # FDE product page
+├── aladdin-v2.html      # Aladdin V2 product page
+├── css/
+│   ├── octen.css        # Shared dark theme
+│   ├── style.css        # MRRC-specific styles
+│   ├── modern.css       # Additional styles
+│   └── docs.css         # Documentation page styles
+├── js/
+│   ├── main.js          # Site-wide JS
+│   └── i18n.js          # Runtime EN↔CN translation strings
+├── docs/                # Documentation & design pages
+│   └── design/          # Architecture design docs (HTML)
+├── efhw/                # EFHW antenna product sub-site
+├── images/              # Site images
+├── stats/               # Apache log analyzer (Python)
+│   ├── analyze.py       # Parses Apache logs → SQLite → HTML dashboard
+│   └── stats.db         # SQLite database
+├── logs/ALL/            # ADIF log files
+├── zh/                  # Chinese translations (mirrors EN structure)
+├── deploy.sh            # Deploy to www.vlsc.net/mrrc/
+└── vlsc.net.conf        # Reference Apache vhost config
+```
+
+### Stats analyzer (`stats/analyze_nginx.py`)
+
+Python script that parses nginx access logs from `/var/log/nginx/access.log`, stores hits in SQLite (`stats_nginx.db`), and generates an HTML dashboard. Uses GeoLite2 for country lookup. Run directly: `python3 stats/analyze_nginx.py`.
+
+The old Apache-based `stats/analyze.py` (MRRC-specific) is kept for reference but no longer used since the migration to nginx.
+
+Deploy to server:
+```bash
+scp stats/analyze_nginx.py cheenle@www.vlsc.net:/home/cheenle/stats/
+ssh cheenle@www.vlsc.net "sudo mkdir -p /home/cheenle/stats && sudo python3 /home/cheenle/stats/analyze_nginx.py"
+```
+
+Set up cron (every 30 min):
+```bash
+# On server: crontab -e
+*/30 * * * * cd /home/cheenle/stats && python3 analyze_nginx.py
+```
+
+Stats dashboard: `https://www.vlsc.net/stats/` (HTTP basic auth protected).
+
+### AdSense
+
+Google AdSense (publisher ID `ca-pub-7442510147240155`) is injected on all pages across all project sites via `js/global-nav.js`. The script dynamically creates the AdSense `<script>` tag on `www.vlsc.net` only, with a duplicate-prevention check to avoid double-loading on pages that already have the script inline (e.g., MRRC docs).
+
+Pages that do not load `global-nav.js` (e.g., `mrrc_ft710/sdd/`, `sunmrrc/sdd/`) get AdSense via the `build_sdd.py` template. After editing `build_sdd.py`, rebuild SDD pages with `python3 build_sdd.py`.
+
+## SunMRRC-specific (`sunmrrc/`)
+
+```
+sunmrrc/
+├── index.html           # Landing page (EN)
+├── css/
+│   └── octen.css        # Shared dark theme
+├── sdd/                 # Software Design Document (generated HTML)
+│   ├── index.html       # SDD overview
+│   ├── 01-executive-summary.html ... 15-ptt-safety-architecture.html
+│   └── diagrams/        # SVG architecture diagrams
+├── zh/
+│   └── index.html       # Chinese landing page
+├── build_sdd.py         # SDD builder: markdown → styled HTML
+└── deploy.sh            # Deploy to www.vlsc.net/sunmrrc/
+```
+
+### SDD build system (`build_sdd.py`)
+
+Converts markdown files from `/Users/cheenle/HAM/sunsdr/SDD/` into styled HTML pages with a sidebar navigation. Requires **pandoc** installed. Run:
+
+```bash
+cd /Users/cheenle/HAM/sunsdr/sunmrrc/website
+python3 build_sdd.py
+```
+
+This regenerates all files in `sdd/`. Each output page embeds the SunMRRC navbar, a sticky sidebar with all 15 SDD chapters, and footer. The script defines the file mapping and nav structure as Python lists near the top — edit those to add/remove chapters.
+
+## MRRC FT-710-specific (`mrrc_ft710/`)
+
+```
+mrrc_ft710/ (→ /Users/cheenle/HAM/mrrc_ft710/website/)
+├── index.html              # Landing page (EN)
+├── sdd.html                # SDD overview page
+├── css/
+│   ├── octen.css           # Shared dark theme
+│   ├── sunsdrmobile.css    # Shared component styles
+│   └── ft710.css           # Amber (#f0a030) brand overrides
+├── js/
+│   └── global-nav.js       # Shared navigation JS
+├── sdd/                    # Software Design Document (generated HTML)
+│   ├── index.html          # SDD overview (from README.md)
+│   ├── 01-executive-summary.html ... 15-ptt-safety-architecture.html
+│   └── diagrams/           # SVG architecture diagrams
+├── zh/
+│   ├── index.html          # Chinese landing page
+│   └── sdd.html            # Chinese SDD overview
+├── build_sdd.py            # SDD builder: markdown → styled HTML
+└── deploy.sh               # Deploy to www.vlsc.net/mrrc_ft710/
+```
+
+### SDD build system (`build_sdd.py`)
+
+Converts markdown files from `/Users/cheenle/HAM/mrrc_ft710/SDD/` into styled HTML pages with FT-710 branding. Requires **pandoc** installed. Run:
+
+```bash
+cd /Users/cheenle/HAM/mrrc_ft710/website
+python3 build_sdd.py
+```
+
+This regenerates all files in `sdd/`. Each output page embeds the FT-710 navbar, a sticky sidebar with all 16 SDD entries, and footer.
+
+## SunsdrMobile-specific (`SunsdrMobile/`)
+
+```
+SunsdrMobile/
+├── index.html              # Landing page (EN)
+├── css/
+│   ├── octen.css           # Shared dark theme (copied from SunMRRC)
+│   └── sunsdrmobile.css    # Amber/orange accent overrides + site components
+├── zh/
+│   └── index.html          # Chinese landing page
+└── deploy.sh               # Deploy to www.vlsc.net/sunsdrmobile/
+```
+
+Pure static HTML/CSS, no JS framework. Uses amber/orange accent (`#f39c12`) — site-specific overrides in `sunsdrmobile.css` that redefine CSS custom properties from the shared `octen.css`. Follows the same navbar/footer/section patterns as MRRC and SunMRRC. Uses Font Awesome 6.4 icons (no emoji). i18n mirrors SunMRRC's separate `zh/index.html` approach. The pages include inline SVG architecture diagrams and a UI phone mockup.
+
+### Design system
+
+SunsdrMobile preserves its amber/orange brand identity by loading `octen.css` first, then overriding CSS custom properties in `sunsdrmobile.css`:
+- `--accent: #f39c12` (amber instead of cyan)
+- `--bg-primary: #0a0e14` (dark blue-gray instead of pure black)
+- Additional site-specific component classes for feature cards, performance metrics, step counters, and architecture endpoint cards.
+
+## EFHW-specific (`efhw/`)
+
+```
+efhw/
+├── index.html              # Landing page (EN)
+├── css/
+│   ├── octen.css           # Shared dark theme (copied from SunsdrMobile)
+│   └── efhw.css            # Emerald green (#10b981) brand overrides
+├── js/
+│   └── global-nav.js       # Shared navigation JS
+├── images/                 # Product images
+├── zh/
+│   └── index.html          # Chinese landing page
+└── deploy.sh               # Deploy to www.vlsc.net/efhw/
+```
+
+Pure static HTML/CSS/JS, no framework. Uses emerald green accent (`#10b981`) for its outdoor/antenna theme, distinguishing it from cyan (MRRC/Portal) and amber (FT-710/SunsdrMobile). Site covers the EFHW Fuchs ATU V3.0 product — ESP32-S3 servo-driven auto-tuner — and links to MRRC's deep research pages for in-depth antenna theory.
+
+### Design system
+
+EFHW preserves its emerald green brand identity by loading `octen.css` first, then overriding CSS custom properties in `efhw.css`:
+- `--accent: #10b981` (emerald green instead of cyan)
+- `--bg-primary: #0a0e14` (dark blue-gray)
+- `.gradient` override: `linear-gradient(135deg, #10b981, #059669)`
+
+### Relationship with MRRC EFHW pages
+
+MRRC contains complementary EFHW deep research pages at `/mrrc/efhw/` (Tailwind CSS, 17-chapter research synthesis). The EFHW product site links to these for deep-dive content; the research pages link back via a "Product Site" nav item. Both are preserved — they serve different audiences (product overview vs. engineering deep-dive).
+
+## Portal — Unified Landing Page (`portal/`)
+
+```
+portal/
+├── index.html           # EN landing page (root /)
+├── css/
+│   └── octen.css        # Shared dark theme (copied from SunMRRC)
+├── zh/
+│   └── index.html       # CN landing page
+└── deploy.sh            # Deploy to /var/www/vlsc.net/ (DocumentRoot)
+```
+
+The portal is the unified entry point at `https://www.vlsc.net/`. It introduces all three projects and explains the two-track ecosystem:
+- **Track A** — MRRC: Universal HF remote control for any radio via Hamlib/rigctld
+- **Track B** — SunSDR: SunSDR2 DX-specific client-server pair (SunMRRC + SunsdrMobile)
+
+Uses the standard octen.css cyan/teal accent as the parent "VLSC Projects" brand color. Four project cards link to each sub-site and GitHub repo.
+
+## nginx Configuration (`nginx/`)
+
+The server migrated from Apache to nginx. The config at `nginx/vlsc.net.conf` is the reference copy of the server block deployed to `/etc/nginx/sites-enabled/vlsc.net` on the server.
+
+Key design:
+- HTTP (port 80) → HTTPS redirect
+- SSL certs reused from `/etc/apache2/ssl/` (Let's Encrypt)
+- `root /var/www/vlsc.net` serves the portal landing page
+- `location /mrrc/`, `/mrrc_ft710/`, `/sunmrrc/`, `/sunsdrmobile/` use `alias` to their respective directories
+- Static asset caching (7d) for CSS/JS/images
+- Security headers (X-Frame-Options, X-Content-Type-Options)
+- Hidden files denied
+
+To deploy nginx config changes:
+```bash
+scp nginx/vlsc.net.conf cheenle@www.vlsc.net:/tmp/
+ssh cheenle@www.vlsc.net "sudo cp /tmp/vlsc.net.conf /etc/nginx/sites-available/vlsc.net && sudo nginx -t && sudo systemctl reload nginx"
+```
+
+## Deploying
+
+Each site deploys independently via its own script:
+
+```bash
+# Portal (unified landing page at /)
+cd /Users/cheenle/HAM/website/portal
+./deploy.sh
+
+# MRRC
+cd /Users/cheenle/UHRR/MRRC/website
+./deploy.sh
+
+# SunMRRC
+cd /Users/cheenle/HAM/sunsdr/sunmrrc/website
+./deploy.sh
+
+# SunsdrMobile
+cd /Users/cheenle/HAM/sunsdr/SunsdrMobile/website
+./deploy.sh
+
+# MRRC FT-710
+cd /Users/cheenle/HAM/mrrc_ft710/website
+./deploy.sh
+
+# EFHW
+cd /Users/cheenle/HAM/website/efhw
+./deploy.sh
+```
+
+All deploy scripts: (1) validate required files exist, (2) create a tarball, (3) SSH to `www.vlsc.net` to back up the current site, (4) `scp` the tarball, (5) extract and set permissions, (6) reload nginx. They prompt for confirmation before the remote steps.
+
+Rollback: each script prints the backup path on the server. SSH in and swap the backup back into the webroot.
+
+## nginx server
+
+All sites are served by nginx on `www.vlsc.net` (HTTPS via Let's Encrypt). The server block config is at `nginx/vlsc.net.conf`. The landing page is served from the DocumentRoot (`/var/www/vlsc.net/`). Sub-sites use `alias` directives: `/mrrc/` → `/var/www/vlsc.net/mrrc/`, `/mrrc_ft710/` → `/var/www/vlsc.net/mrrc_ft710/`, `/sunmrrc/` → `/var/www/vlsc.net/sunmrrc/`, `/sunsdrmobile/` → `/var/www/vlsc.net/sunsdrmobile/`, `/efhw/` → `/var/www/vlsc.net/efhw/`. SSL certs at `/etc/letsencrypt/live/www.vlsc.net/`.

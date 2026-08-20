@@ -1,0 +1,48 @@
+# Copy to terraform.tfvars and adjust to your SSH/auth environment.
+
+hosts = {
+  p6 = {
+    host             = "p6.vlsc.net"
+    user             = "cheenle"
+    port             = 22
+    private_key_path = "~/.ssh/id_ed25519"
+    enabled          = true
+    tags             = ["remote", "linux"]
+  }
+  ham = {
+    host             = "ham.vlsc.net"
+    user             = "cheenle"
+    port             = 22
+    private_key_path = "~/.ssh/id_ed25519"
+    enabled          = true
+    tags             = ["remote", "linux"]
+  }
+  mule = {
+    host             = "mule.vlsc.net"
+    user             = "mulerun"
+    port             = 22
+    private_key_path = "~/.ssh/id_ed25519"
+    enabled          = true
+    tags             = ["remote", "linux"]
+  }
+  www = {
+    host             = "www.vlsc.net"
+    user             = "cheenle"
+    port             = 22
+    private_key_path = "~/.ssh/id_ed25519"
+    enabled          = true
+    tags             = ["remote", "web", "ipv4", "ipv6"]
+  }
+
+  # Example local hosts:
+  # local_shack_1 = {
+  #   host             = "192.168.1.10"
+  #   user             = "pi"
+  #   port             = 22
+  #   private_key_path = "~/.ssh/id_ed25519"
+  #   enabled          = true
+  #   tags             = ["local", "linux", "radio"]
+  # }
+}
+
+command_profile = "probe"

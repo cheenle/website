@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — VLSC Projects</title>
+    <meta name="description" content="About VLSC Projects: an open-source amateur radio remote-control ecosystem built by BG1SB. Our story, the projects, and the engineering philosophy behind them.">
+    <meta name="keywords" content="VLSC, BG1SB, amateur radio, HAM, open source, remote radio control, MRRC, SunMRRC, SunsdrMobile, EFHW">
+    <meta name="author" content="BG1SB">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="About — VLSC Projects">
+    <meta property="og:url" content="https://www.vlsc.net/about.html">
+    <meta property="og:site_name" content="VLSC Projects">
+    <link rel="canonical" href="https://www.vlsc.net/about.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/octen.css?v=5">
+    <link rel="stylesheet" href="css/sunsdrmobile.css?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-hero { padding: calc(var(--gn-h) + var(--nav-h) + 72px) 2rem 72px; text-align: center; }
+        .page-hero h1 { font-size: 2.75rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 16px; }
+        .page-hero p { color: var(--text-secondary); font-size: 1.15rem; max-width: 700px; margin: 0 auto; line-height: 1.7; }
+        .tp-section { max-width: 820px; margin: 0 auto; padding: 0 2rem 64px; }
+        .tp-section h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin: 56px 0 18px; }
+        .tp-section h2::before { content: ''; display: block; width: 36px; height: 3px; border-radius: 2px; background: var(--accent); margin-bottom: 14px; }
+        .tp-section p, .tp-section li { color: var(--text-secondary); line-height: 1.85; font-size: 0.98rem; }
+        .tp-section ul { padding-left: 20px; }
+        .tp-section li { margin-bottom: 10px; }
+        .tp-section li strong { color: var(--text-primary); }
+        .tp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+        .tp-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+        .tp-card h3 { font-size: 1.05rem; font-weight: 600; margin: 0 0 8px; }
+        .tp-card p { margin: 0; font-size: 0.9rem; }
+        .tp-callout { border-left: 3px solid var(--accent); background: var(--accent-glow); padding: 16px 20px; border-radius: 0 10px 10px 0; margin: 28px 0; color: var(--text-secondary); line-height: 1.7; }
+        @media (max-width: 768px) { .tp-grid { grid-template-columns: 1fr; } .page-hero { padding-top: calc(var(--gn-h) + var(--nav-h) + 40px); } }
+    </style>
+</head>
+<body data-site="portal">
+
+<nav class="navbar">
+    <div class="container navbar-content">
+        <a href="index.html" class="logo">
+            <span class="logo-icon"><i class="fas fa-satellite-dish"></i></span>
+            <span>VLSC<span style="color: var(--accent);">·</span>Projects</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html#selector">Selector</a></li>
+            <li><a href="index.html#projects">Projects</a></li>
+            <li><a href="index.html#ecosystem">Ecosystem</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/fde.html">FDE</a></li>
+            <li><a href="https://github.com/cheenle" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub
+            </a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="zh/about.html" class="lang-btn">中文</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+        </div>
+    </div>
+</nav>
+
+<header class="page-hero">
+    <h1>About VLSC Projects</h1>
+    <p>An open-source ecosystem of amateur radio remote-control tools, built in the open by a HAM who wanted to control his radios from anywhere.</p>
+</header>
+
+<section class="tp-section">
+    <h2>The operator</h2>
+    <p>VLSC Projects is built and maintained by <strong>BG1SB</strong>, an amateur radio operator. The call sign is the same one you'll see on the air and on GitHub (<a href="https://github.com/cheenle" target="_blank" rel="noopener" style="color:var(--accent);">github.com/cheenle</a>).</p>
+    <p>What started as a personal need — reliably controlling HF radios from another room, and eventually from another city — grew into a family of open-source projects that share one goal: <strong>make modern radio remote control something a HAM can run, read, and modify themselves</strong>.</p>
+    <p>The engineering style is practical and documented. Each major subsystem is captured in a Software Design Document (SDD), and the workflow follows a Forward-Deployed Engineering (FDE) methodology: build what actually gets used in the field, then formalize it. No proprietary black boxes, no "trust me" hardware.</p>
+
+    <h2>Why VLSC exists</h2>
+    <p>Commercial remote-control solutions for HF radios are often closed, expensive, and tied to one vendor's app. The radio hardware itself is capable of far more than most of it exposes. VLSC exists to answer three questions:</p>
+    <ul>
+        <li><strong>Can we control a modern radio over the network without vendor dongles?</strong> — Yes: the FT-710 project reads the internal FT4222 SPI spectrum interface over a plain USB cable.</li>
+        <li><strong>Can an SDR like the SunSDR2 DX be served to any browser and to native apps?</strong> — Yes: SunMRRC + SunsdrMobile are a client-server pair built around WebSockets.</li>
+        <li><strong>Can an antenna tuner be cheap, autonomous, and network-driven?</strong> — Yes: the EFHW tuner is a ~430-CNY ESP32-S3 device that reads SWR over WebSocket.</li>
+    </ul>
+
+    <h2>The projects</h2>
+    <div class="tp-grid">
+        <div class="tp-card"><h3><a href="/mrrc/" style="color:var(--accent);">MRRC</a></h3><p>Universal HF remote control for any radio via Hamlib/rigctld.</p></div>
+        <div class="tp-card"><h3><a href="/mrrc_ft710/" style="color:var(--accent);">MRRC FT-710</a></h3><p>Software SCU-LAN10 replacement for the Yaesu FT-710 over USB.</p></div>
+        <div class="tp-card"><h3><a href="/sunmrrc/" style="color:var(--accent);">SunMRRC</a></h3><p>SunSDR2 DX remote server with IQ demodulation and a dual-codec audio chain.</p></div>
+        <div class="tp-card"><h3><a href="/sunsdrmobile/" style="color:var(--accent);">SunsdrMobile</a></h3><p>Native iOS client for the SunSDR2 DX, built with SwiftUI.</p></div>
+        <div class="tp-card"><h3><a href="/efhw/" style="color:var(--accent);">EFHW</a></h3><p>ESP32-S3 servo-driven antenna auto-tuner for EFHW antennas.</p></div>
+        <div class="tp-card"><h3><a href="/mrrc_ft8/" style="color:var(--accent);">MRRC-FT8</a></h3><p>Headless FT8/FT4 decode-and-spot server.</p></div>
+    </div>
+
+    <h2>Community &amp; contact</h2>
+    <p>All projects are open source under GPLv3/MIT. The best way to reach the project — report a bug, ask a question, or pitch an idea — is through the GitHub repositories. See the <a href="/contact.html" style="color:var(--accent);">Contact page</a> for the full list of ways to get in touch.</p>
+
+    <div class="tp-callout">
+        VLSC Projects is a hobbyist effort, not a company. Everything here is built because it works on real radios in real shacks — and shared because other HAMs should be able to do the same.
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>VLSC Projects</h4>
+                <p>Open-source amateur radio remote control tools.<br>Built by <a href="https://github.com/cheenle" style="color:var(--accent);">BG1SB</a> · Deployed on <code style="background:var(--bg-tertiary);padding:1px 6px;border-radius:3px;">www.vlsc.net</code></p>
+            </div>
+            <div class="footer-section">
+                <h4>Projects</h4>
+                <ul>
+                    <li><a href="/mrrc/">MRRC</a> — Universal HF Remote</li>
+                    <li><a href="/mrrc_ft710/">MRRC FT-710</a> — FT-710 Remote</li>
+                    <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX Server</li>
+                    <li><a href="/sunsdrmobile/">SunsdrMobile</a> — iOS Client</li>
+                    <li><a href="/efhw/">EFHW</a> — Antenna Auto-Tuner</li>
+                    <li><a href="/mrrc_ft8/">MRRC-FT8</a> — Headless FT8/FT4 Server</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Site</h4>
+                <ul>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                    <li><a href="/privacy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VLSC Projects · Open Source under GPLv3 and MIT Licenses</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+function toggleMobileMenu() { document.querySelector('.nav-links').classList.toggle('active'); }
+</script>
+<script src="js/global-nav.js?v=5" defer data-gn="1"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+/* EFHW brand overrides — Emerald Green on dark background */
+:root {
+  --bg-primary: #0a0e14;
+  --bg-secondary: #0d1117;
+  --bg-tertiary: #10161e;
+  --bg-card: rgba(255,255,255,0.025);
+  --accent: #10b981;
+  --accent-dim: #059669;
+  --accent-glow: rgba(16,185,129,0.12);
+  --text-secondary: #8899aa;
+  --text-muted: #5c6370;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(16,185,129,0.25);
+  --nav-h: 56px;
+}
+
+/* Gradient override for hero titles */
+.gradient {
+  background: linear-gradient(135deg, #10b981, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Logo accent dot */
+.logo .accent-dot {
+  color: var(--accent);
+}

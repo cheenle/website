@@ -1,0 +1,8 @@
+[Unit]
+Description=VLSC feedback callsign DB refresh
+
+[Service]
+Type=oneshot
+User=cheenle
+WorkingDirectory=/home/cheenle/feedback
+ExecStart=/usr/bin/python3 update_db.py

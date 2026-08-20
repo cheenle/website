@@ -1,0 +1,12 @@
+# 复制为 msmtp.conf（chmod 600），填入真实凭据
+defaults
+auth on
+tls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+
+account default
+host smtp.qq.com
+port 465
+from cheenle@qq.com
+user cheenle@qq.com
+password 你的QQ邮箱授权码

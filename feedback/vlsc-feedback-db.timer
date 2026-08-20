@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily callsign DB refresh (Club Log, same source as RumLogNG)
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+OnBootSec=10min
+
+[Install]
+WantedBy=timers.target

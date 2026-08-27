@@ -43,10 +43,11 @@ class AuditParser(HTMLParser):
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         values = dict(attrs)
-        if values.get("id"):
-            self.ids.append(values["id"])
-        if tag == "section" and values.get("id"):
-            self.section_ids.add(values["id"])
+        element_id = values.get("id")
+        if element_id:
+            self.ids.append(element_id)
+        if tag == "section" and element_id:
+            self.section_ids.add(element_id)
         if tag in {"a", "link", "script", "img"}:
             ref = values.get("href") or values.get("src")
             if ref:

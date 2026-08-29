@@ -1,0 +1,110 @@
+.claim-box {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 0.75rem 0.75rem 0;
+  padding: 1rem 1.15rem;
+  margin: 1.5rem 0;
+  background: var(--bg-card);
+}
+
+.claim-label {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.claim-box[data-claim-type="fact"] { border-left-color: #22c55e; }
+.claim-box[data-claim-type="fact"] .claim-label { color: #22c55e; }
+.claim-box[data-claim-type="inference"] { border-left-color: #22d3ee; }
+.claim-box[data-claim-type="inference"] .claim-label { color: #22d3ee; }
+.claim-box[data-claim-type="analogy"] { border-left-color: #f59e0b; }
+.claim-box[data-claim-type="analogy"] .claim-label { color: #f59e0b; }
+.claim-box[data-claim-type="thesis"] { border-left-color: #a78bfa; }
+.claim-box[data-claim-type="thesis"] .claim-label { color: #a78bfa; }
+
+.connection-diagram {
+  margin: 2rem 0;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.connection-svg { display: block; width: 100%; height: auto; }
+.connection-svg text { font-family: var(--font-sans); }
+
+.scale-ladder {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 1.5rem 0;
+}
+
+.scale-step {
+  position: relative;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: var(--bg-card);
+}
+.scale-step strong { display: block; margin-bottom: 0.4rem; }
+.scale-step span { color: var(--text-secondary); font-size: 0.82rem; line-height: 1.45; }
+
+.connection-table-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 0.85rem; }
+.connection-table { min-width: 900px; width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+.connection-table th, .connection-table td { border-bottom: 1px solid var(--border); padding: 0.8rem 1rem; text-align: left; vertical-align: top; }
+.connection-table th { color: var(--accent); background: var(--bg-card); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.connection-table td { color: var(--text-secondary); line-height: 1.55; }
+.connection-table tr:last-child td { border-bottom: 0; }
+
+.evidence-boundary {
+  border: 1px solid #f59e0b;
+  border-radius: 0.8rem;
+  padding: 1.1rem;
+  margin: 1.5rem 0;
+  background: rgba(245, 158, 11, 0.07);
+}
+.evidence-boundary strong { color: #fbbf24; }
+
+.article-thesis {
+  margin: 2rem 0;
+  border: 1px solid rgba(167, 139, 250, 0.45);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background: rgba(167, 139, 250, 0.07);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.recursion-list { counter-reset: recursion; padding: 0; list-style: none; }
+.recursion-list li { counter-increment: recursion; display: flex; gap: 0.9rem; align-items: flex-start; margin: 0 0 0.9rem; border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem; background: var(--bg-card); }
+.recursion-list li::before { content: counter(recursion); display: grid; place-items: center; flex: 0 0 2rem; height: 2rem; border-radius: 50%; color: var(--accent); background: var(--accent-glow); font-family: var(--font-mono); font-weight: 700; }
+
+.citation { margin-left: 0.12em; color: var(--accent); font-size: 0.78em; vertical-align: super; text-decoration: none; }
+.citation:hover, .citation:focus-visible { text-decoration: underline; }
+.references-list { padding-left: 1.4rem; }
+.references-list li { margin-bottom: 0.8rem; line-height: 1.6; scroll-margin-top: 6rem; }
+.references-list a { overflow-wrap: anywhere; }
+
+.article-language { display: flex; justify-content: flex-end; margin: 1rem 0 1.5rem; }
+.article-language a { border: 1px solid var(--border); border-radius: 999px; padding: 0.35rem 0.75rem; font-family: var(--font-mono); font-size: 0.76rem; }
+
+@media (max-width: 900px) {
+  .scale-ladder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 800px) {
+  .scale-ladder { grid-template-columns: 1fr; }
+  .claim-box { padding: 0.9rem; }
+  .connection-diagram { padding: 0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scale-step { transition: none; }
+}

@@ -65,18 +65,12 @@ class ArticleParser(HTMLParser):
             ref = values.get("href") or values.get("src")
             if ref:
                 self.refs.append(ref)
-        if (
-            tag == "link"
-            and values.get("rel") == "canonical"
-            and values.get("href")
-        ):
-            self.canonicals.append(values["href"])
-        if (
-            tag == "link"
-            and values.get("rel") == "alternate"
-            and values.get("hreflang")
-        ):
-            self.hreflangs.add(values["hreflang"])
+        href = values.get("href")
+        if tag == "link" and values.get("rel") == "canonical" and href:
+            self.canonicals.append(href)
+        hreflang = values.get("hreflang")
+        if tag == "link" and values.get("rel") == "alternate" and hreflang:
+            self.hreflangs.add(hreflang)
         if tag == "svg":
             self.svg_stack.append({"title": False, "desc": False})
         elif tag in {"title", "desc"} and self.svg_stack:

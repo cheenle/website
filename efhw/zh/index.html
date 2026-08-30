@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="EFHW 项目 — 端馈半波天线研究与自动化。ESP32-S3 Fuchs ATU V3.0 连续伺服调谐适配器，偏压器同轴供电，WiFi WebSocket 控制，100W PEP，40m-10m 全频段覆盖。">
-    <meta name="keywords" content="EFHW, 端馈半波天线, 天线调谐器, Fuchs ATU, ESP32-S3, 业余无线电, 开源硬件">
+    <meta name="description" content="BG1SB 的 EFHW（端馈半波）天线研究知识库：实测证据、变换器与铁氧体材料裁决、共模与平衡地线实践、多波段机理、NEC 辐射建模 —— 以及作为工程产出之一的 V3.0 Fuchs ATU 自动调谐器。">
+    <meta name="keywords" content="EFHW, 端馈半波天线, 天线研究, 铁氧体变换器, 实测证据, 共模扼流圈, 平衡地线, Fuchs ATU, ESP32-S3, 业余无线电, 开源硬件">
     <meta name="author" content="BG1SB">
     <meta name="theme-color" content="#0a0e14">
 
-    <title>EFHW Projects — 天线研究与自动调谐平台</title>
+    <title>EFHW — 端馈半波天线研究与实践</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,8 @@
             <span>EFHW<span style="color: var(--accent);">Projects</span></span>
         </a>
         <ul class="nav-links">
-            <li><a href="../index.html#features">特性</a></li>
+            <li><a href="#research-hub">研究方向</a></li>
+            <li><a href="#features">工程实践</a></li>
             <li><a href="../index.html#architecture">架构</a></li>
             <li><a href="../index.html#research">研究</a></li>
             <li><a href="../index.html#start">快速开始</a></li>
@@ -51,24 +52,24 @@
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">
-            <i class="fas fa-microchip"></i>
-            <span>V3.0 · 开源硬件</span>
+            <i class="fas fa-compass-drafting"></i>
+            <span>知识库 · 实测证据 · 开源硬件</span>
         </div>
         <h1 class="hero-title">
             EFHW 天线<br>
-            <span class="gradient">自动调谐平台</span>
+            <span class="gradient">研究与实践中心</span>
         </h1>
         <p class="hero-subtitle">
-            ESP32-S3 连续伺服调谐适配器，用于端馈半波天线。
-            室外架设，偏压器同轴馈电，WiFi WebSocket 控制，100W PEP，40m–10m 全频段覆盖。
-            深度集成 MRRC 远程电台生态系统。
+            一根天线，众说纷纭——这里是 BG1SB 的端馈半波天线公开研究场：
+            测量优先于传说，证据链替代营销数字。课题覆盖变换器与铁氧体材料、共模行为、
+            平衡地线、多波段机理、辐射建模——V3.0 Fuchs ATU 只是这些研究的工程产出之一。
         </p>
         <div class="hero-actions">
             <a href="https://github.com/cheenle/efhw-knowledge" class="btn btn-primary btn-large" target="_blank" rel="noopener">
-                <i class="fab fa-github"></i> GitHub
+                <i class="fab fa-github"></i> 知识库
             </a>
-            <a href="../index.html#features" class="btn btn-secondary btn-large">
-                <i class="fas fa-arrow-down"></i> 探索特性
+            <a href="#research-hub" class="btn btn-secondary btn-large">
+                <i class="fas fa-arrow-down"></i> 研究方向
             </a>
             <a href="/mrrc/efhw/" class="btn btn-secondary btn-large">
                 <i class="fas fa-book-open"></i> 深度研究
@@ -76,20 +77,69 @@
         </div>
         <div class="hero-stats">
             <div class="stat-item">
-                <span class="stat-value">&lt;10s</span>
-                <span class="stat-label">全扫描调谐</span>
+                <span class="stat-value">13</span>
+                <span class="stat-label">知识领域</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">6+</span>
+                <span class="stat-label">实测研究</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">3</span>
+                <span class="stat-label">硬件代际</span>
             </div>
             <div class="stat-item">
                 <span class="stat-value">100W</span>
-                <span class="stat-label">PEP SSB/CW</span>
+                <span class="stat-label">外场实践</span>
             </div>
-            <div class="stat-item">
-                <span class="stat-value">40m–10m</span>
-                <span class="stat-label">频段覆盖</span>
+        </div>
+    </div>
+</section>
+
+<!-- 研究方向 -->
+<section class="section" id="research-hub" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">研究方向</span>
+            <h2 class="section-title">我们在研究什么，如何裁决</h2>
+            <p class="section-subtitle">方向、观点、解读与建议——每条都锚定数据，或明确标注"未实测"。</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-scale-balanced"></i></div>
+                <h3>磁芯换装证据裁决</h3>
+                <p>3×FT240-51 → Fair-Rite 2643251002：逐条主张按 证伪/平反/修正/待实测 分级，附数据表与量热文献。材料谬误（Mn-Zn 错标、"饱和漂移"、假宽带）全部退役。</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/core-swap-evidence-2026-08.md"><i class="fas fa-book"></i> 阅读裁决书</a>
             </div>
-            <div class="stat-item">
-                <span class="stat-value">~¥430</span>
-                <span class="stat-label">BOM 成本</span>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-vial"></i></div>
+                <h3>变换器 A/B 实测协议</h3>
+                <p>S21 透射效率台架、100W FT8 量热、合盖/开盖失谐对比、CMC 点位 A/B、伺服 basin 记录——可复用规程，配空白数据表与判据速算脚本。</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/transformer_ab_protocol.md"><i class="fas fa-flask"></i> 打开协议</a>
+            </div>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-chart-line"></i></div>
+                <h3>端到端天线 A/B（21MHz）</h3>
+                <p>49:1 变压器 vs LC 耦合器，同天线/同频/同功率，同呼号配对 ΔSNR + 探针基线扣除：差异统计不可区分（−0.3~−0.75dB）。ADIF+脚本全链可复算。</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/EFHW_49to1_vs_LC_%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A_20260619.md"><i class="fas fa-file-lines"></i> 测试报告</a>
+            </div>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-shield-halved"></i></div>
+                <h3>共模与平衡地线</h3>
+                <p>EFHW 共模电流到底由什么决定（尾线电长度，而非变换器"效率"）、W8JI 纠正后的绕法、3–4.5m 扼流圈部署与 6–10 匝实践配方。</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/efhw_cmc.md"><i class="fas fa-shield"></i> CMC 指南</a>
+            </div>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-diagram-project"></i></div>
+                <h3>多波段机理与 NEC</h3>
+                <p>谐波工作的真相、Sloper 仰角建模（下坡端偏向，1–3dB）、高 Q 针尖 vs "大汤碗"假象——以及自动调谐器究竟买到了什么。</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/README.md"><i class="fas fa-sitemap"></i> 知识图谱</a>
+            </div>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-gears"></i></div>
+                <h3>工程实践：V3.0 Fuchs ATU</h3>
+                <p>本研究的一个工程出口：ESP32-S3 伺服驱动的 Fuchs 并联 LC 耦合器，T200-6 宽带谐振回路，MRRC 远端 SWR——100W，40m–10m，开源硬件。</p>
+                <a class="btn btn-secondary" href="/mrrc/efhw/auto-efhw-tuner-architecture-premium-v2.html"><i class="fas fa-microchip"></i> 架构详解</a>
             </div>
         </div>
     </div>
@@ -114,7 +164,7 @@
 <section class="section" id="features" style="background: var(--bg-secondary);">
     <div class="container">
         <div class="section-header">
-            <span class="section-label">特性</span>
+            <span class="section-label">工程实践</span>
             <h2 class="section-title">Fuchs ATU V3.0 — 伺服驱动精密调谐</h2>
             <p class="section-subtitle">第三代自动调谐器以连续伺服调谐替代继电器组，将 SWR 检测委托给 MRRC/ATR1000，并添加 WiFi 实现全远程控制——同时将故障点从 9 个减少到 2 个。</p>
         </div>
@@ -529,7 +579,7 @@
                 <h4>EFHW Projects</h4>
                 <p>
                     端馈半波天线研究<br>
-                    与自动调谐平台<br>
+                    与实践中心<br>
                     V3.0 · CERN-OHL-S 2.0 / GPL-3.0
                 </p>
             </div>
@@ -537,7 +587,8 @@
                 <h4>链接</h4>
                 <ul>
                     <li><a href="../index.html">首页</a></li>
-                    <li><a href="../index.html#features">特性</a></li>
+                    <li><a href="#research-hub">研究方向</a></li>
+                    <li><a href="#features">工程实践</a></li>
                     <li><a href="../index.html#architecture">架构</a></li>
                     <li><a href="../index.html#research">研究</a></li>
                     <li><a href="../index.html#start">快速开始</a></li>

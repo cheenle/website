@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="EFHW Projects — End-Fed Half-Wave antenna research and automation. ESP32-S3 Fuchs ATU V3.0 for continuous servo tuning, bias-tee coaxial powered, WiFi WebSocket control, 100W PEP, 40m-10m.">
-    <meta name="keywords" content="EFHW, End-Fed Half-Wave, antenna tuner, Fuchs ATU, ESP32-S3, HAM Radio, Amateur Radio, open source hardware">
+    <meta name="description" content="BG1SB's EFHW (End-Fed Half-Wave) antenna research hub: measured evidence, transformer & ferrite material adjudication, CMC and counterpoise practice, multiband mechanisms, NEC radiation analysis — plus engineering practice including the V3.0 Fuchs ATU auto-tuner.">
+    <meta name="keywords" content="EFHW, End-Fed Half-Wave, antenna research, ferrite transformer, evidence, common mode choke, counterpoise, Fuchs ATU, ESP32-S3, HAM Radio, Amateur Radio">
     <meta name="author" content="BG1SB">
     <meta name="theme-color" content="#0a0e14">
 
-    <title>EFHW Projects — Antenna Research & Auto-Tuning Platform</title>
+    <title>EFHW — End-Fed Half-Wave Antenna Research &amp; Practice</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,9 +30,10 @@
             <span>EFHW<span style="color: var(--accent);">Projects</span></span>
         </a>
         <ul class="nav-links">
-            <li><a href="#features">Features</a></li>
+            <li><a href="#research-hub">Directions</a></li>
+            <li><a href="#features">Engineering</a></li>
             <li><a href="#architecture">Architecture</a></li>
-            <li><a href="#research">Research</a></li>
+            <li><a href="#research">Deep Research</a></li>
             <li><a href="#start">Quick Start</a></li>
             <li><a href="#specs">Specs</a></li>
             <li><a href="/mrrc_modern/">Modern</a></li>
@@ -51,24 +52,25 @@
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">
-            <i class="fas fa-microchip"></i>
-            <span>V3.0 · Open Source Hardware</span>
+            <i class="fas fa-compass-drafting"></i>
+            <span>Knowledge Base · Measured Evidence · Open Hardware</span>
         </div>
         <h1 class="hero-title">
             EFHW Antenna<br>
-            <span class="gradient">Auto-Tuning Platform</span>
+            <span class="gradient">Research &amp; Practice Hub</span>
         </h1>
         <p class="hero-subtitle">
-            ESP32-S3 continuous servo tuning adapter for End-Fed Half-Wave antennas.
-            Outdoor, bias-tee coaxial powered, WiFi WebSocket controlled, 100W PEP, 40m–10m full band coverage.
-            Deeply integrated with the MRRC remote radio ecosystem.
+            One wire, many claims — this is BG1SB's open research ground for End-Fed Half-Wave antennas:
+            measurements over folklore, evidence chains over marketing numbers. Topics span transformer
+            magnetics and ferrite materials, common-mode behaviour, counterpoise, multiband operation,
+            radiation modelling — with the V3.0 Fuchs ATU as one engineering output among them.
         </p>
         <div class="hero-actions">
             <a href="https://github.com/cheenle/efhw-knowledge" class="btn btn-primary btn-large" target="_blank" rel="noopener">
-                <i class="fab fa-github"></i> GitHub
+                <i class="fab fa-github"></i> Knowledge Base
             </a>
-            <a href="#features" class="btn btn-secondary btn-large">
-                <i class="fas fa-arrow-down"></i> Explore Features
+            <a href="#research-hub" class="btn btn-secondary btn-large">
+                <i class="fas fa-arrow-down"></i> Research Directions
             </a>
             <a href="/mrrc/efhw/" class="btn btn-secondary btn-large">
                 <i class="fas fa-book-open"></i> Deep Research
@@ -76,20 +78,69 @@
         </div>
         <div class="hero-stats">
             <div class="stat-item">
-                <span class="stat-value">&lt;10s</span>
-                <span class="stat-label">Full Scan Tune</span>
+                <span class="stat-value">13</span>
+                <span class="stat-label">Knowledge Domains</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">6+</span>
+                <span class="stat-label">Measured Studies</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">3</span>
+                <span class="stat-label">Tuner Generations</span>
             </div>
             <div class="stat-item">
                 <span class="stat-value">100W</span>
-                <span class="stat-label">PEP SSB/CW</span>
+                <span class="stat-label">Field Practice</span>
             </div>
-            <div class="stat-item">
-                <span class="stat-value">40m–10m</span>
-                <span class="stat-label">Band Coverage</span>
+        </div>
+    </div>
+</section>
+
+<!-- Research Hub -->
+<section class="section" id="research-hub" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Research Directions</span>
+            <h2 class="section-title">What We Study, How We Judged It</h2>
+            <p class="section-subtitle">Directions, viewpoints, interpretations and recommendations — each tied to data or explicitly marked as unverified.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-scale-balanced"></i></div>
+                <h3>Core-Swap Evidence Adjudication</h3>
+                <p>3&times;FT240-51 &rarr; Fair-Rite 2643251002: every claim graded falsified / vindicated / corrected / pending, with datasheet and calorimetry citations. Material myths (Mn-Zn mislabels, "saturation drift", fake bandwidth) retired.</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/core-swap-evidence-2026-08.md"><i class="fas fa-book"></i> Read the Adjudication</a>
             </div>
-            <div class="stat-item">
-                <span class="stat-value">~¥430</span>
-                <span class="stat-label">BOM Cost</span>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-vial"></i></div>
+                <h3>Transformer A/B Test Protocol</h3>
+                <p>S21 insertion-loss bench, 100W FT8 calorimetry, lid-on/off detuning, CMC placement A/B and servo basin logging — a reusable protocol with pre-built data sheets and a pass/fail judge script.</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/transformer_ab_protocol.md"><i class="fas fa-flask"></i> Open Protocol</a>
+            </div>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-chart-line"></i></div>
+                <h3>End-to-End Antenna A/B (21 MHz)</h3>
+                <p>49:1 transformer vs LC coupler, same antenna / band / power, paired-station &Delta;SNR with probe baseline subtraction: difference statistically indistinguishable (−0.3~−0.75 dB). Full ADIF + scripts reproducible.</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/EFHW_49to1_vs_LC_%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A_20260619.md"><i class="fas fa-file-lines"></i> Test Report</a>
+            </div>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-shield-halved"></i></div>
+                <h3>Common Mode &amp; Counterpoise</h3>
+                <p>Where EFHW CM current actually comes from (tail electrical length, not core "efficiency"), W8JI-corrected winding methods, choke placement practice at 3&ndash;4.5 m with 6&ndash;10 turn recipes.</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/efhw_cmc.md"><i class="fas fa-cable-car"></i> CMC Guide</a>
+            </div>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-diagram-project"></i></div>
+                <h3>Multiband Mechanics &amp; NEC</h3>
+                <p>Harmonic operation truths, sloper takeoff-angle modelling (downhill bias, 1&ndash;3 dB), the high-Q vs "wide bowl" illusion, and what an auto-tuner actually buys you.</p>
+                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/README.md"><i class="fas fa-sitemap"></i> Knowledge Map</a>
+            </div>
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-gears"></i></div>
+                <h3>Engineering: V3.0 Fuchs ATU</h3>
+                <p>One practice output of this research: ESP32-S3 servo-driven Fuchs parallel-LC coupler, T200-6 broadband tank, MRRC-remote SWR — 100W, 40m&ndash;10m, open hardware.</p>
+                <a class="btn btn-secondary" href="/mrrc/efhw/auto-efhw-tuner-architecture-premium-v2.html"><i class="fas fa-microchip"></i> Architecture</a>
             </div>
         </div>
     </div>
@@ -114,7 +165,7 @@
 <section class="section" id="features" style="background: var(--bg-secondary);">
     <div class="container">
         <div class="section-header">
-            <span class="section-label">Features</span>
+            <span class="section-label">Engineering Practice</span>
             <h2 class="section-title">Fuchs ATU V3.0 — Servo-Driven Precision</h2>
             <p class="section-subtitle">The third-generation auto-tuner replaces relay banks with continuous servo tuning, delegates SWR sensing to MRRC/ATR1000, and adds WiFi for full remote control — all while reducing failure points from 9 to 2.</p>
         </div>
@@ -541,7 +592,7 @@
                 <h4>EFHW Projects</h4>
                 <p>
                     End-Fed Half-Wave Antenna Research<br>
-                    &amp; Auto-Tuning Platform<br>
+                    &amp; Practice Hub<br>
                     V3.0 · CERN-OHL-S 2.0 / GPL-3.0
                 </p>
             </div>
@@ -549,7 +600,8 @@
                 <h4>Links</h4>
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a href="#features">Features</a></li>
+                    <li><a href="#research-hub">Research Hub</a></li>
+                    <li><a href="#features">Engineering</a></li>
                     <li><a href="#architecture">Architecture</a></li>
                     <li><a href="#research">Research</a></li>
                     <li><a href="#start">Quick Start</a></li>

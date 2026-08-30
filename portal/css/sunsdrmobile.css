@@ -39,3 +39,39 @@
 
 /* ── Focus ring (overrides octen base in case --accent doesn't propagate) ── */
 a:focus-visible, button:focus-visible, .btn:focus-visible { outline-color: var(--accent); }
+
+/* ── WeChat group QR code section ── */
+.qr-section { text-align: center; }
+.qr-card {
+  display: inline-block;
+  background: #ffffff;
+  padding: 1.25rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  max-width: 280px;
+  width: 100%;
+}
+.qr-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+.qr-note {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Mobile navbar wrap to avoid overlap */
+@media (max-width: 768px) {
+  .navbar-content { flex-wrap: wrap; }
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding-top: 0.5rem;
+  }
+  .nav-links li { margin: 0 0.5rem; }
+}

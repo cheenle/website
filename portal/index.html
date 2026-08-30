@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/octen.css?v=5">
+    <link rel="stylesheet" href="css/octen.css?v=6">
     <link rel="stylesheet" href="css/sunsdrmobile.css?v=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -74,6 +74,21 @@
     </div>
 </section>
 
+<!-- Community -->
+<section class="section qr-section" id="community" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Community</span>
+            <h2 class="section-title">Join the Conversation</h2>
+            <p class="section-subtitle">Scan the QR code with WeChat to join the MRRC-HAM group.</p>
+        </div>
+        <div class="qr-card">
+            <img src="images/qr-wechat-group.jpg" alt="WeChat QR code for MRRC-HAM group">
+        </div>
+        <p class="qr-note">QR code valid until Aug 29, 2026. Will be updated when refreshed.</p>
+    </div>
+</section>
+
 <!-- Selector -->
 <section class="section" id="selector" style="background: var(--bg-primary); padding-top: 4rem; padding-bottom: 4rem;">
     <div class="container">
@@ -100,6 +115,11 @@
                     <td>Yaesu FT-710</td>
                     <td><a href="/mrrc_ft710/">MRRC FT-710</a></td>
                     <td>Software SCU-LAN10 replacement via one USB cable</td>
+                </tr>
+                <tr>
+                    <td>Yaesu FT-710 or Icom IC-7300</td>
+                    <td><a href="/mrrc_modern/">MRRC Modern</a></td>
+                    <td>Pluggable-backend USB remote (FT-710 / IC-7300 / IC-7300MK2)</td>
                 </tr>
                 <tr>
                     <td>SunSDR2 DX</td>
@@ -132,7 +152,7 @@
         <div class="section-header">
             <span class="section-label">Projects</span>
             <h2 class="section-title">Explore the Suite</h2>
-            <p class="section-subtitle">Six open-source remote control projects — universal HF rigs, SDR platforms, digital-mode DSP servers, antenna automation, and native mobile apps.</p>
+            <p class="section-subtitle">Seven open-source remote control projects — universal HF rigs, SDR platforms, digital-mode DSP servers, antenna automation, native mobile apps, and multi-radio USB-native control.</p>
         </div>
 
         <div class="features-grid">
@@ -166,6 +186,22 @@
                 <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
                     <a href="/mrrc_ft710/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> Website</a>
                     <a href="https://github.com/cheenle/mrrc_ft710" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> Source</a>
+                </div>
+            </div>
+
+            <!-- MRRC Modern -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-code-branch"></i></div>
+                <h3>MRRC Modern</h3>
+                <p>Pluggable-backend USB-native remote control for Yaesu FT-710 and Icom IC-7300/IC-7300MK2. FT4222 SPI or CI-V spectrum, bidirectional Opus 48kHz audio, full CAT/CI-V control over 4 WebSocket channels — one codebase, multiple radios.</p>
+                <ul>
+                    <li>v1.10.1 · 593 tests · GPLv3</li>
+                    <li>FT-710 + IC-7300 + IC-7300MK2 backends</li>
+                    <li>Direct USB · No Hamlib · PWA + mobile apps</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/mrrc_modern/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> Website</a>
+                    <a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> Source</a>
                 </div>
             </div>
 
@@ -244,8 +280,8 @@
     <div class="container">
         <div class="section-header">
             <span class="section-label">Ecosystem</span>
-            <h2 class="section-title">Three Approaches, One Vision</h2>
-            <p class="section-subtitle">Different hardware demands different architectures. Our projects span the full spectrum — from traditional CAT-controlled HF rigs to direct-IQ SDR transceivers and USB-native devices.</p>
+            <h2 class="section-title">Four Approaches, One Vision</h2>
+            <p class="section-subtitle">Different hardware demands different architectures. Our projects span the full spectrum — from traditional CAT-controlled HF rigs to USB-native multi-radio control, direct-IQ SDR transceivers, and antenna automation.</p>
         </div>
 
         <div class="perf-grid">
@@ -258,13 +294,17 @@
                 <div class="metric-label">Direct USB<br><small>FT-710 — CAT + FT4222 SPI + audio over USB</small></div>
             </div>
             <div class="perf-card">
+                <div class="metric"><i class="fas fa-code-branch"></i></div>
+                <div class="metric-label">Direct USB Multi-Radio<br><small>MRRC Modern — FT-710 / IC-7300 / IC-7300MK2</small></div>
+            </div>
+            <div class="perf-card">
                 <div class="metric"><i class="fas fa-wifi"></i></div>
                 <div class="metric-label">UDP IQ<br><small>SunSDR2 DX — raw IQ streaming + proprietary protocol</small></div>
             </div>
         </div>
 
         <p style="text-align:center;color:var(--text-secondary);margin-top:2rem;font-size:0.9375rem;max-width:700px;margin-left:auto;margin-right:auto;">
-            <strong>Why three approaches?</strong> Traditional HF radios expose a serial CAT interface. The FT-710 adds FT4222 SPI for real spectrum data — no SCU-LAN10 dongle needed. The SunSDR2 DX streams raw IQ samples over UDP, requiring server-side demodulation. Three different problems, three different solutions, one shared design system.
+            <strong>Why four approaches?</strong> Traditional HF radios expose a serial CAT interface. The FT-710 adds FT4222 SPI for real spectrum data — no SCU-LAN10 dongle needed. MRRC Modern extends the same USB-native architecture to the Icom IC-7300 family via pluggable backends. The SunSDR2 DX streams raw IQ samples over UDP, requiring server-side demodulation. Different radios, different protocols, one shared design system.
         </p>
     </div>
 </section>
@@ -301,6 +341,10 @@
             <div class="perf-card">
                 <div class="metric">FT-710</div>
                 <div class="metric-label">Direct USB path<br><small>CAT + FT4222 SPI + audio</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric">MRRC Modern</div>
+                <div class="metric-label">Multi-radio USB path<br><small>FT-710 + IC-7300 backends</small></div>
             </div>
             <div class="perf-card">
                 <div class="metric">SunSDR2 DX</div>
@@ -353,6 +397,7 @@
                 <ul>
                     <li><a href="/mrrc/">MRRC</a> — Universal HF Remote</li>
                     <li><a href="/mrrc_ft710/">MRRC FT-710</a> — FT-710 Remote</li>
+                    <li><a href="/mrrc_modern/">MRRC Modern</a> — FT-710 / IC-7300 Remote</li>
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX Server</li>
                     <li><a href="/sunsdrmobile/">SunsdrMobile</a> — iOS Client</li>
                     <li><a href="/efhw/">EFHW</a> — Antenna Auto-Tuner</li>
@@ -365,6 +410,7 @@
                     <li><a href="/blog/">Blog</a></li>
                     <li><a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener">MRRC Repository</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_ft710" target="_blank" rel="noopener">FT-710 Repository</a></li>
+                    <li><a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener">MRRC Modern Repository</a></li>
                     <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC Repository</a></li>
                     <li><a href="https://github.com/cheenle/SunsdrMobile" target="_blank" rel="noopener">SunsdrMobile Repository</a></li>
                     <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">EFHW Repository</a></li>
@@ -392,6 +438,6 @@ function toggleMobileMenu() { document.querySelector('.nav-links').classList.tog
 document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); });
 const nav = document.querySelector('.navbar'); window.addEventListener('scroll', () => { nav.style.background = window.scrollY > 50 ? 'rgba(0,0,0,0.98)' : 'rgba(0,0,0,0.92)'; });
 </script>
-    <script src="js/global-nav.js?v=5" defer data-gn="1"></script>
+    <script src="js/global-nav.js?v=6" defer data-gn="1"></script>
 </body>
 </html>

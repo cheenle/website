@@ -20,6 +20,7 @@
     else if (/\/sunmrrc\//.test(p)) SITE = 'sunmrrc';
     else if (/\/sunsdrmobile\//.test(p)) SITE = 'sunsdrmobile';
     else if (/\/mrrc_ft710\//.test(p)) SITE = 'mrrc_ft710';
+    else if (/\/mrrc_modern\//.test(p)) SITE = 'mrrc_modern';
     else if (/\/mrrc_ft8\//.test(p)) SITE = 'mrrc_ft8';
     else if (/\/sdd\//.test(p)) SITE = 'sunmrrc';
     else SITE = 'portal';
@@ -35,6 +36,7 @@
     fde: '/fde.html',
     mrrc: '/mrrc/',
     mrrc_ft710: '/mrrc_ft710/',
+    mrrc_modern: '/mrrc_modern/',
     mrrc_ft8: '/mrrc_ft8/',
     sunmrrc: '/sunmrrc/',
     sunsdrmobile: '/sunsdrmobile/',
@@ -92,7 +94,7 @@
       'backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}' +
       '.vlsc-to-top.show{opacity:1;visibility:visible;transform:translateY(0);}' +
       '.vlsc-to-top:hover{border-color:#f39c12;background:rgba(243,156,18,0.15);}' +
-      '@media(max-width:768px){.vlsc-gn-links{gap:0.85rem;}.vlsc-gn-inner{padding:0 1.25rem;}.vlsc-to-top{right:1rem;bottom:1rem;}}';
+      '@media(max-width:768px){:root{--gn-h:72px;}.vlsc-gn{height:auto;min-height:var(--gn-h);}.vlsc-gn-inner{flex-wrap:wrap;height:auto;min-height:var(--gn-h);padding:0.4rem 1.25rem;}.vlsc-gn-brand{order:1;}.vlsc-gn-gh{order:2;}.vlsc-gn-links{order:3;width:100%;justify-content:center;flex-wrap:wrap;gap:0.35rem 0.75rem;padding-top:0.2rem;}.vlsc-gn-links a{padding:0.1rem 0;}.vlsc-to-top{right:1rem;bottom:1rem;}}';
     (document.head || document.documentElement).appendChild(fb);
   }
 
@@ -109,6 +111,7 @@
         siteLink('fde', 'FDE') +
         siteLink('mrrc', 'MRRC') +
         siteLink('mrrc_ft710', 'FT-710') +
+        siteLink('mrrc_modern', 'Modern') +
         siteLink('mrrc_ft8', 'FT-8') +
         siteLink('sunmrrc', 'SunMRRC') +
         siteLink('sunsdrmobile', 'SunsdrMobile') +

@@ -385,8 +385,13 @@ body.vlsc-gn-on .nav-links { top: var(--nav-h); }
 body.vlsc-gn-on .sdd-sidebar { top: calc(var(--gn-h) + 80px); }
 
 @media (max-width: 768px) {
-  .vlsc-gn-links { gap: 0.85rem; }
-  .vlsc-gn-inner { gap: 0.5rem; }
+  :root { --gn-h: 72px; }
+  .vlsc-gn { height: auto; min-height: var(--gn-h); }
+  .vlsc-gn-inner { flex-wrap: wrap; height: auto; min-height: var(--gn-h); gap: 0.35rem; padding: 0.4rem 1.25rem; }
+  .vlsc-gn-brand { order: 1; }
+  .vlsc-gn-gh { order: 2; }
+  .vlsc-gn-links { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; gap: 0.35rem 0.75rem; padding-top: 0.2rem; }
+  .vlsc-gn-links a { padding: 0.1rem 0; }
   body.vlsc-gn-on .nav-links { top: calc(var(--gn-h) + var(--nav-h)); }
 }
 

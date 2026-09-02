@@ -12,9 +12,9 @@ PAGES = {
     "en": PORTAL / "engineering.html",
     "zh": PORTAL / "zh" / "engineering.html",
 }
-FDE_PAGES = {
-    "en": PORTAL / "fde.html",
-    "zh": PORTAL / "zh" / "fde.html",
+AGENTIC_PAGES = {
+    "en": PORTAL / "agentic.html",
+    "zh": PORTAL / "zh" / "agentic.html",
 }
 INDEX_PAGES = {
     "en": PORTAL / "index.html",
@@ -156,8 +156,9 @@ class EngineeringPageTests(unittest.TestCase):
             )
             self.assertEqual(REQUIRED_FAMILIES, families, language)
 
-    def test_fde_summary_precedes_ontology_and_links_to_engineering(self) -> None:
-        for language, path in FDE_PAGES.items():
+    def test_agentic_summary_precedes_ontology_and_links_to_engineering(self) -> None:
+        # 注：本节断言的 "engineering" 节在任务 3/4 改名为 "harness"，届时同步更新。
+        for language, path in AGENTIC_PAGES.items():
             source, parser = load_page(path)
             self.assertIn("engineering", parser.section_ids, language)
             self.assertLess(
@@ -193,7 +194,7 @@ class EngineeringPageTests(unittest.TestCase):
             self.assertEqual([expected_script], parser.local_scripts, language)
 
     def test_relative_assets_exist(self) -> None:
-        for group_name, pages in (("engineering", PAGES), ("fde", FDE_PAGES)):
+        for group_name, pages in (("engineering", PAGES), ("agentic", AGENTIC_PAGES)):
             for language, path in pages.items():
                 _, parser = load_page(path)
                 for ref in parser.refs:

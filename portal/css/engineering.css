@@ -103,7 +103,7 @@
 .eng-details-body { padding: 1.25rem; color: var(--text-secondary); line-height: 1.7; }
 .eng-cta { padding: 5rem 2rem; text-align: center; background: var(--bg-secondary); }
 
-.fde-engineering-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.ag-engineering-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
 
 @media (max-width: 1100px) {
   .eng-execution-grid, .eng-maturity-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -116,7 +116,7 @@
   .eng-state-grid,
   .eng-maturity-grid,
   .eng-failure-grid,
-  .fde-engineering-summary { grid-template-columns: 1fr; }
+  .ag-engineering-summary { grid-template-columns: 1fr; }
   .eng-contract { grid-template-columns: 1fr; }
   .eng-contract-center { transform: rotate(90deg); }
   .eng-hero { padding: 8rem 1.25rem 4rem; }

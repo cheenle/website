@@ -24,6 +24,23 @@ REQUIRED_SECTIONS = {
     "capabilities",
     "evidence",
 }
+LANDING_PAGES = {
+    "en": PORTAL / "index.html",
+    "zh": PORTAL / "zh" / "index.html",
+}
+OBSOLETE_PHRASES = (
+    "FDE Across Three Projects",
+    'One Methodology<br><span class="gradient">Three Products',
+    "跨三项目的 FDE 实战",
+    '一套方法论<br><span class="gradient">三款产品',
+    "One Field. Three Tracks.",
+    "Built Through Forward Deployed Engineering",
+    "通过 Forward Deployed Engineering 打磨",
+    "Read the FDE Story",
+    "阅读 FDE 方法论",
+    "由 Agent 写成",
+    "written by AI",
+)
 REQUIRED_FAMILIES = {
     "mrrc-universal",
     "mrrc-direct-usb",
@@ -131,20 +148,25 @@ class AgenticPageTests(unittest.TestCase):
             self.assertIn('data-client="android"', direct.group(0))
 
     def test_obsolete_top_level_counts_are_removed(self) -> None:
-        forbidden = (
-            "FDE Across Three Projects",
-            'One Methodology<br><span class="gradient">Three Products',
-            "跨三项目的 FDE 实战",
-            '一套方法论<br><span class="gradient">三款产品',
-            "One Field. Three Tracks.",
-            "Built Through Forward Deployed Engineering",
-            "由 Agent 写成",
-            "written by AI",
-        )
         for language, path in PAGES.items():
             source, _ = load_page(path)
-            for phrase in forbidden:
+            for phrase in OBSOLETE_PHRASES:
                 self.assertNotIn(phrase, source, f"{language}: {phrase}")
+
+    def test_landing_pages_carry_no_obsolete_top_level_claims(self) -> None:
+        """首页不在 PAGES 里（它没有 agentic 页的节结构），曾因此漏掉口径。
+
+        任务 9 把 engineering 降为分册、首页方法论节改为总纲口径；若这条契约只
+        覆盖 agentic 两页，首页残留 "Built Through Forward Deployed Engineering"
+        不会被任何断言发现。
+        """
+        for language, path in LANDING_PAGES.items():
+            source = path.read_text(encoding="utf-8")
+            for phrase in OBSOLETE_PHRASES:
+                self.assertNotIn(phrase, source, f"{language} 首页: {phrase}")
+            self.assertIn('href="/agentic.html"' if language == "en"
+                          else 'href="/zh/agentic.html"', source,
+                          f"{language} 首页: 缺少指向总纲的链接")
 
     def test_page_metadata_leads_with_new_umbrella(self) -> None:
         """`<title>` / description / keywords 是搜索结果与链接预览里**唯一可见的文案**。

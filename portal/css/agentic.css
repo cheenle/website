@@ -160,3 +160,8 @@ html { scroll-behavior: smooth; }
 .ag-proc--blocked  { color: #34d399; border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.08); }
 /* 复现样本用的是真实终端输出，→ 那行 194 字符不换行，必须可横向滚动 */
 pre.ag-diagram { overflow-x: auto; white-space: pre; font-family: 'JetBrains Mono', monospace; font-size: .75rem; line-height: 1.6; }
+
+/* ── 分册面包屑：engineering 页降为「机制分册」后的归属指示 ── */
+.ag-crumb { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; padding: .75rem 0; font-size: .8125rem; color: var(--text-secondary); }
+.ag-crumb a { color: var(--accent); text-decoration: none; }
+.ag-crumb--here { color: var(--text-muted); }

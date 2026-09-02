@@ -272,7 +272,9 @@ B 存在而自动升级。页面徽章分两色族：A 用现有徽章改名后�
    direct-usb 内）、SVG 含 `title`/`desc`、`details`/`summary` 配对、本地资源存在、id 唯一。
 2. 新增断言：`thesis` 节含主张句；`ontology` 节含「概念 → 消费方」表且每行含规则 ID；
    禁句清单含「由 Agent 写成」类表述。
-3. 全站术语普查：`grep -R` （**必须用 `-R`，子站是符号链接，`-r` 会静默漏检**）确认无残留
+3. 全站术语普查：**逐个显式列出站点目录并带尾斜杠**（`grep -Rn PAT portal/ mrrc/ …`）。
+   实测 macOS BSD grep 的 `-r` 与 `-R` **都**不进入符号链接子站，从 `.` 扫会漏掉全部子站却报干净
+   （假绿）；裸符号链接名作参数同样返回 0，带尾斜杠才生效。据此确认无残留
    「Built Through Forward Deployed Engineering」；`FDE` 仅以历史环节/术语条目形式出现。
 4. 链接检查：各站 `fde.html` 引用全部改尽；重定向路径拼写与 §4.1 一致；`nginx -t` 通过。
 5. 数字一致性：全站不再存在第二处版本 / 测试数声明（§8.2 规则 2）。
@@ -310,6 +312,6 @@ B 存在而自动升级。页面徽章分两色族：A 用现有徽章改名后�
 | B3.5 | `mrrc`：软链重指向 + `fde.html → agentic.html`（EN/ZH）+ 23 文件导航术语 + §8.2 数字口径 + 两条 301 | 是 |
 | B4 | `mrrc_modern` / `mrrc_ft710`：`fde.html → agentic.html`（套 §5.2 字段、按 §8.2 删数字）+ 术语层 + 301 | 是 |
 | B5 | `efhw` / `sunmrrc` / `SunsdrMobile` / `mrrc_ft8`：术语层 + 各加一节「分工与资产」 | 是 |
-| B6 | `CLAUDE.md` 更新（事实单一来源规则、`grep -R` 陷阱、新 URL 结构）+ `sitemap.xml` / `make_sitemap.py` + 全站复查 | 是 |
+| B6 | `CLAUDE.md` 更新（事实单一来源规则、符号链接普查约定、新 URL 结构）+ `sitemap.xml` / `make_sitemap.py` + 全站复查 | 是 |
 
 B1 与 B3 必须同批发布，否则旧链接 404。每批独立 commit。

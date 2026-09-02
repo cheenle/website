@@ -18,8 +18,35 @@
 **关键环境事实（工程师必须知道）：**
 
 1. `website/mrrc`、`mrrc_modern`、`mrrc_ft710`、`sunmrrc`、`SunsdrMobile`、`mrrc_ft8`、`ft8`
-   **都是符号链接**。`grep -r` 不跟随符号链接、会静默漏检 —— 全站普查必须用 `grep -R`。
-2. `website/mrrc -> /Users/cheenle/UHRR/MRRC/website` **目标不存在（软链已断）**。本轮不改 mrrc 站。
+   **都是符号链接**（`portal`、`efhw`、`nginx` 是真实目录）。
+
+   **普查铁律（实测 2026-09-02，macOS BSD grep 2.6.0）：** 从仓库根扫 `.` 时，`-r` 与 `-R`
+   **都不**进入符号链接子站 —— 跟随嵌套链接是 GNU grep `-R` 的行为，本机没有。实测漏检量：
+
+   | 站点 | `grep -Ran PAT .` 可见 | 显式 `站点/` 实扫 |
+   | --- | --- | --- |
+   | `mrrc` | 0 | 106 |
+   | `mrrc_modern` | 0 | 45 |
+   | `mrrc_ft710` | 0 | 30 |
+   | `sunmrrc` / `SunsdrMobile` / `mrrc_ft8` | 0 | 各 1 |
+   | `portal` / `efhw`（真实目录） | 45 / 4 | 45 / 4 |
+
+   所以**绝不可**用 `grep -R … .` 做全站普查 —— 它会报告干净而实际漏掉 184 处，形成**假绿**。
+   唯一正确形式是逐个显式列出站点目录、**并带尾斜杠**（尾斜杠是决定因素，裸名同样返回 0）：
+
+   ```bash
+   cd /Users/cheenle/HAM/website
+   SITES="portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/"
+   grep -Ran "PAT" $SITES     # 全部可见
+   grep -Ran "PAT" mrrc       # 0 —— 错：裸符号链接名不进入
+   ```
+
+   例外：任务内先 `cd` 进某站的**真实仓库目录**（如 `/Users/cheenle/HAM/MRRC/website`）再扫 `.`
+   是安全的，那里没有符号链接层。需要文件清单时用 `find -L . -name '*.html'`（`-L` 才跟随链接）。
+   下文所有「全站普查」步骤均已按此形式写好，不要简化回 `grep -R … .`。
+
+2. `website/mrrc` 原指向已搬走的 `/Users/cheenle/UHRR/MRRC/website`，**规划阶段已重指向**
+   `/Users/cheenle/HAM/MRRC/website`（commit `9ad7a21`）；MRRC 站**纳入本轮**（任务 11）。
 3. 子站各自的仓库在 `/Users/cheenle/HAM/<name>/`，其 `website/` 目录才是站点根。
 4. `portal/deploy.sh` 的 `REQUIRED_FILES` 只含 `index.html`、`zh/index.html`、`css/octen.css`，
    不含 `fde.html` —— 改名不需要改它。
@@ -69,7 +96,7 @@
 | `efhw/index.html`、`sunmrrc/index.html`、`SunsdrMobile/index.html`、`mrrc_ft8/index.html` | 修改 | 各新增一节「分工与资产」 |
 | 10 个 `js/global-nav.js` / `js/scope.js`（清单见任务 5） | 修改 | 三处统一模式（`fde: '/fde.html'`、`siteLink('fde','FDE')`、SITE 正则） |
 | 各站 `zh/index.html` | 修改 | 导航术语（本期不新建子站中文长页） |
-| `CLAUDE.md`（workspace 根） | 修改 | 事实单一来源规则、`grep -R` 陷阱、新 URL 结构 |
+| `CLAUDE.md`（workspace 根） | 修改 | 事实单一来源规则、符号链接普查约定、新 URL 结构 |
 
 **每个任务独立 commit。** 任务 1 契约测试必须先红后绿；2–9 属 portal（含跨站 JS 术语层）；
 10 属 nginx；11 MRRC；12 两张子站长页；13 四个子站小改；14 收尾与部署。
@@ -1305,7 +1332,7 @@ git -C /Users/cheenle/HAM/ft8 add website/index.html website/zh/index.html \
 
 在 `## Overview` 之后插入：
 
-```markdown
+````markdown
 ## Site-wide editorial rules
 
 ### Agentic Engineering is the umbrella; FDE is one loop inside it
@@ -1328,11 +1355,26 @@ promotes it. Repositories without `.agents/skills/sdd-guardian/` must not descri
 
 ### Cross-site checks
 
-Sub-site directories under `website/` are symlinks into other git repositories.
-`grep -r` does not follow them and silently returns nothing — always use `grep -R`.
-Commits go to the owning repository, not this one (see the table in
-`docs/superpowers/plans/2026-09-02-agentic-engineering-refactor.md`).
+Sub-site directories under `website/` are symlinks into other git repositories
+(`mrrc/`, `mrrc_modern/`, `mrrc_ft710/`, `sunmrrc/`, `SunsdrMobile/`, `mrrc_ft8/`, `ft8/`);
+`portal/`, `efhw/` and `nginx/` are real directories.
+
+**Site-wide greps must list the site directories explicitly, each with a trailing slash.**
+On this machine (macOS BSD grep) both `-r` and `-R` refuse to descend into symlinked
+sub-directories when you search from `.`, so `grep -R pattern .` reports a clean tree while
+every sub-site hit stays invisible — a silent false green. Use:
+
+```bash
+SITES="portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/"
+grep -Rn "pattern" $SITES      # correct
+grep -Rn "pattern" .           # WRONG: misses all symlinked sub-sites
+grep -Rn "pattern" mrrc        # WRONG: bare symlink arg is not followed either
 ```
+
+`find` needs the same care: use `find -L` to follow symlinks. Grepping `.` is only safe
+after `cd` into a sub-site's real repository directory (e.g. `/Users/cheenle/HAM/MRRC/website`).
+Commits go to the owning repository, not this one.
+````
 
 - [ ] **步骤 2：重生成 sitemap（勿手编）**
 
@@ -1348,11 +1390,17 @@ grep -n "agentic.html\|fde.html" sitemap.xml
 ```bash
 cd /Users/cheenle/HAM/website
 python3 -m unittest discover -s portal/tests -p 'test_*.py' -v 2>&1 | tail -5
-echo "--- 全站 FDE 残留（应为 0，FDE 作为历史环节名词的除外）---"
-grep -Rn "fde\.html" --include=*.html --include=*.js --include=*.conf . 2>/dev/null | grep -v worktrees | grep -v promo-videos
-echo "--- §9.5 数字一致性：portal 之外不得有第二处版本/测试数 ---"
-grep -RnE "439 tests|262 tests|v1\.8\.1|v1\.12\.0" --include=*.html . 2>/dev/null \
-  | grep -v worktrees | grep -v promo-videos | grep -v "^./portal/" || echo "OK: 账本外无第二处可比数字"
+# 全站普查：必须逐个显式列出站点目录并带尾斜杠（见文首「普查铁律」）。
+# 从 . 扫的 -r/-R 都进不去符号链接子站，会假绿通过。
+SITES="portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/"
+echo "--- 全站 fde.html 引用残留（应为 0）---"
+grep -Rn "fde\.html" --include=*.html --include=*.js $SITES || echo "OK: 八站无 fde.html 引用"
+echo "--- nginx 配置里的旧路径（应在 301 规则内，其余为 0）---"
+grep -n "fde" nginx/vlsc.net.conf
+echo "--- §9.5 数字一致性：portal 账本之外不得有第二处版本/测试数 ---"
+grep -RnE "439 tests|262 tests|v1\.8\.1|v1\.12\.0" --include=*.html \
+  mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/ \
+  || echo "OK: 账本外无第二处可比数字"
 echo "--- nginx 301 清单 ---"; grep -c "return 301 /.*agentic" nginx/vlsc.net.conf
 ```
 预期：测试 `OK`；术语残留 grep 无输出（`promo-videos-long/shared/source-snapshots/` 是历史快照，
@@ -1418,5 +1466,5 @@ ssh cheenle@www.vlsc.net "for u in /fde.html /zh/fde.html /mrrc/fde.html /mrrc/z
 
 ```bash
 cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
-  && git commit -m "docs: 回写全站编辑规则（事实单一来源、术语、grep -R 陷阱）并重生成 sitemap"
+  && git commit -m "docs: 回写全站编辑规则（事实单一来源、术语、符号链接普查约定）并重生成 sitemap"
 ```

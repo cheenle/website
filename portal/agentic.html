@@ -1585,6 +1585,25 @@
               >Deferred / known issue</span
             >
           </div>
+<div class="ag-legend" style="margin-top:1rem;" aria-label="Engineering process evidence levels">
+  <span class="ag-proc ag-proc--registry">B1 constraint registry entry</span>
+  <span class="ag-proc ag-proc--spec">B2 spec / plan trail</span>
+  <span class="ag-proc ag-proc--enforced">B3 enforced in session</span>
+  <span class="ag-proc ag-proc--blocked">B4 block verified</span>
+</div>
+<div class="ag-note ag-note--warning" style="margin-top:1rem;">
+  <strong>The two ladders do not cross.</strong> The row below measures whether an engineering process was constrained; the row above measures whether a product behaviour is true. A B4 badge never promotes an A-level claim, and no count of constraints makes a bench result less necessary.
+</div>
+<details class="ag-details" style="margin-top:1.25rem;">
+  <summary>The chain, reproduced end to end (2026-09-02)</summary>
+  <div class="ag-details-body"><pre class="ag-diagram"><code>$ python3 .agents/skills/sdd-guardian/harness/sdd_context.py check probe_b4_tmp.py
+SDD-GUARDIAN: blocking violations found:
+[BLOCK] cat-no-dn (AD-014; SDD V1.2 freq-drift incident) probe_b4_tmp.py:2: return c.query("DN;")
+    → On the FT-710, 'DN;' is NOT a DNR query — it steps the active VFO DOWN ~20 Hz per call. Polling it caused a live frequency-drift incident (V1.2). DNR level is intentionally not polled.
+$ echo $?
+2</code></pre>
+<p>A field incident became an SDD ruling, the ruling became a machine-readable constraint, and the constraint blocked an agent from re-introducing the incident. This is the claim this page makes, and it is reproducible.</p></div>
+</details>
           <div class="ag-evidence-grid" style="margin-top: 2rem">
             <article class="ag-card">
               <h3>MRRC FT-710</h3>
@@ -1597,7 +1616,7 @@
               <p>
                 Source, packaged release, test execution, and radio acceptance
                 are separate evidence records.
-              </p>
+               <strong>Process evidence:</strong> <span class="ag-proc ag-proc--blocked">B4 block verified</span></p>
             </article>
             <article class="ag-card">
               <h3>MRRC Modern</h3>
@@ -1613,7 +1632,7 @@
               <p>
                 IC-series physical-radio acceptance is tracked separately from
                 automated coverage.
-              </p>
+               <strong>Process evidence:</strong> <span class="ag-proc ag-proc--blocked">B4 block verified</span></p>
             </article>
             <article class="ag-card">
               <h3>MRRC-FT8</h3>
@@ -1626,7 +1645,7 @@
               <p>
                 The public package and later field-evolved design are not
                 presented as the same deployed artifact.
-              </p>
+               <strong>Process evidence:</strong> <span class="ag-proc ag-proc--blocked">B4 block verified</span></p>
             </article>
             <article class="ag-card">
               <h3>EFHW V3.0</h3>
@@ -1639,7 +1658,7 @@
               <p>
                 No bench-verified or field-verified claim is made before
                 physical validation.
-              </p>
+               <strong>Process evidence:</strong> <span class="ag-proc ag-proc--spec">B2 spec / plan trail</span></p>
             </article>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">

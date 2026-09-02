@@ -151,3 +151,12 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
   .ag-card { transition: none; }
 }
+
+/* ── 阶梯 B：工程过程证据（紫灰系，与产品成熟度色族视觉分离） ── */
+.ag-proc { display: inline-flex; align-items: center; gap: .35rem; padding: .15rem .55rem; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: .6875rem; letter-spacing: .02em; border: 1px solid var(--border); white-space: nowrap; }
+.ag-proc--registry { color: #a78bfa; border-color: rgba(167,139,250,.35); background: rgba(167,139,250,.08); }
+.ag-proc--spec     { color: #818cf8; border-color: rgba(129,140,248,.35); background: rgba(129,140,248,.08); }
+.ag-proc--enforced { color: #38bdf8; border-color: rgba(56,189,248,.35); background: rgba(56,189,248,.08); }
+.ag-proc--blocked  { color: #34d399; border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.08); }
+/* 复现样本用的是真实终端输出，→ 那行 194 字符不换行，必须可横向滚动 */
+pre.ag-diagram { overflow-x: auto; white-space: pre; font-family: 'JetBrains Mono', monospace; font-size: .75rem; line-height: 1.6; }

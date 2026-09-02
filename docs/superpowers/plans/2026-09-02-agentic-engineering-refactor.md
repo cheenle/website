@@ -1650,6 +1650,10 @@ cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
 | 11 | 假设 ZH 与 EN 版式一致（锚点导航独占一行） | 整行替换 `StopIteration`；改用 `re.S` + `</div></div>` 收口时因中间隔换行+缩进，**惰性匹配一路吞到文档后部**，删掉 `<main>` 起始 | ZH 侧改行内定位替换；HTML 一律禁用 `</div>…</div>` 作边界 |
 | 12 | 任务 5 标题写「9 个 JS」但清单与自检 echo 都是 10 个 | 按 9 数核数会误判「有一个文件没改」 | 以实测 10 个为准（`grep -c fde` 逐个：global-nav.js=3、scope.js=2） |
 | 13 | 任务 5 步骤 2 把 `index.html` 的 `/fde.html` CTA 归为「预期中间态、任务 9 再改」 | **实际是工作树里的活 404**：任务 2 已 `git mv fde.html agentic.html`，磁盘上再无 fde.html；中间任何一次 portal 部署都会把 404 推上线 | href 当场改指 `/agentic.html`（EN/ZH 各一处），只把**按钮文案**（`Read the FDE Story` / `阅读 FDE 方法论`）留给任务 9 —— 延文的理由成立，延 href 的不成立 |
+| 18 | 任务 8 步骤 3 的终端转录把 `→` 那句手工折成两行并补缩进，却声称「原文照录」；真实输出该行 194 字符不换行 | 页面显示的不是程序真实输出（过度声称），且 `<pre class=ag-diagram>` 无 `overflow-x` → 移动端整页横向撑破 | 实地跑 `sdd_context.py check` 取真输出逐字节上页；CSS 补 `pre.ag-diagram{overflow-x:auto;white-space:pre}` |
+| 19 | 步骤 4 让「其余卡片（MRRC Universal、SunMRRC、EFHW）」加 B2，但证据网格只有 FT-710/Modern/FT8/EFHW 四张产品卡 + 一张附录卡 | 按名找不到两张卡 → 断言失败；或误把徽章加到 families 同名卡上 | 正则命中了 families 节的同名 `<h3>`，靠「第二段 `<p>` 不存在」断言挡下；改为只在 `ag-evidence-grid` 区间内替换 |
+| 20 | 步骤 2 的互推说明「the row **above** measures whether an engineering process was constrained」方位写反 （阶梯 A 产品成熟度在上、新插入的阶梯 B 在下） | 读者按字面找「上面那行」会指错图例，说明自相矛盾 | 改为「the row below measures process; the row above measures product」；ZH 用「下面这一行/上面那一行」明确指位 |
+| 21 | 计划未预见工具链 format-on-write：一次内容写入顺带重排两页 HTML 共 3371 行；且 meta 被折多行后，契约测试写死的单行正则 `<meta name="description" content="…"` 直接失配 | 内容提交被排版噪声淹没、不可审计；测试出现与内容无关的「假红」 | 拆成独立 style 提交（用可见文字逐词比对证明零文字增删）；正则改 `\s+` 格式无关；CSS 不跟进格式化（prettier 默认会重排 440 行而 harness 并未如此） |
 | 15 | 任务 6 步骤 3 的待替换旧串记成 `model **for** remote amateur radio`，文件实为 `model **of**` | 无断言的 `str.replace` 静默不命中 → 标题根本没改而测试仍全绿 | 每次替换都加 `count(old)==1` 断言，当场报未命中 |
 | 16 | 规格 §6.2 的消费方表是 **8** 行，任务 6 却写「7 行、不得增删」且未交代第 8 行去向 | 终检按 8 行核对会误判漏改；或第 8 行（事故→约束因果链，含 `cat-no-dn`）真被漏掉 | 第 8 行由任务 8 的复现样本承接；任务 14 终检须确认 8 行全部落地 |
 | 17 | 步骤 3 的新副标把反过度声称声明（不是 RDF/OWL 部署、知识图数据库、新增运行框架）整句删除 | 本体一旦升格为「运行时底座」，丢掉这句会被读成我们建了形式化知识图，直接违反 Evidence before claims | 新副标只换前半句口径，免责声明 EN/ZH 均保留 |

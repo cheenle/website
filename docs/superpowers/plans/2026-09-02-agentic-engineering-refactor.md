@@ -45,6 +45,11 @@
    是安全的，那里没有符号链接层。需要文件清单时用 `find -L . -name '*.html'`（`-L` 才跟随链接）。
    下文所有「全站普查」步骤均已按此形式写好，不要简化回 `grep -R … .`。
 
+   **查基线禁止 `git stash`（任务 2 踩坑）：** 要对比改动前的行为，用 `git show HEAD:<path>`
+   取原内容，或 `git worktree add` 开临时工作树。`git stash --include-untracked` 会把未跟踪文件
+   一并卷入，pop 后又打断 `git mv` 的重命名记录（表现为 `A`+`D`、`git diff --cached -M`
+   看不到重命名），实测只能重做提交来补救，风险远大于收益。
+
    **执行期陷阱（任务 1 实测）：** `git mv` 之后必须重新 `read` 新路径才能编辑——读文件守卫不认旧路径；
    且 `tests/__pycache__/` 会留下旧模块的 `.pyc`，`git mv` 后顺手 `rm -f tests/__pycache__/<旧名>.*.pyc`。
    改测试模块名后还要 `grep -rn "<旧模块名>" portal/` 确认无其他引用。
@@ -259,7 +264,14 @@ cd /Users/cheenle/HAM/website/portal
 git mv fde.html agentic.html
 git mv zh/fde.html zh/agentic.html
 git mv css/fde.css css/agentic.css
+cd /Users/cheenle/HAM/website && git diff --cached --stat -M   # 预期 3 个重命名、0 行增删
+git commit -m "refactor(portal): 纯改名 fde → agentic（三文件，零内容变更）"
 ```
+
+**必须单独成提交（任务 2 实测教训）：** 若把改名与后面的 259 行类名改写合并成一次提交，
+相似度会被压到 git 默认重命名阈值（50%）以下，`git log --follow portal/agentic.html`
+追不到改名前的历史 —— 「用 git mv 保历史」的目的落空。拆开后实测可追到 4 个历史提交。
+此刻 CSS 与页面引用暂时不一致，由本任务后续步骤闭合。
 
 - [ ] **步骤 2：确认改名范围与实际类名（防止漏改/过改）**
 
@@ -281,6 +293,11 @@ LC_ALL=C sed -i '' -E 's/fde-/ag-/g' \
 ```
 
 `fde-status--field` → `ag-status--field`、`fde-card` → `ag-card` 等 47 个类同批完成。
+
+**执行期实测补充：** `fde-` 在 CSS 里既是类名前缀也是**自定义属性前缀**（`--fde-control` 等 19 个），
+同一条 sed 会一起改。跑之前先确认两件事，缺一即停：
+`grep -Rl 'fde-' portal/` 证明 `--fde-*` 的引用点自包含在 `css/agentic.css` 内（实测成立），
+且 portal 内不存在既有 `ag-` 名（实测 0 个）→ 无冲突。子站色值（`#f0a030` 等）不含 `fde-`，不受影响。
 
 - [ ] **步骤 4：改链接与缓存版本**
 
@@ -309,14 +326,71 @@ PY
 ```
 预期输出：`孤儿（用了但没定义）: []`。非空即逐个补定义或删用法，不得留到下个任务。
 
-- [ ] **步骤 6：Commit**
+- [ ] **步骤 5b：修总纲页自身的 6 处旧名引用（初稿遗漏；改名后契约测试立刻抓到）**
+
+`agentic.html` / `zh/agentic.html` 各 3 处，三类方向不同，只改导航必漏：导航**自链**、
+EN↔ZH **语言按钮**、**页脚**语言链接。
+
+```bash
+cd /Users/cheenle/HAM/website/portal
+LC_ALL=C sed -i '' -e 's|<li><a href="fde\.html">FDE</a></li>|<li><a href="agentic.html">Agentic</a></li>|g' \
+  -e 's|href="zh/fde\.html"|href="zh/agentic.html"|g' agentic.html
+LC_ALL=C sed -i '' -e 's|<li><a href="fde\.html">FDE</a></li>|<li><a href="agentic.html">Agentic</a></li>|g' \
+  -e 's|href="\.\./fde\.html"|href="../agentic.html"|g' zh/agentic.html
+grep -c 'fde\.html' agentic.html zh/agentic.html      # 预期均 0
+```
+
+- [ ] **步骤 5c：修 `engineering.html` 两页各 3 处（原计划留给任务 9，提前到此）**
+
+实测 **3 处而非任务 9 记的 2 处**：导航项、页尾 CTA（`Read FDE in Practice` / `阅读 FDE 实战`）、
+页脚语言链接。改名后即已知断链，不能带着它跑 7 个任务。
+
+```bash
+cd /Users/cheenle/HAM/website/portal
+LC_ALL=C sed -i '' -e 's|<li><a href="fde\.html">FDE</a></li>|<li><a href="/agentic.html">Agentic</a></li>|g' \
+  -e 's|href="fde\.html">Read FDE in Practice|href="/agentic.html">Read the Agentic Engineering thesis|g' \
+  -e 's|href="fde\.html">FDE</a>|href="/agentic.html">Agentic</a>|g' engineering.html
+LC_ALL=C sed -i '' -e 's|<li><a href="fde\.html">FDE</a></li>|<li><a href="/zh/agentic.html">Agentic</a></li>|g' \
+  -e 's|href="fde\.html">阅读 FDE 实战|href="/zh/agentic.html">阅读智能体工程总纲|g' \
+  -e 's|href="fde\.html">FDE</a>|href="/zh/agentic.html">Agentic</a>|g' zh/engineering.html
+grep -c 'fde\.html' engineering.html zh/engineering.html   # 预期均 0
+```
+
+- [ ] **步骤 5d：repoint `test_engineering_pages.py`（初稿完全遗漏的第二个契约测试文件）**
+
+该文件第 14-17 行有 `FDE_PAGES = {... "fde.html" ...}`，第 196 行 `("fde", FDE_PAGES)`。
+危险之处：**它的 `load_page` 对不存在的文件抛 `SkipTest`（101-102 行）**，所以改名后
+相关用例不是变红、而是**静默跳过**（实测 skip 从基线 0 变成 2）—— 覆盖率悄悄流失，
+比红测试更危险。改法（本任务内只做路径与命名，节 id 断言留到任务 4）：
+
+- `FDE_PAGES` → `AGENTIC_PAGES`，两个路径改指 `agentic.html` / `zh/agentic.html`
+- 用例名 `test_fde_summary_precedes_ontology_and_links_to_engineering` →
+  `test_agentic_summary_...`；分组标签 `("fde", FDE_PAGES)` → `("agentic", AGENTIC_PAGES)`
+- **不要**动 `test_nested_loops_are_explicit` 里的 `data-loop="fde"` —— FDE 作为闭环名保留
+
+```bash
+cd /Users/cheenle/HAM/website/portal
+python3 -m unittest tests.test_engineering_pages -v 2>&1 | tail -3   # 预期 skip 0
+```
+
+- [ ] **步骤 6：Commit（第二次提交：内容改写）**
 
 ```bash
 cd /Users/cheenle/HAM/website
 git add portal/agentic.html portal/zh/agentic.html portal/css/agentic.css \
-        portal/css/engineering.css portal/engineering.html portal/zh/engineering.html
-git commit -m "refactor(portal): fde 页面/样式重命名为 agentic，类前缀 fde- → ag-"
+        portal/css/engineering.css portal/engineering.html portal/zh/engineering.html \
+        portal/tests/test_engineering_pages.py
+git commit -m "refactor(portal): 类前缀 fde- → ag-，样式引用升 v=2，修 12 处旧名链接"
+git status --porcelain portal/ | grep '^??' || true
 ```
+
+**必须逐路径 `git add`，禁止 `git add -A portal/`：** 该目录下有**不属于任何任务**的未跟踪文件
+（实测 `portal/IMG_9243.JPG`、`portal/images/`），`-A` 会把它们一并提交进去。
+最后一条 grep 用来确认没有误收。
+
+预期测试状态：`Ran 26 tests / FAILED (failures=4) / skipped=0`，
+且 4 处红全在 `test_agentic_pages`（任务 1 故意留红，待任务 3-9 转绿）。
+若 skip 不为 0 或红项越出 `test_agentic_pages`，说明 5b-5d 有漏，停下修。
 ---
 
 ## 任务 3：总纲前三节（EN）——命题、分工、FDE 前史（B1b）
@@ -558,10 +632,31 @@ badge 文案改为 `<span>Agentic Engineering · 智能体工程</span>`。
 其余 label 按任务 3 步骤 5 的数字表改，中文文本不动（`02 · 双循环`→`05 · 生态地图` 之类以
 `grep -o 'ag-section-label">[^<]*' zh/agentic.html` 实际输出为准逐条对齐 EN 序号）。
 
+**同批改 `test_engineering_pages.py` 的 3 行断言**（两侧都改名后才动手，中途必有一侧不一致）：
+
+```python
+    def test_agentic_summary_precedes_ontology_and_links_to_engineering(self) -> None:
+        for language, path in AGENTIC_PAGES.items():
+            source, parser = load_page(path)
+            self.assertIn("harness", parser.section_ids, language)
+            self.assertLess(source.index('id="leverage"'), source.index('id="harness"'))
+            self.assertLess(source.index('id="harness"'), source.index('id="ontology"'))
+            self.assertIn('href="engineering.html"', source, language)
+```
+删掉步骤 5d 留的那行「任务 3/4 届时更新」注释。
+
+- [ ] **步骤 4b：确认无残留旧节名**
+
+```bash
+cd /Users/cheenle/HAM/website/portal
+grep -c 'id="engineering"' agentic.html zh/agentic.html    # 预期均 0
+grep -n 'id="engineering"' tests/test_engineering_pages.py  # 预期只剩对 engineering.html 页的引用，无节 id
+```
+
 - [ ] **步骤 5：跑契约测试，确认 EN/ZH 结构对等**
 
 ```bash
-cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_pages.AgenticPageTests.test_both_languages_share_section_contract -v
+cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_pages.AgenticPageTests.test_ids_are_unique_and_section_parity_is_preserved -v
 ```
 预期 PASS。若 FAIL，报错会列出两侧 section id 差集——以差集为准补齐，不要改测试。
 
@@ -627,10 +722,13 @@ LC_ALL=C sed -i '' \
   zh/index.html zh/about.html zh/contact.html zh/privacy.html
 grep -Rn 'fde\.html' *.html zh/*.html
 ```
-预期最后一条 grep **只剩 4 行**：`engineering.html` ×2、`zh/engineering.html` ×2
-（两处都是相对链接 `href="fde.html"`，一处在导航、一处在页尾 CTA），由任务 10 处理。
-`index.html` 的 `/fde.html` CTA 按钮（含文案 `Read the FDE Story`）也归任务 10 改写——
-它不是 `<li>` 结构，上面的 sed 不会命中，属预期。
+实测最后一条 grep **归零**（0 行）：`engineering.html` / `zh/engineering.html` 各 3 处旧链接
+已在**任务 2 步骤 5c** 提前修掉（初稿此处记为「×2、由任务 10 处理」是错的——任务 10 只管 nginx
+集中 301，修不了页面内的相对链接，且实际是 3 处不是 2 处）。
+
+`index.html` 的 `/fde.html` CTA 按钮（含文案 `Read the FDE Story`）**仍留在此处未改**，
+它不是 `<li>` 结构、上面的 sed 不命中，由**任务 9 步骤 5** 改写 —— 属预期中间态，
+不是漏改。
 
 - [ ] **步骤 3：统一 FDE 中文译名（现状自相矛盾）**
 
@@ -941,7 +1039,8 @@ cd /Users/cheenle/HAM/website && git add portal/agentic.html portal/zh/agentic.h
     <div class="container"><nav class="ag-crumb" aria-label="Part of"><a href="/agentic.html"><i class="fas fa-arrow-left"></i> Agentic Engineering</a><span class="ag-crumb--here">Engineering mechanism</span></nav></div>
 ```
 
-同文件 2 处 `href="fde.html"`（导航 `FDE` 项 + 页尾 CTA）→ `href="/agentic.html"`、文字 `Agentic`。
+同文件的 `href="fde.html"` 已在**任务 2 步骤 5c** 改完（实测 3 处：导航 + 页尾 CTA + 页脚）；
+本步只做验证 `grep -c 'fde\.html' engineering.html` 为 0，不重复改。
 
 - [ ] **步骤 2：`zh/engineering.html` 同步**
 
@@ -1394,6 +1493,9 @@ grep -n "agentic.html\|fde.html" sitemap.xml
 ```bash
 cd /Users/cheenle/HAM/website
 python3 -m unittest discover -s portal/tests -p 'test_*.py' -v 2>&1 | tail -5
+# skip 必须为 0：load_page 对缺失文件抛 SkipTest，任何 skip = 一条契约静默失效
+python3 -m unittest discover -s portal/tests -p 'test_*.py' 2>&1 | grep -q skipped \
+  && echo "!! 有契约测试被跳过，必须查清" || echo "OK: skip 0"
 # 全站普查：必须逐个显式列出站点目录并带尾斜杠（见文首「普查铁律」）。
 # 从 . 扫的 -r/-R 都进不去符号链接子站，会假绿通过。
 SITES="portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/"
@@ -1407,7 +1509,8 @@ grep -RnE "439 tests|262 tests|v1\.8\.1|v1\.12\.0" --include=*.html \
   || echo "OK: 账本外无第二处可比数字"
 echo "--- nginx 301 清单 ---"; grep -c "return 301 /.*agentic" nginx/vlsc.net.conf
 ```
-预期：测试 `OK`；术语残留 grep 无输出（`promo-videos-long/shared/source-snapshots/` 是历史快照，
+预期：测试 `OK` **且 skip 为 0**（`load_page` 对缺失文件抛 `SkipTest`，任何 skip 都意味着一条
+契约在静默失效，必须查明而不是容忍）；术语残留 grep 无输出（`promo-videos-long/shared/source-snapshots/` 是历史快照，
 已排除、不改）；数字一致性输出 `OK: …`；301 计数为 **6**。
 
 - [ ] **步骤 3b：本地 HTTP 冒烟 + 视觉与键盘核验（规格 §9.6 / §9.8，部署前必做）**

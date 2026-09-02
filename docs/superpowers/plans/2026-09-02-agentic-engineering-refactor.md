@@ -1407,7 +1407,7 @@ git -C /Users/cheenle/HAM/mrrc_ft710 add -A website && git -C /Users/cheenle/HAM
 做法：复制**该页相邻一节**的骨架（`section` + `container` + `section-header`/`section-label`/
 `section-title`/`section-subtitle` + 本站网格与卡片类），只替换标题与三张卡文案。
 
-- [ ] **步骤 1：三张卡的固定内容（按族填，逐仓核实 2026-09-02）**
+- [x] **步骤 1：三张卡的固定内容（按族填，逐仓核实 2026-09-02）**
 
 标题：`Division of Work and Contracts Left Behind` / 中文站用「分工与沉淀契约」。
 四站均已有 `zh/index.html`（实测 2026-09-02），EN/ZH 两侧都要加同一节。
@@ -1418,7 +1418,7 @@ git -C /Users/cheenle/HAM/mrrc_ft710 add -A website && git -C /Users/cheenle/HAM
 | 2 · Human sign-off | `efhw`：PCB 制板与台架验证（设计目标≠实测）。`sunmrrc`：逆向协议推断、非自家硬件上的 PTT。`SunsdrMobile`：App Store 发布、真机音频链路。`mrrc_ft8`：真实波段解码保真度、UTC 时隙 |
 | 3 · Contract left behind | `efhw`：调谐器状态模型 + `efhw-knowledge/` 语料。`sunmrrc`：`PROTOCOL.md` 与 SDD 章节。`SunsdrMobile`：客户端能力边界描述。`mrrc_ft8`：`vendor-readonly`（`wsjtx-3.0.2/` 只读，改动走 `dsp/patched/`） |
 
-- [ ] **步骤 2：每站加校验（改完立即跑，别攒到最后）**
+- [x] **步骤 2：每站加校验（改完立即跑，别攒到最后）**
 
 ```bash
 cd /Users/cheenle/HAM/website
@@ -1433,7 +1433,7 @@ done
 
 预期四站 `division节:1`、`fde残留:0`、`zh division节:1`。`efhw` 属 website 仓库，其余三站各自仓库。
 
-- [ ] **步骤 2b：`efhw` 正文里的 FDE 提法（实测四站唯一命中，EN + ZH 各一处）**
+- [x] **步骤 2b：`efhw` 正文里的 FDE 提法（实测四站唯一命中，EN + ZH 各一处）**
 
 四站 `index.html` / `zh/index.html` 均**无** `fde.html` 链接（导航全部由任务 5 改过的 JS 注入），
 但 `efhw` 有一句正文把 FDE 与 SDD 并列为顶级体系：
@@ -1458,7 +1458,7 @@ cd /Users/cheenle/HAM/website/efhw
 grep -n "FDE" index.html zh/index.html || echo "OK: efhw 正文 FDE 提法已处理"
 ```
 
-- [ ] **步骤 3：Commit（分仓库）**
+- [x] **步骤 3：Commit（分仓库）**
 
 ```bash
 git -C /Users/cheenle/HAM/website add efhw/index.html efhw/zh/index.html \
@@ -1650,16 +1650,19 @@ cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
 | 11 | 假设 ZH 与 EN 版式一致（锚点导航独占一行） | 整行替换 `StopIteration`；改用 `re.S` + `</div></div>` 收口时因中间隔换行+缩进，**惰性匹配一路吞到文档后部**，删掉 `<main>` 起始 | ZH 侧改行内定位替换；HTML 一律禁用 `</div>…</div>` 作边界 |
 | 12 | 任务 5 标题写「9 个 JS」但清单与自检 echo 都是 10 个 | 按 9 数核数会误判「有一个文件没改」 | 以实测 10 个为准（`grep -c fde` 逐个：global-nav.js=3、scope.js=2） |
 | 13 | 任务 5 步骤 2 把 `index.html` 的 `/fde.html` CTA 归为「预期中间态、任务 9 再改」 | **实际是工作树里的活 404**：任务 2 已 `git mv fde.html agentic.html`，磁盘上再无 fde.html；中间任何一次 portal 部署都会把 404 推上线 | href 当场改指 `/agentic.html`（EN/ZH 各一处），只把**按钮文案**（`Read the FDE Story` / `阅读 FDE 方法论`）留给任务 9 —— 延文的理由成立，延 href 的不成立 |
-| 24 | 任务 10 步骤 1 称「必须在缓存与 `location ~* \.html$` 之前，否则 `return 301` 会被 regex location 抢走」 | 这条 nginx 匹配规则是错的：`location =` 精确匹配在算法里最先判定，恒胜正则，与配置文件中的先后无关。把错误规则写进生产配置注释，会误导后续维护者（并让人以为挪动位置就能改行为） | 仍按要求插在那两个 regex 之前（可读性/分组无害），但注释改写成正确规则，并点明真正 load-bearing 的是**发布顺序**（内容先部署、nginx 最后 reload），不是 location 位置 |
-| 22 | 任务 9 步骤 6 声称 `test_obsolete_top_level_counts_are_removed` 会守住首页的 `Built Through Forward Deployed Engineering`，但该测试只遍历 `PAGES`（agentic 两页），首页不在其中 | 首页口径残留不会被任何断言发现，「预期此刻全绿」是基于错误覆盖范围得出的 | 抽出 `OBSOLETE_PHRASES` 为模块级常量，新增 `test_landing_pages_carry_no_obsolete_top_level_claims` 覆盖 index 两页，并补入中文残留短语「通过 Forward Deployed Engineering 打磨」等 |
-| 23 | 步骤 8 用 `git add portal/` | 会把仓库里大量无关未跟踪媒体（`portal/images/`、`IMG_9243.JPG`）一并提交 | 显式列出本次改动的 6 个文件 |
+| 15 | 任务 6 步骤 3 的待替换旧串记成 `model **for** remote amateur radio`，文件实为 `model **of**` | 无断言的 `str.replace` 静默不命中 → 标题根本没改而测试仍全绿 | 每次替换都加 `count(old)==1` 断言，当场报未命中 |
+| 16 | 规格 §6.2 的消费方表是 **8** 行，任务 6 却写「7 行、不得增删」且未交代第 8 行去向 | 终检按 8 行核对会误判漏改；或第 8 行（事故→约束因果链，含 `cat-no-dn`）真被漏掉 | 第 8 行由任务 8 的复现样本承接；任务 14 终检须确认 8 行全部落地 |
+| 17 | 步骤 3 的新副标把反过度声称声明（不是 RDF/OWL 部署、知识图数据库、新增运行框架）整句删除 | 本体一旦升格为「运行时底座」，丢掉这句会被读成我们建了形式化知识图，直接违反 Evidence before claims | 新副标只换前半句口径，免责声明 EN/ZH 均保留 |
 | 18 | 任务 8 步骤 3 的终端转录把 `→` 那句手工折成两行并补缩进，却声称「原文照录」；真实输出该行 194 字符不换行 | 页面显示的不是程序真实输出（过度声称），且 `<pre class=ag-diagram>` 无 `overflow-x` → 移动端整页横向撑破 | 实地跑 `sdd_context.py check` 取真输出逐字节上页；CSS 补 `pre.ag-diagram{overflow-x:auto;white-space:pre}` |
 | 19 | 步骤 4 让「其余卡片（MRRC Universal、SunMRRC、EFHW）」加 B2，但证据网格只有 FT-710/Modern/FT8/EFHW 四张产品卡 + 一张附录卡 | 按名找不到两张卡 → 断言失败；或误把徽章加到 families 同名卡上 | 正则命中了 families 节的同名 `<h3>`，靠「第二段 `<p>` 不存在」断言挡下；改为只在 `ag-evidence-grid` 区间内替换 |
 | 20 | 步骤 2 的互推说明「the row **above** measures whether an engineering process was constrained」方位写反 （阶梯 A 产品成熟度在上、新插入的阶梯 B 在下） | 读者按字面找「上面那行」会指错图例，说明自相矛盾 | 改为「the row below measures process; the row above measures product」；ZH 用「下面这一行/上面那一行」明确指位 |
 | 21 | 计划未预见工具链 format-on-write：一次内容写入顺带重排两页 HTML 共 3371 行；且 meta 被折多行后，契约测试写死的单行正则 `<meta name="description" content="…"` 直接失配 | 内容提交被排版噪声淹没、不可审计；测试出现与内容无关的「假红」 | 拆成独立 style 提交（用可见文字逐词比对证明零文字增删）；正则改 `\s+` 格式无关；CSS 不跟进格式化（prettier 默认会重排 440 行而 harness 并未如此） |
-| 15 | 任务 6 步骤 3 的待替换旧串记成 `model **for** remote amateur radio`，文件实为 `model **of**` | 无断言的 `str.replace` 静默不命中 → 标题根本没改而测试仍全绿 | 每次替换都加 `count(old)==1` 断言，当场报未命中 |
-| 16 | 规格 §6.2 的消费方表是 **8** 行，任务 6 却写「7 行、不得增删」且未交代第 8 行去向 | 终检按 8 行核对会误判漏改；或第 8 行（事故→约束因果链，含 `cat-no-dn`）真被漏掉 | 第 8 行由任务 8 的复现样本承接；任务 14 终检须确认 8 行全部落地 |
-| 17 | 步骤 3 的新副标把反过度声称声明（不是 RDF/OWL 部署、知识图数据库、新增运行框架）整句删除 | 本体一旦升格为「运行时底座」，丢掉这句会被读成我们建了形式化知识图，直接违反 Evidence before claims | 新副标只换前半句口径，免责声明 EN/ZH 均保留 |
+| 22 | 任务 9 步骤 6 声称 `test_obsolete_top_level_counts_are_removed` 会守住首页的 `Built Through Forward Deployed Engineering`，但该测试只遍历 `PAGES`（agentic 两页），首页不在其中 | 首页口径残留不会被任何断言发现，「预期此刻全绿」是基于错误覆盖范围得出的 | 抽出 `OBSOLETE_PHRASES` 为模块级常量，新增 `test_landing_pages_carry_no_obsolete_top_level_claims` 覆盖 index 两页，并补入中文残留短语「通过 Forward Deployed Engineering 打磨」等 |
+| 23 | 步骤 8 用 `git add portal/` | 会把仓库里大量无关未跟踪媒体（`portal/images/`、`IMG_9243.JPG`）一并提交 | 显式列出本次改动的 6 个文件 |
+| 24 | 任务 10 步骤 1 称「必须在缓存与 `location ~* \.html$` 之前，否则 `return 301` 会被 regex location 抢走」 | 这条 nginx 匹配规则是错的：`location =` 精确匹配在算法里最先判定，恒胜正则，与配置文件中的先后无关。把错误规则写进生产配置注释，会误导后续维护者（并让人以为挪动位置就能改行为） | 仍按要求插在那两个 regex 之前（可读性/分组无害），但注释改写成正确规则，并点明真正 load-bearing 的是**发布顺序**（内容先部署、nginx 最后 reload），不是 location 位置 |
+| 25 | 任务 13 网格类名表有误：表中给 mrrc_ft8 写 `arch-grid`、SunsdrMobile 写 `features-grid`，但实测 `arch-grid` 仅在 efhw 的 CSS 中定义；三站 `css/scope.css` 皆有的只有 `fx-grid`。 | 按表施工会得到一个没有布局的裸 div 串——移动端三卡叠成一列且无间距，桌面端不成栅格。 | 施工前逐站读取**实际加载**的 stylesheet（含页内 `<style>`）确认类存在；三站统一 `fx-grid`，efhw 用 `features-grid`。 |
+| 26 | 任务 13 称「复制相邻一节骨架、只替换三张卡文案」，但四站**没有任何 prose 卡**可套：`scope-card` 内部是纯内联样式 div（CSS 无 `.scope-card h3` / `.scope-card p` 规则），efhw 的 `arch-card` 是端点卡（`.label/.endpoint/.dir/.payload`）。 | 直接写 `<div class="scope-card"><h3>…</h3><p>…</p></div>` 会拿不到字号/行距/颜色，标题按浏览器默认渲染成超大衬体字，等于交付一个样式破损的新节。 | efhw 套用其唯一现成的 prose 卡 `feature-card`（icon+h3+p 样式齐备）；三站 `scope-card` 沿用各站自身内联约定（mono 小编号 + `--scope-text-muted` 正文），不新造未定义类。 |
+| 27 | 任务 13 未规定新节是否参与 `scope-section-alt` 交替背景。实测各站最后一节均为非 alt。 | 新节与前一节同背景，视觉上粘连成一整块超长节，分节感消失。 | 插入后逐站回看前一节 class，六站（3 站 × EN/ZH）全部补 `scope-section-alt` 恢复交替。 |
 
 ### 由补正 10 得到的一般教训
 

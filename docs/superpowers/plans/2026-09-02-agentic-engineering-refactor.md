@@ -1030,11 +1030,13 @@ ssh cheenle@www.vlsc.net "sudo cp -n /etc/nginx/sites-available/vlsc.net /etc/ng
 
 **文件：** 站点根 `/Users/cheenle/HAM/MRRC/website`（经 `website/mrrc` 软链访问；仓库根 `/Users/cheenle/HAM/mrrc`）
 
-- [ ] **步骤 1：软链重指向已在本轮调研时完成，需 commit**
+- [x] **步骤 1：软链重指向 —— 规划阶段已完成并提交（`9ad7a21`）**
+
+`website/mrrc` 已从失效的 `/Users/cheenle/UHRR/MRRC/website` 重指向 `/Users/cheenle/HAM/MRRC/website`。
+执行本任务时**跳过此步**，只做验证：
 
 ```bash
-cd /Users/cheenle/HAM/website && git diff mrrc | head -4
-git add mrrc && git commit -m "fix: mrrc 软链重指向 /Users/cheenle/HAM/MRRC/website（旧路径已搬走）"
+cd /Users/cheenle/HAM/website && readlink mrrc && ls mrrc/agentic.html 2>/dev/null || ls mrrc/fde.html
 ```
 
 - [ ] **步骤 2：改名 EN/ZH 长页**

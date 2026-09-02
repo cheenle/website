@@ -9,11 +9,14 @@ from urllib.parse import urlparse
 
 PORTAL = Path(__file__).resolve().parents[1]
 PAGES = {
-    "en": PORTAL / "fde.html",
-    "zh": PORTAL / "zh" / "fde.html",
+    "en": PORTAL / "agentic.html",
+    "zh": PORTAL / "zh" / "agentic.html",
 }
 REQUIRED_SECTIONS = {
-    "method",
+    "thesis",
+    "roles",
+    "lineage",
+    "harness",
     "tracks",
     "families",
     "leverage",
@@ -73,7 +76,35 @@ def load_page(path: Path) -> tuple[str, AuditParser]:
     return source, parser
 
 
-class FdePageTests(unittest.TestCase):
+class AgenticPageTests(unittest.TestCase):
+    def test_agentic_thesis_and_role_split_are_stated(self) -> None:
+        required = {
+            "en": (
+                "Agentic engineering is the discipline",
+                "Intent",
+                "Boundaries",
+                "Judgment",
+            ),
+            "zh": ("智能体工程", "意图", "边界", "裁决"),
+        }
+        for language, path in PAGES.items():
+            source, _ = load_page(path)
+            for token in required[language]:
+                self.assertIn(token, source, f"{language}: {token}")
+
+    def test_ontology_consumers_cite_real_constraint_rule_ids(self) -> None:
+        rule_ids = (
+            "ptt-authority",
+            "no-direct-serial",
+            "cat-no-dn",
+            "poll-stale-guard",
+            "vendor-readonly",
+        )
+        for language, path in PAGES.items():
+            source, _ = load_page(path)
+            cited = [r for r in rule_ids if r in source]
+            self.assertGreaterEqual(len(cited), 4, language)
+
     def test_required_sections_and_families_exist_in_both_languages(self) -> None:
         for language, path in PAGES.items():
             source, parser = load_page(path)
@@ -105,6 +136,10 @@ class FdePageTests(unittest.TestCase):
             'One Methodology<br><span class="gradient">Three Products',
             "跨三项目的 FDE 实战",
             '一套方法论<br><span class="gradient">三款产品',
+            "One Field. Three Tracks.",
+            "Built Through Forward Deployed Engineering",
+            "由 Agent 写成",
+            "written by AI",
         )
         for language, path in PAGES.items():
             source, _ = load_page(path)

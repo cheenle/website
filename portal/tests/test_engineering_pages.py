@@ -157,15 +157,18 @@ class EngineeringPageTests(unittest.TestCase):
             self.assertEqual(REQUIRED_FAMILIES, families, language)
 
     def test_agentic_summary_precedes_ontology_and_links_to_engineering(self) -> None:
-        # 注：本节断言的 "engineering" 节在任务 3/4 改名为 "harness"，届时同步更新。
         for language, path in AGENTIC_PAGES.items():
             source, parser = load_page(path)
-            self.assertIn("engineering", parser.section_ids, language)
+            self.assertIn("harness", parser.section_ids, language)
+            # 机制摘要紧跟纲（thesis/roles/lineage）、置于目（tracks…evidence）之前
             self.assertLess(
-                source.index('id="leverage"'), source.index('id="engineering"')
+                source.index('id="lineage"'), source.index('id="harness"'), language
             )
             self.assertLess(
-                source.index('id="engineering"'), source.index('id="ontology"')
+                source.index('id="harness"'), source.index('id="tracks"'), language
+            )
+            self.assertLess(
+                source.index('id="harness"'), source.index('id="ontology"'), language
             )
             self.assertIn('href="engineering.html"', source, language)
 

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VLSC 五个产品族如何将现场问题转化为可复用的远程电台架构、安全模式和共享领域本体。">
-    <meta name="keywords" content="FDE, 前沿部署工程, 业余无线电, 远程控制, 领域本体, MRRC, SunMRRC, FT8, EFHW">
+    <meta name="description" content="智能体工程在 VLSC 的实践：五个产品族如何将现场问题转化为可复用的远程电台架构、安全不变量与共享领域本体；工程内循环如何委托给智能体执行，而意图、边界与裁决仍属于人。">
+    <meta name="keywords" content="智能体工程, Agentic Engineering, AI 智能体开发, 前沿部署工程, 业余无线电, 远程控制, 领域本体, MRRC, SunMRRC, FT8, EFHW">
     <meta name="author" content="BG1SB">
     <meta name="theme-color" content="#000000">
-    <title>FDE 实战 — VLSC 远程电台工程</title>
+    <title>智能体工程 — VLSC 远程电台实战</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/octen.css?v=6">
@@ -25,25 +25,78 @@
     </div></nav>
 
     <header class="ag-hero"><div class="ag-hero-inner">
-        <div class="hero-badge"><i class="fas fa-compass"></i><span>前沿部署工程 · 现场知识系统</span></div>
-        <h1>一个领域，三条轨道<br><span class="gradient">五个产品族</span></h1>
-        <p>VLSC 从真实台站、真实设备和真实故障模式出发。FDE 把现场发现转化为可运行产品；并行的本体工程则把反复出现的知识沉淀为共享术语、明确边界和可复用约束。</p>
-        <div class="ag-hero-stats" aria-label="生态概览"><span class="ag-pill"><i class="fas fa-route"></i> 3 条工程轨道</span><span class="ag-pill"><i class="fas fa-layer-group"></i> 5 个产品族</span><span class="ag-pill"><i class="fas fa-display"></i> Web · PWA · iOS · Android · Desktop</span><span class="ag-pill"><i class="fas fa-shield-halved"></i> 证据驱动安全</span></div>
+                <div class="hero-badge"><i class="fas fa-robot"></i><span>Agentic Engineering · 智能体工程</span></div>
+        <h1>人的意图。<br><span class="gradient">智能体的执行。现场的证据。</span></h1>
+        <p>智能体工程的纪律，是构建一个「智能体可被信任去执行、而人保留唯一裁决权」的工程环境。VLSC 是从现场工程走到这里的，而不是相反。</p>
+        <div class="ag-hero-stats" aria-label="命题概览"><span class="ag-pill"><i class="fas fa-bullseye"></i> 意图归人</span><span class="ag-pill"><i class="fas fa-gears"></i> 内循环委托</span><span class="ag-pill"><i class="fas fa-shield-halved"></i> 边界强制</span><span class="ag-pill"><i class="fas fa-scale-balanced"></i> 证据裁决</span></div>
     </div></header>
 
-    <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#method">方法</a><a href="#tracks">轨道</a><a href="#families">产品族</a><a href="#leverage">杠杆复用</a><a href="#engineering">工程体系</a><a href="#ontology">领域本体</a><a href="#capabilities">能力矩阵</a><a href="#evidence">证据</a></nav></div></div>
+        <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#thesis">命题</a><a href="#roles">分工</a><a href="#lineage">前史</a><a href="#harness">机制摘要</a><a href="#tracks">轨道</a><a href="#families">产品族</a><a href="#ontology">领域本体</a><a href="#evidence">证据纪律</a></nav></div></div>
 
     <main>
-        <section class="ag-section" id="method"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">01 · 双循环</span><h2 class="ag-section-title">交付与知识共同演化</h2><p class="ag-section-subtitle">领域本体不是 FDE 的第四阶段。产品交付和知识工程是两个相互校准、但边界独立的循环。</p></header>
-            <div class="ag-loop-grid">
-                <article class="ag-card" data-track="control"><h3>FDE 交付循环</h3><div class="ag-flow" aria-label="Echo 到 Delta 再到 Product"><span class="ag-flow-step"><strong>Echo</strong><br><small>现场证据</small></span><span class="ag-flow-arrow">→</span><span class="ag-flow-step"><strong>Delta</strong><br><small>高风险验证</small></span><span class="ag-flow-arrow">→</span><span class="ag-flow-step"><strong>Product</strong><br><small>稳定交付</small></span></div><p>Echo 观察实际台站与操作员；Delta 用可运行的垂直切片验证最高风险假设；Product 把结果固化为可运维边界、契约或组件。</p></article>
-                <article class="ag-card" data-track="sdr"><h3>本体工程循环</h3><div class="ag-flow" aria-label="范围、术语、关系、约束与验证"><span class="ag-flow-step">范围</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">术语</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">关系</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">约束</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">验证</span></div><p>产品证据稳定词汇并暴露不变量；模型再为后续工程提供更好的问题、边界和更少的协议偶合。</p></article>
-            </div><div class="ag-note" style="margin-top:1.25rem;"><strong>双向反馈：</strong>产品为本体修订提供证据；本体为下一轮现场工程提供语言、边界和能力问题。</div>
+        <section class="ag-section" id="thesis">
+            <div class="container">
+                <header class="ag-section-header"><span class="ag-section-label">01 · 命题</span><h2 class="ag-section-title">执行可以委托，<span class="gradient">判断不行</span></h2><p class="ag-section-subtitle">撑起本页的是三个主张，每一个都对照工件校验，而非观点。</p></header>
+                <div class="ag-term-grid">
+                    <article class="ag-card"><h3><i class="fas fa-arrows-spin"></i> 角色变了</h3><p>工程内循环——规格、实现、测试、审查、观测、回写 SDD——由智能体携带真实工具、在真实仓库与真实门禁下执行。</p></article>
+                    <article class="ag-card"><h3><i class="fas fa-database"></i> 为什么是现在</h3><p>因为智能体在行动前真的会加载契约。<code>AGENTS.md</code>、活体 SDD 与领域本体，从文档变成了运行时上下文。</p></article>
+                    <article class="ag-card"><h3><i class="fas fa-route"></i> FDE 仍然是门禁</h3><p>现场纪律产出了值得复用的契约；它也保留了智能体永远不能代为签字的部分：PCB、台架、RF 安全、真实台站。</p></article>
+                </div>
+                <div class="ag-note" style="margin-top:1.25rem;"><strong>可证伪形式：</strong>一次现场事故变成一条 SDD 裁决，裁决变成一条机器可读约束，约束阻止智能体重新引入该事故。本页任何无法沿这条链回溯的主张，都不写。</div>
+            </div>
+        </section>
+        <section class="ag-section" id="roles">
+            <div class="container">
+                <header class="ag-section-header"><span class="ag-section-label">02 · 分工</span><h2 class="ag-section-title">智能体跑循环，<span class="gradient">人握住三样东西</span></h2><p class="ag-section-subtitle">这条分界线不按任务大小或技能划分，而按「结果出错时谁负责」划分。</p></header>
+                <div class="ag-loop-grid">
+                    <article class="ag-card" data-track="control">
+                        <h3>委托给智能体</h3>
+                        <div class="ag-flow" aria-label="由智能体执行的工程内循环"><span class="ag-flow-step">规格</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">实现</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">测试</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">审查</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">观测</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">回写&nbsp;SDD</span></div>
+                        <p>智能体在动手前先读取约束注册表，按每条主张的性质选择对应的验证手段，并把结论写回它出发时所用的同一份契约。</p>
+                    </article>
+                    <article class="ag-card" data-track="sdr">
+                        <h3>人保留的三样</h3>
+                        <div class="ag-term-grid" style="grid-template-columns:1fr;"><div><strong>意图</strong>——这件事为何存在、什么算成功、什么刻意不做。</div><div><strong>边界</strong>——架构裁决、安全不变量，以及智能体不得为了跑绿而交易掉的约束。</div><div><strong>裁决</strong>——现有证据是否足以说一句「完成 / 已发布 / 安全」。</div></div>
+                    </article>
+                </div>
+                <div class="ag-note ag-note--warning" style="margin-top:1.25rem;"><strong>智能体承担执行，不承担问责。</strong>一次发射、一次发布、一句安全主张的责任，始终属于签署证据的那个具名的人。任何委托都不改变这一点。</div>
+            </div>
+        </section>
+        <section class="ag-section" id="lineage">
+            <div class="container">
+                <header class="ag-section-header"><span class="ag-section-label">03 · 前史</span><h2 class="ag-section-title">契约从<span class="gradient">前沿部署工程</span>里来</h2><p class="ag-section-subtitle">本体不是 FDE 的第四个阶段，智能体工程也不使 FDE 退役。两个循环耦合，且各自握有否决权。</p></header>
+                <div class="ag-loop-grid">
+                    <article class="ag-card" data-track="control">
+                        <h3>FDE 交付循环</h3>
+                        <div class="ag-flow" aria-label="Echo 到 Delta 再到 Product"><span class="ag-flow-step"><strong>Echo</strong><br><small>现场证据</small></span><span class="ag-flow-arrow">→</span><span class="ag-flow-step"><strong>Delta</strong><br><small>高风险验证</small></span><span class="ag-flow-arrow">→</span><span class="ag-flow-step"><strong>Product</strong><br><small>稳定交付</small></span></div>
+                        <p>Echo 观察真实台站与操作者；Delta 用可运行的垂直切片验证风险最高的假设；Product 把结果固化为可运维的边界、契约或可复用组件——而这正是日后能交给智能体的东西。</p>
+                    </article>
+                    <article class="ag-card" data-track="sdr">
+                        <h3>本体工程循环</h3>
+                        <div class="ag-flow" aria-label="范围、术语、关系、约束、验证"><span class="ag-flow-step">范围</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">术语</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">关系</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">约束</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">验证</span></div>
+                        <p>产品证据稳定词汇、暴露不变量；模型再为下一轮工作——无论人做还是智能体做——提供更干净的问题、更明确的边界，以及更少的偶然协议假设。</p>
+                    </article>
+                </div>
+                <h3 style="margin-top:2.5rem;">智能体不能压缩的部分</h3>
+                <div class="ag-plane-grid">
+                    <article class="ag-card"><h3>硬件</h3><p>PCB 制板与台架 bring-up。EFHW V3.0 设计与固件已完成；在实物板子存在之前，它的主张停留在设计目标。</p></article>
+                    <article class="ag-card"><h3>RF 安全</h3><p>真实电台上的 PTT 路径与发射权限。服务端测试通过，不等于客户端签字放行。</p></article>
+                    <article class="ag-card"><h3>真实台站</h3><p>在操作者自己的天线、波段条件与邻居环境下的现场验证。</p></article>
+                    <article class="ag-card"><h3>发布</h3><p>发布决策，以及什么可以被标注为「已发布」——因为这个标签是对一个人的承诺。</p></article>
+                </div>
+                <div class="ag-note" style="margin-top:1.25rem;"><strong>双向反馈：</strong>产品为模型修订提供证据；模型为下一轮现场循环提供语言、边界与能力问题——而现在这份上下文是由智能体在编辑前加载的。</div>
+            </div>
+        </section>
+
+        <section class="ag-section" id="harness"><div class="container">
+            <header class="ag-section-header"><span class="ag-section-label">04 · 机制摘要</span><h2 class="ag-section-title">Harness × Loop × Living SDD</h2><p class="ag-section-subtitle">Engineering 是把现场意图转化为可重复执行、可审查增量、可追溯证据和可复用资产的完整体系。</p></header>
+            <div class="ag-engineering-summary"><article class="ag-card"><h3>Harness</h3><p>业务、技术和产品约束包围着由 Agent、工具、测试、部署与现场遥测组成的工程护栏与执行环境。</p></article><article class="ag-card"><h3>Loop</h3><p>外层 Echo → Delta → Product 包含内层 Specify → Implement → Test → Review → Observe → Update SDD 工程闭环。</p></article><article class="ag-card"><h3>Living SDD</h3><p>设计意图流向实现；代码、测试、部署和现场证据反向校准活的双向契约。</p></article></div>
+            <div class="eng-note" style="margin-top:1.25rem;"><strong>跨五个产品族：</strong>同一工程体系适配不同电台、协议、客户端、工作流、硬件门禁与证据边界。</div>
+            <div style="text-align:center; margin-top:2rem;"><a class="btn btn-primary" href="engineering.html">查看完整工程体系</a></div>
         </div></section>
 
         <section class="ag-section" id="tracks"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">02 · 生态地图</span><h2 class="ag-section-title">三条轨道，而不是一条人为流水线</h2><p class="ag-section-subtitle">硬件与运行目标不同，架构也不同；共享基础是控制权、媒体流、安全、可观测性与证据。</p></header>
+            <header class="ag-section-header"><span class="ag-section-label">05 · 生态地图</span><h2 class="ag-section-title">三条轨道，而不是一条人为流水线</h2><p class="ag-section-subtitle">硬件与运行目标不同，架构也不同；共享基础是控制权、媒体流、安全、可观测性与证据。</p></header>
             <div class="ag-track-grid">
                 <article class="ag-card" data-track="control"><h3><i class="fas fa-sliders"></i> 电台控制</h3><p><strong>MRRC Universal</strong> 提供基于 Hamlib 的广泛远控；<strong>MRRC FT-710</strong> 完成 Direct USB 垂直验证；<strong>MRRC Modern</strong> 通过 <code>RadioBackend</code> 与 <code>RadioCapabilities</code> 完成平台化。</p></article>
                 <article class="ag-card" data-track="sdr"><h3><i class="fas fa-wave-square"></i> Direct-IQ SDR</h3><p><strong>SunMRRC</strong> 负责 ExpertSDR 侧台站状态和 IQ/音频流；其客户端包括 Web 与原生 iOS 客户端 <strong>SunsdrMobile</strong>，后者不是独立产品族。</p></article>
@@ -53,7 +106,7 @@
         </div></section>
 
         <section class="ag-section" id="families"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">03 · 产品族</span><h2 class="ag-section-title">由现场约束塑造的五个边界</h2><p class="ag-section-subtitle">每个产品族都沿相同证据路径分析。客户端归属于持有权威状态和安全契约的系统。</p></header>
+            <header class="ag-section-header"><span class="ag-section-label">06 · 产品族</span><h2 class="ag-section-title">由现场约束塑造的五个边界</h2><p class="ag-section-subtitle">每个产品族都沿相同证据路径分析。客户端归属于持有权威状态和安全契约的系统。</p></header>
             <div class="ag-family-grid">
                 <article class="ag-card" data-track="control" data-family="mrrc-universal"><h3>MRRC Universal</h3><p>面向 Hamlib/rigctld 支持设备的通用远程操作。</p><dl class="ag-field-list"><div class="ag-field"><dt>现场问题</dt><dd>操作员需要统一远程台站界面，而不是为每款电台重写 CAT。</dd></div><div class="ag-field"><dt>Echo 证据</dt><dd>真实运行证明网络不稳、状态漂移、音频路由和 PTT 控制权是耦合问题。</dd></div><div class="ag-field"><dt>Delta 突破</dt><dd>把机型契约置于 rigctld 后，并以服务端状态而非浏览器控件为权威。</dd></div><div class="ag-field"><dt>产品边界</dt><dd>服务端 CAT、音频、瀑布图、Web/PWA、认证与运行保护。</dd></div><div class="ag-field"><dt>复用资产</dt><dd>Hamlib 词汇、Web 控制模式、会话监督和重连纪律。</dd></div><div class="ag-field"><dt>新增资产</dt><dd>通用设备适配边界与一体化台站控制平面。</dd></div><div class="ag-field"><dt>本体贡献</dt><dd>设备适配器（DeviceAdapter）、能力发现、控制意图与报告状态分离。</dd></div><div class="ag-field"><dt>成熟度 / 证据</dt><dd><span class="ag-status ag-status--field">现场验证</span> 发布运行证据与架构主张分别记录。</dd></div></dl></article>
 
@@ -67,21 +120,14 @@
         </div></section>
 
         <section class="ag-section" id="leverage"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">04 · 工程杠杆</span><h2 class="ag-section-title">复用平面，而不是复用偶然实现</h2><p class="ag-section-subtitle">复用发生在显式架构平面，不意味着不同协议、设备或成熟度可以互换。</p></header>
+            <header class="ag-section-header"><span class="ag-section-label">07 · 工程杠杆</span><h2 class="ag-section-title">复用平面，而不是复用偶然实现</h2><p class="ag-section-subtitle">复用发生在显式架构平面，不意味着不同协议、设备或成熟度可以互换。</p></header>
             <div class="ag-plane-grid"><article class="ag-card"><h3>控制平面</h3><p>控制意图、权威状态、控制租约（Control Lease）、能力发现和幂等协调。</p></article><article class="ag-card"><h3>媒体平面</h3><p>音频、IQ、瀑布图、封帧、节奏、缓冲及传输丢失行为。</p></article><article class="ag-card"><h3>设备平面</h3><p>电台后端、协议绑定、USB 端点、DSP 集成和 RF 执行器。</p></article><article class="ag-card"><h3>安全平面</h3><p>PTT 联锁、超时回 RX、功率/行程限制、单所有者转换与故障隔离。</p></article><article class="ag-card"><h3>工作流平面</h3><p>操作意图、定时 QSO、调谐搜索、重试、取消与恢复。</p></article><article class="ag-card"><h3>体验平面</h3><p>Web/PWA/原生交互、反馈、控件、无障碍和移动端人体工学。</p></article></div>
             <div class="ag-diagram"><div class="ag-flow"><span class="ag-flow-step">MRRC FT-710</span><span class="ag-relation">inspired-by →</span><span class="ag-flow-step">MRRC Modern</span><span class="ag-relation">implements →</span><span class="ag-flow-step">RadioBackend</span></div><div class="ag-flow" style="margin-top:1rem;"><span class="ag-flow-step">SunsdrMobile</span><span class="ag-relation">consumes →</span><span class="ag-flow-step">SunMRRC services</span><span class="ag-relation">inherits →</span><span class="ag-flow-step">共享安全约束</span></div></div>
             <div class="ag-term-grid" style="margin-top:1.25rem;"><article class="ag-card"><h4 class="ag-relation">inherits</h4><p>特化项保留已声明约束或契约。</p></article><article class="ag-card"><h4 class="ag-relation">consumes</h4><p>客户端消费服务，但不拥有服务的系统边界。</p></article><article class="ag-card"><h4 class="ag-relation">implements</h4><p>组件实现接口、能力或协议绑定。</p></article><article class="ag-card"><h4 class="ag-relation">inspired-by</h4><p>证据影响后续设计，但不暗示代码或契约继承。</p></article></div>
         </div></section>
 
-        <section class="ag-section" id="engineering"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">05 · Engineering System</span><h2 class="ag-section-title">Harness × Loop × Living SDD</h2><p class="ag-section-subtitle">Engineering 是把现场意图转化为可重复执行、可审查增量、可追溯证据和可复用资产的完整体系。</p></header>
-            <div class="ag-engineering-summary"><article class="ag-card"><h3>Harness</h3><p>业务、技术和产品约束包围着由 Agent、工具、测试、部署与现场遥测组成的工程护栏与执行环境。</p></article><article class="ag-card"><h3>Loop</h3><p>外层 Echo → Delta → Product 包含内层 Specify → Implement → Test → Review → Observe → Update SDD 工程闭环。</p></article><article class="ag-card"><h3>Living SDD</h3><p>设计意图流向实现；代码、测试、部署和现场证据反向校准活的双向契约。</p></article></div>
-            <div class="eng-note" style="margin-top:1.25rem;"><strong>跨五个产品族：</strong>同一工程体系适配不同电台、协议、客户端、工作流、硬件门禁与证据边界。</div>
-            <div style="text-align:center; margin-top:2rem;"><a class="btn btn-primary" href="engineering.html">查看完整工程体系</a></div>
-        </div></section>
-
         <section class="ag-section" id="ontology"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">06 · 领域本体</span><h2 class="ag-section-title">轻量、模块化的远程业余无线电模型</h2><p class="ag-section-subtitle">领域本体（Domain Ontology）是由产品证据支撑的双语工程契约；它不是 RDF/OWL 部署、知识图数据库或新增运行框架。</p></header>
+            <header class="ag-section-header"><span class="ag-section-label">08 · 领域本体</span><h2 class="ag-section-title">轻量、模块化的远程业余无线电模型</h2><p class="ag-section-subtitle">领域本体（Domain Ontology）是由产品证据支撑的双语工程契约；它不是 RDF/OWL 部署、知识图数据库或新增运行框架。</p></header>
             <div class="ag-term-grid"><article class="ag-card"><h3>主体 Agent</h3><p>拥有权限和责任的操作员、管理员、维护者或自动控制器。</p></article><article class="ag-card"><h3>物理实体 Physical Entity</h3><p>电台、天线、调谐器、接口、传感器、执行器和台站环境。</p></article><article class="ag-card"><h3>软件系统 Software System</h3><p>台站服务、客户端、后端、适配器、解码器、DSP 或持久化组件。</p></article><article class="ag-card"><h3>活动 / 过程 Activity</h3><p>执行活动、观测活动、发射、接收、调谐、解码、同步与恢复。</p></article><article class="ag-card"><h3>信息对象 Information Object</h3><p>控制意图、状态报告、帧、采样、事件、QSO、Profile 或证据记录。</p></article><article class="ag-card"><h3>能力 / 功能 Capability</h3><p>调谐、PTT、模式、音频、IQ 流、解码、匹配和测量。</p></article><article class="ag-card"><h3>策略 / 约束 Policy</h3><p>授权、租约、超时、联锁、功率限制、时间窗与安全状态规则。</p></article><article class="ag-card"><h3>证据 / 溯源 Evidence</h3><p>支撑成熟度主张的来源、版本、环境、方法、结果、日期和限制。</p></article></div>
             <div class="ag-diagram"><h3 style="text-align:center;">核心语义链</h3><div class="ag-flow"><span class="ag-flow-step">控制意图 CommandIntent</span><span class="ag-relation">requests →</span><span class="ag-flow-step">执行活动 Actuation</span><span class="ag-relation">changes →</span><span class="ag-flow-step">设备状态 DeviceState</span></div><div class="ag-flow" style="margin-top:1rem;"><span class="ag-flow-step">观测活动 Observation</span><span class="ag-relation">yields →</span><span class="ag-flow-step">状态报告 StateReport</span></div><div class="ag-flow" style="margin-top:1rem;"><span class="ag-flow-step">RF 信号</span><span class="ag-relation">sampled-as →</span><span class="ag-flow-step">采样 / 流</span><span class="ag-relation">framed-as →</span><span class="ag-flow-step">帧</span></div></div>
             <h3 style="margin-top:2.5rem; text-align:center;">本体模块</h3><div class="ag-module-grid"><article class="ag-card"><h4>身份 / 权限</h4><p>主体、凭据、角色、许可、控制租约、所有者与委派。</p></article><article class="ag-card"><h4>台站 / 设备</h4><p>台站、电台、收发机、天线、调谐器、传感器与执行器。</p></article><article class="ag-card"><h4>功能 / 服务</h4><p>能力、服务、端点、依赖、可用性和降级。</p></article><article class="ag-card"><h4>命令 / 执行 / 观测</h4><p>意图、请求变更、物理/软件活动、测量结果和状态报告。</p></article><article class="ag-card"><h4>协议 / 传输</h4><p>协议绑定、设备适配器、CAT、rigctld、WebSocket、串口、USB 和数据包。</p></article><article class="ag-card"><h4>信号 / 媒体 / 测量</h4><p>RF 信号、IQ 采样、音频流、帧、频谱、SWR、频率和电平。</p></article><article class="ag-card"><h4>时间 / 工作流</h4><p>时刻、区间、时隙、截止时间、工作流状态、QSO、取消和重试。</p></article><article class="ag-card"><h4>安全 / 可靠性</h4><p>联锁、安全状态、超时、故障、不确定性、限制、恢复和监督。</p></article><article class="ag-card"><h4>证据 / 溯源</h4><p>主张、来源工件、版本、测试方法、环境、结果和限制。</p></article></div>
@@ -89,11 +135,11 @@
         </div></section>
 
         <section class="ag-section" id="capabilities"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">07 · 能力矩阵</span><h2 class="ag-section-title">维度可比较，实现各不同</h2><p class="ag-section-subtitle">能力描述产品族能做什么；证据成熟度描述主张被证明到什么程度。二者不能混为一谈。</p></header>
+            <header class="ag-section-header"><span class="ag-section-label">09 · 能力矩阵</span><h2 class="ag-section-title">维度可比较，实现各不同</h2><p class="ag-section-subtitle">能力描述产品族能做什么；证据成熟度描述主张被证明到什么程度。二者不能混为一谈。</p></header>
             <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>维度</th><th>MRRC Universal</th><th>MRRC Direct USB</th><th>SunMRRC</th><th>MRRC-FT8</th><th>EFHW</th></tr></thead><tbody><tr><td>主要设备</td><td>Hamlib 支持的电台</td><td>FT-710；Modern 的 IC-7300 系列</td><td>SunSDR2 DX / ExpertSDR</td><td>电台与音频接口</td><td>EFHW 匹配网络与 ESP32-S3</td></tr><tr><td>控制协议</td><td>rigctld / Hamlib</td><td>USB 串口直连 CAT</td><td>ExpertSDR 侧控制服务</td><td>工作流与电台集成</td><td>本地固件 / 远程命令面</td></tr><tr><td>媒体</td><td>远程音频与瀑布图</td><td>USB/远程音频与瀑布图</td><td>IQ 与音频流</td><td>收发音频</td><td>测量遥测，不含操作音频</td></tr><tr><td>频谱源</td><td>配置的接收后端</td><td>按机型定义 USB/IQ 路径</td><td>Direct-IQ 流</td><td>解码通带</td><td>RF 检测器测量</td></tr><tr><td>DSP</td><td>依赖系统/后端</td><td>按 Profile 定义服务端/客户端管线</td><td>IQ/音频处理链</td><td>FT8 编解码</td><td>有界搜索与测量滤波</td></tr><tr><td>工作流</td><td>通用操作控制</td><td>通用操作控制</td><td>SDR 操作</td><td>时隙 QSO 状态机</td><td>测量→移动→稳定→评估</td></tr><tr><td>RF 执行</td><td>电台命令/PTT</td><td>电台命令/PTT</td><td>电台命令/PTT</td><td>定时发射</td><td>舵机匹配</td></tr><tr><td>客户端</td><td>Web / PWA</td><td>Web/PWA、FT710Mobile、FT710Android</td><td>Web、SunsdrMobile iOS</td><td>工作流 UI</td><td>本地与远程控制界面</td></tr><tr><td>安全模型</td><td>服务端权威与会话监督</td><td>后端权威、PTT 状态机、客户端分别验收</td><td>控制所有权与超时回 RX</td><td>定时 TX 保护和操作状态</td><td>行程/功率限制与有界执行</td></tr></tbody></table></div>
         </div></section>
         <section class="ag-section" id="evidence"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">08 · 证据纪律</span><h2 class="ag-section-title">每项主张都携带来源与边界</h2><p class="ag-section-subtitle">功能标签不是成熟度主张。每项结果必须标记方法、环境、版本和剩余不确定性。</p></header>
+            <header class="ag-section-header"><span class="ag-section-label">10 · 证据纪律</span><h2 class="ag-section-title">每项主张都携带来源与边界</h2><p class="ag-section-subtitle">功能标签不是成熟度主张。每项结果必须标记方法、环境、版本和剩余不确定性。</p></header>
             <div class="ag-legend" aria-label="证据成熟度"><span class="ag-status ag-status--design">设计目标</span><span class="ag-status ag-status--design">模拟结果</span><span class="ag-status ag-status--tested">自动化测试</span><span class="ag-status ag-status--tested">台架验证</span><span class="ag-status ag-status--field">现场验证</span><span class="ag-status ag-status--field">已发布 / 运行</span><span class="ag-status ag-status--known">延期 / 已知问题</span></div>
             <div class="ag-evidence-grid" style="margin-top:2rem;"><article class="ag-card"><h3>MRRC FT-710</h3><p><strong>源码：</strong>v1.8.1<br><strong>Windows 安装包：</strong>v1.8.0<br><strong>自动化测试：</strong>439 项</p><p>源码、发布包、测试执行和电台验收分别记录。</p></article><article class="ag-card"><h3>MRRC Modern</h3><p><strong>版本：</strong>v1.12.0<br><strong>Profile：</strong>FT-710、IC-7300、IC-7300MK2<br><strong>自动化测试：</strong>633 项</p><p>IC 系列真机验收与自动化覆盖单列。</p></article><article class="ag-card"><h3>MRRC-FT8</h3><p><strong>公开版本：</strong>发布记录<br><strong>现场演进：</strong>SDD V1.8</p><p>公开软件包和后续现场设计不视为同一已部署工件。</p></article><article class="ag-card"><h3>EFHW V3.0</h3><p><strong>设计：</strong>完成<br><strong>固件：</strong>完成<br><strong>PCB / 台架：</strong>待完成</p><p>物理验证前不声明台架或现场验证。</p></article></div>
             <div class="ag-note ag-note--warning" style="margin-top:1.25rem;"><strong>已知安全问题：</strong>FT710Mobile 存在未解决的 P0 PTT 安全问题。服务端自动化测试或其他客户端结果都不能关闭该问题，也不能证明原生客户端已安全完成。</div>

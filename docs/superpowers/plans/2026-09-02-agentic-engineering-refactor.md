@@ -657,8 +657,10 @@ badge 文案改为 `<span>Agentic Engineering · 智能体工程</span>`。
         for language, path in AGENTIC_PAGES.items():
             source, parser = load_page(path)
             self.assertIn("harness", parser.section_ids, language)
-            self.assertLess(source.index('id="leverage"'), source.index('id="harness"'))
-            self.assertLess(source.index('id="harness"'), source.index('id="ontology"'))
+            # 机制摘要紧跟纲（thesis/roles/lineage）、置于目（tracks…evidence）之前
+            self.assertLess(source.index('id="lineage"'), source.index('id="harness"'), language)
+            self.assertLess(source.index('id="harness"'), source.index('id="tracks"'), language)
+            self.assertLess(source.index('id="harness"'), source.index('id="ontology"'), language)
             self.assertIn('href="engineering.html"', source, language)
 ```
 
@@ -1623,3 +1625,36 @@ ssh cheenle@www.vlsc.net "for u in /fde.html /zh/fde.html /mrrc/fde.html /mrrc/z
 cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
   && git commit -m "docs: 回写全站编辑规则（事实单一来源、术语、符号链接普查约定）并重生成 sitemap"
 ```
+
+---
+
+## 附录 A：执行期补正记录（计划写完 ≠ 计划对）
+
+本表按发现顺序记录**计划本身的缺陷**。每条都是执行时实测出来的，不是一次性写对的，
+后续任何人重跑本计划须以本表为准。列含义：缺陷 → 若不修会怎样 → 已如何修。
+
+| # | 缺陷 | 若不修的后果 | 处置 |
+| --- | --- | --- | --- |
+| 1 | 「用 `grep -R` 可跟符号链接」的普查约定在 macOS BSD grep 上不成立 | 全站扫描漏 184+ 处子站引用，**报告干净实则漏改** | 改为显式枚举站点目录且带尾斜杠；写进 §9.3 与 CLAUDE.md 草稿 |
+| 2 | `test_engineering_pages.py` 全计划 0 次提及，其 `load_page` 对缺文件抛 `SkipTest` | 改名后 2 个契约用例**静默跳过**（skip 0→2），绿色里看不见覆盖率流失 | 任务 2 增 5b–5d 步 repoint；任务 14 加 skip 归零断言 |
+| 3 | `git mv` 与大规模改写合并成一次提交 | 相似度跌破 git 默认阈值，`--follow` 追不到改名前历史 | 拆「纯改名（0 行增删）」+「内容改写」两提交，实测可追 4 个历史提交 |
+| 4 | 计划遗漏 6 处旧名链接（导航自链、语言按钮、页脚各 3） | 404 | 任务 2 步骤 5a 补齐 |
+| 5 | `engineering.html` 的 fde.html 引用是 3 处而非 2 处 | 漏 1 处 | 同上 |
+| 6 | 任务 4 引用了不存在的测试方法名 | 该步直接挂 | 换成真实方法名 |
+| 7 | 任务 3 步骤 4 只改 harness 的 id 与编号，**未移动到文档第 4 位** | 编号呈 `01 02 03 05 06 07 04 08 09 10`，锚点 Harness 往回跳 | 步骤 4 增加物理移动；验收改为「编号严格递增」 |
+| 8 | 任务 4 步骤 4 的测试片段沿用 `leverage < harness` 旧序 | 与补正 7 冲突 → 该用例永红，且报错方向误导 | 片段改编码规格 §5.1 目标序 `lineage < harness < tracks` |
+| 9 | 任务 4 步骤 1 漏列 ZH Hero 四枚计数 pill | 禁句清单不含 ZH 旧标题串与 pill 文案 → **一屏旧框架仍全绿** | ZH 同步命题 pill，`aria-label` 生态概览→命题概览 |
+| 10 | `<title>` / description / keywords 全计划 0 次提及 | meta 是搜索与链接预览里唯一可见文案，结构断言全看不见 → 正文改完仍假绿 | 两页 meta 改伞形术语（FDE 按策略 B 退居关键词后位）；新增 `test_page_metadata_leads_with_new_umbrella` 固定成契约 |
+| 11 | 假设 ZH 与 EN 版式一致（锚点导航独占一行） | 整行替换 `StopIteration`；改用 `re.S` + `</div></div>` 收口时因中间隔换行+缩进，**惰性匹配一路吞到文档后部**，删掉 `<main>` 起始 | ZH 侧改行内定位替换；HTML 一律禁用 `</div>…</div>` 作边界 |
+
+### 由补正 10 得到的一般教训
+
+新写的守卫**必须反向验证**：注入一次旧值，确认它真能被捕获，否则「测试变绿」
+只说明断言没生效。本条已实测：把 ZH `<title>` 临时改回旧值后守卫确实报红，还原后转绿。
+
+### 执行纪律（本次踩坑换出的三条）
+
+1. 不得在同一批次里并发多个改写同一文件的调用。执行中三次犯此错：两次读到写入中途
+   的残缺文件而报错，一次发出两个互相冲突的替换变体。改文件要么串行、要么合并成一次。
+2. 不要用 git stash 查改名前的基线——会打断 rename 记录；读旧版一律 git show HEAD:<path>。
+3. git mv 之后读守卫失效，紧随的首次编辑必须先 read。

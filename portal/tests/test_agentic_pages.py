@@ -146,6 +146,41 @@ class AgenticPageTests(unittest.TestCase):
             for phrase in forbidden:
                 self.assertNotIn(phrase, source, f"{language}: {phrase}")
 
+    def test_page_metadata_leads_with_new_umbrella(self) -> None:
+        """`<title>` / description / keywords 是搜索结果与链接预览里**唯一可见的文案**。
+
+        正文全改了而 meta 没改，所有结构断言（节 id / class / 锚点）依旧全绿——
+        执行任务 4 时就是这样漏掉两页 meta 的（计划补正 #10），故固定成契约。
+        FDE 作为前史保留在关键词里，但不得再是首位。
+        """
+
+        def grab(pattern: str, source: str, label: str, language: str) -> str:
+            # 用断言而非直接 .group()：标签缺失时要报清哪个标签，而不是 AttributeError。
+            # （用 assert 语句而不是 assertIsNotNone：后者不会为类型检查器收窄。）
+            match = re.search(pattern, source, re.S)
+            assert match is not None, f"{language}: 找不到 {label}"
+            return match.group(1)
+
+        umbrella = {"en": "Agentic Engineering", "zh": "智能体工程"}
+        for language, path in PAGES.items():
+            source, _ = load_page(path)
+            title = grab(r"<title>(.*?)</title>", source, "<title>", language)
+            desc = grab(
+                r'<meta name="description" content="(.*?)"', source, "description", language
+            )
+            keywords = grab(
+                r'<meta name="keywords" content="(.*?)"', source, "keywords", language
+            )
+            needle = umbrella[language].lower()
+            # 大小写不敏感：<title> 是 Title Case，而 description 是散文、句首小写属正常。
+            # 本契约要卡的是「术语在不在」，不是它怎么大写。
+            self.assertIn(needle, title.lower(), f"{language}: <title> 未含新伞形术语 → {title}")
+            self.assertIn(needle, desc.lower(), f"{language}: description 未含新伞形术语")
+            first = keywords.split(",")[0].strip().lower()
+            self.assertIn(
+                needle.lower(), first, f"{language}: 首位关键词仍是 {first!r}"
+            )
+
     def test_ontology_and_evidence_vocabulary_is_present(self) -> None:
         required_tokens = {
             "en": (

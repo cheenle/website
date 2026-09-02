@@ -191,7 +191,26 @@
 
         <section class="ag-section" id="ontology">
             <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">08 · Domain Ontology</span><h2 class="ag-section-title">A lightweight, modular model of remote amateur radio</h2><p class="ag-section-subtitle">The Domain Ontology is a bilingual engineering contract grounded in product evidence. It is not an RDF/OWL deployment, a graph database, or an extra runtime framework.</p></header>
+                <header class="ag-section-header"><span class="ag-section-label">08 · Domain Ontology</span><h2 class="ag-section-title">The ontology is loaded before the agent types</h2><p class="ag-section-subtitle">Not a documentation habit: the same terms, boundaries and axioms are consumed by agent context, by a pre-edit gate, and by human review. It is still a lightweight bilingual contract grounded in product evidence — not an RDF/OWL deployment, a graph database, or a new runtime framework.</p></header>
+<div class="ag-table-wrap"><table class="ag-table">
+<thead><tr><th>Ontology concept / axiom</th><th>Consumer</th><th>Verifiable anchor</th></tr></thead>
+<tbody>
+<tr><td><code>Policy/Constraint</code>: single authoritative state holder, serial exclusivity</td><td>Agent runtime hard block</td><td>ft8 <code>no-direct-serial</code> — "rigctld is the sole serial owner" [AD-008]; ft710 / modern <code>cat-direct-serial-io</code> [AD-002]</td></tr>
+<tr><td><code>Safety</code>: TX authorization and PTT ownership</td><td>Agent runtime hard block</td><td>ft8 <code>ptt-authority</code> — "PTT controlled only by rig and safety components" [AD-007; NFR-050; Ch15]</td></tr>
+<tr><td><code>CommandIntent ≠ Actuation</code></td><td><code>info</code> hint to the agent</td><td>ft710 <code>ptt-release-no-verify</code> — "TX0 is fire-and-forget" [AD-007; Ch15; V1.2]</td></tr>
+<tr><td><code>Observation</code>: a stale read must not pollute state</td><td><code>info</code> constraint + unit test</td><td>ft710 / modern <code>poll-stale-guard</code> [AD-009; §9.6; V1.7 filter race fix]</td></tr>
+<tr><td><code>Protocol Binding ≠ Capability</code></td><td>Code fact + specialized constraint</td><td>modern <code>audio-pyaudio-rate</code> — "rate comes from backend capabilities" [AD-011 amended V2.9/V2.14]</td></tr>
+<tr><td><code>Evidence/Provenance</code>: knowledge must not go stale</td><td>Routing index stores no content</td><td><code>harness/index.json</code> — "holds no content — refs are sliced live from SDD/*.md, so it never goes stale"</td></tr>
+<tr><td><code>Information Object</code>: a change implies a doc sync</td><td>Lifecycle enforcement</td><td><code>SKILL.md</code> Phase 0–6; <code>docs-sync</code> rule [§14]</td></tr>
+</tbody></table></div>
+<div class="ag-note" style="margin-top:1.25rem;">
+  <strong>52 machine-readable constraints across three repositories</strong> — mrrc_ft710: 17, mrrc_modern: 21, mrrc_ft8: 14 (census 2026-09-02).
+  Each rule carries a severity (<code>block</code> / <code>warn</code> / <code>info</code>), an <code>sdd_ref</code> pointing back at an
+  architecture decision or a real incident, a <code>scope</code> glob and <code>patterns</code>.
+  <code>harness/sdd_context.py</code> exposes <code>prime</code> / <code>check</code> / <code>hook</code>;
+  <code>install_hooks.py</code> registers <code>SessionStart → prime</code> and <code>PreToolUse(Edit|Write) → hook</code>.
+  One semantic, three consumers: agent context, runtime block, human review.
+</div>
                 <div class="ag-term-grid">
                     <article class="ag-card"><h3>Agent</h3><p>Operator, administrator, maintainer, or automated controller with authority and responsibility.</p></article>
                     <article class="ag-card"><h3>Physical Entity</h3><p>Radio, antenna, tuner, transceiver interface, sensor, actuator, and station environment.</p></article>

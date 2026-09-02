@@ -1650,6 +1650,9 @@ cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
 | 11 | 假设 ZH 与 EN 版式一致（锚点导航独占一行） | 整行替换 `StopIteration`；改用 `re.S` + `</div></div>` 收口时因中间隔换行+缩进，**惰性匹配一路吞到文档后部**，删掉 `<main>` 起始 | ZH 侧改行内定位替换；HTML 一律禁用 `</div>…</div>` 作边界 |
 | 12 | 任务 5 标题写「9 个 JS」但清单与自检 echo 都是 10 个 | 按 9 数核数会误判「有一个文件没改」 | 以实测 10 个为准（`grep -c fde` 逐个：global-nav.js=3、scope.js=2） |
 | 13 | 任务 5 步骤 2 把 `index.html` 的 `/fde.html` CTA 归为「预期中间态、任务 9 再改」 | **实际是工作树里的活 404**：任务 2 已 `git mv fde.html agentic.html`，磁盘上再无 fde.html；中间任何一次 portal 部署都会把 404 推上线 | href 当场改指 `/agentic.html`（EN/ZH 各一处），只把**按钮文案**（`Read the FDE Story` / `阅读 FDE 方法论`）留给任务 9 —— 延文的理由成立，延 href 的不成立 |
+| 15 | 任务 6 步骤 3 的待替换旧串记成 `model **for** remote amateur radio`，文件实为 `model **of**` | 无断言的 `str.replace` 静默不命中 → 标题根本没改而测试仍全绿 | 每次替换都加 `count(old)==1` 断言，当场报未命中 |
+| 16 | 规格 §6.2 的消费方表是 **8** 行，任务 6 却写「7 行、不得增删」且未交代第 8 行去向 | 终检按 8 行核对会误判漏改；或第 8 行（事故→约束因果链，含 `cat-no-dn`）真被漏掉 | 第 8 行由任务 8 的复现样本承接；任务 14 终检须确认 8 行全部落地 |
+| 17 | 步骤 3 的新副标把反过度声称声明（不是 RDF/OWL 部署、知识图数据库、新增运行框架）整句删除 | 本体一旦升格为「运行时底座」，丢掉这句会被读成我们建了形式化知识图，直接违反 Evidence before claims | 新副标只换前半句口径，免责声明 EN/ZH 均保留 |
 
 ### 由补正 10 得到的一般教训
 

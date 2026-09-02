@@ -127,7 +127,27 @@
         </div></section>
 
         <section class="ag-section" id="ontology"><div class="container">
-            <header class="ag-section-header"><span class="ag-section-label">08 · 领域本体</span><h2 class="ag-section-title">轻量、模块化的远程业余无线电模型</h2><p class="ag-section-subtitle">领域本体（Domain Ontology）是由产品证据支撑的双语工程契约；它不是 RDF/OWL 部署、知识图数据库或新增运行框架。</p></header>
+            <header class="ag-section-header"><span class="ag-section-label">08 · 领域本体</span><h2 class="ag-section-title">本体在智能体动手之前被加载</h2><p class="ag-section-subtitle">不是文档习惯：同一套术语、边界与公理，被智能体上下文、编辑前门禁与人工审查三方消费。它仍然是一份由产品证据支撑的轻量双语契约——不是 RDF/OWL 部署、知识图数据库，也不是新增的运行框架。</p></header>
+<div class="ag-table-wrap"><table class="ag-table">
+<thead><tr><th>本体概念 / 公理</th><th>消费方</th><th>真实锚点</th></tr></thead>
+<tbody>
+<tr><td><code>Policy/Constraint</code>：单一权威状态持有者、Serial 独占</td><td>Agent 运行时硬阻断</td><td>ft8 <code>no-direct-serial</code>——“rigctld is the sole serial owner”[AD-008]；ft710 / modern <code>cat-direct-serial-io</code> [AD-002]</td></tr>
+<tr><td><code>Safety</code>：TX 授权与 PTT 所有权</td><td>Agent 运行时硬阻断</td><td>ft8 <code>ptt-authority</code>——“PTT controlled only by rig and safety components”[AD-007; NFR-050; Ch15]</td></tr>
+<tr><td><code>CommandIntent ≠ Actuation</code></td><td>Agent 侧 <code>info</code> 提示</td><td>ft710 <code>ptt-release-no-verify</code>——“TX0 is fire-and-forget”[AD-007; Ch15; V1.2]</td></tr>
+<tr><td><code>Observation</code>：陈旧读不得污染状态</td><td><code>info</code> 约束 + 单测</td><td>ft710 / modern <code>poll-stale-guard</code> [AD-009; §9.6; V1.7 filter race fix]</td></tr>
+<tr><td><code>Protocol Binding ≠ Capability</code></td><td>代码事实 + 约束特化</td><td>Modern <code>audio-pyaudio-rate</code>：由 FT-710 固定 44.1k 改为“rate comes from backend capabilities”[AD-011 amended V2.9/V2.14]</td></tr>
+<tr><td><code>Evidence/Provenance</code>：知识不得过时</td><td>路由索引不存内容</td><td><code>harness/index.json</code>——“holds no content — refs are sliced live from SDD/*.md, so it never goes stale”</td></tr>
+<tr><td><code>Information Object</code>：变更即文档同步</td><td>生命周期强制</td><td><code>SKILL.md</code> Phase 0–6；<code>docs-sync</code> 规则 [§14]</td></tr>
+</tbody></table></div>
+<div class="ag-note" style="margin-top:1.25rem;">
+  <strong>三个仓库共 52 条机器可读约束</strong>——mrrc_ft710 17 条、mrrc_modern 21 条、mrrc_ft8 14 条（普查日期 2026-09-02）。
+  每条规则带严重级别（<code>block</code> / <code>warn</code> / <code>info</code>）、指回某条架构裁决或真实事故的
+  <code>sdd_ref</code>、<code>scope</code> glob 与 <code>patterns</code>。
+  <code>harness/sdd_context.py</code> 提供 <code>prime</code> / <code>check</code> / <code>hook</code>；
+  <code>install_hooks.py</code> 注册 <code>SessionStart → prime</code> 与
+  <code>PreToolUse(Edit|Write) → hook</code>。
+  同一套语义，三方消费：智能体上下文、运行时阻断、人工审查。
+</div>
             <div class="ag-term-grid"><article class="ag-card"><h3>主体 Agent</h3><p>拥有权限和责任的操作员、管理员、维护者或自动控制器。</p></article><article class="ag-card"><h3>物理实体 Physical Entity</h3><p>电台、天线、调谐器、接口、传感器、执行器和台站环境。</p></article><article class="ag-card"><h3>软件系统 Software System</h3><p>台站服务、客户端、后端、适配器、解码器、DSP 或持久化组件。</p></article><article class="ag-card"><h3>活动 / 过程 Activity</h3><p>执行活动、观测活动、发射、接收、调谐、解码、同步与恢复。</p></article><article class="ag-card"><h3>信息对象 Information Object</h3><p>控制意图、状态报告、帧、采样、事件、QSO、Profile 或证据记录。</p></article><article class="ag-card"><h3>能力 / 功能 Capability</h3><p>调谐、PTT、模式、音频、IQ 流、解码、匹配和测量。</p></article><article class="ag-card"><h3>策略 / 约束 Policy</h3><p>授权、租约、超时、联锁、功率限制、时间窗与安全状态规则。</p></article><article class="ag-card"><h3>证据 / 溯源 Evidence</h3><p>支撑成熟度主张的来源、版本、环境、方法、结果、日期和限制。</p></article></div>
             <div class="ag-diagram"><h3 style="text-align:center;">核心语义链</h3><div class="ag-flow"><span class="ag-flow-step">控制意图 CommandIntent</span><span class="ag-relation">requests →</span><span class="ag-flow-step">执行活动 Actuation</span><span class="ag-relation">changes →</span><span class="ag-flow-step">设备状态 DeviceState</span></div><div class="ag-flow" style="margin-top:1rem;"><span class="ag-flow-step">观测活动 Observation</span><span class="ag-relation">yields →</span><span class="ag-flow-step">状态报告 StateReport</span></div><div class="ag-flow" style="margin-top:1rem;"><span class="ag-flow-step">RF 信号</span><span class="ag-relation">sampled-as →</span><span class="ag-flow-step">采样 / 流</span><span class="ag-relation">framed-as →</span><span class="ag-flow-step">帧</span></div></div>
             <h3 style="margin-top:2.5rem; text-align:center;">本体模块</h3><div class="ag-module-grid"><article class="ag-card"><h4>身份 / 权限</h4><p>主体、凭据、角色、许可、控制租约、所有者与委派。</p></article><article class="ag-card"><h4>台站 / 设备</h4><p>台站、电台、收发机、天线、调谐器、传感器与执行器。</p></article><article class="ag-card"><h4>功能 / 服务</h4><p>能力、服务、端点、依赖、可用性和降级。</p></article><article class="ag-card"><h4>命令 / 执行 / 观测</h4><p>意图、请求变更、物理/软件活动、测量结果和状态报告。</p></article><article class="ag-card"><h4>协议 / 传输</h4><p>协议绑定、设备适配器、CAT、rigctld、WebSocket、串口、USB 和数据包。</p></article><article class="ag-card"><h4>信号 / 媒体 / 测量</h4><p>RF 信号、IQ 采样、音频流、帧、频谱、SWR、频率和电平。</p></article><article class="ag-card"><h4>时间 / 工作流</h4><p>时刻、区间、时隙、截止时间、工作流状态、QSO、取消和重试。</p></article><article class="ag-card"><h4>安全 / 可靠性</h4><p>联锁、安全状态、超时、故障、不确定性、限制、恢复和监督。</p></article><article class="ag-card"><h4>证据 / 溯源</h4><p>主张、来源工件、版本、测试方法、环境、结果和限制。</p></article></div>

@@ -43,9 +43,9 @@ Engineering System（Harness × Loop × Living SDD）——成为同一主张的
 | --- | --- |
 | 「五个产品族由 Agent 写成」 | 「产品族在 FDE 纪律下由人主导产出；Agentic Engineering 描述其后续迭代、验证与本体维护如何交给 Agent 内环」 |
 | 「Agent 通过测试 ⇒ 硬件可用」 | 沿用既有分离：automated test ≠ bench ≠ field；§8.3 新增的阶梯 B 位于其下，不得向上互推 |
-| 让 FDE 一词消失 | FDE 保留为术语条目、历史环节，中文沿用既有译名「前置部署工程」 |
+| 让 FDE 一词消失 | FDE 保留为术语条目、历史环节，中文统一为「前沿部署工程」 |
 | 「AI 赋能」「智慧工程」等无指称表述 | 只写具体工件名：`AGENTS.md`、`.agents/skills/sdd-guardian/`、`constraints.json`、`harness/index.json`、SDD 章节号、capability profile、Control Lease、PTT invariant |
-| 声称 `sunmrrc` 有 Agent 入口 | 如实标注：该族当前仅有 SDD 契约，无 `AGENTS.md`、无约束注册表 |
+| 声称某族有它其实没有的工件 | 逐仓如实标注（普查 2026-09-02）：**有 `AGENTS.md` + `constraints.json` 注册表** = ft710(17) / modern(21) / ft8(14)；**有 `AGENTS.md` 但无注册表** = mrrc、sunsdr(sunmrrc)；**仅 `CLAUDE.md`** = SunsdrMobile；**EFHW** = `efhw-knowledge/` 知识库 + workspace `CLAUDE.md`，无固件约束注册表。无注册表者不得声称「编辑前门禁」 |
 | 把 EFHW 的 PCB/台架 pending 写成缺陷 | 写成「Agent 不得自行裁决、必须由人签字的关口」的示例 |
 | 子站自述跨站可比数字（测试数 / 版本 / cycle 数） | 一律链接到 portal 事实账本（§8） |
 
@@ -67,6 +67,8 @@ location = /fde.html                 { return 301 /agentic.html; }
 location = /zh/fde.html              { return 301 /zh/agentic.html; }
 location = /mrrc_modern/fde.html     { return 301 /mrrc_modern/agentic.html; }
 location = /mrrc_ft710/fde.html      { return 301 /mrrc_ft710/agentic.html; }
+location = /mrrc/fde.html            { return 301 /mrrc/agentic.html; }
+location = /mrrc/zh/fde.html         { return 301 /mrrc/zh/agentic.html; }
 ```
 
 exact-match（`=`）优先于既有的 `location ~* \.html$`，无需调整原块顺序。
@@ -84,7 +86,7 @@ exact-match（`=`）优先于既有的 `location ~* \.html$`，无需调整原�
 | 英文 | 中文 | 备注 |
 | --- | --- | --- |
 | Agentic Engineering | 智能体工程 | 首次出现括注 `Agentic Engineering`；中文 AI 语境 agent 通行译法为「智能体」，「代理式」易被读成 proxy |
-| Forward Deployed Engineering (FDE) | 前置部署工程 | 沿用既有译名，作为历史环节名词条 |
+| Forward Deployed Engineering (FDE) | 前沿部署工程 | 作为历史环节名词条。**中文译名现状本身不一致**：`portal/zh/fde.html` 用「前沿部署工程」×2、`portal/zh/about.html` 用「前置部署工程」×1。取定义该术语的主页所用者，全站统一为「前沿部署工程」，`zh/about.html` 的一处随任务 5 改掉 |
 | Agent | 智能体 | 与本体顶层分区 `Agent`（operator or software agent）区分：涉及人的授权时写「操作者 / Operator」 |
 | Harness | 约束环境（Harness） | 中文页首次出现保留英文 |
 | Living SDD | 活体 SDD（Living SDD） | 与 engineering.html 现有用词一致 |
@@ -212,10 +214,10 @@ section id 断言，拆页时同步 `REQUIRED_SECTIONS` 与 nginx 锚点即可�
 | `mrrc_modern/` | `index.html:932`、`js/global-nav.js:34`、`js/scope.js:12`、`zh/index.html` | `fde.html → agentic.html`：保留技术内容，套 §5.2 两字段，按 §8 处理过时数字 | `/mrrc_modern/fde.html` |
 | `mrrc_ft710/` | `index.html:55`、`js/global-nav.js:35`、`js/scope.js:12`、`zh/index.html` | 同上 | `/mrrc_ft710/fde.html` |
 | `efhw/` | `index.html:560`、`js/global-nav.js:109`、`js/scope.js:46`、`zh/index.html` | 无 FDE 页；新增一节「本族分工与资产」（PCB / 台架为人的签字位） | — |
-| `sunmrrc/` | `js/scope.js` | 新增一节「本族分工与资产」，如实标注无 `AGENTS.md` | — |
+| `sunmrrc/` | `js/scope.js` | 新增一节「本族分工与资产」：仓库根 `/Users/cheenle/HAM/sunsdr` 有 `AGENTS.md` + `CLAUDE.md` + `SDD/`，**无** `.agents` 约束注册表 → 只声明 B1 以下证据 | — |
 | `SunsdrMobile/` | `js/scope.js` | 同上（该族有 `CLAUDE.md`，无约束注册表） | — |
 | `mrrc_ft8/` | `js/scope.js` | 新增一节「本族分工与资产」（14 条约束，含 vendor 只读、rigctld 独占、PTT 权威） | — |
-| `mrrc/` | **软链断裂，本轮不改** | 见 §10 | — |
+| `mrrc/` | 改名 + 术语层 + 数字口径（**不重做页面设计**） | `fde.html → agentic.html`、23 文件 28 处导航链接 | 原「软链断裂」判断有误：仓库在 `/Users/cheenle/HAM/mrrc`，只是 `website/mrrc` 指向已搬走的旧路径。已重指向 |
 
 中文对等：本期**不为子站新建** `zh/agentic.html`（两张子站 FDE 页本就无中文版），只更新
 既有 `zh/index.html` 的链接文案。portal 保持 EN/ZH 完全对等（§9.1 断言）。子站中文页若将来
@@ -287,9 +289,11 @@ B 存在而自动升级。页面徽章分两色族：A 用现有徽章改名后�
 
 * **不做**：OWL/RDF/JSON-LD/SHACL/三元组库/自动推理；新框架或构建系统；重写各产品 SDD；
   修复内容研究中暴露的产品实现缺陷（如 FT710Mobile P0）；页面运行时抓项目指标。
-* **`mrrc` 软链断裂**：`website/mrrc -> /Users/cheenle/UHRR/MRRC/website` 目标不存在，本轮
-  无法编辑。portal 中指向 `/mrrc/` 的链接保持不变（线上 `/var/www/vlsc.net/mrrc/` 仍在服务）。
-  待办：恢复软链后单独一轮做 MRRC Universal 的术语层 + 分工小节。
+* **软链曾指向失效路径**：`website/mrrc` 原指 `/Users/cheenle/UHRR/MRRC/website`（该路径已不存在），
+  真实仓库在 `/Users/cheenle/HAM/mrrc`。已重指向并把 MRRC 纳入本轮。
+  教训：软链断裂不等于仓库丢失，下轮起普查前先 `readlink` + `ls` 目标父目录。
+* **MRRC 的 FDE 页不做重写**：`mrrc/website/fde.html` 是 748 行的独立 Tailwind 设计，与 portal
+  的 octen 组件体系不同源。本轮只做改名、导航术语与 §8.2 数字口径；套 §5 九节模板另立一轮。
 * **`engineering.html` 与总纲的重叠**：内外环描述在两页都出现。约定：总纲只保留一步概括 +
   跳转，环的细节（含 `Specify → … → Update SDD` 的解释段）以 `engineering.html` 为权威。
 * **叙事风险**：Agentic Engineering 是当下热词，页面容易滑向行业通稿。防线＝§3 口径红线 +
@@ -303,6 +307,7 @@ B 存在而自动升级。页面徽章分两色族：A 用现有徽章改名后�
 | B1 | `portal/fde.html` → `agentic.html` + `zh/`（用 `git mv` 保留文件历史）；`css/fde.css` → `agentic.css`（类前缀 `.fde-` → `.ag-` 机械重命名）；导航与 `global-nav.js` | 是 |
 | B2 | `portal/engineering.html` + `zh/engineering.html` 重定位为机制分册；`index.html` 方法论节重写 | 是 |
 | B3 | `nginx/vlsc.net.conf` 四条 301 + `nginx -t` | 与 B1 同批发布 |
+| B3.5 | `mrrc`：软链重指向 + `fde.html → agentic.html`（EN/ZH）+ 23 文件导航术语 + §8.2 数字口径 + 两条 301 | 是 |
 | B4 | `mrrc_modern` / `mrrc_ft710`：`fde.html → agentic.html`（套 §5.2 字段、按 §8.2 删数字）+ 术语层 + 301 | 是 |
 | B5 | `efhw` / `sunmrrc` / `SunsdrMobile` / `mrrc_ft8`：术语层 + 各加一节「分工与资产」 | 是 |
 | B6 | `CLAUDE.md` 更新（事实单一来源规则、`grep -R` 陷阱、新 URL 结构）+ `sitemap.xml` / `make_sitemap.py` + 全站复查 | 是 |

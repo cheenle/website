@@ -31,42 +31,91 @@
 
     <header class="ag-hero">
         <div class="ag-hero-inner">
-            <div class="hero-badge"><i class="fas fa-compass"></i><span>Forward Deployed Engineering · Field Knowledge System</span></div>
-            <h1>One Field. Three Tracks.<br><span class="gradient">Five Product Families.</span></h1>
-            <p>VLSC starts with real stations, real radios, and real failure modes. FDE turns those findings into working products; a parallel ontology practice turns repeated findings into shared language, explicit boundaries, and reusable engineering constraints.</p>
-            <div class="ag-hero-stats" aria-label="Ecosystem summary">
-                <span class="ag-pill"><i class="fas fa-route"></i> 3 engineering tracks</span><span class="ag-pill"><i class="fas fa-layer-group"></i> 5 product families</span><span class="ag-pill"><i class="fas fa-display"></i> Web · PWA · iOS · Android · Desktop</span><span class="ag-pill"><i class="fas fa-shield-halved"></i> Evidence-aware safety</span>
+            <div class="hero-badge"><i class="fas fa-robot"></i><span>Agentic Engineering · 智能体工程</span></div>
+            <h1>Human Intent.<br><span class="gradient">Agentic Execution. Field Evidence.</span></h1>
+            <p>Agentic engineering is the discipline of building environments where an agent can be trusted to execute, and where a human remains the only one who can decide. VLSC reached it through field engineering, not the other way round.</p>
+            <div class="ag-hero-stats" aria-label="Thesis summary">
+                <span class="ag-pill"><i class="fas fa-bullseye"></i> Intent stays human</span><span class="ag-pill"><i class="fas fa-gears"></i> Inner loop delegated</span><span class="ag-pill"><i class="fas fa-shield-halved"></i> Boundaries enforced</span><span class="ag-pill"><i class="fas fa-scale-balanced"></i> Evidence decides</span>
             </div>
         </div>
     </header>
 
     <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections">
-        <a href="#method">Method</a><a href="#tracks">Tracks</a><a href="#families">Product Families</a><a href="#leverage">Leverage</a><a href="#engineering">Engineering</a><a href="#ontology">Ontology</a><a href="#capabilities">Capabilities</a><a href="#evidence">Evidence</a>
+        <a href="#thesis">Thesis</a><a href="#roles">Division</a><a href="#lineage">Lineage</a><a href="#harness">Harness</a><a href="#tracks">Tracks</a><a href="#families">Families</a><a href="#ontology">Ontology</a><a href="#evidence">Evidence</a>
     </nav></div></div>
 
     <main>
-        <section class="ag-section" id="method">
+        <section class="ag-section" id="thesis">
             <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">01 · Two Coupled Loops</span><h2 class="ag-section-title">Delivery and knowledge evolve together</h2><p class="ag-section-subtitle">Ontology is not a fourth FDE phase. Product work and knowledge engineering are separate loops that continuously correct each other.</p></header>
+                <header class="ag-section-header"><span class="ag-section-label">01 · Thesis</span><h2 class="ag-section-title">Execution can be delegated. Judgment cannot.</h2><p class="ag-section-subtitle">Three claims hold this page together. Each one is checked against an artifact, not an opinion.</p></header>
+                <div class="ag-term-grid">
+                    <article class="ag-card"><h3><i class="fas fa-arrows-spin"></i> Roles changed</h3><p>The inner engineering loop — Specify, Implement, Test, Review, Observe, Update SDD — is executed by agents with real tools, real repositories, and real gates.</p></article>
+                    <article class="ag-card"><h3><i class="fas fa-database"></i> Why now</h3><p>Because an agent actually loads the contract before acting. <code>AGENTS.md</code>, the living SDD, and the domain ontology stopped being documents and became runtime context.</p></article>
+                    <article class="ag-card"><h3><i class="fas fa-route"></i> FDE still gates</h3><p>Field discipline produced the contracts worth reusing — and it keeps the parts an agent may never sign off: PCB, bench, RF safety, live stations.</p></article>
+                </div>
+                <div class="ag-note" style="margin-top:1.25rem;"><strong>Testable form:</strong> a field incident becomes an SDD ruling, the ruling becomes a machine-readable constraint, and the constraint blocks the agent from re-introducing the incident. Any claim on this page that cannot be traced onto that chain is not made.</div>
+            </div>
+        </section>
+
+        <section class="ag-section" id="roles">
+            <div class="container">
+                <header class="ag-section-header"><span class="ag-section-label">02 · Division of Work</span><h2 class="ag-section-title">Agents run the loop. Humans hold three things.</h2><p class="ag-section-subtitle">The split is not by task size or by skill. It is by who is accountable when the result is wrong.</p></header>
+                <div class="ag-loop-grid">
+                    <article class="ag-card" data-track="control">
+                        <h3>Delegated to agents</h3>
+                        <div class="ag-flow" aria-label="Inner engineering loop executed by agents"><span class="ag-flow-step">Specify</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Implement</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Test</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Review</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Observe</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Update&nbsp;SDD</span></div>
+                        <p>Agents read the constraint registry before editing, run the verification appropriate to each claim, and write the outcome back into the same contract they started from.</p>
+                    </article>
+                    <article class="ag-card" data-track="sdr">
+                        <h3>Retained by humans</h3>
+                        <div class="ag-term-grid" style="grid-template-columns:1fr;"><div><strong>Intent</strong> — why this work exists, what counts as success, what is deliberately out of scope.</div><div><strong>Boundaries</strong> — architecture rulings, safety invariants, and the constraints an agent may not trade away for a passing test.</div><div><strong>Judgment</strong> — whether the available evidence is enough to say a thing is done, shipped, or safe.</div></div>
+                    </article>
+                </div>
+                <div class="ag-note ag-note--warning" style="margin-top:1.25rem;"><strong>Agents carry execution, not accountability.</strong> Responsibility for a transmit, a release, or a safety claim stays with the named human who signs the evidence. No delegation changes that.</div>
+            </div>
+        </section>
+        <section class="ag-section" id="lineage">
+            <div class="container">
+                <header class="ag-section-header"><span class="ag-section-label">03 · Lineage</span><h2 class="ag-section-title">Forward Deployed Engineering is where the contracts came from</h2><p class="ag-section-subtitle">Ontology is not a fourth FDE phase, and agentic engineering does not retire FDE. The loops are coupled and each keeps a veto.</p></header>
                 <div class="ag-loop-grid">
                     <article class="ag-card" data-track="control">
                         <h3>FDE delivery loop</h3>
                         <div class="ag-flow" aria-label="Echo to Delta to Product"><span class="ag-flow-step"><strong>Echo</strong><br><small>Field evidence</small></span><span class="ag-flow-arrow">→</span><span class="ag-flow-step"><strong>Delta</strong><br><small>Risky proof</small></span><span class="ag-flow-arrow">→</span><span class="ag-flow-step"><strong>Product</strong><br><small>Stable delivery</small></span></div>
-                        <p>Echo observes the actual station and operator. Delta validates the highest-risk assumption with a working vertical slice. Product hardens the result into an operable boundary, contract, or reusable component.</p>
+                        <p>Echo observes the actual station and operator. Delta validates the highest-risk assumption with a working vertical slice. Product hardens the result into an operable boundary, contract, or reusable component — which is exactly the object an agent can later be handed.</p>
                     </article>
                     <article class="ag-card" data-track="sdr">
                         <h3>Ontology engineering loop</h3>
                         <div class="ag-flow" aria-label="Scope to terms, relations, constraints and validation"><span class="ag-flow-step">Scope</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Terms</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Relations</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Constraints</span><span class="ag-flow-arrow">→</span><span class="ag-flow-step">Validate</span></div>
-                        <p>Product evidence stabilizes vocabulary and exposes invariants. The model then gives later teams better questions, cleaner boundaries, and fewer accidental protocol assumptions.</p>
+                        <p>Product evidence stabilizes vocabulary and exposes invariants. The model then gives later work — human or agentic — better questions, cleaner boundaries, and fewer accidental protocol assumptions.</p>
                     </article>
                 </div>
-                <div class="ag-note" style="margin-top:1.25rem;"><strong>Bidirectional feedback:</strong> products generate evidence for ontology revisions; the ontology supplies language, boundaries, and competency questions for the next field cycle.</div>
+                <h3 style="margin-top:2.5rem;">What an agent may not compress</h3>
+                <div class="ag-plane-grid">
+                    <article class="ag-card"><h3>Hardware</h3><p>PCB fabrication and bench bring-up. EFHW V3.0 design and firmware are complete; its claims stay design-target until a board exists.</p></article>
+                    <article class="ag-card"><h3>RF safety</h3><p>PTT paths and transmit authority on real radios. A passing server test does not sign off a client.</p></article>
+                    <article class="ag-card"><h3>Live stations</h3><p>Field verification on the operator's own antenna, band conditions, and neighbors.</p></article>
+                    <article class="ag-card"><h3>Publication</h3><p>Release decisions and what gets labeled shipped, because the label is a promise to a person.</p></article>
+                </div>
+                <div class="ag-note" style="margin-top:1.25rem;"><strong>Bidirectional feedback:</strong> products generate evidence for ontology revisions; the ontology supplies language, boundaries, and competency questions for the next field cycle — now loaded by the agent before it edits.</div>
+            </div>
+        </section>
+
+        <section class="ag-section" id="harness">
+            <div class="container">
+                <header class="ag-section-header"><span class="ag-section-label">04 · Engineering System (summary)</span><h2 class="ag-section-title">Harness × Loop × Living SDD</h2><p class="ag-section-subtitle">Engineering is the system that turns field intent into repeatable execution, reviewed increments, traceable evidence, and reusable assets.</p></header>
+                <div class="ag-engineering-summary">
+                    <article class="ag-card"><h3>Harness</h3><p>Business, technical, and product constraints surround an execution environment of agents, tools, tests, deployment, and field telemetry.</p></article>
+                    <article class="ag-card"><h3>Loop</h3><p>Echo → Delta → Product contains an inner Specify → Implement → Test → Review → Observe → Update SDD loop.</p></article>
+                    <article class="ag-card"><h3>Living SDD</h3><p>Design intent flows toward implementation; code, tests, deployment, and field evidence flow back to correct the contract.</p></article>
+                </div>
+                <div class="eng-note" style="margin-top:1.25rem;"><strong>Across five product families:</strong> the same engineering system adapts to different radios, protocols, clients, workflows, hardware gates, and evidence boundaries.</div>
+                <div style="text-align:center; margin-top:2rem;"><a class="btn btn-primary" href="engineering.html">Explore the Engineering System</a></div>
             </div>
         </section>
 
         <section class="ag-section" id="tracks">
             <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">02 · Ecosystem Map</span><h2 class="ag-section-title">Three tracks, not one artificial chain</h2><p class="ag-section-subtitle">Different hardware and operating goals require different architectures. The common foundation is control ownership, media flow, safety, observability, and evidence.</p></header>
+                <header class="ag-section-header"><span class="ag-section-label">05 · Ecosystem Map</span><h2 class="ag-section-title">Three tracks, not one artificial chain</h2><p class="ag-section-subtitle">Different hardware and operating goals require different architectures. The common foundation is control ownership, media flow, safety, observability, and evidence.</p></header>
                 <div class="ag-track-grid">
                     <article class="ag-card" data-track="control"><h3><i class="fas fa-sliders"></i> Radio Control</h3><p><strong>MRRC Universal</strong> provides broad Hamlib-backed remote operation. <strong>MRRC FT-710</strong> proves a direct USB vertical slice; <strong>MRRC Modern</strong> generalizes it through <code>RadioBackend</code> and <code>RadioCapabilities</code>.</p></article>
                     <article class="ag-card" data-track="sdr"><h3><i class="fas fa-wave-square"></i> Direct-IQ SDR</h3><p><strong>SunMRRC</strong> owns ExpertSDR-facing station state and streams IQ/audio to clients. Its interfaces include the web client and <strong>SunsdrMobile</strong>, the native iOS client—not a separate product family.</p></article>
@@ -86,7 +135,7 @@
 
         <section class="ag-section" id="families">
             <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">03 · Product Families</span><h2 class="ag-section-title">Five boundaries shaped by field constraints</h2><p class="ag-section-subtitle">Each family is described through the same evidence path. Clients belong to the system that owns their authoritative state and safety contract.</p></header>
+                <header class="ag-section-header"><span class="ag-section-label">06 · Product Families</span><h2 class="ag-section-title">Five boundaries shaped by field constraints</h2><p class="ag-section-subtitle">Each family is described through the same evidence path. Clients belong to the system that owns their authoritative state and safety contract.</p></header>
                 <div class="ag-family-grid">
                     <article class="ag-card" data-track="control" data-family="mrrc-universal">
                         <h3>MRRC Universal</h3><p>General remote operation across radios supported by Hamlib/rigctld.</p>
@@ -121,7 +170,7 @@
 
         <section class="ag-section" id="leverage">
             <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">04 · Engineering Leverage</span><h2 class="ag-section-title">Reuse the plane, not the accident</h2><p class="ag-section-subtitle">Reuse occurs at explicit architectural planes. It does not imply that unlike protocols, devices, or maturity levels are interchangeable.</p></header>
+                <header class="ag-section-header"><span class="ag-section-label">07 · Engineering Leverage</span><h2 class="ag-section-title">Reuse the plane, not the accident</h2><p class="ag-section-subtitle">Reuse occurs at explicit architectural planes. It does not imply that unlike protocols, devices, or maturity levels are interchangeable.</p></header>
                 <div class="ag-plane-grid">
                     <article class="ag-card"><h3>Control</h3><p>Command intent, authoritative state, leases, capability discovery, and idempotent reconciliation.</p></article>
                     <article class="ag-card"><h3>Media</h3><p>Audio, IQ, waterfall, framing, pacing, buffering, and transport-loss behavior.</p></article>
@@ -140,22 +189,9 @@
             </div>
         </section>
 
-        <section class="ag-section" id="engineering">
-            <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">05 · Engineering System</span><h2 class="ag-section-title">Harness × Loop × Living SDD</h2><p class="ag-section-subtitle">Engineering is the system that turns field intent into repeatable execution, reviewed increments, traceable evidence, and reusable assets.</p></header>
-                <div class="ag-engineering-summary">
-                    <article class="ag-card"><h3>Harness</h3><p>Business, technical, and product constraints surround an execution environment of agents, tools, tests, deployment, and field telemetry.</p></article>
-                    <article class="ag-card"><h3>Loop</h3><p>Echo → Delta → Product contains an inner Specify → Implement → Test → Review → Observe → Update SDD loop.</p></article>
-                    <article class="ag-card"><h3>Living SDD</h3><p>Design intent flows toward implementation; code, tests, deployment, and field evidence flow back to correct the contract.</p></article>
-                </div>
-                <div class="eng-note" style="margin-top:1.25rem;"><strong>Across five product families:</strong> the same engineering system adapts to different radios, protocols, clients, workflows, hardware gates, and evidence boundaries.</div>
-                <div style="text-align:center; margin-top:2rem;"><a class="btn btn-primary" href="engineering.html">Explore the Engineering System</a></div>
-            </div>
-        </section>
-
         <section class="ag-section" id="ontology">
             <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">06 · Domain Ontology</span><h2 class="ag-section-title">A lightweight, modular model of remote amateur radio</h2><p class="ag-section-subtitle">The Domain Ontology is a bilingual engineering contract grounded in product evidence. It is not an RDF/OWL deployment, a graph database, or an extra runtime framework.</p></header>
+                <header class="ag-section-header"><span class="ag-section-label">08 · Domain Ontology</span><h2 class="ag-section-title">A lightweight, modular model of remote amateur radio</h2><p class="ag-section-subtitle">The Domain Ontology is a bilingual engineering contract grounded in product evidence. It is not an RDF/OWL deployment, a graph database, or an extra runtime framework.</p></header>
                 <div class="ag-term-grid">
                     <article class="ag-card"><h3>Agent</h3><p>Operator, administrator, maintainer, or automated controller with authority and responsibility.</p></article>
                     <article class="ag-card"><h3>Physical Entity</h3><p>Radio, antenna, tuner, transceiver interface, sensor, actuator, and station environment.</p></article>
@@ -193,7 +229,7 @@
 
         <section class="ag-section" id="capabilities">
             <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">07 · Capability Matrix</span><h2 class="ag-section-title">Comparable dimensions, different implementations</h2><p class="ag-section-subtitle">Capabilities describe what a product family can do. Evidence maturity describes how strongly each claim has been demonstrated; the two must not be collapsed.</p></header>
+                <header class="ag-section-header"><span class="ag-section-label">09 · Capability Matrix</span><h2 class="ag-section-title">Comparable dimensions, different implementations</h2><p class="ag-section-subtitle">Capabilities describe what a product family can do. Evidence maturity describes how strongly each claim has been demonstrated; the two must not be collapsed.</p></header>
                 <div class="ag-table-wrap"><table class="ag-table">
                     <thead><tr><th>Dimension</th><th>MRRC Universal</th><th>MRRC Direct USB</th><th>SunMRRC</th><th>MRRC-FT8</th><th>EFHW</th></tr></thead>
                     <tbody>
@@ -212,7 +248,7 @@
         </section>
         <section class="ag-section" id="evidence">
             <div class="container">
-                <header class="ag-section-header"><span class="ag-section-label">08 · Evidence Discipline</span><h2 class="ag-section-title">Claims carry provenance and limits</h2><p class="ag-section-subtitle">A feature label is not a maturity claim. Every result is classified by method, environment, version, and remaining uncertainty.</p></header>
+                <header class="ag-section-header"><span class="ag-section-label">10 · Evidence Discipline</span><h2 class="ag-section-title">Claims carry provenance and limits</h2><p class="ag-section-subtitle">A feature label is not a maturity claim. Every result is classified by method, environment, version, and remaining uncertainty.</p></header>
                 <div class="ag-legend" aria-label="Evidence maturity levels"><span class="ag-status ag-status--design">Design target</span><span class="ag-status ag-status--design">Simulation result</span><span class="ag-status ag-status--tested">Automated test</span><span class="ag-status ag-status--tested">Bench verified</span><span class="ag-status ag-status--field">Field verified</span><span class="ag-status ag-status--field">Released / operational</span><span class="ag-status ag-status--known">Deferred / known issue</span></div>
                 <div class="ag-evidence-grid" style="margin-top:2rem;">
                     <article class="ag-card"><h3>MRRC FT-710</h3><p><strong>Source:</strong> v1.8.1<br><strong>Windows package:</strong> v1.8.0<br><strong>Automated tests:</strong> 439</p><p>Source, packaged release, test execution, and radio acceptance are separate evidence records.</p></article>

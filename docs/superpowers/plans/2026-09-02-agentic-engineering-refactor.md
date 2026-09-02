@@ -114,7 +114,7 @@
 ### 规格覆盖映射（自检用）
 
 | 规格节 | 要求 | 实现任务 |
-|---|---|---|
+| --- | --- | --- |
 | §2 核心主张 | 三角色分工 + 知识复利 | 任务 3、4（`thesis`/`roles`/`lineage`） |
 | §3 措辞红线表 | 禁句、禁「AI 赋能」、禁声称产品由 Agent 写成 | 任务 1 步骤 5（禁句断言）、任务 7 步骤 1（逐仓核实表）、任务 14 步骤 1（回写 `CLAUDE.md`） |
 | §4.1 重定向 | 集中 301 | 任务 10 |
@@ -237,6 +237,7 @@ PAGES = {
 ```bash
 cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_pages -v
 ```
+
 预期：**FAIL / ERROR**，报错含 `FileNotFoundError`（`agentic.html` 尚不存在）。
 若意外 PASS，说明步骤 3 的路径没改到位 —— 先修再继续。
 
@@ -247,11 +248,13 @@ cd /Users/cheenle/HAM/website
 git add portal/tests/test_agentic_pages.py
 git commit -m "test: 定义 Agentic Engineering 总纲页契约（先红）"
 ```
+
 ---
 
 ## 任务 2：portal 文件改名 + CSS 类前缀机械重命名（B1a）
 
 **文件：**
+
 - `git mv`：`portal/fde.html` → `portal/agentic.html`
 - `git mv`：`portal/zh/fde.html` → `portal/zh/agentic.html`
 - `git mv`：`portal/css/fde.css` → `portal/css/agentic.css`
@@ -279,6 +282,7 @@ git commit -m "refactor(portal): 纯改名 fde → agentic（三文件，零内�
 cd /Users/cheenle/HAM/website/portal
 grep -Rno 'fde-[a-z-]*' *.html zh/*.html css/*.css | awk -F: '{print $1}' | sort | uniq -c
 ```
+
 预期恰好 6 个文件：`agentic.html`、`zh/agentic.html`、`engineering.html`、
 `zh/engineering.html`、`css/agentic.css`、`css/engineering.css`。
 出现任何子站文件即停 —— portal 类名与子站样式表是两套，不得跨仓库 `sed`。
@@ -307,6 +311,7 @@ LC_ALL=C sed -i '' 's|css/fde.css?v=1|css/agentic.css?v=2|g' \
   agentic.html zh/agentic.html engineering.html zh/engineering.html
 grep -n 'agentic.css\|fde.css' agentic.html zh/agentic.html engineering.html zh/engineering.html
 ```
+
 预期：4 行都命中 `css/agentic.css?v=2`，无 `fde.css` 残留。
 
 - [ ] **步骤 5：验证无孤儿类**
@@ -324,6 +329,7 @@ for f in ('agentic.html', 'zh/agentic.html', 'engineering.html', 'zh/engineering
 print('孤儿（用了但没定义）:', sorted(used - defined))
 PY
 ```
+
 预期输出：`孤儿（用了但没定义）: []`。非空即逐个补定义或删用法，不得留到下个任务。
 
 - [ ] **步骤 5b：修总纲页自身的 6 处旧名引用（初稿遗漏；改名后契约测试立刻抓到）**
@@ -390,7 +396,7 @@ git status --porcelain portal/ | grep '^??' || true
 
 预期测试状态：`Ran 26 tests / FAILED (failures=4) / skipped=0`，
 且 4 处红全在 `test_agentic_pages`（任务 1 故意留红，待任务 3-9 转绿）。
-若 skip 不为 0 或红项越出 `test_agentic_pages`，说明 5b-5d 有漏，停下修。
+若 skip 不为 0 或红项越出 `test_agentic_pages`，说明 5b-5d 有漏，停下修
 ---
 
 ## 任务 3：总纲前三节（EN）——命题、分工、FDE 前史（B1b）
@@ -484,17 +490,26 @@ git status --porcelain portal/ | grep '^??' || true
         </section>
 ```
 
-- [ ] **步骤 4：把 `engineering` 节改名为 `harness`**
+- [ ] **步骤 4：把 `engineering` 节改名为 `harness` 并物理移动到第 4 位**
 
 `portal/agentic.html` 中 `<section class="ag-section" id="engineering">` → `id="harness"`；
 其 section-label `05 · Engineering System` → `04 · Engineering System (summary)`。
+
+> **计划补正（执行时发现的第 7 处缺陷，已修正）。** 原步骤只改 id 与编号，**没有把该节移动到文档顺序第 4 位**。
+> 插入三节后该节物理位置落在 `leverage` 之后（第 7 位），结果是编号序列变成
+> `01 02 03 05 06 07 04 08 09 10`——页码数字与滚动顺序不一致，且步骤 2 的锚点导航里
+> `Harness` 排在 `Tracks` 之前，点击会**往回跳**。
+> 规格 §5.1 的节序 `thesis, roles, lineage, harness, tracks, …` 就是目标 DOM 顺序。
+> 因此本步骤必须包含移动：把整节（`<section … id="harness">` 至下一个 `<section` 前）
+> 剪切并插回 `<section class="ag-section" id="tracks">` 之前。
+> 验收：`grep -o 'ag-section-label">[0-9][0-9]' agentic.html` 必须输出严格递增的 01…10。
 
 - [ ] **步骤 5：全节编号顺延（插了三节，后面全部错位）**
 
 `portal/agentic.html` 内按此表逐条替换 section-label 的前缀数字（文本其余不动）：
 
 | 现值 | 改为 |
-|---|---|
+| --- | --- |
 | `02 · Ecosystem Map` | `05 · Ecosystem Map` |
 | `03 · Product Families` | `06 · Product Families` |
 | `04 · Engineering Leverage` | `07 · Engineering Leverage` |
@@ -505,6 +520,7 @@ git status --porcelain portal/ | grep '^??' || true
 ```bash
 grep -o 'ag-section-label">[0-9]* · [^<]*' /Users/cheenle/HAM/website/portal/agentic.html
 ```
+
 预期改完后为：`01 · Thesis`、`02 · Division of Work`、`03 · Lineage`、`04 · Engineering System (summary)`、
 `05 · Ecosystem Map`、`06 · Product Families`、`07 · Engineering Leverage`、`08 · Domain Ontology`、
 `09 · Capability Matrix`、`10 · Evidence Discipline`（缺项即漏改）。
@@ -514,6 +530,7 @@ grep -o 'ag-section-label">[0-9]* · [^<]*' /Users/cheenle/HAM/website/portal/ag
 ```bash
 cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_pages -v 2>&1 | tail -20
 ```
+
 预期：`en` 相关断言通过，`zh` 因缺 `thesis`/`roles`/`lineage`/`harness` 节而 FAIL。
 这是预期中间态（EN 先行），**不要**为了让 zh 变绿而偷改测试。
 
@@ -524,6 +541,7 @@ cd /Users/cheenle/HAM/website
 git add portal/agentic.html
 git commit -m "feat(portal): 总纲新增命题/分工/FDE 前史三节（EN），engineering 节降为机制摘要"
 ```
+
 此刻 `zh` 断言仍红属预期，任务 4 收尾。**发布动作在各站 `deploy.sh`，此前线上不受影响。**
 
 ---
@@ -643,6 +661,7 @@ badge 文案改为 `<span>Agentic Engineering · 智能体工程</span>`。
             self.assertLess(source.index('id="harness"'), source.index('id="ontology"'))
             self.assertIn('href="engineering.html"', source, language)
 ```
+
 删掉步骤 5d 留的那行「任务 3/4 届时更新」注释。
 
 - [ ] **步骤 4b：确认无残留旧节名**
@@ -658,6 +677,7 @@ grep -n 'id="engineering"' tests/test_engineering_pages.py  # 预期只剩对 en
 ```bash
 cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_pages.AgenticPageTests.test_ids_are_unique_and_section_parity_is_preserved -v
 ```
+
 预期 PASS。若 FAIL，报错会列出两侧 section id 差集——以差集为准补齐，不要改测试。
 
 - [ ] **步骤 6：Commit**
@@ -667,6 +687,7 @@ cd /Users/cheenle/HAM/website
 git add portal/zh/agentic.html
 git commit -m "feat(portal): 中文总纲同步新增命题/分工/前史三节"
 ```
+
 ---
 
 ## 任务 5：跨站导航与共享 JS 术语层（机械改名）
@@ -684,7 +705,7 @@ sunmrrc/js/scope.js            SunsdrMobile/js/scope.js            mrrc_ft8/js/s
 **两类 `fde` 链接语义不同，不可用一条 sed 打天下：**
 
 | 出现形式 | 语义 | 改成 |
-|---|---|---|
+| --- | --- | --- |
 | JS 里 `fde: '/fde.html'`（绝对路径） | **portal 总纲页** | `agentic: '/agentic.html'` |
 | JS 里 `else if (/\/fde\.html/.test(p)) SITE = 'fde';` | 高亮判定 portal 总纲页 | 正则与值都换成 `agentic` |
 | 子站 HTML 里 `href="fde.html"`（相对路径） | **该子站自己的长页** | `href="agentic.html"`（任务 12 改名后才有效） |
@@ -722,6 +743,7 @@ LC_ALL=C sed -i '' \
   zh/index.html zh/about.html zh/contact.html zh/privacy.html
 grep -Rn 'fde\.html' *.html zh/*.html
 ```
+
 实测最后一条 grep **归零**（0 行）：`engineering.html` / `zh/engineering.html` 各 3 处旧链接
 已在**任务 2 步骤 5c** 提前修掉（初稿此处记为「×2、由任务 10 处理」是错的——任务 10 只管 nginx
 集中 301，修不了页面内的相对链接，且实际是 3 处不是 2 处）。
@@ -765,7 +787,7 @@ git -C /Users/cheenle/HAM/ft8 add website/js/scope.js \
 已核实的仓库前缀（照抄，勿再猜）：
 
 | 站点目录 | 仓库根 | 仓库内路径前缀 |
-|---|---|---|
+| --- | --- | --- |
 | `portal`、`efhw` | `/Users/cheenle/HAM/website` | `portal/`、`efhw/` |
 | `mrrc_modern` | `/Users/cheenle/HAM/mrrc_modern` | `website/` |
 | `mrrc_ft710` | `/Users/cheenle/HAM/mrrc_ft710` | `website/` |
@@ -776,7 +798,7 @@ git -C /Users/cheenle/HAM/ft8 add website/js/scope.js \
 **已知未跟踪文件（本计划会首次把它们纳入版本控制）：** `efhw/js/scope.js`、`efhw/css/scope.css`、
 `efhw/images/`。它们线上在跑（`deploy.sh` 打包整个目录），但 git 里没有——`git add` 时一并提交，
 这是修复而非误操作。若某仓库报 `no changes added to commit`，先 `git -C <repo> check-ignore -v <path>`
-确认是否被忽略，不要盲目 `git add -f`。
+确认是否被忽略，不要盲目 `git add -f`
 ---
 
 ## 任务 6：本体节改写为「Agent 运行时底座」（EN + ZH）
@@ -822,6 +844,7 @@ git -C /Users/cheenle/HAM/ft8 add website/js/scope.js \
 cd /Users/cheenle/HAM/website/portal
 grep -n 'id="ontology"' -A2 agentic.html | head
 ```
+
 把 `<h2 class="ag-section-title">` 内文案改为
 `The ontology is loaded before the agent types`，
 `ag-section-subtitle` 改为
@@ -842,6 +865,7 @@ cd /Users/cheenle/HAM && for id in no-direct-serial cat-direct-serial-io ptt-aut
   hit=$(grep -Rl "\"$id\"" mrrc_ft710/.agents mrrc_modern/.agents ft8/.agents 2>/dev/null | wc -l | tr -d ' ')
   printf "%-26s repos=%s\n" "$id" "$hit"; done
 ```
+
 预期 8 行全部 `repos>=1`。任何 `repos=0` 一律**删该行**，不改测试、不弱化措辞。
 
 - [ ] **步骤 6：Commit**
@@ -853,7 +877,7 @@ cd /Users/cheenle/HAM/website && git add portal/agentic.html portal/zh/agentic.h
 
 此刻 `test_ontology_consumers_cite_real_constraint_rule_ids` 仍红：本节只引入 5 个受测规则 ID 中的
 3 个（`no-direct-serial`、`ptt-authority`、`poll-stale-guard`）。`vendor-readonly` 在任务 7 的
-FT-8 卡片、`cat-no-dn` 在任务 8 的复现样本里出现，断言于**任务 7 步骤 4 转绿**（阈值 4）。不要为此改测试。
+FT-8 卡片、`cat-no-dn` 在任务 8 的复现样本里出现，断言于**任务 7 步骤 4 转绿**（阈值 4）。不要为此改测试
 ---
 
 ## 任务 7：五张产品族卡片追加两字段（EN + ZH）
@@ -866,7 +890,7 @@ FT-8 卡片、`cat-no-dn` 在任务 8 的复现样本里出现，断言于**任�
 - [ ] **步骤 1：逐仓工件普查（已核实 2026-09-02，照此写，不得美化）**
 
 | 卡片 | `AGENTS.md` | `.agents` 约束注册表 | 可声明的最高阶梯 B |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | MRRC Universal | ✅ 58 行 | ❌ | B2（spec/plan 留痕） |
 | MRRC Direct USB（FT-710 + Modern） | ✅ 两仓都有 | ✅ 17 / 21 条 | **B4**（阻断被验证） |
 | SunMRRC | ✅ 仓库根 `/Users/cheenle/HAM/sunsdr/AGENTS.md` | ❌ | B2 |
@@ -885,30 +909,35 @@ FT-8 卡片、`cat-no-dn` 在任务 8 的复现样本里出现，断言于**任�
 逐卡实际文案（**照抄，不要自行加戏**）：
 
 **MRRC Universal**
+
 ```html
 <div class="ag-field"><dt>Agent Execution</dt><dd><code>AGENTS.md</code> at the repo root — run-and-verify, config and port conventions, and the <code>/CONFIG</code> restart caveat are stated for agents before they touch the Tornado app. No machine-readable constraint registry yet. Census 2026-09-02.</dd></div>
 <div class="ag-field"><dt>Human Retained Judgment</dt><dd>Live-station PTT and RF safety on operator hardware; release labelling. · <strong>Contract Left Behind:</strong> the run-and-verify entry contract reused by every later family.</dd></div>
 ```
 
 **MRRC Direct USB (FT-710 · Modern)**
+
 ```html
 <div class="ag-field"><dt>Agent Execution</dt><dd><code>AGENTS.md</code> plus <code>.agents/skills/sdd-guardian/</code>: 17 constraints (ft710) and 21 (modern) with severity, <code>sdd_ref</code>, scope globs and patterns. <code>SessionStart → prime</code> loads them; <code>PreToolUse(Edit|Write) → hook</code> blocks violations before the edit lands. Census 2026-09-02.</dd></div>
 <div class="ag-field"><dt>Human Retained Judgment</dt><dd>PTT safety path on real radios; PCB and bench bring-up; whether evidence supports a "shipped" label. · <strong>Contract Left Behind:</strong> the constraint registry itself, plus <code>harness/index.json</code> routing to live SDD slices.</dd></div>
 ```
 
 **SunMRRC**
+
 ```html
 <div class="ag-field"><dt>Agent Execution</dt><dd><code>AGENTS.md</code> and <code>CLAUDE.md</code> at the <code>sunsdr</code> repo root, in front of a reverse-engineered protocol document and a living SDD. No constraint registry — so no claim of a pre-edit gate here. Census 2026-09-02.</dd></div>
 <div class="ag-field"><dt>Human Retained Judgment</dt><dd>Every protocol inference drawn from observation rather than a datasheet; PTT on hardware we did not design. · <strong>Contract Left Behind:</strong> <code>PROTOCOL.md</code> and the SDD chapters that later families cite as a boundary source.</dd></div>
 ```
 
 **MRRC-FT8**
+
 ```html
 <div class="ag-field"><dt>Agent Execution</dt><dd><code>AGENTS.md</code> plus <code>.agents/skills/sdd-guardian/</code>: 14 constraints including <code>vendor-readonly</code>, <code>no-direct-serial</code> and <code>ptt-authority</code>, enforced through the same prime / hook pair. Census 2026-09-02.</dd></div>
 <div class="ag-field"><dt>Human Retained Judgment</dt><dd>Decoder fidelity against real band conditions; UTC slot discipline where a mistake costs an emission. · <strong>Contract Left Behind:</strong> the vendored-decoder rule: <code>wsjtx-3.0.2/</code> is read-only and changes go to <code>dsp/patched/</code> [<code>vendor-readonly</code>, NFR-080 / AD-002].</dd></div>
 ```
 
 **EFHW Auto Tuner V3.0**
+
 ```html
 <div class="ag-field"><dt>Agent Execution</dt><dd>Site and knowledge-base work runs under the workspace <code>CLAUDE.md</code>; the antenna research corpus in <code>efhw-knowledge/</code> is the shared ontology source. No firmware constraint registry. Census 2026-09-02.</dd></div>
 <div class="ag-field"><dt>Human Retained Judgment</dt><dd>PCB fabrication and bench validation — this family's claims stay design-target until a physical board exists. · <strong>Contract Left Behind:</strong> the tuner state model and the 49:1 vs LC test report other families can cite.</dd></div>
@@ -919,7 +948,7 @@ FT-8 卡片、`cat-no-dn` 在任务 8 的复现样本里出现，断言于**任�
 `dt` 统一：`智能体承担环节` / `人保留裁决`。`dd` 文案（照抄）：
 
 | 卡片 | 智能体承担环节 | 人保留裁决 |
-|---|---|---|
+| --- | --- | --- |
 | MRRC Universal | 仓库根 `AGENTS.md`：运行与验证、配置与端口约定、`/CONFIG` 重启陷阱在行动前告知智能体。尚无机器可读约束注册表。普查 2026-09-02。 | 真实台站上的 PTT 与 RF 安全；发布标注。· **沉淀契约：** 被后续各族复用的运行与验证入口契约。 |
 | MRRC Direct USB | 根 `AGENTS.md` + `.agents/skills/sdd-guardian/`：ft710 17 条、modern 21 条，带 severity、`sdd_ref`、scope glob 与 patterns。`SessionStart → prime` 加载，`PreToolUse(Edit\|Write) → hook` 在落盘前阻断。普查 2026-09-02。 | 真机 PTT 安全路径；PCB 与台架点亮；证据是否足以称「已发布」。· **沉淀契约：** 约束注册表本身，加上把路由指向活体 SDD 切片的 `harness/index.json`。 |
 | SunMRRC | `sunsdr` 仓库根的 `AGENTS.md` 与 `CLAUDE.md`，位于一份逆向协议文档与活体 SDD 之前。无约束注册表——因此本节不主张编辑前门禁。普查 2026-09-02。 | 所有靠观察而非数据手册得出的协议推断；非自家设计硬件上的 PTT。· **沉淀契约：** `PROTOCOL.md` 与被后续各族当作边界来源引用的 SDD 章节。 |
@@ -931,6 +960,7 @@ FT-8 卡片、`cat-no-dn` 在任务 8 的复现样本里出现，断言于**任�
 ```bash
 cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_pages -v 2>&1 | tail -8
 ```
+
 预期：`test_ontology_consumers_cite_real_constraint_rule_ids` **此刻转绿**；
 `test_obsolete_top_level_counts_are_removed` 可能仍红（`Built Through Forward Deployed Engineering`
 在 `index.html`、`One Field. Three Tracks.` 在旧 Hero），归任务 9 清除——属预期中间态。
@@ -939,6 +969,7 @@ cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_p
 cd /Users/cheenle/HAM/website && git add portal/agentic.html portal/zh/agentic.html \
   && git commit -m "feat(portal): 五产品族补智能体承担环节与人保留裁决字段（逐仓核实）"
 ```
+
 ---
 
 ## 任务 8：证据节双阶梯与 `ag-proc--*` 徽章（EN + ZH + CSS）
@@ -1018,6 +1049,7 @@ $ echo $?
 cd /Users/cheenle/HAM/website && git add portal/agentic.html portal/zh/agentic.html portal/css/agentic.css \
   && git commit -m "feat(portal): 证据节引入阶梯 B 与 ag-proc 徽章，附实测阻断复现样本"
 ```
+
 ---
 
 ## 任务 9：机制分册重定位 + portal 首页方法论节（EN + ZH）
@@ -1027,7 +1059,7 @@ cd /Users/cheenle/HAM/website && git add portal/agentic.html portal/zh/agentic.h
 - [ ] **步骤 1：`engineering.html` 降为「分册」（改 4 处，行号来自 2026-09-02 普查）**
 
 | 行 | 现值 | 改为 |
-|---|---|---|
+| --- | --- | --- |
 | 10 | `<title>Engineering System — Harness, Loops &amp; Living SDD \| VLSC</title>` | `<title>Engineering Mechanism — Harness, Loops &amp; Living SDD \| VLSC</title>` |
 | 28 | badge `Engineering System · From Intent to Field Evidence` | `Mechanism Volume · Part of Agentic Engineering` |
 | 57 | `<span class="eng-key">OUTER · FDE DELIVERY</span>` | `<span class="eng-key">OUTER · FDE DELIVERY LOOP</span>`（保留 FDE，补 loop 以与纲的口径一致） |
@@ -1085,6 +1117,7 @@ badge → `机制分册 · 属于智能体工程`；CTA 标题 → 「机制如�
 ```bash
 cd /Users/cheenle/HAM/website/portal && grep -n "Four Approaches\|four approaches\|三条轨道\|四个" index.html zh/index.html | cut -c1-120
 ```
+
 若「Four Approaches」指四条**技术路径**（CAT / USB / UDP IQ / 原生客户端）则与产品族数不冲突，保留；
 若被读成「四个产品族」则改为明确的技术路径措辞。判据：同节 `<p>` 是否逐条列举协议路径。
 
@@ -1093,6 +1126,7 @@ cd /Users/cheenle/HAM/website/portal && grep -n "Four Approaches\|four approache
 ```bash
 cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_pages -v 2>&1 | tail -6
 ```
+
 预期 `OK`（任务 1 的全部断言此刻应成立，含 `test_obsolete_top_level_counts_are_removed` 里
 `Built Through Forward Deployed Engineering` 与 `One Field. Three Tracks.` 两条 —— 后者若仍红，
 说明 `index.html` 或 `about.html` 还留着旧 Hero 句，按步骤 7 清掉）。
@@ -1103,6 +1137,7 @@ cd /Users/cheenle/HAM/website/portal && python3 -m unittest tests.test_agentic_p
 cd /Users/cheenle/HAM/website/portal
 grep -Rn "One Field. Three Tracks.\|一个领域，三条轨道" *.html zh/*.html
 ```
+
 逐处改写为总纲口径（首页 Hero 若含此句，改为 `Agentic Engineering. Field Evidence.` /
 「智能体工程 · 现场证据」），直到 grep 无输出。
 
@@ -1111,6 +1146,7 @@ grep -Rn "One Field. Three Tracks.\|一个领域，三条轨道" *.html zh/*.htm
 ```bash
 cd /Users/cheenle/HAM/website && git add portal/ && git commit -m "feat(portal): engineering 降为机制分册，首页方法论节改智能体工程口径"
 ```
+
 ---
 
 ## 任务 10：nginx 集中 301（B3，须与页面改名同批发布）
@@ -1122,6 +1158,7 @@ cd /Users/cheenle/HAM/website && git add portal/ && git commit -m "feat(portal):
 ```bash
 grep -n "Static asset caching" /Users/cheenle/HAM/website/nginx/vlsc.net.conf
 ```
+
 锚点：`# ── Static asset caching (all sub-sites) ──` 那一行**之前**。
 必须在缓存与 `location ~* \.html$` 块之前，否则 `return 301` 会被 regex location 抢走。
 
@@ -1146,6 +1183,7 @@ cd /Users/cheenle/HAM/website
 scp nginx/vlsc.net.conf cheenle@www.vlsc.net:/tmp/
 ssh cheenle@www.vlsc.net "sudo cp /tmp/vlsc.net.conf /etc/nginx/sites-available/vlsc.net && sudo nginx -t && sudo systemctl reload nginx"
 ```
+
 预期 `nginx: configuration file ... test is successful`。
 **若 `nginx -t` 失败，立刻停止**：不要把服务器留在失败配置上（`reload` 不会加载坏配置，但 `cp` 已覆盖）。
 回滚：`ssh cheenle@www.vlsc.net "sudo cp /etc/nginx/sites-available/vlsc.net.bak /etc/nginx/sites-available/vlsc.net && sudo nginx -t && sudo systemctl reload nginx"`
@@ -1154,6 +1192,7 @@ ssh cheenle@www.vlsc.net "sudo cp /tmp/vlsc.net.conf /etc/nginx/sites-available/
 ```bash
 ssh cheenle@www.vlsc.net "sudo cp -n /etc/nginx/sites-available/vlsc.net /etc/nginx/sites-available/vlsc.net.bak"
 ```
+
 ---
 
 ## 任务 11：MRRC 站改名 + 术语层（B3.5）
@@ -1193,6 +1232,7 @@ LC_ALL=C sed -i '' \
   $FILES
 grep -Rn "fde\.html" --include=*.html --include=*.js . | grep -v agentic | head
 ```
+
 最后一条 grep 应无输出。`docs/design/*.html` 用 `../../fde.html`，`docs/*.html` 用 `../fde.html`，
 顶层用 `fde.html` —— 三种相对深度都已在 sed 中覆盖，漏一种即出现 404。
 
@@ -1204,6 +1244,7 @@ grep -Rn "fde\.html" --include=*.html --include=*.js . | grep -v agentic | head
 cd /Users/cheenle/HAM/MRRC/website
 grep -n "15 cycles\|4 days\|3 commits\|17 files\|Git-Verified" agentic.html | head
 ```
+
 规则：commit / 文件计数类**删除**并改为指向 portal 账本（`/agentic.html#evidence`）；
 `15 cycles (Mar–Jun 2026)` 这类带时间窗的**保留但补 as-of 标注**：
 `15 field cycles recorded Mar–Jun 2026 (historical; see the evidence ledger)`。
@@ -1232,6 +1273,7 @@ for p in ('agentic.html', 'zh/agentic.html'):
     print('inserted into', p)
 PY
 ```
+
 锚点已实测：`agentic.html` 与 `zh/agentic.html` 各含 0 个 `</main>`、1 个 `</body>`，故用 `</body>`。
 插完跑 `grep -c 'evidence ledger' agentic.html zh/agentic.html`，预期各为 1。
 
@@ -1251,7 +1293,7 @@ grep -Rn "fde\.html" --include=*.html --include=*.js . | grep -v agentic
 
 预期：无输出。若有输出，说明步骤 3 的 sed 漏了某种相对深度（`../../`、`../`、裸名之外的第四种形态），
 按实际输出补一条 sed 后重跑本步骤；**不要**放宽 grep、不要跳过。若步骤 6 已 commit，
-把补充改动 `git add` 后用 `git commit --amend` 合入同一次提交。
+把补充改动 `git add` 后用 `git commit --amend` 合入同一次提交
 ---
 
 ## 任务 12：两张子站长页（`mrrc_modern` · `mrrc_ft710`，B4）
@@ -1278,10 +1320,11 @@ for r in /Users/cheenle/HAM/mrrc_modern /Users/cheenle/HAM/mrrc_ft710; do
   grep -n "V1.0) to multi-client\|12 FDE Cycles\|Git-Verified" agentic.html
 done
 ```
+
 预期每站 3 个命中。逐处按下面替换：
 
 | 位置 | 原文 | 改为 |
-|---|---|---|
+| --- | --- | --- |
 | ~348 | `(V1.0) to multi-client TX ownership fix (V2.1) — 16 days, 262 tests, 6` | `from first bring-up to the multi-client TX ownership fix — every step recorded in the <a href="/agentic.html#evidence">VLSC evidence ledger</a>, which owns version and test counts` |
 | ~501 | `<h2 class="section-title">12 FDE Cycles (Git-Verified)</h2>` | `<h2 class="section-title">Field Signals, Version Steps</h2>`，并把其 `<p class="section-subtitle">` 补为定性描述：`Each field signal drove one version step. Counts and as-of dates live in the evidence ledger.` |
 | ~636 | `<td>5 tests + <code>TX session:</code> logging</td>` | `<td>Automated tests + <code>TX session:</code> logging</td>` |
@@ -1296,6 +1339,7 @@ for r in /Users/cheenle/HAM/mrrc_modern /Users/cheenle/HAM/mrrc_ft710; do
   grep -n "fde\.html" *.html zh/*.html js/*.js 2>/dev/null | grep -v agentic
 done
 ```
+
 最后一行应无输出。
 
 - [ ] **步骤 4：新增「分工与资产」一节（两站同结构，文案按族区分）**
@@ -1340,6 +1384,7 @@ git -C /Users/cheenle/HAM/mrrc_modern add -A website && git -C /Users/cheenle/HA
 git -C /Users/cheenle/HAM/mrrc_ft710 add -A website && git -C /Users/cheenle/HAM/mrrc_ft710 commit -m \
  "refactor(website): fde → agentic，删过时 cycle/测试数，新增分工与资产节"
 ```
+
 ---
 
 ## 任务 13：四个子站各加一节「分工与资产」（B5，术语层已在任务 5）
@@ -1349,7 +1394,7 @@ git -C /Users/cheenle/HAM/mrrc_ft710 add -A website && git -C /Users/cheenle/HAM
 **四站网格与卡片类名各不相同，不可共用模板。** 已实测：
 
 | 站点 | 网格类 | 卡片类 | 站点根 |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `efhw` | `arch-grid` | `arch-card` | `/Users/cheenle/HAM/website/efhw` |
 | `sunmrrc` | `fx-grid` | `scope-card` | `/Users/cheenle/HAM/sunsdr/sunmrrc/website` |
 | `SunsdrMobile` | `features-grid` | `scope-card`（实测 `SunsdrMobile/index.html:221-222`） | `/Users/cheenle/HAM/sunsdr/SunsdrMobile/website` |
@@ -1364,7 +1409,7 @@ git -C /Users/cheenle/HAM/mrrc_ft710 add -A website && git -C /Users/cheenle/HAM
 四站均已有 `zh/index.html`（实测 2026-09-02），EN/ZH 两侧都要加同一节。
 
 | 卡 | 文案要点 |
-|---|---|
+| --- | --- |
 | 1 · Loaded before editing | `efhw`：workspace `CLAUDE.md`；**无**产品级 `AGENTS.md`、**无**约束注册表 → 只写「按站点契约执行」，不得写门禁。`sunmrrc`：`/Users/cheenle/HAM/sunsdr/AGENTS.md` + `CLAUDE.md` + `SDD/`；**无**注册表。`SunsdrMobile`：`CLAUDE.md`；**无**注册表。`mrrc_ft8`：`AGENTS.md` + 14 条注册表 + prime/hook（唯一可写门禁的四者之一） |
 | 2 · Human sign-off | `efhw`：PCB 制板与台架验证（设计目标≠实测）。`sunmrrc`：逆向协议推断、非自家硬件上的 PTT。`SunsdrMobile`：App Store 发布、真机音频链路。`mrrc_ft8`：真实波段解码保真度、UTC 时隙 |
 | 3 · Contract left behind | `efhw`：调谐器状态模型 + `efhw-knowledge/` 语料。`sunmrrc`：`PROTOCOL.md` 与 SDD 章节。`SunsdrMobile`：客户端能力边界描述。`mrrc_ft8`：`vendor-readonly`（`wsjtx-3.0.2/` 只读，改动走 `dsp/patched/`） |
@@ -1424,7 +1469,7 @@ git -C /Users/cheenle/HAM/ft8 add website/index.html website/zh/index.html \
 
 **顺带记录（不在本轮修）：** `SunsdrMobile/index.html:163` 为
 `<body data-site="sunsdrmobile" class="fx-grid">` —— `fx-grid` 疑似误挂在 `<body>` 上。
-本轮只观察不修改，另立一条 issue。
+本轮只观察不修改，另立一条 issue
 ---
 
 ## 任务 14：规则回写 `CLAUDE.md` + sitemap + 全站终检（B6）
@@ -1485,6 +1530,7 @@ Commits go to the owning repository, not this one.
 cd /Users/cheenle/HAM/website/portal && python3 make_sitemap.py
 grep -n "agentic.html\|fde.html" sitemap.xml
 ```
+
 预期：`/agentic.html` 与 `/zh/agentic.html` 各 1 行，`fde.html` **0 行**（旧名不进气清单，
 由 nginx 301 兜住外部链接）。
 
@@ -1509,6 +1555,7 @@ grep -RnE "439 tests|262 tests|v1\.8\.1|v1\.12\.0" --include=*.html \
   || echo "OK: 账本外无第二处可比数字"
 echo "--- nginx 301 清单 ---"; grep -c "return 301 /.*agentic" nginx/vlsc.net.conf
 ```
+
 预期：测试 `OK` **且 skip 为 0**（`load_page` 对缺失文件抛 `SkipTest`，任何 skip 都意味着一条
 契约在静默失效，必须查明而不是容忍）；术语残留 grep 无输出（`promo-videos-long/shared/source-snapshots/` 是历史快照，
 已排除、不改）；数字一致性输出 `OK: …`；301 计数为 **6**。
@@ -1564,6 +1611,7 @@ scp /Users/cheenle/HAM/website/nginx/vlsc.net.conf cheenle@www.vlsc.net:/tmp/
 ssh cheenle@www.vlsc.net "sudo cp /tmp/vlsc.net.conf /etc/nginx/sites-available/vlsc.net && sudo nginx -t && sudo systemctl reload nginx"
 ssh cheenle@www.vlsc.net "for u in /fde.html /zh/fde.html /mrrc/fde.html /mrrc/zh/fde.html /mrrc_modern/fde.html /mrrc_ft710/fde.html; do printf '%-24s %s\n' \"\$u\" \"\$(curl -sI https://www.vlsc.net\$u | grep -o 'HTTP/[0-9.]* [0-9]*')\"; done"
 ```
+
 预期 6 行全部 `HTTP/2 301`。各站 `deploy.sh` 会提示确认并自动备份；备份路径记下来用于回滚。
 已核实（2026-09-02）：8 站全部存在 `deploy.sh`，且 `grep -c fde deploy.sh` 全站为 **0** ——
 没有任何部署脚本把 `fde.html` 列为必备文件，改名不会让 `deploy.sh` 失败。`portal/deploy.sh`

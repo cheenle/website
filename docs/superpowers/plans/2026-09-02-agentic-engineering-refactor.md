@@ -750,9 +750,11 @@ grep -Rn 'fde\.html' *.html zh/*.html
 已在**任务 2 步骤 5c** 提前修掉（初稿此处记为「×2、由任务 10 处理」是错的——任务 10 只管 nginx
 集中 301，修不了页面内的相对链接，且实际是 3 处不是 2 处）。
 
-`index.html` 的 `/fde.html` CTA 按钮（含文案 `Read the FDE Story`）**仍留在此处未改**，
-它不是 `<li>` 结构、上面的 sed 不命中，由**任务 9 步骤 5** 改写 —— 属预期中间态，
-不是漏改。
+`index.html` 的 CTA 按钮不是 `<li>` 结构、上面的 sed 不命中。**其 href 已在本步当场改为
+`/agentic.html`（EN 与 ZH 各一处，见补正 #13）** —— 因为任务 2 已把文件改名，留着就是活 404。
+**按钮文案**（`Read the FDE Story` / `阅读 FDE 方法论`）仍留给**任务 9 步骤 3**（初稿误记为
+「步骤 5」，步骤 5 实为口径核对）整节改写；任务 9 的替换块本身已含 `href="/agentic.html"`，
+故与本步不冲突。
 
 - [ ] **步骤 3：统一 FDE 中文译名（现状自相矛盾）**
 
@@ -1646,6 +1648,8 @@ cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
 | 9 | 任务 4 步骤 1 漏列 ZH Hero 四枚计数 pill | 禁句清单不含 ZH 旧标题串与 pill 文案 → **一屏旧框架仍全绿** | ZH 同步命题 pill，`aria-label` 生态概览→命题概览 |
 | 10 | `<title>` / description / keywords 全计划 0 次提及 | meta 是搜索与链接预览里唯一可见文案，结构断言全看不见 → 正文改完仍假绿 | 两页 meta 改伞形术语（FDE 按策略 B 退居关键词后位）；新增 `test_page_metadata_leads_with_new_umbrella` 固定成契约 |
 | 11 | 假设 ZH 与 EN 版式一致（锚点导航独占一行） | 整行替换 `StopIteration`；改用 `re.S` + `</div></div>` 收口时因中间隔换行+缩进，**惰性匹配一路吞到文档后部**，删掉 `<main>` 起始 | ZH 侧改行内定位替换；HTML 一律禁用 `</div>…</div>` 作边界 |
+| 12 | 任务 5 标题写「9 个 JS」但清单与自检 echo 都是 10 个 | 按 9 数核数会误判「有一个文件没改」 | 以实测 10 个为准（`grep -c fde` 逐个：global-nav.js=3、scope.js=2） |
+| 13 | 任务 5 步骤 2 把 `index.html` 的 `/fde.html` CTA 归为「预期中间态、任务 9 再改」 | **实际是工作树里的活 404**：任务 2 已 `git mv fde.html agentic.html`，磁盘上再无 fde.html；中间任何一次 portal 部署都会把 404 推上线 | href 当场改指 `/agentic.html`（EN/ZH 各一处），只把**按钮文案**（`Read the FDE Story` / `阅读 FDE 方法论`）留给任务 9 —— 延文的理由成立，延 href 的不成立 |
 
 ### 由补正 10 得到的一般教训
 

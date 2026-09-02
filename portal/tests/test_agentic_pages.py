@@ -166,10 +166,10 @@ class AgenticPageTests(unittest.TestCase):
             source, _ = load_page(path)
             title = grab(r"<title>(.*?)</title>", source, "<title>", language)
             desc = grab(
-                r'<meta name="description" content="(.*?)"', source, "description", language
+                r'<meta\s+name="description"\s+content="(.*?)"', source, "description", language
             )
             keywords = grab(
-                r'<meta name="keywords" content="(.*?)"', source, "keywords", language
+                r'<meta\s+name="keywords"\s+content="(.*?)"', source, "keywords", language
             )
             needle = umbrella[language].lower()
             # 大小写不敏感：<title> 是 Title Case，而 description 是散文、句首小写属正常。

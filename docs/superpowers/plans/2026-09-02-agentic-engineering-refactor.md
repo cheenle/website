@@ -45,6 +45,10 @@
    是安全的，那里没有符号链接层。需要文件清单时用 `find -L . -name '*.html'`（`-L` 才跟随链接）。
    下文所有「全站普查」步骤均已按此形式写好，不要简化回 `grep -R … .`。
 
+   **执行期陷阱（任务 1 实测）：** `git mv` 之后必须重新 `read` 新路径才能编辑——读文件守卫不认旧路径；
+   且 `tests/__pycache__/` 会留下旧模块的 `.pyc`，`git mv` 后顺手 `rm -f tests/__pycache__/<旧名>.*.pyc`。
+   改测试模块名后还要 `grep -rn "<旧模块名>" portal/` 确认无其他引用。
+
 2. `website/mrrc` 原指向已搬走的 `/Users/cheenle/UHRR/MRRC/website`，**规划阶段已重指向**
    `/Users/cheenle/HAM/MRRC/website`（commit `9ad7a21`）；MRRC 站**纳入本轮**（任务 11）。
 3. 子站各自的仓库在 `/Users/cheenle/HAM/<name>/`，其 `website/` 目录才是站点根。

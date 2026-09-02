@@ -557,7 +557,7 @@
         <div class="section-header">
             <span class="section-label">Resources</span>
             <h2 class="section-title">Documentation & Links</h2>
-            <p class="section-subtitle">SDD, FDE, reference designs, and community comparison.</p>
+            <p class="section-subtitle">SDD, the Agentic Engineering thesis, reference designs, and community comparison. <a href="/agentic.html">Read the thesis &rarr;</a></p>
         </div>
         <div class="demo-grid">
             <a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener" class="demo-link">
@@ -582,6 +582,33 @@
             </a>
         </div>
     </div>
+</section>
+
+<section class="section" id="division" style="background: var(--bg-secondary);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Knowledge Base · Contracts</span>
+      <h2 class="section-title">Division of Work and Contracts Left Behind</h2>
+      <p class="section-subtitle">What this project loads before editing, what a human still signs off, and what stays readable afterwards.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-file-lines"></i></div>
+        <h3>CLAUDE.md Loaded, No Constraint Registry</h3>
+        <p>Workspace <code>CLAUDE.md</code> is loaded before editing. This site has <strong>no</strong> product-level <code>AGENTS.md</code> and <strong>no</strong> machine-readable constraint registry, so the Agent works to the site contract only. No automated pre-edit gate exists here, and none is claimed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-user-check"></i></div>
+        <h3>Board Fab and Bench Verification</h3>
+        <p>PCB fabrication decisions and every measured bench result stay with a human. Design targets are never published as measurements.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-box-archive"></i></div>
+        <h3>Tuner State Model and Corpus</h3>
+        <p>The tuner state model and the <code>efhw-knowledge/</code> corpus remain as human-readable contracts for the next operator.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Footer -->

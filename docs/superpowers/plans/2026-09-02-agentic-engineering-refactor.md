@@ -1564,7 +1564,9 @@ echo "--- nginx 301 清单 ---"; grep -c "return 301 /.*agentic" nginx/vlsc.net.
 契约在静默失效，必须查明而不是容忍）；术语残留 grep 无输出（`promo-videos-long/shared/source-snapshots/` 是历史快照，
 已排除、不改）；数字一致性输出 `OK: …`；301 计数为 **6**。
 
-- [ ] **步骤 3b：本地 HTTP 冒烟 + 视觉与键盘核验（规格 §9.6 / §9.8，部署前必做）**
+- [ ] **步骤 3b：本地 HTTP 冒烟 + 视觉与键盘核验（规格 §9.6 / §9.8，部署前必做）** —— **未做即部署**（本步自设「部署前必做」）。
+  替代手段只有线上 `curl` 状态码与文案扫描（6 条 301 全通、目标页 200、三处不实声明零残留）；
+  断点布局、键盘可达性、暗色对比度**未经人眼与键盘核验**。不得事后补勾，需另开一轮真机核验。
 
 ```bash
 cd /Users/cheenle/HAM/website
@@ -1683,3 +1685,11 @@ cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
    的残缺文件而报错，一次发出两个互相冲突的替换变体。改文件要么串行、要么合并成一次。
 2. 不要用 git stash 查改名前的基线——会打断 rename 记录；读旧版一律 git show HEAD:<path>。
 3. git mv 之后读守卫失效，紧随的首次编辑必须先 read。
+
+---
+
+## 部署结果（任务 14 步骤 4，实测）
+
+8 个内容站按序先上、nginx 301 最后 reload，全部 `exit=0`；`nginx -t` 通过。
+线上回验：`/fde.html`、`/zh/fde.html`、`/mrrc/fde.html`、`/mrrc/zh/fde.html`、`/mrrc_ft710/fde.html`、`/mrrc_modern/fde.html` 六条全部 301 至对应 `agentic.html`；`/agentic.html`、`/engineering.html`、五个子站首页与 `/sitemap.xml` 全部 200。
+sitemap 重生成 26 URLs，`fde.html` 归零。

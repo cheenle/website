@@ -21,6 +21,48 @@ This is a workspace grouping HAM radio project websites. All are pure static HTM
 
 All sites are bilingual (EN/CN), share the same Octen dark theme design system (`css/octen.css`), and deploy to nginx on `www.vlsc.net`.
 
+## Site-wide editorial rules
+
+### Agentic Engineering is the umbrella; FDE is one loop inside it
+
+`/agentic.html` is the thesis page (EN + `zh/`). `/engineering.html` is the mechanism volume.
+Forward Deployed Engineering (Echo → Delta → Product) stays documented inside §03 Lineage as the
+predecessor that produced the contracts agents now load. Do not re-promote FDE as the top-level
+brand, and do not delete it. Chinese term: 智能体工程 (never 代理式工程); FDE 中文统一为「前沿部署工程」.
+
+### Facts have one owner
+
+The portal Evidence section (`/agentic.html#evidence`) is the single source of truth for
+cross-project comparable numbers: versions, test counts, release status, known defects.
+Sub-sites keep their own architecture, module tables and protocol detail — they must not
+self-report comparable numbers. Link to the ledger instead.
+
+Never claim a product family was built by AI or agents. Process evidence (constraint registry,
+spec trail, hooks, verified blocks) is graded separately from product maturity and never
+promotes it. Repositories without `.agents/skills/sdd-guardian/` must not describe a pre-edit gate.
+
+### Cross-site checks
+
+Sub-site directories under `website/` are symlinks into other git repositories
+(`mrrc/`, `mrrc_modern/`, `mrrc_ft710/`, `sunmrrc/`, `SunsdrMobile/`, `mrrc_ft8/`, `ft8/`);
+`portal/`, `efhw/` and `nginx/` are real directories.
+
+**Site-wide greps must list the site directories explicitly, each with a trailing slash.**
+On this machine (macOS BSD grep) both `-r` and `-R` refuse to descend into symlinked
+sub-directories when you search from `.`, so `grep -R pattern .` reports a clean tree while
+every sub-site hit stays invisible — a silent false green. Use:
+
+```bash
+SITES="portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/"
+grep -Rn "pattern" $SITES      # correct
+grep -Rn "pattern" .           # WRONG: misses all symlinked sub-sites
+grep -Rn "pattern" mrrc        # WRONG: bare symlink arg is not followed either
+```
+
+`find` needs the same care: use `find -L` to follow symlinks. Grepping `.` is only safe
+after `cd` into a sub-site's real repository directory (e.g. `/Users/cheenle/HAM/MRRC/website`).
+Commits go to the owning repository, not this one.
+
 ## Common patterns across all five sites
 
 - **Design**: `css/octen.css` — dark theme with cyan/teal accent (`#22d3ee`), Inter + JetBrains Mono fonts, responsive. Font Awesome 6.4 for icons. Embedded SVG favicons.

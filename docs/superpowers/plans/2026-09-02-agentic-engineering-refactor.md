@@ -1212,13 +1212,13 @@ ssh cheenle@www.vlsc.net "sudo cp -n /etc/nginx/sites-available/vlsc.net /etc/ng
 cd /Users/cheenle/HAM/website && readlink mrrc && ls mrrc/agentic.html 2>/dev/null || ls mrrc/fde.html
 ```
 
-- [ ] **步骤 2：改名 EN/ZH 长页**
+- [x] **步骤 2：改名 EN/ZH 长页**
 
 ```bash
 cd /Users/cheenle/HAM/MRRC/website && git mv fde.html agentic.html && git mv zh/fde.html zh/agentic.html
 ```
 
-- [ ] **步骤 3：23 文件 28 处导航链接批量改名**
+- [x] **步骤 3：23 文件 28 处导航链接批量改名**
 
 ```bash
 cd /Users/cheenle/HAM/MRRC/website
@@ -1240,7 +1240,7 @@ grep -Rn "fde\.html" --include=*.html --include=*.js . | grep -v agentic | head
 最后一条 grep 应无输出。`docs/design/*.html` 用 `../../fde.html`，`docs/*.html` 用 `../fde.html`，
 顶层用 `fde.html` —— 三种相对深度都已在 sed 中覆盖，漏一种即出现 404。
 
-- [ ] **步骤 4：§8.2 数字口径修复（`agentic.html` 内部）**
+- [x] **步骤 4：§8.2 数字口径修复（`agentic.html` 内部）**
 
 该页自述 `15 cycles`、`4 days`、`3 commits`、`17 files`、`Git-Verified` 均无 as-of 范围。逐处处理：
 
@@ -1281,7 +1281,7 @@ PY
 锚点已实测：`agentic.html` 与 `zh/agentic.html` 各含 0 个 `</main>`、1 个 `</body>`，故用 `</body>`。
 插完跑 `grep -c 'evidence ledger' agentic.html zh/agentic.html`，预期各为 1。
 
-- [ ] **步骤 6：Commit（落在 mrrc 仓库）**
+- [x] **步骤 6：Commit（落在 mrrc 仓库）**
 
 ```bash
 git -C /Users/cheenle/HAM/mrrc add -A website && git -C /Users/cheenle/HAM/mrrc commit -m \
@@ -1480,7 +1480,7 @@ git -C /Users/cheenle/HAM/ft8 add website/index.html website/zh/index.html \
 
 **文件：** 修改 `CLAUDE.md`（workspace 根），重跑 `portal/make_sitemap.py`
 
-- [ ] **步骤 1：`CLAUDE.md` 新增一节**
+- [x] **步骤 1：`CLAUDE.md` 新增一节**
 
 在 `## Overview` 之后插入：
 
@@ -1663,6 +1663,8 @@ cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
 | 25 | 任务 13 网格类名表有误：表中给 mrrc_ft8 写 `arch-grid`、SunsdrMobile 写 `features-grid`，但实测 `arch-grid` 仅在 efhw 的 CSS 中定义；三站 `css/scope.css` 皆有的只有 `fx-grid`。 | 按表施工会得到一个没有布局的裸 div 串——移动端三卡叠成一列且无间距，桌面端不成栅格。 | 施工前逐站读取**实际加载**的 stylesheet（含页内 `<style>`）确认类存在；三站统一 `fx-grid`，efhw 用 `features-grid`。 |
 | 26 | 任务 13 称「复制相邻一节骨架、只替换三张卡文案」，但四站**没有任何 prose 卡**可套：`scope-card` 内部是纯内联样式 div（CSS 无 `.scope-card h3` / `.scope-card p` 规则），efhw 的 `arch-card` 是端点卡（`.label/.endpoint/.dir/.payload`）。 | 直接写 `<div class="scope-card"><h3>…</h3><p>…</p></div>` 会拿不到字号/行距/颜色，标题按浏览器默认渲染成超大衬体字，等于交付一个样式破损的新节。 | efhw 套用其唯一现成的 prose 卡 `feature-card`（icon+h3+p 样式齐备）；三站 `scope-card` 沿用各站自身内联约定（mono 小编号 + `--scope-text-muted` 正文），不新造未定义类。 |
 | 27 | 任务 13 未规定新节是否参与 `scope-section-alt` 交替背景。实测各站最后一节均为非 alt。 | 新节与前一节同背景，视觉上粘连成一整块超长节，分节感消失。 | 插入后逐站回看前一节 class，六站（3 站 × EN/ZH）全部补 `scope-section-alt` 恢复交替。 |
+| 28 | 任务 11 步骤 3 的 sed 只覆盖三种相对深度（`../../`、`../`、裸名），实际存在**第四种** `href="zh/fde.html"`（`fde.html:119` 语言按钮）| 漏掉即留下一条死链，且它在页面底部、人工点检最易忽略 | 改用有序 python 字符串替换并显式加 `zh/fde.html` 一条；完工后按形态计数（13/9/4/1=27）逐类核对 |
+| 29 | 会话约定称「`grep -r` 不跟软链，全站搜索用 `grep -R`」| 本机是 BSD grep 2.6.0：从 `.` 出发时 `-R` 同样**不下钻软链子目录**，四个子站的命中全部漏掉却报告显示干净——假绿比红更糟 | 实测三向对照（`.` 命中 3 / 显式列目录命中 8 / 裸软链参数命中 0），正确写法已作为强制约定写入 CLAUDE.md「Cross-site checks」；`find` 同需 `-L` |
 
 ### 由补正 10 得到的一般教训
 

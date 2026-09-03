@@ -1323,25 +1323,39 @@
             ><span class="ag-status ag-status--field">已发布 / 运行</span
             ><span class="ag-status ag-status--known">延期 / 已知问题</span>
           </div>
-<div class="ag-legend" style="margin-top:1rem;" aria-label="工程过程证据等级">
-  <span class="ag-proc ag-proc--registry">B1 约束注册表条目</span>
-  <span class="ag-proc ag-proc--spec">B2 规格·计划留痕</span>
-  <span class="ag-proc ag-proc--enforced">B3 会话内强制执行</span>
-  <span class="ag-proc ag-proc--blocked">B4 阻断被验证</span>
-</div>
-<div class="ag-note ag-note--warning" style="margin-top:1rem;">
-  <strong>两条阶梯不互推。</strong>下面这一行衡量工程过程是否被约束，上面那一行衡量产品行为是否为真。B4 徽章不提升任何 A 级主张；约束条数再多，也不能减少一次台架验证的必要性。
-</div>
-<details class="ag-details" style="margin-top:1.25rem;">
-  <summary>这条链的端到端复现（2026-09-02）</summary>
-  <div class="ag-details-body"><pre class="ag-diagram"><code>$ python3 .agents/skills/sdd-guardian/harness/sdd_context.py check probe_b4_tmp.py
+          <div
+            class="ag-legend"
+            style="margin-top: 1rem"
+            aria-label="工程过程证据等级"
+          >
+            <span class="ag-proc ag-proc--registry">B1 约束注册表条目</span>
+            <span class="ag-proc ag-proc--spec">B2 规格·计划留痕</span>
+            <span class="ag-proc ag-proc--enforced">B3 会话内强制执行</span>
+            <span class="ag-proc ag-proc--blocked">B4 阻断被验证</span>
+          </div>
+          <div class="ag-note ag-note--warning" style="margin-top: 1rem">
+            <strong>两条阶梯不互推。</strong
+            >下面这一行衡量工程过程是否被约束，上面那一行衡量产品行为是否为真。B4
+            徽章不提升任何 A
+            级主张；约束条数再多，也不能减少一次台架验证的必要性。
+          </div>
+          <details class="ag-details" style="margin-top: 1.25rem">
+            <summary>这条链的端到端复现（2026-09-02）</summary>
+            <div class="ag-details-body">
+              <pre
+                class="ag-diagram"
+              ><code>$ python3 .agents/skills/sdd-guardian/harness/sdd_context.py check probe_b4_tmp.py
 SDD-GUARDIAN: blocking violations found:
 [BLOCK] cat-no-dn (AD-014; SDD V1.2 freq-drift incident) probe_b4_tmp.py:2: return c.query("DN;")
     → On the FT-710, 'DN;' is NOT a DNR query — it steps the active VFO DOWN ~20 Hz per call. Polling it caused a live frequency-drift incident (V1.2). DNR level is intentionally not polled.
 $ echo $?
 2</code></pre>
-<p>一次现场事故变成一条 SDD 裁决，裁决变成一条机器可读约束，而这条约束挡住了智能体把事故重新引入。这就是本页所做的主张，而且它可以被当场复现。</p></div>
-</details>
+              <p>
+                一次现场事故变成一条 SDD
+                裁决，裁决变成一条机器可读约束，而这条约束挡住了智能体把事故重新引入。这就是本页所做的主张，而且它可以被当场复现。
+              </p>
+            </div>
+          </details>
           <div class="ag-evidence-grid" style="margin-top: 2rem">
             <article class="ag-card">
               <h3>MRRC FT-710</h3>
@@ -1350,7 +1364,11 @@ $ echo $?
                   >Windows 安装包：</strong
                 >v1.8.0<br /><strong>自动化测试：</strong>439 项
               </p>
-              <p>源码、发布包、测试执行和电台验收分别记录。 <strong>过程证据：</strong> <span class="ag-proc ag-proc--blocked">B4 阻断被验证</span></p>
+              <p>
+                源码、发布包、测试执行和电台验收分别记录。
+                <strong>过程证据：</strong>
+                <span class="ag-proc ag-proc--blocked">B4 阻断被验证</span>
+              </p>
             </article>
             <article class="ag-card">
               <h3>MRRC Modern</h3>
@@ -1359,7 +1377,10 @@ $ echo $?
                 >FT-710、IC-7300、IC-7300MK2<br /><strong>自动化测试：</strong
                 >633 项
               </p>
-              <p>IC 系列真机验收与自动化覆盖单列。 <strong>过程证据：</strong> <span class="ag-proc ag-proc--blocked">B4 阻断被验证</span></p>
+              <p>
+                IC 系列真机验收与自动化覆盖单列。 <strong>过程证据：</strong>
+                <span class="ag-proc ag-proc--blocked">B4 阻断被验证</span>
+              </p>
             </article>
             <article class="ag-card">
               <h3>MRRC-FT8</h3>
@@ -1368,7 +1389,11 @@ $ echo $?
                   >现场演进：</strong
                 >SDD V1.8
               </p>
-              <p>公开软件包和后续现场设计不视为同一已部署工件。 <strong>过程证据：</strong> <span class="ag-proc ag-proc--blocked">B4 阻断被验证</span></p>
+              <p>
+                公开软件包和后续现场设计不视为同一已部署工件。
+                <strong>过程证据：</strong>
+                <span class="ag-proc ag-proc--blocked">B4 阻断被验证</span>
+              </p>
             </article>
             <article class="ag-card">
               <h3>EFHW V3.0</h3>
@@ -1376,7 +1401,10 @@ $ echo $?
                 <strong>设计：</strong>完成<br /><strong>固件：</strong
                 >完成<br /><strong>PCB / 台架：</strong>待完成
               </p>
-              <p>物理验证前不声明台架或现场验证。 <strong>过程证据：</strong> <span class="ag-proc ag-proc--spec">B2 规格·计划留痕</span></p>
+              <p>
+                物理验证前不声明台架或现场验证。 <strong>过程证据：</strong>
+                <span class="ag-proc ag-proc--spec">B2 规格·计划留痕</span>
+              </p>
             </article>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">

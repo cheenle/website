@@ -1,661 +1,1349 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BG1SB 的 EFHW（端馈半波）天线研究知识库：实测证据、变换器与铁氧体材料裁决、共模与平衡地线实践、多波段机理、NEC 辐射建模 —— 以及作为工程产出之一的 V3.0 Fuchs ATU 自动调谐器。">
-    <meta name="keywords" content="EFHW, 端馈半波天线, 天线研究, 铁氧体变换器, 实测证据, 共模扼流圈, 平衡地线, Fuchs ATU, ESP32-S3, 业余无线电, 开源硬件">
-    <meta name="author" content="BG1SB">
-    <meta name="theme-color" content="#0a0e14">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="BG1SB 的 EFHW（端馈半波）天线研究知识库：实测证据、变换器与铁氧体材料裁决、共模与平衡地线实践、多波段机理、NEC 辐射建模 —— 以及作为工程产出之一的 V3.0 Fuchs ATU 自动调谐器。"
+    />
+    <meta
+      name="keywords"
+      content="EFHW, 端馈半波天线, 天线研究, 铁氧体变换器, 实测证据, 共模扼流圈, 平衡地线, Fuchs ATU, ESP32-S3, 业余无线电, 开源硬件"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta name="theme-color" content="#0a0e14" />
 
     <title>EFHW — 端馈半波天线研究与实践</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
 
-    <link rel="stylesheet" href="../css/octen.css?v=6">
-    <link rel="stylesheet" href="../css/efhw.css?v=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../css/efhw.css?v=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>📡</text></svg>">
-</head>
-<body data-site="efhw">
-
-<!-- 导航栏 -->
-<nav class="navbar">
-    <div class="container navbar-content">
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>📡</text></svg>"
+    />
+  </head>
+  <body data-site="efhw">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+      <div class="container navbar-content">
         <a href="../index.html" class="logo">
-            <span class="logo-icon"><i class="fas fa-broadcast-tower"></i></span>
-            <span>EFHW<span style="color: var(--accent);">Projects</span></span>
+          <span class="logo-icon"><i class="fas fa-broadcast-tower"></i></span>
+          <span>EFHW<span style="color: var(--accent)">Projects</span></span>
         </a>
         <ul class="nav-links">
-            <li><a href="#research-hub">研究方向</a></li>
-            <li><a href="#features">工程实践</a></li>
-            <li><a href="../index.html#architecture">架构</a></li>
-            <li><a href="../index.html#research">研究</a></li>
-            <li><a href="../index.html#start">快速开始</a></li>
-            <li><a href="../index.html#specs">规格</a></li>
-            <li><a href="/mrrc_modern/">Modern</a></li>
-            <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">
-                <i class="fab fa-github"></i> GitHub
-            </a></li>
+          <li><a href="#research-hub">研究方向</a></li>
+          <li><a href="#features">工程实践</a></li>
+          <li><a href="../index.html#architecture">架构</a></li>
+          <li><a href="../index.html#research">研究</a></li>
+          <li><a href="../index.html#start">快速开始</a></li>
+          <li><a href="../index.html#specs">规格</a></li>
+          <li><a href="/mrrc_modern/">Modern</a></li>
+          <li>
+            <a
+              href="https://github.com/cheenle/efhw-knowledge"
+              target="_blank"
+              rel="noopener"
+            >
+              <i class="fab fa-github"></i> GitHub
+            </a>
+          </li>
         </ul>
         <div class="nav-actions">
-            <a href="../index.html" class="lang-btn">English</a>
-            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+          <a href="../index.html" class="lang-btn">English</a>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
         </div>
-    </div>
-</nav>
+      </div>
+    </nav>
 
-<!-- 英雄区域 -->
-<section class="hero">
-    <div class="hero-content">
+    <!-- 英雄区域 -->
+    <section class="hero">
+      <div class="hero-content">
         <div class="hero-badge">
-            <i class="fas fa-compass-drafting"></i>
-            <span>知识库 · 实测证据 · 开源硬件</span>
+          <i class="fas fa-compass-drafting"></i>
+          <span>知识库 · 实测证据 · 开源硬件</span>
         </div>
         <h1 class="hero-title">
-            EFHW 天线<br>
-            <span class="gradient">研究与实践中心</span>
+          EFHW 天线<br />
+          <span class="gradient">研究与实践中心</span>
         </h1>
         <p class="hero-subtitle">
-            一根天线，众说纷纭——这里是 BG1SB 的端馈半波天线公开研究场：
-            测量优先于传说，证据链替代营销数字。课题覆盖变换器与铁氧体材料、共模行为、
-            平衡地线、多波段机理、辐射建模——V3.0 Fuchs ATU 只是这些研究的工程产出之一。
+          一根天线，众说纷纭——这里是 BG1SB 的端馈半波天线公开研究场：
+          测量优先于传说，证据链替代营销数字。课题覆盖变换器与铁氧体材料、共模行为、
+          平衡地线、多波段机理、辐射建模——V3.0 Fuchs ATU
+          只是这些研究的工程产出之一。
         </p>
         <div class="hero-actions">
-            <a href="https://github.com/cheenle/efhw-knowledge" class="btn btn-primary btn-large" target="_blank" rel="noopener">
-                <i class="fab fa-github"></i> 知识库
-            </a>
-            <a href="#research-hub" class="btn btn-secondary btn-large">
-                <i class="fas fa-arrow-down"></i> 研究方向
-            </a>
-            <a href="/mrrc/efhw/" class="btn btn-secondary btn-large">
-                <i class="fas fa-book-open"></i> 深度研究
-            </a>
+          <a
+            href="https://github.com/cheenle/efhw-knowledge"
+            class="btn btn-primary btn-large"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fab fa-github"></i> 知识库
+          </a>
+          <a href="#research-hub" class="btn btn-secondary btn-large">
+            <i class="fas fa-arrow-down"></i> 研究方向
+          </a>
+          <a href="/mrrc/efhw/" class="btn btn-secondary btn-large">
+            <i class="fas fa-book-open"></i> 深度研究
+          </a>
         </div>
         <div class="hero-stats">
-            <div class="stat-item">
-                <span class="stat-value">13</span>
-                <span class="stat-label">知识领域</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">6+</span>
-                <span class="stat-label">实测研究</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">3</span>
-                <span class="stat-label">硬件代际</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">100W</span>
-                <span class="stat-label">外场实践</span>
-            </div>
+          <div class="stat-item">
+            <span class="stat-value">13</span>
+            <span class="stat-label">知识领域</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">6+</span>
+            <span class="stat-label">实测研究</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">3</span>
+            <span class="stat-label">硬件代际</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">100W</span>
+            <span class="stat-label">外场实践</span>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- 研究方向 -->
-<section class="section" id="research-hub" style="background: var(--bg-secondary);">
-    <div class="container">
+    <!-- 研究方向 -->
+    <section
+      class="section"
+      id="research-hub"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container">
         <div class="section-header">
-            <span class="section-label">研究方向</span>
-            <h2 class="section-title">我们在研究什么，如何裁决</h2>
-            <p class="section-subtitle">方向、观点、解读与建议——每条都锚定数据，或明确标注"未实测"。</p>
+          <span class="section-label">研究方向</span>
+          <h2 class="section-title">我们在研究什么，如何裁决</h2>
+          <p class="section-subtitle">
+            方向、观点、解读与建议——每条都锚定数据，或明确标注"未实测"。
+          </p>
         </div>
         <div class="features-grid">
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-scale-balanced"></i></div>
-                <h3>磁芯换装证据裁决</h3>
-                <p>3×FT240-51 → Fair-Rite 2643251002：逐条主张按 证伪/平反/修正/待实测 分级，附数据表与量热文献。材料谬误（Mn-Zn 错标、"饱和漂移"、假宽带）全部退役。</p>
-                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/core-swap-evidence-2026-08.md"><i class="fas fa-book"></i> 阅读裁决书</a>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-scale-balanced"></i>
             </div>
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-vial"></i></div>
-                <h3>变换器 A/B 实测协议</h3>
-                <p>S21 透射效率台架、100W FT8 量热、合盖/开盖失谐对比、CMC 点位 A/B、伺服 basin 记录——可复用规程，配空白数据表与判据速算脚本。</p>
-                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/transformer_ab_protocol.md"><i class="fas fa-flask"></i> 打开协议</a>
+            <h3>磁芯换装证据裁决</h3>
+            <p>
+              3×FT240-51 → Fair-Rite 2643251002：逐条主张按
+              证伪/平反/修正/待实测 分级，附数据表与量热文献。材料谬误（Mn-Zn
+              错标、"饱和漂移"、假宽带）全部退役。
+            </p>
+            <a
+              class="btn btn-secondary"
+              target="_blank"
+              rel="noopener"
+              href="https://github.com/cheenle/efhw-knowledge/blob/main/references/core-swap-evidence-2026-08.md"
+              ><i class="fas fa-book"></i> 阅读裁决书</a
+            >
+          </div>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-vial"></i>
             </div>
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-chart-line"></i></div>
-                <h3>端到端天线 A/B（21MHz）</h3>
-                <p>49:1 变压器 vs LC 耦合器，同天线/同频/同功率，同呼号配对 ΔSNR + 探针基线扣除：差异统计不可区分（−0.3~−0.75dB）。ADIF+脚本全链可复算。</p>
-                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/EFHW_49to1_vs_LC_%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A_20260619.md"><i class="fas fa-file-lines"></i> 测试报告</a>
+            <h3>变换器 A/B 实测协议</h3>
+            <p>
+              S21 透射效率台架、100W FT8 量热、合盖/开盖失谐对比、CMC 点位
+              A/B、伺服 basin 记录——可复用规程，配空白数据表与判据速算脚本。
+            </p>
+            <a
+              class="btn btn-secondary"
+              target="_blank"
+              rel="noopener"
+              href="https://github.com/cheenle/efhw-knowledge/blob/main/references/transformer_ab_protocol.md"
+              ><i class="fas fa-flask"></i> 打开协议</a
+            >
+          </div>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-chart-line"></i>
             </div>
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-shield-halved"></i></div>
-                <h3>共模与平衡地线</h3>
-                <p>EFHW 共模电流到底由什么决定（尾线电长度，而非变换器"效率"）、W8JI 纠正后的绕法、3–4.5m 扼流圈部署与 6–10 匝实践配方。</p>
-                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/references/efhw_cmc.md"><i class="fas fa-shield"></i> CMC 指南</a>
+            <h3>端到端天线 A/B（21MHz）</h3>
+            <p>
+              49:1 变压器 vs LC 耦合器，同天线/同频/同功率，同呼号配对 ΔSNR +
+              探针基线扣除：差异统计不可区分（−0.3~−0.75dB）。ADIF+脚本全链可复算。
+            </p>
+            <a
+              class="btn btn-secondary"
+              target="_blank"
+              rel="noopener"
+              href="https://github.com/cheenle/efhw-knowledge/blob/main/EFHW_49to1_vs_LC_%E6%B5%8B%E8%AF%95%E6%8A%A5%E5%91%8A_20260619.md"
+              ><i class="fas fa-file-lines"></i> 测试报告</a
+            >
+          </div>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-shield-halved"></i>
             </div>
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-diagram-project"></i></div>
-                <h3>多波段机理与 NEC</h3>
-                <p>谐波工作的真相、Sloper 仰角建模（下坡端偏向，1–3dB）、高 Q 针尖 vs "大汤碗"假象——以及自动调谐器究竟买到了什么。</p>
-                <a class="btn btn-secondary" target="_blank" rel="noopener" href="https://github.com/cheenle/efhw-knowledge/blob/main/README.md"><i class="fas fa-sitemap"></i> 知识图谱</a>
+            <h3>共模与平衡地线</h3>
+            <p>
+              EFHW 共模电流到底由什么决定（尾线电长度，而非变换器"效率"）、W8JI
+              纠正后的绕法、3–4.5m 扼流圈部署与 6–10 匝实践配方。
+            </p>
+            <a
+              class="btn btn-secondary"
+              target="_blank"
+              rel="noopener"
+              href="https://github.com/cheenle/efhw-knowledge/blob/main/references/efhw_cmc.md"
+              ><i class="fas fa-shield"></i> CMC 指南</a
+            >
+          </div>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-diagram-project"></i>
             </div>
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-gears"></i></div>
-                <h3>工程实践：V3.0 Fuchs ATU</h3>
-                <p>本研究的一个工程出口：ESP32-S3 伺服驱动的 Fuchs 并联 LC 耦合器，T200-6 宽带谐振回路，MRRC 远端 SWR——100W，40m–10m，开源硬件。</p>
-                <a class="btn btn-secondary" href="/mrrc/efhw/auto-efhw-tuner-architecture-premium-v2.html"><i class="fas fa-microchip"></i> 架构详解</a>
+            <h3>多波段机理与 NEC</h3>
+            <p>
+              谐波工作的真相、Sloper 仰角建模（下坡端偏向，1–3dB）、高 Q 针尖 vs
+              "大汤碗"假象——以及自动调谐器究竟买到了什么。
+            </p>
+            <a
+              class="btn btn-secondary"
+              target="_blank"
+              rel="noopener"
+              href="https://github.com/cheenle/efhw-knowledge/blob/main/README.md"
+              ><i class="fas fa-sitemap"></i> 知识图谱</a
+            >
+          </div>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-gears"></i>
             </div>
+            <h3>工程实践：V3.0 Fuchs ATU</h3>
+            <p>
+              本研究的一个工程出口：ESP32-S3 伺服驱动的 Fuchs 并联 LC
+              耦合器，T200-6 宽带谐振回路，MRRC 远端
+              SWR——100W，40m–10m，开源硬件。
+            </p>
+            <a
+              class="btn btn-secondary"
+              href="/mrrc/efhw/auto-efhw-tuner-architecture-premium-v2.html"
+              ><i class="fas fa-microchip"></i> 架构详解</a
+            >
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- 社区 -->
-<section class="section qr-section" id="community" style="background: var(--bg-primary);">
-    <div class="container">
+    <!-- 社区 -->
+    <section
+      class="section qr-section"
+      id="community"
+      style="background: var(--bg-primary)"
+    >
+      <div class="container">
         <div class="section-header">
-            <span class="section-label">社区</span>
-            <h2 class="section-title">加入讨论</h2>
-            <p class="section-subtitle">微信扫码加入 MRRC-HAM 同好群。</p>
+          <span class="section-label">社区</span>
+          <h2 class="section-title">加入讨论</h2>
+          <p class="section-subtitle">微信扫码加入 MRRC-HAM 同好群。</p>
         </div>
         <div class="qr-card">
-            <img src="../images/qr-wechat-group.jpg" alt="MRRC-HAM 同好群微信二维码">
+          <img
+            src="../images/qr-wechat-group.jpg"
+            alt="MRRC-HAM 同好群微信二维码"
+          />
         </div>
-        <p class="qr-note">该二维码 7 天内（8 月 29 日前）有效，重新进入将更新。</p>
-    </div>
-</section>
+        <p class="qr-note">
+          该二维码 7 天内（8 月 29 日前）有效，重新进入将更新。
+        </p>
+      </div>
+    </section>
 
-<!-- 特性 -->
-<section class="section" id="features" style="background: var(--bg-secondary);">
-    <div class="container">
+    <!-- 特性 -->
+    <section
+      class="section"
+      id="features"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container">
         <div class="section-header">
-            <span class="section-label">工程实践</span>
-            <h2 class="section-title">Fuchs ATU V3.0 — 伺服驱动精密调谐</h2>
-            <p class="section-subtitle">第三代自动调谐器以连续伺服调谐替代继电器组，将 SWR 检测委托给 MRRC/ATR1000，并添加 WiFi 实现全远程控制——同时将故障点从 9 个减少到 2 个。</p>
+          <span class="section-label">工程实践</span>
+          <h2 class="section-title">Fuchs ATU V3.0 — 伺服驱动精密调谐</h2>
+          <p class="section-subtitle">
+            第三代自动调谐器以连续伺服调谐替代继电器组，将 SWR 检测委托给
+            MRRC/ATR1000，并添加 WiFi 实现全远程控制——同时将故障点从 9 个减少到
+            2 个。
+          </p>
         </div>
 
         <div class="features-grid">
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-cog"></i></div>
-                <h3>连续伺服调谐</h3>
-                <p>ESP32-S3 LEDC PWM 驱动 MG996R 伺服电机，50Hz。空气可变电容（10–500pF）提供精确、连续的电容调节——无离散继电器档位，无死区。</p>
-                <ul>
-                    <li>两阶段扫描：37 粗步（5°）+ 30 精步（1°）</li>
-                    <li>已知频率缓存命中 &lt;1 秒</li>
-                    <li>全扫描最坏情况 &lt;10 秒</li>
-                </ul>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-cog"></i>
             </div>
+            <h3>连续伺服调谐</h3>
+            <p>
+              ESP32-S3 LEDC PWM 驱动 MG996R
+              伺服电机，50Hz。空气可变电容（10–500pF）提供精确、连续的电容调节——无离散继电器档位，无死区。
+            </p>
+            <ul>
+              <li>两阶段扫描：37 粗步（5°）+ 30 精步（1°）</li>
+              <li>已知频率缓存命中 &lt;1 秒</li>
+              <li>全扫描最坏情况 &lt;10 秒</li>
+            </ul>
+          </div>
 
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-microchip"></i></div>
-                <h3>ESP32-S3 核心</h3>
-                <p>240MHz 双核 Xtensa LX7，16MB 闪存。五个 FreeRTOS 任务并行协调调谐、WiFi 通信、健康监控、NVS 持久化和伺服控制。</p>
-                <ul>
-                    <li>ESP-IDF v5.x C 固件，约 2800 行</li>
-                    <li>5 个 FreeRTOS 任务 + cJSON 协议解析</li>
-                    <li>NVS 学习缓存：频率 → 伺服位置映射</li>
-                </ul>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-microchip"></i>
             </div>
+            <h3>ESP32-S3 核心</h3>
+            <p>
+              240MHz 双核 Xtensa LX7，16MB 闪存。五个 FreeRTOS
+              任务并行协调调谐、WiFi 通信、健康监控、NVS 持久化和伺服控制。
+            </p>
+            <ul>
+              <li>ESP-IDF v5.x C 固件，约 2800 行</li>
+              <li>5 个 FreeRTOS 任务 + cJSON 协议解析</li>
+              <li>NVS 学习缓存：频率 → 伺服位置映射</li>
+            </ul>
+          </div>
 
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-bolt"></i></div>
-                <h3>偏压器同轴供电</h3>
-                <p>13.8V DC 与 RF 和控制数据在同一根同轴电缆上传输。室外单元无需单独电源线——单根 RG-58 或同等同轴电缆即可完成全部工作。</p>
-                <ul>
-                    <li>室内偏压器单元将 DC 注入同轴电缆</li>
-                    <li>室外 IP66 铝制外壳</li>
-                    <li>单根同轴：RF + DC 供电 + WiFi 数据</li>
-                </ul>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-bolt"></i>
             </div>
+            <h3>偏压器同轴供电</h3>
+            <p>
+              13.8V DC 与 RF
+              和控制数据在同一根同轴电缆上传输。室外单元无需单独电源线——单根
+              RG-58 或同等同轴电缆即可完成全部工作。
+            </p>
+            <ul>
+              <li>室内偏压器单元将 DC 注入同轴电缆</li>
+              <li>室外 IP66 铝制外壳</li>
+              <li>单根同轴：RF + DC 供电 + WiFi 数据</li>
+            </ul>
+          </div>
 
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-shield-alt"></i></div>
-                <h3>安全系统</h3>
-                <p>多层保护：120W 阈值过功率中断、通过远程 ATR1000 检测的高 SWR 保护、2.2MΩ ESD 泄放电阻、带看门狗定时器的持续健康监控。</p>
-                <ul>
-                    <li>过功率检测与中断（&gt;120W 阈值）</li>
-                    <li>高 SWR 自动中断 + ATR1000 反馈回路</li>
-                    <li>2.2MΩ ESD 泄放 + 看门狗健康监控</li>
-                </ul>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-shield-alt"></i>
             </div>
+            <h3>安全系统</h3>
+            <p>
+              多层保护：120W 阈值过功率中断、通过远程 ATR1000 检测的高 SWR
+              保护、2.2MΩ ESD 泄放电阻、带看门狗定时器的持续健康监控。
+            </p>
+            <ul>
+              <li>过功率检测与中断（&gt;120W 阈值）</li>
+              <li>高 SWR 自动中断 + ATR1000 反馈回路</li>
+              <li>2.2MΩ ESD 泄放 + 看门狗健康监控</li>
+            </ul>
+          </div>
 
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-wave-square"></i></div>
-                <h3>Fuchs LC 耦合器</h3>
-                <p>成熟的并联 LC 谐振电路设计。T200-6 6 型羰基铁粉磁环（μ=8），2:14 匝比实现 49:1 阻抗变换。连续电容替代固定/切换电容组。</p>
-                <ul>
-                    <li>T200-6 磁环 — μ=8 羰基铁，低损耗</li>
-                    <li>2:14 匝比 → 49:1 阻抗比</li>
-                    <li>10–500pF 空气可变电容，伺服驱动</li>
-                </ul>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-wave-square"></i>
             </div>
+            <h3>Fuchs LC 耦合器</h3>
+            <p>
+              成熟的并联 LC 谐振电路设计。T200-6 6 型羰基铁粉磁环（μ=8），2:14
+              匝比实现 49:1 阻抗变换。连续电容替代固定/切换电容组。
+            </p>
+            <ul>
+              <li>T200-6 磁环 — μ=8 羰基铁，低损耗</li>
+              <li>2:14 匝比 → 49:1 阻抗比</li>
+              <li>10–500pF 空气可变电容，伺服驱动</li>
+            </ul>
+          </div>
 
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-network-wired"></i></div>
-                <h3>MRRC 生态集成</h3>
-                <p>WebSocket 协议直接连接 MRRC 服务器。SWR 测量委托给 ATR1000 以实现精确检测。MRRC Web UI 提供完整 ATU 控制面板——手动调谐、频段扫描、缓存管理。</p>
-                <ul>
-                    <li>WiFi 2.4GHz WebSocket 连接 MRRC 服务器</li>
-                    <li>ATR1000 SWR 检测 — 无板载 SWR 电桥</li>
-                    <li>MRRC Web UI ATU 控制面板</li>
-                </ul>
+          <div class="feature-card animate">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-network-wired"></i>
             </div>
+            <h3>MRRC 生态集成</h3>
+            <p>
+              WebSocket 协议直接连接 MRRC 服务器。SWR 测量委托给 ATR1000
+              以实现精确检测。MRRC Web UI 提供完整 ATU
+              控制面板——手动调谐、频段扫描、缓存管理。
+            </p>
+            <ul>
+              <li>WiFi 2.4GHz WebSocket 连接 MRRC 服务器</li>
+              <li>ATR1000 SWR 检测 — 无板载 SWR 电桥</li>
+              <li>MRRC Web UI ATU 控制面板</li>
+            </ul>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- 架构 -->
-<section class="section" id="architecture" style="background: var(--bg-primary);">
-    <div class="container">
+    <!-- 架构 -->
+    <section
+      class="section"
+      id="architecture"
+      style="background: var(--bg-primary)"
+    >
+      <div class="container">
         <div class="section-header">
-            <span class="section-label">架构</span>
-            <h2 class="section-title">系统设计</h2>
-            <p class="section-subtitle">三个物理平面——室内电台、室外 ATU 和天线——通过单根同轴电缆连接。</p>
+          <span class="section-label">架构</span>
+          <h2 class="section-title">系统设计</h2>
+          <p class="section-subtitle">
+            三个物理平面——室内电台、室外 ATU 和天线——通过单根同轴电缆连接。
+          </p>
         </div>
 
         <div class="arch-diagram">
-<svg viewBox="0 0 880 200" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="gBoxIndoor" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="rgba(16,185,129,0.08)"/><stop offset="100%" stop-color="rgba(16,185,129,0.02)"/>
-    </linearGradient>
-    <linearGradient id="gBoxATU" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="rgba(93,173,226,0.08)"/><stop offset="100%" stop-color="rgba(93,173,226,0.02)"/>
-    </linearGradient>
-    <linearGradient id="gBoxAnt" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="rgba(46,204,113,0.08)"/><stop offset="100%" stop-color="rgba(46,204,113,0.02)"/>
-    </linearGradient>
-  </defs>
+          <svg viewBox="0 0 880 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gBoxIndoor" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(16,185,129,0.08)" />
+                <stop offset="100%" stop-color="rgba(16,185,129,0.02)" />
+              </linearGradient>
+              <linearGradient id="gBoxATU" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(93,173,226,0.08)" />
+                <stop offset="100%" stop-color="rgba(93,173,226,0.02)" />
+              </linearGradient>
+              <linearGradient id="gBoxAnt" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(46,204,113,0.08)" />
+                <stop offset="100%" stop-color="rgba(46,204,113,0.02)" />
+              </linearGradient>
+            </defs>
 
-  <rect x="10" y="15" width="200" height="110" rx="14" fill="url(#gBoxIndoor)" stroke="rgba(16,185,129,0.35)" stroke-width="1.5"/>
-  <text x="110" y="44" text-anchor="middle" fill="#10b981" font-size="15" font-weight="700" font-family="inherit">室内电台</text>
-  <text x="110" y="66" text-anchor="middle" fill="#8899aa" font-size="12" font-family="inherit">MRRC 服务器 + 偏压器</text>
-  <text x="110" y="88" text-anchor="middle" fill="#5c6370" font-size="11" font-family="inherit">ATR1000 SWR 检测</text>
-  <text x="110" y="107" text-anchor="middle" fill="#5c6370" font-size="11" font-family="inherit">WebSocket 控制</text>
+            <rect
+              x="10"
+              y="15"
+              width="200"
+              height="110"
+              rx="14"
+              fill="url(#gBoxIndoor)"
+              stroke="rgba(16,185,129,0.35)"
+              stroke-width="1.5"
+            />
+            <text
+              x="110"
+              y="44"
+              text-anchor="middle"
+              fill="#10b981"
+              font-size="15"
+              font-weight="700"
+              font-family="inherit"
+            >
+              室内电台
+            </text>
+            <text
+              x="110"
+              y="66"
+              text-anchor="middle"
+              fill="#8899aa"
+              font-size="12"
+              font-family="inherit"
+            >
+              MRRC 服务器 + 偏压器
+            </text>
+            <text
+              x="110"
+              y="88"
+              text-anchor="middle"
+              fill="#5c6370"
+              font-size="11"
+              font-family="inherit"
+            >
+              ATR1000 SWR 检测
+            </text>
+            <text
+              x="110"
+              y="107"
+              text-anchor="middle"
+              fill="#5c6370"
+              font-size="11"
+              font-family="inherit"
+            >
+              WebSocket 控制
+            </text>
 
-  <rect x="410" y="15" width="240" height="110" rx="14" fill="url(#gBoxATU)" stroke="rgba(93,173,226,0.35)" stroke-width="1.5"/>
-  <text x="530" y="44" text-anchor="middle" fill="#5dade2" font-size="15" font-weight="700" font-family="inherit">EFHW Fuchs ATU V3.0</text>
-  <text x="530" y="66" text-anchor="middle" fill="#8899aa" font-size="12" font-family="inherit">ESP32-S3 · MG996R 伺服</text>
-  <text x="530" y="88" text-anchor="middle" fill="#5c6370" font-size="11" font-family="inherit">T200-6 2:14 · 10-500pF 空气电容</text>
-  <text x="530" y="107" text-anchor="middle" fill="#5c6370" font-size="11" font-family="inherit">IP66 铝制外壳</text>
+            <rect
+              x="410"
+              y="15"
+              width="240"
+              height="110"
+              rx="14"
+              fill="url(#gBoxATU)"
+              stroke="rgba(93,173,226,0.35)"
+              stroke-width="1.5"
+            />
+            <text
+              x="530"
+              y="44"
+              text-anchor="middle"
+              fill="#5dade2"
+              font-size="15"
+              font-weight="700"
+              font-family="inherit"
+            >
+              EFHW Fuchs ATU V3.0
+            </text>
+            <text
+              x="530"
+              y="66"
+              text-anchor="middle"
+              fill="#8899aa"
+              font-size="12"
+              font-family="inherit"
+            >
+              ESP32-S3 · MG996R 伺服
+            </text>
+            <text
+              x="530"
+              y="88"
+              text-anchor="middle"
+              fill="#5c6370"
+              font-size="11"
+              font-family="inherit"
+            >
+              T200-6 2:14 · 10-500pF 空气电容
+            </text>
+            <text
+              x="530"
+              y="107"
+              text-anchor="middle"
+              fill="#5c6370"
+              font-size="11"
+              font-family="inherit"
+            >
+              IP66 铝制外壳
+            </text>
 
-  <rect x="710" y="60" width="160" height="70" rx="14" fill="url(#gBoxAnt)" stroke="rgba(46,204,113,0.35)" stroke-width="1.5"/>
-  <text x="790" y="84" text-anchor="middle" fill="#2ecc71" font-size="14" font-weight="700" font-family="inherit">EFHW 天线</text>
-  <text x="790" y="104" text-anchor="middle" fill="#8899aa" font-size="11" font-family="inherit">~20m 导线辐射器</text>
-  <text x="790" y="120" text-anchor="middle" fill="#5c6370" font-size="10" font-family="inherit">40m-10m 多波段</text>
+            <rect
+              x="710"
+              y="60"
+              width="160"
+              height="70"
+              rx="14"
+              fill="url(#gBoxAnt)"
+              stroke="rgba(46,204,113,0.35)"
+              stroke-width="1.5"
+            />
+            <text
+              x="790"
+              y="84"
+              text-anchor="middle"
+              fill="#2ecc71"
+              font-size="14"
+              font-weight="700"
+              font-family="inherit"
+            >
+              EFHW 天线
+            </text>
+            <text
+              x="790"
+              y="104"
+              text-anchor="middle"
+              fill="#8899aa"
+              font-size="11"
+              font-family="inherit"
+            >
+              ~20m 导线辐射器
+            </text>
+            <text
+              x="790"
+              y="120"
+              text-anchor="middle"
+              fill="#5c6370"
+              font-size="10"
+              font-family="inherit"
+            >
+              40m-10m 多波段
+            </text>
 
-  <line x1="210" y1="70" x2="410" y2="70" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
-  <polygon points="402,64 416,70 402,76" fill="rgba(16,185,129,0.5)"/>
-  <polygon points="218,64 204,70 218,76" fill="rgba(16,185,129,0.5)"/>
-  <text x="310" y="62" text-anchor="middle" fill="#10b981" font-size="11" font-weight="600" font-family="inherit">单根同轴电缆</text>
-  <text x="310" y="82" text-anchor="middle" fill="#8899aa" font-size="10" font-family="inherit">RF + DC + WiFi 控制</text>
+            <line
+              x1="210"
+              y1="70"
+              x2="410"
+              y2="70"
+              stroke="rgba(16,185,129,0.4)"
+              stroke-width="1.5"
+            />
+            <polygon
+              points="402,64 416,70 402,76"
+              fill="rgba(16,185,129,0.5)"
+            />
+            <polygon
+              points="218,64 204,70 218,76"
+              fill="rgba(16,185,129,0.5)"
+            />
+            <text
+              x="310"
+              y="62"
+              text-anchor="middle"
+              fill="#10b981"
+              font-size="11"
+              font-weight="600"
+              font-family="inherit"
+            >
+              单根同轴电缆
+            </text>
+            <text
+              x="310"
+              y="82"
+              text-anchor="middle"
+              fill="#8899aa"
+              font-size="10"
+              font-family="inherit"
+            >
+              RF + DC + WiFi 控制
+            </text>
 
-  <path d="M 650 70 L 650 95 L 710 95" stroke="rgba(93,173,226,0.35)" stroke-width="1.5" fill="none"/>
-  <polygon points="718,91 710,95 718,99" fill="rgba(93,173,226,0.45)"/>
-  <text x="670" y="135" text-anchor="middle" fill="#5dade2" font-size="10" font-weight="600" font-family="inherit">RF 50Ω</text>
+            <path
+              d="M 650 70 L 650 95 L 710 95"
+              stroke="rgba(93,173,226,0.35)"
+              stroke-width="1.5"
+              fill="none"
+            />
+            <polygon
+              points="718,91 710,95 718,99"
+              fill="rgba(93,173,226,0.45)"
+            />
+            <text
+              x="670"
+              y="135"
+              text-anchor="middle"
+              fill="#5dade2"
+              font-size="10"
+              font-weight="600"
+              font-family="inherit"
+            >
+              RF 50Ω
+            </text>
 
-  <g transform="translate(10,145)">
-    <rect x="0" y="0" width="185" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-    <text x="8" y="15" fill="#10b981" font-size="9" font-family="monospace">WS:// MRRC 服务器</text>
-    <text x="8" y="29" fill="#8899aa" font-size="9" font-family="inherit">命令 · 状态 · 缓存</text>
-  </g>
-  <g transform="translate(205,145)">
-    <rect x="0" y="0" width="185" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-    <text x="8" y="15" fill="#5dade2" font-size="9" font-family="monospace">ESP32-S3 FreeRTOS</text>
-    <text x="8" y="29" fill="#8899aa" font-size="9" font-family="inherit">5 任务 · NVS · LEDC PWM</text>
-  </g>
-  <g transform="translate(400,145)">
-    <rect x="0" y="0" width="185" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-    <text x="8" y="15" fill="#2ecc71" font-size="9" font-family="monospace">Fuchs LC 网络</text>
-    <text x="8" y="29" fill="#8899aa" font-size="9" font-family="inherit">T200-6 · 10-500pF · 49:1</text>
-  </g>
-  <g transform="translate(595,145)">
-    <rect x="0" y="0" width="185" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-    <text x="8" y="15" fill="#e67e22" font-size="9" font-family="monospace">安全边界</text>
-    <text x="8" y="29" fill="#8899aa" font-size="9" font-family="inherit">过功率 · 高SWR · ESD · WDT</text>
-  </g>
-</svg>
+            <g transform="translate(10,145)">
+              <rect
+                x="0"
+                y="0"
+                width="185"
+                height="36"
+                rx="6"
+                fill="rgba(255,255,255,0.03)"
+                stroke="rgba(255,255,255,0.05)"
+                stroke-width="1"
+              />
+              <text
+                x="8"
+                y="15"
+                fill="#10b981"
+                font-size="9"
+                font-family="monospace"
+              >
+                WS:// MRRC 服务器
+              </text>
+              <text
+                x="8"
+                y="29"
+                fill="#8899aa"
+                font-size="9"
+                font-family="inherit"
+              >
+                命令 · 状态 · 缓存
+              </text>
+            </g>
+            <g transform="translate(205,145)">
+              <rect
+                x="0"
+                y="0"
+                width="185"
+                height="36"
+                rx="6"
+                fill="rgba(255,255,255,0.03)"
+                stroke="rgba(255,255,255,0.05)"
+                stroke-width="1"
+              />
+              <text
+                x="8"
+                y="15"
+                fill="#5dade2"
+                font-size="9"
+                font-family="monospace"
+              >
+                ESP32-S3 FreeRTOS
+              </text>
+              <text
+                x="8"
+                y="29"
+                fill="#8899aa"
+                font-size="9"
+                font-family="inherit"
+              >
+                5 任务 · NVS · LEDC PWM
+              </text>
+            </g>
+            <g transform="translate(400,145)">
+              <rect
+                x="0"
+                y="0"
+                width="185"
+                height="36"
+                rx="6"
+                fill="rgba(255,255,255,0.03)"
+                stroke="rgba(255,255,255,0.05)"
+                stroke-width="1"
+              />
+              <text
+                x="8"
+                y="15"
+                fill="#2ecc71"
+                font-size="9"
+                font-family="monospace"
+              >
+                Fuchs LC 网络
+              </text>
+              <text
+                x="8"
+                y="29"
+                fill="#8899aa"
+                font-size="9"
+                font-family="inherit"
+              >
+                T200-6 · 10-500pF · 49:1
+              </text>
+            </g>
+            <g transform="translate(595,145)">
+              <rect
+                x="0"
+                y="0"
+                width="185"
+                height="36"
+                rx="6"
+                fill="rgba(255,255,255,0.03)"
+                stroke="rgba(255,255,255,0.05)"
+                stroke-width="1"
+              />
+              <text
+                x="8"
+                y="15"
+                fill="#e67e22"
+                font-size="9"
+                font-family="monospace"
+              >
+                安全边界
+              </text>
+              <text
+                x="8"
+                y="29"
+                fill="#8899aa"
+                font-size="9"
+                font-family="inherit"
+              >
+                过功率 · 高SWR · ESD · WDT
+              </text>
+            </g>
+          </svg>
         </div>
 
         <div class="arch-grid">
-            <div class="arch-card">
-                <div class="label">命令与控制</div>
-                <div class="endpoint">WS:// MRRC</div>
-                <div class="dir">双向</div>
-                <div class="payload">调谐启停、伺服位置、SWR 读数、缓存操作</div>
+          <div class="arch-card">
+            <div class="label">命令与控制</div>
+            <div class="endpoint">WS:// MRRC</div>
+            <div class="dir">双向</div>
+            <div class="payload">调谐启停、伺服位置、SWR 读数、缓存操作</div>
+          </div>
+          <div class="arch-card">
+            <div class="label">调谐引擎</div>
+            <div class="endpoint">两阶段扫描</div>
+            <div class="dir">内部</div>
+            <div class="payload">
+              37 点粗扫 (5°) → 30 点精扫 (1°) → 最佳匹配
             </div>
-            <div class="arch-card">
-                <div class="label">调谐引擎</div>
-                <div class="endpoint">两阶段扫描</div>
-                <div class="dir">内部</div>
-                <div class="payload">37 点粗扫 (5°) → 30 点精扫 (1°) → 最佳匹配</div>
-            </div>
-            <div class="arch-card">
-                <div class="label">伺服控制</div>
-                <div class="endpoint">LEDC PWM 50Hz</div>
-                <div class="dir">ESP32 → MG996R</div>
-                <div class="payload">500–2500μs 脉宽，0–180° 范围</div>
-            </div>
-            <div class="arch-card">
-                <div class="label">健康监控</div>
-                <div class="endpoint">看门狗 + 遥测</div>
-                <div class="dir">周期性</div>
-                <div class="payload">心跳、伺服堵转检测、WiFi RSSI、运行时间</div>
-            </div>
+          </div>
+          <div class="arch-card">
+            <div class="label">伺服控制</div>
+            <div class="endpoint">LEDC PWM 50Hz</div>
+            <div class="dir">ESP32 → MG996R</div>
+            <div class="payload">500–2500μs 脉宽，0–180° 范围</div>
+          </div>
+          <div class="arch-card">
+            <div class="label">健康监控</div>
+            <div class="endpoint">看门狗 + 遥测</div>
+            <div class="dir">周期性</div>
+            <div class="payload">心跳、伺服堵转检测、WiFi RSSI、运行时间</div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- 研究 -->
-<section class="section" id="research" style="background: var(--bg-secondary);">
-    <div class="container">
+    <!-- 研究 -->
+    <section
+      class="section"
+      id="research"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container">
         <div class="section-header">
-            <span class="section-label">知识库</span>
-            <h2 class="section-title">EFHW 深度研究</h2>
-            <p class="section-subtitle">全面的天线理论、变压器设计、磁芯材料分析和实用制作指南——17 章工程研究。</p>
+          <span class="section-label">知识库</span>
+          <h2 class="section-title">EFHW 深度研究</h2>
+          <p class="section-subtitle">
+            全面的天线理论、变压器设计、磁芯材料分析和实用制作指南——17
+            章工程研究。
+          </p>
         </div>
 
         <div class="perf-grid">
-            <div class="perf-card">
-                <div class="metric"><i class="fas fa-magnet"></i></div>
-                <div class="metric-label">变压器设计<br><small>49:1 vs 64:1、磁芯选择、绕线方法</small></div>
+          <div class="perf-card">
+            <div class="metric"><i class="fas fa-magnet"></i></div>
+            <div class="metric-label">
+              变压器设计<br /><small>49:1 vs 64:1、磁芯选择、绕线方法</small>
             </div>
-            <div class="perf-card">
-                <div class="metric"><i class="fas fa-chart-line"></i></div>
-                <div class="metric-label">VNA 测量<br><small>真实性能数据、PA3HHO 验证</small></div>
+          </div>
+          <div class="perf-card">
+            <div class="metric"><i class="fas fa-chart-line"></i></div>
+            <div class="metric-label">
+              VNA 测量<br /><small>真实性能数据、PA3HHO 验证</small>
             </div>
-            <div class="perf-card">
-                <div class="metric"><i class="fas fa-microscope"></i></div>
-                <div class="metric-label">磁芯材料<br><small>横店东磁 Ni-Zn vs FT240-43 对比</small></div>
+          </div>
+          <div class="perf-card">
+            <div class="metric"><i class="fas fa-microscope"></i></div>
+            <div class="metric-label">
+              磁芯材料<br /><small>横店东磁 Ni-Zn vs FT240-43 对比</small>
             </div>
-            <div class="perf-card">
-                <div class="metric"><i class="fas fa-project-diagram"></i></div>
-                <div class="metric-label">TX/RX 分离<br><small>PA9X 噪声隔离架构</small></div>
+          </div>
+          <div class="perf-card">
+            <div class="metric"><i class="fas fa-project-diagram"></i></div>
+            <div class="metric-label">
+              TX/RX 分离<br /><small>PA9X 噪声隔离架构</small>
             </div>
+          </div>
         </div>
 
-        <div style="text-align:center;margin-top:2.5rem;">
-            <a href="/mrrc/efhw/" class="btn btn-primary btn-large">
-                <i class="fas fa-book-open"></i> 阅读完整深度研究
-            </a>
-            <p style="color:var(--text-muted);margin-top:1rem;font-size:0.85rem;">
-                也可参阅：<a href="/mrrc/efhw/t200-2-guide.html" style="color:var(--accent);">T200-2 工程指南</a> ·
-                <a href="/mrrc/efhw/auto-efhw-tuner-architecture-premium-v2.html" style="color:var(--accent);">ATU 架构（高级版）</a>
-            </p>
+        <div style="text-align: center; margin-top: 2.5rem">
+          <a href="/mrrc/efhw/" class="btn btn-primary btn-large">
+            <i class="fas fa-book-open"></i> 阅读完整深度研究
+          </a>
+          <p
+            style="
+              color: var(--text-muted);
+              margin-top: 1rem;
+              font-size: 0.85rem;
+            "
+          >
+            也可参阅：<a
+              href="/mrrc/efhw/t200-2-guide.html"
+              style="color: var(--accent)"
+              >T200-2 工程指南</a
+            >
+            ·
+            <a
+              href="/mrrc/efhw/auto-efhw-tuner-architecture-premium-v2.html"
+              style="color: var(--accent)"
+              >ATU 架构（高级版）</a
+            >
+          </p>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- 设计演进 -->
-<section class="section" id="evolution" style="background: var(--bg-primary);">
-    <div class="container">
+    <!-- 设计演进 -->
+    <section
+      class="section"
+      id="evolution"
+      style="background: var(--bg-primary)"
+    >
+      <div class="container">
         <div class="section-header">
-            <span class="section-label">设计演进</span>
-            <h2 class="section-title">三代迭代优化</h2>
-            <p class="section-subtitle">每代迭代在增加功能的同时降低复杂度——从 9 个故障点降至 2 个。</p>
+          <span class="section-label">设计演进</span>
+          <h2 class="section-title">三代迭代优化</h2>
+          <p class="section-subtitle">
+            每代迭代在增加功能的同时降低复杂度——从 9 个故障点降至 2 个。
+          </p>
         </div>
 
         <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>V1.0（已归档）</th>
-                    <th>V2.0（已归档）</th>
-                    <th>V3.0（当前版本）</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>MCU</strong></td>
-                    <td>PIC16F1938</td>
-                    <td>STM32F103</td>
-                    <td>ESP32-S3</td>
-                </tr>
-                <tr>
-                    <td><strong>磁环</strong></td>
-                    <td>T200-2 ×2</td>
-                    <td>T200-2 ×2</td>
-                    <td>T200-6 ×1</td>
-                </tr>
-                <tr>
-                    <td><strong>电容</strong></td>
-                    <td>7 继电器 / 128 档</td>
-                    <td>7 继电器 / 128 档</td>
-                    <td>伺服连续 10–500pF</td>
-                </tr>
-                <tr>
-                    <td><strong>SWR 检测</strong></td>
-                    <td>板载 Tandem Match</td>
-                    <td>板载 Tandem Match</td>
-                    <td>远程 ATR1000</td>
-                </tr>
-                <tr>
-                    <td><strong>通信</strong></td>
-                    <td>串口 UART</td>
-                    <td>串口 UART</td>
-                    <td>WiFi WebSocket</td>
-                </tr>
-                <tr>
-                    <td><strong>故障点</strong></td>
-                    <td>9</td>
-                    <td>9</td>
-                    <td>2</td>
-                </tr>
-                <tr>
-                    <td><strong>BOM 成本</strong></td>
-                    <td>~¥375</td>
-                    <td>~¥390</td>
-                    <td>~¥430</td>
-                </tr>
-            </tbody>
+          <thead>
+            <tr>
+              <th></th>
+              <th>V1.0（已归档）</th>
+              <th>V2.0（已归档）</th>
+              <th>V3.0（当前版本）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MCU</strong></td>
+              <td>PIC16F1938</td>
+              <td>STM32F103</td>
+              <td>ESP32-S3</td>
+            </tr>
+            <tr>
+              <td><strong>磁环</strong></td>
+              <td>T200-2 ×2</td>
+              <td>T200-2 ×2</td>
+              <td>T200-6 ×1</td>
+            </tr>
+            <tr>
+              <td><strong>电容</strong></td>
+              <td>7 继电器 / 128 档</td>
+              <td>7 继电器 / 128 档</td>
+              <td>伺服连续 10–500pF</td>
+            </tr>
+            <tr>
+              <td><strong>SWR 检测</strong></td>
+              <td>板载 Tandem Match</td>
+              <td>板载 Tandem Match</td>
+              <td>远程 ATR1000</td>
+            </tr>
+            <tr>
+              <td><strong>通信</strong></td>
+              <td>串口 UART</td>
+              <td>串口 UART</td>
+              <td>WiFi WebSocket</td>
+            </tr>
+            <tr>
+              <td><strong>故障点</strong></td>
+              <td>9</td>
+              <td>9</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td><strong>BOM 成本</strong></td>
+              <td>~¥375</td>
+              <td>~¥390</td>
+              <td>~¥430</td>
+            </tr>
+          </tbody>
         </table>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- 快速开始 -->
-<section class="section" id="start" style="background: var(--bg-secondary);">
-    <div class="container">
+    <!-- 快速开始 -->
+    <section class="section" id="start" style="background: var(--bg-secondary)">
+      <div class="container">
         <div class="section-header">
-            <span class="section-label">快速开始</span>
-            <h2 class="section-title">制作您的 EFHW 自动调谐器</h2>
-            <p class="section-subtitle">开源硬件和固件——四步完成制作、烧录、部署和调谐。</p>
+          <span class="section-label">快速开始</span>
+          <h2 class="section-title">制作您的 EFHW 自动调谐器</h2>
+          <p class="section-subtitle">
+            开源硬件和固件——四步完成制作、烧录、部署和调谐。
+          </p>
         </div>
 
         <div class="steps">
-            <div class="step">
-                <h4><i class="fas fa-shopping-cart"></i> 采购元器件</h4>
-                <p>按 BOM 表订购零件——全部可在淘宝/JLC 购买。总成本约 ¥430。</p>
-                <code>BOM：T200-6 磁环、ESP32-S3-WROOM-1、MG996R 伺服、空气可变电容 10-500pF、IP66 外壳</code>
-            </div>
-            <div class="step">
-                <h4><i class="fas fa-microchip"></i> 烧录固件</h4>
-                <p>克隆仓库，配置 WiFi 凭证，使用 ESP-IDF v5.x 构建并烧录。</p>
-                <code>git clone https://github.com/cheenle/efhw-knowledge && cd auto-efhw-tuner/firmware-esp32 && idf.py build flash</code>
-            </div>
-            <div class="step">
-                <h4><i class="fas fa-plug"></i> 连接与配置</h4>
-                <p>将电台偏压器的同轴电缆连接到 ATU。ATU 加入您的 WiFi 并向 MRRC 注册。</p>
-                <code>单根同轴：偏压器（室内）→ RG-58 → ATU（室外）→ EFHW 天线导线</code>
-            </div>
-            <div class="step">
-                <h4><i class="fas fa-satellite-dish"></i> 调谐与操作</h4>
-                <p>使用 MRRC Web UI ATU 面板——选择频段，触发自动调谐，伺服在数秒内找到最佳 SWR。</p>
-                <code>MRRC → ATU 面板 → 选择频段 → 自动调谐 → &lt;10s → 发射就绪</code>
-            </div>
+          <div class="step">
+            <h4><i class="fas fa-shopping-cart"></i> 采购元器件</h4>
+            <p>按 BOM 表订购零件——全部可在淘宝/JLC 购买。总成本约 ¥430。</p>
+            <code
+              >BOM：T200-6 磁环、ESP32-S3-WROOM-1、MG996R 伺服、空气可变电容
+              10-500pF、IP66 外壳</code
+            >
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-microchip"></i> 烧录固件</h4>
+            <p>克隆仓库，配置 WiFi 凭证，使用 ESP-IDF v5.x 构建并烧录。</p>
+            <code
+              >git clone https://github.com/cheenle/efhw-knowledge && cd
+              auto-efhw-tuner/firmware-esp32 && idf.py build flash</code
+            >
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-plug"></i> 连接与配置</h4>
+            <p>
+              将电台偏压器的同轴电缆连接到 ATU。ATU 加入您的 WiFi 并向 MRRC
+              注册。
+            </p>
+            <code
+              >单根同轴：偏压器（室内）→ RG-58 → ATU（室外）→ EFHW
+              天线导线</code
+            >
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-satellite-dish"></i> 调谐与操作</h4>
+            <p>
+              使用 MRRC Web UI ATU
+              面板——选择频段，触发自动调谐，伺服在数秒内找到最佳 SWR。
+            </p>
+            <code
+              >MRRC → ATU 面板 → 选择频段 → 自动调谐 → &lt;10s → 发射就绪</code
+            >
+          </div>
         </div>
 
-        <div style="text-align:center;margin-top:3rem">
-            <a href="https://github.com/cheenle/efhw-knowledge" class="btn btn-primary btn-large" target="_blank" rel="noopener">
-                <i class="fab fa-github"></i> 在 GitHub 上查看
-            </a>
+        <div style="text-align: center; margin-top: 3rem">
+          <a
+            href="https://github.com/cheenle/efhw-knowledge"
+            class="btn btn-primary btn-large"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fab fa-github"></i> 在 GitHub 上查看
+          </a>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- 规格 -->
-<section class="section" id="specs" style="background: var(--bg-primary);">
-    <div class="container">
+    <!-- 规格 -->
+    <section class="section" id="specs" style="background: var(--bg-primary)">
+      <div class="container">
         <div class="section-header">
-            <span class="section-label">规格</span>
-            <h2 class="section-title">技术规格</h2>
-            <p class="section-subtitle">EFHW Fuchs ATU V3.0 — 完整硬件和固件规格。</p>
+          <span class="section-label">规格</span>
+          <h2 class="section-title">技术规格</h2>
+          <p class="section-subtitle">
+            EFHW Fuchs ATU V3.0 — 完整硬件和固件规格。
+          </p>
         </div>
 
         <table>
-            <thead>
-                <tr><th>参数</th><th>数值</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>MCU</td><td>ESP32-S3-WROOM-1（240MHz 双核，16MB 闪存）</td></tr>
-                <tr><td>频率范围</td><td>40m–10m（7–30MHz，完整 WARC 频段覆盖）</td></tr>
-                <tr><td>功率等级</td><td>100W PEP SSB/CW</td></tr>
-                <tr><td>磁环</td><td>T200-6（6 型羰基铁粉，μ=8）</td></tr>
-                <tr><td>匝比</td><td>2:14 → 49:1 阻抗变换</td></tr>
-                <tr><td>电容</td><td>空气可变电容 10–500pF，MG996R 伺服驱动</td></tr>
-                <tr><td>调谐方法</td><td>两阶段扫描：37 粗步（5°）+ 30 精步（1°）</td></tr>
-                <tr><td>调谐时间</td><td>&lt;10s 全扫描，&lt;1s NVS 缓存命中</td></tr>
-                <tr><td>通信</td><td>WiFi 2.4GHz WebSocket 连接 MRRC 服务器</td></tr>
-                <tr><td>SWR 检测</td><td>远程通过 ATR1000（无板载 SWR 电桥）</td></tr>
-                <tr><td>供电</td><td>13.8V DC，通过同轴电缆偏压器馈电</td></tr>
-                <tr><td>防护</td><td>IP66 铝制外壳、过功率中断、高 SWR 中断、2.2MΩ ESD 泄放、看门狗</td></tr>
-                <tr><td>PCB</td><td>140×50mm 双层板（KiCad），板外 RF/HV 硬线连接</td></tr>
-                <tr><td>BOM 成本</td><td>~¥430（全部元器件可通过淘宝/JLC 购买）</td></tr>
-                <tr><td>固件</td><td>ESP-IDF v5.x C，约 2800 行，12 个源文件</td></tr>
-                <tr><td>许可证</td><td>硬件：CERN-OHL-S 2.0 · 固件：GPL-3.0</td></tr>
-            </tbody>
+          <thead>
+            <tr>
+              <th>参数</th>
+              <th>数值</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>MCU</td>
+              <td>ESP32-S3-WROOM-1（240MHz 双核，16MB 闪存）</td>
+            </tr>
+            <tr>
+              <td>频率范围</td>
+              <td>40m–10m（7–30MHz，完整 WARC 频段覆盖）</td>
+            </tr>
+            <tr>
+              <td>功率等级</td>
+              <td>100W PEP SSB/CW</td>
+            </tr>
+            <tr>
+              <td>磁环</td>
+              <td>T200-6（6 型羰基铁粉，μ=8）</td>
+            </tr>
+            <tr>
+              <td>匝比</td>
+              <td>2:14 → 49:1 阻抗变换</td>
+            </tr>
+            <tr>
+              <td>电容</td>
+              <td>空气可变电容 10–500pF，MG996R 伺服驱动</td>
+            </tr>
+            <tr>
+              <td>调谐方法</td>
+              <td>两阶段扫描：37 粗步（5°）+ 30 精步（1°）</td>
+            </tr>
+            <tr>
+              <td>调谐时间</td>
+              <td>&lt;10s 全扫描，&lt;1s NVS 缓存命中</td>
+            </tr>
+            <tr>
+              <td>通信</td>
+              <td>WiFi 2.4GHz WebSocket 连接 MRRC 服务器</td>
+            </tr>
+            <tr>
+              <td>SWR 检测</td>
+              <td>远程通过 ATR1000（无板载 SWR 电桥）</td>
+            </tr>
+            <tr>
+              <td>供电</td>
+              <td>13.8V DC，通过同轴电缆偏压器馈电</td>
+            </tr>
+            <tr>
+              <td>防护</td>
+              <td>
+                IP66 铝制外壳、过功率中断、高 SWR 中断、2.2MΩ ESD 泄放、看门狗
+              </td>
+            </tr>
+            <tr>
+              <td>PCB</td>
+              <td>140×50mm 双层板（KiCad），板外 RF/HV 硬线连接</td>
+            </tr>
+            <tr>
+              <td>BOM 成本</td>
+              <td>~¥430（全部元器件可通过淘宝/JLC 购买）</td>
+            </tr>
+            <tr>
+              <td>固件</td>
+              <td>ESP-IDF v5.x C，约 2800 行，12 个源文件</td>
+            </tr>
+            <tr>
+              <td>许可证</td>
+              <td>硬件：CERN-OHL-S 2.0 · 固件：GPL-3.0</td>
+            </tr>
+          </tbody>
         </table>
 
-        <h3 style="text-align:center;color:var(--text-primary);margin-top:3rem;margin-bottom:1.5rem">技术栈</h3>
+        <h3
+          style="
+            text-align: center;
+            color: var(--text-primary);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+          "
+        >
+          技术栈
+        </h3>
         <div class="tech-stack">
-            <span class="tech-tag">ESP32-S3</span>
-            <span class="tech-tag">ESP-IDF v5.x</span>
-            <span class="tech-tag">FreeRTOS</span>
-            <span class="tech-tag">WebSocket</span>
-            <span class="tech-tag">cJSON</span>
-            <span class="tech-tag">LEDC PWM</span>
-            <span class="tech-tag">NVS</span>
-            <span class="tech-tag">T200-6</span>
-            <span class="tech-tag">MG996R</span>
-            <span class="tech-tag">KiCad</span>
-            <span class="tech-tag">CERN-OHL-S 2.0</span>
-            <span class="tech-tag">GPL-3.0</span>
+          <span class="tech-tag">ESP32-S3</span>
+          <span class="tech-tag">ESP-IDF v5.x</span>
+          <span class="tech-tag">FreeRTOS</span>
+          <span class="tech-tag">WebSocket</span>
+          <span class="tech-tag">cJSON</span>
+          <span class="tech-tag">LEDC PWM</span>
+          <span class="tech-tag">NVS</span>
+          <span class="tech-tag">T200-6</span>
+          <span class="tech-tag">MG996R</span>
+          <span class="tech-tag">KiCad</span>
+          <span class="tech-tag">CERN-OHL-S 2.0</span>
+          <span class="tech-tag">GPL-3.0</span>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- 资源 -->
-<section class="section" id="resources" style="background: var(--bg-secondary);">
-    <div class="container" style="text-align:center">
+    <!-- 资源 -->
+    <section
+      class="section"
+      id="resources"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container" style="text-align: center">
         <div class="section-header">
-            <span class="section-label">资源</span>
-            <h2 class="section-title">文档与链接</h2>
-            <p class="section-subtitle">SDD、智能体工程总纲、参考设计与社区对比。<a href="/zh/agentic.html">阅读总纲 &rarr;</a></p>
+          <span class="section-label">资源</span>
+          <h2 class="section-title">文档与链接</h2>
+          <p class="section-subtitle">
+            SDD、智能体工程总纲、参考设计与社区对比。<a href="/zh/agentic.html"
+              >阅读总纲 &rarr;</a
+            >
+          </p>
         </div>
         <div class="demo-grid">
-            <a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener" class="demo-link">
-                <i class="fab fa-github"></i>
-                <span>知识库</span>
-                <small>EFHW 天线理论 + 自动调谐器项目</small>
-            </a>
-            <a href="https://ybr387rz.mule.page/" target="_blank" rel="noopener" class="demo-link">
-                <i class="fas fa-book"></i>
-                <span>SDD（外部）</span>
-                <small>14 章软件设计说明书</small>
-            </a>
-            <a href="/mrrc/efhw/" class="demo-link">
-                <i class="fas fa-flask"></i>
-                <span>深度研究</span>
-                <small>17 章 EFHW 工程研究</small>
-            </a>
-            <a href="/mrrc/" class="demo-link">
-                <i class="fas fa-broadcast-tower"></i>
-                <span>MRRC</span>
-                <small>通用 HF 远程控制平台</small>
-            </a>
+          <a
+            href="https://github.com/cheenle/efhw-knowledge"
+            target="_blank"
+            rel="noopener"
+            class="demo-link"
+          >
+            <i class="fab fa-github"></i>
+            <span>知识库</span>
+            <small>EFHW 天线理论 + 自动调谐器项目</small>
+          </a>
+          <a
+            href="https://ybr387rz.mule.page/"
+            target="_blank"
+            rel="noopener"
+            class="demo-link"
+          >
+            <i class="fas fa-book"></i>
+            <span>SDD（外部）</span>
+            <small>14 章软件设计说明书</small>
+          </a>
+          <a href="/mrrc/efhw/" class="demo-link">
+            <i class="fas fa-flask"></i>
+            <span>深度研究</span>
+            <small>17 章 EFHW 工程研究</small>
+          </a>
+          <a href="/mrrc/" class="demo-link">
+            <i class="fas fa-broadcast-tower"></i>
+            <span>MRRC</span>
+            <small>通用 HF 远程控制平台</small>
+          </a>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<section class="section" id="division" style="background: var(--bg-secondary);">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label">知识库 · 契约</span>
-      <h2 class="section-title">分工与沉淀契约</h2>
-      <p class="section-subtitle">本工程环在编辑前加载什么、哪些仍由人签字、事后留下什么可读的东西。</p>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-file-lines"></i></div>
-        <h3>加载 CLAUDE.md，无约束注册表</h3>
-        <p>工作区 <code>CLAUDE.md</code> 在编辑前加载。本站<strong>没有</strong>产品级 <code>AGENTS.md</code>，也<strong>没有</strong>机器可读约束注册表，因此 Agent 只按站点契约执行。这里不存在自动编辑前门禁，页面也不声称有。</p>
+    <section
+      class="section"
+      id="division"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">知识库 · 契约</span>
+          <h2 class="section-title">分工与沉淀契约</h2>
+          <p class="section-subtitle">
+            本工程环在编辑前加载什么、哪些仍由人签字、事后留下什么可读的东西。
+          </p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-file-lines"></i>
+            </div>
+            <h3>加载 CLAUDE.md，无约束注册表</h3>
+            <p>
+              工作区
+              <code>CLAUDE.md</code>
+              在编辑前加载。本站<strong>没有</strong>产品级
+              <code>AGENTS.md</code
+              >，也<strong>没有</strong>机器可读约束注册表，因此 Agent
+              只按站点契约执行。这里不存在自动编辑前门禁，页面也不声称有。
+            </p>
+          </div>
+          <div class="feature-card">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-user-check"></i>
+            </div>
+            <h3>制板决定与台架验证</h3>
+            <p>
+              PCB
+              制板决定与台架上的每一项实测结论都由人签字。设计目标从不当作实测值发布。
+            </p>
+          </div>
+          <div class="feature-card">
+            <div
+              class="icon"
+              style="background: var(--accent-glow); color: var(--accent)"
+            >
+              <i class="fas fa-box-archive"></i>
+            </div>
+            <h3>调谐器状态模型与语料</h3>
+            <p>
+              调谐器状态模型与
+              <code>efhw-knowledge/</code> 语料作为给人读的契约留存在此。
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="feature-card">
-        <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-user-check"></i></div>
-        <h3>制板决定与台架验证</h3>
-        <p>PCB 制板决定与台架上的每一项实测结论都由人签字。设计目标从不当作实测值发布。</p>
-      </div>
-      <div class="feature-card">
-        <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-box-archive"></i></div>
-        <h3>调谐器状态模型与语料</h3>
-        <p>调谐器状态模型与 <code>efhw-knowledge/</code> 语料作为给人读的契约留存在此。</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- 页脚 -->
-<footer class="footer">
-    <div class="container">
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="container">
         <div class="footer-grid">
-            <div class="footer-section">
-                <h4>EFHW Projects</h4>
-                <p>
-                    端馈半波天线研究<br>
-                    与实践中心<br>
-                    V3.0 · CERN-OHL-S 2.0 / GPL-3.0
-                </p>
-            </div>
-            <div class="footer-section">
-                <h4>链接</h4>
-                <ul>
-                    <li><a href="../index.html">首页</a></li>
-                    <li><a href="#research-hub">研究方向</a></li>
-                    <li><a href="#features">工程实践</a></li>
-                    <li><a href="../index.html#architecture">架构</a></li>
-                    <li><a href="../index.html#research">研究</a></li>
-                    <li><a href="../index.html#start">快速开始</a></li>
-                    <li><a href="../index.html#specs">规格</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>资源</h4>
-                <ul>
-                    <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">GitHub 仓库</a></li>
-                    <li><a href="https://github.com/cheenle/efhw-knowledge/blob/main/references/core-swap-evidence-2026-08.md" target="_blank" rel="noopener">磁芯换装证据裁决 (2026-08)</a></li>
-                    <li><a href="https://github.com/cheenle/efhw-knowledge/blob/main/references/transformer_ab_protocol.md" target="_blank" rel="noopener">变换器 A/B 实测协议</a></li>
-                    <li><a href="https://ybr387rz.mule.page/" target="_blank" rel="noopener">SDD 文档</a></li>
-                    <li><a href="/mrrc/efhw/">深度研究</a></li>
-                    <li><a href="/mrrc/">MRRC 平台</a></li>
-                </ul>
-            </div>
+          <div class="footer-section">
+            <h4>EFHW Projects</h4>
+            <p>
+              端馈半波天线研究<br />
+              与实践中心<br />
+              V3.0 · CERN-OHL-S 2.0 / GPL-3.0
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>链接</h4>
+            <ul>
+              <li><a href="../index.html">首页</a></li>
+              <li><a href="#research-hub">研究方向</a></li>
+              <li><a href="#features">工程实践</a></li>
+              <li><a href="../index.html#architecture">架构</a></li>
+              <li><a href="../index.html#research">研究</a></li>
+              <li><a href="../index.html#start">快速开始</a></li>
+              <li><a href="../index.html#specs">规格</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>资源</h4>
+            <ul>
+              <li>
+                <a
+                  href="https://github.com/cheenle/efhw-knowledge"
+                  target="_blank"
+                  rel="noopener"
+                  >GitHub 仓库</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cheenle/efhw-knowledge/blob/main/references/core-swap-evidence-2026-08.md"
+                  target="_blank"
+                  rel="noopener"
+                  >磁芯换装证据裁决 (2026-08)</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/cheenle/efhw-knowledge/blob/main/references/transformer_ab_protocol.md"
+                  target="_blank"
+                  rel="noopener"
+                  >变换器 A/B 实测协议</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://ybr387rz.mule.page/"
+                  target="_blank"
+                  rel="noopener"
+                  >SDD 文档</a
+                >
+              </li>
+              <li><a href="/mrrc/efhw/">深度研究</a></li>
+              <li><a href="/mrrc/">MRRC 平台</a></li>
+            </ul>
+          </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 EFHW Projects。硬件采用 CERN-OHL-S 2.0 许可，固件采用 GPL-3.0 许可。· 由 <a href="https://github.com/cheenle" style="color:var(--accent);">BG1SB</a> 构建</p>
+          <p>
+            &copy; 2026 EFHW Projects。硬件采用 CERN-OHL-S 2.0 许可，固件采用
+            GPL-3.0 许可。· 由
+            <a href="https://github.com/cheenle" style="color: var(--accent)"
+              >BG1SB</a
+            >
+            构建
+          </p>
         </div>
-    </div>
-</footer>
+      </div>
+    </footer>
 
-<script>
-function toggleMobileMenu() {
-    document.querySelector('.nav-links').classList.toggle('active');
-}
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', function(e) {
-        e.preventDefault();
-        const t = document.querySelector(this.getAttribute('href'));
-        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-});
-const nav = document.querySelector('.navbar');
-window.addEventListener('scroll', () => {
-    nav.style.background = window.scrollY > 50 ? 'rgba(10,14,20,0.98)' : 'rgba(10,14,20,0.92)';
-});
-</script>
+    <script>
+      function toggleMobileMenu() {
+        document.querySelector(".nav-links").classList.toggle("active");
+      }
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          const t = document.querySelector(this.getAttribute("href"));
+          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+      const nav = document.querySelector(".navbar");
+      window.addEventListener("scroll", () => {
+        nav.style.background =
+          window.scrollY > 50 ? "rgba(10,14,20,0.98)" : "rgba(10,14,20,0.92)";
+      });
+    </script>
     <script src="../js/global-nav.js?v=6" defer data-gn="1"></script>
-</body>
+  </body>
 </html>

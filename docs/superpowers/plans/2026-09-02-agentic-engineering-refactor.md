@@ -1307,14 +1307,14 @@ grep -Rn "fde\.html" --include=*.html --include=*.js . | grep -v agentic
 **已实测：两文件各 1124 行、仅差 6 行**（第 8 行 meta、12 行 title、21 行 css 版本号）。
 其余同文——所以过时数字在两站的行号一致（`348`、`501`、`636`），用一条循环处理。
 
-- [ ] **步骤 1：改名（各自仓库）**
+- [x] **步骤 1：改名（各自仓库）**
 
 ```bash
 for r in /Users/cheenle/HAM/mrrc_modern /Users/cheenle/HAM/mrrc_ft710; do
   git -C "$r" mv website/fde.html website/agentic.html || echo "FAIL $r"; done
 ```
 
-- [ ] **步骤 2：删/改三处过时数字（§8.2）**
+- [x] **步骤 2：删/改三处过时数字（§8.2）**
 
 ```bash
 for r in /Users/cheenle/HAM/mrrc_modern /Users/cheenle/HAM/mrrc_ft710; do
@@ -1333,7 +1333,7 @@ done
 | ~501 | `<h2 class="section-title">12 FDE Cycles (Git-Verified)</h2>` | `<h2 class="section-title">Field Signals, Version Steps</h2>`，并把其 `<p class="section-subtitle">` 补为定性描述：`Each field signal drove one version step. Counts and as-of dates live in the evidence ledger.` |
 | ~636 | `<td>5 tests + <code>TX session:</code> logging</td>` | `<td>Automated tests + <code>TX session:</code> logging</td>` |
 
-- [ ] **步骤 3：页内其余 `fde.html` 自链与术语**
+- [x] **步骤 3：页内其余 `fde.html` 自链与术语**
 
 ```bash
 for r in /Users/cheenle/HAM/mrrc_modern /Users/cheenle/HAM/mrrc_ft710; do
@@ -1346,7 +1346,7 @@ done
 
 最后一行应无输出。
 
-- [ ] **步骤 4：新增「分工与资产」一节（两站同结构，文案按族区分）**
+- [x] **步骤 4：新增「分工与资产」一节（两站同结构，文案按族区分）**
 
 插在 `agentic.html` 主内容最后一个 `</section>` 之后。两页样式同源，用该页既有类名
 （实测该类名存在于本页：`section` / `container` / `section-header`(**`div` 而非 `header`**) /
@@ -1380,7 +1380,7 @@ import json;d=json.load(open('$r/.agents/skills/sdd-guardian/harness/constraints
 print(len(d if isinstance(d,list) else d.get('rules',[])))"; done
 ```
 
-- [ ] **步骤 5：Commit**
+- [x] **步骤 5：Commit**
 
 ```bash
 git -C /Users/cheenle/HAM/mrrc_modern add -A website && git -C /Users/cheenle/HAM/mrrc_modern commit -m \
@@ -1528,7 +1528,7 @@ after `cd` into a sub-site's real repository directory (e.g. `/Users/cheenle/HAM
 Commits go to the owning repository, not this one.
 ````
 
-- [ ] **步骤 2：重生成 sitemap（勿手编）**
+- [x] **步骤 2：重生成 sitemap（勿手编）**
 
 ```bash
 cd /Users/cheenle/HAM/website/portal && python3 make_sitemap.py
@@ -1538,7 +1538,7 @@ grep -n "agentic.html\|fde.html" sitemap.xml
 预期：`/agentic.html` 与 `/zh/agentic.html` 各 1 行，`fde.html` **0 行**（旧名不进气清单，
 由 nginx 301 兜住外部链接）。
 
-- [ ] **步骤 3：全站终检（规格 §9）**
+- [x] **步骤 3：全站终检（规格 §9）**
 
 ```bash
 cd /Users/cheenle/HAM/website
@@ -1591,7 +1591,7 @@ kill %1
 键盘核验：`Tab` 聚焦 `<summary>` → `Enter`/`Space` 展开 → 确认 `aria-expanded` 翻转且内容可见。
 最后跑 `lens_diagnostics mode=all`，确认无阻塞错误后才进入步骤 4。
 
-- [ ] **步骤 4：部署（逐站 `deploy.sh`，按 CLAUDE.md 顺序）**
+- [x] **步骤 4：部署（逐站 `deploy.sh`，按 CLAUDE.md 顺序）**
 
 **发布顺序有硬约束：nginx 的 301 必须最后加载。** 否则 301 指向的新页还不存在，旧链接从「可读到」
 变成「重定向到 404」——比不修更糟。正确顺序：
@@ -1621,7 +1621,7 @@ ssh cheenle@www.vlsc.net "for u in /fde.html /zh/fde.html /mrrc/fde.html /mrrc/z
 没有任何部署脚本把 `fde.html` 列为必备文件，改名不会让 `deploy.sh` 失败。`portal/deploy.sh`
 的 `REQUIRED_FILES` 只有 `index.html`、`zh/index.html`、`css/octen.css`。
 
-- [ ] **步骤 5：Commit**
+- [x] **步骤 5：Commit**
 
 ```bash
 cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
@@ -1668,6 +1668,9 @@ cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
 | 30 | 校验脚本只 print「停」而以 0 退出，被 `&&` 链吞掉 | 判定为否的同一轮里提交照样执行，等于用一次假证明背书了 5 个文件的提交；且消息里引用了那个坏方法当作证据 | 校验必须以退出码表达结论（`sys.exit(1)`），不得只打印文字。等价性判定改用 `html.parser` 收集文字节点——正则剥标签在属性内含 `>` 时边界即错，会给出假阴性 |
 | 31 | 提交之后工具链仍会异步 format-on-write | 若未察觉就直接部署，线上文件与 git 里任何一次提交都不对应，回溯与 diff 全部失效 | 每轮收尾跑 `git status --porcelain | grep -v ^??` 确认跟踪文件干净；排版差异一律单独成 style 提交（本轮 `1c3511e`） |
 | 32 | `git commit -F -` 从 stdin 读到 EOF，会把 `&&` 之后 heredoc 的全部内容吞成提交消息 | HEAD 一度变成一条消息为整段 Python 源码的提交，而预期的账本写入根本没发生（静默失败） | 提交消息一律用 `-m`，或把消息先写成文件再 `-F <file>`；同一轮绝不对同一仓库发两个带写操作的调用 |
+| 33 | `git reset --soft` 只退 HEAD、**不动索引**：索引里还是早先 `git add` 的旧版本 | 修正过的诚实文本留在工作区，不实声明反而进了提交；只看 `git status` 干净会完全发现不了 | 提交后必须校验**提交对象**而非工作区：`git show HEAD:<path> | grep -c <坏串>`；reset --soft 之后若还要提交，先 `git add` 再 commit |
+| 34 | `website/mrrc_ft8`、`mrrc_modern` 等是**软链**，改它们的文件等于改上游仓库，在 website 仓库 `git add` 它们不会有任何内容 | 提交消息声称「撤回了 ft8 的不实声明」而该提交实际只含 blog 两文件——消息与内容不符，且上游仓库的不实声明仍留在其 HEAD 里 | 改子站文件一律在 owning repo 提交，并用 `git show --stat` 核对提交真的含这些路径 |
+| 35 | 已发布的分工节卡片写「edit hooks are live…refused before it is written」，实测三仓库 `.claude/settings.local.json` 均无 hooks 键（钩子只是 `install_hooks.py` 待装片段） | 三处线上文案不实（幸未部署）| 全部改为明示未接线、不声称自动门禁；发布前须实测钩子状态，不得从「仓库里有 sdd-guardian 目录」推出「门禁在生效」 |
 
 ### 由补正 10 得到的一般教训
 

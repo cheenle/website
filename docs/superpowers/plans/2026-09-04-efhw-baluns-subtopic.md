@@ -137,3 +137,16 @@ tree / calc）。
 操作环境提醒：macOS 无 timeout 命令（只有 gtimeout）；上一轮 portal 部署曾因
 timeout: command not found 实际未执行，是线上 curl 仍显示 26 URL 才揭穿的 ——
 部署结论一律以线上取异为准，不以退出码为准。
+
+## 断点 2：EN 页已成稿（.wip/efhw-baluns.en.html，418 行）
+
+01 表格 7 行齐 + 标签纪律块；02 决策树 Q1-Q4；03 工艺 8 步（含每步失败模式）；
+03b BOM 表；04 四项现场实践 + 优化目标表（5 行全填破折号并指向研究站）+ 放弃判据；
+Evidence（6 位作者名，无杜撰 URL）+ 回链区 + footer + script。
+结构校验：`<tr>`/`</tr>` 各 23、单 h1、无未闭合块、`tag-m` 零使用（本页无自测值，符合 §4）。
+修掉 3 处截断伤：LTA 行缺 `</tr>`、一处未闭合 calc 残块、以及两次被 awk/切片
+显示误导的**假缺陷**（我据被裁剪的输出断定有错，实际文本是好的）。
+
+余下待办：① CN 整页翻译（同锚点 id、路径加 ../、无英文残留）② efhw.css 三处版本统一
+v2（新页已引用 v2，两首页仍 v1）③ 两首页导航入口 + #research 分工句
+④ deploy.sh required-files ⑤ check_baluns.py 关卡 ⑥ 页面放回 efhw/ + 部署 + 线上回验。

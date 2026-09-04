@@ -62,3 +62,62 @@
   }
   .nav-links li { margin: 0 0.5rem; }
 }
+
+/* ---------- Balun sub-topic page (baluns.html) ---------- */
+.subnav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(10, 14, 20, 0.94);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+.subnav-inner {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding: 0.7rem 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+}
+.subnav-inner a { color: var(--text-secondary); white-space: nowrap; }
+.subnav-inner a:hover { color: var(--accent); }
+
+.spec-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.spec-table th, .spec-table td {
+  text-align: left; padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--border); vertical-align: top;
+}
+.spec-table th {
+  font-family: "JetBrains Mono", monospace; font-size: 0.72rem;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-secondary); background: var(--bg-secondary);
+}
+.spec-table td.deny { color: #fca5a5; }
+.spec-table td.na { color: var(--text-muted); font-family: "JetBrains Mono", monospace; }
+
+.tag {
+  display: inline-block; padding: 0.05rem 0.4rem; margin-right: 0.35rem;
+  border-radius: 4px; font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem; border: 1px solid var(--border);
+}
+.tag-c { color: var(--accent); background: rgba(16, 185, 129, 0.1); }
+.tag-m { color: #f0a030; background: rgba(240, 160, 48, 0.1); }
+
+.tree, .tree ul { list-style: none; margin: 0; padding-left: 1.1rem; }
+.tree { padding-left: 0; }
+.tree li { position: relative; padding: 0.25rem 0 0.25rem 0.9rem; }
+.tree li::before {
+  content: ""; position: absolute; left: 0; top: 0.75rem;
+  width: 0.55rem; height: 1px; background: var(--border);
+}
+.tree .q { color: var(--text-primary); font-weight: 600; }
+.tree .leaf { color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 0.82rem; }
+
+.calc {
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem 1.15rem; margin: 1rem 0;
+  font-family: "JetBrains Mono", monospace; font-size: 0.82rem;
+  color: var(--text-secondary); overflow-x: auto;
+}
+.calc b { color: var(--text-primary); }

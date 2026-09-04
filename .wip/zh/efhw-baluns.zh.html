@@ -122,3 +122,69 @@
         </table>
       </div>
     </section>
+    <section class="section" id="selection" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">02 · 选型决策</span>
+          <h2 class="section-title">按约束决定，不要按牌子决定</h2>
+          <p class="section-subtitle">四条约束，按顺序过一遍。每个叶子给出器件型号并链向支撑它的实测论证 —— 我们不在此复述对方的数值。</p>
+        </div>
+        <ul class="tree">
+          <li class="q">Q1 · 多大功率，是连续发射（FT8/数字）还是峰值型（SSB/CW）？</li>
+          <ul>
+            <li>QRO 或连续工作 &rarr; 单节升比必须小。用 TLT（Guanella）结构，或两颗/更大磁芯；单颗小磁芯做 1:49 是最常烧坏的那件。 <span class="leaf">&rarr; 见 <a href="../../mrrc/efhw/index.html">磁芯选型</a></span></li>
+            <li>QRP（&le;10 W）&rarr; 材料对的话几乎所有像样磁芯都行；此时优化目标是损耗，不是热。</li>
+          </ul>
+          <li class="q">Q2 · 几个波段，你能不能接受重新调谐？</li>
+          <ul>
+            <li>单波段 &rarr; 固定升比匹配 + 电台端天线调谐器，是损耗最低的做法。</li>
+            <li>多波段长线 &rarr; 宽带变换器 + 调谐器；请预期真正在干活的是调谐器，不是巴伦。 <span class="leaf">&rarr; <a href="../../mrrc/efhw/t200-2-guide.html">T200-2 谐振匹配工程指南</a></span></li>
+          </ul>
+          <li class="q">Q3 · 永久户外架设，还是收放式便携？</li>
+          <ul>
+            <li>永久 &rarr; 灌封、排水孔、密封圈、抗紫外外壳与真正的应力释放，优先级高于电气上的精巧；现场故障多数是水，不是铁氧体。</li>
+            <li>便携 &rarr; 尽量减重；馈点是 2&ndash;5 k&Omega; 的高阻抗节点，垂在那里的同轴屏蔽层是天线的一部分。</li>
+          </ul>
+          <li class="q">Q4 · 到这一步，才轮到选磁芯材料。</li>
+          <ul>
+            <li>Ni-Zn（43 / 75 一类）&rarr; 全 HF 表现平缓，耐饱和，但会把功率较早转成热。</li>
+            <li>Mn-Zn（73 一类）&rarr; 低 kW 下每匝阻抗高得多，于是匝数更少、损耗更低 —— 但饱和与热都是悬崖式。 <span class="leaf">&rarr; <a href="../../mrrc/efhw/index.html">Fair-Rite 2643251002 与 FT240-43 对比</a></span></li>
+            <li>粉铁 &rarr; 没有尖锐饱和点，但做 HF 共模抑制不合适。</li>
+          </ul>
+        </ul>
+        <div class="calc"><b>买任何东西之前，先自己算这一个数。</b>馈点交流电压 V = sqrt(P &times; Z)：100 W 灌进 2450 &Omega; 约 495 V 有效值，峰值约 700 V。 <span class="tag tag-c">C</span> 所以在功率下真正先坏的是飞弧、匝间距与前几匝的绝缘体系，不是铁氧体。按你自己的功率与负载把这个数写下来 —— 它决定你用什么线、什么绕法、什么外壳。</div>
+      </div>
+    </section>
+    <section class="section" id="selection" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">02 · 选型决策</span>
+          <h2 class="section-title">按约束决定，不要按牌子决定</h2>
+          <p class="section-subtitle">四条约束，按顺序过一遍。每个叶子给出器件并链向支撑它的实测论证 —— 我们不在此复述对方的数值。</p>
+        </div>
+        <ul class="tree">
+          <li class="q">Q1 · 多大功率，是连续发射（FT8/数字）还是峰值型（SSB/CW）？</li>
+          <ul>
+            <li>QRO 或连续工作 &rarr; 单节升比必须小。用 TLT（Guanella）结构，或两颗/更大磁芯；单颗小磁芯做 1:49 是最常烧坏的那件。 <span class="leaf">&rarr; 见 <a href="../../mrrc/efhw/index.html">磁芯选型</a></span></li>
+            <li>QRP（&le;10 W）&rarr; 材料对的话几乎所有像样磁芯都行；此时优化目标是损耗，不是热。</li>
+          </ul>
+          <li class="q">Q2 · 几个波段，你能不能接受重新调谐？</li>
+          <ul>
+            <li>单波段 &rarr; 固定升比匹配 + 电台端天线调谐器，是损耗最低的做法。</li>
+            <li>多波段长线 &rarr; 宽带变换器 + 调谐器；请预期真正在干活的是调谐器，不是巴伦。 <span class="leaf">&rarr; <a href="../../mrrc/efhw/t200-2-guide.html">T200-2 谐振匹配工程指南</a></span></li>
+          </ul>
+          <li class="q">Q3 · 永久户外架设，还是收放式便携？</li>
+          <ul>
+            <li>永久 &rarr; 灌封、排水孔、密封圈、抗紫外外壳与真正的应力释放，优先级高于电气上的精巧；现场故障多数是水，不是铁氧体。</li>
+            <li>便携 &rarr; 尽量减重；馈点是 2&ndash;5 k&Omega; 的高阻抗节点，垂在那里的同轴屏蔽层是天线的一部分。</li>
+          </ul>
+          <li class="q">Q4 · 到这一步，才轮到选磁芯材料。</li>
+          <ul>
+            <li>Ni-Zn（43 / 75 一类）&rarr; 全 HF 表现平缓，耐饱和，但会把功率较早转成热。</li>
+            <li>Mn-Zn（73 一类）&rarr; 低 kW 下每匝阻抗高得多，于是匝数更少、损耗更低 —— 但饱和与热都是悬崖式。 <span class="leaf">&rarr; <a href="../../mrrc/efhw/index.html">Fair-Rite 2643251002 与 FT240-43 对比</a></span></li>
+            <li>粉铁 &rarr; 没有尖锐饱和点，但做 HF 共模抑制不合适。</li>
+          </ul>
+        </ul>
+        <div class="calc"><b>买任何东西之前，先自己算这一个数。</b>馈点交流电压 V = sqrt(P &times; Z)：100 W 灌进 2450 &Omega; 约 495 V 有效值，峰值约 700 V。 <span class="tag tag-c">C</span> 所以在功率下真正先坏的是飞弧、匝间距与前几匝的绝缘体系，不是铁氧体。按你自己的功率与负载把这个数写下来 —— 它决定你用什么线、什么绕法、什么外壳。</div>
+      </div>
+    </section>

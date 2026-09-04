@@ -150,3 +150,20 @@ Evidence（6 位作者名，无杜撰 URL）+ 回链区 + footer + script。
 余下待办：① CN 整页翻译（同锚点 id、路径加 ../、无英文残留）② efhw.css 三处版本统一
 v2（新页已引用 v2，两首页仍 v1）③ 两首页导航入口 + #research 分工句
 ④ deploy.sh required-files ⑤ check_baluns.py 关卡 ⑥ 页面放回 efhw/ + 部署 + 线上回验。
+
+## 断点 3：两页落地 efhw/ 并集成完成（未部署）
+
+关卡 `python3 efhw/check_baluns.py` → OK。本轮自造并抓回的缺陷：
+
+ 1. **`bash -c` 尾部语法错误 ≠ 整条未执行**。上一轮我据 exit=2 判定"一个字都没写"并重发同一块
+    heredoc，导致 CN 页出现**两个 `id="selection"`**（重复 88 行）。bash 是逐条读取执行的，
+    只在读到残缺行时才报错，之前的完整命令已落盘。判据只能看文件系统。
+ 2. **同文件并行调用再次违规 ×3**：两首页 double edit（幸而原子回滚，未产生重复 Modern 项）、
+    check_baluns.py 两次补尾造成 `IndentationError line 96`、引号修复与 grep 竞态读到旧内容。
+ 3. **排版修复误伤 `<script>`**：把 ASCII `"` 换成中文 `“”` 的脚本以 `<[^>]*>` 切分文本节点，
+    而 `<script>` 体不是标签也不是文本节点 —— 内联 JS 的 22 处字符串字面量被改成弯引号，
+    语法即坏。上线前必须把 script/style 区一并排除在中文标点替换之外。
+ 4. **`wc` 不给文件名会读空 stdin** 返回 `0 0 0`，被误读为"文件被清空"。
+ 5. 关卡自身两条误报（`ag-` 是 `tag-c` 的子串；反面引语 `"0.2 dB, trust us"` 命中 dB 断言）。
+    处理方式是**收紧判据**（词边界 + 引语语境双条件），不是放宽放行。
+另：文件被 HTML formatter 重排过（124→444 行），**行号不可作为定位锚点**，一律用 id/label。

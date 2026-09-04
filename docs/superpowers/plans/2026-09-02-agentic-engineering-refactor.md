@@ -1673,6 +1673,7 @@ cd /Users/cheenle/HAM/website && git add CLAUDE.md portal/sitemap.xml \
 | 33 | `git reset --soft` 只退 HEAD、**不动索引**：索引里还是早先 `git add` 的旧版本 | 修正过的诚实文本留在工作区，不实声明反而进了提交；只看 `git status` 干净会完全发现不了 | 提交后必须校验**提交对象**而非工作区：`git show HEAD:<path> | grep -c <坏串>`；reset --soft 之后若还要提交，先 `git add` 再 commit |
 | 34 | `website/mrrc_ft8`、`mrrc_modern` 等是**软链**，改它们的文件等于改上游仓库，在 website 仓库 `git add` 它们不会有任何内容 | 提交消息声称「撤回了 ft8 的不实声明」而该提交实际只含 blog 两文件——消息与内容不符，且上游仓库的不实声明仍留在其 HEAD 里 | 改子站文件一律在 owning repo 提交，并用 `git show --stat` 核对提交真的含这些路径 |
 | 35 | 已发布的分工节卡片写「edit hooks are live…refused before it is written」，实测三仓库 `.claude/settings.local.json` 均无 hooks 键（钩子只是 `install_hooks.py` 待装片段） | 三处线上文案不实（幸未部署）| 全部改为明示未接线、不声称自动门禁；发布前须实测钩子状态，不得从「仓库里有 sdd-guardian 目录」推出「门禁在生效」 |
+| 36 | 任务 11 改名 zh 长页时只做了术语与链接，没检查页面自身的 i18n 完整性 | `mrrc/zh/agentic.html` 的 <title>、meta description、CTA 标题与整段正文一直是**未翻译的英文**，且两处把 FDE 译作「驻场工程」（违反统一译名「前沿部署工程」）—— 改了两个月都没人发现 | 子站长页改名后须单独跑一次中文完整性检查：`grep -c <title>中文` + 扫连续英文句段 + 扫禁用译名 |
 
 ### 由补正 10 得到的一般教训
 

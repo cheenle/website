@@ -122,3 +122,18 @@ nginx 无需改动：`location /efhw/` 已用 alias 覆盖整个目录。
 
 - 页面标题与 slug 用 `baluns.html`（复数）还是 `balun-guide.html`：倾向复数，短且与导航词一致
 - 是否给本页配产品图/绕线过程图（`efhw/images/` 现有素材是否够用，需实施时盘点；无图则以 SVG 示意图代替，不占位假图）
+
+## 9. 实施前发现：sitemap 生成器缺陷（阻塞 §5 的 sitemap 步骤）
+
+实测（2026-09-04）：`HEAD` == 工作区，`portal/sitemap.xml` = 26 个 URL，其中 `agentic.html`
+仅 2 条（portal 自身的 EN/CN），`fde.html` 0 条；`portal/make_sitemap.py` 中**不存在** `SITE_PAGES`。
+
+根因：`find_html(ROOT)` 的 `ROOT` 是 **portal 目录本身**，子站只通过 `SUBSITES` 列表加入**根路径**
+（`/efhw/`），因此**任何子站的二级页都不可能被子站之外的机制收录**。
+后果：此前手工补录的六站 `agentic.html` / `engineering.html` 共 6 条**已回归丢失** ——
+因为改的是产物 `sitemap.xml` 而非生成器，一次重新生成就冲掉了（正是计划里我自己警告过的陷阱）。
+
+因此 §5 的 sitemap 步骤修正为：**先修生成器**（遍历 `$SITES` 各站目录、或显式维护子页清单），
+再 `python3 portal/make_sitemap.py` 重生成，验证六站页 + 本页两个新 URL 均在列；
+**禁止手编 `sitemap.xml`**。§6 关卡补一条：`sitemap.xml` 的 URL 集合必须是
+`make_sitemap.py` 的输出（重跑一次应字节相同），否则视为手工改动混入。

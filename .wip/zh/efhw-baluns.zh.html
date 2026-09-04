@@ -188,3 +188,23 @@
         <div class="calc"><b>买任何东西之前，先自己算这一个数。</b>馈点交流电压 V = sqrt(P &times; Z)：100 W 灌进 2450 &Omega; 约 495 V 有效值，峰值约 700 V。 <span class="tag tag-c">C</span> 所以在功率下真正先坏的是飞弧、匝间距与前几匝的绝缘体系，不是铁氧体。按你自己的功率与负载把这个数写下来 —— 它决定你用什么线、什么绕法、什么外壳。</div>
       </div>
     </section>
+    <section class="section" id="build">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">03 · 制作工艺</span>
+          <h2 class="section-title">好设计死在哪里</h2>
+          <p class="section-subtitle">同样的磁芯、同样的匝数、同样的电台 —— 有人拿到 20 dB 回波损耗，有人拿到一块砖头并且在 80 m 上不出功率。差别几乎全在过程。</p>
+        </div>
+        <div class="steps">
+          <div class="step"><h4><i class="fas fa-search"></i> 上线之前先查磁芯</h4>
+            <p>用细锉或胶带把内孔倒角去毛刺。锐利的内缘会在你看不见的那一侧，在张力下磨破漆皮。</p>
+            <p class="risk"><b>失败模式：</b>只在冷机时出现的匝对磁芯短路；或一个季节的热循环之后变成匝间内部短路。</p></div>
+          <div class="step"><h4><i class="fas fa-circle-notch"></i> 均匀绕制，轻而恒定的张力</h4>
+            <p>尽量把匝均匀铺开在整个圆周上，张力保持一致。堆叠抬高局部电容与局部磁通密度，过大的间隙漏磁 —— 两者都先吃掉低频段。</p>
+            <p class="risk"><b>失败模式：</b>20 m 上正常，80 m 上像死了一样。</p></div>
+          <div class="step"><h4><i class="fas fa-code-compare"></i> 剪线之前先标同名端</h4>
+            <p>TLT 相位绕错，巴伦就变成一颗没有变换功能的普通磁环；自耦变压器绕错，你就得到一匝短路。剪线前把起绕与结束端标出来。</p>
+            <p class="risk"><b>失败模式：</b>处处高驻波、低功率就烫、而作者坚信是电路设计有问题。</p></div>
+          <div class="step"><h4><i class="fas fa-bolt"></i> 引脚尽量短，不要留辫子</h4>
+            <p>在 2&ndash;5 k&Omega; 的节点上，每多一毫米引线都是额外的电感加一小段天线。焊在端子上，不要焊在一缕多股线上。</p>
+            <p class="risk"><b>失败模式：</b>手一转盒子，回波损耗就跟着变。</p></div>

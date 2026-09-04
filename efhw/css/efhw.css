@@ -1,123 +1,196 @@
 /* EFHW brand overrides — Emerald Green on dark background */
 :root {
-  --bg-primary: #0a0e14;
-  --bg-secondary: #0d1117;
-  --bg-tertiary: #10161e;
-  --bg-card: rgba(255,255,255,0.025);
-  --accent: #10b981;
-  --accent-dim: #059669;
-  --accent-glow: rgba(16,185,129,0.12);
-  --text-secondary: #8899aa;
-  --text-muted: #5c6370;
-  --border: rgba(255,255,255,0.06);
-  --border-hover: rgba(16,185,129,0.25);
-  --nav-h: 56px;
+	--bg-primary: #0a0e14;
+	--bg-secondary: #0d1117;
+	--bg-tertiary: #10161e;
+	--bg-card: rgba(255, 255, 255, 0.025);
+	--accent: #10b981;
+	--accent-dim: #059669;
+	--accent-glow: rgba(16, 185, 129, 0.12);
+	--text-secondary: #8899aa;
+	--text-muted: #5c6370;
+	--border: rgba(255, 255, 255, 0.06);
+	--border-hover: rgba(16, 185, 129, 0.25);
+	--nav-h: 56px;
 }
 
 /* Gradient override for hero titles */
 .gradient {
-  background: linear-gradient(135deg, #10b981, #059669);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+	background: linear-gradient(135deg, #10b981, #059669);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
 }
 
 /* Logo accent dot */
 .logo .accent-dot {
-  color: var(--accent);
+	color: var(--accent);
 }
 
 /* WeChat group QR code section */
-.qr-section { text-align: center; }
+.qr-section {
+	text-align: center;
+}
 .qr-card {
-  display: inline-block;
-  background: #ffffff;
-  padding: 1.25rem;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  max-width: 280px;
-  width: 100%;
+	display: inline-block;
+	background: #ffffff;
+	padding: 1.25rem;
+	border-radius: 16px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	max-width: 280px;
+	width: 100%;
 }
 .qr-card img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
+	width: 100%;
+	height: auto;
+	display: block;
+	border-radius: 8px;
 }
 .qr-note {
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+	margin-top: 1rem;
+	font-size: 0.85rem;
+	color: var(--text-muted);
 }
 
 /* Mobile navbar wrap to avoid overlap */
 @media (max-width: 768px) {
-  .navbar-content { flex-wrap: wrap; }
-  .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    padding-top: 0.5rem;
-  }
-  .nav-links li { margin: 0 0.5rem; }
+	.navbar-content {
+		flex-wrap: wrap;
+	}
+	.nav-links {
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding-top: 0.5rem;
+	}
+	.nav-links li {
+		margin: 0 0.5rem;
+	}
 }
 
 /* ---------- Balun sub-topic page (baluns.html) ---------- */
 .subnav {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: rgba(10, 14, 20, 0.94);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
+	position: sticky;
+	top: 0;
+	z-index: 40;
+	background: rgba(10, 14, 20, 0.94);
+	border-bottom: 1px solid var(--border);
+	backdrop-filter: blur(10px);
 }
 .subnav-inner {
-  display: flex;
-  gap: 1.25rem;
-  overflow-x: auto;
-  padding: 0.7rem 0;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.78rem;
+	display: flex;
+	gap: 1.25rem;
+	overflow-x: auto;
+	padding: 0.7rem 0;
+	font-family: "JetBrains Mono", monospace;
+	font-size: 0.78rem;
 }
-.subnav-inner a { color: var(--text-secondary); white-space: nowrap; }
-.subnav-inner a:hover { color: var(--accent); }
+.subnav-inner a {
+	color: var(--text-secondary);
+	white-space: nowrap;
+}
+.subnav-inner a:hover {
+	color: var(--accent);
+}
 
-.spec-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-.spec-table th, .spec-table td {
-  text-align: left; padding: 0.7rem 0.8rem;
-  border-bottom: 1px solid var(--border); vertical-align: top;
+.spec-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.9rem;
+}
+.spec-table th,
+.spec-table td {
+	text-align: left;
+	padding: 0.7rem 0.8rem;
+	border-bottom: 1px solid var(--border);
+	vertical-align: top;
 }
 .spec-table th {
-  font-family: "JetBrains Mono", monospace; font-size: 0.72rem;
-  text-transform: uppercase; letter-spacing: 0.06em;
-  color: var(--text-secondary); background: var(--bg-secondary);
+	font-family: "JetBrains Mono", monospace;
+	font-size: 0.72rem;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--text-secondary);
+	background: var(--bg-secondary);
 }
-.spec-table td.deny { color: #fca5a5; }
-.spec-table td.na { color: var(--text-muted); font-family: "JetBrains Mono", monospace; }
+.spec-table td.deny {
+	color: #fca5a5;
+}
+.spec-table td.na {
+	color: var(--text-muted);
+	font-family: "JetBrains Mono", monospace;
+}
 
 .tag {
-  display: inline-block; padding: 0.05rem 0.4rem; margin-right: 0.35rem;
-  border-radius: 4px; font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem; border: 1px solid var(--border);
+	display: inline-block;
+	padding: 0.05rem 0.4rem;
+	margin-right: 0.35rem;
+	border-radius: 4px;
+	font-family: "JetBrains Mono", monospace;
+	font-size: 0.68rem;
+	border: 1px solid var(--border);
 }
-.tag-c { color: var(--accent); background: rgba(16, 185, 129, 0.1); }
-.tag-m { color: #f0a030; background: rgba(240, 160, 48, 0.1); }
+.tag-c {
+	color: var(--accent);
+	background: rgba(16, 185, 129, 0.1);
+}
+.tag-m {
+	color: #f0a030;
+	background: rgba(240, 160, 48, 0.1);
+}
 
-.tree, .tree ul { list-style: none; margin: 0; padding-left: 1.1rem; }
-.tree { padding-left: 0; }
-.tree li { position: relative; padding: 0.25rem 0 0.25rem 0.9rem; }
-.tree li::before {
-  content: ""; position: absolute; left: 0; top: 0.75rem;
-  width: 0.55rem; height: 1px; background: var(--border);
+.tree,
+.tree ul {
+	list-style: none;
+	margin: 0;
+	padding-left: 1.1rem;
 }
-.tree .q { color: var(--text-primary); font-weight: 600; }
-.tree .leaf { color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 0.82rem; }
+.tree {
+	padding-left: 0;
+}
+.tree li {
+	position: relative;
+	padding: 0.25rem 0 0.25rem 0.9rem;
+}
+.tree li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.75rem;
+	width: 0.55rem;
+	height: 1px;
+	background: var(--border);
+}
+.tree .q {
+	color: var(--text-primary);
+	font-weight: 600;
+}
+.tree .leaf {
+	color: var(--accent);
+	font-family: "JetBrains Mono", monospace;
+	font-size: 0.82rem;
+}
 
 .calc {
-  background: var(--bg-secondary); border: 1px solid var(--border);
-  border-radius: 10px; padding: 1rem 1.15rem; margin: 1rem 0;
-  font-family: "JetBrains Mono", monospace; font-size: 0.82rem;
-  color: var(--text-secondary); overflow-x: auto;
+	background: var(--bg-secondary);
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	padding: 1rem 1.15rem;
+	margin: 1rem 0;
+	font-family: "JetBrains Mono", monospace;
+	font-size: 0.82rem;
+	color: var(--text-secondary);
+	overflow-x: auto;
 }
-.calc b { color: var(--text-primary); }
+.calc b {
+	color: var(--text-primary);
+}
+.step .risk {
+	color: #fca5a5;
+	font-size: 0.84rem;
+	margin-top: 0.6rem;
+}
+.step .risk b {
+	color: #fca5a5;
+}

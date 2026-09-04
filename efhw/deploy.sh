@@ -19,7 +19,7 @@ echo "=========================================="
 echo ""
 
 # Check required files
-for f in "index.html" "css/octen.css" "js/global-nav.js"; do
+for f in "index.html" "baluns.html" "zh/baluns.html" "css/octen.css" "js/global-nav.js"; do
     if [ ! -f "${LOCAL_WEBSITE_DIR}/${f}" ]; then
         echo "ERROR: Required file not found: ${LOCAL_WEBSITE_DIR}/${f}"
         exit 1

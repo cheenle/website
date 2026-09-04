@@ -67,14 +67,18 @@
         </ul>
         <div class="nav-actions">
           <a href="zh/baluns.html" class="lang-btn">中文</a>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
         </div>
       </div>
     </nav>
-nav">
+    <div class="subnav">
       <div class="container subnav-inner">
         <a href="#taxonomy">01 · Taxonomy</a>
         <a href="#selection">02 · Selection</a>
         <a href="#build">03 · Build craft</a>
+        <a href="#bom">03b · Bill of materials</a>
         <a href="#field">04 · Field &amp; optimisation</a>
         <a href="#evidence">Evidence &amp; sources</a>
       </div>
@@ -370,14 +374,21 @@ have not measured it&rdquo;, not &ldquo;0.2 dB, trust us&rdquo;.</div>
         <li><a href="../mrrc/efhw/t200-2-guide.html">T200-2 resonant matching guide</a></li>
       </ul></div>
     </div>
-<div class="section-cta">
+    <p style="margin-top:1.5rem"><span class="tag tag-m">M</span> rows reserved: any value we measure ourselves will cite its raw data file under the repository logs/ directory.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-cta">
   <h2>Build one, then measure it</h2>
   <p>This page ends where a claim would start. If you do wind and pot one, bring a VNA, bring a 2.5 k&Omega; non-inductive load, and bring the methodology the research site already argues about.</p>
   <div class="hero-actions">
     <a href="index.html" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to EFHW Projects</a>
     <a href="../mrrc/efhw/index.html" class="btn btn-secondary"><i class="fas fa-book-open"></i> Deep research</a>
   </div>
-</div>
+    </div>
+  </div>
 </section>
 <footer class="footer">
   <div class="container">
@@ -402,6 +413,9 @@ have not measured it&rdquo;, not &ldquo;0.2 dB, trust us&rdquo;.</div>
   </div>
 </footer>
 <script>
+      function toggleMobileMenu() {
+        document.querySelector(".nav-links").classList.toggle("active");
+      }
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener("click", (e) => {
       const t = document.querySelector(a.getAttribute("href"));

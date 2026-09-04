@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="端馈天线用巴伦与非平衡变换器实操专题：49:1 / 64:1 unun、Guanella 电流巴伦、1:1 磁环共模抑制、LTA 的类型谱系；按约束选型的决策树；绕线、浸漆与防水装配的工艺与失败模式；装机实践与可在纸面复核的优化目标。理论与实测数据归 EFHW 深度研究站。" />
+    <meta name="keywords" content="巴伦, 非平衡变换器, unun, 49:1, 64:1, Guanella, 电流巴伦, 电压巴伦, 共模抑制, 磁环, EFHW, 端馈半波段, 平衡地网, 传输线变压器" />
+    <meta name="author" content="BG1SB" />
+    <meta name="theme-color" content="#0a0e14" />
+    <link rel="alternate" hreflang="en" href="../baluns.html" />
+    <link rel="alternate" hreflang="zh-CN" href="baluns.html" />
+    <title>巴伦与非平衡变换器 — 类型、制作、装机实践 — EFHW Projects</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../css/efhw.css?v=2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>🧲</text></svg>" />
+  </head>
+  <body data-site="efhw">
+    <nav class="navbar">
+      <div class="container navbar-content">
+        <a href="../index.html" class="logo">
+          <span class="logo-icon"><i class="fas fa-broadcast-tower"></i></span>
+          <span>EFHW<span style="color: var(--accent)">Projects</span></span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="../index.html#research-hub">研究方向</a></li>
+          <li><a href="../index.html#features">工程实践</a></li>
+          <li><a href="#taxonomy">巴伦类型</a></li>
+          <li><a href="#build">制作工艺</a></li>
+          <li><a href="#field">装机实践</a></li>
+          <li><a href="../index.html#research">深度研究</a></li>
+          <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener" class="nav-cta"><i class="fab fa-github"></i> GitHub</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a href="../baluns.html" class="lang-btn">EN</a>
+        </div>
+      </div>
+    </nav>
+    <div class="subnav">
+      <div class="container subnav-inner">
+        <a href="#taxonomy">01 · 类型谱系</a>
+        <a href="#selection">02 · 选型决策</a>
+        <a href="#build">03 · 制作工艺</a>
+        <a href="#bom">03b · 物料清单</a>
+        <a href="#field">04 · 装机与优化</a>
+        <a href="#evidence">证据与出处</a>
+      </div>
+    </div>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-magnet"></i>
+          <span>决策与台架工艺 · 理论与实测归深度研究站</span>
+        </div>
+        <h1 class="hero-title">巴伦与非平衡变换器<br /><span class="gradient">类型、制作、最佳实践</span></h1>
+        <p class="hero-subtitle">
+          这是一页给动手者的话，不是物理课。它只回答四件事：你手里那个磁件到底属于哪一类、
+          按你的功率与波段该选哪一个、怎样绕制与封装才不毁掉它、以及装机后该先检查什么。
+          所有"为什么"——磁芯材料、损耗实测、49:1 与 64:1 之争、VNA 测量方法——
+          归 <a href="../../mrrc/efhw/index.html">EFHW 深度研究站</a> 所有，本页只链接，不复制。
+        </p>
+        <div class="hero-actions">
+          <a href="#taxonomy" class="btn btn-primary btn-large"><i class="fas fa-table-list"></i> 打开类型谱系</a>
+          <a href="../../mrrc/efhw/index.html" class="btn btn-secondary btn-large"><i class="fas fa-chart-line"></i> 实测与理论</a>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="taxonomy">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">01 · 类型谱系</span>
+          <h2 class="section-title">五种器件，三件事</h2>
+          <p class="section-subtitle">
+            "巴伦"是一份职责说明，不是一颗料号。现场常被混为一谈的有三件事：
+            阻抗变换、强制平衡电流、抑制共模。一件器件通常只做其中一件半。
+            请把中间那列读成"它实际承担的职责"，最后一列读成"人们烧钱的理由"。
+          </p>
+        </div>
+        <div class="calc"><b>本页的标签纪律。</b>[C] = 有可引用出处的工程共识，或可用本页给出的公式自行复算的算术。[M] = 我们实测，且原始数据文件在仓库里可查。凡我们没测过的，一律写 <span style="color:#f0a030">—</span> 并指向研究站。我们不印自己无法复算也无法出示的数字。</div>
+        <table class="spec-table">
+          <thead><tr><th>器件</th><th>它实际承担的职责</th><th>工作频段</th><th>什么时候选它</th><th>什么时候别选</th></tr></thead>
+          <tbody>
+            <tr><td><b>49:1 unun</b> <span class="tag tag-c">C</span></td>
+              <td>把 50 &Omega; 升到约 2450 &Omega;（50 &times; 49）。它是自耦变压器，<em>不做</em>任何平衡。</td>
+              <td>1.8&ndash;30 MHz，线长按最低波段裁</td>
+              <td>端馈半波段，且馈点阻抗确实在几 k&Omega; 量级。</td>
+              <td class="deny">你其实需要对称性；或把表功率灌进小磁芯，然后把烫手叫作"正常"。</td></tr>
+            <tr><td><b>64:1 unun</b> <span class="tag tag-c">C</span></td>
+              <td>同样的活，升比为 3200 &Omega;（50 &times; 64）。</td>
+              <td>同上</td>
+              <td>你实测的馈点更接近 3&ndash;5 k&Omega; 而不是 2.5。</td>
+              <td class="deny">你希望别人替你决定 —— 49 与 64 之争是测量之争，见研究站。</td></tr>
+            <tr><td><b>Guanella / TLT 电流巴伦</b> <span class="tag tag-c">C</span></td>
+              <td>靠绕在磁芯上的传输线承载功率来变换，并强制两导体电流等值反相。</td>
+              <td>单节升比很小（典型 1:4，1:16 需两节）</td>
+              <td>既要平衡又要变换、要宽带、且热上留有余量。</td>
+              <td class="deny">你要在一颗小磁芯上做 1:49 —— 节数与体积随升比增长。</td></tr>
+            <tr><td><b>1:1 电流巴伦</b> <span class="tag tag-c">C</span></td>
+              <td>不变换。对共模呈现高串联阻抗。</td>
+              <td>取决于磁芯阻抗峰位置</td>
+              <td>用同轴馈电给对称天线（偶极子、环）。</td>
+              <td class="deny">端馈单线 —— 它修的是平衡，不是 2&ndash;5 k&Omega; 的失配。</td></tr>
+            <tr><td><b>共模磁环（CMC）</b> <span class="tag tag-c">C</span></td>
+              <td>抑制屏蔽层电流。它根本不是巴伦。</td>
+              <td>五者中最宽</td>
+              <td>端馈天线永远要一个。这才是电视机与电脑噪声那一项。</td>
+              <td class="deny">你指望它改善驻波 —— 它作用于离开天线系统的东西，不碰 Z&#8346;。</td></tr>
+            <tr><td><b>LTA / 分布式</b> <span class="tag tag-c">C</span></td>
+              <td>有损传输线段；无磁芯，故无饱和。</td>
+              <td>以 VHF/UHF 为主；HF 版本体积很大</td>
+              <td>要极宽频段，或你不愿在热上信任铁氧体。</td>
+              <td class="deny">HF 满功率 —— 你接受的那份损耗是盒子里真实的发热。</td></tr>
+            <tr><td><b>偶极子 + 1:1 电流巴伦</b> <span class="tag tag-c">C</span></td>
+              <td>什么都不变换；对称天线本就约 50 &Omega;，巴伦只让屏蔽层安静下来。</td>
+              <td>逐频段（或用陷阱/扇形偶极子）</td>
+              <td>你真的能架起两半。这是诚实的基线。</td>
+              <td class="deny">你只有一根支撑和一根线 —— 那就回到上面那行。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>

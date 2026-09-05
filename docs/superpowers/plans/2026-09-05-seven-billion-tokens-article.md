@@ -639,7 +639,7 @@ cd /Users/cheenle/HAM/website/portal
 ```zsh
 cd /Users/cheenle/HAM/website
 git add portal/tests/test_seven_billion_tokens_article.py
-git status --porcelain --cached          # 确认只有这一个文件
+git diff --cached --name-only          # 确认只有这一个文件
 git commit -m "test(portal): 《Seven Billion Tokens》契约测试先行（红）
 
 13 个 section id、四类 data-claim-type、R1/R2/R4 禁句与 gate 归属、
@@ -852,7 +852,7 @@ cd /Users/cheenle/HAM/website/portal
 ```zsh
 cd /Users/cheenle/HAM/website
 git add portal/blog/seven-billion-tokens/article.css portal/blog/seven-billion-tokens/index.html
-git status --porcelain --cached
+git diff --cached --name-only
 git commit -m "feat(blog): 《Seven Billion Tokens, One Field Incident》EN 正文 + article.css
 
 台账先行：开场即 7,007,437,567 tokens / 41,257 轮 / 882 会话的七工具普查表，
@@ -1036,7 +1036,7 @@ cd /Users/cheenle/HAM/website/portal
 ```zsh
 cd /Users/cheenle/HAM/website
 git add portal/blog/index.html portal/sitemap.xml
-git status --porcelain --cached
+git diff --cached --name-only
 git commit -m "feat(blog): 首页卡片 + sitemap 收录《Seven Billion Tokens》EN/ZH
 
 复用既有 intelligence 类目，不新增筛选 chip。sitemap 由 make_sitemap.py
@@ -1154,7 +1154,7 @@ git diff portal/index.html portal/zh/index.html | grep -E '^[+-]' | grep -iE 'qr
 
 ```zsh
 git add portal/index.html portal/zh/index.html portal/agentic.html portal/zh/agentic.html portal/engineering.html portal/zh/engineering.html
-git status --porcelain --cached
+git diff --cached --name-only
 git commit -m "fix(portal): 数字校正到 2026-09-05 普查值
 
 index.html 项目卡：FT-710 180+→439 tests（并 V1.0→v1.8.1，据 CHANGELOG
@@ -1230,7 +1230,7 @@ done
 cd /Users/cheenle/HAM/website
 grep -n "pre-edit gate" portal/blog/seven-billion-tokens/index.html
 grep -n "编辑前门禁" portal/blog/seven-billion-tokens/zh/index.html
-ls -d /Users/cheenle/HAM/{MRRC,sunsdr} /.agents 2>/dev/null; ls -d /Users/cheenle/HAM/MRRC/.agents /Users/cheenle/HAM/sunsdr/.agents 2>&1 | head -2
+ls -d /Users/cheenle/HAM/MRRC/.agents /Users/cheenle/HAM/sunsdr/.agents 2>&1 | head -2
 ```
 
 预期：每处 gate 措辞的上下文都属于 ft710 / modern / ft8；后一条确认 `MRRC` 与 `sunsdr` **没有** `.agents` 目录（因此文中对它们只能说"无注册表，不主张门禁"）。
@@ -1239,8 +1239,8 @@ ls -d /Users/cheenle/HAM/{MRRC,sunsdr} /.agents 2>/dev/null; ls -d /Users/cheenl
 
 ```zsh
 cd /Users/cheenle/HAM/website/portal/blog/seven-billion-tokens
-grep -o '.\{120\}234,247,399.\{120\}' index.html
-grep -o '.\{120\}5,380,941,148.\{120\}' index.html
+grep -o '.\{0,120\}234,247,399.\{0,120\}' index.html
+grep -o '.\{0,120\}5,380,941,148.\{0,120\}' index.html
 grep -c 'not recorded\|estimate' index.html
 ```
 

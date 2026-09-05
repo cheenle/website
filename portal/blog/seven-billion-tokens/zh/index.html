@@ -192,8 +192,7 @@ Verification method · Result · Limitations · Date</pre></div>
         <div class="term-block"><div class="term-head">2026-09-02 复现，2026-09-05 对 HEAD 重新验证</div><pre>$ python3 .agents/skills/sdd-guardian/harness/sdd_context.py check probe_b4_tmp.py
 SDD-GUARDIAN: blocking violations found:
 <span class="block-line">[BLOCK] cat-no-dn (AD-014; SDD V1.2 freq-drift incident) probe_b4_tmp.py:2: return c.query("DN;")</span>
- → On the FT-710, 'DN;' is NOT a DNR query — it steps the active VFO DOWN ~20 Hz per call.
-   Polling it caused a live frequency-drift incident (V1.2). DNR level is intentionally not polled.
+    → On the FT-710, 'DN;' is NOT a DNR query — it steps the active VFO DOWN ~20 Hz per call. Polling it caused a live frequency-drift incident (V1.2). DNR level is intentionally not polled.
 $ echo $?
 <span class="exit">2</span></pre></div>
 

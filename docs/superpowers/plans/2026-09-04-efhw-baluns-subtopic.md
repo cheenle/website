@@ -167,3 +167,17 @@ v2（新页已引用 v2，两首页仍 v1）③ 两首页导航入口 + #researc
  5. 关卡自身两条误报（`ag-` 是 `tag-c` 的子串；反面引语 `"0.2 dB, trust us"` 命中 dB 断言）。
     处理方式是**收紧判据**（词边界 + 引语语境双条件），不是放宽放行。
 另：文件被 HTML formatter 重排过（124→444 行），**行号不可作为定位锚点**，一律用 id/label。
+
+## 完成：已部署并线上回验
+
+efhw 部署（`--force`）→ portal 部署（该脚本**无** `--force`，`read -p` 读 EOF 即静默中止，
+需 `yes | ./deploy.sh`）。线上：/efhw/baluns.html 与 /efhw/zh/baluns.html 均 200，
+`efhw.css?v=2` 生效，CN 内联 script 弯引号 0，`images/qr-wechat-group.jpg` 由缺图转 200，
+八站抽查全 200，sitemap 44→53（+2 巴伦页，+7 子站 `zh/` 根，0 删除）。
+
+42. **契约测试的期望值不能硬编码页面名**：`mrrc_ft710/engineering.html` 从未存在，
+    该断言只能在偶然间通过。改为遍历 SUBSITES 下 depth-1 *.html 从磁盘派生期望；
+    这一改立刻暴露真实缺口——各子站中文首页 `zh/index.html` 从未被收录。
+43. **portal/deploy.sh 的回滚提示是危险建议**：它教人 `rm -rf /var/www/vlsc.net/*`
+    后只还原 `landing_*` 备份，照做会连带删掉全部子站。仅存在于 echo 文本、不在执行路径，
+    但应当改写（只删/还原 DocumentRoot 中的 portal 自有文件）。待办。

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seven Billion Tokens, One Field Incident — VLSC Blog</title>
+    <meta name="description" content="A reproducible end-to-end account of agentic engineering: 7,007,437,567 tokens across seven agent harnesses, one field frequency-drift incident, and the machinery that made the spend safe. Every number carries provenance and limits — including the ones I got wrong.">
+    <meta name="keywords" content="agentic engineering, AI agent harness, token accounting, evidence discipline, living SDD, constraint registry, forward deployed engineering, amateur radio, BG1SB">
+    <meta name="author" content="BG1SB">
+    <meta property="og:type" content="article"><meta property="og:title" content="Seven Billion Tokens, One Field Incident"><meta property="og:description" content="What it actually takes to let agents ship: a ledger-first account with provenance on every number, including the measurement I got wrong by 1.6 billion tokens."><meta property="og:url" content="https://www.vlsc.net/blog/seven-billion-tokens/"><meta property="og:site_name" content="VLSC Projects">
+    <link rel="canonical" href="https://www.vlsc.net/blog/seven-billion-tokens/">
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/seven-billion-tokens/">
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/seven-billion-tokens/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/seven-billion-tokens/">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/octen.css?v=6"><link rel="stylesheet" href="../../css/blog.css?v=1"><link rel="stylesheet" href="article.css?v=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Seven Billion Tokens, One Field Incident","description":"A ledger-first, reproducible account of agentic engineering from field intent to delivery and self-correction.","author":{"@type":"Person","name":"BG1SB","url":"https://github.com/cheenle"},"publisher":{"@type":"Organization","name":"VLSC Projects","url":"https://www.vlsc.net/"},"datePublished":"2026-09-05","dateModified":"2026-09-05","keywords":"agentic engineering, harness, living SDD, constraint registry, evidence discipline","articleSection":"Intelligence","mainEntityOfPage":"https://www.vlsc.net/blog/seven-billion-tokens/"}</script>
+</head>
+<body data-site="portal">
+<article class="blog-article">
+    <nav class="blog-breadcrumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <span class="blog-cat">Intelligence</span> › Seven Billion Tokens</nav>
+    <div class="article-language"><a href="zh/" lang="zh-CN">中文版</a></div>
+    <header class="blog-header"><div class="blog-cat-badge"><i class="fas fa-receipt"></i> Intelligence</div><h1>Seven Billion Tokens, One Field Incident</h1><p class="blog-subtitle">What it actually takes to let agents ship — from one business intent to delivery, use, and self-correction</p><div class="blog-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-05">Sep 5, 2026</time> &nbsp;·&nbsp; ~30 min read</div><ul class="blog-tags"><li><a href="/blog/">#agentic-engineering</a></li><li><a href="/blog/">#evidence</a></li><li><a href="/blog/">#harness</a></li><li><a href="/blog/">#living-sdd</a></li></ul></header>
+    <nav class="blog-toc" id="blog-toc" aria-label="Table of contents"></nav>
+    <div class="blog-content">
+
+    <p class="lede">This article opens with a bill. Not because the bill is impressive — it is mostly cache reads — but because a bill is the one artifact in this whole story that cannot argue with you. Everything else here, including the bill, gets checked against something.</p>
+
+    <div class="volume" data-volume="gewu">
+        <header class="volume-head"><span class="volume-num">Volume I</span><h2>Investigating Things</h2><p class="volume-gloss">格物 (gé wù) — go to the thing itself. Five sections on what the transcripts, the test runs and the radio each actually said, and on two separate ways of failing to look.</p></header>
+
+    <section id="ledger">
+        <h2>The ledger, before any argument</h2>
+        <p>Between 2026-06-16 and 2026-09-05, seven different agent harnesses ran against the repositories behind this website. I parsed every session store on this machine — roughly 2.7 GB of JSONL plus four SQLite databases — and totalled what each tool recorded about itself.</p>
+
+        <div class="ledger-scroll">
+        <table class="ledger-table">
+            <caption>Census 2026-09-05. Machine: macOS, arm64. Method: parse each harness's own session store; attribute by the <code>cwd</code> / workspace / directory field it records. Semantics differ per tool and were corrected individually — see <a href="#numbers-lie">the section on why the first number I produced was wrong</a>.</caption>
+            <thead><tr><th>Harness</th><th>Tokens</th><th>Turns</th><th>Sessions</th><th>Provenance</th><th>Span</th></tr></thead>
+            <tbody>
+                <tr><td class="tool">claude-code</td><td class="num">3,129,411,481</td><td class="num">21,648</td><td class="num">194</td><td><code>~/.claude/projects/**/*.jsonl</code> → <code>message.usage</code></td><td>08-05 → 09-05</td></tr>
+                <tr><td class="tool">pi</td><td class="num">1,625,562,962</td><td class="num">8,719</td><td class="num">60</td><td><code>~/.pi/agent/sessions/**/*.jsonl</code> → <code>usage.totalTokens</code> (+ <code>cost</code>)</td><td>07-22 → 09-05</td></tr>
+                <tr><td class="tool">kimi-code</td><td class="num">1,201,837,537</td><td class="num">9,769</td><td class="num">229</td><td><code>~/.kimi-code/sessions/**/wire.jsonl</code> → <code>usage.record</code></td><td>07-18 → 08-30</td></tr>
+                <tr><td class="tool">codex</td><td class="num">547,796,667</td><td class="num">717</td><td class="num">116</td><td><code>~/.codex/sessions/**/*.jsonl</code> → <code>token_count.info.total_token_usage</code></td><td>06-16 → 09-05</td></tr>
+                <tr><td class="tool">mulerun</td><td class="num">471,558,325</td><td class="num">181</td><td class="num">181</td><td><code>.mulerun/agent-data/opencode/opencode/opencode.db</code> → <code>session.tokens_*</code></td><td>not recorded</td></tr>
+                <tr><td class="tool">cursor</td><td class="num">27,079,705</td><td class="num">217</td><td class="num">96</td><td><code>state.vscdb</code> → <code>cursorDiskKV</code> <code>bubbleId:*</code> <code>tokenCount</code></td><td>not recorded</td></tr>
+                <tr><td class="tool">opencode</td><td class="num">4,190,890</td><td class="num">6</td><td class="num">6</td><td><code>~/.local/share/opencode/opencode.db</code> → <code>session.tokens_*</code></td><td>not recorded</td></tr>
+                <tr class="total"><td>Total recorded</td><td class="num">7,007,437,567</td><td class="num">41,257</td><td class="num">882</td><td>seven harnesses</td><td>06-16 → 09-05</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <p>Three structural facts about that total matter more than its size.</p>
+
+        <div class="stat-row">
+            <div class="stat-tile"><span class="stat-num">95.2%</span><span class="stat-cap">of all recorded tokens are cache reads — 6,670,776,092 of them. Context being re-loaded, not new content being written.</span></div>
+            <div class="stat-tile"><span class="stat-num">4.8%</span><span class="stat-cap">is "fresh": 336,661,475 tokens of new input plus output. Of that, model output is 30,061,161.</span></div>
+            <div class="stat-tile"><span class="stat-num">$9.30</span><span class="stat-cap">per billion tokens — the only harness that priced itself spent $15.11 for 1,625,562,962 tokens.</span></div>
+        </div>
+
+        <div class="claim-box" data-claim-type="fact"><span class="claim-label">Fact</span><p>Seven billion tokens of this work was 95.2% re-reading. The agents were not producing seven billion tokens of prose; they were re-loading the same contract, over and over, before each action — and producing 30,061,161 tokens of output.</p></div>
+        <div class="prov"><b>Claim:</b> recorded token volume and its cache-read share. <b>Source artifact:</b> the seven session stores named in the table. <b>Version / commit:</b> census 2026-09-05, working trees at <code>mrrc_ft710@9c353a1</code>, <code>mrrc_modern@9d5f239</code>, <code>ft8</code> and <code>website</code> HEAD. <b>Environment:</b> macOS arm64, local session stores only. <b>Verification method:</b> line-filtered JSON parse plus SQLite queries; Codex cross-checked against its own <code>threads.tokens_used</code>. <b>Result:</b> 7,007,437,567 tokens / 41,257 turns / 882 sessions. <b>Limitations:</b> only what this machine retained; three tools record no tokens at all (§<a href="#floor">floor</a>). <b>Date:</b> 2026-09-05.</div>
+
+        <p>That ratio is not an inefficiency to apologise for. It is the price of a specific decision: that the contract gets loaded before the agent acts, every single time, rather than being a document nobody opens. Volume III comes back to what that decision buys.</p>
+    </section>
+
+    <section id="floor">
+        <h2>Why seven billion is a floor, not a total</h2>
+        <p>Four separate gaps sit underneath that table, and each one only becomes visible if you go looking for what the tools <em>failed</em> to record.</p>
+
+        <p><strong>iFlow records nothing.</strong> Its store holds 195 transcripts and 63,602 records spanning 2025-10-20 to 2026-04-16, including 37,202 assistant turns across six different model backends. Every one of those turns carries a <code>usage</code> object. Every one of those <code>usage</code> objects says <code>input_tokens: 0, output_tokens: 0</code>. The tool wrote the field and never filled it in.</p>
+
+        <p>So for iFlow I can only estimate, from 843,290,639 characters of transcript at roughly 3.6 characters per token: about 234,247,399 tokens, with a plausible range of 187M to 281M. That figure is an <strong>estimate</strong>, it is <strong>not recorded</strong> by any tool, and it is deliberately kept out of the 7,007,437,567 total above.</p>
+
+        <p><strong>Hermes records structure but not volume.</strong> Its <code>state.db</code> has a <code>messages.token_count</code> column. All 9,121 rows are zero. What it does record is more interesting than tokens: 292 sessions, 4,336 tool calls, and a <code>source</code> field splitting them into <strong>201 cron, 68 cli, and 23 weixin</strong>. All 277 session files point at the same <code>base_url</code>. So for three months an agent ran on a schedule and could be reached from a chat app — and nobody measured what it cost.</p>
+
+        <div class="claim-box" data-claim-type="inference"><span class="claim-label">Inference</span><p>The 201 cron sessions are the most consequential unmeasured thing in this ledger. Scheduled autonomous work is exactly where cost and blast radius both stop being bounded by a human sitting at a keyboard. That it is also the least instrumented is not a coincidence: instrumentation follows the thing you were afraid of, and interactive sessions are the thing people are afraid of.</p></div>
+
+        <p><strong>Two stores are empty or derivative.</strong> Cursor's <code>ai-code-tracking.db</code> has six tables; five have zero rows. And Qoder — a Cursor derivative — turned out to hold 588 chat bubbles whose keys are <em>all</em> present in Cursor's store, with zero bubbles unique to Qoder. Counting both would have double-counted 1,500,804 tokens. Qoder contributes nothing and is excluded.</p>
+
+        <p><strong>Retention truncates the beginning.</strong> Claude Code's oldest retained transcript is 2026-08-05. The MRRC repository's first commit is 2026-03-06. Five months of work on that family is simply not in the store any more.</p>
+
+        <p>Adding the iFlow estimate to the recorded total gives roughly 7,241,684,966 tokens, 87,580 interactions and 1,359 sessions — and even that number is a floor, because Hermes contributes interactions but no tokens at all.</p>
+
+        <div class="claim-box" data-claim-type="thesis"><span class="claim-label">Author's thesis</span><p>A measurement that cannot say what it missed is not a measurement, it is a vibe with a comma in it. The useful move is not to produce one big number but to keep two columns — recorded and estimated — and refuse to let them merge.</p></div>
+    </section>
+
+    <section id="numbers-lie">
+        <h2>The first number I produced was wrong by 1.6 billion</h2>
+        <p>I ran this census twice. The first pass reported 5,380,941,148 tokens. That figure was wrong in both directions at once, and the way it was wrong is the most useful thing in this article.</p>
+
+        <p><strong>It under-counted</strong>, because I only looked where I expected agent tools to live: <code>~/.claude</code>, <code>~/.codex</code>, <code>~/.kimi-code</code>, <code>~/.iflow</code>. Pi (1.63B), MuleRun (471.6M), Cursor (27.1M) and opencode (4.2M) were sitting in <code>~/.pi</code>, <code>~/.mulerun</code>, <code>~/Library/Application Support/</code> and <code>~/.local/share/</code>. I had not enumerated the question — "where does this machine keep agent transcripts?" — I had enumerated four answers I already knew.</p>
+
+        <p><strong>It over-counted</strong>, because I summed usage fields without asking what they meant. Two separate errors, the same shape:</p>
+
+        <ul>
+            <li>Codex reports <code>input_tokens</code>, <code>output_tokens</code> and <code>cached_input_tokens</code>. I added all three. But <code>cached_input_tokens</code> is a <em>subset</em> of <code>input_tokens</code>, not a sibling — one session shows input 21,463, cached 3,456, output 485, total 21,948, and 21,463 + 485 = 21,948 exactly. I had inflated Codex by 511,938,498.</li>
+            <li>Pi reports <code>input</code>, <code>output</code>, <code>cacheRead</code>, <code>cacheWrite</code>, <code>reasoning</code> — and also <code>totalTokens</code>, which already equals the sum of the first four. I summed all six fields. I had inflated Pi by roughly its entire value.</li>
+        </ul>
+
+        <p>The tell was sitting in plain sight. Codex's own SQLite database has a <code>threads.tokens_used</code> column that sums to 546,858,767. My JSONL parse said 1,058,625,328. I noted the two numbers "corroborated" each other and moved on, because 546M is roughly half of 1.06B and I had already decided what the answer was.</p>
+
+        <div class="claim-box" data-claim-type="fact"><span class="claim-label">Fact</span><p>The corrected Codex figure is 547,796,667 from the transcripts and 546,858,767 from the database — a 0.17% difference, accounted for by threads whose rollout files were archived separately. The first-pass figure of 1,058,625,328 was 93% too high.</p></div>
+
+        <p>This is what the classical phrase 致知在格物 — "extending knowledge lies in investigating things", from the <em>Great Learning</em> (《大学》) — actually means when you strip the mystique off it. Knowledge does not arrive from the label on the field. It arrives from going to the thing: opening the record, checking whether 21,463 + 485 equals 21,948, and noticing that it does.</p>
+
+        <div class="claim-box" data-claim-type="thesis"><span class="claim-label">Author's thesis</span><p>A number that has never been reconciled against a second, independently-produced number is not yet a number. It is a hypothesis about a number. The discipline is not "be careful" — it is "find the other source, and treat disagreement as information rather than as noise".</p></div>
+
+        <p>The <a href="/engineering.html">engineering mechanism volume</a> on this site lists six failure modes that look like speed. Three of them are exactly this error wearing different clothes: documentation replacing verification, test count replacing evidence, and AI generation replacing review. All three produce a confident artifact. None of them produces a checked one.</p>
+    </section>
+
+    <section id="intent">
+        <h2>One business intent: a cable you already own</h2>
+        <p>Strip the ledger away and this all started somewhere much more mundane.</p>
+
+        <p>The Yaesu FT-710 is an HF/50 MHz transceiver. To run it remotely — real audio, real spectrum, real transmit control — the manufacturer's answer is a proprietary accessory called the SCU-LAN10. It costs money, it adds a box, and it is one more thing to fail between you and your own radio.</p>
+
+        <p>The intent was narrower than "build a remote control product". It was: <em>can this be done over the single USB cable that is already plugged into the back of the radio?</em></p>
+
+        <p>That question is what the <a href="/agentic.html">agentic engineering thesis page</a> calls the Echo stage — observing the actual station and the actual operator before designing anything. And the observation produced two facts that determined everything downstream:</p>
+
+        <ul>
+            <li>The FT-710's USB interface exposes an FT4222 SPI bridge that yields genuine spectrum data — a real waterfall at roughly 21 fps, not a synthetic S-meter fallback.</li>
+            <li>The same cable carries bidirectional Opus audio at 48 kHz and full CAT control. No Hamlib, no dongle, no second device.</li>
+        </ul>
+
+        <p>Notice what kind of claim that is. It is not "we wanted a product". It is "the thing on the bench has this property, and here is how we found out". The FT4222 bridge is undocumented; it was found by looking. Everything in Volume II is machinery for not losing what looking produced.</p>
+
+        <div class="claim-box" data-claim-type="fact"><span class="claim-label">Fact</span><p>The FT-710 family reached 439 automated tests, verified by running them on 2026-09-05: <code>Ran 439 tests in 10.675s</code> / <code>OK</code>. Its source baseline is v1.8.1 and its packaged Windows installer is v1.8.0 — two different numbers that are both correct, for different artifacts.</p></div>
+        <div class="prov"><b>Claim:</b> FT-710 test count and version split. <b>Source artifact:</b> <code>mrrc_ft710/tests/</code> via <code>venv/bin/python -m unittest discover -s tests</code>; <code>mrrc_ft710/CHANGELOG.md</code>; <code>mrrc_ft710/SDD/README.md</code>; git tags. <b>Version / commit:</b> HEAD <code>9c353a1</code>, latest tag <code>v1.8.0</code>, CHANGELOG entry <code>[v1.8.1] — 2026-08-16</code>. <b>Environment:</b> macOS arm64, no radio attached (tests are hardware-independent by constraint). <b>Verification method:</b> executed the suite; read CHANGELOG, SDD README and tag list. <b>Result:</b> 439 passed, 0 failed. <b>Limitations:</b> automated coverage is not physical-radio acceptance; the Windows installer lags the source baseline by one patch. <b>Date:</b> 2026-09-05.</div>
+    </section>
+
+    <section id="before">
+        <h2>The control group: six months without a harness</h2>
+        <p>Here is the part that makes the rest of the article measurable. Before any of this machinery existed, I spent roughly six months doing the same kind of work with none of it.</p>
+
+        <p>The iFlow store covers 2025-10-20 to 2026-04-16: 185 sessions, 37,202 assistant turns, and six model backends — glm-5 (17,925 turns), qwen3-coder-plus (6,706), kimi-k2.5 (6,500), minimax-m2.5 (4,315), glm-4.7 (1,080) and iFlow-ROME-30BA3B (673). The projects include 15,674 turns against a Mac control application, 13,219 turns against the earliest MRRC tree, 3,193 against a PSK Reporter analyser, plus FT8 decoders, a CW decoder, an antenna switch, a Wi-Fi reconnect script and a VPN helper.</p>
+
+        <p>That is not a small amount of work, and much of it was useful. The PSK Reporter analysis became a published workflow. The MRRC tree became a product family. But there is no <code>AGENTS.md</code> in any of it, no design document under version control, no machine-readable constraint, and no gate of any kind. When a session ended, what it learned ended with it.</p>
+
+        <div class="claim-box" data-claim-type="analogy"><span class="claim-label">Analogy</span><p>Wang Yangming famously tried to investigate the bamboo in front of his pavilion — 格竹, "investigating the bamboo" — by sitting and contemplating it, and after seven days fell ill without having learned anything about bamboo. The story is usually told as a critique of him, but the operative detail is the method: he applied enormous sincerity to a procedure with no feedback path. Thirty-seven thousand turns across six model backends, with no constraint registry and no design contract, is the same shape. The effort was real. The procedure could not converge.</p></div>
+        <div class="prov"><b>Source:</b> the 格竹 episode is recorded in the <em>Chuanxi lu</em> (《传习录》, Wang Yangming's transmitted instructions). Cited as an analogy about method, not as a historical claim about bamboo biology, and not as a claim that any classical text anticipated agent tooling.</div>
+
+        <p>On the maturity ladder in the <a href="/engineering.html">mechanism volume</a>, that period is level 1 → 2: <em>ad hoc</em>, where knowledge lives in individual actions and temporary notes, moving toward <em>repeatable</em>, where a basic execution path exists. It never reached level 3 — <em>traceable</em> — because nothing linked a specification to a test to a release to a piece of evidence.</p>
+
+        <p>The contrast that matters is not "before was bad, after was good". It is that the same person, the same radios and the same business problems produced a different <em>kind</em> of output once there was somewhere for the output to land. Volume II is about that somewhere.</p>
+    </section>
+
+    </div>
+
+    <div class="volume" data-volume="zhizhi">
+        <header class="volume-head"><span class="volume-num">Volume II</span><h2>Extending Knowledge</h2><p class="volume-gloss">致知 (zhì zhī) — 物格而后知至, "things investigated, then knowledge arrives". Three sections on how an observation becomes a contract a machine can read, and how 52 of those contracts became an ontology.</p></header>
+
+    <section id="machine">
+        <h2>The machine: constraints outside, execution inside</h2>
+        <p>What replaced the bamboo-sitting is described in full on the <a href="/engineering.html">engineering mechanism page</a>. The short version is a harness in two layers.</p>
+
+        <p><strong>Outside</strong> are three sets of constraints. The <em>business</em> harness fixes why the work exists, who it serves and what counts as success. The <em>technical</em> harness fixes the domain model, the interfaces, the safety invariants and the recovery behaviour. The <em>product</em> harness fixes deliverables, acceptance criteria, version and release status, known issues, and which assets are reusable.</p>
+
+        <p><strong>Inside</strong> is an execution environment: humans and AI agents, a repository with a design document, tools and diagnostics, tests and review, deployment, and field telemetry. The boundary rule is the important part — the harness must make failure visible. Tool output stays traceable to code and environment. Automated tests do not replace bench or field verification. Humans and agents pass through the same review, evidence and safety gates.</p>
+
+        <p>Two loops run inside that harness, nested rather than sequential. The outer loop is the delivery loop the thesis page inherits from forward deployed engineering: <strong>Echo → Delta → Product</strong>. Echo observes field reality. Delta proves the riskiest assumption with a working vertical slice. Product stabilises the result into something operable — which is precisely the object that can later be handed to an agent. The inner loop is <strong>Specify → Implement → Test → Review → Deploy / Observe → Update SDD</strong>, and it runs many times inside each outer stage.</p>
+
+        <div class="claim-box" data-claim-type="fact"><span class="claim-label">Fact</span><p>The inner loop — Specify, Implement, Test, Review, Observe, Update SDD — is the part executed by agents with real tools, real repositories and real gates. Intent, architectural boundaries and the judgment of whether evidence is sufficient remain with a named human. This is a division of accountability, not of task size.</p></div>
+
+        <p>The design document is what makes the two loops couple. It carries eight explicit lifecycle states — <code>planned</code>, <code>implemented</code>, <code>tested</code>, <code>bench-verified</code>, <code>field-verified</code>, <code>released</code>, <code>deferred</code>, <code>known-issue</code> — and promotion between them is never automatic. Every claim about a state carries a minimum evidence record:</p>
+
+        <div class="term-block"><div class="term-head">Minimum evidence record</div><pre>Claim · Source artifact · Version / commit · Environment
+Verification method · Result · Limitations · Date</pre></div>
+
+        <p>Without those fields, a status label is an assertion without provenance. Every <code>.prov</code> block in this article is that template filled in — which is either the most tedious feature of this page or the entire point, depending on whether you have ever had to reconstruct what a number meant six weeks later.</p>
+    </section>
+
+    <section id="chain">
+        <h2>One chain, end to end, that you can run</h2>
+        <p>Abstract machinery is cheap to describe. Here is the single claim this whole system makes, demonstrated on a real incident, with the command you would type.</p>
+
+        <p><strong>The incident.</strong> On the Yaesu FT-710, the CAT command <code>DN;</code> is not a query for the DNR noise-reduction level. It steps the active VFO <em>down</em> by roughly 20 Hz per call. A polling loop that read it every two seconds — a completely reasonable thing to write if you trust the command reference — drifts a live radio's frequency while the operator is on air. This happened, on air, and it is recorded in the design document's version history as V1.2.</p>
+
+        <p><strong>The ruling.</strong> The incident became architecture decision <code>AD-014</code>: the DNR level is intentionally not polled. A decision, written down, in the document that owns decisions.</p>
+
+        <p><strong>The constraint.</strong> The ruling became a machine-readable rule in <code>.agents/skills/sdd-guardian/harness/constraints.json</code>:</p>
+
+        <div class="term-block"><div class="term-head">constraints.json — one of 17 rules in this repository</div><pre>{
+  "id":       "cat-no-dn",
+  "severity": "block",
+  "sdd_ref":  "AD-014; SDD V1.2 freq-drift incident",
+  "scope":    [...],  "patterns": [...]
+}</pre></div>
+
+        <p><strong>The enforcement.</strong> <code>install_hooks.py</code> registers two hooks: <code>SessionStart → prime</code>, which loads the constraint digest when a session opens, and <code>PreToolUse(Edit|Write) → hook</code>, which inspects a proposed edit <em>before it lands on disk</em>. Here is what happens when an agent tries to reintroduce the bug:</p>
+
+        <div class="term-block"><div class="term-head">Reproduced 2026-09-02, re-verified against HEAD 2026-09-05</div><pre>$ python3 .agents/skills/sdd-guardian/harness/sdd_context.py check probe_b4_tmp.py
+SDD-GUARDIAN: blocking violations found:
+<span class="block-line">[BLOCK] cat-no-dn (AD-014; SDD V1.2 freq-drift incident) probe_b4_tmp.py:2: return c.query("DN;")</span>
+ → On the FT-710, 'DN;' is NOT a DNR query — it steps the active VFO DOWN ~20 Hz per call.
+   Polling it caused a live frequency-drift incident (V1.2). DNR level is intentionally not polled.
+$ echo $?
+<span class="exit">2</span></pre></div>
+
+        <p>Exit code <code>2</code> is what a blocked edit looks like. Not a warning in a log somebody reads on Monday. The edit does not happen.</p>
+
+        <div class="claim-box" data-claim-type="fact"><span class="claim-label">Fact</span><p>A field incident became a design-document ruling; the ruling became a machine-readable constraint; the constraint blocked an agent from reintroducing the incident, with a non-zero exit status. Every link in that chain is an artifact in a repository, and the last link is reproducible by running one command.</p></div>
+
+        <p>This is 物格而后知至 — "things investigated, then knowledge arrives" — with one addition the classical sentence does not have. The knowledge that arrived did not stay in a head or a document. It went into a gate. The radio was the thing investigated; the constraint is the knowledge, still arriving, every time someone reaches for <code>DN;</code>.</p>
+
+        <p>One design detail makes the whole thing durable: <code>harness/index.json</code> routes files and topics to typed references into the design document but stores <strong>no content</strong>. The <code>brief</code> and <code>sdd</code> commands slice the live <code>SDD/*.md</code> files at query time. The routing index cannot go stale relative to the document it points at, because it never held a copy.</p>
+
+        <div class="claim-box" data-claim-type="inference"><span class="claim-label">Inference</span><p>Most knowledge-management systems fail by caching. They copy the authoritative text somewhere convenient, and the copy outlives the original's next edit. Storing references and slicing live is slower and less convenient, and it is the only version of this that survives contact with a document that keeps changing.</p></div>
+    </section>
+
+    <section id="scale">
+        <h2>Accumulation: 52 rules, three repositories, one ontology</h2>
+        <p>One blocked edit is an anecdote. Here is the shape of the accumulation.</p>
+
+        <p>There are 52 machine-readable constraints across three repositories: <strong>17</strong> in <code>mrrc_ft710</code> (8 block, 4 warn, 5 info), <strong>21</strong> in <code>mrrc_modern</code> (8 block, 6 warn, 7 info) and <strong>14</strong> in <code>mrrc_ft8</code> (9 block, 1 warn, 4 info). Census 2026-09-02, re-verified 2026-09-05. Each carries a severity, an <code>sdd_ref</code> pointing back at an architecture decision or a real incident, a scope glob and patterns.</p>
+
+        <p>The git history shows the lineage literally. <code>mrrc_modern</code> shares its initial commit — <code>9403e2e</code>, "Initial commit: FT-710 radio control server" — with <code>mrrc_ft710</code>. It is not inspired by the earlier project; it descends from it. What changed is that the one-radio assumptions got extracted into a <code>RadioBackend</code> interface and a <code>RadioCapabilities</code> negotiation, which is how a single vertical slice became a platform covering three radio profiles.</p>
+
+        <p>And by the third family the machinery stopped being retrofitted. The very first commit of <code>mrrc_ft8</code> — <code>d4a7a32</code>, "headless FT8/FT4 server — DSP worker, TX path, CQ loop, Band Activity UI" — introduces <code>AGENTS.md</code>, the design document <em>and</em> the guardian skill together. The gate shipped with the project instead of being bolted on three weeks later, which is what had happened in <code>mrrc_ft710</code> (initial commit 2026-07-06, guardian skill 2026-07-20).</p>
+
+        <p>The rules keep growing out of incidents rather than out of policy. Commit <code>2bc3d30</code> reads: "docs: SDD V2.23 — record issues I8-I11, expand sdd-guardian harness to 21 rules". Four newly-understood problems, and the registry grew to match.</p>
+
+        <div class="ledger-scroll">
+        <table class="ledger-table">
+            <caption>Tokens by repository, all harnesses, census 2026-09-05. Attribution uses each tool's own recorded working directory. The arithmetic closes: 6,980,357,862 attributable + 27,079,705 unattributable (Cursor records no directory) = 7,007,437,567.</caption>
+            <thead><tr><th>Repository</th><th>Tokens</th><th>Note</th></tr></thead>
+            <tbody>
+                <tr><td class="tool">ft8</td><td class="num">1,875,258,566</td><td>highest of any family; DSP and slot-timing work is iteration-heavy</td></tr>
+                <tr><td class="tool">mrrc_ft710</td><td class="num">1,275,611,389</td><td>the vertical slice that produced the reusable contract</td></tr>
+                <tr><td class="tool">mrrc_modern</td><td class="num">1,260,804,213</td><td>platform generalisation to three radio profiles</td></tr>
+                <tr><td class="tool">MRRC</td><td class="num">1,150,197,250</td><td>universal family; longest history, partially truncated by retention</td></tr>
+                <tr><td class="tool">website</td><td class="num">819,343,926</td><td>this portal, including the page you are reading</td></tr>
+                <tr><td class="tool">sunsdr</td><td class="num">64,490,898</td><td>one repository carrying both the station server and its iOS client</td></tr>
+                <tr><td class="tool">pskreporter</td><td class="num">54,409,498</td><td>not a product family; the DX-hunting analyser</td></tr>
+                <tr><td class="tool">efhw-knowledge</td><td class="num">45,949,584</td><td>antenna research corpus — the shared ontology source</td></tr>
+                <tr><td class="tool">wfview</td><td class="num">23,459,822</td><td>early FT-710 exploration, predates the product repos</td></tr>
+                <tr><td class="tool">unattributed</td><td class="num">410,832,716</td><td>sessions started from a parent directory, plus non-radio work</td></tr>
+                <tr class="total"><td>Attributable</td><td class="num">6,980,357,862</td><td>radio-ecosystem repositories alone: 6,491,655,826</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <p>The distribution is worth a moment. Four product families absorbed between 1.15 and 1.88 billion tokens each. The website — the thing that explains all of it — absorbed 819 million. The antenna research corpus, which is mostly reading and synthesis rather than code, absorbed 46 million. Effort tracked difficulty, not visibility.</p>
+
+        <div class="claim-box" data-claim-type="analogy"><span class="claim-label">Analogy</span><p>Zhu Xi's instruction in his supplement to the <em>Great Learning</em> is to investigate one thing today and another tomorrow, until accumulated practice produces 豁然贯通 — a "sudden thorough comprehension" in which the whole is understood at once. The domain ontology on the thesis page was built exactly backwards from how ontologies are usually built: repeated concepts and constraints were consolidated <em>only after</em> the same evidence had appeared across product boundaries. Seventeen rules, then twenty-one, then fourteen — and then, and not before, a shared vocabulary of Control Lease, CommandIntent, Actuation, Observation and StateReport.</p></div>
+
+        <p>That ordering is not an aesthetic preference. An ontology written first is a guess about what the domain contains. An ontology written after three product families have each independently produced the same distinction is a record of something that turned out to be true.</p>
+
+        <div class="claim-box" data-claim-type="inference"><span class="claim-label">Inference</span><p>The reusable asset here is not code. It is the constraint registry itself, plus the routing index, plus the habit of writing an incident down as a rule with a severity and a citation. Code reuse across unlike radios is limited; the machinery for turning a field surprise into a permanent gate transfers to any domain that has surprises.</p></div>
+    </section>
+
+    </div>
+
+    <div class="volume" data-volume="zhixing">
+        <header class="volume-head"><span class="volume-num">Volume III</span><h2>Unity of Knowing and Acting</h2><p class="volume-gloss">知行合一 (zhī xíng hé yī) — 知而不行，只是未知, "to know and not act is not yet to know". Four sections on shipping, on the drift that proves knowledge stops being knowledge, and on what a human still signs.</p></header>
+
+    <section id="delivery">
+        <h2>Delivery: what shipped, and what it cost to keep shipping</h2>
+        <p>Test suites were run, not read, on 2026-09-05:</p>
+
+        <div class="ledger-scroll">
+        <table class="ledger-table">
+            <caption>All three suites executed on macOS arm64 with no radio hardware attached. Hardware-independent by design: tests mock at the serial and audio boundary.</caption>
+            <thead><tr><th>Family</th><th>Command</th><th>Result</th></tr></thead>
+            <tbody>
+                <tr><td class="tool">FT-710</td><td><code>venv/bin/python -m unittest discover -s tests</code></td><td><code>Ran 439 tests</code> · <code>OK</code></td></tr>
+                <tr><td class="tool">Modern</td><td><code>venv/bin/python -m unittest discover -s tests</code></td><td><code>Ran 682 tests</code> · <code>FAILED (errors=1)</code></td></tr>
+                <tr><td class="tool">FT8</td><td><code>venv/bin/python -m pytest tests -q --collect-only</code></td><td><code>937 tests collected</code></td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <p>Two honest qualifications. The Modern error is <code>unittest.loader._FailedTest.test_macos_launcher</code> — a Windows-only launcher test that cannot import on macOS. It is an environment limit, not a product defect, and it is one of the 682 rather than one on top of them. And the FT8 figure is <em>collected</em>, not <em>passed</em>: collection counts what pytest found, which is not the same claim as a green run. Publishing 937 without that word would be the exact error this article keeps catching.</p>
+
+        <p>Delivery itself is unglamorous and load-bearing. Each site deploys through its own script: validate that required files exist, build a tarball, back up the live site over SSH, copy, extract, set ownership, reload nginx. Four rules in those scripts were each paid for with a real failure:</p>
+
+        <ul>
+            <li><strong>Remote heredocs must be quoted</strong> (<code>&lt;&lt;'REMOTE'</code>), with variables passed on the ssh command line. An unquoted heredoc let the local shell expand <code>$(...)</code> first, which once made a deploy script skip its own backup silently on <em>every</em> run — while still printing a backup path that did not exist.</li>
+            <li><strong><code>tar -x</code> never deletes.</strong> Excluding a file from the package does not remove a copy an earlier run already published. Retiring build-time tooling needed an explicit remote delete, because the document root is world-readable.</li>
+            <li><strong>Backups are per-site, lean and rotated.</strong> Never copy a whole deployed site: server-managed binary directories are ~120–140 MB each, and that is how a temporary volume reached 3.7 GB — 1.7 GB from thirteen copies of one site, 2.0 GB from eighteen copies of another — on a disk that had once filled completely.</li>
+            <li><strong>A rollback hint may only restore one site's own directory.</strong> Three scripts used to print a command that deleted the entire document root and restored a single sub-site into it. On a shared root that is not a rollback, it is an outage with extra steps.</li>
+        </ul>
+
+        <div class="claim-box" data-claim-type="fact"><span class="claim-label">Fact</span><p>Each of those four rules corresponds to a defect that occurred, was diagnosed, and was written into the deployment scripts and the workspace instructions. The rules are not best practices adopted from a checklist; they are scar tissue with a rationale attached.</p></div>
+    </section>
+
+    <section id="drift">
+        <h2>Drift: the ledger itself goes stale</h2>
+        <p>Running the suites turned up something more interesting than the numbers. It turned up four separate kinds of drift, and one case where the drift was in my own proposed fix.</p>
+
+        <p><strong>① The landing page had not been updated in weeks.</strong> It carried <span class="stale-pair"><del class="stale">V1.0 · 180+ tests</del><span class="arrow">→</span>v1.8.1 · 439 tests</span> for the FT-710 and <span class="stale-pair"><del class="stale">v1.10.1 · 593 tests</del><span class="arrow">→</span>v1.12.1 · 682 tests</span> for Modern, plus <span class="stale-pair"><del class="stale">40 tests</del><span class="arrow">→</span>937 collected</span> for the FT8 family. Both were verified by running the suites rather than by reading any document.</p>
+
+        <p><strong>② The evidence ledger was one patch behind.</strong> The ledger is supposed to be the single source of truth for cross-project comparable numbers, and it is — which is exactly why its own staleness matters more than the landing page's. It said <span class="stale-pair"><del class="stale">v1.12.0 · 633 tests</del><span class="arrow">→</span>v1.12.1 · 682 tests</span>. Three days of work had moved the version and added forty-nine tests, and nothing had told the ledger.</p>
+
+        <p><strong>③ Every constraint registry lags the document it guards.</strong> In <code>mrrc_ft710</code> the registry declares <code>sdd_version: V1.7</code> while the design document is at v1.8.0. In <code>mrrc_modern</code> it declares <code>V2.27</code> against a document at <code>V2.30</code>. In <code>mrrc_ft8</code> it declares <code>V1.0</code> against <code>V1.8</code>. Three for three. Enforcement still works — the rules are pattern-based and the routing index resolves live — but the version metadata a reviewer would trust is wrong in all three places.</p>
+
+        <p><strong>④ And then the case that nearly went the other way.</strong> Three authoritative-looking sources all agreed that the FT-710 was at v1.8.0: the latest git tag, the design document's quick-facts table, and the product's own website. I was about to "correct" the ledger's <code>v1.8.1</code> down to match them. Then I read <code>CHANGELOG.md</code>, which has an entry <code>[v1.8.1] — 2026-08-16</code>. The ledger had been right all along, and right in a specific way: it records <em>two</em> fields, "Source: v1.8.1" and "Windows package: v1.8.0", because those are two different artifacts at two different versions. The tag, the document and the website each described the packaged release. Only the ledger had kept the distinction.</p>
+
+        <div class="claim-box" data-claim-type="thesis"><span class="claim-label">Author's thesis</span><p>Precision is what survived here. A single "version" field would have been wrong no matter which value it held, and would have invited the exact correction I nearly made. When two artifacts can be at different versions, the schema needs two fields — and then the ambiguity that looks like sloppiness turns out to be the only correct record.</p></div>
+
+        <p>There is a fifth finding, and it is a constraint on what I changed. Several sub-site pages also mention 439 and 633. They are not competing claims. One reads "v1.12.0 Windows Stable (V2.27) — published after 633/633 tests on macOS and Windows 11", which is a dated record of what was true when that release shipped. Another is a version-history row: <code>SDD V2.30</code>, dated 2026-08-29, author field <code>Kimi</code>. Updating 633 to 682 in either place would not make them accurate. It would make them false — a claim that a release passed a test suite that did not exist when it shipped.</p>
+
+        <div class="claim-box" data-claim-type="fact"><span class="claim-label">Fact</span><p>A dated evidence record and a current-state claim are different artifacts even when they contain the same number. This article's corrections were confined to six portal files that make current-state claims. No historical record in any repository was modified.</p></div>
+
+        <p>Which leaves the question a ledger cannot answer by itself: who tells the ledger? For this cycle the answer was a person running the test suites on a Saturday and noticing. That does not scale, and it is the clearest remaining gap in the whole system — the contract test in <code>portal/tests/</code> now pins the numbers this article cites, so at least the article cannot drift from the census silently. The ledger itself still drifts on human attention.</p>
+    </section>
+
+    <section id="human">
+        <h2>What was never delegated</h2>
+        <p>Everything above could read as an argument for handing over more. It is not, and the boundary is the part I would least want paraphrased away.</p>
+
+        <p>Agents carry execution. Humans keep three things: <strong>intent</strong> — why this work exists, what counts as success, what is deliberately out of scope; <strong>boundaries</strong> — architecture rulings, safety invariants, and the constraints an agent may not trade away for a passing test; and <strong>judgment</strong> — whether the available evidence is enough to say a thing is done, shipped, or safe. Responsibility for a transmit, a release or a safety claim stays with the named human who signs the evidence. No delegation changes that.</p>
+
+        <p>Four things are not compressible at any token budget:</p>
+
+        <ul>
+            <li><strong>Hardware.</strong> PCB fabrication and bench bring-up. The EFHW tuner's V3.0 design and firmware are complete, and its claims stay at design-target until a board exists.</li>
+            <li><strong>RF safety.</strong> PTT paths and transmit authority on real radios. A passing server test does not sign off a client.</li>
+            <li><strong>Live stations.</strong> Field verification on the operator's own antenna, band conditions and neighbours.</li>
+            <li><strong>Publication.</strong> Release decisions, and what gets labelled shipped — because the label is a promise to a person.</li>
+        </ul>
+
+        <p>And one known defect stays open on purpose. The FT710Mobile iOS client has an unresolved P0 PTT safety issue. 439 passing server-side tests do not close it. Another client passing does not close it. It remains listed as a known issue, which is the state that says "we are not pretending".</p>
+
+        <p>This is why the evidence system runs on two ladders that are forbidden to cross.</p>
+
+        <div class="ladder-pair">
+            <div class="ladder ladder--product"><h4>Product maturity (A-ladder)</h4><ol><li>design target</li><li>simulation result</li><li>automated test</li><li>bench verified</li><li>field verified</li><li>released / operational</li><li>deferred / known issue</li></ol></div>
+            <div class="ladder ladder--process"><h4>Process constraint (B-ladder)</h4><ol><li><code>B1</code> constraint registry entry</li><li><code>B2</code> spec / plan trail</li><li><code>B3</code> enforced in session</li><li><code>B4</code> block verified</li></ol></div>
+            <p class="ladder-note">A <code>B4</code> badge never promotes an A-level claim. No count of constraints makes a bench result less necessary. The EFHW family sits at <code>B2</code> on the process ladder and at design-target on the product ladder, and those two facts do not trade.</p>
+        </div>
+
+        <p>The reason to insist on this is that the alternative is genuinely tempting. 52 machine-readable constraints, a reproducible block, seven billion tokens of verified work — it would be easy to let that momentum imply more than it proves. The classical formulation is sharper than my version of it: 知而不行，只是未知 — "knowing and not acting is simply not yet knowing". A constraint that does not block is a constraint you do not actually have. But the converse binds just as hard — acting is not knowing. A blocked edit proves the gate works. It does not prove the antenna matches, the radio is safe to key, or the release is ready.</p>
+
+        <div class="claim-box" data-claim-type="thesis"><span class="claim-label">Author's thesis</span><p>The value of the harness is not that it lets agents do more. It is that it makes the remaining human work legible: three retained responsibilities, four non-compressible gates, two ladders that cannot cross, and one open defect that stays open in public. Delegating execution only pays if what is left over is small, named and enforceable.</p></div>
+    </section>
+
+    <section id="playbook">
+        <h2>What transfers, if you are not building radios</h2>
+        <p>Nothing here requires amateur radio, Python or a specific model vendor. The transferable sequence is seven steps, and the honest reading is that steps 1, 2 and 6 are where almost all of the value sits.</p>
+
+        <ol class="steps">
+            <li><h4>Write down what counts as success before you write code</h4><p>Not a vision statement — an acceptance condition and an explicit out-of-scope list. The business harness is three questions: why does this exist, who does it serve, what would make it done. Agents are extremely good at optimising a target and extremely indifferent to whether it was the right target.</p></li>
+            <li><h4>Make your constraints machine-readable, with a citation each</h4><p>Severity, scope, patterns, and a reference back to the decision or incident that produced it. A rule nobody can trace gets deleted by the first person who finds it inconvenient. Fifty-two rules across three repositories is not a lot; what makes them work is that each one says why it exists.</p></li>
+            <li><h4>Load the contract at runtime, not at onboarding</h4><p>Reference the authoritative document and slice it live. Do not copy it into a prompt template that somebody will forget to update — that copy is where knowledge goes to become fiction.</p></li>
+            <li><h4>Gate the write, not the review</h4><p>A check that runs before the edit lands costs nothing and stops the incident. A check that runs after relies on someone looking. If you can only afford one, buy the hook.</p></li>
+            <li><h4>Turn every incident into a rule in the same change</h4><p>The frequency-drift bug became <code>AD-014</code> became <code>cat-no-dn</code> became a blocked edit. Three steps, all recorded, none of them optional. An incident that produces only a fix will happen again in a different file.</p></li>
+            <li><h4>Reconcile every number against a second source</h4><p>My first census was wrong by 1.6 billion tokens while a database holding the right answer sat on the same disk. Disagreement between sources is the finding. Agreement you did not check is not corroboration.</p></li>
+            <li><h4>Keep the two ladders separate and publish the open defect</h4><p>Process evidence and product maturity are different claims about the same work. Collapsing them is how a project with excellent tooling ends up telling people it is finished.</p></li>
+        </ol>
+
+        <p>For a rough self-assessment, the maturity ladder in the mechanism volume is: <strong>1 ad hoc</strong>, knowledge in individual actions and temporary notes; <strong>2 repeatable</strong>, a basic harness and execution path exist; <strong>3 traceable</strong>, specification, code, tests, release and evidence can be linked; <strong>4 evidence-driven</strong>, claims include source, environment, method, result and limitations; <strong>5 reusable</strong>, validated architecture and constraints transfer across products.</p>
+
+        <p>The six months in Volume I were level 1 moving toward 2. The three repositories with guardian skills are at 4, and the shared ontology plus the extracted backend abstractions are the beginning of 5. Documentation volume and test counts alone do not advance a level — that is stated on the mechanism page and it is the clause most worth believing.</p>
+
+        <div class="claim-box" data-claim-type="inference"><span class="claim-label">Inference</span><p>If you adopt one thing from this article, adopt step 6. It is the cheapest, it requires no tooling, and it is the only one that catches errors in the evidence you use to justify all the others. Everything else here can be built gradually. The habit of asking "what is the second source?" has to be there from the first day, because it is the habit that tells you the first day went wrong.</p></div>
+    </section>
+
+    </div>
+
+    <section id="references">
+        <h2>Provenance</h2>
+        <p>Every quantitative claim in this article, with the artifact it came from and the date it was checked. Census date for all rows: <strong>2026-09-05</strong> unless stated.</p>
+
+        <h3>Token ledger</h3>
+        <ul>
+            <li><strong>claude-code</strong> — 3,129,411,481 tokens / 21,648 turns / 194 sessions. Source: <code>~/.claude/projects/**/*.jsonl</code>, field <code>message.usage</code>. Anthropic semantics: <code>input_tokens</code>, <code>output_tokens</code>, <code>cache_read_input_tokens</code> and <code>cache_creation_input_tokens</code> are mutually exclusive and additive. Models recorded: deepseek-v4-flash (18,184 turns), qwen3.8-flash (1,077), glm-5.2 (800), deepseek-v4-pro (715), qwen3.8-max (438), qwen3.8-max-0902 (434). Span 2026-08-05 → 09-05.</li>
+            <li><strong>pi</strong> — 1,625,562,962 tokens / 8,719 turns / 60 sessions. Source: <code>~/.pi/agent/sessions/**/*.jsonl</code>, field <code>usage.totalTokens</code>. <em>Must</em> use <code>totalTokens</code>: <code>input</code> excludes <code>cacheRead</code>, and <code>totalTokens</code> already equals input + output + cacheRead + cacheWrite. Verified as per-turn deltas, not cumulative (20 of 25 sampled files non-monotonic). Providers recorded: deepseek (90), mulerun (26), new-provider (6). Models: deepseek-v4-flash, deepseek-v4-pro, gpt-5.6, qwen3.8-flash, deepseek-v4-flash-vision-exp. Cost recorded by the tool: <code>cost.total</code> = $15.1135 for 1,625,562,962 tokens, i.e. $9.30 per billion. Span 2026-07-22 → 09-05.</li>
+            <li><strong>kimi-code</strong> — 1,201,837,537 tokens / 9,769 turns / 229 sessions. Source: <code>~/.kimi-code/sessions/**/wire.jsonl</code>, event <code>usage.record</code> filtered to <code>usageScope == "turn"</code>. Models: kimi-code/k3 (5,463), kimi-for-coding (2,097), k3-256k (1,903), kimi-for-coding-highspeed (306). Span 2026-07-18 → 08-30.</li>
+            <li><strong>codex</strong> — 547,796,667 tokens / 717 turns / 116 sessions. Source: <code>~/.codex/sessions/**/*.jsonl</code> and <code>archived_sessions/</code>, field <code>token_count.info.total_token_usage</code> (session-cumulative; last value per session). <code>cached_input_tokens</code> is a subset of <code>input_tokens</code> and must not be added. Cross-check: <code>~/.codex/state_5.sqlite</code> → <code>threads.tokens_used</code> sums to 546,858,767 across the same 116 threads (0.17% delta). Providers: api111 (106), openai (6), deepseek (4). Models: gpt-5.5, gpt-5.6-sol, gpt-5.3-codex, deepseek-v4-flash. Span 2026-06-16 → 09-05.</li>
+            <li><strong>mulerun</strong> — 471,558,325 tokens / 181 sessions. Source: <code>~/.mulerun/agent-data/opencode/opencode/opencode.db</code>, table <code>session</code>, columns <code>tokens_input/output/reasoning/cache_read/cache_write</code>. 5,166 messages, 25,305 parts. Models: gpt-5.5 (160), deepseek-v4-flash-free (16), qwen3.6-plus (2), gemini-3-pro-preview (1), gemini-3.1-pro-preview (1), glm-5.1 (1). No timestamps in the session table, so no span.</li>
+            <li><strong>cursor</strong> — 27,079,705 tokens / 217 non-zero bubbles / 96 composers. Source: <code>~/Library/Application Support/Cursor/User/globalStorage/state.vscdb</code>, table <code>cursorDiskKV</code>, keys <code>bubbleId:*</code>, embedded <code>tokenCount.inputTokens/outputTokens</code>. Of 7,384 bubbles only 217 carry non-zero counts. Records no working directory, so these tokens cannot be attributed to a repository.</li>
+            <li><strong>opencode</strong> — 4,190,890 tokens / 6 sessions. Source: <code>~/.local/share/opencode/opencode.db</code>, table <code>session</code>. All six sessions ran in one git worktree used for video production. Models: big-pickle (3), gpt-5.5 (1), qwen3.6-plus-free (1). Zero session-id overlap with the MuleRun database, so the two do not double-count.</li>
+        </ul>
+
+        <h3>Excluded, empty or estimated</h3>
+        <ul>
+            <li><strong>iflow</strong> — <em>estimate only</em>, ~234,247,399 tokens (range 187M–281M). The tool <em>does not record</em> usage: all 37,202 assistant turns carry <code>input_tokens: 0, output_tokens: 0</code>. Estimate basis: 843,290,639 characters of transcript ÷ 3.6. Models recorded: glm-5, qwen3-coder-plus, kimi-k2.5, minimax-m2.5, glm-4.7, iFlow-ROME-30BA3B. Span 2025-10-20 → 2026-04-16. Excluded from the recorded total.</li>
+            <li><strong>hermes</strong> — tokens <em>not recorded</em>. <code>~/.hermes/state.db</code> has a <code>messages.token_count</code> column whose 9,121 rows are all zero. What is recorded: 292 sessions, 4,336 tool calls, and sources cron (201), cli (68), weixin (23). All 277 session files declare <code>base_url: https://api.deepseek.com/v1</code>. Models: deepseek-v4-flash (230 sessions), deepseek-v4-pro (45), gpt-5.5 (11), google/gemma-4-12b (1), google/gemma-4-e4b (1). Stored message text totals 14,975,356 characters ≈ 4.2M tokens, which is a floor excluding the ~36 KB system prompt re-sent per call. Span 2026-05-11 → 07-24.</li>
+            <li><strong>qoder</strong> — excluded as a strict subset. All 588 of its bubbles share keys with Cursor's store; zero are unique. Counting it would have double-counted 1,500,804 tokens.</li>
+            <li><strong>cursor ai-tracking</strong> — <code>~/.cursor/ai-tracking/ai-code-tracking.db</code>: six tables, five with zero rows. Feature installed, never used.</li>
+        </ul>
+
+        <h3>Test counts and versions</h3>
+        <ul>
+            <li>FT-710: <code>Ran 439 tests</code> / <code>OK</code>, executed 2026-09-05. Source v1.8.1 (<code>CHANGELOG.md</code> entry dated 2026-08-16), packaged Windows installer v1.8.0 (latest git tag). Design document at v1.8.0.</li>
+            <li>Modern: <code>Ran 682 tests</code> / <code>FAILED (errors=1)</code>, executed 2026-09-05. The single error is <code>unittest.loader._FailedTest.test_macos_launcher</code> — a Windows-only launcher test that cannot import on macOS. Version v1.12.1, design document V2.30, three declared radio profiles.</li>
+            <li>FT8: <code>937 tests collected</code> via pytest, 2026-09-05. Collected, not passed. Design document V1.8.</li>
+            <li>Constraint registries: <code>mrrc_ft710</code> 17 rules (8 block / 4 warn / 5 info), <code>mrrc_modern</code> 21 (8 / 6 / 7), <code>mrrc_ft8</code> 14 (9 / 1 / 4). Total 52. Each registry's declared <code>sdd_version</code> lags its design document: V1.7 vs v1.8.0, V2.27 vs V2.30, V1.0 vs V1.8.</li>
+            <li>Commit counts: MRRC 326 across all refs (12 tags), so the published "280+ commits" stands. The sunsdr repository holds 67 commits and carries both the station server and its client; the iOS client has its own repository with 9 commits.</li>
+            <li>Lineage: <code>mrrc_modern</code> and <code>mrrc_ft710</code> share initial commit <code>9403e2e</code>. <code>mrrc_ft710</code> gained its guardian skill at <code>2498ec2</code> on 2026-07-20, two weeks after its initial commit on 2026-07-06. <code>mrrc_ft8</code> introduced <code>AGENTS.md</code>, its design document and its guardian skill together in its first commit <code>d4a7a32</code> on 2026-08-02. Registry growth: <code>2bc3d30</code> "SDD V2.23 — record issues I8-I11, expand sdd-guardian harness to 21 rules".</li>
+        </ul>
+
+        <h3>Method, and its limits</h3>
+        <ul>
+            <li>Attribution is by each tool's own recorded working directory. Sessions started from a parent directory fall into "unattributed", so the per-repository table is a floor.</li>
+            <li>Model identifiers are as recorded by each harness. <em>That</em> is a fact. Which vendor actually served a given request is an inference: <code>model_provider: api111</code> and <code>provider: mulerun</code> show that routing was not always direct, and no traffic was captured to confirm any endpoint.</li>
+            <li>Only this machine's stores were available. Work done elsewhere, or pruned locally, is absent — which is why Claude Code's span starts three months after the oldest repository.</li>
+            <li>Cache-read dominance varies by harness and pricing model, so the 95.2% figure describes this workload on these tools, not agent work in general.</li>
+            <li>One workspace instruction turned out to be broken on this machine: the documented pattern for cross-site search assigns directories to a string variable and expands it unquoted. Under zsh, which does not word-split unquoted expansions, and with <code>grep</code> resolving to <code>ugrep</code>, all eight directories are passed as one nonexistent path — exit status 2, no output, indistinguishable from "no matches". A silent false green across every sub-site. The array form works and is what was used here.</li>
+        </ul>
+
+        <h3>On this site</h3>
+        <ul>
+            <li><a href="/agentic.html">Agentic Engineering</a> — the thesis: intent stays human, the inner loop is delegated, boundaries are enforced, evidence decides. Holds the cross-project evidence ledger and the domain ontology.</li>
+            <li><a href="/engineering.html">Engineering Mechanism</a> — harness, nested loops and the living design contract, with the maturity ladder and the failure modes that look like speed.</li>
+            <li>Product families: <a href="/mrrc/">MRRC Universal</a> · <a href="/mrrc_ft710/">MRRC FT-710</a> · <a href="/mrrc_modern/">MRRC Modern</a> · <a href="/sunmrrc/">SunMRRC</a> · <a href="/sunsdrmobile/">SunsdrMobile</a> · <a href="/mrrc_ft8/">MRRC-FT8</a> · <a href="/efhw/">EFHW</a></li>
+        </ul>
+
+        <h3>Classical sources</h3>
+        <ul>
+            <li>《大学》 <em>The Great Learning</em> — "致知在格物，物格而后知至". Cited for the ordering claim: investigation precedes knowledge.</li>
+            <li>朱熹《大学章句》补传 — Zhu Xi's supplement, "今日格一物，明日格一物，积习既多，然后脱然自有贯通处", and "一旦豁然贯通焉". Cited as an analogy for accumulation preceding consolidation.</li>
+            <li>王阳明《传习录》 <em>Chuanxi lu</em> — the 格竹 episode, and "知而不行，只是未知". Cited as an analogy for method without a feedback path, and as the sharpest available statement of why an unenforced constraint is not a constraint.</li>
+        </ul>
+        <p>These are cited as analogies and as framings. They are evidence about how a method was named, not evidence that the method works, and nothing in the ledger above depends on them.</p>
+    </section>
+
+    </div>
+    <footer class="blog-footer"><div class="blog-author"><div class="ba-icon"><i class="fas fa-user"></i></div><div><h3>BG1SB</h3><p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p></div></div><div class="blog-related"><h3>Related reading</h3><ul><li><a href="/agentic.html">Agentic Engineering — Human Intent, Agentic Execution, Field Evidence</a></li><li><a href="/engineering.html">Harness, Loops &amp; Living SDD: the VLSC Engineering System</a></li><li><a href="/blog/connections-recursive-intelligence/">Connections Rule: Recursive Intelligence from Neurons to Civilization</a></li></ul></div><div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div></footer>
+</article>
+<script>(function(){var toc=document.getElementById('blog-toc');var content=document.querySelector('.blog-content');if(!toc||!content)return;var heads=content.querySelectorAll('h2, h3');if(!heads.length)return;var html='<div class="blog-toc-title">Table of contents</div><ol>';heads.forEach(function(h,i){var id=h.id||('sec-'+i);h.id=id;html+='<li class="'+(h.tagName==='H3'?'toc-h3':'')+'"><a href="#'+id+'">'+h.textContent+'</a></li>';});html+='</ol>';toc.innerHTML=html;})();</script>
+<script src="../../js/global-nav.js?v=6" defer data-gn="1"></script>
+</body>
+</html>

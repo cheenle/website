@@ -412,8 +412,28 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             if not path.exists():
                 continue
             source = path.read_text(encoding="utf-8")
-            hits = [n for n in STALE_NUMBERS if n in source]
+            # The article's `drift` section must be able to QUOTE a wrong number
+            # in order to show it was wrong. Quoted values are wrapped in
+            # <del class="stale">…</del> and stripped before the check, so a
+            # struck-through citation is allowed but a live claim is not.
+            live = re.sub(r'<del class="stale">.*?</del>', " ", source, flags=re.S)
+            hits = [n for n in STALE_NUMBERS if n in live]
             self.assertEqual([], hits, str(path.relative_to(PORTAL)))
+
+    def test_drift_section_quotes_stale_values_as_struck_through(self) -> None:
+        # Positive counterpart: the pedagogy must survive the stripping above.
+        # Each stale value the article names has to appear inside <del class="stale">.
+        for language, path in ARTICLES.items():
+            source, _parser = load(path)
+            start = source.find('<section id="drift"')
+            self.assertNotEqual(-1, start, f"{language}: drift section")
+            end = source.find("</section>", start)
+            body = source[start:end]
+            struck = re.findall(r'<del class="stale">(.*?)</del>', body, re.S)
+            self.assertGreaterEqual(len(struck), 3, f"{language}: drift quotes")
+            joined = " ".join(struck)
+            for value in ("180+", "593", "v1.10.1"):
+                self.assertIn(value, joined, f"{language}: struck-through {value}")
 
     def test_estimates_are_labelled(self) -> None:
         for language, path in ARTICLES.items():
@@ -610,12 +630,12 @@ cd /Users/cheenle/HAM/website/portal
 预期（**已用 dry-run 实测确认，不是推测**）：
 
 ```
-4 failed, 14 skipped in 0.06s
+4 failed, 15 skipped in 0.06s
 ```
 
 - **4 failed**：`test_articles_and_css_exist`（`article.css` 不存在）、`test_blog_index_lists_article`（卡片尚无）、`test_sitemap_lists_both_languages`（sitemap 尚无）、`test_stale_numbers_are_gone`
-- **14 skipped**：其余方法都经 `load()` 抛 `unittest.SkipTest`（文章文件尚不存在）
-- 合计 **18 个测试方法**
+- **15 skipped**：其余方法都经 `load()` 抛 `unittest.SkipTest`（文章文件尚不存在）
+- 合计 **19 个测试方法**
 
 `test_stale_numbers_are_gone` 的失败信息必须逐字为：
 
@@ -696,6 +716,15 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 .volume[data-volume="gewu"] .volume-head .volume-num { color: #f59e0b; }
 .volume[data-volume="zhizhi"] .volume-head .volume-num { color: #22d3ee; }
 .volume[data-volume="zhixing"] .volume-head .volume-num { color: #a78bfa; }
+
+/* ---- stale: a superseded number, quoted only to be struck through ----
+   The contract test strips <del class="stale">…</del> before checking that no
+   stale number survives as a live claim, and separately requires the `drift`
+   section to quote at least three of them inside this element. So: use it for
+   every superseded value you name, and never for a current one. */
+del.stale { font-family: var(--font-mono); color: #f87171; text-decoration: line-through; text-decoration-thickness: 1px; opacity: 0.85; white-space: nowrap; }
+.stale-pair { font-family: var(--font-mono); font-size: 0.86rem; white-space: nowrap; }
+.stale-pair .arrow { color: var(--text-secondary); margin: 0 0.35rem; }
 ```
 
 - [ ] **步骤 2：写 EN `index.html` 的 head 与骨架**
@@ -806,7 +835,15 @@ $ echo $?
 
 - `scale`：按仓库 token 表（ft8 `1,875,258,566`；mrrc_ft710 `1,275,611,389`；mrrc_modern `1,260,804,213`；MRRC `1,150,197,250`；website `819,343,926`；sunsdr `64,490,898`；pskreporter `54,409,498`；efhw-knowledge `45,949,584`；wfview `23,459,822`；未归属 `410,832,716`；可归属合计 `6,980,357,862`，无线电生态小计 `6,491,655,826`）。校验式必须写出：`6,980,357,862 + 27,079,705 = 7,007,437,567`。`52` 条约束（`17`/`21`/`14`）随事故生长；`mrrc_modern` 与 `mrrc_ft710` 共享同一 initial commit `9403e2e`；`ft8` 首个提交 `d4a7a32` 同时引入 `AGENTS.md` + `SDD` + `sdd-guardian`；commit `2bc3d30` "SDD V2.23 — record issues I8-I11, expand sdd-guardian harness to 21 rules"。
 - `delivery`：实测 `439`（FT-710，`Ran 439 tests ... OK`）、`682`（Modern，含 1 个 `test_macos_launcher` loader error，macOS 导入失败，非产品缺陷）、`937` collected（FT8，pytest，collected ≠ passed）。部署机制：校验→打包→远端备份→scp→解包→权限→reload nginx；三条安全规则（远端 heredoc 必须 `<<'REMOTE'` 引号化、`tar -x` 从不删除、备份按站瘦身 `rsync --exclude downloads --exclude videos` 且只留 3 份、回滚只还自己那一目录）；共享 DocumentRoot 禁止整根 `rm -rf` / `chown -R`。
-- `drift`：本次现场抓到的四类漂移 —— ① `portal/index.html` 的 `180+ tests` / `593 tests` / `40 tests` / `v1.10.1`；② 台账 Modern 行落后一个补丁（`v1.12.0`/`633` → `v1.12.1`/`682`）；③ 三个仓库注册表的 `sdd_version` 全部滞后（ft710 `V1.7` vs SDD `v1.8.0`；modern `V2.27` vs `V2.30`；ft8 `V1.0` vs `V1.8`）；④ **反向案例**：FT-710 的 git tag / SDD README / 子站都说 `v1.8.0`，只有 `CHANGELOG.md` 有 `[v1.8.1] — 2026-08-16`，而台账"Source: v1.8.1 / Windows package: v1.8.0"的双字段写法是唯一正确的 —— 差一点就把对的数字改错。必须写明结论：**带日期的历史记录不得被"更新"**（`mrrc_modern/sdd.html` 的 "Published after 633/633 tests" 是 v1.12.0 的发布记录，改成 682 就是造假）。
+- `drift`：本次现场抓到的四类漂移 —— ① `portal/index.html` 的过时数字；② 台账 Modern 行落后一个补丁（`v1.12.0`/`633` → `v1.12.1`/`682`）；③ 三个仓库注册表的 `sdd_version` 全部滞后（ft710 `V1.7` vs SDD `v1.8.0`；modern `V2.27` vs `V2.30`；ft8 `V1.0` vs `V1.8`）；④ **反向案例**：FT-710 的 git tag / SDD README / 子站都说 `v1.8.0`，只有 `CHANGELOG.md` 有 `[v1.8.1] — 2026-08-16`，而台账"Source: v1.8.1 / Windows package: v1.8.0"的双字段写法是唯一正确的 —— 差一点就把对的数字改错。必须写明结论：**带日期的历史记录不得被"更新"**（`mrrc_modern/sdd.html` 的 "Published after 633/633 tests" 是 v1.12.0 的发布记录，改成 682 就是造假）。
+
+  **⚠️ 硬性标记要求**：本节凡引用一个**已被推翻的旧值**，必须包在 `<del class="stale">` 里，并紧跟新值。原因是契约测试有两条互锁的断言：`test_stale_numbers_are_gone` 会先剥掉 `<del class="stale">…</del>` 再检查旧值是否作为**活的声明**残留；`test_drift_section_quotes_stale_values_as_struck_through` 反过来要求 `drift` 节内至少 3 处 `<del class="stale">`，且其中必须能看到 `180+`、`593`、`v1.10.1` 三个串。**裸写 `180+ tests` 会让前一条红；不写又会让后一条红。** 推荐写法：
+
+```html
+<p>The landing page carried <span class="stale-pair"><del class="stale">V1.0 · 180+ tests</del><span class="arrow">→</span>v1.8.1 · 439 tests</span> for the FT-710, and <span class="stale-pair"><del class="stale">v1.10.1 · 593 tests</del><span class="arrow">→</span>v1.12.1 · 682 tests</span> for Modern. Both were verified by running the suites, not by reading a document.</p>
+```
+
+  注意 `40 tests`（FT8 旧值）**不在** `STALE_NUMBERS` 里，裸写无害，但为了体例一致也建议同样标记。
 
 - [ ] **步骤 9：写 `human` / `playbook` / `references` 三节**
 

@@ -105,3 +105,69 @@ del.stale { font-family: var(--font-mono); color: #f87171; text-decoration: line
   .ledger-table th, .ledger-table td { padding: 0.4rem 0.45rem; }
   .volume-head h2 { font-size: 1.3rem; }
 }
+
+/* ── Anchored headings clear the fixed global nav (36px, injected by global-nav.js) ── */
+section[id], h1[id], h2[id], h3[id], .volume-head {
+  scroll-margin-top: calc(var(--gn-h, 36px) + 22px);
+}
+
+/* ── Language switcher: turn the bare link into a pill ── */
+.article-language {
+  text-align: right;
+  margin: 0 0 12px;
+}
+.article-language a {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.8rem; color: var(--text-secondary);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 6px 14px; text-decoration: none; transition: all 0.2s;
+}
+.article-language a:hover { color: var(--accent); border-color: var(--border-hover); }
+
+/* ── TOC volume-group labels (added by the volume-aware TOC script) ── */
+.blog-toc-vol {
+  margin: 16px 0 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.blog-toc li.toc-h3 { padding-left: 18px; }
+
+/* ── Chinese typography — scoped to the zh-CN page so the EN article keeps Inter ──
+   The site's --font-sans is Latin-only (Inter); CJK glyphs fall back to the
+   system default with a line-height tuned for Latin, which reads cramped.
+   These rules only match the zh page (html lang="zh-CN"). */
+html:lang(zh-CN) .blog-article,
+html:lang(zh-CN) .blog-header,
+html:lang(zh-CN) .blog-breadcrumb,
+html:lang(zh-CN) .blog-toc,
+html:lang(zh-CN) .blog-content,
+html:lang(zh-CN) .blog-footer {
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC',
+    'Source Han Sans SC', 'Microsoft YaHei', var(--font-sans), sans-serif;
+}
+html:lang(zh-CN) .blog-content { line-height: 2.0; letter-spacing: 0.01em; }
+html:lang(zh-CN) .blog-content p { margin: 0 0 22px; }
+html:lang(zh-CN) .blog-content li { margin-bottom: 10px; }
+html:lang(zh-CN) .blog-content h2 { line-height: 1.5; letter-spacing: -0.01em; }
+html:lang(zh-CN) .blog-content h3 { line-height: 1.5; }
+html:lang(zh-CN) .blog-subtitle { line-height: 1.85; }
+html:lang(zh-CN) .blog-meta, html:lang(zh-CN) .blog-tags { line-height: 1.7; }
+/* Keep code/pre on the mono font even on the zh page */
+html:lang(zh-CN) .blog-content code,
+html:lang(zh-CN) .blog-content pre,
+html:lang(zh-CN) .term-block,
+html:lang(zh-CN) .ledger-table td.num,
+html:lang(zh-CN) .ledger-table td.tool,
+html:lang(zh-CN) .stat-tile .stat-num,
+html:lang(zh-CN) .prov {
+  font-family: var(--font-mono);
+}
+@media (max-width: 640px) {
+  html:lang(zh-CN) .blog-content { line-height: 1.9; }
+}

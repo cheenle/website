@@ -47,21 +47,48 @@ Sub-site directories under `website/` are symlinks into other git repositories
 (`mrrc/`, `mrrc_modern/`, `mrrc_ft710/`, `sunmrrc/`, `SunsdrMobile/`, `mrrc_ft8/`, `ft8/`);
 `portal/`, `efhw/` and `nginx/` are real directories.
 
-**Site-wide greps must list the site directories explicitly, each with a trailing slash.**
-On this machine (macOS BSD grep) both `-r` and `-R` refuse to descend into symlinked
-sub-directories when you search from `.`, so `grep -R pattern .` reports a clean tree while
-every sub-site hit stays invisible — a silent false green. Use:
+**Site-wide greps must list the site directories explicitly — as a shell ARRAY, never as a
+string variable.** Two independent traps here, both verified 2026-09-05 against this
+machine's actual tooling (`grep` resolves to **ugrep 7.5.0**, not BSD grep; the shell is
+**zsh 5.9**):
 
-```bash
-SITES="portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/"
-grep -Rn "pattern" $SITES      # correct
-grep -Rn "pattern" .           # WRONG: misses all symlinked sub-sites
-grep -Rn "pattern" mrrc        # WRONG: bare symlink arg is not followed either
+1. `-r` / `-R` will not descend into symlinked sub-directories when searching from `.`, so
+   `grep -R pattern .` reports a clean tree while every sub-site hit stays invisible.
+   Measured: 0 hits under `./mrrc_ft710/` and `./mrrc/` for a string that occurs in both.
+2. **zsh does not word-split unquoted parameter expansions.** Assigning the list to a string
+   and expanding `$SITES` passes all eight directories as ONE nonexistent path. ugrep prints
+   `warning: … No such file or directory`, exits 2, and produces no matches — which at a
+   prompt is indistinguishable from "clean tree". This is a silent false green across every
+   sub-site, produced by the very pattern meant to prevent one.
+
+```zsh
+SITES=(portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/)
+grep -Rn "pattern" $SITES       # correct: array expands to 8 args  → 8 hits measured
+grep -Rn "pattern" .            # WRONG: misses all symlinked sub-sites → 0 hits
 ```
+
+```zsh
+SITES="portal/ mrrc/ … efhw/"   # WRONG under zsh — string, not array
+grep -Rn "pattern" $SITES       # → 1 bogus arg, exit 2, 0 hits, looks like a clean tree
+```
+
+If a script must stay POSIX/bash-compatible, use `bash -c` with the array, or pass the
+directories as literal arguments. The trailing slash is for readability and to make a
+missing directory obvious — it is *not* load-bearing: ugrep follows a symlink given
+explicitly on the command line either way (`mrrc_ft710` and `mrrc_ft710/` both returned 2
+hits). An earlier revision of this file claimed the bare form was not followed; that was
+wrong for ugrep and has been corrected.
 
 `find` needs the same care: use `find -L` to follow symlinks. Grepping `.` is only safe
 after `cd` into a sub-site's real repository directory (e.g. `/Users/cheenle/HAM/MRRC/website`).
 Commits go to the owning repository, not this one.
+
+**`portal/images/` and `efhw/images/` are deliberately NOT tracked.** They hold the WeChat
+group QR code, which expires and is regenerated roughly weekly; committing it would mean a
+churn commit every week. The tracked HTML references those paths, so a fresh clone renders a
+broken image until the files are placed on disk. Deployment ships them from the working tree
+(`portal/deploy.sh` tars the directory, not the git index), so production is unaffected. If
+you add a tracked asset under those directories, say so explicitly — the default is disk-only.
 
 ## Common patterns across all five sites
 

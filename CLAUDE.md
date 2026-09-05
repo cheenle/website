@@ -316,7 +316,17 @@ Two rules when editing any `deploy.sh`:
 
 - **Remote heredocs must be quoted** (`<<'REMOTE'`), with variables passed on the `ssh` command line. An unquoted `<< EOF` lets the local macOS shell expand `$(...)`/`$VAR` first, which once made `portal/deploy.sh` skip its backup silently on every single run while still printing a backup path that did not exist.
 - **`tar -x` never deletes.** Excluding a file from the package does not remove a copy already published by an earlier run, so retiring shipped tooling (`tests/`, `make_sitemap.py`, `check_baluns.py`) needs an explicit remote delete. Build-time tooling must not be in the package at all — the DocumentRoot is world-readable.
-
+- **Backups are per-site, lean, and rotated.** Never `cp -r` a whole deployed site:
+  `downloads/` and `videos/` are server-managed binaries no HTML deploy touches, and
+  they are ~120-140MB of each site — that is how `/var/tmp` reached 3.7G (1.7G from 13
+  `mrrc_ft710` copies, 2.0G from 18 `mrrc_ft8` copies) on a volume that once filled to
+  100%. Use `rsync -a --exclude='downloads' --exclude='videos' <site>/ <backup>/` and
+  keep only the 3 newest backups per site (append `|| true` to the prune pipeline: on
+  a first deploy none exist, and the remote blocks run under `set -e`).
+- **A rollback hint may only restore one site's own directory.** Three scripts used to
+  print `sudo rm -rf $REMOTE_WEBROOT && sudo cp -r /var/tmp/<site>_backup_* $REMOTE_WEBROOT`,
+  which deletes the whole DocumentRoot and puts back a single sub-site. Restore with
+  `sudo rsync -a $B/ $REMOTE_WEBROOT/<site>/` (merge, so `downloads/` survives).
 ## nginx server
 
 All sites are served by nginx on `www.vlsc.net` (HTTPS via Let's Encrypt). The server block config is at `nginx/vlsc.net.conf`. The landing page is served from the DocumentRoot (`/var/www/vlsc.net/`). Sub-sites use `alias` directives: `/mrrc/` → `/var/www/vlsc.net/mrrc/`, `/mrrc_ft710/` → `/var/www/vlsc.net/mrrc_ft710/`, `/sunmrrc/` → `/var/www/vlsc.net/sunmrrc/`, `/sunsdrmobile/` → `/var/www/vlsc.net/sunsdrmobile/`, `/efhw/` → `/var/www/vlsc.net/efhw/`. SSL certs at `/etc/letsencrypt/live/www.vlsc.net/`.

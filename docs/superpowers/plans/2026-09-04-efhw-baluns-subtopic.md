@@ -175,9 +175,31 @@ efhw 部署（`--force`）→ portal 部署（该脚本**无** `--force`，`read
 `efhw.css?v=2` 生效，CN 内联 script 弯引号 0，`images/qr-wechat-group.jpg` 由缺图转 200，
 八站抽查全 200，sitemap 44→53（+2 巴伦页，+7 子站 `zh/` 根，0 删除）。
 
-42. **契约测试的期望值不能硬编码页面名**：`mrrc_ft710/engineering.html` 从未存在，
+ 1. **契约测试的期望值不能硬编码页面名**：`mrrc_ft710/engineering.html` 从未存在，
     该断言只能在偶然间通过。改为遍历 SUBSITES 下 depth-1 *.html 从磁盘派生期望；
     这一改立刻暴露真实缺口——各子站中文首页 `zh/index.html` 从未被收录。
-43. **portal/deploy.sh 的回滚提示是危险建议**：它教人 `rm -rf /var/www/vlsc.net/*`
+ 2. **portal/deploy.sh 的回滚提示是危险建议**：它教人 `rm -rf /var/www/vlsc.net/*`
     后只还原 `landing_*` 备份，照做会连带删掉全部子站。仅存在于 echo 文本、不在执行路径，
     但应当改写（只删/还原 DocumentRoot 中的 portal 自有文件）。待办。
+
+## 追加：portal/deploy.sh 两处真实缺陷修复 + 泄露清理（已线上验证）
+
+44. **portal 部署从未备份成功**：`ssh host << EOF` 未加引号，块内
+    `$(ls -A $REMOTE_WEBROOT)` 被 macOS 本地 shell 提前展开（本地无此路径 → 空串），
+    守卫恒假 → 每次都静默跳过备份，却仍打印一个不存在的 "Backup location"。
+    服务器实测 landing_* 备份数 = 0（其它 79 个子站备份都在）。
+    现所有远端块改为 `<<'REMOTE'`，变量经 ssh 命令行显式传入。
+45. **回滚提示是毁灭性建议**：原文教人 `rm -rf /var/www/vlsc.net/*` 再还原 landing 备份。
+    DocumentRoot 与各子站共用，照做即全站清空且无法恢复（备份根本不存在）。
+46. **我造成并修好的泄露**：portal 包 = 整个目录，把 `tests/*.py`、`make_sitemap.py`、
+    `.pytest_cache`、未被引用的 `IMG_9243.JPG` 一并发布；线上实测
+    `/tests/test_sitemap.py`、`/make_sitemap.py`、`/IMG_9243.JPG` 均 **200 可下载**。
+    修法分两步且缺一不可：包内 `--exclude` **且**删除线上已存在副本 ——
+    `tar -x` 从不删除旧文件，只加 exclude 时 IMG 仍是 200（本轮就是这样被抓出来的）。
+    同类：`/efhw/check_baluns.py` 200 → 已在 efhw/deploy.sh 排除并删除线上副本。
+47. 备份/权限改为**只作用于包内路径**（不再 `chown -R`/`chmod -R 755` 整个 DocumentRoot，
+    那会把子站所有文件置成可执行）。备份 335KB / 29 文件，`/var/www` 85% 满、仅剩 2.1G，
+    全量拷贝不可行。
+另：`git checkout` 后重打补丁消除了编辑器把 deploy.sh 缩进 4 空格→Tab 的 15/13 行格式噪音。
+发现（未处理，非我引入）：webroot 根有 `/RJ/`（8/31，含 index.html+assets），不在
+make_sitemap.py 的 SUBSITES 里 → 该站未被 sitemap 收录。

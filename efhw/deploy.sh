@@ -30,7 +30,8 @@ echo "[OK] Required files present."
 # Create tarball
 echo "[..] Creating tarball..."
 cd "$(dirname "${LOCAL_WEBSITE_DIR}")"
-tar czf "${TARBALL}" efhw/
+# check_baluns.py is a local verification gate, not site content — keep it out of the webroot.
+tar czf "${TARBALL}" --exclude='efhw/check_baluns.py' efhw/
 echo "[OK] Tarball created: ${TARBALL}"
 
 # Confirm

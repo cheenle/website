@@ -306,7 +306,16 @@ cd /Users/cheenle/HAM/website/efhw
 
 All deploy scripts: (1) validate required files exist, (2) create a tarball, (3) SSH to `www.vlsc.net` to back up the current site, (4) `scp` the tarball, (5) extract and set permissions, (6) reload nginx. They prompt for confirmation before the remote steps.
 
-Rollback: each script prints the backup path on the server. SSH in and swap the backup back into the webroot.
+Rollback: each script prints the backup path on the server. Restore **only that backup, into the paths it covers** — `portal/deploy.sh` backs up exactly the files its package writes.
+
+### Deploy scripts must stay scoped to their own site
+
+`/var/www/vlsc.net` is a **shared DocumentRoot**: the portal owns the loose files at its root, each sub-site owns its own directory (nginx `alias`). Therefore no deploy script may ever `rm -rf`, `chown -R` or `chmod -R` the DocumentRoot as a whole — that hits every other site. `portal/deploy.sh` drives backup, ownership and rollback off the package's own file list for this reason.
+
+Two rules when editing any `deploy.sh`:
+
+- **Remote heredocs must be quoted** (`<<'REMOTE'`), with variables passed on the `ssh` command line. An unquoted `<< EOF` lets the local macOS shell expand `$(...)`/`$VAR` first, which once made `portal/deploy.sh` skip its backup silently on every single run while still printing a backup path that did not exist.
+- **`tar -x` never deletes.** Excluding a file from the package does not remove a copy already published by an earlier run, so retiring shipped tooling (`tests/`, `make_sitemap.py`, `check_baluns.py`) needs an explicit remote delete. Build-time tooling must not be in the package at all — the DocumentRoot is world-readable.
 
 ## nginx server
 

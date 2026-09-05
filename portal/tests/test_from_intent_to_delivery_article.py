@@ -22,20 +22,16 @@ CANONICAL = {
     "zh": f"https://www.vlsc.net/blog/{SLUG}/zh/",
 }
 
-# Four volumes + four data appendices. The id set must be identical in both
-# languages; appendices sit OUTSIDE every volume, like `references` in the
-# seven-billion-tokens template.
+# Opening thesis + four dimensions (one volume each) + closing + four data
+# appendices. The id set must be identical in both languages; thesis, closing
+# and the appendices sit OUTSIDE every volume.
 REQUIRED_SECTIONS = {
-    "intent",
-    "control-group",
-    "fde",
-    "harness",
-    "scale",
-    "incident-chain",
-    "delivery-evidence",
-    "optimization",
-    "ladders",
-    "playbook",
+    "thesis",
+    "dim-abstraction",
+    "dim-knowledge",
+    "dim-economics",
+    "dim-responsibility",
+    "closing",
     "appendix-repos",
     "appendix-tools",
     "appendix-timeline",
@@ -46,25 +42,31 @@ REQUIRED_SECTIONS = {
 REQUIRED_CLAIM_TYPES = {"fact", "inference", "thesis"}
 
 VOLUMES = (
-    ("intent", ("intent", "control-group")),
-    ("mechanism", ("fde", "harness", "scale")),
-    ("delivery", ("incident-chain", "delivery-evidence", "optimization")),
-    ("migration", ("ladders", "playbook")),
+    ("abstraction", ("dim-abstraction",)),
+    ("knowledge", ("dim-knowledge",)),
+    ("economics", ("dim-economics",)),
+    ("responsibility", ("dim-responsibility",)),
 )
 UNVOLUMED_SECTIONS = (
+    "thesis",
+    "closing",
     "appendix-repos",
     "appendix-tools",
     "appendix-timeline",
     "appendix-limits",
 )
 VOLUME_TITLES = {
-    "en": {"intent": "Intent", "mechanism": "Mechanism",
-           "delivery": "Delivery and Correction", "migration": "Migration"},
-    "zh": {"intent": "意图", "mechanism": "机制",
-           "delivery": "交付与修正", "migration": "迁移"},
+    "en": {"abstraction": "The Abstraction Ladder",
+           "knowledge": "The Carrier Decides How Long Knowledge Lives",
+           "economics": "Tokens Are the Price of Uncertainty",
+           "responsibility": "Two Ledgers"},
+    "zh": {"abstraction": "抽象阶梯",
+           "knowledge": "知识的载体决定知识的寿命",
+           "economics": "不确定性的价格",
+           "responsibility": "两本账"},
 }
-EN_TITLE = "One USB Cable: A Business Intent's Full Journey Through Agentic Engineering"
-ZH_TITLE = "从一根 USB 线说起：一个业务意图的 Agentic 工程全程"
+EN_TITLE = "One USB Cable: Seven Months of a Business Intent, and the Four Dimensions of Agentic Engineering"
+ZH_TITLE = "从一根 USB 线说起：一个业务意图的七个月，与 Agentic 工程的四个维度"
 
 # Hard numbers and commit hashes from the approved story. Every one of these
 # strings must appear verbatim in BOTH languages.
@@ -108,6 +110,10 @@ LEDGER_CONSTANTS = {
     "commit_58aa675": "58aa675",
     "commit_88f519f": "88f519f",
     "commit_625779f": "625779f",
+    "cache_read_share": "95.2",
+    "ft8_tokens_per_line": "26,800",
+    "wfview_tokens_per_line": "136",
+    "line_caliber_inflation": "2.7",
 }
 
 # Red lines: never claim a product family was built by AI.
@@ -403,7 +409,7 @@ class FromIntentToDeliveryArticleTests(unittest.TestCase):
             ):
                 self.assertIn(field, article_data[0], f"{language}: {field}")
             self.assertEqual("2026-09-05", article_data[0]["datePublished"], language)
-            self.assertEqual("2026-09-05", article_data[0]["dateModified"], language)
+            self.assertEqual("2026-09-06", article_data[0]["dateModified"], language)
             self.assertEqual("Intelligence", article_data[0]["articleSection"], language)
 
     def test_links_to_thesis_mechanism_and_ledger_pages(self) -> None:

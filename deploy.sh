@@ -23,7 +23,7 @@ BACKUP_BASE="/var/www/backups"
 # Each site: key | local dir | remote subdir (under REMOTE_ROOT) | URL
 SITES=(
 	"portal|/Users/cheenle/HAM/website/portal||https://$REMOTE_HOST/"
-	"mrrc|/Users/cheenle/UHRR/MRRC/website|mrrc|https://$REMOTE_HOST/mrrc/"
+	"mrrc|/Users/cheenle/HAM/MRRC/website|mrrc|https://$REMOTE_HOST/mrrc/"
 	"mrrc_ft710|/Users/cheenle/HAM/mrrc_ft710/website|mrrc_ft710|https://$REMOTE_HOST/mrrc_ft710/"
 	"mrrc_ft8|/Users/cheenle/HAM/ft8/website|mrrc_ft8|https://$REMOTE_HOST/mrrc_ft8/"
 	"sunmrrc|/Users/cheenle/HAM/sunsdr/sunmrrc/website|sunmrrc|https://$REMOTE_HOST/sunmrrc/"

@@ -13,16 +13,8 @@
     />
     <meta name="author" content="BG1SB" />
     <meta name="theme-color" content="#0a0e14" />
-    <link
-      rel="alternate"
-      hreflang="zh-CN"
-      href="zh/baluns.html"
-    />
-    <link
-      rel="alternate"
-      hreflang="en"
-      href="baluns.html"
-    />
+    <link rel="alternate" hreflang="zh-CN" href="zh/baluns.html" />
+    <link rel="alternate" hreflang="en" href="baluns.html" />
     <title>
       Baluns &amp; Ununs — Types, Build, Field Practice — EFHW Projects
     </title>
@@ -59,8 +51,11 @@
           <li><a href="#field">Field Practice</a></li>
           <li><a href="index.html#research">Deep Research</a></li>
           <li>
-            <a href="https://github.com/cheenle/efhw-knowledge" target="_blank"
-              rel="noopener" class="nav-cta"
+            <a
+              href="https://github.com/cheenle/efhw-knowledge"
+              target="_blank"
+              rel="noopener"
+              class="nav-cta"
               ><i class="fab fa-github"></i> GitHub</a
             >
           </li>
@@ -88,19 +83,22 @@
       <div class="hero-content">
         <div class="hero-badge">
           <i class="fas fa-magnet"></i>
-          <span>Decision &amp; bench craft · theory and measurements live in the research site</span>
+          <span
+            >Decision &amp; bench craft · theory and measurements live in the
+            research site</span
+          >
         </div>
         <h1 class="hero-title">
           Baluns &amp; Ununs<br />
           <span class="gradient">Types, Build, Best Practice</span>
         </h1>
         <p class="hero-subtitle">
-          A builder's page, not a physics page. It answers four questions:
-          which magnetic device you are actually holding, which one to pick
-          for your power and bands, how to wind and seal it without
-          destroying it, and what to check before you blame the antenna.
-          Every "why" — core materials, loss measurements, the 49:1 versus
-          64:1 argument, VNA methodology — is owned by the
+          A builder's page, not a physics page. It answers four questions: which
+          magnetic device you are actually holding, which one to pick for your
+          power and bands, how to wind and seal it without destroying it, and
+          what to check before you blame the antenna. Every "why" — core
+          materials, loss measurements, the 49:1 versus 64:1 argument, VNA
+          methodology — is owned by the
           <a href="../mrrc/efhw/index.html">EFHW Deep Research</a> site and
           linked, never copied here.
         </p>
@@ -121,20 +119,19 @@
           <span class="section-label">01 · Taxonomy</span>
           <h2 class="section-title">Five devices, three jobs</h2>
           <p class="section-subtitle">
-            "Balun" is a job description, not a part. Three jobs get
-            conflated: impedance transformation, balanced-current
-            enforcement, and common-mode suppression. A device usually does
-            one and a half. Read the middle column as "which job this
-            actually performs", and the last column as the reason people
-            burn money.
+            "Balun" is a job description, not a part. Three jobs get conflated:
+            impedance transformation, balanced-current enforcement, and
+            common-mode suppression. A device usually does one and a half. Read
+            the middle column as "which job this actually performs", and the
+            last column as the reason people burn money.
           </p>
         </div>
         <div class="calc">
-          <b>Label discipline on this page.</b> [C] = engineering consensus
-          with a citable source, or arithmetic you can redo from the formula
-          shown. [M] = measured by us, with the raw data file in the
-          repository. Anything we have not measured is written as
-          <span style="color:#f0a030">—</span> and pointed at the research
+          <b>Label discipline on this page.</b> [C] = engineering consensus with
+          a citable source, or arithmetic you can redo from the formula shown.
+          [M] = measured by us, with the raw data file in the repository.
+          Anything we have not measured is written as
+          <span style="color: #f0a030">—</span> and pointed at the research
           site. We do not print numbers we cannot derive or show.
         </div>
         <table class="spec-table">
@@ -149,106 +146,215 @@
           </thead>
           <tbody>
             <tr>
-                <td><b>49:1 unun</b> <span class="tag tag-c">C</span></td>
-                <td>Steps 50 &Omega; up to ~2450 &Omega; (50 &times; 49). An
-                  autotransformer: it does <em>not</em> balance anything.</td>
-                <td>1.8&ndash;30 MHz, one wire cut for the lowest band</td>
-                <td>End-fed half-wave where the feedpoint really is a few k&Omega;.</td>
-                <td class="deny">You need symmetry, or you run S-metre power through
-                  a small core and call the resulting heat &ldquo;normal&rdquo;.</td>
-              </tr>
-              <tr>
-                <td><b>64:1 unun</b> <span class="tag tag-c">C</span></td>
-                <td>Same job, 3200 &Omega; step-up (50 &times; 64).</td>
-                <td>As above</td>
-                <td>Your measured feedpoint sits nearer 3&ndash;5 k&Omega; than 2.5.</td>
-                <td class="deny">You want a decision made for you &mdash; the
-                  49 vs 64 argument is a measurement argument, see the research
-                  site.</td>
-              </tr>
-              <tr>
-                <td><b>Guanella / TLT current balun</b> <span class="tag tag-c">C</span></td>
-                <td>Transforms by carrying power in a transmission line wound on
-                  the core; forces equal and opposite conductor currents.</td>
-                <td>Ratio per section is small (1:4 typical, two sections for 1:16)</td>
-                <td>You want balance <em>and</em> transformation, wideband, with
-                  headroom on heat.</td>
-                <td class="deny">You need 1:49 from one small core &mdash; the
-                  section count and size grow with the ratio.</td>
-              </tr>
-              <tr>
-                <td><b>1:1 current balun</b> <span class="tag tag-c">C</span></td>
-                <td>No transformation. High series impedance to common mode on
-                  both conductors.</td>
-                <td>Wherever the core&rsquo;s impedance peak is</td>
-                <td>Feeding a balanced antenna (dipole, loop) with coax.</td>
-                <td class="deny">An end-fed wire &mdash; it fixes balance, not the
-                  2&ndash;5 k&Omega; mismatch.</td>
-              </tr>
-              <tr>
-                <td><b>Common-mode choke (CMC)</b> <span class="tag tag-c">C</span></td>
-                <td>Suppresses shield current. Not a balun at all.</td>
-                <td>Broadest of the five</td>
-                <td>Always, on an end-fed. This is the TV/RPI noise item.</td>
-                <td class="deny">You expect it to improve match &mdash; it acts on
-                  what leaves the antenna system, not on Z&#8346;.</td>
-              </tr>
-              <tr>
-                <td><b>LTA / distributed</b> <span class="tag tag-c">C</span></td>
-                <td>Lossy transmission-line section; no core, no saturation.</td>
-                <td>VHF/UHF mostly; HF designs get physically long</td>
-                <td>Very wideband duty, or you refuse to trust ferrite thermally.</td>
-                <td class="deny">HF legal limit &mdash; the loss you accept is real
-                  heat in a box.</td></tr>
+              <td><b>49:1 unun</b> <span class="tag tag-c">C</span></td>
+              <td>
+                Steps 50 &Omega; up to ~2450 &Omega; (50 &times; 49). An
+                autotransformer: it does <em>not</em> balance anything.
+              </td>
+              <td>1.8&ndash;30 MHz, one wire cut for the lowest band</td>
+              <td>
+                End-fed half-wave where the feedpoint really is a few k&Omega;.
+              </td>
+              <td class="deny">
+                You need symmetry, or you run S-metre power through a small core
+                and call the resulting heat &ldquo;normal&rdquo;.
+              </td>
+            </tr>
+            <tr>
+              <td><b>64:1 unun</b> <span class="tag tag-c">C</span></td>
+              <td>Same job, 3200 &Omega; step-up (50 &times; 64).</td>
+              <td>As above</td>
+              <td>
+                Your measured feedpoint sits nearer 3&ndash;5 k&Omega; than 2.5.
+              </td>
+              <td class="deny">
+                You want a decision made for you &mdash; the 49 vs 64 argument
+                is a measurement argument, see the research site.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Guanella / TLT current balun</b>
+                <span class="tag tag-c">C</span>
+              </td>
+              <td>
+                Transforms by carrying power in a transmission line wound on the
+                core; forces equal and opposite conductor currents.
+              </td>
+              <td>
+                Ratio per section is small (1:4 typical, two sections for 1:16)
+              </td>
+              <td>
+                You want balance <em>and</em> transformation, wideband, with
+                headroom on heat.
+              </td>
+              <td class="deny">
+                You need 1:49 from one small core &mdash; the section count and
+                size grow with the ratio.
+              </td>
+            </tr>
+            <tr>
+              <td><b>1:1 current balun</b> <span class="tag tag-c">C</span></td>
+              <td>
+                No transformation. High series impedance to common mode on both
+                conductors.
+              </td>
+              <td>Wherever the core&rsquo;s impedance peak is</td>
+              <td>Feeding a balanced antenna (dipole, loop) with coax.</td>
+              <td class="deny">
+                An end-fed wire &mdash; it fixes balance, not the 2&ndash;5
+                k&Omega; mismatch.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Common-mode choke (CMC)</b> <span class="tag tag-c">C</span>
+              </td>
+              <td>Suppresses shield current. Not a balun at all.</td>
+              <td>Broadest of the five</td>
+              <td>Always, on an end-fed. This is the TV/RPI noise item.</td>
+              <td class="deny">
+                You expect it to improve match &mdash; it acts on what leaves
+                the antenna system, not on Z&#8346;.
+              </td>
+            </tr>
+            <tr>
+              <td><b>LTA / distributed</b> <span class="tag tag-c">C</span></td>
+              <td>Lossy transmission-line section; no core, no saturation.</td>
+              <td>VHF/UHF mostly; HF designs get physically long</td>
+              <td>
+                Very wideband duty, or you refuse to trust ferrite thermally.
+              </td>
+              <td class="deny">
+                HF legal limit &mdash; the loss you accept is real heat in a
+                box.
+              </td>
+            </tr>
 
-              <tr><td><b>Dipole + 1:1 current balun</b> <span class="tag tag-c">C</span></td>
-                <td>Nothing transforms; the balanced antenna presents ~50&Omega; and the balun only keeps the shield quiet.</td>
-                <td>Per band (or a trap/fan dipole)</td>
-                <td>You can actually put up two halves. This is the honest baseline.</td>
-                <td class="deny">You have one support and one wire &mdash; then you are back on the row above.</td></tr>
-            </tbody>
-          </table>
-        </div>
+            <tr>
+              <td>
+                <b>Dipole + 1:1 current balun</b>
+                <span class="tag tag-c">C</span>
+              </td>
+              <td>
+                Nothing transforms; the balanced antenna presents ~50&Omega; and
+                the balun only keeps the shield quiet.
+              </td>
+              <td>Per band (or a trap/fan dipole)</td>
+              <td>
+                You can actually put up two halves. This is the honest baseline.
+              </td>
+              <td class="deny">
+                You have one support and one wire &mdash; then you are back on
+                the row above.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
-    <section class="section" id="selection" style="background: var(--bg-secondary)">
+    <section
+      class="section"
+      id="selection"
+      style="background: var(--bg-secondary)"
+    >
       <div class="container">
         <div class="section-header">
           <span class="section-label">02 · Selection</span>
           <h2 class="section-title">Decide by constraint, not by brand</h2>
-          <p class="section-subtitle">Four constraints, applied in order. Each leaf names the device and links the measurement argument that backs it — we do not re-print their numbers here.</p>
+          <p class="section-subtitle">
+            Four constraints, applied in order. Each leaf names the device and
+            links the measurement argument that backs it — we do not re-print
+            their numbers here.
+          </p>
         </div>
         <ul class="tree">
-          <li class="q">Q1 · How much RF power, and is it continuous (FT8/digital) or peaked (SSB/CW)?</li>
+          <li class="q">
+            Q1 · How much RF power, and is it continuous (FT8/digital) or peaked
+            (SSB/CW)?
+          </li>
           <ul>
-            <li>QRO or continuous-duty &rarr; the ratio per section must stay small. Use a TLT (Guanella) build or two stacked/larger cores; a single small 1:49 core is the usual burnt part. <span class="leaf">&rarr; see <a href="../mrrc/efhw/index.html">Ferrite Core Selection</a></span></li>
-            <li>QRP (&le;10 W) &rarr; almost any decent core of the right material works; optimise for loss, not heat.</li>
+            <li>
+              QRO or continuous-duty &rarr; the ratio per section must stay
+              small. Use a TLT (Guanella) build or two stacked/larger cores; a
+              single small 1:49 core is the usual burnt part.
+              <span class="leaf"
+                >&rarr; see
+                <a href="../mrrc/efhw/index.html"
+                  >Ferrite Core Selection</a
+                ></span
+              >
+            </li>
+            <li>
+              QRP (&le;10 W) &rarr; almost any decent core of the right material
+              works; optimise for loss, not heat.
+            </li>
           </ul>
           <li class="q">Q2 · How many bands, and do you want to retune?</li>
           <ul>
-            <li>Single band &rarr; a fixed-ratio match plus an ATU at the rig is the least-lossy option.</li>
-            <li>Multi-band wire &rarr; wideband transformer + tuner at the feedpoint or rig; expect the tuner, not the balun, to do the work. <span class="leaf">&rarr; <a href="../mrrc/efhw/t200-2-guide.html">T200-2 resonant matching guide</a></span></li>
+            <li>
+              Single band &rarr; a fixed-ratio match plus an ATU at the rig is
+              the least-lossy option.
+            </li>
+            <li>
+              Multi-band wire &rarr; wideband transformer + tuner at the
+              feedpoint or rig; expect the tuner, not the balun, to do the work.
+              <span class="leaf"
+                >&rarr;
+                <a href="../mrrc/efhw/t200-2-guide.html"
+                  >T200-2 resonant matching guide</a
+                ></span
+              >
+            </li>
           </ul>
-          <li class="q">Q3 · Permanent outdoor install or take-down portable?</li>
+          <li class="q">
+            Q3 · Permanent outdoor install or take-down portable?
+          </li>
           <ul>
-            <li>Permanent &rarr; potting, drain holes, UV-proof enclosure and a real strain relief outrank electrical finesse; most field failures are water, not ferrite.</li>
-            <li>Portable &rarr; minimise mass; the feedpoint is a 2&ndash;5 k&Omega; node, so a dangling coax shield there is an active part of the antenna.</li>
+            <li>
+              Permanent &rarr; potting, drain holes, UV-proof enclosure and a
+              real strain relief outrank electrical finesse; most field failures
+              are water, not ferrite.
+            </li>
+            <li>
+              Portable &rarr; minimise mass; the feedpoint is a 2&ndash;5
+              k&Omega; node, so a dangling coax shield there is an active part
+              of the antenna.
+            </li>
           </ul>
           <li class="q">Q4 · Then, and only then, choose core material.</li>
           <ul>
-            <li>Ni-Zn (type 43 / 75 class) &rarr; broad HF, tolerant of saturation, converts power to heat early.</li>
-            <li>Mn-Zn (type 73 class) &rarr; far higher impedance per turn at low kW, so fewer turns and less loss — but a hard saturation and thermal cliff. <span class="leaf">&rarr; <a href="../mrrc/efhw/index.html">Fair-Rite 2643251002 vs FT240-43</a></span></li>
-            <li>Powdered iron &rarr; no sharp saturation, poor for choke use at HF.</li>
+            <li>
+              Ni-Zn (type 43 / 75 class) &rarr; broad HF, tolerant of
+              saturation, converts power to heat early.
+            </li>
+            <li>
+              Mn-Zn (type 73 class) &rarr; far higher impedance per turn at low
+              kW, so fewer turns and less loss — but a hard saturation and
+              thermal cliff.
+              <span class="leaf"
+                >&rarr;
+                <a href="../mrrc/efhw/index.html"
+                  >Fair-Rite 2643251002 vs FT240-43</a
+                ></span
+              >
+            </li>
+            <li>
+              Powdered iron &rarr; no sharp saturation, poor for choke use at
+              HF.
+            </li>
           </ul>
         </ul>
-<div class="calc">
-<b>Do this arithmetic before you buy a core.</b> Feedpoint RMS voltage on an
-end-fed half wave is V = sqrt(P x Z): 100 W into 2450 ohm gives about 495 V
-RMS, roughly 700 V peak. <span class="tag tag-c">C</span> That is why arc-over,
-turn spacing and the first few turns of insulation are the failure point at
-power, not the ferrite. Write the number down for your own power and load;
-it decides your wire, your form of winding and your enclosure.
-</div>
+        <div class="calc">
+          <b>Do this arithmetic before you buy a core.</b> Feedpoint RMS voltage
+          on an end-fed half wave is V = sqrt(P x Z): 100 W into 2450 ohm gives
+          about 495 V RMS, roughly 700 V peak.
+          <span class="tag tag-c">C</span> That is why arc-over, turn spacing
+          and the first few turns of insulation are the failure point at power,
+          not the ferrite. Write the number down for your own power and load; it
+          decides your wire, your form of winding and your enclosure.
+        </div>
       </div>
     </section>
 
@@ -257,176 +363,518 @@ it decides your wire, your form of winding and your enclosure.
         <div class="section-header">
           <span class="section-label">03 · Build craft</span>
           <h2 class="section-title">Where good designs die</h2>
-          <p class="section-subtitle">Same core, same turns, same radio — one builder gets 20 dB of return loss, another gets a warm brick that deades on the low bands. The difference is almost entirely process.</p>
+          <p class="section-subtitle">
+            Same core, same turns, same radio — one builder gets 20 dB of return
+            loss, another gets a warm brick that deades on the low bands. The
+            difference is almost entirely process.
+          </p>
         </div>
-<div class="steps">
-<div class="step"><h4><i class="fas fa-search"></i> Inspect before contact</h4>
-<p>Chamfer and deburr the bore of the core with a fine file or tape. A sharp inner rim chafes enamel under tension on the far side, where you cannot see it.</p>
-<p class="risk"><b>Failure mode:</b> a turn-to-core short that appears only when cold, or an internal short after one season of thermal cycling.</p></div>
-<div class="step"><h4><i class="fas fa-circle-notch"></i> Wind uniformly, light tension</h4>
-<p>Spread the turns evenly over as much circumference as you can, with constant tension. Pile-ups raise local capacitance and local flux density; wide gaps leak field. Both cost you the low bands first.</p>
-<p class="risk"><b>Failure mode:</b> fine on 20 m, dead on 80 m.</p></div>
-<div class="step"><h4><i class="fas fa-code-compare"></i> Mark the phase dots before you cut</h4>
-<p>Wrong phasing on a transmission-line transformer turns a balun into a plain choke with no transformation; wrong phasing on an autotransformer gives you a shorted turn. Mark start and finish before trimming the wire.</p>
-<p class="risk"><b>Failure mode:</b> high SWR everywhere, hot core at low power, builder convinced the circuit is bogus.</p></div>
-<div class="step"><h4><i class="fas fa-bolt"></i> Short leads, no pigtails</h4>
-<p>At a 2&ndash;5 k&Omega; node every millimetre of stray lead is added inductance and a small antenna. Solder to the terminal, not to a loop of stranded wire.</p>
-<p class="risk"><b>Failure mode:</b> return loss that moves when you rotate the box in your hand.</p></div>
-<div class="step"><h4><i class="fas fa-droplet"></i> Impregnate, do not glaze</h4>
-<p>Void-free impregnation is what makes a measured prototype survive a rooftop. Warm the assembly, flood with low-viscosity epoxy or polyurethane varnish, then let it outgas in vacuum so trapped air does not stay as an insulated bubble around a lossy turn.</p>
-<p class="risk"><b>Failure mode:</b> the bench numbers were right; the resin hid a void that became a hot spot at duty cycle, and a foam-like layer that thermally insulates the very thing that gets hot.</p></div>
-<div class="step"><h4><i class="fas fa-cloud-rain"></i> Seal against water, not against curiosity</h4>
-<p>Drain hole at the lowest point of the enclosure, gasketed lid, UV-stable body, and strain relief on the feedline that clamps the jacket rather than the conductors.</p>
-<p class="risk"><b>Failure mode:</b> the commonest field failure of all is a box that collected rain over winter. Water in a high-field region does not just corrode, it adds loss that grows with frequency.</p></div>
-<div class="step"><h4><i class="fas fa-circle-half-stroke"></i> Give the cold ground a place to live</h4>
-<p>The unun&rsquo;s ground terminal and the coax shield must join at one short, low-inductance point, and that point is where your counterpoise or radial attaches. Long earth studs do not help; a copper plate and a bolted join do.</p>
-<p class="risk"><b>Failure mode:</b> an &ldquo;antenna that works fine indoors and terrible outside&rdquo; is usually a ground/counterpoise story, not a transformer story.</p></div>
-<div class="step"><h4><i class="fas fa-gauge-high"></i> Verify before you close the lid</h4>
-<p>Measure before potting, not after. A 1-port sweep with a known-resistive load substituted at the far end tells you whether the build matches the design; a sweep of the finished antenna tells you nothing about the transformer specifically.</p>
-<p class="risk"><b>Failure mode:</b> sealed box, surprising SWR, no way to know whose fault it is, new box built from the same mistake.</p></div>
-</div>
+        <div class="steps">
+          <div class="step">
+            <h4><i class="fas fa-search"></i> Inspect before contact</h4>
+            <p>
+              Chamfer and deburr the bore of the core with a fine file or tape.
+              A sharp inner rim chafes enamel under tension on the far side,
+              where you cannot see it.
+            </p>
+            <p class="risk">
+              <b>Failure mode:</b> a turn-to-core short that appears only when
+              cold, or an internal short after one season of thermal cycling.
+            </p>
+          </div>
+          <div class="step">
+            <h4>
+              <i class="fas fa-circle-notch"></i> Wind uniformly, light tension
+            </h4>
+            <p>
+              Spread the turns evenly over as much circumference as you can,
+              with constant tension. Pile-ups raise local capacitance and local
+              flux density; wide gaps leak field. Both cost you the low bands
+              first.
+            </p>
+            <p class="risk"><b>Failure mode:</b> fine on 20 m, dead on 80 m.</p>
+          </div>
+          <div class="step">
+            <h4>
+              <i class="fas fa-code-compare"></i> Mark the phase dots before you
+              cut
+            </h4>
+            <p>
+              Wrong phasing on a transmission-line transformer turns a balun
+              into a plain choke with no transformation; wrong phasing on an
+              autotransformer gives you a shorted turn. Mark start and finish
+              before trimming the wire.
+            </p>
+            <p class="risk">
+              <b>Failure mode:</b> high SWR everywhere, hot core at low power,
+              builder convinced the circuit is bogus.
+            </p>
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-bolt"></i> Short leads, no pigtails</h4>
+            <p>
+              At a 2&ndash;5 k&Omega; node every millimetre of stray lead is
+              added inductance and a small antenna. Solder to the terminal, not
+              to a loop of stranded wire.
+            </p>
+            <p class="risk">
+              <b>Failure mode:</b> return loss that moves when you rotate the
+              box in your hand.
+            </p>
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-droplet"></i> Impregnate, do not glaze</h4>
+            <p>
+              Void-free impregnation is what makes a measured prototype survive
+              a rooftop. Warm the assembly, flood with low-viscosity epoxy or
+              polyurethane varnish, then let it outgas in vacuum so trapped air
+              does not stay as an insulated bubble around a lossy turn.
+            </p>
+            <p class="risk">
+              <b>Failure mode:</b> the bench numbers were right; the resin hid a
+              void that became a hot spot at duty cycle, and a foam-like layer
+              that thermally insulates the very thing that gets hot.
+            </p>
+          </div>
+          <div class="step">
+            <h4>
+              <i class="fas fa-cloud-rain"></i> Seal against water, not against
+              curiosity
+            </h4>
+            <p>
+              Drain hole at the lowest point of the enclosure, gasketed lid,
+              UV-stable body, and strain relief on the feedline that clamps the
+              jacket rather than the conductors.
+            </p>
+            <p class="risk">
+              <b>Failure mode:</b> the commonest field failure of all is a box
+              that collected rain over winter. Water in a high-field region does
+              not just corrode, it adds loss that grows with frequency.
+            </p>
+          </div>
+          <div class="step">
+            <h4>
+              <i class="fas fa-circle-half-stroke"></i> Give the cold ground a
+              place to live
+            </h4>
+            <p>
+              The unun&rsquo;s ground terminal and the coax shield must join at
+              one short, low-inductance point, and that point is where your
+              counterpoise or radial attaches. Long earth studs do not help; a
+              copper plate and a bolted join do.
+            </p>
+            <p class="risk">
+              <b>Failure mode:</b> an &ldquo;antenna that works fine indoors and
+              terrible outside&rdquo; is usually a ground/counterpoise story,
+              not a transformer story.
+            </p>
+          </div>
+          <div class="step">
+            <h4>
+              <i class="fas fa-gauge-high"></i> Verify before you close the lid
+            </h4>
+            <p>
+              Measure before potting, not after. A 1-port sweep with a
+              known-resistive load substituted at the far end tells you whether
+              the build matches the design; a sweep of the finished antenna
+              tells you nothing about the transformer specifically.
+            </p>
+            <p class="risk">
+              <b>Failure mode:</b> sealed box, surprising SWR, no way to know
+              whose fault it is, new box built from the same mistake.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
-<section class="section" id="bom" style="background: var(--bg-secondary)">
-  <div class="container">
-    <div class="section-header"><span class="section-label">03b · Bill of materials</span>
-      <h2 class="section-title">What a durable feedpoint actually costs</h2>
-      <p class="section-subtitle">Generic parts, no brand endorsement, and no price claim — prices move. The point of this table is the parts people omit, then wonder why the box failed.</p></div>
-    <table class="spec-table">
-      <thead><tr><th>Item</th><th>Why it is on the list</th><th>What gets skipped</th></tr></thead>
-      <tbody>
-        <tr><td>Toroid core, material per Q4 above</td><td>The design&rsquo;s thermal and impedance budget lives here.</td><td class="deny">Buying one core for every experiment.</td></tr>
-        <tr><td>Enamelled copper, two gauges (fine for the ratio, heavy for the high-current turn)</td><td>An autotransformer&rsquo;s low-Z turn carries the whole antenna current.</td><td class="deny">Using one thin wire throughout.</td></tr>
-        <tr><td>PTFE or FEP insulated wire for the first turns</td><td>That is where several hundred volts peak appears.</td><td class="deny">Assuming enamel is an insulation system at QRO.</td></tr>
-        <tr><td>Low-viscosity impregnating resin + vacuum bag or pump</td><td>Voids, not resin, are what kill the build.</td><td class="deny">Brushing on surface varnish and calling it potted.</td></tr>
-        <tr><td>IP-rated enclosure, gasket, drain hole, UV-stable</td><td>Rain and sun out-ferrite any HF design.</td><td class="deny">A 3D-printed lid with no gasket.</td></tr>
-        <tr><td>Chassis SO-239 or N panel mount + short internal links</td><td>Keeps the ground node short and measurable.</td><td class="deny">Feeding wire straight to a PCB pad.</td></tr>
-        <tr><td>Copper plate or bus bar for the cold-ground / radial stud</td><td>One low-inductance join for shield and counterpoise.</td><td class="deny">&ldquo;It is only ground.&rdquo;</td></tr>
-        <tr><td>Ferrite beads or a spare core for the CMC</td><td>The CMC is a separate device; you need both.</td><td class="deny">Expecting the unun to stop shield current.</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-<section class="section" id="field">
-  <div class="container">
-    <div class="section-header"><span class="section-label">04 · Field &amp; optimisation</span>
-      <h2 class="section-title">Install it, then argue with the numbers</h2>
-      <p class="section-subtitle">Optimisation targets you can check on paper, plus the four field practices that move real-world results more than any winding tweak.</p></div>
-    <div class="feature-card"><h3 class="card-title">Four practices, in the order they pay</h3>
-      <ol>
-        <li><b>Put a CMC on the feedline, close to the feedpoint.</b> It does not change your match; it stops the shield from becoming the other half of the antenna, which is what actually causes the TV interference, the hot coax and the &ldquo;SWR changes when I stand near it&rdquo; report. <span class="tag tag-c">C</span></li>
-        <li><b>Give the counterpoise a deliberate length and route.</b> On a single-ended feed the radials are part of the radiator, not housekeeping. <span class="tag tag-c">C</span> Length choice and its effect on pattern are adjudicated in <a href="../mrrc/efhw/index.html">Counterpoise &mdash; Balance Ground</a>.</li>
-        <li><b>Keep the feedline away from the wire for a wavelength or so.</b> Coupling between the last metre of coax and the antenna end invalidates everything you measured at the bench.</li>
-        <li><b>Measure the system twice: once at the rig, once at the box.</b> If you only ever measure at the rig, coax loss is hiding inside your conclusion about the transformer.</li>
-      </ol>
-    </div>
-    <table class="spec-table">
-      <thead><tr><th>Target</th><th>How to check it on paper</th><th>Our measured value</th></tr></thead>
-      <tbody>
-        <tr><td>Flux density headroom</td><td>B<sub>max</sub> = V / (4.44 &middot; f<sub>min</sub> &middot; N<sub>primary</sub> &middot; A<sub>e</sub>). Raise turns or core area, never just the wire gauge. <span class="tag tag-c">C</span></td><td class="na">&mdash; see research site</td></tr>
-        <tr><td>Insertion loss budget</td><td>Core loss grows with frequency and with flux density; it is a trade, not a spec sheet number. <span class="tag tag-c">C</span></td><td class="na">&mdash; <a href="../mrrc/efhw/index.html">49:1 loss measurements</a></td></tr>
-        <tr><td>Thermal rise at duty cycle</td><td>Estimate dissipated power, then check it against the enclosure&rsquo;s surface area. FT8 and AM are duty-cycle tests, SSB is not. <span class="tag tag-c">C</span></td><td class="na">&mdash; not measured by us</td></tr>
-        <tr><td>Self-resonance above the top band</td><td>Winding capacitance plus magnetising inductance sets a ceiling; more turns buys low-band performance and spends high-band headroom. <span class="tag tag-c">C</span></td><td class="na">&mdash; see research site</td></tr>
-        <tr><td>Power derating point</td><td>The cliff is material-dependent and abrupt on Mn-Zn. Do not extrapolate from a QRP success. <span class="tag tag-c">C</span></td><td class="na">&mdash; <a href="../mrrc/efhw/index.html">stacked-core comparison</a></td></tr>
-      </tbody>
-    </table>
-    <div class="calc"><b>The honest row at the bottom of the table.</b> Not one value above is
-    measured by us. This page is deliberately silent about dB and degrees Celsius:
-    <span style="color:#f0a030">&mdash;</span> means &ldquo;we
-have not measured it&rdquo;, not &ldquo;0.2 dB, trust us&rdquo;.</div>
-    <div class="feature-card" style="border-color: rgba(240,160,48,0.4)">
-      <h3 class="card-title"><i class="fas fa-person-from-portal" style="color:#f0a030"></i> When to stop optimising the balun</h3>
-      <p>Optimisation has an exit condition. Choose a different antenna rather than a better transformer when:</p>
-      <ul>
-        <li>You need a symmetrical pattern, low take-off angle on the low bands, or real rejection of common mode &mdash; a balanced antenna with a 1:1 current balun is a different, better solution, not a worse balun.</li>
-        <li>Your tuning loop costs more loss than the transformer you are trying to perfect. The research site&rsquo;s transformer work is excellent; a mismatched ATU will still eat the difference.</li>
-        <li>The band you want puts the feedpoint above what one wire and one core can hold. Then it is a physics limit, not a craft limit.</li>
-      </ul>
-    </div>
-  </div>
-</section>
+    <section class="section" id="bom" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">03b · Bill of materials</span>
+          <h2 class="section-title">What a durable feedpoint actually costs</h2>
+          <p class="section-subtitle">
+            Generic parts, no brand endorsement, and no price claim — prices
+            move. The point of this table is the parts people omit, then wonder
+            why the box failed.
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Why it is on the list</th>
+              <th>What gets skipped</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Toroid core, material per Q4 above</td>
+              <td>
+                The design&rsquo;s thermal and impedance budget lives here.
+              </td>
+              <td class="deny">Buying one core for every experiment.</td>
+            </tr>
+            <tr>
+              <td>
+                Enamelled copper, two gauges (fine for the ratio, heavy for the
+                high-current turn)
+              </td>
+              <td>
+                An autotransformer&rsquo;s low-Z turn carries the whole antenna
+                current.
+              </td>
+              <td class="deny">Using one thin wire throughout.</td>
+            </tr>
+            <tr>
+              <td>PTFE or FEP insulated wire for the first turns</td>
+              <td>That is where several hundred volts peak appears.</td>
+              <td class="deny">
+                Assuming enamel is an insulation system at QRO.
+              </td>
+            </tr>
+            <tr>
+              <td>Low-viscosity impregnating resin + vacuum bag or pump</td>
+              <td>Voids, not resin, are what kill the build.</td>
+              <td class="deny">
+                Brushing on surface varnish and calling it potted.
+              </td>
+            </tr>
+            <tr>
+              <td>IP-rated enclosure, gasket, drain hole, UV-stable</td>
+              <td>Rain and sun out-ferrite any HF design.</td>
+              <td class="deny">A 3D-printed lid with no gasket.</td>
+            </tr>
+            <tr>
+              <td>Chassis SO-239 or N panel mount + short internal links</td>
+              <td>Keeps the ground node short and measurable.</td>
+              <td class="deny">Feeding wire straight to a PCB pad.</td>
+            </tr>
+            <tr>
+              <td>Copper plate or bus bar for the cold-ground / radial stud</td>
+              <td>One low-inductance join for shield and counterpoise.</td>
+              <td class="deny">&ldquo;It is only ground.&rdquo;</td>
+            </tr>
+            <tr>
+              <td>Ferrite beads or a spare core for the CMC</td>
+              <td>The CMC is a separate device; you need both.</td>
+              <td class="deny">Expecting the unun to stop shield current.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="section" id="field">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">04 · Field &amp; optimisation</span>
+          <h2 class="section-title">Install it, then argue with the numbers</h2>
+          <p class="section-subtitle">
+            Optimisation targets you can check on paper, plus the four field
+            practices that move real-world results more than any winding tweak.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3 class="card-title">Four practices, in the order they pay</h3>
+          <ol>
+            <li>
+              <b>Put a CMC on the feedline, close to the feedpoint.</b> It does
+              not change your match; it stops the shield from becoming the other
+              half of the antenna, which is what actually causes the TV
+              interference, the hot coax and the &ldquo;SWR changes when I stand
+              near it&rdquo; report. <span class="tag tag-c">C</span>
+            </li>
+            <li>
+              <b>Give the counterpoise a deliberate length and route.</b> On a
+              single-ended feed the radials are part of the radiator, not
+              housekeeping. <span class="tag tag-c">C</span> Length choice and
+              its effect on pattern are adjudicated in
+              <a href="../mrrc/efhw/index.html"
+                >Counterpoise &mdash; Balance Ground</a
+              >.
+            </li>
+            <li>
+              <b
+                >Keep the feedline away from the wire for a wavelength or so.</b
+              >
+              Coupling between the last metre of coax and the antenna end
+              invalidates everything you measured at the bench.
+            </li>
+            <li>
+              <b>Measure the system twice: once at the rig, once at the box.</b>
+              If you only ever measure at the rig, coax loss is hiding inside
+              your conclusion about the transformer.
+            </li>
+          </ol>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Target</th>
+              <th>How to check it on paper</th>
+              <th>Our measured value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Flux density headroom</td>
+              <td>
+                B<sub>max</sub> = V / (4.44 &middot; f<sub>min</sub> &middot;
+                N<sub>primary</sub> &middot; A<sub>e</sub>). Raise turns or core
+                area, never just the wire gauge.
+                <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">&mdash; see research site</td>
+            </tr>
+            <tr>
+              <td>Insertion loss budget</td>
+              <td>
+                Core loss grows with frequency and with flux density; it is a
+                trade, not a spec sheet number. <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">
+                &mdash;
+                <a href="../mrrc/efhw/index.html">49:1 loss measurements</a>
+              </td>
+            </tr>
+            <tr>
+              <td>Thermal rise at duty cycle</td>
+              <td>
+                Estimate dissipated power, then check it against the
+                enclosure&rsquo;s surface area. FT8 and AM are duty-cycle tests,
+                SSB is not. <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">&mdash; not measured by us</td>
+            </tr>
+            <tr>
+              <td>Self-resonance above the top band</td>
+              <td>
+                Winding capacitance plus magnetising inductance sets a ceiling;
+                more turns buys low-band performance and spends high-band
+                headroom. <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">&mdash; see research site</td>
+            </tr>
+            <tr>
+              <td>Power derating point</td>
+              <td>
+                The cliff is material-dependent and abrupt on Mn-Zn. Do not
+                extrapolate from a QRP success. <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">
+                &mdash;
+                <a href="../mrrc/efhw/index.html">stacked-core comparison</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>The honest row at the bottom of the table.</b> Not one value above
+          is measured by us. This page is deliberately silent about dB and
+          degrees Celsius: <span style="color: #f0a030">&mdash;</span> means
+          &ldquo;we have not measured it&rdquo;, not a number we trust.
+        </div>
+        <div class="feature-card" style="border-color: rgba(240, 160, 48, 0.4)">
+          <h3 class="card-title">
+            <i class="fas fa-person-from-portal" style="color: #f0a030"></i>
+            When to stop optimising the balun
+          </h3>
+          <p>
+            Optimisation has an exit condition. Choose a different antenna
+            rather than a better transformer when:
+          </p>
+          <ul>
+            <li>
+              You need a symmetrical pattern, low take-off angle on the low
+              bands, or real rejection of common mode &mdash; a balanced antenna
+              with a 1:1 current balun is a different, better solution, not a
+              worse balun.
+            </li>
+            <li>
+              Your tuning loop costs more loss than the transformer you are
+              trying to perfect. The research site&rsquo;s transformer work is
+              excellent; a mismatched ATU will still eat the difference.
+            </li>
+            <li>
+              The band you want puts the feedpoint above what one wire and one
+              core can hold. Then it is a physics limit, not a craft limit.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-<section class="section" id="evidence" style="background: var(--bg-secondary)">
-  <div class="container">
-    <div class="section-header"><span class="section-label">Evidence &amp; sources</span>
-      <h2 class="section-title">Where the numbers on this page come from</h2>
-      <p class="section-subtitle">This page publishes no measurement of its own. Anything quantitative here is either arithmetic from a stated formula, or a pointer to the work that measured it.</p></div>
-    <div class="tech-stack">
-      <span class="tech-tag">G. Guanella &mdash; transmission-line transformer principle</span>
-      <span class="tech-tag">H. Guggenb&uuml;ll &mdash; broad-band matching of balanced lines</span>
-      <span class="tech-tag">W8JI &mdash; balun &amp; transformer measurements</span>
-      <span class="tech-tag">PA3HHO &mdash; EFHF / EFHW transformer research</span>
-      <span class="tech-tag">W. Chew &mdash; RF Transmission Line Transformers</span>
-      <span class="tech-tag">ARRL Handbook &mdash; matching networks</span>
-    </div>
-    <p style="margin-top:1.5rem">Owned by this site&rsquo;s research hub (theory, VNA methodology, measured comparisons):</p>
-    <div class="footer-grid" style="margin-top:0.5rem">
-      <div class="footer-section"><ul>
-        <li><a href="../mrrc/efhw/index.html">49:1 vs 64:1 transformer design</a></li>
-        <li><a href="../mrrc/efhw/index.html">Turns ratio showdown 2:14 vs 3:21</a></li>
-        <li><a href="../mrrc/efhw/index.html">Ferrite core selection</a></li>
-        <li><a href="../mrrc/efhw/index.html">Winding methods &amp; W8JI corrections</a></li>
-      </ul></div>
-      <div class="footer-section"><ul>
-        <li><a href="../mrrc/efhw/index.html">Common-mode choke in-depth</a></li>
-        <li><a href="../mrrc/efhw/index.html">Counterpoise &mdash; balance ground</a></li>
-        <li><a href="../mrrc/efhw/index.html">Back-to-back measurement myth</a></li>
-        <li><a href="../mrrc/efhw/t200-2-guide.html">T200-2 resonant matching guide</a></li>
-      </ul></div>
-    </div>
-    <p style="margin-top:1.5rem"><span class="tag tag-m">M</span> rows reserved: any value we measure ourselves will cite its raw data file under the repository logs/ directory.</p>
-  </div>
-</section>
+    <section
+      class="section"
+      id="evidence"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Evidence &amp; sources</span>
+          <h2 class="section-title">
+            Where the numbers on this page come from
+          </h2>
+          <p class="section-subtitle">
+            This page publishes no measurement of its own. Anything quantitative
+            here is either arithmetic from a stated formula, or a pointer to the
+            work that measured it.
+          </p>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-tag"
+            >G. Guanella &mdash; transmission-line transformer principle</span
+          >
+          <span class="tech-tag"
+            >H. Guggenb&uuml;ll &mdash; broad-band matching of balanced
+            lines</span
+          >
+          <span class="tech-tag"
+            >W8JI &mdash; balun &amp; transformer measurements</span
+          >
+          <span class="tech-tag"
+            >PA3HHO &mdash; EFHF / EFHW transformer research</span
+          >
+          <span class="tech-tag"
+            >W. Chew &mdash; RF Transmission Line Transformers</span
+          >
+          <span class="tech-tag">ARRL Handbook &mdash; matching networks</span>
+        </div>
+        <p style="margin-top: 1.5rem">
+          Owned by this site&rsquo;s research hub (theory, VNA methodology,
+          measured comparisons):
+        </p>
+        <div class="footer-grid" style="margin-top: 0.5rem">
+          <div class="footer-section">
+            <ul>
+              <li>
+                <a href="../mrrc/efhw/index.html"
+                  >49:1 vs 64:1 transformer design</a
+                >
+              </li>
+              <li>
+                <a href="../mrrc/efhw/index.html"
+                  >Turns ratio showdown 2:14 vs 3:21</a
+                >
+              </li>
+              <li>
+                <a href="../mrrc/efhw/index.html">Ferrite core selection</a>
+              </li>
+              <li>
+                <a href="../mrrc/efhw/index.html"
+                  >Winding methods &amp; W8JI corrections</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <ul>
+              <li>
+                <a href="../mrrc/efhw/index.html">Common-mode choke in-depth</a>
+              </li>
+              <li>
+                <a href="../mrrc/efhw/index.html"
+                  >Counterpoise &mdash; balance ground</a
+                >
+              </li>
+              <li>
+                <a href="../mrrc/efhw/index.html"
+                  >Back-to-back measurement myth</a
+                >
+              </li>
+              <li>
+                <a href="../mrrc/efhw/t200-2-guide.html"
+                  >T200-2 resonant matching guide</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1.5rem">
+          <span class="tag tag-m">M</span> rows reserved: any value we measure
+          ourselves will cite its raw data file under the repository logs/
+          directory.
+        </p>
+      </div>
+    </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-cta">
-  <h2>Build one, then measure it</h2>
-  <p>This page ends where a claim would start. If you do wind and pot one, bring a VNA, bring a 2.5 k&Omega; non-inductive load, and bring the methodology the research site already argues about.</p>
-  <div class="hero-actions">
-    <a href="index.html" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to EFHW Projects</a>
-    <a href="../mrrc/efhw/index.html" class="btn btn-secondary"><i class="fas fa-book-open"></i> Deep research</a>
-  </div>
-    </div>
-  </div>
-</section>
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-section"><h4>EFHW Projects</h4><p>End-Fed Half-Wave Antenna Research<br />&amp; Practice Hub<br />V3.0 · CERN-OHL-S 2.0 / GPL-3.0</p></div>
-      <div class="footer-section"><h4>This page</h4><ul>
-        <li><a href="#taxonomy">01 · Taxonomy</a></li>
-        <li><a href="#selection">02 · Selection</a></li>
-        <li><a href="#build">03 · Build craft</a></li>
-        <li><a href="#bom">03b · BOM</a></li>
-        <li><a href="#field">04 · Field &amp; optimisation</a></li>
-        <li><a href="#evidence">Evidence &amp; sources</a></li>
-      </ul></div>
-      <div class="footer-section"><h4>Ecosystem</h4><ul>
-        <li><a href="index.html">EFHW home</a></li>
-        <li><a href="zh/baluns.html">中文</a></li>
-        <li><a href="/mrrc/efhw/">Deep research (MRRC)</a></li>
-        <li><a href="/">VLSC projects</a></li>
-      </ul></div>
-    </div>
-    <div class="footer-bottom"><p>© 2026 BG1SB · Content: CERN-OHL-S 2.0 / GPL-3.0 · No measured value on this page was invented.</p></div>
-  </div>
-</footer>
-<script>
+    <section class="section">
+      <div class="container">
+        <div class="section-cta">
+          <h2>Build one, then measure it</h2>
+          <p>
+            This page ends where a claim would start. If you do wind and pot
+            one, bring a VNA, bring a 2.5 k&Omega; non-inductive load, and bring
+            the methodology the research site already argues about.
+          </p>
+          <div class="hero-actions">
+            <a href="index.html" class="btn btn-primary"
+              ><i class="fas fa-arrow-left"></i> Back to EFHW Projects</a
+            >
+            <a href="../mrrc/efhw/index.html" class="btn btn-secondary"
+              ><i class="fas fa-book-open"></i> Deep research</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-section">
+            <h4>EFHW Projects</h4>
+            <p>
+              End-Fed Half-Wave Antenna Research<br />&amp; Practice Hub<br />V3.0
+              · CERN-OHL-S 2.0 / GPL-3.0
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>This page</h4>
+            <ul>
+              <li><a href="#taxonomy">01 · Taxonomy</a></li>
+              <li><a href="#selection">02 · Selection</a></li>
+              <li><a href="#build">03 · Build craft</a></li>
+              <li><a href="#bom">03b · BOM</a></li>
+              <li><a href="#field">04 · Field &amp; optimisation</a></li>
+              <li><a href="#evidence">Evidence &amp; sources</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Ecosystem</h4>
+            <ul>
+              <li><a href="index.html">EFHW home</a></li>
+              <li><a href="zh/baluns.html">中文</a></li>
+              <li><a href="/mrrc/efhw/">Deep research (MRRC)</a></li>
+              <li><a href="/">VLSC projects</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            © 2026 BG1SB · Content: CERN-OHL-S 2.0 / GPL-3.0 · No measured value
+            on this page was invented.
+          </p>
+        </div>
+      </div>
+    </footer>
+    <script>
       function toggleMobileMenu() {
         document.querySelector(".nav-links").classList.toggle("active");
       }
-  document.querySelectorAll('a[href^="#"]').forEach((a) => {
-    a.addEventListener("click", (e) => {
-      const t = document.querySelector(a.getAttribute("href"));
-      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); }
-    });
-  });
-  const nav = document.querySelector(".navbar");
-  window.addEventListener("scroll", () => {
-    nav.style.background = window.scrollY > 50 ? "rgba(10,14,20,0.98)" : "rgba(10,14,20,0.92)";
-  });
-</script>
-<script src="js/global-nav.js?v=6" defer data-gn="1"></script>
-</body>
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const t = document.querySelector(a.getAttribute("href"));
+          if (t) {
+            e.preventDefault();
+            t.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+      const nav = document.querySelector(".navbar");
+      window.addEventListener("scroll", () => {
+        nav.style.background =
+          window.scrollY > 50 ? "rgba(10,14,20,0.98)" : "rgba(10,14,20,0.92)";
+      });
+    </script>
+    <script src="js/global-nav.js?v=6" defer data-gn="1"></script>
+  </body>
 </html>

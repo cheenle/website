@@ -3,8 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="端馈天线用巴伦与非平衡变换器实操专题：49:1 / 64:1 unun、Guanella 电流巴伦、1:1 磁环共模抑制、LTA 的类型谱系；按约束选型的决策树；绕线、浸漆与防水装配的工艺与失败模式；装机实践与可在纸面复核的优化目标。理论与实测数据归 EFHW 深度研究站。" />
-    <meta name="keywords" content="巴伦, 非平衡变换器, unun, 49:1, 64:1, Guanella, 电流巴伦, 电压巴伦, 共模抑制, 磁环, EFHW, 端馈半波段, 平衡地网, 传输线变压器" />
+    <meta
+      name="description"
+      content="端馈天线用巴伦与非平衡变换器实操专题：49:1 / 64:1 unun、Guanella 电流巴伦、1:1 磁环共模抑制、LTA 的类型谱系；按约束选型的决策树；绕线、浸漆与防水装配的工艺与失败模式；装机实践与可在纸面复核的优化目标。理论与实测数据归 EFHW 深度研究站。"
+    />
+    <meta
+      name="keywords"
+      content="巴伦, 非平衡变换器, unun, 49:1, 64:1, Guanella, 电流巴伦, 电压巴伦, 共模抑制, 磁环, EFHW, 端馈半波段, 平衡地网, 传输线变压器"
+    />
     <meta name="author" content="BG1SB" />
     <meta name="theme-color" content="#0a0e14" />
     <link rel="alternate" hreflang="en" href="../baluns.html" />
@@ -12,11 +18,21 @@
     <title>巴伦与非平衡变换器 — 类型、制作、装机实践 — EFHW Projects</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="../css/octen.css?v=6" />
     <link rel="stylesheet" href="../css/efhw.css?v=2" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>🧲</text></svg>" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>🧲</text></svg>"
+    />
   </head>
   <body data-site="efhw">
     <nav class="navbar">
@@ -32,7 +48,15 @@
           <li><a href="#build">制作工艺</a></li>
           <li><a href="#field">装机实践</a></li>
           <li><a href="../index.html#research">深度研究</a></li>
-          <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener" class="nav-cta"><i class="fab fa-github"></i> GitHub</a></li>
+          <li>
+            <a
+              href="https://github.com/cheenle/efhw-knowledge"
+              target="_blank"
+              rel="noopener"
+              class="nav-cta"
+              ><i class="fab fa-github"></i> GitHub</a
+            >
+          </li>
         </ul>
         <div class="nav-actions">
           <a href="../baluns.html" class="lang-btn">EN</a>
@@ -58,16 +82,27 @@
           <i class="fas fa-magnet"></i>
           <span>决策与台架工艺 · 理论与实测归深度研究站</span>
         </div>
-        <h1 class="hero-title">巴伦与非平衡变换器<br /><span class="gradient">类型、制作、最佳实践</span></h1>
+        <h1 class="hero-title">
+          巴伦与非平衡变换器<br /><span class="gradient"
+            >类型、制作、最佳实践</span
+          >
+        </h1>
         <p class="hero-subtitle">
           这是一页给动手者的话，不是物理课。它只回答四件事：你手里那个磁件到底属于哪一类、
           按你的功率与波段该选哪一个、怎样绕制与封装才不毁掉它、以及装机后该先检查什么。
-          所有“为什么”——磁芯材料、损耗实测、49:1 与 64:1 之争、VNA 测量方法——
-          归 <a href="../../mrrc/efhw/index.html">EFHW 深度研究站</a> 所有，本页只链接，不复制。
+          所有“为什么”——磁芯材料、损耗实测、49:1 与 64:1 之争、VNA 测量方法—— 归
+          <a href="../../mrrc/efhw/index.html">EFHW 深度研究站</a>
+          所有，本页只链接，不复制。
         </p>
         <div class="hero-actions">
-          <a href="#taxonomy" class="btn btn-primary btn-large"><i class="fas fa-table-list"></i> 打开类型谱系</a>
-          <a href="../../mrrc/efhw/index.html" class="btn btn-secondary btn-large"><i class="fas fa-chart-line"></i> 实测与理论</a>
+          <a href="#taxonomy" class="btn btn-primary btn-large"
+            ><i class="fas fa-table-list"></i> 打开类型谱系</a
+          >
+          <a
+            href="../../mrrc/efhw/index.html"
+            class="btn btn-secondary btn-large"
+            ><i class="fas fa-chart-line"></i> 实测与理论</a
+          >
         </div>
       </div>
     </section>
@@ -82,80 +117,187 @@
             请把中间那列读成“它实际承担的职责”，最后一列读成“人们烧钱的理由”。
           </p>
         </div>
-        <div class="calc"><b>本页的标签纪律。</b>[C] = 有可引用出处的工程共识，或可用本页给出的公式自行复算的算术。[M] = 我们实测，且原始数据文件在仓库里可查。凡我们没测过的，一律写 <span style="color:#f0a030">—</span> 并指向研究站。我们不印自己无法复算也无法出示的数字。</div>
+        <div class="calc">
+          <b>本页的标签纪律。</b>[C] =
+          有可引用出处的工程共识，或可用本页给出的公式自行复算的算术。[M] =
+          我们实测，且原始数据文件在仓库里可查。凡我们没测过的，一律写
+          <span style="color: #f0a030">—</span>
+          并指向研究站。我们不印自己无法复算也无法出示的数字。
+        </div>
         <table class="spec-table">
-          <thead><tr><th>器件</th><th>它实际承担的职责</th><th>工作频段</th><th>什么时候选它</th><th>什么时候别选</th></tr></thead>
+          <thead>
+            <tr>
+              <th>器件</th>
+              <th>它实际承担的职责</th>
+              <th>工作频段</th>
+              <th>什么时候选它</th>
+              <th>什么时候别选</th>
+            </tr>
+          </thead>
           <tbody>
-            <tr><td><b>49:1 unun</b> <span class="tag tag-c">C</span></td>
-              <td>把 50 &Omega; 升到约 2450 &Omega;（50 &times; 49）。它是自耦变压器，<em>不做</em>任何平衡。</td>
+            <tr>
+              <td><b>49:1 unun</b> <span class="tag tag-c">C</span></td>
+              <td>
+                把 50 &Omega; 升到约 2450 &Omega;（50 &times;
+                49）。它是自耦变压器，<em>不做</em>任何平衡。
+              </td>
               <td>1.8&ndash;30 MHz，线长按最低波段裁</td>
               <td>端馈半波段，且馈点阻抗确实在几 k&Omega; 量级。</td>
-              <td class="deny">你其实需要对称性；或把表功率灌进小磁芯，然后把烫手叫作“正常”。</td></tr>
-            <tr><td><b>64:1 unun</b> <span class="tag tag-c">C</span></td>
+              <td class="deny">
+                你其实需要对称性；或把表功率灌进小磁芯，然后把烫手叫作“正常”。
+              </td>
+            </tr>
+            <tr>
+              <td><b>64:1 unun</b> <span class="tag tag-c">C</span></td>
               <td>同样的活，升比为 3200 &Omega;（50 &times; 64）。</td>
               <td>同上</td>
               <td>你实测的馈点更接近 3&ndash;5 k&Omega; 而不是 2.5。</td>
-              <td class="deny">你希望别人替你决定 —— 49 与 64 之争是测量之争，见研究站。</td></tr>
-            <tr><td><b>Guanella / TLT 电流巴伦</b> <span class="tag tag-c">C</span></td>
-              <td>靠绕在磁芯上的传输线承载功率来变换，并强制两导体电流等值反相。</td>
+              <td class="deny">
+                你希望别人替你决定 —— 49 与 64 之争是测量之争，见研究站。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Guanella / TLT 电流巴伦</b> <span class="tag tag-c">C</span>
+              </td>
+              <td>
+                靠绕在磁芯上的传输线承载功率来变换，并强制两导体电流等值反相。
+              </td>
               <td>单节升比很小（典型 1:4，1:16 需两节）</td>
               <td>既要平衡又要变换、要宽带、且热上留有余量。</td>
-              <td class="deny">你要在一颗小磁芯上做 1:49 —— 节数与体积随升比增长。</td></tr>
-            <tr><td><b>1:1 电流巴伦</b> <span class="tag tag-c">C</span></td>
+              <td class="deny">
+                你要在一颗小磁芯上做 1:49 —— 节数与体积随升比增长。
+              </td>
+            </tr>
+            <tr>
+              <td><b>1:1 电流巴伦</b> <span class="tag tag-c">C</span></td>
               <td>不变换。对共模呈现高串联阻抗。</td>
               <td>取决于磁芯阻抗峰位置</td>
               <td>用同轴馈电给对称天线（偶极子、环）。</td>
-              <td class="deny">端馈单线 —— 它修的是平衡，不是 2&ndash;5 k&Omega; 的失配。</td></tr>
-            <tr><td><b>共模磁环（CMC）</b> <span class="tag tag-c">C</span></td>
+              <td class="deny">
+                端馈单线 —— 它修的是平衡，不是 2&ndash;5 k&Omega; 的失配。
+              </td>
+            </tr>
+            <tr>
+              <td><b>共模磁环（CMC）</b> <span class="tag tag-c">C</span></td>
               <td>抑制屏蔽层电流。它根本不是巴伦。</td>
               <td>五者中最宽</td>
               <td>端馈天线永远要一个。这才是电视机与电脑噪声那一项。</td>
-              <td class="deny">你指望它改善驻波 —— 它作用于离开天线系统的东西，不碰 Z&#8346;。</td></tr>
-            <tr><td><b>LTA / 分布式</b> <span class="tag tag-c">C</span></td>
+              <td class="deny">
+                你指望它改善驻波 —— 它作用于离开天线系统的东西，不碰 Z&#8346;。
+              </td>
+            </tr>
+            <tr>
+              <td><b>LTA / 分布式</b> <span class="tag tag-c">C</span></td>
               <td>有损传输线段；无磁芯，故无饱和。</td>
               <td>以 VHF/UHF 为主；HF 版本体积很大</td>
               <td>要极宽频段，或你不愿在热上信任铁氧体。</td>
-              <td class="deny">HF 满功率 —— 你接受的那份损耗是盒子里真实的发热。</td></tr>
-            <tr><td><b>偶极子 + 1:1 电流巴伦</b> <span class="tag tag-c">C</span></td>
-              <td>什么都不变换；对称天线本就约 50 &Omega;，巴伦只让屏蔽层安静下来。</td>
+              <td class="deny">
+                HF 满功率 —— 你接受的那份损耗是盒子里真实的发热。
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>偶极子 + 1:1 电流巴伦</b> <span class="tag tag-c">C</span>
+              </td>
+              <td>
+                什么都不变换；对称天线本就约 50
+                &Omega;，巴伦只让屏蔽层安静下来。
+              </td>
               <td>逐频段（或用陷阱/扇形偶极子）</td>
               <td>你真的能架起两半。这是诚实的基线。</td>
-              <td class="deny">你只有一根支撑和一根线 —— 那就回到上面那行。</td></tr>
+              <td class="deny">你只有一根支撑和一根线 —— 那就回到上面那行。</td>
+            </tr>
           </tbody>
         </table>
       </div>
     </section>
-    <section class="section" id="selection" style="background: var(--bg-secondary)">
+    <section
+      class="section"
+      id="selection"
+      style="background: var(--bg-secondary)"
+    >
       <div class="container">
         <div class="section-header">
           <span class="section-label">02 · 选型决策</span>
           <h2 class="section-title">按约束决定，不要按牌子决定</h2>
-          <p class="section-subtitle">四条约束，按顺序过一遍。每个叶子给出器件并链向支撑它的实测论证 —— 我们不在此复述对方的数值。</p>
+          <p class="section-subtitle">
+            四条约束，按顺序过一遍。每个叶子给出器件并链向支撑它的实测论证 ——
+            我们不在此复述对方的数值。
+          </p>
         </div>
         <ul class="tree">
-          <li class="q">Q1 · 多大功率，是连续发射（FT8/数字）还是峰值型（SSB/CW）？</li>
+          <li class="q">
+            Q1 · 多大功率，是连续发射（FT8/数字）还是峰值型（SSB/CW）？
+          </li>
           <ul>
-            <li>QRO 或连续工作 &rarr; 单节升比必须小。用 TLT（Guanella）结构，或两颗/更大磁芯；单颗小磁芯做 1:49 是最常烧坏的那件。 <span class="leaf">&rarr; 见 <a href="../../mrrc/efhw/index.html">磁芯选型</a></span></li>
-            <li>QRP（&le;10 W）&rarr; 材料对的话几乎所有像样磁芯都行；此时优化目标是损耗，不是热。</li>
+            <li>
+              QRO 或连续工作 &rarr; 单节升比必须小。用
+              TLT（Guanella）结构，或两颗/更大磁芯；单颗小磁芯做 1:49
+              是最常烧坏的那件。
+              <span class="leaf"
+                >&rarr; 见
+                <a href="../../mrrc/efhw/index.html">磁芯选型</a></span
+              >
+            </li>
+            <li>
+              QRP（&le;10 W）&rarr;
+              材料对的话几乎所有像样磁芯都行；此时优化目标是损耗，不是热。
+            </li>
           </ul>
           <li class="q">Q2 · 几个波段，你能不能接受重新调谐？</li>
           <ul>
-            <li>单波段 &rarr; 固定升比匹配 + 电台端天线调谐器，是损耗最低的做法。</li>
-            <li>多波段长线 &rarr; 宽带变换器 + 调谐器；请预期真正在干活的是调谐器，不是巴伦。 <span class="leaf">&rarr; <a href="../../mrrc/efhw/t200-2-guide.html">T200-2 谐振匹配工程指南</a></span></li>
+            <li>
+              单波段 &rarr; 固定升比匹配 + 电台端天线调谐器，是损耗最低的做法。
+            </li>
+            <li>
+              多波段长线 &rarr; 宽带变换器 +
+              调谐器；请预期真正在干活的是调谐器，不是巴伦。
+              <span class="leaf"
+                >&rarr;
+                <a href="../../mrrc/efhw/t200-2-guide.html"
+                  >T200-2 谐振匹配工程指南</a
+                ></span
+              >
+            </li>
           </ul>
           <li class="q">Q3 · 永久户外架设，还是收放式便携？</li>
           <ul>
-            <li>永久 &rarr; 灌封、排水孔、密封圈、抗紫外外壳与真正的应力释放，优先级高于电气上的精巧；现场故障多数是水，不是铁氧体。</li>
-            <li>便携 &rarr; 尽量减重；馈点是 2&ndash;5 k&Omega; 的高阻抗节点，垂在那里的同轴屏蔽层是天线的一部分。</li>
+            <li>
+              永久 &rarr;
+              灌封、排水孔、密封圈、抗紫外外壳与真正的应力释放，优先级高于电气上的精巧；现场故障多数是水，不是铁氧体。
+            </li>
+            <li>
+              便携 &rarr; 尽量减重；馈点是 2&ndash;5 k&Omega;
+              的高阻抗节点，垂在那里的同轴屏蔽层是天线的一部分。
+            </li>
           </ul>
           <li class="q">Q4 · 到这一步，才轮到选磁芯材料。</li>
           <ul>
-            <li>Ni-Zn（43 / 75 一类）&rarr; 全 HF 表现平缓，耐饱和，但会把功率较早转成热。</li>
-            <li>Mn-Zn（73 一类）&rarr; 低 kW 下每匝阻抗高得多，于是匝数更少、损耗更低 —— 但饱和与热都是悬崖式。 <span class="leaf">&rarr; <a href="../../mrrc/efhw/index.html">Fair-Rite 2643251002 与 FT240-43 对比</a></span></li>
+            <li>
+              Ni-Zn（43 / 75 一类）&rarr; 全 HF
+              表现平缓，耐饱和，但会把功率较早转成热。
+            </li>
+            <li>
+              Mn-Zn（73 一类）&rarr; 低 kW
+              下每匝阻抗高得多，于是匝数更少、损耗更低 —— 但饱和与热都是悬崖式。
+              <span class="leaf"
+                >&rarr;
+                <a href="../../mrrc/efhw/index.html"
+                  >Fair-Rite 2643251002 与 FT240-43 对比</a
+                ></span
+              >
+            </li>
             <li>粉铁 &rarr; 没有尖锐饱和点，但做 HF 共模抑制不合适。</li>
           </ul>
         </ul>
-        <div class="calc"><b>买任何东西之前，先自己算这一个数。</b>馈点交流电压 V = sqrt(P &times; Z)：100 W 灌进 2450 &Omega; 约 495 V 有效值，峰值约 700 V。 <span class="tag tag-c">C</span> 所以在功率下真正先坏的是飞弧、匝间距与前几匝的绝缘体系，不是铁氧体。按你自己的功率与负载把这个数写下来 —— 它决定你用什么线、什么绕法、什么外壳。</div>
+        <div class="calc">
+          <b>买任何东西之前，先自己算这一个数。</b>馈点交流电压 V = sqrt(P
+          &times; Z)：100 W 灌进 2450 &Omega; 约 495 V 有效值，峰值约 700 V。
+          <span class="tag tag-c">C</span>
+          所以在功率下真正先坏的是飞弧、匝间距与前几匝的绝缘体系，不是铁氧体。按你自己的功率与负载把这个数写下来
+          —— 它决定你用什么线、什么绕法、什么外壳。
+        </div>
       </div>
     </section>
     <section class="section" id="build">
@@ -163,158 +305,415 @@
         <div class="section-header">
           <span class="section-label">03 · 制作工艺</span>
           <h2 class="section-title">好设计死在哪里</h2>
-          <p class="section-subtitle">同样的磁芯、同样的匝数、同样的电台 —— 有人拿到 20 dB 回波损耗，有人拿到一块砖头并且在 80 m 上不出功率。差别几乎全在过程。</p>
+          <p class="section-subtitle">
+            同样的磁芯、同样的匝数、同样的电台 —— 有人拿到 20 dB
+            回波损耗，有人拿到一块砖头并且在 80 m 上不出功率。差别几乎全在过程。
+          </p>
         </div>
         <div class="steps">
-          <div class="step"><h4><i class="fas fa-search"></i> 上线之前先查磁芯</h4>
-            <p>用细锉或胶带把内孔倒角去毛刺。锐利的内缘会在你看不见的那一侧，在张力下磨破漆皮。</p>
-            <p class="risk"><b>失败模式：</b>只在冷机时出现的匝对磁芯短路；或一个季节的热循环之后变成匝间内部短路。</p></div>
-          <div class="step"><h4><i class="fas fa-circle-notch"></i> 均匀绕制，轻而恒定的张力</h4>
-            <p>尽量把匝均匀铺开在整个圆周上，张力保持一致。堆叠抬高局部电容与局部磁通密度，过大的间隙漏磁 —— 两者都先吃掉低频段。</p>
-            <p class="risk"><b>失败模式：</b>20 m 上正常，80 m 上像死了一样。</p></div>
-          <div class="step"><h4><i class="fas fa-code-compare"></i> 剪线之前先标同名端</h4>
-            <p>TLT 相位绕错，巴伦就变成一颗没有变换功能的普通磁环；自耦变压器绕错，你就得到一匝短路。剪线前把起绕与结束端标出来。</p>
-            <p class="risk"><b>失败模式：</b>处处高驻波、低功率就烫、而作者坚信是电路设计有问题。</p></div>
-          <div class="step"><h4><i class="fas fa-bolt"></i> 引脚尽量短，不要留辫子</h4>
-            <p>在 2&ndash;5 k&Omega; 的节点上，每多一毫米引线都是额外的电感加一小段天线。焊在端子上，不要焊在一缕多股线上。</p>
-            <p class="risk"><b>失败模式：</b>手一转盒子，回波损耗就跟着变。</p></div>
-<div class="step"><h4><i class="fas fa-droplet"></i> 是浸渍，不是刷一层壳</h4>
-  <p>无 Void 浸渍才是让台架样机活过一整个屋顶季节的东西。先预热组件，用低粘度环氧或聚氨酯清漆浸透，再在真空中脱气 —— 被截留的空气若留在损耗性导线周围，就是一个隔热气泡。</p>
-  <p class="risk"><b>失败模式：</b>台架数值是对的；树脂藏下一个空洞，在工作周期里变成热点，而那层泡沫状物质恰好隔热在最发热的那个部件上。</p></div>
-<div class="step"><h4><i class="fas fa-cloud-rain"></i> 防水，不是防好奇</h4>
-  <p>外壳最低点开排水孔，盖子加密封圈，壳体抗紫外，馈线做真正的应力释放 —— 夹住外护套，不要夹导体。</p>
-  <p class="risk"><b>失败模式：</b>现场最常见的故障根本不是铁氧体，是一整个冬天接了雨的盒子。水进入高场区不只是腐蚀，它引入的损耗还随频率上升。</p></div>
-<div class="step"><h4><i class="fas fa-circle-half-stroke"></i> 给冷地一个明确的住处</h4>
-  <p>unun 的地端与同轴屏蔽层必须汇于一个短、低电感点，而你的Counterpoise 或径向线就接在这一点上。加长接地桩没有用；一块铜板加螺栓搭接才有用。</p>
-  <p class="risk"><b>失败模式：</b>“室内好好的、到外面就不行”的天线，通常是地网/counterpoise 的故事，不是变换器的故事。</p></div>
-<div class="step"><h4><i class="fas fa-gauge-high"></i> 合盖之前先测</h4>
-  <p>灌封前测，不要灌封后测。远端接一个已知阻性负载做单端口扫频，能告出这个作品是否符合设计；扫整副天线则关于变换器什么都不能说。</p>
-  <p class="risk"><b>失败模式：</b>盒子已封、驻波意外、无人能判断是谁的责任，于是用同一个错误再做一个盒子。</p></div>
-</div>
+          <div class="step">
+            <h4><i class="fas fa-search"></i> 上线之前先查磁芯</h4>
+            <p>
+              用细锉或胶带把内孔倒角去毛刺。锐利的内缘会在你看不见的那一侧，在张力下磨破漆皮。
+            </p>
+            <p class="risk">
+              <b>失败模式：</b
+              >只在冷机时出现的匝对磁芯短路；或一个季节的热循环之后变成匝间内部短路。
+            </p>
+          </div>
+          <div class="step">
+            <h4>
+              <i class="fas fa-circle-notch"></i> 均匀绕制，轻而恒定的张力
+            </h4>
+            <p>
+              尽量把匝均匀铺开在整个圆周上，张力保持一致。堆叠抬高局部电容与局部磁通密度，过大的间隙漏磁
+              —— 两者都先吃掉低频段。
+            </p>
+            <p class="risk">
+              <b>失败模式：</b>20 m 上正常，80 m 上像死了一样。
+            </p>
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-code-compare"></i> 剪线之前先标同名端</h4>
+            <p>
+              TLT
+              相位绕错，巴伦就变成一颗没有变换功能的普通磁环；自耦变压器绕错，你就得到一匝短路。剪线前把起绕与结束端标出来。
+            </p>
+            <p class="risk">
+              <b>失败模式：</b
+              >处处高驻波、低功率就烫、而作者坚信是电路设计有问题。
+            </p>
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-bolt"></i> 引脚尽量短，不要留辫子</h4>
+            <p>
+              在 2&ndash;5 k&Omega;
+              的节点上，每多一毫米引线都是额外的电感加一小段天线。焊在端子上，不要焊在一缕多股线上。
+            </p>
+            <p class="risk"><b>失败模式：</b>手一转盒子，回波损耗就跟着变。</p>
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-droplet"></i> 是浸渍，不是刷一层壳</h4>
+            <p>
+              无 Void
+              浸渍才是让台架样机活过一整个屋顶季节的东西。先预热组件，用低粘度环氧或聚氨酯清漆浸透，再在真空中脱气
+              —— 被截留的空气若留在损耗性导线周围，就是一个隔热气泡。
+            </p>
+            <p class="risk">
+              <b>失败模式：</b
+              >台架数值是对的；树脂藏下一个空洞，在工作周期里变成热点，而那层泡沫状物质恰好隔热在最发热的那个部件上。
+            </p>
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-cloud-rain"></i> 防水，不是防好奇</h4>
+            <p>
+              外壳最低点开排水孔，盖子加密封圈，壳体抗紫外，馈线做真正的应力释放
+              —— 夹住外护套，不要夹导体。
+            </p>
+            <p class="risk">
+              <b>失败模式：</b
+              >现场最常见的故障根本不是铁氧体，是一整个冬天接了雨的盒子。水进入高场区不只是腐蚀，它引入的损耗还随频率上升。
+            </p>
+          </div>
+          <div class="step">
+            <h4>
+              <i class="fas fa-circle-half-stroke"></i> 给冷地一个明确的住处
+            </h4>
+            <p>
+              unun
+              的地端与同轴屏蔽层必须汇于一个短、低电感点，而你的Counterpoise
+              或径向线就接在这一点上。加长接地桩没有用；一块铜板加螺栓搭接才有用。
+            </p>
+            <p class="risk">
+              <b>失败模式：</b
+              >“室内好好的、到外面就不行”的天线，通常是地网/counterpoise
+              的故事，不是变换器的故事。
+            </p>
+          </div>
+          <div class="step">
+            <h4><i class="fas fa-gauge-high"></i> 合盖之前先测</h4>
+            <p>
+              灌封前测，不要灌封后测。远端接一个已知阻性负载做单端口扫频，能告出这个作品是否符合设计；扫整副天线则关于变换器什么都不能说。
+            </p>
+            <p class="risk">
+              <b>失败模式：</b
+              >盒子已封、驻波意外、无人能判断是谁的责任，于是用同一个错误再做一个盒子。
+            </p>
+          </div>
+        </div>
       </div>
     </section>
-<section class="section" id="bom" style="background: var(--bg-secondary)">
-  <div class="container">
-    <div class="section-header"><span class="section-label">03b · 物料清单</span>
-      <h2 class="section-title">一个活得久的馈点到底要花什么</h2>
-      <p class="section-subtitle">通用件，不做品牌推荐，也不报价格 —— 价格会动。这张表的意义在于那些被人省掉、然后大家再纳闷“盒子为什么坏了”的东西。</p></div>
-    <table class="spec-table">
-      <thead><tr><th>项目</th><th>为什么在清单上</th><th>通常被省掉的代价</th></tr></thead>
-      <tbody>
-        <tr><td>磁环，材料按 Q4 选</td><td>设计的热预算与阻抗预算全在这里。</td><td class="deny">想用一颗磁芯应付所有实验。</td></tr>
-        <tr><td>漆包线两种线径（细线做变换，粗线做大电流那匝）</td><td>自耦变压器的低阻抗匝要承载整副天线的电流。</td><td class="deny">全程只用一根细线。</td></tr>
-        <tr><td>PTFE / FEP 绝缘线用于前几匝</td><td>几百伏峰值就出现在那里。</td><td class="deny">以为漆皮在 QRO 下就算一套绝缘体系。</td></tr>
-        <tr><td>低粘度浸渍树脂 + 真空袋或真空泵</td><td>杀死成品的是空洞，不是树脂。</td><td class="deny">刷一层表面清漆就叫“已灌封”。</td></tr>
-        <tr><td>IP 等级外壳、密封圈、排水孔、抗紫外</td><td>雨和太阳比任何 HF 设计都能先坏事。</td><td class="deny">一个没有密封圈的 3D 打印盖子。</td></tr>
-        <tr><td>机箱 SO-239 或 N 座 + 短内部连接</td><td>让地节点保持短且可测。</td><td class="deny">把线直接焊到 PCB 焊盘上。</td></tr>
-        <tr><td>铜板或汇流排做冷地 / 径向桩</td><td>屏蔽层与 counterpoise 需要一个低电感搭接点。</td><td class="deny">“不就是个地嘛。”</td></tr>
-        <tr><td>磁环珠或一颗备用磁芯做 CMC</td><td>CMC 是独立器件，两个都要有。</td><td class="deny">指望 unun 去阻止屏蔽层电流。</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-<section class="section" id="field">
-  <div class="container">
-    <div class="section-header"><span class="section-label">04 · 装机与优化</span>
-      <h2 class="section-title">装好之后，用数字跟它讲道理</h2>
-      <p class="section-subtitle">可在纸面复核的优化目标，加上四条对实际效果的影响超过任何绕线调整的做法。</p></div>
-    <div class="feature-card"><h3 class="card-title">四项实践，按回报排序</h3>
-      <ol>
-        <li><b>馈线上装 CMC，靠近馈点。</b>它不改变你的匹配；它阻止屏蔽层变成天线的另一半 —— 而这才是邻居家电视噪声、馈线发热和“我一站过去驻波就变”的真正来源。 <span class="tag tag-c">C</span></li>
-        <li><b>给 counterpoise 一个明确决定的长度与走向。</b>单端馈电时径向线是辐射体的一部分，不是收尾工作。 <span class="tag tag-c">C</span> 长度选择与其对方向图的影响，由 <a href="../../mrrc/efhw/index.html">Counterpoise 与平衡地网</a> 裁决。</li>
-        <li><b>让馈线在一两个波长内远离振子。</b>最后一米同轴与天线端头之间的耦合，会让你在台架上测的一切作废。</li>
-        <li><b>系统测两处：电台端一次、盒子端一次。</b>只在电台端测，馈线损耗就一直藏在你对变换器的结论里。</li>
-      </ol>
-    </div>
-    <table class="spec-table">
-      <thead><tr><th>优化目标</th><th>怎么在纸面上复核</th><th>我们自己的实测值</th></tr></thead>
-      <tbody>
-        <tr><td>磁通密度余量</td><td>B<sub>max</sub> = V / (4.44 &middot; f<sub>min</sub> &middot; N<sub>primary</sub> &middot; A<sub>e</sub>)。要留余量就加匝数或加磁芯截面积，而不是换粗线。 <span class="tag tag-c">C</span></td><td class="na">&mdash; 见深度研究站</td></tr>
-        <tr><td>插入损耗预算</td><td>磁芯损耗随频率与磁通密度上升；这是一个取舍，不是一颗规格表数值。 <span class="tag tag-c">C</span></td><td class="na">&mdash; <a href="../../mrrc/efhw/index.html">49:1 损耗实测</a></td></tr>
-        <tr><td>工作周期下的温升</td><td>先估出耗散功率，再跟外壳表面积对账。FT8 与 AM 是工作周期测试，SSB 不是。 <span class="tag tag-c">C</span></td><td class="na">&mdash; 我们未测</td></tr>
-        <tr><td>自谐振在最高波段之上</td><td>绕组电容加磁化电感定出上限；多绕几匝买到低频表现，代价是高频余量。 <span class="tag tag-c">C</span></td><td class="na">&mdash; 见深度研究站</td></tr>
-        <tr><td>功率降额点</td><td>悬崖由材料决定，Mn-Zn 上是突变的。不要从 QRP 的成功外推。 <span class="tag tag-c">C</span></td><td class="na">&mdash; <a href="../../mrrc/efhw/index.html">叠芯对比</a></td></tr>
-      </tbody>
-    </table>
-    <div class="calc"><b>这张表最下面一行的诚实之处。</b>上面没有任何一个数值由我们测得。本页刻意对 dB 与摄氏度保持沉默：<span style="color:#f0a030">—</span> 的意思是“我们没有测过”，不是“0.2 dB，请相信我们”。</div>
-    <div class="feature-card" style="border-color: rgba(240,160,48,0.4)">
-      <h3 class="card-title"><i class="fas fa-person-from-portal" style="color:#f0a030"></i> 什么时候该停止优化巴伦</h3>
-      <p>优化要有退出条件。遇到下列情形，请换一根天线，而不是换一颗更好的变换器：</p>
-      <ul>
-        <li>你需要对称方向图、低频段真正的低掠射角，或对共模的实质抑制 —— 对称天线加 1:1 电流巴伦是另一个（更好的）解，不是一颗更差的巴伦。</li>
-        <li>你的调谐回路吃掉的损耗比你想优化到位的变换器还多。研究站的变换器工作已经很好；失配的 ATU 仍然会把这点差距全吞掉。</li>
-        <li>你要的波段把馈点阻抗推到一根线一颗磁芯守不住的地方。那是物理限制，不是手艺限制。</li>
-      </ul>
-    </div>
-  </div>
-</section>
-<section class="section" id="evidence" style="background: var(--bg-secondary)">
-  <div class="container">
-    <div class="section-header"><span class="section-label">证据与出处</span>
-      <h2 class="section-title">本页的数字从哪里来</h2>
-      <p class="section-subtitle">本页不发表任何自己的测量。这里出现的量化内容，要么是可复算的公式算术，要么是指向实测工作的链接。</p></div>
-    <div class="tech-stack">
-      <span class="tech-tag">G. Guanella —— 传输线变压器原理</span>
-      <span class="tech-tag">H. Guggenbühl —— 平衡线的宽带匹配</span>
-      <span class="tech-tag">W8JI —— 巴伦与变换器实测</span>
-      <span class="tech-tag">PA3HHO —— EFHF/EFHW 变换器研究</span>
-      <span class="tech-tag">W. Chew —— RF Transmission Line Transformers</span>
-      <span class="tech-tag">ARRL Handbook —— 匹配网络</span>
-    </div>
-    <p style="margin-top:1.5rem">归本站深度研究站所有（理论、VNA 方法学、实测对比）：</p>
-    <div class="footer-grid" style="margin-top:0.5rem">
-      <div class="footer-section"><ul>
-        <li><a href="../../mrrc/efhw/index.html">49:1 与 64:1 变换器设计</a></li>
-        <li><a href="../../mrrc/efhw/index.html">匝比之争 2:14 对 3:21</a></li>
-        <li><a href="../../mrrc/efhw/index.html">铁氧体磁芯选型</a></li>
-        <li><a href="../../mrrc/efhw/index.html">绕线方法与 W8JI 更正</a></li>
-      </ul></div>
-      <div class="footer-section"><ul>
-        <li><a href="../../mrrc/efhw/index.html">共模磁环深度解析</a></li>
-        <li><a href="../../mrrc/efhw/index.html">Counterpoise 与平衡地网</a></li>
-        <li><a href="../../mrrc/efhw/index.html">背靠背测量迷思</a></li>
-        <li><a href="../../mrrc/efhw/t200-2-guide.html">T200-2 谐振匹配工程指南</a></li>
-      </ul></div>
-    </div>
-    <p style="margin-top:1.5rem"><span class="tag tag-m">M</span> 为预留标签：任何我们自己测得的数值，都将在仓库的 ADI 数据目录中引用其原始文件。</p>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <div class="section-cta">
-      <h2>做一个出来，然后把它测清楚</h2>
-      <p>本页在“该开始下断言”的地方结束。如果你真的绕了一颗、灌了封，请带上 VNA、带上一只 2.5 k&Omega; 无感负载，也带上研究站已经在争论的那套方法学。</p>
-      <div class="hero-actions">
-        <a href="../index.html" class="btn btn-primary"><i class="fas fa-arrow-left"></i> 返回 EFHW Projects</a>
-        <a href="../../mrrc/efhw/index.html" class="btn btn-secondary"><i class="fas fa-book-open"></i> 深度研究</a>
+    <section class="section" id="bom" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">03b · 物料清单</span>
+          <h2 class="section-title">一个活得久的馈点到底要花什么</h2>
+          <p class="section-subtitle">
+            通用件，不做品牌推荐，也不报价格 ——
+            价格会动。这张表的意义在于那些被人省掉、然后大家再纳闷“盒子为什么坏了”的东西。
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>项目</th>
+              <th>为什么在清单上</th>
+              <th>通常被省掉的代价</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>磁环，材料按 Q4 选</td>
+              <td>设计的热预算与阻抗预算全在这里。</td>
+              <td class="deny">想用一颗磁芯应付所有实验。</td>
+            </tr>
+            <tr>
+              <td>漆包线两种线径（细线做变换，粗线做大电流那匝）</td>
+              <td>自耦变压器的低阻抗匝要承载整副天线的电流。</td>
+              <td class="deny">全程只用一根细线。</td>
+            </tr>
+            <tr>
+              <td>PTFE / FEP 绝缘线用于前几匝</td>
+              <td>几百伏峰值就出现在那里。</td>
+              <td class="deny">以为漆皮在 QRO 下就算一套绝缘体系。</td>
+            </tr>
+            <tr>
+              <td>低粘度浸渍树脂 + 真空袋或真空泵</td>
+              <td>杀死成品的是空洞，不是树脂。</td>
+              <td class="deny">刷一层表面清漆就叫“已灌封”。</td>
+            </tr>
+            <tr>
+              <td>IP 等级外壳、密封圈、排水孔、抗紫外</td>
+              <td>雨和太阳比任何 HF 设计都能先坏事。</td>
+              <td class="deny">一个没有密封圈的 3D 打印盖子。</td>
+            </tr>
+            <tr>
+              <td>机箱 SO-239 或 N 座 + 短内部连接</td>
+              <td>让地节点保持短且可测。</td>
+              <td class="deny">把线直接焊到 PCB 焊盘上。</td>
+            </tr>
+            <tr>
+              <td>铜板或汇流排做冷地 / 径向桩</td>
+              <td>屏蔽层与 counterpoise 需要一个低电感搭接点。</td>
+              <td class="deny">“不就是个地嘛。”</td>
+            </tr>
+            <tr>
+              <td>磁环珠或一颗备用磁芯做 CMC</td>
+              <td>CMC 是独立器件，两个都要有。</td>
+              <td class="deny">指望 unun 去阻止屏蔽层电流。</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-  </div>
-</section>
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-section"><h4>EFHW Projects</h4><p>端馈半波段天线研究<br />与工程实践 · V3.0<br />CERN-OHL-S 2.0 / GPL-3.0</p></div>
-      <div class="footer-section"><h4>本页</h4><ul>
-        <li><a href="#taxonomy">01 · 类型谱系</a></li>
-        <li><a href="#selection">02 · 选型决策</a></li>
-        <li><a href="#build">03 · 制作工艺</a></li>
-        <li><a href="#bom">03b · 物料清单</a></li>
-        <li><a href="#field">04 · 装机与优化</a></li>
-        <li><a href="#evidence">证据与出处</a></li>
-      </ul></div>
-      <div class="footer-section"><h4>生态</h4><ul>
-        <li><a href="../index.html">EFHW 首页</a></li>
-        <li><a href="../baluns.html">English</a></li>
-        <li><a href="/mrrc/efhw/">深度研究（MRRC）</a></li>
-        <li><a href="/">VLSC 项目总览</a></li>
-      </ul></div>
-    </div>
-    <div class="footer-bottom"><p>© 2026 BG1SB · 内容许可：CERN-OHL-S 2.0 / GPL-3.0 · 本页没有一个实测数值是编出来的。</p></div>
-  </div>
-</footer>
-<script>
+    </section>
+    <section class="section" id="field">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">04 · 装机与优化</span>
+          <h2 class="section-title">装好之后，用数字跟它讲道理</h2>
+          <p class="section-subtitle">
+            可在纸面复核的优化目标，加上四条对实际效果的影响超过任何绕线调整的做法。
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3 class="card-title">四项实践，按回报排序</h3>
+          <ol>
+            <li>
+              <b>馈线上装 CMC，靠近馈点。</b
+              >它不改变你的匹配；它阻止屏蔽层变成天线的另一半 ——
+              而这才是邻居家电视噪声、馈线发热和“我一站过去驻波就变”的真正来源。
+              <span class="tag tag-c">C</span>
+            </li>
+            <li>
+              <b>给 counterpoise 一个明确决定的长度与走向。</b
+              >单端馈电时径向线是辐射体的一部分，不是收尾工作。
+              <span class="tag tag-c">C</span> 长度选择与其对方向图的影响，由
+              <a href="../../mrrc/efhw/index.html">Counterpoise 与平衡地网</a>
+              裁决。
+            </li>
+            <li>
+              <b>让馈线在一两个波长内远离振子。</b
+              >最后一米同轴与天线端头之间的耦合，会让你在台架上测的一切作废。
+            </li>
+            <li>
+              <b>系统测两处：电台端一次、盒子端一次。</b
+              >只在电台端测，馈线损耗就一直藏在你对变换器的结论里。
+            </li>
+          </ol>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>优化目标</th>
+              <th>怎么在纸面上复核</th>
+              <th>我们自己的实测值</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>磁通密度余量</td>
+              <td>
+                B<sub>max</sub> = V / (4.44 &middot; f<sub>min</sub> &middot;
+                N<sub>primary</sub> &middot;
+                A<sub>e</sub>)。要留余量就加匝数或加磁芯截面积，而不是换粗线。
+                <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">&mdash; 见深度研究站</td>
+            </tr>
+            <tr>
+              <td>插入损耗预算</td>
+              <td>
+                磁芯损耗随频率与磁通密度上升；这是一个取舍，不是一颗规格表数值。
+                <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">
+                &mdash; <a href="../../mrrc/efhw/index.html">49:1 损耗实测</a>
+              </td>
+            </tr>
+            <tr>
+              <td>工作周期下的温升</td>
+              <td>
+                先估出耗散功率，再跟外壳表面积对账。FT8 与 AM
+                是工作周期测试，SSB 不是。 <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">&mdash; 我们未测</td>
+            </tr>
+            <tr>
+              <td>自谐振在最高波段之上</td>
+              <td>
+                绕组电容加磁化电感定出上限；多绕几匝买到低频表现，代价是高频余量。
+                <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">&mdash; 见深度研究站</td>
+            </tr>
+            <tr>
+              <td>功率降额点</td>
+              <td>
+                悬崖由材料决定，Mn-Zn 上是突变的。不要从 QRP 的成功外推。
+                <span class="tag tag-c">C</span>
+              </td>
+              <td class="na">
+                &mdash; <a href="../../mrrc/efhw/index.html">叠芯对比</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>这张表最下面一行的诚实之处。</b
+          >上面没有任何一个数值由我们测得。本页刻意对 dB 与摄氏度保持沉默：<span
+            style="color: #f0a030"
+            >—</span
+          >
+          的意思是“我们没有测过”，不是“0.2 dB，请相信我们”。
+        </div>
+        <div class="feature-card" style="border-color: rgba(240, 160, 48, 0.4)">
+          <h3 class="card-title">
+            <i class="fas fa-person-from-portal" style="color: #f0a030"></i>
+            什么时候该停止优化巴伦
+          </h3>
+          <p>
+            优化要有退出条件。遇到下列情形，请换一根天线，而不是换一颗更好的变换器：
+          </p>
+          <ul>
+            <li>
+              你需要对称方向图、低频段真正的低掠射角，或对共模的实质抑制 ——
+              对称天线加 1:1 电流巴伦是另一个（更好的）解，不是一颗更差的巴伦。
+            </li>
+            <li>
+              你的调谐回路吃掉的损耗比你想优化到位的变换器还多。研究站的变换器工作已经很好；失配的
+              ATU 仍然会把这点差距全吞掉。
+            </li>
+            <li>
+              你要的波段把馈点阻抗推到一根线一颗磁芯守不住的地方。那是物理限制，不是手艺限制。
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section
+      class="section"
+      id="evidence"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">证据与出处</span>
+          <h2 class="section-title">本页的数字从哪里来</h2>
+          <p class="section-subtitle">
+            本页不发表任何自己的测量。这里出现的量化内容，要么是可复算的公式算术，要么是指向实测工作的链接。
+          </p>
+        </div>
+        <div class="tech-stack">
+          <span class="tech-tag">G. Guanella —— 传输线变压器原理</span>
+          <span class="tech-tag">H. Guggenbühl —— 平衡线的宽带匹配</span>
+          <span class="tech-tag">W8JI —— 巴伦与变换器实测</span>
+          <span class="tech-tag">PA3HHO —— EFHF/EFHW 变换器研究</span>
+          <span class="tech-tag"
+            >W. Chew —— RF Transmission Line Transformers</span
+          >
+          <span class="tech-tag">ARRL Handbook —— 匹配网络</span>
+        </div>
+        <p style="margin-top: 1.5rem">
+          归本站深度研究站所有（理论、VNA 方法学、实测对比）：
+        </p>
+        <div class="footer-grid" style="margin-top: 0.5rem">
+          <div class="footer-section">
+            <ul>
+              <li>
+                <a href="../../mrrc/efhw/index.html">49:1 与 64:1 变换器设计</a>
+              </li>
+              <li>
+                <a href="../../mrrc/efhw/index.html">匝比之争 2:14 对 3:21</a>
+              </li>
+              <li><a href="../../mrrc/efhw/index.html">铁氧体磁芯选型</a></li>
+              <li>
+                <a href="../../mrrc/efhw/index.html">绕线方法与 W8JI 更正</a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <ul>
+              <li><a href="../../mrrc/efhw/index.html">共模磁环深度解析</a></li>
+              <li>
+                <a href="../../mrrc/efhw/index.html">Counterpoise 与平衡地网</a>
+              </li>
+              <li><a href="../../mrrc/efhw/index.html">背靠背测量迷思</a></li>
+              <li>
+                <a href="../../mrrc/efhw/t200-2-guide.html"
+                  >T200-2 谐振匹配工程指南</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top: 1.5rem">
+          <span class="tag tag-m">M</span>
+          为预留标签：任何我们自己测得的数值，都将在仓库的 ADI
+          数据目录中引用其原始文件。
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-cta">
+          <h2>做一个出来，然后把它测清楚</h2>
+          <p>
+            本页在“该开始下断言”的地方结束。如果你真的绕了一颗、灌了封，请带上
+            VNA、带上一只 2.5 k&Omega;
+            无感负载，也带上研究站已经在争论的那套方法学。
+          </p>
+          <div class="hero-actions">
+            <a href="../index.html" class="btn btn-primary"
+              ><i class="fas fa-arrow-left"></i> 返回 EFHW Projects</a
+            >
+            <a href="../../mrrc/efhw/index.html" class="btn btn-secondary"
+              ><i class="fas fa-book-open"></i> 深度研究</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-section">
+            <h4>EFHW Projects</h4>
+            <p>
+              端馈半波段天线研究<br />与工程实践 · V3.0<br />CERN-OHL-S 2.0 /
+              GPL-3.0
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>本页</h4>
+            <ul>
+              <li><a href="#taxonomy">01 · 类型谱系</a></li>
+              <li><a href="#selection">02 · 选型决策</a></li>
+              <li><a href="#build">03 · 制作工艺</a></li>
+              <li><a href="#bom">03b · 物料清单</a></li>
+              <li><a href="#field">04 · 装机与优化</a></li>
+              <li><a href="#evidence">证据与出处</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>生态</h4>
+            <ul>
+              <li><a href="../index.html">EFHW 首页</a></li>
+              <li><a href="../baluns.html">English</a></li>
+              <li><a href="/mrrc/efhw/">深度研究（MRRC）</a></li>
+              <li><a href="/">VLSC 项目总览</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            © 2026 BG1SB · 内容许可：CERN-OHL-S 2.0 / GPL-3.0 ·
+            本页没有一个实测数值是编出来的。
+          </p>
+        </div>
+      </div>
+    </footer>
+    <script>
       function toggleMobileMenu() {
         document.querySelector(".nav-links").classList.toggle("active");
       }
@@ -327,9 +726,10 @@
       });
       const nav = document.querySelector(".navbar");
       window.addEventListener("scroll", () => {
-        nav.style.background = window.scrollY > 50 ? "rgba(10,14,20,0.98)" : "rgba(10,14,20,0.92)";
+        nav.style.background =
+          window.scrollY > 50 ? "rgba(10,14,20,0.98)" : "rgba(10,14,20,0.92)";
       });
-</script>
-<script src="../js/global-nav.js?v=6" defer data-gn="1"></script>
-</body>
+    </script>
+    <script src="../js/global-nav.js?v=6" defer data-gn="1"></script>
+  </body>
 </html>

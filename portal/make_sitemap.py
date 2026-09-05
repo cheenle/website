@@ -69,6 +69,8 @@ for url, path in sorted(pages):
     urls.append(f'<url><loc>{loc}</loc><lastmod>{lastmod(path)}</lastmod></url>')
 for s in SUBSITES:
     urls.append(f'<url><loc>{BASE}{s}</loc><changefreq>weekly</changefreq></url>')
+    if os.path.isdir(os.path.join(SITE_ROOT, s.strip('/'), 'zh')):
+        urls.append(f'<url><loc>{BASE}{s}zh/</loc><changefreq>weekly</changefreq></url>')
 for url, path in sorted(find_subsite_pages()):
     urls.append(f'<url><loc>{url}</loc><lastmod>{lastmod(path)}</lastmod></url>')
 

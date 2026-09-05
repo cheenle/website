@@ -43,13 +43,46 @@ def test_artifact_matches_generator_output():
         "sitemap.xml is not generator output — fix make_sitemap.py, never the artifact")
 
 
-def test_subsite_identity_pages_are_indexed():
-    """Depth-1 sub-site pages must be enumerated, not just site roots."""
+def test_all_subsite_pages_are_indexed():
+    """Every depth-1 sub-site HTML page must be enumerated.
+
+    Expectations come from the filesystem, never from a hardcoded URL list: a
+    hardcoded entry for a page that does not exist can only pass by accident,
+    and here it hid a false assertion (mrrc_ft710/engineering.html was never
+    created).
+    """
     have = _urls(open(ARTIFACT).read())
-    for loc in (f"{BASE}/mrrc/agentic.html", f"{BASE}/mrrc/zh/agentic.html",
-                f"{BASE}/mrrc_ft710/agentic.html", f"{BASE}/mrrc_modern/agentic.html",
-                f"{BASE}/mrrc_ft710/engineering.html", f"{BASE}/efhw/index.html"):
-        assert loc in have or loc.replace("index.html", "") in have, f"未收录 {loc}"
+    src = open(os.path.join(PORTAL, "make_sitemap.py")).read()
+    listed = re.findall(r"SUBSITES = \[(.*?)\]", src, re.S)[0]
+    seen, missing = 0, []
+    for site in re.findall(r"'([^']+)'", listed):
+        base = os.path.join(REPO, site.strip("/"))
+        if not os.path.isdir(base):
+            continue
+        for sub in ("", "zh"):
+            d = os.path.join(base, sub)
+            if not os.path.isdir(d):
+                continue
+            for fn in sorted(os.listdir(d)):
+                if not fn.endswith(".html") or fn.startswith("."):
+                    continue
+                if fn == "index.html":
+                    loc = BASE + site + (sub + "/" if sub else "")
+                else:
+                    loc = BASE + site + (sub + "/" if sub else "") + fn
+                if loc in have:
+                    seen += 1
+                else:
+                    missing.append(loc)
+    assert not missing, "未收录的深度 1 页面: " + ", ".join(missing[:6])
+    assert seen >= 25, "只匹配到 %d 页，目录遍历可能失效" % seen
+
+
+def test_new_efhw_baluns_pages_are_indexed():
+    """The topic page added this round must be discoverable in both languages."""
+    have = _urls(open(ARTIFACT).read())
+    for loc in (BASE + "/efhw/baluns.html", BASE + "/efhw/zh/baluns.html"):
+        assert loc in have, "未收录 " + loc
 
 
 def test_all_subsite_roots_present():

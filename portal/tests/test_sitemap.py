@@ -91,3 +91,40 @@ def test_all_subsite_roots_present():
     listed = re.findall(r"SUBSITES = \[(.*?)\]", src, re.S)[0]
     for site in re.findall(r"'([^']+)'", listed):
         assert BASE + site in have, f"子站根未收录 {site}"
+
+
+def test_every_loc_is_a_normalized_absolute_url():
+    """No '.', '..' or '//' path segment may reach a published <loc>.
+
+    This is the defect that shipped for weeks unnoticed: os.walk reached
+    portal/index.html, relpath(portal, portal) == '.', and the generator
+    emitted https://www.vlsc.net/./ — a URL no crawler can resolve and no
+    reader of the artifact would think to look for. A malformed entry is
+    worse than a missing one: the count still looks right.
+    """
+    bad = []
+    for loc in sorted(_urls(open(ARTIFACT).read())):
+        if not loc.startswith(BASE + "/"):
+            bad.append(loc)
+            continue
+        path = loc[len(BASE):]
+        if "//" in path or "." in path.split("/") or ".." in path.split("/"):
+            bad.append(loc)
+    assert not bad, "畸形 <loc>: " + ", ".join(bad)
+
+
+def test_homepage_indexed_exactly_once_with_lastmod():
+    """The root URL has exactly one owner.
+
+    Line 63 of make_sitemap.py emits BASE/ with a changefreq, and the
+    os.walk over portal/ also reached portal/index.html. Both wrote an
+    entry, so the homepage appeared twice — once as '/' and once as the
+    malformed '/./'. Pinning the count is what makes the deduplication
+    stick: re-adding either emitter fails this test.
+    """
+    text = open(ARTIFACT).read()
+    blocks = re.findall(r"<url>.*?</url>", text, re.S)
+    root = [b for b in blocks
+            if re.search(r"<loc>" + re.escape(BASE) + r"/</loc>", b)]
+    assert len(root) == 1, "首页 <url> 条目 %d 个，应为 1 个" % len(root)
+    assert "<lastmod>" in root[0], "首页条目缺 <lastmod>：首页每次部署都会变"

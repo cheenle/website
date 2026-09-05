@@ -14,7 +14,15 @@ def find_html(base):
             if fn.endswith('.html') and not fn.startswith('.'):
                 full = os.path.join(dirpath, fn)
                 if fn == 'index.html':
-                    url = os.path.relpath(dirpath, base) + '/'
+                    rel = os.path.relpath(dirpath, base)
+                    # relpath(base, base) == '.', which used to produce the
+                    # URL './' and publish https://www.vlsc.net/./ . The
+                    # portal root index.html is the site's one URL carrying a
+                    # changefreq, so it is emitted separately below and
+                    # skipped here — normalizing it instead would duplicate.
+                    if rel == '.':
+                        continue
+                    url = rel + '/'
                 else:
                     url = os.path.relpath(full, base)
                 pages.append((url.replace(os.sep, '/'), full))
@@ -60,7 +68,15 @@ SUBSITES = ['/mrrc/', '/mrrc_ft710/', '/mrrc_ft8/', '/mrrc_modern/',
             '/sunmrrc/', '/sunsdrmobile/', '/efhw/']
 
 urls = []
-urls.append(f'<url><loc>{BASE}/</loc><changefreq>weekly</changefreq></url>')
+# The homepage is this entry's alone — find_html skips portal/index.html so
+# the root URL cannot be emitted twice. It still gets a lastmod, because the
+# landing page changes on nearly every deploy and a changefreq without a
+# lastmod tells a crawler nothing about when to come back.
+ROOT_INDEX = os.path.join(ROOT, 'index.html')
+root_lastmod = (f'<lastmod>{lastmod(ROOT_INDEX)}</lastmod>'
+                if os.path.exists(ROOT_INDEX) else '')
+urls.append(f'<url><loc>{BASE}/</loc>{root_lastmod}'
+            f'<changefreq>weekly</changefreq></url>')
 for url, path in sorted(pages):
     if url.startswith('zh/'):
         loc = f'{BASE}/zh/{url[3:]}'

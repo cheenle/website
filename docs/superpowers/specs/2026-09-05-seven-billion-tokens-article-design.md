@@ -122,7 +122,36 @@
 
 ## 5. 文章结构（12 节，每节一个 `id`，契约测试锁死）
 
-必需 section id 集合：
+### 5.0 双标题与三卷结构（2026-09-05 增补）
+
+**双标题**：
+- EN：`Seven Billion Tokens, One Field Incident`（保留 —— 台账先行的具体钩子）
+- ZH：`格物致知 —— Agentic AI 的思考`
+
+**slug 不变**（`seven-billion-tokens`），因此 canonical / hreflang / sitemap / 测试常量中的 URL 全部不受影响。ZH 标题只出现在 ZH 页的 `<title>`、`<h1>` 与 JSON-LD `headline` 上；**EN 页不得出现 `格物致知` 四字**（契约测试 `test_titles_are_bilingual` 断言 `assertNotIn`）—— 两个框架不互相稀释，EN 读者得具体钩子，ZH 读者得经典框架，两版结构完全相同。
+
+**三卷分组**：13 个 section id 不变，但按《大学》「致知在格物，物格而后知至」与阳明「知行合一」重组为三卷。卷标记用 `<div class="volume" data-volume="...">` 包裹（**不用 `<section>`**，否则 `section_ids` 集合会多出 3 个 id，破坏 `REQUIRED_SECTIONS` 的精确相等断言）。`references` 作为附录留在三卷之外 —— 它是溯源清单，不是乐章。
+
+| 卷 | `data-volume` | 卷题 | 含 section id | 为什么是这一卷 |
+|---|---|---|---|---|
+| 卷一 | `gewu` | 格物 · Investigating Things | `ledger` `floor` `numbers-lie` `intent` `before` | 到现场去问那个东西：解析本机会话库、跑测试、读 CHANGELOG；以及「不格物」的两种反面 —— 裸调模型的 iFlow 时代（阳明格竹）与把字段相加却不问语义的我自己（5.38B 错值） |
+| 卷二 | `zhizhi` | 致知 · Extending Knowledge | `machine` `chain` `scale` | 物格而后知至：一套机器把观测变成契约；一条链把事故变成 `AD-014` 再变成 `cat-no-dn`；52 条约束的积累到本体的「豁然贯通」 |
+| 卷三 | `zhixing` | 知行合一 · Unity of Knowing and Acting | `delivery` `drift` `human` `playbook` | 知而不行只是未知：交付是知识遇到世界；漂移是「知」停止行动的失败模式；人保留的签字权是委托的边界 |
+| 附录 | —（不包裹） | Provenance | `references` | 溯源清单 |
+
+**卷内必含的具体对应**（写进正文，不是装饰）：
+
+- 卷一 `before` 节必含一个 `data-claim-type="analogy"` 的 claim-box：**阳明格竹七日而病** ↔ iFlow 时代 37,202 轮 / 6 个模型 / 零注册表。对着竹子枯坐不是格物，在循环里调模型也不是。
+- 卷一 `numbers-lie` 节必含：**致知在格物，不在台账** —— 我自己的 5,380,941,148 是一次「不格物」，字段相加而未问语义。
+- 卷二 `chain` 节必含：**物格而后知至** 的四步链（电台的实际行为 → SDD 裁决 → 机器可读约束 → 运行时拦截）。
+- 卷二 `scale` 节必含：朱子「今日格一物，明日格一物，积习既多，然后脱然自有贯通处」↔ 17→21→14 条约束的积累，与 `agentic.html` 原话「本体只在证据跨产品边界出现之后才被固化」。
+- 卷三 `human` 节必含：**知而不行，只是未知** ↔ 一条不会 block 的约束等于没有这条约束（`PreToolUse → hook`，退出码 2）。
+
+**表述纪律**：经典引文只作为 `analogy` 或 `thesis` 出现，**不得**作为 `fact`。凡引用需给出出处（《大学》、朱熹《大学章句》补传、王阳明《传习录》）。不得把古典概念写成"中国早就有了 agentic engineering"这类目的论断言 —— 那是 R1 的近亲，同样禁止。
+
+### 5.1 节清单
+
+必需 section id 集合（13 个，与三卷分组正交）：
 `ledger, floor, numbers-lie, intent, before, machine, chain, scale, delivery, drift, human, playbook, references`
 
 | # | id | 内容要点 | 主要 `data-claim-type` |
@@ -142,11 +171,11 @@
 | 12 | `playbook` | 给要用 AI 做业务的人的 7 步可迁移做法 + 成熟度 1–5 自评 + engineering.html 的 7 条评审清单 | thesis + analogy |
 | 13 | `references` | 完整溯源清单：每个数字的来源路径 / 命令 / 日期；站内链接（`/agentic.html`、`/engineering.html`、五个产品族）；标准引用（Stanford Ontology 101、W3C PROV-O、SOSA/SSN、SKOS、Time、WoT TD、ETSI SAREF、QUDT） | fact |
 
-### 5.1 断言分类纪律
+### 5.2 断言分类纪律
 
 沿用 connections 一文的 `.claim-box[data-claim-type]` 四分类：`fact`（可复核，须给来源）/ `inference`（我的推论）/ `analogy`（类比）/ `thesis`（主张）。**四种类型都必须出现**，契约测试断言。凡 §4.5 表述纪律涉及的"模型标识符 vs 实际 API 终点"，必须分别标 fact 与 inference。
 
-### 5.2 页面骨架（与 connections 一文完全同构）
+### 5.3 页面骨架（与 connections 一文完全同构）
 
 `<article class="blog-article">` → `.blog-breadcrumb` → `.article-language` → `.blog-header`（`.blog-cat-badge` + `h1` + `.blog-subtitle` + `.blog-meta` + `.blog-tags`）→ `<nav class="blog-toc" id="blog-toc">`（JS 自动填充）→ `.blog-content` → 各 `<section id>` → 作者块 → Related reading。
 

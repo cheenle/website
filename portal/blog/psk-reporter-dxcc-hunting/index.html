@@ -17,7 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/octen.css?v=6">
-    <link rel="stylesheet" href="../../css/blog.css?v=1">
+    <link rel="stylesheet" href="../../css/agentic.css?v=2">
+    <link rel="stylesheet" href="../../css/blog-article.css?v=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="application/ld+json">
     {
@@ -37,31 +38,29 @@
 </head>
 <body data-site="portal">
 
-<article class="blog-article">
+<article class="ba-article">
 
-    <nav class="blog-breadcrumb">
-        <a href="/">Home</a> › <a href="/blog/">Blog</a> › <span class="blog-cat">Field Notes</span> › Finding new DXCC with PSK Reporter
-    </nav>
+    <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <span class="ba-crumb-cat">Field Notes</span> › Finding new DXCC with PSK Reporter</span></nav>
 
-    <header class="blog-header">
-        <div class="blog-cat-badge"><i class="fas fa-globe-asia"></i> Field Notes</div>
-        <h1>Finding New DXCC with PSK Reporter: A Data-Driven DX Hunting Workflow</h1>
-        <p class="blog-subtitle">Stop calling into the void. Watch what stations a few hundred kilometers away are decoding, and you'll know exactly when a rare one is workable from your QTH.</p>
-        <div class="blog-meta">
-            By BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">Aug 12, 2026</time> &nbsp;·&nbsp; ~7 min read
-        </div>
-        <ul class="blog-tags">
+<header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+            <div class="hero-badge"><i class="fas fa-globe-asia"></i><span>Field Notes</span></div>
+            <h1>Finding New DXCC with PSK Reporter: A Data-Driven DX Hunting Workflow</h1>
+            <p>Stop calling into the void. Watch what stations a few hundred kilometers away are decoding, and you'll know exactly when a rare one is workable from your QTH.</p>
+            <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">Aug 12, 2026</time> &nbsp;·&nbsp; ~7 min read</p>
+            <ul class="ba-tags">
             <li><a href="/blog/">#dxcc</a></li>
             <li><a href="/blog/">#psk-reporter</a></li>
             <li><a href="/blog/">#ft8</a></li>
             <li><a href="/blog/">#propagation</a></li>
             <li><a href="/blog/">#dxing</a></li>
         </ul>
+        </div>
     </header>
 
-    <nav class="blog-toc" id="blog-toc" aria-label="Table of contents"></nav>
 
-    <div class="blog-content">
+    <main class="ba-main">
+        <div class="ba-prose">
 
         <p>DX hunting has a classic loop: watch the cluster, hear <em>DX</em> CQ'd by somebody, tune in, call, call again, give up. It works, but it's blind. You're gambling on propagation you can't see. Over the last year I've switched to a different signal that costs nothing and is far more reliable: <strong>what stations near me are decoding right now.</strong> If a station 500&nbsp;km away is decoding Franz Josef Land on 15 meters, the path from my QTH to the high Arctic is open too — at this exact moment.</p>
 
@@ -152,9 +151,11 @@
 
         <p>Tonight's session ended the way most good ones do: a short list, one clear priority, and the clock already past 21:00 local. The 15-meter path to the Arctic that had been open at 18:49 was fading by the time I had the rig warmed. That's the honest part of this workflow — the tool tells you the window exists, but it doesn't hold it open for you. The value isn't in the recommendation itself; it's in being ready when the flag goes up: tuned, decoding, and pointed at the right band.</p>
 
-    </div>
+        </div>
+</main>
 
-    <footer class="blog-footer">
+    <footer class="ba-footer">
+        <div class="ba-footer-inner">
         <div class="blog-author">
             <div class="ba-icon"><i class="fas fa-user"></i></div>
             <div>
@@ -173,27 +174,11 @@
             <a href="/blog/opus-vs-pcm-remote-audio/"><i class="fas fa-arrow-left"></i> Prev: Opus vs PCM</a>
             <a href="/blog/ft710-usb-remote-control/">Next: FT-710 remote control <i class="fas fa-arrow-right"></i></a>
         </div>
+            </div>
     </footer>
 
 </article>
 
-<script>
-(function () {
-  var toc = document.getElementById('blog-toc');
-  var content = document.querySelector('.blog-content');
-  if (!toc || !content) return;
-  var heads = content.querySelectorAll('h2, h3');
-  if (!heads.length) return;
-  var html = '<div class="blog-toc-title">Table of contents</div><ol>';
-  heads.forEach(function (h, i) {
-    var id = h.id || ('sec-' + i);
-    h.id = id;
-    html += '<li class="' + (h.tagName === 'H3' ? 'toc-h3' : '') + '"><a href="#' + id + '">' + h.textContent + '</a></li>';
-  });
-  html += '</ol>';
-  toc.innerHTML = html;
-})();
-</script>
 
 <script src="../../js/global-nav.js?v=6" defer data-gn="1"></script>
 </body>

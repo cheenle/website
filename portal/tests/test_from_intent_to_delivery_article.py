@@ -14,7 +14,7 @@ ARTICLES = {
     "en": PORTAL / "blog" / SLUG / "index.html",
     "zh": PORTAL / "blog" / SLUG / "zh" / "index.html",
 }
-ARTICLE_CSS = PORTAL / "blog" / SLUG / "article.css"
+ARTICLE_CSS = PORTAL / "css" / "blog-article.css"
 BLOG_INDEX = PORTAL / "blog" / "index.html"
 SITEMAP = PORTAL / "sitemap.xml"
 CANONICAL = {
@@ -245,7 +245,7 @@ def section_body(source: str, section_id: str, language: str) -> str:
 
 class FromIntentToDeliveryArticleTests(unittest.TestCase):
     def test_articles_and_css_exist(self) -> None:
-        self.assertTrue(ARTICLE_CSS.exists(), "article.css")
+        self.assertTrue(ARTICLE_CSS.exists(), "blog-article.css")
         for language, path in ARTICLES.items():
             self.assertTrue(path.exists(), language)
 

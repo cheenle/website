@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/octen.css?v=6" />
     <link rel="stylesheet" href="../../css/agentic.css?v=2" />
-    <link rel="stylesheet" href="article.css?v=3" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script type="application/ld+json">
       {
@@ -40,11 +40,10 @@
     </script>
   </head>
   <body data-site="portal">
-    <article class="sbt-page">
-      <nav class="sbt-crumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a><span>/</span><span>From Intent to Delivery</span></nav>
-      <a class="sbt-lang" href="zh/" lang="zh-CN">中文版</a>
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a><span>/</span><span>From Intent to Delivery</span></span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
 
-      <header class="ag-hero sbt-hero">
+      <header class="ag-hero ba-hero">
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-route"></i><span>Intelligence · Field Distillation</span></div>
           <h1>One USB Cable.<br /><span class="gradient">Four Dimensions of Agentic Engineering.</span></h1>
@@ -55,14 +54,14 @@
             <span class="ag-pill"><i class="fas fa-vial"></i> 439 / 682 / 937 tests run on census day</span>
             <span class="ag-pill"><i class="fas fa-scale-balanced"></i> judgment separated from execution</span>
           </div>
-          <p class="sbt-meta">BG1SB · <time datetime="2026-09-05">Sep 5, 2026</time> · updated <time datetime="2026-09-06">Sep 6, 2026</time> · ~22 min read</p>
+          <p class="ba-meta">BG1SB · <time datetime="2026-09-05">Sep 5, 2026</time> · updated <time datetime="2026-09-06">Sep 6, 2026</time> · ~22 min read</p>
         </div>
       </header>
 
       <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#thesis">Thesis</a><a href="#dim-abstraction">Abstraction</a><a href="#dim-knowledge">Knowledge</a><a href="#dim-economics">Economics</a><a href="#dim-responsibility">Responsibility</a><a href="#closing">Closing</a><a href="#appendix-limits">Boundaries</a></nav></div></div>
 
-      <main class="sbt-main">
-        <p class="sbt-lede">Data collected 2026-09-05. This article cross-verifies with the published <a href="/blog/seven-billion-tokens/">Seven Billion Tokens, One Field Incident</a> ("7B"): that one is the ledger; this one is the distillation. Where the two differ in caliber, the appendices state the difference item by item.</p>
+      <main class="ba-main">
+        <p class="lede">Data collected 2026-09-05. This article cross-verifies with the published <a href="/blog/seven-billion-tokens/">Seven Billion Tokens, One Field Incident</a> ("7B"): that one is the ledger; this one is the distillation. Where the two differ in caliber, the appendices state the difference item by item.</p>
 
         <section id="thesis" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">00 · Thesis</span><h2 class="ag-section-title">Separate judgment from execution</h2><p class="ag-section-subtitle">One sentence that explains everything the case contains.</p></header>
           <div class="claim-box" data-claim-type="thesis"><span class="claim-label">Author's thesis</span><p>Agentic engineering is not "using AI to write code". It is <strong>separating judgment from execution</strong>: judgment settles into contracts, execution is delegated to agents, and evidence decides whether a contract lives or dies.</p></div>
@@ -90,7 +89,7 @@
 
           <section id="dim-knowledge" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">02 · Argument</span><h2 class="ag-section-title">Three eras of carriers, all lived in one case</h2><p class="ag-section-subtitle">The effect of using AI depends not on model strength but on what carrier knowledge settles into.</p></header>
             <div class="claim-box" data-claim-type="thesis"><span class="claim-label">Author's thesis</span><p>The carrier of knowledge determines the lifespan of knowledge. This case lived through all three eras in sequence.</p></div>
-            <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>Era</th><th>Carrier</th><th>Fate of knowledge</th><th>Case evidence</th></tr></thead><tbody>
+            <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>Era</th><th>Carrier</th><th>Fate of knowledge</th><th>Case evidence</th></tr></thead><tbody>
               <tr><td>Conversation era</td><td>chat logs</td><td>evaporates with the session</td><td>iFlow: 37,202 turns, an estimated ~230 million tokens (usage fields all zero; estimate, not recorded) — output produced, zero sediment</td></tr>
               <tr><td>Document era</td><td>SDD / practice guides</td><td>goes stale, gets skipped</td><td>MRRC's SDD framework (2026-05-02, <code>58aa675</code>) and the FDE practice guide (2026-05-10, <code>88f519f</code>)</td></tr>
               <tr><td>Contract era</td><td>machine-readable constraints + runtime gates</td><td>needs no remembering — appears when it should</td><td>sdd-guardian (2026-07-20, <code>2498ec2</code>): constraints injected at session start, violations intercepted by a <code>PreToolUse</code> hook before an edit lands on disk</td></tr>
@@ -148,8 +147,8 @@ $ echo $?
           </ol>
         </div></section>
 
-        <section id="appendix-repos" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">Appendix A · Repositories</span><h2 class="ag-section-title">Repository × commits × phase × tokens</h2><p class="ag-section-subtitle">Commit classification is a coarse pass by message prefix and carries error; census date 2026-09-05.</p></header>
-          <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>Repository</th><th>Commits</th><th>Span</th><th>Business phase</th><th>Primary harnesses</th><th>Recorded tokens</th></tr></thead><tbody>
+        <section id="appendix-repos" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">Appendix A · Repositories</span><h2 class="ag-section-title">Repository × commits × phase × tokens</h2><p class="ag-section-subtitle">Commit classification is a coarse pass by message prefix and carries error; census date 2026-09-05.</p></header>
+          <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>Repository</th><th>Commits</th><th>Span</th><th>Business phase</th><th>Primary harnesses</th><th>Recorded tokens</th></tr></thead><tbody>
             <tr><td>MRRC</td><td>181</td><td>2026-03-06 → 09-05</td><td>FDE incubation + universal remote-control family</td><td>claude-code / mulerun / kimi</td><td>1.16 B</td></tr>
             <tr><td>sunsdr(+Mobile)</td><td>67 + 9</td><td>2026-06-21 → 09-03</td><td>Direct-IQ SDR track + iOS client</td><td>codex / mulerun / claude</td><td>64 M</td></tr>
             <tr><td>mrrc_ft710</td><td>162</td><td>2026-07-06 → 09-05</td><td>Vertical slice + harness formation</td><td>pi / kimi / claude</td><td>1.28 B</td></tr>
@@ -161,8 +160,8 @@ $ echo $?
           <p>Lineage notes: on census day MRRC went V5.6.5 → V6.0.0 (<code>625779f</code>, 2026-09-05); it is the oldest repository (from 2026-03-06) and its early consumption is beyond the retention window. mrrc_modern forked from mrrc_ft710's history and has been independent since 2026-08-17.</p>
         </div></section>
 
-        <section id="appendix-tools" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">Appendix B · Tools</span><h2 class="ag-section-title">Tool × API source × tokens, in both calibers</h2><p class="ag-section-subtitle">Census 2026-09-05. claude-code carries two calibers side by side; the published census used the line caliber.</p></header>
-          <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>Tool</th><th>Tokens (line / recorded caliber)</th><th>Tokens (deduplicated caliber)</th><th>Turns</th><th>Sessions</th><th>Main models</th></tr></thead><tbody>
+        <section id="appendix-tools" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">Appendix B · Tools</span><h2 class="ag-section-title">Tool × API source × tokens, in both calibers</h2><p class="ag-section-subtitle">Census 2026-09-05. claude-code carries two calibers side by side; the published census used the line caliber.</p></header>
+          <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>Tool</th><th>Tokens (line / recorded caliber)</th><th>Tokens (deduplicated caliber)</th><th>Turns</th><th>Sessions</th><th>Main models</th></tr></thead><tbody>
             <tr><td>claude-code</td><td>3,207,496,620</td><td><strong>1,175,403,254</strong> (dedup by message.id, 7,519 API responses)</td><td>22,184</td><td>218</td><td>deepseek-v4-flash 90.6%</td></tr>
             <tr><td>pi</td><td>1,633,493,477</td><td>same as recorded</td><td>8,921</td><td>61</td><td>deepseek-v4-flash 63% / gpt-5.6 24%</td></tr>
             <tr><td>kimi-code</td><td>1,203,639,664</td><td>same as recorded</td><td>9,816</td><td>233 (wire-file caliber)</td><td>k3 65.9%</td></tr>
@@ -176,8 +175,8 @@ $ echo $?
           <p>Excluded, keeping the two-column ledger — recorded versus estimated must not be merged: iFlow's 37,202 assistant turns all record zero usage; by character count they are an <strong>estimated ~234 million tokens (estimate, not recorded)</strong>. Hermes: 292 sessions with every token_count zero (not recorded). Qoder: a duplicate subset of Cursor.</p>
         </div></section>
 
-        <section id="appendix-timeline" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">Appendix C · Timeline</span><h2 class="ag-section-title">Phase → goal → representative commits → consumption → evidence</h2><p class="ag-section-subtitle">Each phase maps to a named business goal.</p></header>
-          <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>Phase</th><th>Period</th><th>Business goal</th><th>Representative commits</th><th>Tokens</th><th>Delivery evidence</th></tr></thead><tbody>
+        <section id="appendix-timeline" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">Appendix C · Timeline</span><h2 class="ag-section-title">Phase → goal → representative commits → consumption → evidence</h2><p class="ag-section-subtitle">Each phase maps to a named business goal.</p></header>
+          <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>Phase</th><th>Period</th><th>Business goal</th><th>Representative commits</th><th>Tokens</th><th>Delivery evidence</th></tr></thead><tbody>
             <tr><td>Control group</td><td>2025-10 → 2026-04</td><td>Exploration, no harness</td><td>(no repository)</td><td>estimated ~230 M (iFlow; estimate, not recorded)</td><td>output without sediment</td></tr>
             <tr><td>FDE incubation</td><td>2026-03 → 06</td><td>Universal remote interface</td><td>MRRC <code>ba66892</code> / <code>58aa675</code> / <code>88f519f</code></td><td>~130 M (before claude log retention)</td><td>V4.6 → V5.3, SDD framework</td></tr>
             <tr><td>SDR track</td><td>2026-06 → 07</td><td>ExpertSDR replacement client</td><td>sunsdr <code>38cb85e</code> / <code>6b1bc2b</code></td><td>64 M</td><td>V1.0 production, PTT two-way ACK</td></tr>
@@ -188,7 +187,7 @@ $ echo $?
           </tbody></table></div>
         </div></section>
 
-        <section id="appendix-limits" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">Appendix D · Measurement Boundaries</span><h2 class="ag-section-title">Seven honesty statements</h2><p class="ag-section-subtitle">Every number in this article lives inside these boundaries.</p></header>
+        <section id="appendix-limits" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">Appendix D · Measurement Boundaries</span><h2 class="ag-section-title">Seven honesty statements</h2><p class="ag-section-subtitle">Every number in this article lives inside these boundaries.</p></header>
           <ol class="steps">
             <li><h4>Tokens cannot be attributed to single commits</h4><p>Sessions span multiple commits, and commits do not record which session produced them. Every "commit × token" correspondence here is an aggregation at working-directory × time-window granularity — the finest grain that can be attributed.</p></li>
             <li><h4>The claude-code dual caliber</h4><p>The line caliber (summing every jsonl line carrying usage) counts chunks of the same API response multiple times and inflates by about 2.7×; deduplication by message.id gives the actual API consumption. The published census used the line caliber; Appendix B lists both columns side by side. Other tools are unaffected.</p></li>
@@ -202,7 +201,7 @@ $ echo $?
         </div></section>
       </main>
 
-      <footer class="sbt-footer"><div class="container"><div class="blog-author"><div class="ba-icon"><i class="fas fa-user"></i></div><div><h3>BG1SB</h3><p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p></div></div><div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div></div></footer>
+      <footer class="ba-footer"><div class="ba-footer-inner"><div class="blog-author"><div class="ba-icon"><i class="fas fa-user"></i></div><div><h3>BG1SB</h3><p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p></div></div><div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div></div></footer>
     </article>
     <script src="../../js/global-nav.js?v=6" defer data-gn="1"></script>
   </body>

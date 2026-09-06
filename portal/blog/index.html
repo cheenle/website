@@ -17,7 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/octen.css?v=6">
-    <link rel="stylesheet" href="../css/blog.css?v=1">
+    <link rel="stylesheet" href="../css/agentic.css?v=2">
+    <link rel="stylesheet" href="../css/blog-article.css?v=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="application/ld+json">
     {
@@ -42,12 +43,16 @@
 </head>
 <body data-site="portal">
 
-<header class="blog-list-hero">
-    <h1>VLSC Blog</h1>
-    <p>Engineering notes from the VLSC open-source amateur radio projects — remote radio control, SDR signal chains, antenna tuning, and the field work behind them. Written by <a href="https://github.com/cheenle" target="_blank" rel="noopener" style="color:var(--accent);">BG1SB</a>.</p>
+<header class="ag-hero ba-hero">
+    <div class="ag-hero-inner">
+        <h1>VLSC <span class="gradient">Blog</span></h1>
+        <p>Engineering notes from the VLSC open-source amateur radio projects — remote radio control, SDR signal chains, antenna tuning, and the field work behind them. Written by <a href="https://github.com/cheenle" target="_blank" rel="noopener" style="color:var(--accent);">BG1SB</a>.</p>
+    </div>
 </header>
 
-<section class="section" style="background: var(--bg-primary);">
+<main>
+<section class="ag-section">
+    <div class="container">
     <div class="blog-cat-filter" id="cat-filter">
         <button type="button" data-filter="all" class="is-active">All</button>
         <button type="button" data-filter="mrrc">MRRC</button>
@@ -60,51 +65,51 @@
         <button type="button" data-filter="intelligence">Intelligence</button>
     </div>
 
-    <div class="blog-grid">
+    <div class="ba-grid">
 
-        <article class="blog-card" data-cat="intelligence">
+        <article class="ag-card blog-card" data-cat="intelligence">
             <div class="bc-cat">Intelligence</div>
             <h2><a href="/blog/from-intent-to-delivery/">One USB Cable: Seven Months of a Business Intent, and the Four Dimensions of Agentic Engineering</a></h2>
             <p class="bc-excerpt">Four dimensions distilled from one real case — judgment separated from execution, the abstraction ladder, the carrier of knowledge, tokens as the price of uncertainty, and the responsibility that cannot be delegated. Case and data demoted to evidence.</p>
             <div class="bc-meta">BG1SB · Sep 5, 2026 · ~22 min read</div>
         </article>
 
-        <article class="blog-card" data-cat="intelligence">
+        <article class="ag-card blog-card" data-cat="intelligence">
             <div class="bc-cat">Intelligence</div>
             <h2><a href="/blog/seven-billion-tokens/">Seven Billion Tokens, One Field Incident</a></h2>
             <p class="bc-excerpt">7,007,437,567 recorded tokens mapped to repositories, source-line scale, evidence loops, and one FT-710 field frequency-drift incident — including the 1.6B-token measurement error the ledger caught.</p>
             <div class="bc-meta">BG1SB · Sep 5, 2026 · ~30 min read</div>
         </article>
 
-        <article class="blog-card" data-cat="intelligence">
+        <article class="ag-card blog-card" data-cat="intelligence">
             <div class="bc-cat">Intelligence</div>
             <h2><a href="/blog/connections-recursive-intelligence/">Connections Rule: Recursive Intelligence from Neurons to Civilization</a></h2>
             <p class="bc-excerpt">From the fruit-fly connectome to RAG, multi-agent systems, embodied AI, and brain–computer interfaces: an evidence-led argument for why connection matters—and why connection alone is not enough.</p>
             <div class="bc-meta">BG1SB · Aug 28, 2026 · ~24 min read</div>
         </article>
 
-        <article class="blog-card" data-cat="ft710">
+        <article class="ag-card blog-card" data-cat="ft710">
             <div class="bc-cat">FT-710</div>
             <h2><a href="/blog/ft710-usb-remote-control/">Remote-Controlling a Yaesu FT-710 with Just a USB Cable</a></h2>
             <p class="bc-excerpt">The FT-710's hidden FT4222 SPI bridge exposes real spectrum data over the USB cable you already own — CAT, waterfall, and audio on one link, no SCU-LAN10 dongle.</p>
             <div class="bc-meta">BG1SB · Aug 12, 2026 · 9 min read</div>
         </article>
 
-        <article class="blog-card" data-cat="efhw">
+        <article class="ag-card blog-card" data-cat="efhw">
             <div class="bc-cat">EFHW</div>
             <h2><a href="/blog/efhw-esp32s3-auto-tuner/">Designing an ESP32-S3 Servo-Driven Antenna Tuner</a></h2>
             <p class="bc-excerpt">One servo, one air variable capacitor, and no on-board SWR bridge. How a 430-CNY tuner reads SWR over WebSocket and covers 40m to 10m.</p>
             <div class="bc-meta">BG1SB · Aug 12, 2026 · 8 min read</div>
         </article>
 
-        <article class="blog-card" data-cat="audio">
+        <article class="ag-card blog-card" data-cat="audio">
             <div class="bc-cat">Audio</div>
             <h2><a href="/blog/opus-vs-pcm-remote-audio/">Opus vs PCM for HF Remote Audio: Latency, Bandwidth, and Trade-offs</a></h2>
             <p class="bc-excerpt">The &gt;10× bandwidth cut that makes remote radio usable on mobile networks — plus a 20 ms frame cost, an arm64 ctypes bug, and a 1-byte codec tag.</p>
             <div class="bc-meta">BG1SB · Aug 12, 2026 · 8 min read</div>
         </article>
 
-        <article class="blog-card" data-cat="field">
+        <article class="ag-card blog-card" data-cat="field">
             <div class="bc-cat">Field Notes</div>
             <h2><a href="/blog/psk-reporter-dxcc-hunting/">Finding New DXCC with PSK Reporter: A Data-Driven DX Hunting Workflow</a></h2>
             <p class="bc-excerpt">Watch what stations a few hundred kilometers away are decoding, and you'll know exactly when a rare DXCC is workable from your QTH. A real evening session on 15 meters.</p>
@@ -112,7 +117,9 @@
         </article>
 
     </div>
+    </div>
 </section>
+</main>
 
 <footer class="footer">
     <div class="container">

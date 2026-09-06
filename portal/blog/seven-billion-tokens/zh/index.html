@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../../css/octen.css?v=6" />
     <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
-    <link rel="stylesheet" href="../article.css?v=3" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script type="application/ld+json">
       {
@@ -40,11 +40,10 @@
     </script>
   </head>
   <body data-site="portal">
-    <article class="sbt-page">
-      <nav class="sbt-crumb"><a href="/">首页</a><span>/</span><a href="/blog/">博客</a><span>/</span><span>格物致知</span></nav>
-      <a class="sbt-lang" href="../" lang="en">English</a>
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">首页</a><span>/</span><a href="/blog/">博客</a><span>/</span><span>格物致知</span></span><a class="ba-lang" href="../" lang="en">English</a></nav>
 
-      <header class="ag-hero sbt-hero">
+      <header class="ag-hero ba-hero">
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-receipt"></i><span>Intelligence · 证据台账</span></div>
           <h1>七十亿 token。<br /><span class="gradient">一次现场事故。</span></h1>
@@ -55,22 +54,22 @@
             <span class="ag-pill"><i class="fas fa-shield-halved"></i> 拦截已复现</span>
             <span class="ag-pill"><i class="fas fa-scale-balanced"></i> 证据先于声明</span>
           </div>
-          <p class="sbt-meta">BG1SB · <time datetime="2026-09-05">2026 年 9 月 5 日</time> · 约 18 分钟阅读</p>
+          <p class="ba-meta">BG1SB · <time datetime="2026-09-05">2026 年 9 月 5 日</time> · 约 18 分钟阅读</p>
         </div>
       </header>
 
       <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#ledger">台账</a><a href="#intent">意图</a><a href="#machine">机制</a><a href="#chain">事故链</a><a href="#scale">Token x 代码</a><a href="#delivery">交付</a><a href="#human">人类边界</a><a href="#references">溯源</a></nav></div></div>
 
-      <main class="sbt-main">
-        <p class="sbt-lede">七十亿 token 不是生产力奖杯，而是一条工程系统的痕迹：业务意图进入 harness，内环用上下文去实现与验证，活的 SDD 留住被学到的东西，最后由现场证据决定什么为真。</p>
+      <main class="ba-main">
+        <p class="lede">七十亿 token 不是生产力奖杯，而是一条工程系统的痕迹：业务意图进入 harness，内环用上下文去实现与验证，活的 SDD 留住被学到的东西，最后由现场证据决定什么为真。</p>
         <div class="claim-box" data-claim-type="thesis"><span class="claim-label">主张</span><p>token 只有在绑定到仓库、代码规模、证据与失败边界时才有意义。没有映射，它只是虚荣账；有了映射，它显示系统把成本花在不确定性、迭代、上下文重载与纠错上。</p></div>
 
         <div class="volume" data-volume="gewu">
           <header class="volume-head"><span class="volume-num">卷一</span><h2>格物 · Investigating Things</h2><p class="volume-gloss">回到事物本身：会话库、测试、代码、电台行为，以及第一次测量为什么会错。</p></header>
 
           <section id="ledger" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">01 · 台账</span><h2 class="ag-section-title">先看账单，再降低它的地位</h2><p class="ag-section-subtitle">账单有价值，是因为它能被核对；不是因为它很大。</p></header>
-            <div class="sbt-metric-grid"><article class="ag-card"><h3>记录总量</h3><strong>7,007,437,567</strong><p>七个 harness，41,257 轮，882 个会话。</p></article><article class="ag-card"><h3>缓存重读</h3><strong>95.2%</strong><p>6,670,776,092 个 token 是上下文重载，不是新文本产出。</p></article><article class="ag-card"><h3>新鲜部分</h3><strong>4.8%</strong><p>336,661,475 个新输入加输出；模型输出为 30,061,161。</p></article><article class="ag-card"><h3>有计价样本</h3><strong>$9.30 / B</strong><p>Pi 记录 $15.11 对应 1,625,562,962 tokens。</p></article></div>
-            <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>Harness</th><th>Tokens</th><th>轮次</th><th>会话</th><th>来源</th></tr></thead><tbody><tr><td>claude-code</td><td>3,129,411,481</td><td>21,648</td><td>194</td><td><code>~/.claude/projects/**/*.jsonl</code></td></tr><tr><td>pi</td><td>1,625,562,962</td><td>8,719</td><td>60</td><td><code>usage.totalTokens</code> 与 cost</td></tr><tr><td>kimi-code</td><td>1,201,837,537</td><td>9,769</td><td>229</td><td><code>usage.record</code></td></tr><tr><td>codex</td><td>547,796,667</td><td>717</td><td>116</td><td>JSONL 与 <code>threads.tokens_used</code> 交叉核对</td></tr><tr><td>mulerun</td><td>471,558,325</td><td>181</td><td>181</td><td><code>session.tokens_*</code></td></tr><tr><td>cursor</td><td>27,079,705</td><td>217</td><td>96</td><td>非零 <code>bubbleId:*</code></td></tr><tr><td>opencode</td><td>4,190,890</td><td>6</td><td>6</td><td><code>opencode.db</code></td></tr></tbody></table></div>
+            <div class="ag-evidence-grid"><article class="ag-card"><h3>记录总量</h3><strong>7,007,437,567</strong><p>七个 harness，41,257 轮，882 个会话。</p></article><article class="ag-card"><h3>缓存重读</h3><strong>95.2%</strong><p>6,670,776,092 个 token 是上下文重载，不是新文本产出。</p></article><article class="ag-card"><h3>新鲜部分</h3><strong>4.8%</strong><p>336,661,475 个新输入加输出；模型输出为 30,061,161。</p></article><article class="ag-card"><h3>有计价样本</h3><strong>$9.30 / B</strong><p>Pi 记录 $15.11 对应 1,625,562,962 tokens。</p></article></div>
+            <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>Harness</th><th>Tokens</th><th>轮次</th><th>会话</th><th>来源</th></tr></thead><tbody><tr><td>claude-code</td><td>3,129,411,481</td><td>21,648</td><td>194</td><td><code>~/.claude/projects/**/*.jsonl</code></td></tr><tr><td>pi</td><td>1,625,562,962</td><td>8,719</td><td>60</td><td><code>usage.totalTokens</code> 与 cost</td></tr><tr><td>kimi-code</td><td>1,201,837,537</td><td>9,769</td><td>229</td><td><code>usage.record</code></td></tr><tr><td>codex</td><td>547,796,667</td><td>717</td><td>116</td><td>JSONL 与 <code>threads.tokens_used</code> 交叉核对</td></tr><tr><td>mulerun</td><td>471,558,325</td><td>181</td><td>181</td><td><code>session.tokens_*</code></td></tr><tr><td>cursor</td><td>27,079,705</td><td>217</td><td>96</td><td>非零 <code>bubbleId:*</code></td></tr><tr><td>opencode</td><td>4,190,890</td><td>6</td><td>6</td><td><code>opencode.db</code></td></tr></tbody></table></div>
             <div class="prov"><b>声明：</b>已记录 token 总量。<b>来源工件：</b>七个本机会话存储。<b>版本／提交：</b>普查 2026-09-05。<b>环境：</b>macOS arm64。<b>验证方法：</b>JSONL 解析加 SQLite 核对。<b>结果：</b>7,007,437,567 tokens / 41,257 轮 / 882 会话。<b>局限：</b>仅本机留存；部分工具不记录用量。<b>日期：</b>2026-09-05。</div>
           </div></section>
 
@@ -100,7 +99,7 @@
           <header class="volume-head"><span class="volume-num">卷二</span><h2>致知 · Extending Knowledge</h2><p class="volume-gloss">一次现场观察变成契约，契约变成门禁，许多门禁长成可复用本体。</p></header>
 
           <section id="machine" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">06 · 机制</span><h2 class="ag-section-title">约束在外，执行在内</h2><p class="ag-section-subtitle">这是工程机制页中与本事故有关的最小切片。</p></header>
-            <div class="ag-engineering-summary"><article class="ag-card"><h3>Harness</h3><p>业务、技术、产品约束定义工作为何存在、哪些接口与安全边界重要、什么证据可以改变声明。</p></article><article class="ag-card"><h3>Loop</h3><p>Echo -> Delta -> Product 里包含内环：Specify -> Implement -> Test -> Review -> Deploy / Observe -> Update SDD。</p></article><article class="ag-card"><h3>活的 SDD</h3><p>SDD 连接意图、代码、测试、部署、已知问题与可复用决策。运行时加载契约，而不是陈旧副本。</p></article></div>
+            <div class="ag-module-grid"><article class="ag-card"><h3>Harness</h3><p>业务、技术、产品约束定义工作为何存在、哪些接口与安全边界重要、什么证据可以改变声明。</p></article><article class="ag-card"><h3>Loop</h3><p>Echo -> Delta -> Product 里包含内环：Specify -> Implement -> Test -> Review -> Deploy / Observe -> Update SDD。</p></article><article class="ag-card"><h3>活的 SDD</h3><p>SDD 连接意图、代码、测试、部署、已知问题与可复用决策。运行时加载契约，而不是陈旧副本。</p></article></div>
             <div class="claim-box" data-claim-type="fact"><span class="claim-label">事实</span><p>内环由智能体使用真实仓库与真实门禁执行；意图、架构边界和证据是否充分的判断留在人手里。这就是智能体工程与前沿部署工程的边界。</p></div>
           </div></section>
 
@@ -115,7 +114,7 @@ $ echo $?
           </div></section>
 
           <section id="scale" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">08 · Token x 代码</span><h2 class="ag-section-title">token 规模不跟 LOC 排序</h2><p class="ag-section-subtitle">关键问题不是「用了多少 AI」，而是内环在哪里反复重载上下文以消除不确定性。</p></header>
-            <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>仓库／工作桶</th><th>Tokens</th><th>Tracked source lines</th><th>Tokens / line</th><th>工程读法</th></tr></thead><tbody><tr><td>ft8</td><td>1,875,258,566</td><td>69,972</td><td>26,800</td><td>代码量小、风险密度高：DSP、时隙与 TX 保护。</td></tr><tr><td>mrrc_ft710</td><td>1,275,611,389</td><td>728,632</td><td>1,751</td><td>大型 native/mobile tracked tree；纵向切片产出可复用契约。</td></tr><tr><td>mrrc_modern</td><td>1,260,804,213</td><td>744,195</td><td>1,694</td><td>平台抽象与三个电台 profile。</td></tr><tr><td>MRRC</td><td>1,150,197,250</td><td>150,345</td><td>7,650</td><td>通用族；历史最长，部分受留存截断。</td></tr><tr><td>website</td><td>819,343,926</td><td>35,816</td><td>22,876</td><td>证据对账、双语结构与跨站一致性。</td></tr><tr><td>sunsdr</td><td>64,490,898</td><td>38,361</td><td>1,681</td><td>电台服务端与客户端网站；大量协议学习早于留存日志。</td></tr><tr><td>pskreporter</td><td>54,409,498</td><td>not available</td><td>n/a</td><td>本机无独立 checkout，无法给可复核行数。</td></tr><tr><td>efhw-knowledge</td><td>45,949,584</td><td>22,425</td><td>2,049</td><td>阅读、综合与本体抽取。</td></tr><tr><td>wfview</td><td>23,459,822</td><td>172,509</td><td>136</td><td>参考树，本地 agent 投入小。</td></tr><tr><td>未归属工作桶</td><td>410,832,716</td><td>n/a</td><td>n/a</td><td>父目录会话与非无线电工作。</td></tr><tr><td><strong>工作目录合计</strong></td><td><strong>6,980,357,862</strong></td><td><strong>1,962,255 counted</strong></td><td>mixed</td><td>无线电生态仓库本身：6,491,655,826</td></tr></tbody></table></div>
+            <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>仓库／工作桶</th><th>Tokens</th><th>Tracked source lines</th><th>Tokens / line</th><th>工程读法</th></tr></thead><tbody><tr><td>ft8</td><td>1,875,258,566</td><td>69,972</td><td>26,800</td><td>代码量小、风险密度高：DSP、时隙与 TX 保护。</td></tr><tr><td>mrrc_ft710</td><td>1,275,611,389</td><td>728,632</td><td>1,751</td><td>大型 native/mobile tracked tree；纵向切片产出可复用契约。</td></tr><tr><td>mrrc_modern</td><td>1,260,804,213</td><td>744,195</td><td>1,694</td><td>平台抽象与三个电台 profile。</td></tr><tr><td>MRRC</td><td>1,150,197,250</td><td>150,345</td><td>7,650</td><td>通用族；历史最长，部分受留存截断。</td></tr><tr><td>website</td><td>819,343,926</td><td>35,816</td><td>22,876</td><td>证据对账、双语结构与跨站一致性。</td></tr><tr><td>sunsdr</td><td>64,490,898</td><td>38,361</td><td>1,681</td><td>电台服务端与客户端网站；大量协议学习早于留存日志。</td></tr><tr><td>pskreporter</td><td>54,409,498</td><td>not available</td><td>n/a</td><td>本机无独立 checkout，无法给可复核行数。</td></tr><tr><td>efhw-knowledge</td><td>45,949,584</td><td>22,425</td><td>2,049</td><td>阅读、综合与本体抽取。</td></tr><tr><td>wfview</td><td>23,459,822</td><td>172,509</td><td>136</td><td>参考树，本地 agent 投入小。</td></tr><tr><td>未归属工作桶</td><td>410,832,716</td><td>n/a</td><td>n/a</td><td>父目录会话与非无线电工作。</td></tr><tr><td><strong>工作目录合计</strong></td><td><strong>6,980,357,862</strong></td><td><strong>1,962,255 counted</strong></td><td>mixed</td><td>无线电生态仓库本身：6,491,655,826</td></tr></tbody></table></div>
             <div class="claim-box" data-claim-type="analogy"><span class="claim-label">类比</span><p>朱熹《大学章句》里的豁然贯通，在这里可作为积累类比：今日格一物，明日格一物，之后才固化。本体是在证据跨越产品边界重复出现之后才写出来的。</p></div>
             <div class="claim-box" data-claim-type="inference"><span class="claim-label">推论</span><p>token 不衡量生产率，源码行数也不衡量难度。二者比值只能作为不确定性、上下文重载、证据对齐和安全边界工作的诊断信号。</p></div>
           </div></section>
@@ -125,7 +124,7 @@ $ echo $?
           <header class="volume-head"><span class="volume-num">卷三</span><h2>知行合一 · Unity of Knowing and Acting</h2><p class="volume-gloss">知而不行，只是未知；没有证据的行动，也不是知识。</p></header>
 
           <section id="delivery" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">09 · 交付</span><h2 class="ag-section-title">发布也是证据工作</h2><p class="ag-section-subtitle">测试套在 2026-09-05 实跑，不是读文档得出。</p></header>
-            <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>产品族</th><th>命令</th><th>结果</th></tr></thead><tbody><tr><td>FT-710</td><td><code>venv/bin/python -m unittest discover -s tests</code></td><td><code>Ran 439 tests</code> / <code>OK</code></td></tr><tr><td>Modern</td><td><code>venv/bin/python -m unittest discover -s tests</code></td><td><code>Ran 682 tests</code> / <code>FAILED (errors=1)</code>；macOS 上 Windows launcher import 限制。</td></tr><tr><td>FT8</td><td><code>venv/bin/python -m pytest tests -q --collect-only</code></td><td><code>937 tests collected</code>，收集数不是通过数。</td></tr></tbody></table></div>
+            <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>产品族</th><th>命令</th><th>结果</th></tr></thead><tbody><tr><td>FT-710</td><td><code>venv/bin/python -m unittest discover -s tests</code></td><td><code>Ran 439 tests</code> / <code>OK</code></td></tr><tr><td>Modern</td><td><code>venv/bin/python -m unittest discover -s tests</code></td><td><code>Ran 682 tests</code> / <code>FAILED (errors=1)</code>；macOS 上 Windows launcher import 限制。</td></tr><tr><td>FT8</td><td><code>venv/bin/python -m pytest tests -q --collect-only</code></td><td><code>937 tests collected</code>，收集数不是通过数。</td></tr></tbody></table></div>
             <div class="claim-box" data-claim-type="fact"><span class="claim-label">事实</span><p>部署规则也来自真实缺陷：远端 heredoc 加引号、因为 <code>tar -x</code> 不删除而显式远端删除、按站点精简备份、回滚提示只允许恢复单站目录。</p></div>
           </div></section>
 
@@ -144,12 +143,12 @@ $ echo $?
           </div></section>
         </div>
 
-        <section id="references" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 · 溯源</span><h2 class="ag-section-title">每个数字都有边界</h2><p class="ag-section-subtitle">除另有说明，所有行的普查日期均为 2026-09-05。</p></header>
+        <section id="references" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 · 溯源</span><h2 class="ag-section-title">每个数字都有边界</h2><p class="ag-section-subtitle">除另有说明，所有行的普查日期均为 2026-09-05。</p></header>
           <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>类别</th><th>证据</th></tr></thead><tbody><tr><td>Token 台账</td><td>claude-code 3,129,411,481 / 21,648 / 194；pi 1,625,562,962 / 8,719 / 60；kimi-code 1,201,837,537 / 9,769 / 229；codex 547,796,667 / 717 / 116；mulerun 471,558,325 / 181；cursor 27,079,705；opencode 4,190,890。合计 7,007,437,567 / 41,257 / 882。</td></tr><tr><td>排除或估算</td><td>iflow 估算 234,247,399 tokens，范围 187M-281M；usage 全部记 0。Hermes：292 会话、9,121 消息、4,336 工具调用，但无 token 用量。Qoder 作为重复子集排除。</td></tr><tr><td>测试与约束</td><td>FT-710 439 tests OK；Modern 682 tests，含一个 macOS 环境 error；FT8 937 tests collected。约束注册表：17、21、14 条，合计 52。</td></tr><tr><td>谱系</td><td><code>mrrc_modern</code> 与 <code>mrrc_ft710</code> 共享初始提交 <code>9403e2e</code>。<code>mrrc_ft8</code> 在初始提交 <code>d4a7a32</code> 同时引入 AGENTS.md、SDD 与 guardian skill。注册表增长包含 <code>2bc3d30</code>。</td></tr><tr><td>方法局限</td><td>归属使用各工具记录的工作目录。source-line 计数来自本机各 git root 的 <code>git ls-files</code>，统计常见文本／源码扩展名，排除生成依赖目录。模型标识符按 harness 自身记录。</td></tr><tr><td>古典出处</td><td>《大学》：“致知在格物，物格而后知至”。朱熹《大学章句》：“一旦豁然贯通焉”。王阳明《传习录》：格竹与“知而不行，只是未知”。这些是类比与框架，不是方法有效性的证据。</td></tr><tr><td>站内链接</td><td><a href="/agentic.html">智能体工程</a>；<a href="/engineering.html">工程机制</a>；产品族：<a href="/mrrc/">MRRC Universal</a>、<a href="/mrrc_ft710/">MRRC FT-710</a>、<a href="/mrrc_modern/">MRRC Modern</a>、<a href="/sunmrrc/">SunMRRC</a>、<a href="/sunsdrmobile/">SunsdrMobile</a>、<a href="/mrrc_ft8/">MRRC-FT8</a>、<a href="/efhw/">EFHW</a>。</td></tr></tbody></table></div>
         </div></section>
       </main>
 
-      <footer class="sbt-footer"><div class="container"><div class="blog-author"><div class="ba-icon"><i class="fas fa-user"></i></div><div><h3>BG1SB</h3><p>业余无线电操作者与软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话记下来。</p></div></div><div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div></div></footer>
+      <footer class="ba-footer"><div class="ba-footer-inner"><div class="blog-author"><div class="ba-icon"><i class="fas fa-user"></i></div><div><h3>BG1SB</h3><p>业余无线电操作者与软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话记下来。</p></div></div><div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div></div></footer>
     </article>
     <script src="../../../js/global-nav.js?v=6" defer data-gn="1"></script>
   </body>

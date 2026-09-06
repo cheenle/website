@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../../css/octen.css?v=6" />
     <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
-    <link rel="stylesheet" href="../article.css?v=3" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script type="application/ld+json">
       {
@@ -40,11 +40,10 @@
     </script>
   </head>
   <body data-site="portal">
-    <article class="sbt-page">
-      <nav class="sbt-crumb"><a href="/">首页</a><span>/</span><a href="/blog/">博客</a><span>/</span><span>从意图到交付</span></nav>
-      <a class="sbt-lang" href="../" lang="en">English</a>
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">首页</a><span>/</span><a href="/blog/">博客</a><span>/</span><span>从意图到交付</span></span><a class="ba-lang" href="../" lang="en">English</a></nav>
 
-      <header class="ag-hero sbt-hero">
+      <header class="ag-hero ba-hero">
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-route"></i><span>Intelligence · 现场提炼</span></div>
           <h1>一根 USB 线。<br /><span class="gradient">Agentic 工程的四个维度。</span></h1>
@@ -55,14 +54,14 @@
             <span class="ag-pill"><i class="fas fa-vial"></i> 普查当天实跑 439 / 682 / 937 测试</span>
             <span class="ag-pill"><i class="fas fa-scale-balanced"></i> 判断与执行分离</span>
           </div>
-          <p class="sbt-meta">BG1SB · <time datetime="2026-09-05">2026 年 9 月 5 日</time> · 更新于 <time datetime="2026-09-06">9 月 6 日</time> · 约 22 分钟阅读</p>
+          <p class="ba-meta">BG1SB · <time datetime="2026-09-05">2026 年 9 月 5 日</time> · 更新于 <time datetime="2026-09-06">9 月 6 日</time> · 约 22 分钟阅读</p>
         </div>
       </header>
 
       <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#thesis">总纲</a><a href="#dim-abstraction">抽象阶梯</a><a href="#dim-knowledge">知识载体</a><a href="#dim-economics">经济学</a><a href="#dim-responsibility">责任</a><a href="#closing">收束</a><a href="#appendix-limits">边界</a></nav></div></div>
 
-      <main class="sbt-main">
-        <p class="sbt-lede">数据采集日期：2026-09-05。本文与已发布的<a href="/blog/seven-billion-tokens/">《Seven Billion Tokens, One Field Incident》</a>（下称《7B》）互证：那篇是账本，这篇是提炼。两篇数字口径如有差异，附录逐条说明。这是智能体工程方法的一次自述。</p>
+      <main class="ba-main">
+        <p class="lede">数据采集日期：2026-09-05。本文与已发布的<a href="/blog/seven-billion-tokens/">《Seven Billion Tokens, One Field Incident》</a>（下称《7B》）互证：那篇是账本，这篇是提炼。两篇数字口径如有差异，附录逐条说明。这是智能体工程方法的一次自述。</p>
 
         <section id="thesis" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">00 · 总纲</span><h2 class="ag-section-title">把判断从执行中分离</h2><p class="ag-section-subtitle">一句话，解释这个案例里发生的一切。</p></header>
           <div class="claim-box" data-claim-type="thesis"><span class="claim-label">主张</span><p>Agentic 工程不是「用 AI 写代码」，而是<strong>把判断从执行中分离：判断沉淀为契约，执行委托给 agent，证据决定契约的存亡。</strong></p></div>
@@ -90,7 +89,7 @@
 
           <section id="dim-knowledge" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">02 · 论点</span><h2 class="ag-section-title">一个案例，完整经历三个时代</h2><p class="ag-section-subtitle">AI 使用的效果不取决于模型多强，取决于知识沉淀在什么载体上。</p></header>
             <div class="claim-box" data-claim-type="thesis"><span class="claim-label">主张</span><p>知识的载体决定知识的寿命。这个案例按顺序完整经历了三个时代。</p></div>
-            <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>时代</th><th>载体</th><th>知识的命运</th><th>案例证据</th></tr></thead><tbody>
+            <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>时代</th><th>载体</th><th>知识的命运</th><th>案例证据</th></tr></thead><tbody>
               <tr><td>对话时代</td><td>聊天记录</td><td>随会话蒸发</td><td>iFlow 37,202 轮、约 2.3 亿 tokens（usage 字段全零，按字符估算、未记录），有产出、零沉淀</td></tr>
               <tr><td>文档时代</td><td>SDD / 指导书</td><td>会过期、会被跳过</td><td>MRRC 的 SDD 框架（2026-05-02，<code>58aa675</code>）与 FDE（前沿部署工程）实践指导书（2026-05-10，<code>88f519f</code>）</td></tr>
               <tr><td>契约时代</td><td>机器可读约束 + 运行时门禁</td><td>不需要被记得，会在该出现时自己出现</td><td>sdd-guardian（2026-07-20，<code>2498ec2</code>）：会话开始注入约束，<code>PreToolUse</code> 钩子在编辑落盘前拦截</td></tr>
@@ -148,8 +147,8 @@ $ echo $?
           </ol>
         </div></section>
 
-        <section id="appendix-repos" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 A · 仓库</span><h2 class="ag-section-title">仓库 × 提交 × 阶段 × token 总表</h2><p class="ag-section-subtitle">提交分类按 message 前缀粗分、有误差；普查日期 2026-09-05。</p></header>
-          <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>仓库</th><th>提交数</th><th>跨度</th><th>业务阶段</th><th>主力 harness</th><th>记录 tokens</th></tr></thead><tbody>
+        <section id="appendix-repos" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 A · 仓库</span><h2 class="ag-section-title">仓库 × 提交 × 阶段 × token 总表</h2><p class="ag-section-subtitle">提交分类按 message 前缀粗分、有误差；普查日期 2026-09-05。</p></header>
+          <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>仓库</th><th>提交数</th><th>跨度</th><th>业务阶段</th><th>主力 harness</th><th>记录 tokens</th></tr></thead><tbody>
             <tr><td>MRRC</td><td>181</td><td>2026-03-06 → 09-05</td><td>FDE 孵化 + 通用远控产品族</td><td>claude-code / mulerun / kimi</td><td>11.6 亿</td></tr>
             <tr><td>sunsdr(+Mobile)</td><td>67 + 9</td><td>2026-06-21 → 09-03</td><td>Direct-IQ SDR 轨 + iOS 客户端</td><td>codex / mulerun / claude</td><td>0.64 亿</td></tr>
             <tr><td>mrrc_ft710</td><td>162</td><td>2026-07-06 → 09-05</td><td>垂直切片 + harness 成型</td><td>pi / kimi / claude</td><td>12.8 亿</td></tr>
@@ -161,8 +160,8 @@ $ echo $?
           <p>谱系备注：普查当天 MRRC 由 V5.6.5 升至 V6.0.0（<code>625779f</code>，2026-09-05）；它是历史最老的仓库（2026-03-06 起），早期消耗超出留存窗口。mrrc_modern 自 mrrc_ft710 历史分叉，2026-08-17 起独立。</p>
         </div></section>
 
-        <section id="appendix-tools" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 B · 工具</span><h2 class="ag-section-title">工具 × API 源 × token 总表（双口径）</h2><p class="ag-section-subtitle">普查 2026-09-05。claude-code 双口径两列并列；已发表 census 用行口径。</p></header>
-          <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>工具</th><th>tokens（行 / 记录口径）</th><th>tokens（去重口径）</th><th>turns</th><th>sessions</th><th>主要模型</th></tr></thead><tbody>
+        <section id="appendix-tools" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 B · 工具</span><h2 class="ag-section-title">工具 × API 源 × token 总表（双口径）</h2><p class="ag-section-subtitle">普查 2026-09-05。claude-code 双口径两列并列；已发表 census 用行口径。</p></header>
+          <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>工具</th><th>tokens（行 / 记录口径）</th><th>tokens（去重口径）</th><th>turns</th><th>sessions</th><th>主要模型</th></tr></thead><tbody>
             <tr><td>claude-code</td><td>3,207,496,620</td><td><strong>1,175,403,254</strong>（按 message.id 去重，7,519 次 API 响应）</td><td>22,184</td><td>218</td><td>deepseek-v4-flash 90.6%</td></tr>
             <tr><td>pi</td><td>1,633,493,477</td><td>同左</td><td>8,921</td><td>61</td><td>deepseek-v4-flash 63% / gpt-5.6 24%</td></tr>
             <tr><td>kimi-code</td><td>1,203,639,664</td><td>同左</td><td>9,816</td><td>233（wire 文件口径）</td><td>k3 65.9%</td></tr>
@@ -176,8 +175,8 @@ $ echo $?
           <p>被排除的（保持两列账本：已记录 vs 估算，不合并）：iFlow 37,202 轮对话 usage 全零，<strong>按字符估算约 2.34 亿 tokens（估算值，未记录）</strong>；Hermes 292 会话 token_count 全零（未记录）；Qoder 为 Cursor 的重复子集。</p>
         </div></section>
 
-        <section id="appendix-timeline" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 C · 时间线</span><h2 class="ag-section-title">阶段 → 业务目标 → 代表提交 → 消耗 → 证据</h2><p class="ag-section-subtitle">每个阶段都对应一个明确的业务目标。</p></header>
-          <div class="sbt-table-wrap"><table class="ag-table"><thead><tr><th>阶段</th><th>时间</th><th>业务目标</th><th>代表提交</th><th>tokens</th><th>交付证据</th></tr></thead><tbody>
+        <section id="appendix-timeline" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 C · 时间线</span><h2 class="ag-section-title">阶段 → 业务目标 → 代表提交 → 消耗 → 证据</h2><p class="ag-section-subtitle">每个阶段都对应一个明确的业务目标。</p></header>
+          <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>阶段</th><th>时间</th><th>业务目标</th><th>代表提交</th><th>tokens</th><th>交付证据</th></tr></thead><tbody>
             <tr><td>对照组</td><td>2025-10 → 2026-04</td><td>探索期，无 harness</td><td>（无仓库）</td><td>估算 2.3 亿（iFlow；估算值，未记录）</td><td>有产出无沉淀</td></tr>
             <tr><td>FDE 孵化</td><td>2026-03 → 06</td><td>通用远控界面</td><td>MRRC <code>ba66892</code> / <code>58aa675</code> / <code>88f519f</code></td><td>约 1.3 亿（claude 日志留存前）</td><td>V4.6 → V5.3，SDD 框架</td></tr>
             <tr><td>SDR 轨</td><td>2026-06 → 07</td><td>ExpertSDR 替代客户端</td><td>sunsdr <code>38cb85e</code> / <code>6b1bc2b</code></td><td>0.64 亿</td><td>V1.0 production，PTT 双向 ACK</td></tr>
@@ -188,7 +187,7 @@ $ echo $?
           </tbody></table></div>
         </div></section>
 
-        <section id="appendix-limits" class="ag-section sbt-refs"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 D · 测量边界</span><h2 class="ag-section-title">七条诚实声明</h2><p class="ag-section-subtitle">本文每个数字都活在这些边界之内。</p></header>
+        <section id="appendix-limits" class="ag-section"><div class="container"><header class="ag-section-header"><span class="ag-section-label">附录 D · 测量边界</span><h2 class="ag-section-title">七条诚实声明</h2><p class="ag-section-subtitle">本文每个数字都活在这些边界之内。</p></header>
           <ol class="steps">
             <li><h4>token 不能精确归因到单次提交</h4><p>会话跨越多个提交，提交也不记录出自哪个会话。本文所有「提交 × token」对应都是<strong>工作目录 × 时间窗口</strong>级别的归集，这是可归因的最细粒度。</p></li>
             <li><h4>claude-code 双口径</h4><p>行口径（每条带 usage 的 jsonl 行求和）把同一 API 响应的分块重复计入，放大约 2.7 倍；按 message.id 去重为实际 API 消耗。已发表 census 用行口径，附录 B 两列并列。其他工具无此问题。</p></li>
@@ -202,7 +201,7 @@ $ echo $?
         </div></section>
       </main>
 
-      <footer class="sbt-footer"><div class="container"><div class="blog-author"><div class="ba-icon"><i class="fas fa-user"></i></div><div><h3>BG1SB</h3><p>业余无线电操作者与软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话记下来。</p></div></div><div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div></div></footer>
+      <footer class="ba-footer"><div class="ba-footer-inner"><div class="blog-author"><div class="ba-icon"><i class="fas fa-user"></i></div><div><h3>BG1SB</h3><p>业余无线电操作者与软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话记下来。</p></div></div><div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div></div></footer>
     </article>
     <script src="../../../js/global-nav.js?v=6" defer data-gn="1"></script>
   </body>

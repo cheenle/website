@@ -22,113 +22,145 @@ CANONICAL = {
     "zh": f"https://www.vlsc.net/blog/{SLUG}/zh/",
 }
 
+# The merged article (2026-09-06): the 7B ledger + the four-dimension
+# distillation + process-efficiency and model-matching analysis, on one
+# narrative axis: intent → process → method → models → verdict. Fifteen
+# sections in five volumes; the three appendices sit OUTSIDE every volume.
 REQUIRED_SECTIONS = {
-    "ledger",
-    "floor",
-    "numbers-lie",
-    "intent",
-    "before",
-    "machine",
-    "chain",
-    "scale",
-    "delivery",
-    "drift",
-    "human",
-    "playbook",
-    "references",
+    "intents",
+    "control-group",
+    "intervention",
+    "unit-cost",
+    "rework",
+    "cadence",
+    "method-timeline",
+    "incident-chains",
+    "evidence-ledgers",
+    "eras",
+    "benchmarks",
+    "matching",
+    "attribution",
+    "advice",
+    "closing",
+    "appendix-ledger",
+    "appendix-repos",
+    "appendix-limits",
 }
-REQUIRED_CLAIM_TYPES = {"fact", "inference", "analogy", "thesis"}
+# Grading discipline: measured/test-run results are fact, attribution and
+# trend judgments are inference, methodology claims are thesis.
+REQUIRED_CLAIM_TYPES = {"fact", "inference", "thesis"}
 
-# Three volumes (spec §5.0). Order matters; `references` is an appendix and
-# deliberately sits OUTSIDE every volume.
 VOLUMES = (
-    ("gewu", ("ledger", "floor", "numbers-lie", "intent", "before")),
-    ("zhizhi", ("machine", "chain", "scale")),
-    ("zhixing", ("delivery", "drift", "human", "playbook")),
+    ("intent", ("intents", "control-group")),
+    ("process", ("intervention", "unit-cost", "rework", "cadence")),
+    ("method", ("method-timeline", "incident-chains", "evidence-ledgers")),
+    ("models", ("eras", "benchmarks", "matching")),
+    ("verdict", ("attribution", "advice", "closing")),
 )
-UNVOLUMED_SECTIONS = ("references",)
+UNVOLUMED_SECTIONS = ("appendix-ledger", "appendix-repos", "appendix-limits")
 VOLUME_TITLES = {
-    "en": {"gewu": "Investigating Things", "zhizhi": "Extending Knowledge",
-           "zhixing": "Unity of Knowing and Acting"},
-    "zh": {"gewu": "格物", "zhizhi": "致知", "zhixing": "知行合一"},
+    "en": {
+        "intent": "Intent never starts with",
+        "process": "From round-trips to right-first-time",
+        "method": "What the harness and the SDD did at each stage",
+        "models": "Evolution, benchmarks, and task matching",
+        "verdict": "Where the efficiency actually came from",
+    },
+    "zh": {
+        "intent": "意图从不以",
+        "process": "从「来来回回」到「一次做对」",
+        "method": "harness 与 SDD 在各阶段的作用",
+        "models": "演进、评测与任务匹配",
+        "verdict": "效率究竟从哪里来",
+    },
 }
-ZH_TITLE = "格物致知"
-EN_TITLE = "Seven Billion Tokens, One Field Incident"
+EN_TITLE = "Seven Billion Tokens, Dissected"
+ZH_TITLE = "七十亿 token 的全程拆解"
 
-# Five required classical correspondences (spec §5.0). Anchors are per-language:
-# the ZH page carries the classical Chinese; the EN page carries the standard
-# English gloss (and MAY additionally carry the Chinese term, but is not forced to).
-CLASSICAL_ANCHORS = {
-    "before": {
-        "zh": ("格竹",),
-        "en": ("investigating the bamboo",),
-    },
-    "numbers-lie": {
-        "zh": ("致知在格物",),
-        "en": ("investigating things",),
-    },
-    "chain": {
-        "zh": ("物格而后知至",),
-        "en": ("things investigated", "knowledge arrives"),
-    },
-    "scale": {
-        "zh": ("豁然贯通",),
-        "en": ("sudden thorough comprehension",),
-    },
-    "human": {
-        "zh": ("知而不行",),
-        "en": ("knowing and not acting",),
-    },
-}
-# Classical claims must be analogy or thesis, never fact. Terms that mark a
-# claim-box as classical, per language.
-CLASSICAL_TERMS = {
-    "zh": ("格竹", "格物", "致知", "知行", "贯通"),
-    "en": ("bamboo", "investigating things", "extending knowledge",
-           "unity of knowing", "comprehension"),
-}
-# At least one source must be named, per language.
-CITATION_SOURCES = {
-    "zh": ("大学", "传习录", "大学章句"),
-    "en": ("Great Learning", "Chuanxi", "Zhu Xi", "Wang Yangming"),
-}
-# Teleological claims are forbidden (R1's near cousin).
-FORBIDDEN_TELEOLOGY = ("早就有了", "already had agentic", "invented agentic")
-
-# Census 2026-09-05. These strings must appear verbatim in BOTH languages.
+# Hard numbers from the 2026-09-06 unified draft. Every one of these strings
+# must appear verbatim in BOTH languages.
 LEDGER_CONSTANTS = {
+    # headline ledger
     "recorded_tokens": "7,007,437,567",
-    "recorded_turns": "41,257",
-    "recorded_sessions": "882",
-    "with_estimates_tokens": "7,241,684,966",
-    "with_estimates_interactions": "87,580",
-    "with_estimates_sessions": "1,359",
-    "fresh_tokens": "336,661,475",
-    "cache_read_tokens": "6,670,776,092",
-    "output_tokens": "30,061,161",
-    "cache_read_share": "95.2",
-    "fresh_share": "4.8",
-    "pi_tokens": "1,625,562,962",
-    "pi_cost": "15.11",
-    "cost_per_billion": "9.30",
+    "iflow_turns": "37,202",
+    "iflow_sessions": "185",
+    "glm5_peak_week_turns": "10,420",
+    # dual-caliber totals and per-harness figures (Appendix A)
+    "tokens_total_recorded": "7,123,689,610",
+    "tokens_total_dedup": "5,091,596,244",
+    "claude_line_caliber": "3,207,496,620",
+    "claude_dedup_caliber": "1,175,403,254",
+    "claude_api_responses": "7,519",
+    "pi_tokens": "1,633,493,477",
+    "kimi_tokens": "1,203,639,664",
+    "codex_tokens": "547,796,667",
+    "mulerun_tokens": "499,992,587",
+    "cursor_tokens": "27,079,705",
+    "opencode_tokens": "4,190,890",
+    "line_caliber_inflation": "2.7",
+    # process efficiency
+    "intervention_drop": "17.1 → 0.3",
+    "ft8_peak_unit_cost": "75.5",
+    "ft8_maintenance_unit_cost": "0.9",
+    "ft710_peak_unit_cost": "15.2",
+    "ft710_maintenance_unit_cost": "0.95",
+    "rework_ft710_open": "36%",
+    "rework_ft8_from": "29%",
+    "rework_ft8_to": "17%",
+    "rework_mrrc_integration": "50%",
+    "rework_modern_refactor": "31%",
+    "rework_sunsdr_early": "51%",
+    "rework_modern_intervention": "0.71",
+    "red_green_median_minutes": "19",
+    # method
+    "constraints_split": "ft710 17 / modern 21 / ft8 14",
     "constraints_total": "52",
-    "constraints_ft710": "17",
-    "constraints_modern": "21",
-    "constraints_ft8": "14",
+    # delivery evidence
     "tests_ft710": "439",
     "tests_modern": "682",
     "tests_ft8_collected": "937",
-    "iflow_turns": "37,202",
-    "iflow_estimate": "234,247,399",
-    "hermes_sessions": "292",
-    "hermes_messages": "9,121",
-    "hermes_toolcalls": "4,336",
-    "first_pass_wrong": "5,380,941,148",
-    "codex_db_corroboration": "546,858,767",
+    "mrrc_version_before": "V5.6.5",
+    "mrrc_version_after": "V6.0.0",
+    # commits and hashes
+    "commit_ba66892": "ba66892",
+    "commit_38cb85e": "38cb85e",
+    "commit_9403e2e": "9403e2e",
+    "commit_58aa675": "58aa675",
+    "commit_88f519f": "88f519f",
+    "commit_87297d1": "87297d1",
+    "commit_2498ec2": "2498ec2",
+    "commit_d4a7a32": "d4a7a32",
+    "commit_2bc3d30": "2bc3d30",
+    "commit_72fd6f0": "72fd6f0",
+    "commit_bb128ff": "bb128ff",
+    "commit_067f565": "067f565",
+    "commits_mrrc": "181",
+    "commits_ft710": "162",
+    "commits_modern": "244",
+    "commits_ft8": "253",
+    "commits_website": "102",
+    "commits_sunsdr_pair": "67+9",
+    "shared_commits_ft710_modern": "149",
+    # models and benchmarks
+    "aa_kimi_k3": "Kimi K3 57",
+    "aa_qwen_max": "Qwen3.8-Max 56",
+    "lmarena_gemini": "1501",
+    "code_arena_glm": "1595",
+    "codeforces_v4pro": "3206",
+    "swe_bench_lead": "9.1",
+    "openrouter_flash": "$0.14",
+    "openrouter_flash_out": "$0.27",
+    "v4pro_new_feature_share": "68%",
+    "matching_analysis_share": "60%",
+    "flash_fix_share": "70%",
+    # measurement boundaries
+    "mrrc_w25_doubtful": "27.6",
+    "commit_class_error": "±10%",
     "census_date": "2026-09-05",
+    "modified_date": "2026-09-06",
 }
 
-# R1 / R4 red lines.
+# Red lines: never claim a product family was built by AI.
 FORBIDDEN = {
     "en": (
         "built by AI",
@@ -146,17 +178,26 @@ FORBIDDEN = {
     ),
 }
 
-# Numbers overturned by the 2026-09-05 census. Must NOT appear as current claims.
-STALE_NUMBERS = ("180+ tests", "180+ 测试", "593 tests", "593 测试", "v1.10.1")
-
-# R2: a pre-edit-gate claim may only sit near these three repos.
+# R2: a pre-edit-gate claim may only sit near the three repos that own one.
 GATE_OWNERS = ("mrrc_ft710", "mrrc_modern", "ft8", "FT-710", "Modern", "MRRC-FT8")
 GATE_FORBIDDEN_NEIGHBOURS = ("SunMRRC", "SunsdrMobile", "EFHW", "MRRC Universal")
 
 # R7: estimates must be visibly labelled.
+ESTIMATE_PROBES = {
+    "en": ("234 million",),
+    "zh": ("2.34 亿",),
+}
 ESTIMATE_LABELS = {
     "en": ("estimate", "not recorded", "unrecorded"),
     "zh": ("估算", "未记录", "工具记 0"),
+}
+# The recorded vs estimated columns must never be merged.
+NO_MERGE_PHRASE = {"en": "must not be merged", "zh": "不合并"}
+# claude-code dual caliber: both columns side by side, plus the note that the
+# published census used the line caliber.
+DUAL_CALIBER_NOTE = {
+    "en": "the published census used the line caliber",
+    "zh": "已发表 census 用行口径",
 }
 
 
@@ -231,6 +272,14 @@ def load(path: Path) -> tuple[str, ArticleParser]:
     return source, parser
 
 
+def section_body(source: str, section_id: str, language: str) -> str:
+    start = source.find(f'<section id="{section_id}"')
+    assert start != -1, f"{language}: section {section_id}"
+    end = source.find("</section>", start)
+    assert end != -1, f"{language}: unclosed {section_id}"
+    return source[start:end]
+
+
 class SevenBillionTokensArticleTests(unittest.TestCase):
     def test_articles_and_css_exist(self) -> None:
         self.assertTrue(ARTICLE_CSS.exists(), "blog-article.css")
@@ -255,53 +304,10 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             ]
             self.assertEqual([], missing, language)
 
-    def test_stale_numbers_are_gone(self) -> None:
-        targets = list(ARTICLES.values()) + [
-            PORTAL / "index.html",
-            PORTAL / "zh" / "index.html",
-            PORTAL / "agentic.html",
-            PORTAL / "zh" / "agentic.html",
-            PORTAL / "engineering.html",
-            PORTAL / "zh" / "engineering.html",
-        ]
-        for path in targets:
-            if not path.exists():
-                continue
-            source = path.read_text(encoding="utf-8")
-            # The article's `drift` section must be able to QUOTE a wrong number
-            # in order to show it was wrong. Quoted values are wrapped in
-            # <del class="stale">…</del> and stripped before the check, so a
-            # struck-through citation is allowed but a live claim is not.
-            # Tag regexes tolerate line-wrapped markup (`</del\n>`), and the
-            # surviving text is whitespace-normalized so a live claim cannot
-            # hide behind a line break either.
-            live = re.sub(r"<del\s+class=\"stale\">.*?</del\s*>", " ", source, flags=re.S)
-            live = re.sub(r"\s+", " ", live)
-            hits = [n for n in STALE_NUMBERS if n in live]
-            self.assertEqual([], hits, str(path.relative_to(PORTAL)))
-
-    def test_drift_section_quotes_stale_values_as_struck_through(self) -> None:
-        # Positive counterpart: the pedagogy must survive the stripping above.
-        # Each stale value the article names has to appear inside <del class="stale">.
-        for language, path in ARTICLES.items():
-            source, _parser = load(path)
-            start = source.find('<section id="drift"')
-            self.assertNotEqual(-1, start, f"{language}: drift section")
-            end = source.find("</section>", start)
-            body = source[start:end]
-            struck = re.findall(r"<del\s+class=\"stale\">(.*?)</del\s*>", body, re.S)
-            self.assertGreaterEqual(len(struck), 3, f"{language}: drift quotes")
-            joined = " ".join(struck)
-            for value in ("180+", "593", "v1.10.1"):
-                self.assertIn(value, joined, f"{language}: struck-through {value}")
-
     def test_estimates_are_labelled(self) -> None:
         for language, path in ARTICLES.items():
             source, _ = load(path)
-            for value in (
-                LEDGER_CONSTANTS["iflow_estimate"],
-                LEDGER_CONSTANTS["first_pass_wrong"],
-            ):
+            for value in ESTIMATE_PROBES[language]:
                 index = source.find(value)
                 self.assertNotEqual(-1, index, f"{language}: {value}")
                 window = source[max(0, index - 900) : index + 900].lower()
@@ -309,6 +315,20 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
                     any(label in window for label in ESTIMATE_LABELS[language]),
                     f"{language}: {value} needs an estimate/unrecorded label nearby",
                 )
+
+    def test_recorded_and_estimated_ledgers_are_not_merged(self) -> None:
+        for language, path in ARTICLES.items():
+            source, _ = load(path)
+            self.assertIn(NO_MERGE_PHRASE[language], source, language)
+
+    def test_dual_caliber_is_presented_side_by_side(self) -> None:
+        for language, path in ARTICLES.items():
+            source, _ = load(path)
+            body = section_body(source, "appendix-ledger", language)
+            self.assertIn(LEDGER_CONSTANTS["claude_line_caliber"], body, language)
+            self.assertIn(LEDGER_CONSTANTS["claude_dedup_caliber"], body, language)
+            self.assertIn("message.id", body, language)
+            self.assertIn(DUAL_CALIBER_NOTE[language], source, language)
 
     def test_gate_claims_only_near_owning_repos(self) -> None:
         pattern = re.compile(r"pre-edit gate|编辑前门禁|编辑前拦截|PreToolUse")
@@ -321,12 +341,11 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
                     f"{language}: gate claim at {match.start()} lacks an owning repo",
                 )
                 for bad in GATE_FORBIDDEN_NEIGHBOURS:
-                    if bad in window:
-                        self.assertNotIn(
-                            bad,
-                            window,
-                            f"{language}: gate claim near {bad} violates R2",
-                        )
+                    self.assertNotIn(
+                        bad,
+                        window,
+                        f"{language}: gate claim near {bad} violates R2",
+                    )
 
     def test_forbidden_phrases_absent(self) -> None:
         for language, path in ARTICLES.items():
@@ -345,9 +364,9 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
         zh_source, _ = load(ARTICLES["zh"])
         self.assertIn(EN_TITLE, en_source)
         self.assertIn(ZH_TITLE, zh_source)
-        # The EN page keeps the concrete hook and stays free of the ZH title,
-        # so the two frames never blur into one.
+        # The two frames never blur into one.
         self.assertNotIn(ZH_TITLE, en_source)
+        self.assertNotIn(EN_TITLE, zh_source)
         # each page must still offer the other language
         self.assertIn('href="zh/"', en_source)
         self.assertIn('href="../"', zh_source)
@@ -369,45 +388,6 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             self.assertEqual(expected, parser.section_volume, language)
             for volume, _sections in VOLUMES:
                 self.assertIn(VOLUME_TITLES[language][volume], source, language)
-
-    def test_classical_anchors_are_present_in_their_sections(self) -> None:
-        for language, path in ARTICLES.items():
-            source, _parser = load(path)
-            for section, per_language in CLASSICAL_ANCHORS.items():
-                start = source.find(f'<section id="{section}"')
-                self.assertNotEqual(-1, start, f"{language}: section {section}")
-                end = source.find("</section>", start)
-                self.assertNotEqual(-1, end, f"{language}: unclosed {section}")
-                # Whitespace-normalize: line-wrapped prose ("knowledge\narrives")
-                # must still match its anchor phrase.
-                body = re.sub(r"\s+", " ", source[start:end])
-                for anchor in per_language[language]:
-                    self.assertIn(anchor, body, f"{language}: {section} needs {anchor}")
-
-    def test_classical_citations_are_not_graded_as_fact(self) -> None:
-        for language, path in ARTICLES.items():
-            source, _parser = load(path)
-            terms = CLASSICAL_TERMS[language]
-            boxes = re.findall(
-                r'<div class="claim-box" data-claim-type="([^"]+)">((?:(?!</div>).)*)',
-                source,
-                re.S,
-            )
-            self.assertTrue(boxes, f"{language}: no claim-box found")
-            for kind, body in boxes:
-                if any(term in body for term in terms):
-                    self.assertIn(
-                        kind,
-                        {"analogy", "thesis"},
-                        f"{language}: classical claim graded as '{kind}'",
-                    )
-            self.assertTrue(
-                any(name in source for name in CITATION_SOURCES[language]),
-                f"{language}: no classical source named",
-            )
-            lowered = source.lower()
-            for phrase in FORBIDDEN_TELEOLOGY:
-                self.assertNotIn(phrase.lower(), lowered, f"{language}: {phrase}")
 
     def test_chain_reproduction_block_is_present(self) -> None:
         required = (
@@ -457,6 +437,7 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             ):
                 self.assertIn(field, article_data[0], f"{language}: {field}")
             self.assertEqual("2026-09-05", article_data[0]["datePublished"], language)
+            self.assertEqual("2026-09-06", article_data[0]["dateModified"], language)
             self.assertEqual("Intelligence", article_data[0]["articleSection"], language)
 
     def test_links_to_thesis_and_mechanism_pages(self) -> None:

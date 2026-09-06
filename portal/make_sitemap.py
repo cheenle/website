@@ -5,6 +5,11 @@ import os, datetime
 ROOT = os.path.dirname(os.path.abspath(__file__))
 BASE = "https://www.vlsc.net"
 
+# Redirect stubs (meta-refresh pages whose canonical lives elsewhere) must not
+# be advertised to crawlers: from-intent-to-delivery merged into
+# seven-billion-tokens on 2026-09-06 and 301s at the nginx layer.
+EXCLUDE_PREFIXES = ('blog/from-intent-to-delivery/',)
+
 
 def find_html(base):
     pages = []
@@ -25,7 +30,10 @@ def find_html(base):
                     url = rel + '/'
                 else:
                     url = os.path.relpath(full, base)
-                pages.append((url.replace(os.sep, '/'), full))
+                url = url.replace(os.sep, '/')
+                if url.startswith(EXCLUDE_PREFIXES):
+                    continue
+                pages.append((url, full))
     return pages
 
 

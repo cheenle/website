@@ -272,7 +272,11 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             # in order to show it was wrong. Quoted values are wrapped in
             # <del class="stale">…</del> and stripped before the check, so a
             # struck-through citation is allowed but a live claim is not.
-            live = re.sub(r'<del class="stale">.*?</del>', " ", source, flags=re.S)
+            # Tag regexes tolerate line-wrapped markup (`</del\n>`), and the
+            # surviving text is whitespace-normalized so a live claim cannot
+            # hide behind a line break either.
+            live = re.sub(r"<del\s+class=\"stale\">.*?</del\s*>", " ", source, flags=re.S)
+            live = re.sub(r"\s+", " ", live)
             hits = [n for n in STALE_NUMBERS if n in live]
             self.assertEqual([], hits, str(path.relative_to(PORTAL)))
 
@@ -285,7 +289,7 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             self.assertNotEqual(-1, start, f"{language}: drift section")
             end = source.find("</section>", start)
             body = source[start:end]
-            struck = re.findall(r'<del class="stale">(.*?)</del>', body, re.S)
+            struck = re.findall(r"<del\s+class=\"stale\">(.*?)</del\s*>", body, re.S)
             self.assertGreaterEqual(len(struck), 3, f"{language}: drift quotes")
             joined = " ".join(struck)
             for value in ("180+", "593", "v1.10.1"):
@@ -374,7 +378,9 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
                 self.assertNotEqual(-1, start, f"{language}: section {section}")
                 end = source.find("</section>", start)
                 self.assertNotEqual(-1, end, f"{language}: unclosed {section}")
-                body = source[start:end]
+                # Whitespace-normalize: line-wrapped prose ("knowledge\narrives")
+                # must still match its anchor phrase.
+                body = re.sub(r"\s+", " ", source[start:end])
                 for anchor in per_language[language]:
                     self.assertIn(anchor, body, f"{language}: {section} needs {anchor}")
 

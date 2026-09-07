@@ -112,6 +112,18 @@ class ConnectionsArticleTests(unittest.TestCase):
             self.assertEqual(REQUIRED_CLAIM_TYPES, claim_types, language)
         self.assertEqual(parsed["en"][1].section_ids, parsed["zh"][1].section_ids)
 
+    def test_distillation_layer_is_present(self) -> None:
+        for language, path in ARTICLES.items():
+            source, _parser = load(path)
+            # TL;DR card: four tagged findings + a reading path into the essay
+            self.assertIn('class="ba-tldr"', source, language)
+            self.assertEqual(4, source.count('class="ba-tldr-tag"'), language)
+            # one takeaway per content section; the recursion one is the
+            # closing "remember three things" block, so 6 + 1 = 7 in total
+            self.assertEqual(7, source.count('class="section-takeaway"'), language)
+            closing = "If you remember three things" if language == "en" else "如果只记三件事"
+            self.assertIn(closing, source, language)
+
     def test_connectome_facts_and_boundaries_are_present(self) -> None:
         required = {
             "en": ("139,255", "50 million", "not sufficient", "neuromodulation"),

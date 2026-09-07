@@ -54,7 +54,7 @@
     />
     <link rel="stylesheet" href="../../css/octen.css?v=6" />
     <link rel="stylesheet" href="../../css/agentic.css?v=2" />
-    <link rel="stylesheet" href="../../css/blog-article.css?v=1" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=2" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -76,7 +76,7 @@
           "url": "https://www.vlsc.net/"
         },
         "datePublished": "2026-09-05",
-        "dateModified": "2026-09-06",
+        "dateModified": "2026-09-08",
         "keywords": "agentic engineering, harness, living SDD, constraint registry, process efficiency, model selection",
         "articleSection": "Intelligence",
         "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/"
@@ -98,14 +98,28 @@
             <span class="ag-pill"><i class="fas fa-arrow-trend-down"></i> 17.1 → 0.3 human turns per commit</span>
             <span class="ag-pill"><i class="fas fa-scale-balanced"></i> evidence before claims</span>
           </div>
-          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-05">Sep 5, 2026</time> &nbsp;·&nbsp; updated <time datetime="2026-09-06">Sep 6, 2026</time> &nbsp;·&nbsp; ~28 min read</p>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-05">Sep 5, 2026</time> &nbsp;·&nbsp; updated <time datetime="2026-09-08">Sep 8, 2026</time> &nbsp;·&nbsp; ~30 min read</p>
         </div>
       </header>
 
-      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#intents">Intent</a><a href="#intervention">Process</a><a href="#method-timeline">Method</a><a href="#eras">Models</a><a href="#attribution">Verdict</a><a href="#appendix-ledger">Appendix</a></nav></div></div>
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#intents">Intent</a><a href="#intervention">Process</a><a href="#method-timeline">Method</a><a href="#eras">Models</a><a href="#attribution">Verdict</a><a href="#four-dimensions">Dimensions</a><a href="#appendix-ledger">Appendix</a></nav></div></div>
 
       <main class="ba-main">
         <p class="lede">For anyone who wants to do business with AI. This is the full dissection of one real case: the same operator, the same amateur-radio ecosystem, seven months (2026-03 → 2026-09, plus a 2025-10 → 2026-04 control period), 7.1B recorded tokens, seven repositories, six agent harnesses, a dozen models. It answers one through-line: how a business intent becomes a delivered product; how many round-trips the process took and why it kept getting smoother; what models, tools and method each contributed; and how you might spend your next seven months. Every number has a source, fact and inference are labelled separately, and the measurement boundaries live in the appendix.</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the skeleton in five findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The efficiency curve is real.</strong> Three repos, one direction: human intervention per commit fell from 17.1 to 0.3 turns on ft8 (~30×). "Getting smoother" has a quantified shape.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Tokens track uncertainty, not output.</strong> ~26,800 tokens per line on ft8's DSP and timing-safety code versus 136 on a read-only reference tree — a ~200× density gap. The meter is an uncertainty gauge, not a productivity trophy.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>Method is the variable you control.</strong> The same model cost 75.5 M tokens per commit exploring ft8 and 0.9–3.8 M in maintenance. Models set the ceiling; method decides how much of it you actually collect.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The hardest evidence is incident-to-immunity time.</strong> 13 days (frequency drift) and 7 days (backup disk) from field incident to a gate that makes the same mistake impossible.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>One-sentence discipline:</strong> first ask "where does my judgment settle", then ask "what can AI do for me".</li>
+            </ul>
+            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#intervention">§3 intervention turns</a><a href="#incident-chains">§8 incident chains</a><a href="#attribution">§13 attribution</a><a href="#four-dimensions">Vol. VI · four disciplines</a></div>
+          </div>
+        </div>
 
         <div class="volume" data-volume="intent">
           <header class="volume-head">
@@ -157,6 +171,8 @@
             </div>
             <p>That is the problem every mechanism in Volume III exists to solve.</p>
           </div></section>
+
+          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>Intent exists in business language or it does not exist; and knowledge needs a carrier that outlives the conversation. Every mechanism in the volumes that follow exists for the second half.</p></aside>
         </div>
 
         <div class="volume" data-volume="process">
@@ -238,6 +254,8 @@
               <p>Write the contract first and let AI deliver to green — an institutionalized capability that only formed late, and the organizational shape of "smooth".</p>
             </div>
           </div></section>
+
+          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>Three curves fall in the same direction; rework follows an arc and concentrates in exploration weeks. The late-timeline difference is not zero rework — it is who does it: the agent, autonomously.</p></aside>
         </div>
 
         <div class="volume" data-volume="method">
@@ -319,6 +337,8 @@ $ echo $?
               <p>You can delegate the doing; you can never delegate the "does it count". Responsibility cannot be delegated.</p>
             </div>
           </div></section>
+
+          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>The method was not designed in advance; it grew out of incidents. Verdict → machine-readable constraint → pre-write interception is the loop — and all 52 constraints trace back to a specific decision or accident.</p></aside>
         </div>
 
         <div class="volume" data-volume="models">
@@ -388,6 +408,8 @@ $ echo $?
               <p>Flagship models buy direction, value models buy execution, long-context variants buy the specials, and harnesses buy the way of working. The same model shows a completely different task profile in a different harness — gpt-5.6 is a blitz squad in codex and a release pipeline in pi — so the unit of selection is the model × harness × task triple.</p>
             </div>
           </div></section>
+
+          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>The model market turns over every 3–4 weeks, and no model led on every task. The unit of selection is the model × harness × task triple.</p></aside>
         </div>
 
         <div class="volume" data-volume="verdict">
@@ -447,6 +469,38 @@ $ echo $?
               <p>First ask "where does my judgment settle", then ask "what can AI do for me".</p>
             </div>
             <p>AI use without a settling ground is consumption — 37,202 turns of conversation can leave nothing behind. AI use with a settling ground is asset accumulation — every incident, every constraint, every spec lowers the cost of the next delegation. Models change generation every quarter; the contract thickens every day. The former is weather; the latter is climate. What you can build is the climate.</p>
+          </div></section>
+
+          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>Models set the ceiling; method decides how much of it you collect. Of the two variables, only one is yours to build — the sentence above says where to start.</p></aside>
+        </div>
+
+        <div class="volume" data-volume="dimensions">
+          <header class="volume-head">
+            <span class="volume-num">Volume VI · The Four Dimensions</span>
+            <h2>Separate judgment from execution</h2>
+            <p class="volume-gloss">The distillation layer. Four dimensions explain everything the ledger showed — and they travel to any business, radio or not.</p>
+          </header>
+
+          <section id="four-dimensions" class="ag-section"><div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">16 · The four dimensions</span>
+              <h2 class="ag-section-title">Four dimensions, four disciplines</h2>
+              <p class="ag-section-subtitle">The merged distillation: what the case means once the ledger is closed.</p>
+            </header>
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">The one-sentence method</span>
+              <p>Agentic engineering is not "using AI to write code". It separates judgment from execution: judgment settles into contracts, execution is delegated to agents, and evidence decides whether a contract survives. That one sentence explains why the same operator left evaporated chat logs in the control period and seven repositories with 52 machine-readable constraints in the measured one — the difference was never the model; it was whether judgment had a carrier that outlives the conversation.</p>
+            </div>
+            <div class="ag-loop-grid">
+              <article class="ag-card"><h3>1 · Engineering history — the abstraction ladder rises again</h3><p>Machine code → assembly → high-level languages → frameworks → cloud: every generation delegates one more layer of "how" to the machine. Agentic delegates the whole implementation layer. What remains for the person is three acts: define the intent, mark the boundaries, exercise the verdict. The workload moved accordingly — 12 design specs and 10 implementation plans were written before the code; ft8's first substantive commit brought AGENTS.md, a 15-chapter SDD and contract tests before any business code. Definition now precedes implementation.</p></article>
+              <article class="ag-card"><h3>2 · Epistemology — the carrier decides the knowledge's lifespan</h3><p>Chat logs evaporate with the session; documents expire and get skipped; machine-readable constraints with runtime gates do not need to be remembered — they appear when needed. 52 constraints are 52 judgments made permanent, and they survived six harnesses because the carrier is the repository, not a tool. Incident-to-immunity time is the true measure of organizational learning: this ecosystem ran 13 days and 7 days.</p></article>
+              <article class="ag-card"><h3>3 · Economics — tokens are the price of uncertainty</h3><p>Token spend follows uncertainty density, not line count: ~26,800 tokens per line on ft8's DSP and timing-safety code versus 136 on a read-only reference tree. Peaks land exactly where direction is undecided. And 95.2% of recorded tokens are cache-reads — the tax of contracts that are not yet machine-sliceable. Spending less is not "use AI less"; it is reducing the uncertainty itself.</p></article>
+              <article class="ag-card"><h3>4 · Responsibility — two ledgers, three non-delegable acts</h3><p>Product maturity and process evidence are separate books that never vouch for each other: on census day, 439 passing FT-710 tests could not close one open P0 PTT safety issue in the client. Three acts are never delegable — hardware bring-up and bench debugging, RF safety on real radios, and the verdict on whether evidence is sufficient. Not because AI is too weak, but because responsibility cannot be delegated.</p></article>
+            </div>
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">The four disciplines</span>
+              <p>1 · <strong>Definition before implementation</strong> — acceptance criteria, non-goals and boundaries written before the first line of code; intent phrased in business language that stands without the word AI. 2 · <strong>Every incident becomes a rule</strong> — repair is only the first link; verdict → constraint → pre-write interception closes the loop. 3 · <strong>Watch where uncertainty spends</strong> — token peaks are a direction radar; audit every important number against two sources. 4 · <strong>Keep the two ledgers apart</strong> — process badges never promote product claims; "do" can be delegated, "did it count" never leaves your hands.</p>
+            </div>
           </div></section>
         </div>
 

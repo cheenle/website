@@ -24,8 +24,8 @@ CANONICAL = {
 
 # The merged article (2026-09-06): the 7B ledger + the four-dimension
 # distillation + process-efficiency and model-matching analysis, on one
-# narrative axis: intent → process → method → models → verdict. Fifteen
-# sections in five volumes; the three appendices sit OUTSIDE every volume.
+# narrative axis: intent → process → method → models → verdict → dimensions.
+# Sixteen sections in six volumes; the three appendices sit OUTSIDE every volume.
 REQUIRED_SECTIONS = {
     "intents",
     "control-group",
@@ -42,6 +42,7 @@ REQUIRED_SECTIONS = {
     "attribution",
     "advice",
     "closing",
+    "four-dimensions",
     "appendix-ledger",
     "appendix-repos",
     "appendix-limits",
@@ -56,6 +57,7 @@ VOLUMES = (
     ("method", ("method-timeline", "incident-chains", "evidence-ledgers")),
     ("models", ("eras", "benchmarks", "matching")),
     ("verdict", ("attribution", "advice", "closing")),
+    ("dimensions", ("four-dimensions",)),
 )
 UNVOLUMED_SECTIONS = ("appendix-ledger", "appendix-repos", "appendix-limits")
 VOLUME_TITLES = {
@@ -65,6 +67,7 @@ VOLUME_TITLES = {
         "method": "What the harness and the SDD did at each stage",
         "models": "Evolution, benchmarks, and task matching",
         "verdict": "Where the efficiency actually came from",
+        "dimensions": "Separate judgment from execution",
     },
     "zh": {
         "intent": "意图从不以",
@@ -72,6 +75,7 @@ VOLUME_TITLES = {
         "method": "harness 与 SDD 在各阶段的作用",
         "models": "演进、评测与任务匹配",
         "verdict": "效率究竟从哪里来",
+        "dimensions": "把判断从执行中分离",
     },
 }
 EN_TITLE = "Seven Billion Tokens, Dissected"
@@ -157,7 +161,7 @@ LEDGER_CONSTANTS = {
     "mrrc_w25_doubtful": "27.6",
     "commit_class_error": "±10%",
     "census_date": "2026-09-05",
-    "modified_date": "2026-09-06",
+    "modified_date": "2026-09-08",
 }
 
 # Red lines: never claim a product family was built by AI.
@@ -389,6 +393,16 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             for volume, _sections in VOLUMES:
                 self.assertIn(VOLUME_TITLES[language][volume], source, language)
 
+    def test_distillation_layer_is_present(self) -> None:
+        for language, path in ARTICLES.items():
+            source, _parser = load(path)
+            # TL;DR card: five tagged findings + a reading path into the article
+            self.assertIn('class="ba-tldr"', source, language)
+            self.assertEqual(5, source.count('class="ba-tldr-tag"'), language)
+            self.assertIn('href="#four-dimensions"', source, language)
+            # one takeaway per narrative volume; the distillation volume has none
+            self.assertEqual(5, source.count('class="volume-takeaway"'), language)
+
     def test_chain_reproduction_block_is_present(self) -> None:
         required = (
             "sdd_context.py",
@@ -437,7 +451,7 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             ):
                 self.assertIn(field, article_data[0], f"{language}: {field}")
             self.assertEqual("2026-09-05", article_data[0]["datePublished"], language)
-            self.assertEqual("2026-09-06", article_data[0]["dateModified"], language)
+            self.assertEqual("2026-09-08", article_data[0]["dateModified"], language)
             self.assertEqual("Intelligence", article_data[0]["articleSection"], language)
 
     def test_links_to_thesis_and_mechanism_pages(self) -> None:

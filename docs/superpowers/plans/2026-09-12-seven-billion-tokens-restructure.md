@@ -40,7 +40,7 @@
 | R4 | 中文术语：**智能体工程**（禁用"代理式工程"）；FDE = **前沿部署工程** |
 | R5 | 跨项目可比数字（版本/测试数/发布状态/已知缺陷）唯一主人是 `/agentic.html#evidence`；**token 账本唯一主人是分册 A** |
 | R6 | 每条声明带最小证据记录（来源工件 · 版本/commit · 环境 · 验证方法 · 结果 · 局限 · 日期） |
-| R7 | 估算值与未记录值必须显式标注，**不得并入"已记录"合计**（iFlow ≈2.34 亿估算、Hermes 未记录、Qoder 去重为 0） |
+| R7 | 估算值与未记录值必须显式标注，**不得并入"已记录"合计**（iFlow ≈2.47 亿估算）；**且不得在未逐表核对前列为“未记录”**（本轮教训：Hermes 只查 `messages` 漏了 `sessions`，少算 4.85 亿） |
 | R8 | **总额下降必须显式标注**；每个 harness 标注测量窗口 |
 | R9 | 分册不得重复 `engineering.html` 的机制内容（Harness × Loop × Living SDD、五种工程边界、失败模式），交叉处只外链 |
 
@@ -112,9 +112,15 @@ census 数字的限定词（见 §A1 的观察者效应说明）。
 | mulerun | `~/.mulerun/agent-data/opencode/opencode/opencode.db` → `session.tokens_*` | 五列相加（含 `tokens_reasoning`） |
 | opencode | `~/.local/share/opencode/opencode.db` → `message.data.tokens.total`（role=assistant） | 该库 `session` 表**无** `tokens_*` 列 |
 | cursor | `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` → `cursorDiskKV` key `bubbleId:%` | `tokenCount.inputTokens + outputTokens` |
+| **Hermes** | `~/.hermes/state.db` → `sessions` | `input_tokens + output_tokens + cache_read_tokens + cache_write_tokens + reasoning_tokens`；**必查 `sessions` 表，不是 `messages.token_count`**（后者全 0） |
+| **AgnesCode** | `~/.agnes/data/sessions/sessions.db` → `usage_ledger` | `total_tokens`；与 `sessions.accumulated_total_tokens` 互证 |
+| **DeepSeek Harness** | `~/.dsh/sessions/*/*/session.jsonl.zstd` | zstd 解压后取 `data.chunk.usage` 的 `inputTokens+outputTokens+cacheReadTokens+reasoningTokens`（**不是顶层 `usage`**） |
 
-> 打开只读 SQLite 必须用 `file:<path>?mode=ro&immutable=1`，否则 opencode 库报
-> `unable to open database file`。
+> **主动搜索义务**：新增 harness 不会自己出现。重跑时必须用两个扫描工具（脚本留在 `/tmp`，不发布）：
+> ① 扫全盘 SQLite：凡表名/列名含 `token` 且行数 >0 且求和非 0 即报出；
+> ② 扫全盘 `*.jsonl` / `*.json`（>500KB）中含 `totalTokens|total_tokens|tokens_used|input_tokens|cached_tokens` 字段的文件。
+> 已知应报出的三源：Hermes / AgnesCode / `.dsh`；已知应排除：Hermes `state-snapshots/`、
+> Agnes `llm_request.*.jsonl`、`~/Library/Application Support/Qoder`（Cursor 重复子集）。
 
 预期输出（2026-09-12 实测，见附录 A §A1）。若任何一行不同，**以重跑结果为准**并同步更新附录 A。
 
@@ -230,14 +236,16 @@ VOLUME_TITLES = {
 > （测试逐字断言它存在于主文 EN + ZH）。只属于分册的数字（完整账本表、测量边界、模型年鉴）
 > 定义在各自分册的常量里（任务 4/5 的 `LEDGER_TABLE`、`BOUNDARY_CONSTANTS`），
 > **不得塞进这里**。
-
 ```python
 LEDGER_CONSTANTS = {
     # 双口径门面（附录 C1 的 ledger-shrank 节）
     "published_line_census": "7,007,437,567",
-    "recomputed_line_census": "6,774,077,763",
-    "recomputed_dedup_census": "5,065,000,630",
-    "line_drop": "349,611,847",
+    "recomputed_line_census": "7,353,156,771",
+    "recomputed_dedup_census": "5,644,079,638",
+    "delta_vs_published": "345,719,204",
+    # 两个方向的误差各一个代表数
+    "claude_dedup_census": "818,520,401",
+    "hermes_tokens": "485,213,348",
     "codex_tokens": "547,796,667",
     # 对照期（不变）
     "iflow_turns": "37,202",
@@ -278,8 +286,9 @@ LEDGER_CONSTANTS = {
     "census_date": "2026-09-12",
 }
 # 已移入分册、**不再属于主文常量**的值（防止误加回主文）：
-#   claude_line / claude_dedup / claude_api_ids / pi_tokens / kimi_tokens /
-#   mulerun_tokens / cursor_tokens / opencode_tokens  → 任务 4 LEDGER_TABLE
+#   claude_line / claude_api_ids / pi_tokens / kimi_tokens / mulerun_tokens /
+#   cursor_tokens / opencode_tokens / hermes_window / agnes_tokens / dsh_tokens
+#                                                     → 任务 4 LEDGER_TABLE
 #   mrrc_w25_doubtful / commit_class_error            → 任务 4 BOUNDARY_CONSTANTS
 #   models_era_count                                  → 任务 5 ALMANAC_CONSTANTS
 #   mrrc_tag                                          → 不写入文章（R5：版本归 /agentic.html#evidence）
@@ -307,7 +316,7 @@ LEDGER_CONSTANTS = {
         """R5: 账本表唯一主人是分册 A；主文只许引结论句。"""
         for language, path in ARTICLES.items():
             source, _ = load(path)
-            for token in ("7,007,437,567", "6,774,077,763", "5,065,000,630"):
+            for token in ("7,007,437,567", "7,353,156,771", "5,644,079,638"):
                 self.assertIn(token, source, f"{language}: {token}")
             self.assertLess(source.count("<table"), 8, f"{language}: 主文表格过多，账本/年鉴应外链")
 
@@ -348,8 +357,8 @@ git commit -m "test(blog): 主文契约改为 15 节/6 卷 + 2026-09-12 census �
 （`https://www.vlsc.net/blog/seven-billion-tokens/`）。hero 三枚 pill 改成：
 
 ```html
-<span class="ag-pill"><i class="fas fa-database"></i> 6,774,077,763 recorded tokens</span>
-<span class="ag-pill"><i class="fas fa-arrow-trend-down"></i> −349,611,847 in seven days</span>
+<span class="ag-pill"><i class="fas fa-database"></i> 7,353,156,771 recorded tokens</span>
+<span class="ag-pill"><i class="fas fa-arrow-trend-up"></i> +345,719,204 vs the published census</span>
 <span class="ag-pill"><i class="fas fa-shield-halved"></i> 52 machine-readable constraints</span>
 ```
 
@@ -392,7 +401,7 @@ git commit -m "feat(blog): 主文 EN 重写——开篇改为会倒退的账本�
 
 **ZH 独有的强制要求**（附录 B）：
 
-1. token 量一律「亿 tokens」：`6,774,077,763` → 「67.7 亿 tokens」但**快照数字保留原样**
+1. token 量一律「亿 tokens」：`7,353,156,771` → 「73.5 亿 tokens」但**快照数字保留原样**
    （`7,007,437,567` 等原样，因为它是对外可核对的账本值）
 2. 不造词：不得出现"沉淀地"；改「知识的载体」
 3. 引号用「」；中英文之间保留半角空格
@@ -493,10 +502,17 @@ LEDGER_TABLE = {
     "pi_tokens": "1,874,576,102",
     "kimi_tokens": "1,254,875,254",
     "mulerun_tokens": "537,961,611",
+    "hermes_tokens": "485,213,348",
+    "hermes_window": "2026-05-15 .. 2026-07-24",
+    "agnes_tokens": "82,931,675",
+    "agnes_window": "2026-07-13 .. 2026-07-26",
     "cursor_tokens": "27,079,705",
+    "dsh_tokens": "10,931,069",
     "opencode_tokens": "4,190,890",
-    "iflow_estimate": "234,247,399",
+    "iflow_estimate": "247,000,000",
     "last_cleanup": "2026-09-07T13:13:57Z",
+    "codex_crosscheck": "546,858,767",
+    "observer_effect_delta": "8,338,698",
 }
 BOUNDARY_CONSTANTS = {
     "mrrc_w25_doubtful": "27.6",
@@ -655,7 +671,7 @@ git commit -m "feat(blog): 新增分册 C《实践手册》——清单/模板/�
     def test_shared_numbers_match_the_main_article(self) -> None:
         """同一事实在两个页面出现时必须同值。"""
         en_main, _ = load(ARTICLES["en"])
-        shared = ("6,774,077,763", "5,065,000,630", "52", "0.76")
+        shared = ("7,353,156,771", "5,644,079,638", "485,213,348", "52", "0.76")
         for slug in ("ledger", "almanac", "playbook"):
             for language, path in companion_paths(slug):
                 source, _ = load(path)
@@ -879,7 +895,7 @@ cd /Users/cheenle/HAM/website/portal && python3 -m http.server 8899
 ```bash
 cd /Users/cheenle/HAM/website/portal
 SITES=(portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/)
-grep -Rn "6,774,077,763" $SITES        # 只应出现在 portal/blog/seven-billion-tokens/**
+grep -Rn "7,353,156,771" $SITES        # 只应出现在 portal/blog/seven-billion-tokens/**
 ```
 
 - [ ] **步骤 4：汇报并等待部署指令**
@@ -895,33 +911,52 @@ grep -Rn "6,774,077,763" $SITES        # 只应出现在 portal/blog/seven-billi
 
 ## A1 · Token 账本（已记录口径）
 
-> **❗ 观察者效应（先读）**：下列数字来自 2026-09-12 01:35 CST 的一次运行。**同一个脚本在
+> **❗ 两条必读警告**
+>
+> **① 观察者效应**：下列数字来自 2026-09-12 的一次运行。**同一个脚本在
 > 12 分钟后重跑就得出不同结果**（pi `1,874,576,102` → `1,882,914,800`），差额正是
 > **执行本次 census 的那个 pi 会话自己写入的 token**。因此：
 > ① 实现期重跑时必须记录**截止时间戳**并写进分册 A；
 > ② 本文只能报告“截至某时刻的快照”，不得描述成“累计总量”；
 > ③ 若重跑值不同，**以重跑值为准**并同步全表。
+>
+> **② 原发表值同时虚高与虚低。** 已发表门面值 `7,007,437,567` 建立在 7 个 harness 上，
+> 而实测至少还有 **3 个带完整 token 记录的 harness 被遗漏**（Hermes / AgnesCode /
+> DeepSeek Harness），同时 claude-code 的行口径又把同一 API 响应重复计入约 2.7×。
+> **两个方向的误差同时存在**——这就是“账本不是资产，是读数”的最硬证据。
 
-| harness | tokens（行口径） | 测量窗口 | 会话 |
-|---|---|---|---|
-| claude-code | 2,527,597,534 | 2026-08-08 .. 2026-09-08 | 48 |
-| pi | 1,874,576,102 | 2026-07-22 .. 2026-09-11 | 65 |
-| kimi-code | 1,254,875,254 | 2026-07-18 .. 2026-09-06 | 245 |
-| codex | 547,796,667 | 2026-05-27 .. 2026-08-30 | 116 |
-| mulerun | 537,961,611 | 2026-05-20 .. 2026-09-06 | 183 |
-| cursor | 27,079,705 | — | — |
-| opencode | 4,190,890 | — | 6 |
-| **合计（行口径）** | **6,774,077,763** | | |
-| **合计（去重口径）** | **5,065,000,630** | claude-code 去重后 818,520,401（6,600 个 API 响应） | |
+| harness | tokens（行口径） | 测量窗口 | 会话 | 备注 |
+|---|---|---|---|---|
+| claude-code | 2,527,597,534 | 2026-08-08 .. 2026-09-08 | 48 | 保留期已删早期历史；去重后 818,520,401（6,600 个 API 响应） |
+| pi | 1,874,576,102 | 2026-07-22 .. 2026-09-11 | 65 | |
+| kimi-code | 1,254,875,254 | 2026-07-18 .. 2026-09-06 | 245 | `usageScope=="turn"` |
+| codex | 547,796,667 | 2026-05-27 .. 2026-08-30 | 116 | 已冻结；`state_5.sqlite` 独立复核 546,858,767（差 0.17%） |
+| mulerun | 537,961,611 | 2026-05-20 .. 2026-09-06 | 183 | |
+| **Hermes** | **485,213,348** | 2026-05-15 .. 2026-07-24 | 292 | **原文记作“未记录”——错**：只查了 `messages.token_count`（全 0），漏了 `sessions` 表的 `input/output/cache_read_tokens`。85% 的 `cwd` 为空，无法按仓库归属 |
+| **AgnesCode** | **82,931,675** | 2026-07-13 .. 2026-07-26 | 3 | **原普查未含**；`usage_ledger` 1142 行；`sessions.accumulated_total_tokens` 精确互证 |
+| cursor | 27,079,705 | — | — | 无 cwd，无法归属 |
+| **DeepSeek Harness** | **10,931,069** | 2026-08-16 | 2 | **原普查未含**；`~/.dsh/sessions/*/*/session.jsonl.zstd` |
+| opencode | 4,190,890 | — | 6 | |
+| Qoder | 2,916 | — | — | `agent_memory.token_count`，非会话账本 |
+| **合计（行口径）** | **7,353,156,771** | | | **比已发表值多 345,719,204** |
+| **合计（去重口径）** | **5,644,079,638** | claude-code 去重后 | | 唯一可比口径 |
 
-**对比**：09-05 首发门面值 `7,007,437,567`（行口径）→ 现值低 `233,359,804`；
-09-06 读数 `7,123,689,610` → 现值低 `349,611,847`。去重口径 09-06 为 `5,091,596,244` → 现值低 `26,595,614`。
+**新增三源的提取方法（不得改）**
 
-**缓存结构**（仅三个有完整分列的 harness，占总额 83.5%）：
-cache-read `5,296,577,386` / fresh `337,372,055` / output `23,099,449`；
-缓存读取占 **93.6%**。
+| harness | 位置 | 字段 |
+|---|---|---|
+| Hermes | `~/.hermes/state.db` → `sessions`（292 行） | `input_tokens + output_tokens + cache_read_tokens + cache_write_tokens + reasoning_tokens` |
+| AgnesCode | `~/.agnes/data/sessions/sessions.db` → `usage_ledger`（1142 行） | `total_tokens` |
+| DeepSeek Harness | `~/.dsh/sessions/*/*/session.jsonl.zstd`（zstd 解压） | `data.chunk.usage` 的 `inputTokens + outputTokens + cacheReadTokens + reasoningTokens`（**不是顶层 `usage`**） |
 
-**不并入合计**：iFlow ≈234,247,399（估算，`usage` 全零）；Hermes 未记录；Qoder 去重为 0。
+**必须排除的重复源**：Hermes `sessions/*.jsonl`（无 token 字段）、
+Hermes `state-snapshots/*/state.db`（旧快照）、Agnes `state/logs/llm_request.*.jsonl`
+（`usage` 全为 `null`）、Qoder（Cursor 重复子集）。
+
+**缓存结构**（仅三个有完整分列的 harness：claude-code / pi / kimi-code）：
+cache-read `5,296,577,386` / fresh `337,372,055` / output `23,099,449`；缓存读取占 **93.6%**。
+
+**不并入合计**：iFlow ≈247,000,000（估算，`usage` 全零，195 会话 / 890,601,145 字符）。
 
 ## A2 · 上周过程指标（2026-09-05 .. 2026-09-12）
 
@@ -983,8 +1018,9 @@ MRRC tag `V5.7.0`；FT8 tag `v1.1.0`。
 | 部署备份撑满磁盘 | 整站 `cp -r` 备份，含 `downloads/`、`videos/` | 服务器 `/var/tmp` 100%（单份 ~300 MB） | 备份按站瘦身 + 轮转（保留 3 份） | `rsync --exclude` |
 | portal 备份从未生效 | 远端 heredoc 未加引号，本地 shell 先展开 | 每次都打印一个不存在的备份路径 | 远端 heredoc 必须 `<<'REMOTE'`（`067f565`） | `git log -S"<<'REMOTE'"` |
 | 测量口径错误 | codex `cached_input_tokens` 是 `input_tokens` 子集；pi `totalTokens` 已含全部 | 首次 census 多算 16 亿 | 逐工具字段语义表 | 附录 A1 |
-| 账本倒退 | claude-code 日志有保留期 | 一周后总额 **−349,611,847** | **证据必须被快照**（本次新增的第一原则） | `~/.claude/.last-cleanup` |
+| 账本倒退 | claude-code 日志有保留期 | 一周后 claude-code 行口径 **−679,899,086** | **证据必须被快照**（本次新增的第一原则） | `~/.claude/.last-cleanup` |
 | 观察者效应 | 测量脚本与被测量对象同机运行 | 同脚本相隔 12 分钟得出两个不同总额（差 `8,338,698`） | census 值必须携带**截止时间戳** | 短时间连跑两次同一脚本 |
+| **查错表：宣布“未记录”而未查全** | 只查 `messages.token_count`（全 0），未查 `sessions` 表 | 已发表账本少算 **485,213,348**（Hermes） | 逐工具字段语义表必须覆盖**整库所有表**；宣布“未记录”前必须列出查过的表 | `PRAGMA table_info` 逐表扫 `token` 列 |
 
 ---
 
@@ -1018,7 +1054,7 @@ MRRC tag `V5.7.0`；FT8 tag `v1.1.0`。
 
 | section id | 必须包含 |
 |---|---|
-| `ledger-shrank` | **开场即给新事实**：`7,007,437,567` → `6,774,077,763`（−`349,611,847`）；机制 = claude-code 保留期（`~/.claude/.last-cleanup` = `2026-09-07T13:13:57Z`）；对照 = codex `547,796,667` **逐位不变**；`pi` 反而 +；**第二条证据 = 观察者效应**：同脚本相隔 12 分钟得出两个 pi 总额（差 `8,338,698`，来自本次测量会话自己写入的 token）；结论 = **证据必须被快照，不能被累计**。标 `fact` + `thesis` |
+| `ledger-shrank` | **开场即给新事实**：已发表 `7,007,437,567` → 重算 `7,353,156,771`（**+345,719,204**）；两个方向的误差各一条硬证据：**虚高**（claude-code 行口径重复计，去重后 `818,520,401`）、**虚低**（Hermes `485,213,348` 被原文记作“未记录”）、**漂移**（保留期：`~/.claude/.last-cleanup` = `2026-09-07T13:13:57Z`；观察者效应：同脚本 12 分钟差 `8,338,698`）；对照 = codex `547,796,667` **逐位不变**；结论 = **证据必须被快照，不能被累计；每个数字必须带截止时间戳**。标 `fact` + `thesis` |
 | `intents` | 四个业务意图（MRRC `ba66892` / sunsdr `38cb85e` / ft710 `9403e2e` / ft8 08-03），去掉 AI 仍成立。标 `thesis` |
 | `control-group` | 对照期 185 会话 / `37,202` 轮 / 单周 `10,420` 轮；usage 全零、零沉淀。标 `fact` |
 | `intervention` | 三条曲线同向：ft8 `17.1 → 0.3`；新增上周 modern `0.76` 轮/提交、MRRC `3.50`。标 `fact` |
@@ -1038,11 +1074,11 @@ MRRC tag `V5.7.0`；FT8 tag `v1.1.0`。
 
 | section id | 必须包含 |
 |---|---|
-| `census` | 附录 A1 全表（含每行**测量窗口**）+ 双口径 + 不并入合计的三项 |
+| `census` | 附录 A1 全表（**11 个 harness**，含每行**测量窗口**）+ 双口径 + 新增三源的提取方法 + 必须排除的重复源 + 不并入合计项（iFlow 估算） |
 | `window` | claude-code 清理证据（`~/.claude/.last-cleanup` = `2026-09-07T13:13:57Z`）；codex 冻结（`547,796,667` **逐位不变**）；**观察者效应实证**：同脚本相隔 12 分钟得出两个 pi 总额（差 `8,338,698`，来自本次测量会话自己写入的 token）→ **每个 census 值必须带截止时间戳**；"总额不是单调量" |
 | `repos` | 附录 A4 的 HEAD 口径表 + `--all` 口径警告 |
-| `boundaries` | 八条测量边界（沿用原附录 C）扩充：新增窗口口径、**观察者效应**、venv 方法变更、`--all` 口径警告 |
-| `verify` | 每工具字段语义表（附录 A1 的方法列）；哪些可自跑、哪些只能信 |
+| `boundaries` | 测量边界扩充：窗口口径、**观察者效应**、**“未记录”的宣布标准**（必须先列出查过的表）、venv 方法变更、`--all` 口径警告 |
+| `verify` | 每工具字段语义表（附录 A1 的方法列）；哪些可自跑、哪些只能信；**两处独立交叉校验**：codex `sessions` 547,796,667 vs `state_5.sqlite` 546,858,767；AgnesCode `usage_ledger` vs `sessions.accumulated_total_tokens` 精确相等 |
 
 ## C3 · 分册 B（4 节）
 

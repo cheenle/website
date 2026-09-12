@@ -343,6 +343,24 @@ class CompanionPagesTests(unittest.TestCase):
                 self.assertIn(token, source, f"ledger/{language} 缺 {token}")
                 self.assertIn(token, mains[language], f"main/{language} 缺 {token}")
 
+    def test_blog_index_lists_series(self) -> None:
+        source = BLOG_INDEX.read_text(encoding="utf-8")
+        for path in ("/blog/seven-billion-tokens/",
+                     "/blog/seven-billion-tokens/ledger/",
+                     "/blog/seven-billion-tokens/almanac/",
+                     "/blog/seven-billion-tokens/playbook/"):
+            self.assertIn(path, source, path)
+
+    def test_sitemap_lists_all_four_pages_both_languages(self) -> None:
+        source = SITEMAP.read_text(encoding="utf-8")
+        for slug in ("", "ledger/", "almanac/", "playbook/"):
+            base = f"https://www.vlsc.net/blog/seven-billion-tokens/{slug}"
+            self.assertIn(base, source, base)
+            self.assertIn(base + "zh/", source, base + "zh/")
+
+    def test_chips_class_is_styled(self) -> None:
+        self.assertIn(".bc-chips", COMPANION_CSS.read_text(encoding="utf-8"))
+
     def test_product_numbers_are_cited_consistently(self) -> None:
         """主文引用的产品数字必须与 /agentic.html#evidence 一致（R5）。
 

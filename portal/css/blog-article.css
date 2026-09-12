@@ -1164,3 +1164,14 @@ html:lang(zh-CN) del.stale {
 		transition: none;
 	}
 }
+
+/* 系列 chip：主卡内导向三册分册 */
+.bc-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+.bc-chips a {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: .75rem; letter-spacing: .02em;
+  padding: .2rem .6rem; border-radius: 999px;
+  border: 1px solid var(--accent, #22d3ee);
+  color: var(--accent, #22d3ee); text-decoration: none;
+}
+.bc-chips a:hover { background: var(--accent, #22d3ee); color: #0a0e14; }

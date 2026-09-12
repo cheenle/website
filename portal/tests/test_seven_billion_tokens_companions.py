@@ -316,6 +316,47 @@ class CompanionPagesTests(unittest.TestCase):
             self.assertIn(LEDGER_TABLE["codex_crosscheck"], body, language)
             self.assertIn(LEDGER_TABLE["agnes_tokens"], body, language)
 
+    # ------------------------------------------------------ 系列级一致性
+    def test_series_links_are_reciprocal(self) -> None:
+        """主文挂三册；三册回链主文与彼此。"""
+        for language, path in ARTICLES.items():
+            source, _ = load(path)
+            for slug in COMPANIONS:
+                self.assertIn(f"{slug}/", source, f"main/{language} -> {slug}")
+        for slug in COMPANIONS:
+            for language, path in companion_paths(slug):
+                source, _ = load(path)
+                self.assertIn('href="../"', source, f"{slug}/{language} -> main")
+                for other in COMPANIONS:
+                    if other == slug:
+                        continue
+                    self.assertIn(f"{other}/", source, f"{slug}/{language} -> {other}")
+
+    def test_ledger_and_main_agree_on_the_headline(self) -> None:
+        """同一事实在两个页面出现时必须同值。"""
+        mains = {"en": load(ARTICLES["en"])[0], "zh": load(ARTICLES["zh"])[0]}
+        headline = ("7,007,437,567", "7,404,583,808", "5,695,506,675",
+                    "397,146,241", "485,213,348", "818,520,401")
+        for language, path in companion_paths("ledger"):
+            source, _ = load(path)
+            for token in headline:
+                self.assertIn(token, source, f"ledger/{language} 缺 {token}")
+                self.assertIn(token, mains[language], f"main/{language} 缺 {token}")
+
+    def test_product_numbers_are_cited_consistently(self) -> None:
+        """主文引用的产品数字必须与 /agentic.html#evidence 一致（R5）。
+
+        只校验两处真正交叉引用的值（FT-710 / Modern）；ft8 的测试数只在主文出现，
+        evidence 页不收录，因此不得反向要求。
+        """
+        evidence = (PORTAL / "agentic.html").read_text(encoding="utf-8")
+        main_en = load(ARTICLES["en"])[0]
+        for token in ("439", "724", "v1.14.3"):
+            self.assertIn(token, main_en, f"main 缺 {token}")
+            self.assertIn(token, evidence, f"agentic.html#evidence 缺 {token}")
+        # ft8 的实跑值只属于主文
+        self.assertIn("935", main_en, "main 缺 935")
+
     # ---------------------------------------------------------- 分册 B 专有
     def test_almanac_records_the_current_shift(self) -> None:
         """主力模型在一周内换人——新主力与调用次数必须逐字出现。"""

@@ -3,24 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seven Billion Tokens, Dissected: One Business Intent, Seven Months, and Where the Speed Actually Came From — VLSC Blog</title>
+    <title>Seven Billion Tokens, Dissected: The Ledger That Shrank — VLSC Blog</title>
     <meta
       name="description"
-      content="A full dissection of one real case: the same operator, the same amateur-radio ecosystem, seven months, 7.1B recorded tokens, seven repositories, six agent harnesses, a dozen models — how a business intent became delivered products, what the round-trips cost, and where the efficiency actually came from."
+      content="A published token ledger that was overstated, understated and drifting — all at once. One business intent, seven months, eleven agent harnesses, and the discipline that turns measurements into evidence: snapshot it, timestamp it, and keep the two books apart."
     />
     <meta
       name="keywords"
-      content="agentic engineering, AI agent harness, token accounting, process efficiency, living SDD, constraint registry, model selection, forward deployed engineering, amateur radio, BG1SB"
+      content="agentic engineering, AI agent harness, token accounting, measurement boundaries, process efficiency, living SDD, constraint registry, model selection, forward deployed engineering, amateur radio, BG1SB"
     />
     <meta name="author" content="BG1SB" />
     <meta property="og:type" content="article" />
     <meta
       property="og:title"
-      content="Seven Billion Tokens, Dissected: One Business Intent, Seven Months, and Where the Speed Actually Came From"
+      content="Seven Billion Tokens, Dissected: The Ledger That Shrank"
     />
     <meta
       property="og:description"
-      content="Intent → process efficiency → method → model evolution → attribution. A ledger-first account with provenance on every number: 7,007,437,567 recorded tokens, 52 machine-readable constraints, and the 17.1 → 0.3 intervention curve."
+      content="Intent → process → method → model → attribution, with provenance on every number. The published census was wrong in three directions at once; the honest re-run is 7,404,583,808 recorded tokens, timestamped 2026-09-12T02:40:59Z."
     />
     <meta
       property="og:url"
@@ -54,7 +54,7 @@
     />
     <link rel="stylesheet" href="../../css/octen.css?v=6" />
     <link rel="stylesheet" href="../../css/agentic.css?v=2" />
-    <link rel="stylesheet" href="../../css/blog-article.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=3" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -63,8 +63,8 @@
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "Seven Billion Tokens, Dissected: One Business Intent, Seven Months, and Where the Speed Actually Came From",
-        "description": "A ledger-first dissection of seven months of agentic engineering: business intent, process efficiency, method, model evolution, and attribution — every number with a source.",
+        "headline": "Seven Billion Tokens, Dissected: The Ledger That Shrank",
+        "description": "A published token ledger that was overstated, understated and drifting — all at once. The honest re-run, its measurement boundaries, and the discipline behind it.",
         "author": {
           "@type": "Person",
           "name": "BG1SB",
@@ -76,8 +76,8 @@
           "url": "https://www.vlsc.net/"
         },
         "datePublished": "2026-09-05",
-        "dateModified": "2026-09-08",
-        "keywords": "agentic engineering, harness, living SDD, constraint registry, process efficiency, model selection",
+        "dateModified": "2026-09-12",
+        "keywords": "agentic engineering, harness, living SDD, constraint registry, measurement boundaries, process efficiency, model selection",
         "articleSection": "Intelligence",
         "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/"
       }
@@ -91,35 +91,61 @@
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-receipt"></i><span>Intelligence · Field Ledger</span></div>
           <h1>Seven Billion Tokens, <span class="gradient">Dissected.</span></h1>
-          <p>One business intent, seven months, and where the speed actually came from — a complete anatomy of a real case, with provenance on every number.</p>
+          <p>One business intent, seven months, eleven agent harnesses — and a published number that turned out to be wrong in three directions at once.</p>
           <div class="ag-hero-stats" aria-label="Article summary">
-            <span class="ag-pill"><i class="fas fa-database"></i> 7,007,437,567 recorded tokens</span>
+            <span class="ag-pill"><i class="fas fa-database"></i> 7,404,583,808 recorded tokens</span>
+            <span class="ag-pill"><i class="fas fa-arrow-trend-up"></i> +397,146,241 vs the published census</span>
             <span class="ag-pill"><i class="fas fa-shield-halved"></i> 52 machine-readable constraints</span>
-            <span class="ag-pill"><i class="fas fa-arrow-trend-down"></i> 17.1 → 0.3 human turns per commit</span>
             <span class="ag-pill"><i class="fas fa-scale-balanced"></i> evidence before claims</span>
           </div>
-          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-05">Sep 5, 2026</time> &nbsp;·&nbsp; updated <time datetime="2026-09-08">Sep 8, 2026</time> &nbsp;·&nbsp; ~30 min read</p>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-05">Sep 5, 2026</time> &nbsp;·&nbsp; updated <time datetime="2026-09-12">Sep 12, 2026</time> &nbsp;·&nbsp; ~25 min read</p>
         </div>
       </header>
 
-      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#intents">Intent</a><a href="#intervention">Process</a><a href="#method-timeline">Method</a><a href="#eras">Models</a><a href="#attribution">Verdict</a><a href="#four-dimensions">Dimensions</a><a href="#appendix-ledger">Appendix</a></nav></div></div>
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#intents">Intent</a><a href="#intervention">Process</a><a href="#method-timeline">Method</a><a href="#model-shift">Model</a><a href="#attribution">Verdict</a><a href="#four-dimensions">Dimensions</a></nav></div></div>
 
       <main class="ba-main">
-        <p class="lede">For anyone who wants to do business with AI. This is the full dissection of one real case: the same operator, the same amateur-radio ecosystem, seven months (2026-03 → 2026-09, plus a 2025-10 → 2026-04 control period), 7.1B recorded tokens, seven repositories, six agent harnesses, a dozen models. It answers one through-line: how a business intent becomes a delivered product; how many round-trips the process took and why it kept getting smoother; what models, tools and method each contributed; and how you might spend your next seven months. Every number has a source, fact and inference are labelled separately, and the measurement boundaries live in the appendix.</p>
+        <p class="lede">For anyone who wants to do business with AI. This is the dissection of one real case: the same operator, the same amateur-radio ecosystem, seven months (2026-03 → 2026-09, plus a 2025-10 → 2026-04 control period), seven repositories, eleven agent harnesses that record usage, and a dozen models. It answers one through-line: how a business intent becomes a delivered product, how many round-trips the process took and why it kept getting smoother, and what the numbers behind that story can actually support. Every figure carries a source and a cutoff; fact and inference are labelled separately; the ledger tables and the measurement boundaries live in the companion volumes so this page can stay a narrative.</p>
 
         <div class="ba-tldr" id="tldr">
           <div class="ba-tldr-card">
             <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the skeleton in five findings</p>
             <ul class="ba-tldr-list">
-              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The efficiency curve is real.</strong> Three repos, one direction: human intervention per commit fell from 17.1 to 0.3 turns on ft8 (~30×). "Getting smoother" has a quantified shape.</li>
-              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Tokens track uncertainty, not output.</strong> ~26,800 tokens per line on ft8's DSP and timing-safety code versus 136 on a read-only reference tree — a ~200× density gap. The meter is an uncertainty gauge, not a productivity trophy.</li>
-              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>Method is the variable you control.</strong> The same model cost 75.5 M tokens per commit exploring ft8 and 0.9–3.8 M in maintenance. Models set the ceiling; method decides how much of it you actually collect.</li>
-              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The hardest evidence is incident-to-immunity time.</strong> 13 days (frequency drift) and 7 days (backup disk) from field incident to a gate that makes the same mistake impossible.</li>
-              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>One-sentence discipline:</strong> first ask "where does my judgment settle", then ask "what can AI do for me".</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>A ledger can be wrong in both directions at once.</strong> The published census of 7,007,437,567 tokens was overstated (one harness double-counted chunks of the same API response, ~2.7×) and understated (a harness marked "not recorded" had 485,213,348 tokens sitting in a table nobody queried). The honest re-run is 7,404,583,808.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>A ledger is a reading, not an asset.</strong> One harness deleted its own history mid-week (down 679,899,086 tokens); a re-run of the same script twelve minutes later differed by 51,427,037 because the session doing the measuring was itself being measured.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The efficiency curve is real.</strong> Three repos, one direction: human intervention per commit fell from 17.1 to 0.3 turns on ft8 (~30×), and last week mrrc_modern ran at 0.73 turns per commit across 41 commits.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>Model capability sets the ceiling; method decides how much of it you collect.</strong> The same model cost 75.5 M tokens per commit exploring ft8 and 0.9 M in maintenance. Of the two variables, only one is under your control.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>One-sentence discipline:</strong> first ask "where does my judgment settle", then ask "what can AI do for me" — and snapshot the evidence before you quote it.</li>
             </ul>
-            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#intervention">§3 intervention turns</a><a href="#incident-chains">§8 incident chains</a><a href="#attribution">§13 attribution</a><a href="#four-dimensions">Vol. VI · four disciplines</a></div>
+            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#ledger-shrank">§01 the ledger that shrank</a><a href="#incident-chains">§09 incident chains</a><a href="#attribution">§13 attribution</a><a href="#four-dimensions">Vol. VI · four disciplines</a></div>
           </div>
         </div>
+
+        <section id="ledger-shrank" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Prologue</span>
+            <h2 class="ag-section-title">The ledger that shrank</h2>
+            <p class="ag-section-subtitle">Before any argument about method, one lesson about measurement — learned the hard way.</p>
+          </header>
+          <p>On 2026-09-05 this site published a token census: <strong>7,007,437,567 recorded tokens</strong>. One week later the same measurement was re-run and returned <strong>7,404,583,808</strong> — <strong>397,146,241 more</strong>. The interesting part is not the growth. It is that the old number was wrong in three separate ways at the same time.</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Direction</th><th>What happened</th><th>Evidence</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Overstated</strong></td><td>claude-code's log writes one <code>usage</code> record per chunk of the same API response, so summing every line inflates the total by roughly 2.7×. Deduplicating by <code>message.id</code> leaves <strong>818,520,401</strong> — and brings the whole ledger to <strong>5,695,506,675</strong>.</td><td>6,600 distinct API responses</td></tr>
+              <tr><td><strong>Understated</strong></td><td>Hermes was published as "not recorded". It records fine — in a <code>sessions</code> table holding <strong>485,213,348</strong> tokens. The earlier check queried <code>messages.token_count</code>, which is all zeros.</td><td>292 sessions, 2026-05-15 → 07-24</td></tr>
+              <tr><td><strong>Drifting</strong></td><td>claude-code deleted its own older logs at <code>2026-09-07T13:13:57Z</code>, so the same harness measured 679,899,086 tokens <em>less</em> than a week before. Then a second run of the identical script, twelve minutes later, differed by <strong>51,427,037</strong> — because the session performing the measurement was itself writing to the logs being measured.</td><td>Observer effect, reproduced twice</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>The counter-check matters as much as the finding.</strong> codex has been dormant since late August, and its figure came back bit-for-bit identical at <strong>547,796,667</strong> — measured twice, by two different code paths. A stable measurement and an unstable one are both information; only the stable one deserves to be called a total.</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact</span>
+            <p>All figures on this page are a snapshot taken at <code>2026-09-12T02:40:59Z</code> across eleven harnesses. The full per-harness table, each harness's own measurement window, and the rules for what may and may not be compared are in the companion volume <a href="ledger/">The Ledger and Its Measurement Boundaries</a>. Recorded and estimated ledgers must not be merged: iFlow's roughly 247 million tokens are estimated from character counts because its usage fields are zero, and stay outside every total here.</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis</span>
+            <p>Evidence must be snapshotted, never accumulated. A number without a cutoff time is not a measurement — it is a rumour with decimal places.</p>
+          </div>
+        </div></section>
 
         <div class="volume" data-volume="intent">
           <header class="volume-head">
@@ -130,7 +156,7 @@
 
           <section id="intents" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">01 · Intent</span>
+              <span class="ag-section-label">02 · Intent</span>
               <h2 class="ag-section-title">Four business intents, none of them mentions AI</h2>
               <p class="ag-section-subtitle">AI was brought in later as a means of execution. It was never the purpose.</p>
             </header>
@@ -160,11 +186,11 @@
 
           <section id="control-group" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">02 · Control group</span>
+              <span class="ag-section-label">03 · Control group</span>
               <h2 class="ag-section-title">Six months with nowhere for knowledge to land</h2>
               <p class="ag-section-subtitle">The models were not weak. What was weak: knowledge had no carrier.</p>
             </header>
-            <p>From 2025-10-20 to 2026-04-16, the same person ran 185 iFlow sessions and 37,202 turns across six model backends (qwen3-coder-plus, glm-5 — 10,420 turns in a single week — kimi-k2.5, minimax-m2.5). The output was real: MRRC's ancestor was born in this period. But nothing about the work settled anywhere.</p>
+            <p>From 2025-10-20 to 2026-04-16, the same person ran <strong>185</strong> iFlow sessions and <strong>37,202</strong> turns across six model backends (qwen3-coder-plus, glm-5 — <strong>10,420</strong> turns in a single week — kimi-k2.5, minimax-m2.5). The output was real: MRRC's ancestor was born in this period. But nothing about the work settled anywhere.</p>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">Fact</span>
               <p>Every one of the 37,202 assistant turns records zero usage, and no engineering artifact survived the era: no contract, no document system, no gate. When a session ended, what it had learned ended with it.</p>
@@ -179,12 +205,12 @@
           <header class="volume-head">
             <span class="volume-num">Volume II · Process</span>
             <h2>From round-trips to right-first-time</h2>
-            <p class="volume-gloss">"It got smoother" is a feeling; quantified, it is evidence. Three metrics, all reproducible (method in Appendix C).</p>
+            <p class="volume-gloss">"It got smoother" is a feeling; quantified, it is evidence. Three metrics, all reproducible from git history and local logs.</p>
           </header>
 
           <section id="intervention" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">03 · Intervention</span>
+              <span class="ag-section-label">04 · Intervention</span>
               <h2 class="ag-section-title">Human turns per delivered commit</h2>
               <p class="ag-section-subtitle">How many conversational round-trips a human must put in for each commit that lands.</p>
             </header>
@@ -194,17 +220,19 @@
                 <tr><td>ft8</td><td>W31: 17.1 turns/commit (7 commits burned 120 turns + 530M tokens)</td><td>W32–34: 0.3–0.7 turns/commit</td><td>~30×</td></tr>
                 <tr><td>ft710</td><td>W29–30: 4.6–4.9 turns/commit</td><td>W33–34: 0.7 turns/commit</td><td>~6×</td></tr>
                 <tr><td>website</td><td>W34: 1.6 turns/commit</td><td>W35–36: 0.4 turns/commit</td><td>~4×</td></tr>
+                <tr><td>mrrc_modern</td><td>—</td><td><strong>last week: 0.73 turns/commit</strong> (30 human turns over 41 commits)</td><td>held</td></tr>
+                <tr><td>MRRC</td><td>—</td><td>last week: 6.00 turns/commit (12 human turns over 2 commits)</td><td>reversed</td></tr>
               </tbody>
             </table></div>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">Fact</span>
-              <p>Three independent curves fall in the same direction. What "&lt;1" means in the late period: a one-sentence requirement, the agent autonomously runs through multiple commits, and the human only supplies intent and judgment.</p>
+              <p>Three independent curves fall in the same direction — ft8's reads <strong>17.1 → 0.3</strong> turns per commit — and the low number held for a fourth week on mrrc_modern. What "&lt;1" means: a one-sentence requirement, the agent autonomously runs through multiple commits, and the human only supplies intent and judgment. MRRC's last week shows the other side of the same rule — two commits that were still settling their direction cost 6.00 turns each.</p>
             </div>
           </div></section>
 
           <section id="unit-cost" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">04 · Unit cost</span>
+              <span class="ag-section-label">05 · Unit cost</span>
               <h2 class="ag-section-title">Tokens per commit</h2>
               <p class="ag-section-subtitle">The meter reads uncertainty, not productivity.</p>
             </header>
@@ -214,17 +242,19 @@
                 <tr><td>ft710</td><td>15.2 M/commit (W30)</td><td>0.95 M/commit (W34)</td><td>16×</td></tr>
                 <tr><td>ft8</td><td>75.5 M/commit (W31)</td><td>0.9 M/commit (W36)</td><td>84×</td></tr>
                 <tr><td>sunsdr</td><td>1.9 M/commit (W25)</td><td>0.4 M/commit (W27)</td><td>5×</td></tr>
+                <tr><td>mrrc_modern</td><td>—</td><td><strong>last week: 5.95 M/commit</strong> (244,037,840 over 41 commits)</td><td>rising</td></tr>
+                <tr><td>MRRC</td><td>—</td><td>last week: 47.07 M/commit (94,144,081 over 2 commits)</td><td>rising</td></tr>
               </tbody>
             </table></div>
             <div class="claim-box" data-claim-type="inference">
               <span class="claim-label">Inference</span>
-              <p>High-cost weeks are exploration with the direction undecided; low-cost weeks are delivery after the pattern was established. Token peaks always land where uncertainty is highest — the figure is an uncertainty meter, not a productivity trophy.</p>
+              <p>High-cost weeks are exploration with the direction undecided; low-cost weeks are delivery after the pattern was established. Last week is the proof rather than the exception: mrrc_modern's unit cost climbed back from 0.95 M to 5.95 M precisely because it took on four new feature releases in five days, while MRRC's two direction-setting commits cost 47.07 M each. Token peaks always land where uncertainty is highest — the figure is an uncertainty meter, not a productivity trophy.</p>
             </div>
           </div></section>
 
           <section id="rework" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">05 · Rework</span>
+              <span class="ag-section-label">06 · Rework</span>
               <h2 class="ag-section-title">Not a monotonic decline — an arc</h2>
               <p class="ag-section-subtitle">Rework concentrates in exploration and integration weeks; maintenance weeks sit in single digits.</p>
             </header>
@@ -232,22 +262,22 @@
               <span class="claim-label">Fact</span>
               <p>ft710's fix-commit share fell from 36% in its opening week to 6–12% in maintenance weeks; ft8's fell from 29% to 17% — achieved during its two highest-volume weeks (147 / 82 commits).</p>
             </div>
-            <p><strong>The counter-evidence is just as real.</strong> MRRC hit 50% fix share in its big integration week (W32, 798M tokens); modern hit 31% in its big refactor week (W35); sunsdr's early hardware-tuning weeks hit 51%. New requirements always bring new rework. The difference is who does the rework: increasingly, agents complete it autonomously (modern W35: fix share 31%, but humans intervened only 0.71 turns per commit).</p>
+            <p><strong>The counter-evidence is just as real, and it arrived this week.</strong> MRRC hit 50% fix share in its big integration week (W32, 798M tokens); modern hit 31% in its big refactor week (W35); sunsdr's early hardware-tuning weeks hit 51%. Last week mrrc_modern closed <strong>41</strong> commits of which <strong>17</strong> were fixes — a <strong>41%</strong> fix share, its highest since the refactor. New requirements always bring new rework. The difference is who does the rework: humans intervened only 0.73 turns per commit, so the agent completed nearly all of it autonomously.</p>
           </div></section>
 
           <section id="cadence" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">06 · Cadence</span>
+              <span class="ag-section-label">07 · Cadence</span>
               <h2 class="ag-section-title">The workflow takes shape</h2>
               <p class="ag-section-subtitle">Contract red first, agent delivers to green.</p>
             </header>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">Fact</span>
-              <p>Releases accelerated: modern shipped 6 versions in 13 days (3 in a single day); ft8 shipped 3 versions in its first 3 days; MRRC once shipped 9 versions in two days.</p>
+              <p>Release cadence kept accelerating: this week mrrc_modern shipped <strong>v1.14.0</strong> through <strong>v1.14.3</strong> — four releases in five days, with the version's own changelog corrected the same day it was published. Earlier: modern shipped 6 versions in 13 days (3 in a single day); ft8 shipped 3 versions in its first 3 days; MRRC once shipped 9 versions in two days.</p>
             </div>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">Fact</span>
-              <p>Since 2026-W35 the website repo shows a stable "contract test goes red first, feature commit turns it green" pattern: 5 test→feat pairs, with a median time-to-green of 19 minutes (example: on 09-05 the contract test went red first, and the article feature went green 19 minutes later).</p>
+              <p>Since 2026-W35 the website repo shows a stable "contract test goes red first, feature commit turns it green" pattern: 5 test→feat pairs, with a median time-to-green of <strong>19</strong> minutes. This article's own series is being built the same way.</p>
             </div>
             <div class="claim-box" data-claim-type="inference">
               <span class="claim-label">Inference</span>
@@ -267,7 +297,7 @@
 
           <section id="method-timeline" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">07 · Timeline</span>
+              <span class="ag-section-label">08 · Timeline</span>
               <h2 class="ag-section-title">How the method grew</h2>
               <p class="ag-section-subtitle">Document era, then contract era: knowledge stops needing to be remembered and appears when it should.</p>
             </header>
@@ -278,7 +308,8 @@
                 <tr><td>2026-07-06</td><td>ft710 rewrites its SDD from day one (<code>87297d1</code>)</td><td>Contract first</td></tr>
                 <tr><td>2026-07-20</td><td>sdd-guardian is born (<code>2498ec2</code>): constraint registry + runtime gates — constraints injected at session start (SessionStart → prime), edits intercepted before they land on disk (PreToolUse → hook)</td><td><strong>Contract era</strong> — knowledge needs no remembering</td></tr>
                 <tr><td>2026-08-02</td><td>ft8's first substantive commit (<code>d4a7a32</code>) brings AGENTS.md, a 15-chapter SDD, the guardian and contract tests in one shot</td><td>The method is mature enough to inherit wholesale — a new project has gates on day one</td></tr>
-                <tr><td>2026-08-26</td><td>modern's constraint registry grows to 21 rules (<code>2bc3d30</code>)</td><td>By 2026-09-05 the three repos hold <strong>52 machine-readable constraints</strong> (ft710 17 / modern 21 / ft8 14), each with severity, scope, match patterns and a citation to its origin</td></tr>
+                <tr><td>2026-08-26</td><td>modern's constraint registry grows to 21 rules (<code>2bc3d30</code>)</td><td>As of 2026-09-12 the three gated repos hold <strong>52 machine-readable constraints</strong> (<strong>ft710 17 / modern 21 / ft8 14</strong>), each with severity, scope, match patterns and a citation to its origin</td></tr>
+                <tr><td>2026-09-05 → 09-12</td><td>The registry count does not change</td><td><strong>An honest plateau.</strong> A week of heavy delivery added no new constraint rows — either the gates held, or a class of incident is going unregistered. Both readings are on the table; the ledger cannot yet tell them apart.</td></tr>
               </tbody>
             </table></div>
             <p>The division of labour: the outer harness defines business, technical and product constraints — why the work exists, where the boundaries are, what evidence can change a conclusion. The inner loop — Specify → Implement → Test → Review → Observe → Update SDD — is delegated to agents wholesale. The living SDD lets design intent flow downward and field evidence flow back up, with explicit lifecycle states and no automatic promotion.</p>
@@ -286,7 +317,7 @@
 
           <section id="incident-chains" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">08 · Incident chains</span>
+              <span class="ag-section-label">09 · Incident chains</span>
               <h2 class="ag-section-title">The hardest evidence that the method works</h2>
               <p class="ag-section-subtitle">Not one of the 52 constraints was designed cleverly in advance; every one traces back to a concrete incident.</p>
             </header>
@@ -297,7 +328,7 @@
               </article>
               <article class="ag-card" data-track="sdr">
                 <h3>Deploy backups fill the disk · 7-day loop</h3>
-                <p>08-29: server <code>/var/tmp</code> at 100% (~300 MB per backup) → 09-05: sister fixes land in four repositories on the same day — and, following the thread, the hidden defect that portal backups had never worked (an unquoted remote heredoc, <code>067f565</code>) → the rules are promoted to the four deployment iron rules.</p>
+                <p>08-29: server <code>/var/tmp</code> at 100% (about 300 MB per backup) → 09-05: sister fixes land in four repositories on the same day — and, following the thread, the hidden defect that portal backups had never worked (an unquoted remote heredoc, <code>067f565</code>) → the rules are promoted to the four deployment iron rules.</p>
               </article>
             </div>
             <div class="term-block"><div class="term-head">Reproduced block in mrrc_ft710, 2026-09-05</div><pre>$ python3 .agents/skills/sdd-guardian/harness/sdd_context.py check probe_b4_tmp.py
@@ -307,19 +338,19 @@ $ echo $?
 2</pre></div>
             <div class="claim-box" data-claim-type="thesis">
               <span class="claim-label">Author's thesis</span>
-              <p>The incident conversion rate — the time from incident to permanent immunity — is the true measure of an organization's learning ability.</p>
+              <p>The incident conversion rate — the time from incident to permanent immunity — is the true measure of an organization's learning ability. This ecosystem runs at <strong>13</strong> days and <strong>7</strong> days. A registry that stopped growing is not automatically good news: it is a question, and the answer is in whether new incident rows appear when the next incident does.</p>
             </div>
           </div></section>
 
           <section id="evidence-ledgers" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">09 · Delivery evidence</span>
+              <span class="ag-section-label">10 · Delivery evidence</span>
               <h2 class="ag-section-title">Two ledgers that never vouch for each other</h2>
-              <p class="ag-section-subtitle">Test suites were run, not read, on census day 2026-09-05.</p>
+              <p class="ag-section-subtitle">Test suites were run, not read, on census day 2026-09-12.</p>
             </header>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">Fact</span>
-              <p>FT-710: <code>Ran 439 tests</code> / <code>OK</code>. modern: <code>Ran 682 tests</code> — the 1 error is a Windows-only launcher failing to import on macOS, an environment limit, not a product defect. ft8: <code>937 tests collected</code> — collected is not passed, and the wording must keep the distinction. MRRC V5.6.5 was field-verified and released (it entered V6.0.0 on 09-05). sunsdr V1.0 shipped with PTT two-way ACK.</p>
+              <p>FT-710: <code>439 passed</code>. mrrc_modern: <code>724 passed</code>, up from 682 a week earlier. ft8: <code>935 passed, 1 skipped, 1 xfailed</code> — previously published as "937 collected", and collected is not passed; the wording had to change with the evidence. Note also that all three product repositories moved to their own virtualenvs (Python 3.13): running the suites under the system Python 3.9 now fails at collection time on <code>X | None</code> annotations. That is an environment limit, not a product defect, and the boundary is written down rather than quietly dropped.</p>
             </div>
             <div class="ladder-pair">
               <div class="ladder ladder--product">
@@ -338,78 +369,31 @@ $ echo $?
             </div>
           </div></section>
 
-          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>The method was not designed in advance; it grew out of incidents. Verdict → machine-readable constraint → pre-write interception is the loop — and all 52 constraints trace back to a specific decision or accident.</p></aside>
+          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>The method was not designed in advance; it grew out of incidents. Verdict → machine-readable constraint → pre-write interception is the loop — and all 52 constraints trace back to a specific decision or accident, not to a planning session.</p></aside>
         </div>
 
         <div class="volume" data-volume="models">
           <header class="volume-head">
             <span class="volume-num">Volume IV · Models</span>
-            <h2>Evolution, benchmarks, and task matching</h2>
-            <p class="volume-gloss">Measured from local logs, not vendor brochures — with the public benchmarks kept in a separate layer.</p>
+            <h2>The model is not the long-term variable</h2>
+            <p class="volume-gloss">Seven months, six eras, and one week that made the whole question smaller. The almanac lives in its own volume.</p>
           </header>
 
-          <section id="eras" class="ag-section"><div class="container">
+          <section id="model-shift" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">10 · Eras</span>
-              <h2 class="ag-section-title">Seven months, five eras</h2>
-              <p class="ag-section-subtitle">Measured from this machine's logs, not from vendor announcements.</p>
+              <span class="ag-section-label">11 · Shift</span>
+              <h2 class="ag-section-title">The main force changed inside a week</h2>
+              <p class="ag-section-subtitle">Measured from local logs, not vendor announcements.</p>
             </header>
-            <div class="ag-table-wrap"><table class="ag-table">
-              <thead><tr><th>Era</th><th>Period</th><th>Main force</th><th>Shape</th></tr></thead>
-              <tbody>
-                <tr><td>Probing</td><td>autumn 2025</td><td>cursor (model unrecorded, 26M)</td><td>in-editor completion</td></tr>
-                <tr><td>Bare dialogue</td><td>2025-10 → 2026-04</td><td>iFlow: qwen3-coder-plus, glm-5, kimi-k2.5, minimax-m2.5</td><td>conversational, ~230M estimated (not recorded), zero sediment</td></tr>
-                <tr><td>GPT-5.5</td><td>2026-05 → 06</td><td>gpt-5.5 (mulerun + codex, 610M)</td><td>repo-scale work begins</td></tr>
-                <tr><td>K3 family</td><td>mid-2026-07 → early 08</td><td>k3 (820M) + k3-256k + kimi-for-coding</td><td>harness formation; broke through ft710</td></tr>
-                <tr><td>Flash hegemony</td><td>2026-08 on</td><td>deepseek-v4-flash (4.0B, peak week 1.6B)</td><td>the value tier eats daily engineering</td></tr>
-                <tr><td>Multipolar competition</td><td>late 2026-08 → now</td><td>flash decayed to 26M/week; gpt-5.6, a gpt-5.5 resurgence, qwen3.8-flash, qwen3.8-max-0902 (106M in its first two days)</td><td>models picked per task</td></tr>
-              </tbody>
-            </table></div>
+            <p>On 2026-09-05 this ecosystem's claude-code workload was dominated by one value-tier model. Seven days later the same harness is dominated by a different one: <strong>qwen3.8-max-0902</strong> at <strong>3,883</strong> calls, with the previous leader still present but no longer driving. On the pi side, a model that did not appear in the last census at all — <strong>glm-5.3-flash</strong> — is already at <strong>745</strong> calls, and a vision variant has appeared in the logs.</p>
             <div class="claim-box" data-claim-type="inference">
               <span class="claim-label">Inference</span>
-              <p>Inside the hegemony there was challenger rotation: W32 tried qwen3.8-max and glm-5.2 (75M in a single day) without adopting them; from W35 a new combination took hold. The model market rotates every 3–4 weeks — locking into a single model is a clearly losing strategy.</p>
+              <p>Inside the previous "flash hegemony" there was constant challenger rotation, and the rotation did not stop — it accelerated. The model market turns over every three to four weeks. Any method that hard-codes a model name is buying a depreciating asset; the selection mechanism, not the choice, is the durable part.</p>
             </div>
+            <p>The measured division of labour still holds — flagships buy direction, value models buy execution, long-context variants buy the specials, harnesses buy the way of working — and the full era-by-era record, the task × model × harness matching table, the public benchmarks (independent measurements and vendor claims kept in separate layers) and the routing-label trap are all in the companion volume <a href="almanac/">The Model × Harness Almanac</a>.</p>
           </div></section>
 
-          <section id="benchmarks" class="ag-section"><div class="container">
-            <header class="ag-section-header">
-              <span class="ag-section-label">11 · Public benchmarks</span>
-              <h2 class="ag-section-title">Outside measurements, kept in separate layers</h2>
-              <p class="ag-section-subtitle">Independent measurements and vendor claims are not the same kind of number.</p>
-            </header>
-            <ul>
-              <li><strong>Independent measurements:</strong> Artificial Analysis intelligence index — Kimi K3 57, Qwen3.8-Max 56; LMArena — Gemini 3 Pro at 1501 Elo (the first past 1500); Code Arena — GLM-5.2 at 1595 in the coding blind test, first among open-weights models.</li>
-              <li><strong>Vendor claims (single-source):</strong> DeepSeek-V4-Pro at Codeforces 3206; Qwen3.8-Flash claims a 9.1-point SWE-bench Pro lead over Opus 4.6.</li>
-              <li><strong>The value tier is the hardest public narrative:</strong> V4-Flash (OpenRouter $0.14 / $0.27 per million), Qwen3.8-Flash (officially one third of that price), GPT-5.6 Luna, Gemini 3.1 Flash-Lite — all crowded into the "affordable daily engineering" niche, corroborating the measured flash hegemony.</li>
-              <li><strong>Warning:</strong> a model name in a log is not a model entity. <code>big-pickle</code> is a stealth model officially acknowledged by OpenCode; <code>code-supernova-1-million</code> was a 2025 stealth marketing name (the original channel is gone); <code>kimi-for-coding</code> is a subscription API alias. Treat log identifiers as routing labels, not capability entities.</li>
-            </ul>
-          </div></section>
-
-          <section id="matching" class="ag-section"><div class="container">
-            <header class="ag-section-header">
-              <span class="ag-section-label">12 · Matching</span>
-              <h2 class="ag-section-title">Task × model × harness, measured</h2>
-              <p class="ag-section-subtitle">No model wins every task; the same model changes personality across harnesses.</p>
-            </header>
-            <div class="ag-table-wrap"><table class="ag-table">
-              <thead><tr><th>Role</th><th>Measured combination</th><th>Evidence</th></tr></thead>
-              <tbody>
-                <tr><td>Greenfield / new features</td><td>deepseek-v4-pro</td><td>the only model with an absolute majority of new-feature work (68%)</td></tr>
-                <tr><td>Focused blitz</td><td>gpt-5.6-sol (codex)</td><td>punched through ft8 inside a one-week window (235M), then withdrew — a blitz</td></tr>
-                <tr><td>Daily workhorse</td><td>deepseek-v4-flash (claude-code + pi)</td><td>4.0B total; ~70% fixes + analysis + ops; the claude-code side leans field ops, the pi side leans repair</td></tr>
-                <tr><td>Main development + long-context special</td><td>k3 / k3-256k (kimi-code)</td><td>k3 spent 417M in the ft710 push; k3-256k's 165M went almost entirely to ft8 (timing-safety code needs long context)</td></tr>
-                <tr><td>Delivery / release pipeline</td><td>gpt-5.6 (pi), gpt-5.5 (mulerun)</td><td>website writing, docs, promo videos, installer packaging</td></tr>
-                <tr><td>Analysis / writing</td><td>qwen3.8-flash, qwen3.8-max-0902</td><td>60% of trial sessions are analysis-type; the newest entrant went straight at website analysis tasks</td></tr>
-              </tbody>
-            </table></div>
-            <p>The harness division is equally clear: claude-code carries the heavy engineering (the three gated repositories), pi carries repair and releases, codex carries focused blitzes, kimi-code carries main development, mulerun carries content generation, and opencode probes (4.2M).</p>
-            <div class="claim-box" data-claim-type="inference">
-              <span class="claim-label">Inference</span>
-              <p>Flagship models buy direction, value models buy execution, long-context variants buy the specials, and harnesses buy the way of working. The same model shows a completely different task profile in a different harness — gpt-5.6 is a blitz squad in codex and a release pipeline in pi — so the unit of selection is the model × harness × task triple.</p>
-            </div>
-          </div></section>
-
-          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>The model market turns over every 3–4 weeks, and no model led on every task. The unit of selection is the model × harness × task triple.</p></aside>
+          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>The main force of a harness can change in seven days. Do not lock in a model; lock in the way you choose one — and keep your own log, because it is the only benchmark that measures your work.</p></aside>
         </div>
 
         <div class="volume" data-volume="verdict">
@@ -421,12 +405,12 @@ $ echo $?
 
           <section id="attribution" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">13 · Attribution</span>
+              <span class="ag-section-label">12 · Attribution</span>
               <h2 class="ag-section-title">Stronger models, or a thicker method?</h2>
               <p class="ag-section-subtitle">Both variables changed over the seven months; four pieces of evidence separate them.</p>
             </header>
             <div class="ag-loop-grid">
-              <article class="ag-card"><h3>1 · Same model, ±method: an order of magnitude</h3><p>Flash exploring ft8 in W32 cost 75.5 M per commit; the same model in maintenance cost 0.9–3.8 M per commit. The model did not change — the contract thickness did.</p></article>
+              <article class="ag-card"><h3>1 · Same model, ±method: an order of magnitude</h3><p>Flash exploring ft8 in W32 cost 75.5 M per commit; the same model in maintenance cost 0.9 M per commit. The model did not change — the contract thickness did.</p></article>
               <article class="ag-card"><h3>2 · Strong models, no method: still zero</h3><p>iFlow-era glm-5 produced 10,420 turns in a single week, yet the 37,202 turns left zero sediment. With method absent, model strength is beside the point.</p></article>
               <article class="ag-card"><h3>3 · The method's birthday is precisely visible</h3><p>The contract package grew in ft710 on 07-20 and was inherited wholesale by ft8 on 08-02 — and ft8's intervention turns fell from 17.1 straight to 0.3.</p></article>
               <article class="ag-card"><h3>4 · Model upgrades widen the delegation radius</h3><p>The task granularity one turn can reliably deliver grew from "change this function" to "deliver this feature against this spec and pass the contract tests". Models decide what can be delegated; method decides whether what was delegated comes back.</p></article>
@@ -439,28 +423,29 @@ $ echo $?
 
           <section id="advice" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">14 · Advice</span>
+              <span class="ag-section-label">13 · Advice</span>
               <h2 class="ag-section-title">Two tracks</h2>
               <p class="ag-section-subtitle">The engineering track is yours; the model track is the market's. The compound interest is on yours.</p>
             </header>
             <p><strong>The engineering-capability track</strong> (you control it — the compound interest is here):</p>
             <ol class="steps">
+              <li><h4>Snapshot before you quote</h4><p>Any figure you intend to act on gets a cutoff timestamp and a written window. This article's ledger is stamped <code>2026-09-12T02:40:59Z</code>, and every harness carries its own window, because one of them deletes its own history.</p></li>
               <li><h4>Acceptance before implementation</h4><p>Write the acceptance conditions before the first line of code — the standard of "does it count" precedes implementation and is the number-one killer of round-trips.</p></li>
               <li><h4>Machine-readable constraints, pre-write gates</h4><p>The fix is only the first link; ruling → machine-readable constraint → gate is the closed loop (this ecosystem: 13 days / 7 days).</p></li>
-              <li><h4>Red first, then green</h4><p>Contract tests first, agents deliver to green — the median loop in this ecosystem is 19 minutes.</p></li>
-              <li><h4>Tokens as an uncertainty meter</h4><p>Wherever the token peak lands, that is where the direction is undecided.</p></li>
+              <li><h4>Red first, then green</h4><p>Contract tests first, agents deliver to green — the median loop in this ecosystem is 19 minutes, and the registry's plateau is watched rather than assumed.</p></li>
             </ol>
             <p><strong>The model-capability track</strong> (the market gives it — the strategy is not locking in):</p>
             <ol class="steps" style="counter-reset: step 4">
-              <li><h4>Pick tiers by task, not by faith</h4><p>Flagships for greenfield and blitz work, the value tier for daily work, long-context variants for specials — in measurement, no model wins every task.</p></li>
-              <li><h4>Re-evaluate the market every 3–4 weeks</h4><p>The timeline above changed main force five times; the selection mechanism — fast trials plus a weekly review — matters more than any single choice.</p></li>
+              <li><h4>Pick tiers by task, not by faith</h4><p>Flagships for greenfield and blitz work, the value tier for daily work, long-context variants for specials — in measurement, no model wins every task, and this week the main force changed.</p></li>
+              <li><h4>Re-evaluate the market every 3–4 weeks</h4><p>The timeline above changed main force six times; the selection mechanism — fast trials plus a weekly review — matters more than any single choice.</p></li>
               <li><h4>Beware model names</h4><p>Routing labels are not model entities, and vendor claims are not independent benchmarks. Your own logs — which task, how many tokens, how many round-trips, what result — are the only benchmark that never lies to you.</p></li>
             </ol>
+            <p>The checklists, templates and the case-derived failure library that turn these seven rules into something you can copy on Monday are in <a href="playbook/">the companion volume</a>.</p>
           </div></section>
 
           <section id="closing" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">15 · Closing</span>
+              <span class="ag-section-label">14 · Closing</span>
               <h2 class="ag-section-title">Ask where it settles first</h2>
               <p class="ag-section-subtitle">Seven months of lessons fold into one sentence.</p>
             </header>
@@ -468,10 +453,10 @@ $ echo $?
               <span class="claim-label">Author's thesis</span>
               <p>First ask "where does my judgment settle", then ask "what can AI do for me".</p>
             </div>
-            <p>AI use without a settling ground is consumption — 37,202 turns of conversation can leave nothing behind. AI use with a settling ground is asset accumulation — every incident, every constraint, every spec lowers the cost of the next delegation. Models change generation every quarter; the contract thickens every day. The former is weather; the latter is climate. What you can build is the climate.</p>
+            <p>AI use without a settling ground is consumption — 37,202 turns of conversation can leave nothing behind. AI use with a settling ground is asset accumulation — every incident, every constraint, every spec lowers the cost of the next delegation. And the ledger is the same: a number you snapshot and date is an asset; a number you remember and quote is weather. Models change generation every quarter; the contract thickens every day. The former is weather; the latter is climate. What you can build is the climate.</p>
           </div></section>
 
-          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>Models set the ceiling; method decides how much of it you collect. Of the two variables, only one is yours to build — the sentence above says where to start.</p></aside>
+          <aside class="volume-takeaway"><span class="tk-label">Volume takeaway</span><p>Models set the ceiling; method decides how much of it you collect. And the measurement itself obeys the same rule — snapshot it, date it, or it will quietly change under you.</p></aside>
         </div>
 
         <div class="volume" data-volume="dimensions">
@@ -483,9 +468,9 @@ $ echo $?
 
           <section id="four-dimensions" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">16 · The four dimensions</span>
+              <span class="ag-section-label">15 · The four dimensions</span>
               <h2 class="ag-section-title">Four dimensions, four disciplines</h2>
-              <p class="ag-section-subtitle">The merged distillation: what the case means once the ledger is closed.</p>
+              <p class="ag-section-subtitle">The distillation: what the case means once the ledger is closed.</p>
             </header>
             <div class="claim-box" data-claim-type="thesis">
               <span class="claim-label">The one-sentence method</span>
@@ -494,74 +479,37 @@ $ echo $?
             <div class="ag-loop-grid">
               <article class="ag-card"><h3>1 · Engineering history — the abstraction ladder rises again</h3><p>Machine code → assembly → high-level languages → frameworks → cloud: every generation delegates one more layer of "how" to the machine. Agentic delegates the whole implementation layer. What remains for the person is three acts: define the intent, mark the boundaries, exercise the verdict. The workload moved accordingly — 12 design specs and 10 implementation plans were written before the code; ft8's first substantive commit brought AGENTS.md, a 15-chapter SDD and contract tests before any business code. Definition now precedes implementation.</p></article>
               <article class="ag-card"><h3>2 · Epistemology — the carrier decides the knowledge's lifespan</h3><p>Chat logs evaporate with the session; documents expire and get skipped; machine-readable constraints with runtime gates do not need to be remembered — they appear when needed. 52 constraints are 52 judgments made permanent, and they survived six harnesses because the carrier is the repository, not a tool. Incident-to-immunity time is the true measure of organizational learning: this ecosystem ran 13 days and 7 days.</p></article>
-              <article class="ag-card"><h3>3 · Economics — tokens are the price of uncertainty</h3><p>Token spend follows uncertainty density, not line count: ~26,800 tokens per line on ft8's DSP and timing-safety code versus 136 on a read-only reference tree. Peaks land exactly where direction is undecided. And 95.2% of recorded tokens are cache-reads — the tax of contracts that are not yet machine-sliceable. Spending less is not "use AI less"; it is reducing the uncertainty itself.</p></article>
+              <article class="ag-card"><h3>3 · Economics — tokens are the price of uncertainty, and cache reads are the rent</h3><p>Token spend follows uncertainty density, not line count, and the peaks land exactly where direction is undecided. In the three harnesses that report a complete split, cache reads account for <strong>93.7%</strong> of all recorded tokens — the standing cost of re-sending context that has not been made machine-sliceable. Spending less is not "use AI less"; it is reducing the uncertainty itself, and shrinking the context that must be re-read.</p></article>
               <article class="ag-card"><h3>4 · Responsibility — two ledgers, three non-delegable acts</h3><p>Product maturity and process evidence are separate books that never vouch for each other: on census day, 439 passing FT-710 tests could not close one open P0 PTT safety issue in the client. Three acts are never delegable — hardware bring-up and bench debugging, RF safety on real radios, and the verdict on whether evidence is sufficient. Not because AI is too weak, but because responsibility cannot be delegated.</p></article>
             </div>
             <div class="claim-box" data-claim-type="thesis">
               <span class="claim-label">The four disciplines</span>
-              <p>1 · <strong>Definition before implementation</strong> — acceptance criteria, non-goals and boundaries written before the first line of code; intent phrased in business language that stands without the word AI. 2 · <strong>Every incident becomes a rule</strong> — repair is only the first link; verdict → constraint → pre-write interception closes the loop. 3 · <strong>Watch where uncertainty spends</strong> — token peaks are a direction radar; audit every important number against two sources. 4 · <strong>Keep the two ledgers apart</strong> — process badges never promote product claims; "do" can be delegated, "did it count" never leaves your hands.</p>
+              <p>1 · <strong>Definition before implementation</strong> — acceptance criteria, non-goals and boundaries written before the first line of code; intent phrased in business language that stands without the word AI. 2 · <strong>Every incident becomes a rule</strong> — repair is only the first link; verdict → constraint → pre-write interception closes the loop. 3 · <strong>Watch where uncertainty spends</strong> — token peaks are a direction radar; audit every important number against two sources, and date the snapshot. 4 · <strong>Keep the two ledgers apart</strong> — process badges never promote product claims; "do" can be delegated, "did it count" never leaves your hands.</p>
             </div>
           </div></section>
         </div>
 
-        <section id="appendix-ledger" class="ag-section"><div class="container">
+        <section class="ag-section"><div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">Appendix A · Token ledger</span>
-            <h2 class="ag-section-title">Census 2026-09-05, in both calibers</h2>
-            <p class="ag-section-subtitle">claude-code carries two calibers side by side; the published census used the line caliber.</p>
+            <span class="ag-section-label">Companions</span>
+            <h2 class="ag-section-title">The three volumes that left this page</h2>
+            <p class="ag-section-subtitle">This article is the causal chain. The queries live next door, each independently citable.</p>
           </header>
-          <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>Harness</th><th>Tokens (line / recorded caliber)</th><th>Tokens (deduplicated caliber)</th><th>Turns</th><th>Sessions</th><th>Main models</th></tr></thead>
-            <tbody>
-              <tr><td>claude-code</td><td>3,207,496,620</td><td><strong>1,175,403,254</strong> (dedup by message.id, 7,519 API responses)</td><td>22,184</td><td>218</td><td>deepseek-v4-flash 90.6%</td></tr>
-              <tr><td>pi</td><td>1,633,493,477</td><td>same as recorded</td><td>8,921</td><td>61</td><td>ds-v4-flash 63% / gpt-5.6 24%</td></tr>
-              <tr><td>kimi-code</td><td>1,203,639,664</td><td>same as recorded</td><td>9,816</td><td>233 (wire-file caliber)</td><td>k3 65.9%</td></tr>
-              <tr><td>codex</td><td>547,796,667</td><td>same as recorded</td><td>4,466 (token_count events)</td><td>116</td><td>gpt-5.6-sol 53.7% / gpt-5.5 34%</td></tr>
-              <tr><td>mulerun</td><td>499,992,587</td><td>same as recorded</td><td>182</td><td>182</td><td>gpt-5.5 80.1%</td></tr>
-              <tr><td>cursor</td><td>27,079,705</td><td>same as recorded</td><td>217</td><td>96</td><td>code-supernova 78.9%</td></tr>
-              <tr><td>opencode</td><td>4,190,890</td><td>same as recorded</td><td>6</td><td>6</td><td>big-pickle</td></tr>
-              <tr><td><strong>Total</strong></td><td><strong>7,123,689,610</strong></td><td><strong>5,091,596,244</strong></td><td></td><td></td><td></td></tr>
-            </tbody>
-          </table></div>
-          <p>The published census (earlier on 2026-09-05) read 7,007,437,567; the difference is same-day growth. Dual-caliber note: claude-code's log records usage per chunk of the same API response, so the line caliber inflates by about 2.7×; the other tools are unaffected. The two columns — recorded versus estimated — must not be merged: iFlow's ~234 million tokens (all-zero usage fields, estimated by character count), Hermes (not recorded) and Qoder (a duplicate subset of Cursor) all stay out of the total.</p>
-        </div></section>
-
-        <section id="appendix-repos" class="ag-section"><div class="container">
-          <header class="ag-section-header">
-            <span class="ag-section-label">Appendix B · Repositories</span>
-            <h2 class="ag-section-title">Repository × commits × phase</h2>
-            <p class="ag-section-subtitle">Census 2026-09-05. Tokens attributed by recorded working directory.</p>
-          </header>
-          <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>Repository</th><th>Commits</th><th>Span</th><th>Phase</th><th>Main harnesses</th><th>Recorded tokens</th></tr></thead>
-            <tbody>
-              <tr><td>MRRC</td><td>181</td><td>03-06 → 09-05</td><td>FDE incubation + universal remote-control family</td><td>claude / mulerun / kimi</td><td>1.16 B</td></tr>
-              <tr><td>sunsdr(+Mobile)</td><td>67+9</td><td>06-21 → 09-03</td><td>SDR track + iOS client</td><td>codex / mulerun / claude</td><td>64 M</td></tr>
-              <tr><td>mrrc_ft710</td><td>162</td><td>07-06 → 09-05</td><td>Vertical slice + harness formation</td><td>pi / kimi / claude</td><td>1.28 B</td></tr>
-              <tr><td>mrrc_modern</td><td>244</td><td>07-06 → 09-05</td><td>Platform abstraction (shares 149 commits with ft710)</td><td>claude-code</td><td>1.26 B</td></tr>
-              <tr><td>ft8</td><td>253</td><td>08-03 → 09-05</td><td>Workflow track + full contract reuse on day one</td><td>claude / pi / kimi / codex</td><td>1.88 B</td></tr>
-              <tr><td>website</td><td>102</td><td>08-20 → 09-05</td><td>Expression &amp; evidence system</td><td>pi / claude / mulerun</td><td>0.92 B</td></tr>
-            </tbody>
-          </table></div>
-        </div></section>
-
-        <section id="appendix-limits" class="ag-section"><div class="container">
-          <header class="ag-section-header">
-            <span class="ag-section-label">Appendix C · Measurement boundaries</span>
-            <h2 class="ag-section-title">Eight honesty statements</h2>
-            <p class="ag-section-subtitle">Every number in this article lives inside these boundaries.</p>
-          </header>
-          <ol>
-            <li>Tokens cannot be attributed to single commits; every "commit × token" correspondence here is an aggregation at working-directory × time-window granularity.</li>
-            <li>The claude-code dual caliber is documented in Appendix A; codex turns are counted as token_count events.</li>
-            <li>Retention bias: claude-code logs are retained only back to 2026-08-05; iFlow and Hermes record no tokens; sessions started from a parent directory cannot be attributed to a project. <strong>All totals are lower bounds.</strong></li>
-            <li>Turns/commit counts only human-input turns; MRRC W25's 27.6 turns/commit is affected by codex's archive caliber and is treated as doubtful.</li>
-            <li>Task-type classification is keyword-based on the first message of each session, with n&lt;65 per model — inference-grade, read for structure only.</li>
-            <li>Sessions are attributed to the model with the highest token share; mixed sessions hide secondary models' contributions.</li>
-            <li>ft710 and modern share 149 commits; commit classification by message prefix is coarse, with about ±10% error; weeks with &lt;5 commits are excluded from trend judgments.</li>
-            <li>Public benchmark numbers come from external sources (AA / LMArena / Code Arena / vendor announcements), with vendor claims and independent measurements labelled in separate layers; <code>big-pickle</code>, <code>code-supernova-1-million</code> and <code>kimi-for-coding</code> are routing labels with no official entity behind them.</li>
-          </ol>
-          <p>Related pages: <a href="/agentic.html">Agentic Engineering</a>; <a href="/engineering.html">Engineering Mechanism</a>. Product families: <a href="/mrrc/">MRRC</a>, <a href="/mrrc_ft710/">MRRC FT-710</a>, <a href="/mrrc_modern/">MRRC Modern</a>, <a href="/sunmrrc/">SunMRRC</a>, <a href="/sunsdrmobile/">SunsdrMobile</a>, <a href="/mrrc_ft8/">MRRC-FT8</a>, <a href="/efhw/">EFHW</a>.</p>
+          <div class="ag-loop-grid">
+            <article class="ag-card">
+              <h3><a href="ledger/">The Ledger and Its Measurement Boundaries</a></h3>
+              <p>The full eleven-harness census with every measurement window, the dual-caliber explanation, the retention and observer-effect evidence, and the rules for what may and may not be compared. If you only want to check a number, start here.</p>
+            </article>
+            <article class="ag-card">
+              <h3><a href="almanac/">The Model × Harness Almanac</a></h3>
+              <p>Six model eras, the task × model × harness matching table, public benchmarks with independent measurements and vendor claims held in separate layers, and the routing-label trap.</p>
+            </article>
+            <article class="ag-card">
+              <h3><a href="playbook/">The Practitioner's Playbook</a></h3>
+              <p>The four disciplines expanded into three checklists, three copyable templates, and a failure library where every entry traces to a real incident in this ecosystem.</p>
+            </article>
+          </div>
+          <p>Related pages: <a href="/agentic.html">Agentic Engineering</a>; <a href="/engineering.html">Engineering Mechanism</a>. Product families: <a href="/mrrc/">MRRC</a>, <a href="/mrrc_ft710/">MRRC FT-710</a>, <a href="/mrrc_modern/">MRRC Modern</a>, <a href="/sunmrrc/">SunMRRC</a>, <a href="/sunsdrmobile/">Sunsdrmobile</a>, <a href="/mrrc_ft8/">MRRC-FT8</a>, <a href="/efhw/">EFHW</a>.</p>
         </div></section>
       </main>
 

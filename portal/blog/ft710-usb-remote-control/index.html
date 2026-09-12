@@ -64,7 +64,7 @@
 
         <p>If you own a Yaesu FT-710 and have looked at remote control at all, you've met the <strong>SCU-LAN10</strong> — Yaesu's network dongle that bridges the radio to your LAN. It works, but it is an extra box, a proprietary protocol, and a closed black box. This article is about a different path: controlling a FT-710 over <strong>a single USB cable</strong>, reading its real spectrum/waterfall data, and streaming audio — with no additional hardware at all.</p>
 
-        <p>This is the story behind the <a href="/mrrc_ft710/">MRRC FT-710</a> open-source project, and it starts with a fact most owners don't realize: <strong>the FT-710 already contains everything needed for high-quality remote control.</strong> The USB port on the back is not just a CAT serial port — it exposes three independent interfaces at once.</p>
+        <p>This is the story behind the <a href="/mrrc_modern/">MRRC FT-710</a> open-source project, and it starts with a fact most owners don't realize: <strong>the FT-710 already contains everything needed for high-quality remote control.</strong> The USB port on the back is not just a CAT serial port — it exposes three independent interfaces at once.</p>
 
         <h2 id="anatomy">Anatomy of the FT-710 USB port</h2>
 
@@ -185,7 +185,8 @@ EX040200   # set scope to CENTER mode (not FIX mode)</code></pre>
 
         <p>The trade-offs are honest ones. The SCU-LAN10 puts the radio on your LAN, so any machine on the network can reach it. The USB path binds the radio to a single host computer — which then shares it out over the network itself. If you're running a 24/7 shack computer anyway, that's not a limitation at all; it's a simplification.</p>
 
-        <p>The full architecture — component inventory, WebSocket message specs, and the seven-layer PTT safety model — is documented in the project's <a href="/mrrc_ft710/sdd/">Software Design Document</a>. The code is open source on <a href="https://github.com/cheenle/mrrc_ft710" target="_blank" rel="noopener">GitHub</a>, and a live demo runs at <a href="/mrrc_ft710/">mrrc_ft710.vlsc.net</a>.</p>
+        <p>The full architecture — component inventory, WebSocket message specs, and the seven-layer PTT safety model — is documented in the <a href="/mrrc_modern/sdd/">Software Design Document</a>. The code is open source on <a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener">GitHub</a>.</p>
+        <p class="citation"><strong>Archived 2026-09-12.</strong> The original single-radio repository (<code>cheenle/mrrc_ft710</code>) is now read-only and its site 301-redirects to MRRC Modern, which drives the FT-710 as well as the IC-7300 / IC-7300MK2 through a pluggable backend. This article is kept as the technical record of how the USB path was discovered.</p>
 
         </div>
 </main>

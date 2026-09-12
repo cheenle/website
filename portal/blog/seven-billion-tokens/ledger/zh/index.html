@@ -6,11 +6,11 @@
     <title>账本与测量边界 — VLSC Blog</title>
     <meta
       name="description"
-      content="十一种 harness 的完整 token 普查，带明写的截止时刻与各自的测量窗口；双口径说明，以及让账本在你脚下移动的三种机制：日志保留、观察者效应、裸日期陷阱。"
+      content="十一种 harness 的完整 token 普查，带明写的截止时刻与各自的测量窗口；双口径说明，以及让账本在你脚下移动的三种机制：日志保留、观测者效应、裸日期陷阱。"
     />
     <meta
       name="keywords"
-      content="token 计量, 测量边界, 双口径, 日志保留, 观察者效应, 智能体工程, BG1SB"
+      content="token 计量, 测量边界, 双口径, 日志保留, 观测者效应, 智能体工程, BG1SB"
     />
     <meta name="author" content="BG1SB" />
     <meta property="og:type" content="article" />
@@ -37,12 +37,12 @@
         "@context": "https://schema.org",
         "@type": "Article",
         "headline": "账本与测量边界",
-        "description": "十一种 harness 的完整 token 普查，带各自的测量窗口，以及日志保留、观察者效应与裸日期三种陷阱。",
+        "description": "十一种 harness 的完整 token 普查，带各自的测量窗口，以及日志保留、观测者效应与裸日期三种陷阱。",
         "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
         "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
         "datePublished": "2026-09-12",
         "dateModified": "2026-09-12",
-        "keywords": "token 计量, 测量边界, 双口径, 日志保留, 观察者效应",
+        "keywords": "token 计量, 测量边界, 双口径, 日志保留, 观测者效应",
         "articleSection": "Intelligence",
         "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/ledger/zh/"
       }
@@ -171,7 +171,7 @@
             <li><strong>token 不能归因到单次提交。</strong>所有「提交 × token」的对应都是「工作目录 × 时间窗口」级归集。</li>
             <li><strong>每个 harness 带自己的窗口。</strong>起止日期各不相同，因为各工具的保留策略不同；跨窗口比较不等于跨时间比较。</li>
             <li><strong>总量不是单调量。</strong>这一周某个 harness 在降、其他在升。下降就报下降。</li>
-            <li><strong>观察者效应在这台机器上无法避免</strong>：普查包含执行普查的那个会话。截止时刻是唯一的缓解手段。</li>
+            <li><strong>观测者效应在这台机器上无法避免</strong>：普查包含执行普查的那个会话。截止时刻是唯一的缓解手段。</li>
             <li><strong>宣布「未记录」需要缺席证据。</strong>在把任何 harness 标为未记录之前，必须先列出并检查它存储里的每一张表。在更弱的规则下漏掉了三个。</li>
             <li><strong>留存偏差。</strong>claude-code 只保留一个窗口；iFlow、Hermes、Qoder 在此前查过的位置没有可用的会话 token。这里所有合计都是实际消耗的下界。</li>
             <li><strong>轮次不可跨工具比较。</strong>各工具对「一轮」的定义不同。只有 token 可以横向走；每提交、每轮的比例只能留在单个项目内。MRRC W25 的 <strong>27.6</strong> 轮/提交受归档口径变化影响，判定为存疑。</li>

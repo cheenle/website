@@ -125,7 +125,7 @@
             <tbody>
               <tr><td><strong>虚高</strong></td><td>claude-code 的日志会为同一个 API 响应的每个分块各写一条 <code>usage</code> 记录，逐行求和会把总量放大约 2.7 倍。按 <code>message.id</code> 去重后只剩 <strong>818,520,401</strong>，整个账本也随之变成 <strong>5,695,506,675</strong>。</td><td>6,600 个不同的 API 响应</td></tr>
               <tr><td><strong>虚低</strong></td><td>Hermes 曾被写成「未记录」。它记录得好好的——在 <code>sessions</code> 表里存着 <strong>485,213,348</strong> 个 token。上一次的检查查的是 <code>messages.token_count</code>，那一列全是 0。</td><td>292 个会话，2026-05-15 → 07-24</td></tr>
-              <tr><td><strong>漂移</strong></td><td>claude-code 在 <code>2026-09-07T13:13:57Z</code> 删掉了自己较早的日志，同一个 harness 因此比一周前少计 679,899,086 个 token。紧接着，同一个脚本十二分钟后重跑，又差了 <strong>51,427,037</strong>——因为执行这次测量的会话本身，正在往被测量的日志里写东西。</td><td>观察者效应，复现两次</td></tr>
+              <tr><td><strong>漂移</strong></td><td>claude-code 在 <code>2026-09-07T13:13:57Z</code> 删掉了自己较早的日志，同一个 harness 因此比一周前少计 679,899,086 个 token。紧接着，同一个脚本十二分钟后重跑，又差了 <strong>51,427,037</strong>——因为执行这次测量的会话本身，正在往被测量的日志里写东西。</td><td>观测者效应，复现两次</td></tr>
             </tbody>
           </table></div>
           <p><strong>反向校验和这个发现同样重要。</strong>codex 自八月下旬起停用，它的数字两次测量逐位相同：<strong>547,796,667</strong>——而且是用两条不同的代码路径算出来的。稳定的读数和不稳定的读数都是信息，但只有稳定的那个才配叫「总量」。</p>
@@ -490,7 +490,7 @@ $ echo $?
           <div class="ag-loop-grid">
             <article class="ag-card">
               <h3><a href="../ledger/zh/">账本与测量边界</a></h3>
-              <p>十一种 harness 的完整普查，每个都带测量窗口；双口径说明、日志保留与观察者效应的实证，以及什么可以比、什么不可以比的规则。如果你只想核对一个数字，从这里开始。</p>
+              <p>十一种 harness 的完整普查，每个都带测量窗口；双口径说明、日志保留与观测者效应的实证，以及什么可以比、什么不可以比的规则。如果你只想核对一个数字，从这里开始。</p>
             </article>
             <article class="ag-card">
               <h3><a href="../almanac/zh/">模型 × harness 年鉴</a></h3>

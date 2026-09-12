@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>账本与测量边界 — VLSC Blog</title>
+    <meta
+      name="description"
+      content="十一种 harness 的完整 token 普查，带明写的截止时刻与各自的测量窗口；双口径说明，以及让账本在你脚下移动的三种机制：日志保留、观察者效应、裸日期陷阱。"
+    />
+    <meta
+      name="keywords"
+      content="token 计量, 测量边界, 双口径, 日志保留, 观察者效应, 智能体工程, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="账本与测量边界" />
+    <meta
+      property="og:description"
+      content="十一种 harness、一个截止时刻（2026-09-12T02:40:59Z），以及什么可以比、什么不可以比的规则。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/seven-billion-tokens/ledger/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/seven-billion-tokens/ledger/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/seven-billion-tokens/ledger/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/seven-billion-tokens/ledger/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/seven-billion-tokens/ledger/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../../css/blog-article.css?v=3" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "账本与测量边界",
+        "description": "十一种 harness 的完整 token 普查，带各自的测量窗口，以及日志保留、观察者效应与裸日期三种陷阱。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-12",
+        "dateModified": "2026-09-12",
+        "keywords": "token 计量, 测量边界, 双口径, 日志保留, 观察者效应",
+        "articleSection": "Intelligence",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/ledger/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">首页</a> › <a href="/blog/">博客</a> › <a href="../">七十亿 token 的全程拆解</a> › <span class="ba-crumb-cat">分册 · 账本</span></span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-book-open"></i><span>分册一 · 账本</span></div>
+          <h1>账本<span class="gradient">与测量边界。</span></h1>
+          <p>十一种 harness、一个明写的截止时刻，以及你在比较两个数字之前需要的全部规则。</p>
+          <div class="ag-hero-stats" aria-label="分册摘要">
+            <span class="ag-pill"><i class="fas fa-clock"></i> 截止 2026-09-12T02:40:59Z</span>
+            <span class="ag-pill"><i class="fas fa-database"></i> 已记录 7,404,583,808</span>
+            <span class="ag-pill"><i class="fas fa-layer-group"></i> 去重 5,695,506,675</span>
+          </div>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-09-12">2026 年 9 月 12 日</time> &nbsp;·&nbsp; 约 9 分钟阅读</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#census">普查</a><a href="#window">窗口</a><a href="#repos">仓库</a><a href="#boundaries">边界</a><a href="#verify">复核</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">这是《<a href="../">七十亿 token 的全程拆解</a>》的查询分册。它单独存在，是为了让叙事不必把每个数字辩护两遍。这里的一切都是快照：普查取在 <code>2026-09-12T02:40:59Z</code>，每个 harness 带自己的测量窗口，「什么可以比、什么不可以比」的规则是写下来的，不是默认的。如果你只是来核对一个数字，先看表格，然后<b>在引用之前</b>读一遍「<a href="#boundaries">边界</a>」。</p>
+
+        <section id="census" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 普查</span>
+            <h2 class="ag-section-title">同一截止时刻的十一种 harness</h2>
+            <p class="ag-section-subtitle">只列已记录用量。估算与未记录单列，永不并入合计。</p>
+          </header>
+          <div class="ledger-scroll"><table class="ag-table ledger-table">
+            <thead><tr><th>harness</th><th>tokens（已记录）</th><th>测量窗口</th><th>会话</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>claude-code</td><td>2,527,597,534</td><td>2026-08-08 .. 2026-09-08</td><td>48</td><td>较早的历史已被保留策略删除；按 <code>message.id</code> 去重后为 <strong>818,520,401</strong>（6,600 个 API 响应）</td></tr>
+              <tr><td>pi</td><td>1,926,003,139</td><td>2026-07-22 .. 2026-09-12</td><td>67</td><td>包含执行本次普查的那个会话本身</td></tr>
+              <tr><td>kimi-code</td><td>1,254,875,254</td><td>2026-07-18 .. 2026-09-06</td><td>245</td><td>wire 文件口径；只取 <code>usageScope == "turn"</code></td></tr>
+              <tr><td>codex</td><td>547,796,667</td><td>2026-05-27 .. 2026-08-30</td><td>116</td><td>已停用。第二个存储独立复核得 <strong>546,858,767</strong>（相差 0.17%）</td></tr>
+              <tr><td>mulerun</td><td>537,961,611</td><td>2026-05-20 .. 2026-09-06</td><td>183</td><td></td></tr>
+              <tr><td>Hermes</td><td>485,213,348</td><td>2026-05-15 .. 2026-07-24</td><td>292</td><td>此前被发表为「未记录」——它的 token 在 <code>sessions</code> 表里</td></tr>
+              <tr><td>AgnesCode</td><td>82,931,675</td><td>2026-07-13 .. 2026-07-26</td><td>1,142</td><td>完全不在早先那次普查里</td></tr>
+              <tr><td>cursor</td><td>27,079,705</td><td>—</td><td>—</td><td>不记录工作目录，无法归属到某个仓库</td></tr>
+              <tr><td>DeepSeek Harness</td><td>10,931,069</td><td>2026-08-16</td><td>2</td><td>完全不在早先那次普查里；会话日志为压缩格式</td></tr>
+              <tr><td>opencode</td><td>4,190,890</td><td>—</td><td>6</td><td></td></tr>
+              <tr><td>Qoder</td><td>2,916</td><td>—</td><td>—</td><td>agent memory 计数器，不是会话账本</td></tr>
+              <tr><td><strong>合计（已记录）</strong></td><td><strong>7,404,583,808</strong></td><td></td><td></td><td>比已发表 census 的 7,007,437,567 多 <strong>397,146,241</strong></td></tr>
+              <tr><td><strong>合计（去重口径）</strong></td><td><strong>5,695,506,675</strong></td><td></td><td></td><td>唯一可跨时点比较的口径</td></tr>
+            </tbody>
+          </table></div>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 双口径</span>
+            <p>claude-code 会为同一个 API 响应的每个分块各写一条 <code>usage</code> 记录，逐行求和会把它的消耗放大约 2.7 倍；按 <code>message.id</code> 去重才是真实的 API 消耗。其他 harness 没有这个问题——所以两个合计的差额恰好只等于 claude-code 这一项修正，不多不少。</p>
+          </div>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 已记录与估算不合并</span>
+            <p>iFlow 记录了 185 个会话、37,202 轮对话，但每个用量字段都是零，所以它的体量只能按字符数估算——大约 <strong>247,000,000</strong> 个 token，且区间很宽。它不进任何合计。这是两种不同性质的数字，不能相加。</p>
+          </div>
+
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">推断 · 三个 harness 为什么漏了</span>
+            <p>早先那次普查不是粗心，是规则太弱：它在查过<b>一张表</b>之后就把某个 harness 判定为「未记录」。Hermes 把消息正文放在一张表里（其 token 列全为零），把会话合计放在另一张表里。修正办法是程序性的：任何 harness 在被标为「未记录」之前，必须先把它存储里的每一张表都列出来查过。</p>
+          </div>
+        </div></section>
+
+        <section id="window" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 窗口</span>
+            <h2 class="ag-section-title">账本为什么会移动</h2>
+            <p class="ag-section-subtitle">三种互相独立的机制，全部已复现。它们都不是噪声。</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card">
+              <h3>保留策略会删掉历史</h3>
+              <p><code>2026-09-07T13:13:57Z</code>，claude-code 执行了自己的日志清理。于是同一个 harness 比一周前<b>少</b>计了 <strong>679,899,086</strong> 个 token——尽管中间这一周工作量很重。建立在滑动窗口上的总量不是累计资产，而是从「别人控制的窗口」里读出的一次读数。</p>
+            </article>
+            <article class="ag-card">
+              <h3>观察者在样本之内</h3>
+              <p>普查跑在它所测量的同一台机器上，而执行普查的这个会话正在往被读取的日志里写东西。相隔十二分钟，同一个脚本给出的 pi 合计相差 <strong>51,427,037</strong>——全部来自测量会话自己。任何重跑都会不一样；唯一的对策是声明截止时刻。</p>
+            </article>
+            <article class="ag-card">
+              <h3>裸日期不是零点</h3>
+              <p><code>git log --since=2026-09-05</code> 会被解析成<b>那一天的此刻</b>：<code>git rev-parse --since=2026-09-05</code> 得到 <code>1788576106</code> = <code>2026-09-05 10:41:46 +0800</code>。在 01:47 和 10:41 各跑一次，提交数会不一样。永远把时区写全：<code>--since='2026-09-05T00:00:00+08:00'</code>。</p>
+            </article>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">论点 · 快照纪律</span>
+            <p>稳定的读数和不稳定的读数都是信息，但只有稳定的那个配叫「总量」。工作规则是：离开这一页的每个数值都带截止时刻与明写的测量窗口。凡是能做第二次测量的，就把第二次也报出来——codex 的数字在两条独立推导下逐位相同，而这种一致本身就是方法可靠的证据。</p>
+          </div>
+        </div></section>
+
+        <section id="repos" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 仓库</span>
+            <h2 class="ag-section-title">提交数与口径陷阱</h2>
+            <p class="ag-section-subtitle">提交数只有同一种统计规则之内才可比。</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>仓库</th><th>HEAD 提交</th><th>最新 tag</th><th>阶段</th></tr></thead>
+            <tbody>
+              <tr><td>MRRC</td><td>181</td><td>V5.7.0</td><td>通用远控产品族</td></tr>
+              <tr><td>mrrc_ft710</td><td>162</td><td>v1.8.0</td><td>垂直切片 + harness 成型</td></tr>
+              <tr><td>mrrc_modern</td><td>281</td><td>v1.14.2</td><td>平台抽象</td></tr>
+              <tr><td>ft8</td><td>253</td><td>v1.1.0</td><td>工作流轨 + 首日契约复用</td></tr>
+              <tr><td>sunsdr（含 SunsdrMobile）</td><td>67 + 9</td><td>v1.0</td><td>SDR 轨 + iOS 客户端</td></tr>
+              <tr><td>website</td><td>111</td><td>—</td><td>表达与证据系统</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 口径警告</span>
+            <p>上表是 HEAD 口径（<code>git log --oneline | wc -l</code>）。用 <code>--all</code> 统计同一批仓库会得到显著不同的数字——MRRC 会变成 328、website 仓会变成 213——因为未合并分支与旁支也被算了进去。两个数字都不算错，混用才是错。本系列所有提交数统一采用 HEAD 口径；而按 message 前缀粗分带来的方法误差约为 <strong>±10%</strong>。</p>
+          </div>
+        </div></section>
+
+        <section id="boundaries" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 边界</span>
+            <h2 class="ag-section-title">这些数字能支撑什么、不能支撑什么</h2>
+            <p class="ag-section-subtitle">本系列每个数字都活在这些限制之内。它们是明写的，不是暗示的。</p>
+          </header>
+          <ol>
+            <li><strong>token 不能归因到单次提交。</strong>所有「提交 × token」的对应都是「工作目录 × 时间窗口」级归集。</li>
+            <li><strong>每个 harness 带自己的窗口。</strong>起止日期各不相同，因为各工具的保留策略不同；跨窗口比较不等于跨时间比较。</li>
+            <li><strong>总量不是单调量。</strong>这一周某个 harness 在降、其他在升。下降就报下降。</li>
+            <li><strong>观察者效应在这台机器上无法避免</strong>：普查包含执行普查的那个会话。截止时刻是唯一的缓解手段。</li>
+            <li><strong>宣布「未记录」需要缺席证据。</strong>在把任何 harness 标为未记录之前，必须先列出并检查它存储里的每一张表。在更弱的规则下漏掉了三个。</li>
+            <li><strong>留存偏差。</strong>claude-code 只保留一个窗口；iFlow、Hermes、Qoder 在此前查过的位置没有可用的会话 token。这里所有合计都是实际消耗的下界。</li>
+            <li><strong>轮次不可跨工具比较。</strong>各工具对「一轮」的定义不同。只有 token 可以横向走；每提交、每轮的比例只能留在单个项目内。MRRC W25 的 <strong>27.6</strong> 轮/提交受归档口径变化影响，判定为存疑。</li>
+            <li><strong>任务分类基于关键词</strong>（各模型样本数少于 65），属推断级，只看结构。会话按 token 占比最高的模型归一，混用会话会掩盖次要模型。</li>
+            <li><strong>产品数字来自实跑测试</strong>，不是抄 changelog。三个产品仓库现在都用各自的虚拟环境（Python 3.13）；用系统 Python 3.9 跑会在收集期因 <code>X | None</code> 注解失败。那是环境限制，不是产品缺陷。</li>
+          </ol>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">推断</span>
+            <p>本册的普查日期是 <strong>2026-09-12</strong>。任何引用缺少这个日期、缺少截止时刻 <code>2026-09-12T02:40:59Z</code>、或缺少其 harness 窗口的数字，都已经被引到了它的支撑范围之外。</p>
+          </div>
+        </div></section>
+
+        <section id="verify" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · 复核</span>
+            <h2 class="ag-section-title">字段语义，以及怎么查我们</h2>
+            <p class="ag-section-subtitle">每个 harness 记录用量的方式都不同。求错字段，是得到「看起来合理的错误答案」最常见的方式。</p>
+          </header>
+          <div class="ledger-scroll"><table class="ag-table ledger-table">
+            <thead><tr><th>harness</th><th>求和的字段</th><th>陷阱</th></tr></thead>
+            <tbody>
+              <tr><td>claude-code</td><td>input + output + cache_creation + cache_read</td><td>四个桶互斥可加——但同一个响应的每个分块各记一条，相信总量之前必须按 <code>message.id</code> 去重</td></tr>
+              <tr><td>pi</td><td><code>totalTokens</code></td><td><code>input</code> 不含 <code>cacheRead</code>；用已记录的总量，不要自己加分量</td></tr>
+              <tr><td>kimi-code</td><td>inputOther + output + inputCacheRead + inputCacheCreation</td><td>只取 <code>usageScope == "turn"</code>；用 session 口径会重复计入</td></tr>
+              <tr><td>codex</td><td>每会话最后一次累计的 <code>total_token_usage</code></td><td><code>cached_input_tokens</code> 是 <code>input_tokens</code> 的子集——相加会把总量高估约三分之一</td></tr>
+              <tr><td>mulerun / opencode</td><td>会话级 token 列</td><td>同一形状的两个存储；共享的那个存储根本没有会话级 token 列</td></tr>
+              <tr><td>cursor</td><td>每个 bubble 的 tokenCount</td><td>值是累计快照——每个 key 取最后一次。子集工具共享同一批 key，独立贡献为零</td></tr>
+              <tr><td>Hermes</td><td>会话的 input + output + cache_read + cache_write + reasoning</td><td>消息表的 token 列全为零；合计在 <code>sessions</code> 表上</td></tr>
+              <tr><td>AgnesCode</td><td>usage ledger 的 total</td><td>它自己的累计列精确一致，可作第二意见</td></tr>
+              <tr><td>DeepSeek Harness</td><td>压缩会话日志里每步的 usage</td><td>usage 块嵌在 step chunk 之下，不在记录顶层</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 两处独立交叉校验</span>
+            <p>codex 从会话日志推导出的数字是 <strong>547,796,667</strong>；同一工具另一个存储报的是 <strong>546,858,767</strong>——来自第二个独立写入来源，相差 0.17%。AgnesCode 的账本合计为 <strong>82,931,675</strong>，它自己的每会话累计列求出来完全同值。两处这样的吻合不能证明整本账，但足以说明提取方法没有系统性故障。</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">论点 · 你能自己复核的部分</span>
+            <p>这里的一切都来自产生它的那台机器上的文件，所以任何能访问这些日志的人都能重现这次普查——前提是他先固定一个截止时刻。把字段语义写下来就是为了这件事：无法重新推导的数字是声明，能够重新推导的数字才是证据。回到叙事正文《<a href="../">七十亿 token 的全程拆解</a>》，或继续看年鉴与实践手册。</p>
+          </div>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电操作者与软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话记下来。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>分册</h3>
+          <ul>
+            <li><a href="../">七十亿 token 的全程拆解 — 主文</a></li>
+            <li><a href="../almanac/zh/">模型 × harness 年鉴</a></li>
+            <li><a href="../playbook/zh/">实践手册</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="../"><i class="fas fa-arrow-left"></i> 主文</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../../js/global-nav.js?v=6" defer data-gn="1"></script>
+  </body>
+</html>

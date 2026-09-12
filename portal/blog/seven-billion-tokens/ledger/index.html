@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Ledger and Its Measurement Boundaries — VLSC Blog</title>
+    <meta
+      name="description"
+      content="The full eleven-harness token census at a declared cutoff, with every measurement window, the dual-caliber explanation, and the retention, observer-effect and bare-date traps that make a ledger move under your feet."
+    />
+    <meta
+      name="keywords"
+      content="token accounting, measurement boundaries, dual caliber, log retention, observer effect, agentic engineering, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="The Ledger and Its Measurement Boundaries" />
+    <meta
+      property="og:description"
+      content="Eleven harnesses, one cutoff (2026-09-12T02:40:59Z), and the rules for what may and may not be compared."
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/seven-billion-tokens/ledger/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/seven-billion-tokens/ledger/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/seven-billion-tokens/ledger/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/seven-billion-tokens/ledger/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/seven-billion-tokens/ledger/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=3" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Ledger and Its Measurement Boundaries",
+        "description": "The full eleven-harness token census with every measurement window, plus the retention, observer-effect and bare-date traps.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-12",
+        "dateModified": "2026-09-12",
+        "keywords": "token accounting, measurement boundaries, dual caliber, log retention, observer effect",
+        "articleSection": "Intelligence",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/ledger/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <a href="../">Seven Billion Tokens</a> › <span class="ba-crumb-cat">Companion · Ledger</span></span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-book-open"></i><span>Companion I · Ledger</span></div>
+          <h1>The Ledger <span class="gradient">and Its Measurement Boundaries.</span></h1>
+          <p>Eleven harnesses, one declared cutoff, and every rule you need before comparing two numbers.</p>
+          <div class="ag-hero-stats" aria-label="Volume summary">
+            <span class="ag-pill"><i class="fas fa-clock"></i> cutoff 2026-09-12T02:40:59Z</span>
+            <span class="ag-pill"><i class="fas fa-database"></i> 7,404,583,808 recorded</span>
+            <span class="ag-pill"><i class="fas fa-layer-group"></i> 5,695,506,675 deduplicated</span>
+          </div>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-12">Sep 12, 2026</time> &nbsp;·&nbsp; ~9 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#census">Census</a><a href="#window">Windows</a><a href="#repos">Repositories</a><a href="#boundaries">Boundaries</a><a href="#verify">Verify</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">This is the query volume for <a href="../">Seven Billion Tokens, Dissected</a>. It exists because the narrative needs numbers it does not have to defend twice. Everything here is a snapshot: the census was taken at <code>2026-09-12T02:40:59Z</code>, each harness carries its own measurement window, and the rules for what may and may not be compared are written down rather than assumed. If you only came to check one number, start at the table and then read <a href="#boundaries">Boundaries</a> before you quote it.</p>
+
+        <section id="census" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Census</span>
+            <h2 class="ag-section-title">Eleven harnesses at one cutoff</h2>
+            <p class="ag-section-subtitle">Recorded usage only. Estimated and unrecorded ledgers are listed separately and never added in.</p>
+          </header>
+          <div class="ledger-scroll"><table class="ag-table ledger-table">
+            <thead><tr><th>Harness</th><th>Tokens (recorded)</th><th>Measurement window</th><th>Sessions</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>claude-code</td><td>2,527,597,534</td><td>2026-08-08 .. 2026-09-08</td><td>48</td><td>Retention has already deleted earlier history; <strong>818,520,401</strong> after deduplicating by <code>message.id</code> (6,600 API responses)</td></tr>
+              <tr><td>pi</td><td>1,926,003,139</td><td>2026-07-22 .. 2026-09-12</td><td>67</td><td>Includes the session that performed this census</td></tr>
+              <tr><td>kimi-code</td><td>1,254,875,254</td><td>2026-07-18 .. 2026-09-06</td><td>245</td><td>Wire-file caliber; only <code>usageScope == "turn"</code></td></tr>
+              <tr><td>codex</td><td>547,796,667</td><td>2026-05-27 .. 2026-08-30</td><td>116</td><td>Dormant. Independently cross-checked at <strong>546,858,767</strong> from a second store (0.17% apart)</td></tr>
+              <tr><td>mulerun</td><td>537,961,611</td><td>2026-05-20 .. 2026-09-06</td><td>183</td><td></td></tr>
+              <tr><td>Hermes</td><td>485,213,348</td><td>2026-05-15 .. 2026-07-24</td><td>292</td><td>Previously published as "not recorded" — the tokens live in the <code>sessions</code> table</td></tr>
+              <tr><td>AgnesCode</td><td>82,931,675</td><td>2026-07-13 .. 2026-07-26</td><td>1,142</td><td>Absent from the earlier census entirely</td></tr>
+              <tr><td>cursor</td><td>27,079,705</td><td>—</td><td>—</td><td>No working directory recorded, so it cannot be attributed to a repository</td></tr>
+              <tr><td>DeepSeek Harness</td><td>10,931,069</td><td>2026-08-16</td><td>2</td><td>Absent from the earlier census entirely; compressed session logs</td></tr>
+              <tr><td>opencode</td><td>4,190,890</td><td>—</td><td>6</td><td></td></tr>
+              <tr><td>Qoder</td><td>2,916</td><td>—</td><td>—</td><td>Agent memory counter, not a session ledger</td></tr>
+              <tr><td><strong>Total (recorded)</strong></td><td><strong>7,404,583,808</strong></td><td></td><td></td><td><strong>397,146,241</strong> above the published census of 7,007,437,567</td></tr>
+              <tr><td><strong>Total (deduplicated)</strong></td><td><strong>5,695,506,675</strong></td><td></td><td></td><td>The only caliber that is comparable across time</td></tr>
+            </tbody>
+          </table></div>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · Dual caliber</span>
+            <p>claude-code writes one <code>usage</code> record per chunk of the same API response, so a naive line sum overstates its consumption by roughly 2.7×. Deduplicating by <code>message.id</code> recovers the real API consumption. No other harness has this problem, which is why the two totals differ by exactly the claude-code correction and nothing else.</p>
+          </div>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · Recorded and estimated must not be merged</span>
+            <p>iFlow recorded 185 sessions and 37,202 turns but wrote zero into every usage field, so its volume can only be estimated from character counts — roughly <strong>247,000,000</strong> tokens, an estimate with a wide band. It stays outside both totals. The two ledgers are different kinds of number and must not be added together.</p>
+          </div>
+
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · Why three harnesses were missing</span>
+            <p>The earlier census did not fail from carelessness; it failed from a rule that was too weak. It declared a harness "not recorded" after querying one table. Hermes keeps message text in one table with an all-zero token column and session totals in another table entirely. The correction is procedural: no harness may be labelled unrecorded until every table in its store has been listed and checked.</p>
+          </div>
+        </div></section>
+
+        <section id="window" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · Windows</span>
+            <h2 class="ag-section-title">Why the ledger moves</h2>
+            <p class="ag-section-subtitle">Three independent mechanisms, all reproduced. None of them is noise.</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card">
+              <h3>Retention deletes history</h3>
+              <p>At <code>2026-09-07T13:13:57Z</code>, claude-code ran its own log cleanup. The same harness therefore measured <strong>679,899,086</strong> tokens <em>fewer</em> than it had a week earlier, despite a week of heavy work in between. A total built on a sliding window is not a cumulative asset; it is a reading taken from a window that someone else controls.</p>
+            </article>
+            <article class="ag-card">
+              <h3>The observer is inside the sample</h3>
+              <p>The census runs on the same machine it measures, and the session executing it writes to the logs being read. Twelve minutes apart, the identical script produced pi totals differing by <strong>51,427,037</strong> — the measuring session's own output. Any re-run will differ; the only defence is to declare a cutoff.</p>
+            </article>
+            <article class="ag-card">
+              <h3>Bare dates are not midnight</h3>
+              <p><code>git log --since=2026-09-05</code> parses as <em>that day at the current time of day</em>: <code>git rev-parse --since=2026-09-05</code> resolves to a max-age of <code>1788576106</code> = <code>2026-09-05 10:41:46 +0800</code>. Run it at 01:47 and at 10:41 and you get different commit counts. Always write the zone explicitly: <code>--since='2026-09-05T00:00:00+08:00'</code>.</p>
+            </article>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Thesis · Snapshot discipline</span>
+            <p>A stable measurement and an unstable one are both information, but only the stable one deserves to be called a total. The working rule: every figure that leaves this page carries a cutoff timestamp and a written measurement window. Where a second measurement is possible, it is reported — codex's figure is the same to the digit across two independent derivations, and that agreement is itself evidence that the method is sound.</p>
+          </div>
+        </div></section>
+
+        <section id="repos" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Repositories</span>
+            <h2 class="ag-section-title">Commits, and the caliber trap</h2>
+            <p class="ag-section-subtitle">Commit counts are only comparable inside one counting rule.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Repository</th><th>HEAD commits</th><th>Latest tag</th><th>Phase</th></tr></thead>
+            <tbody>
+              <tr><td>MRRC</td><td>181</td><td>V5.7.0</td><td>Universal remote-control family</td></tr>
+              <tr><td>mrrc_ft710</td><td>162</td><td>v1.8.0</td><td>Vertical slice + harness formation</td></tr>
+              <tr><td>mrrc_modern</td><td>281</td><td>v1.14.2</td><td>Platform abstraction</td></tr>
+              <tr><td>ft8</td><td>253</td><td>v1.1.0</td><td>Workflow track + contract reuse on day one</td></tr>
+              <tr><td>sunsdr (+ SunsdrMobile)</td><td>67 + 9</td><td>v1.0</td><td>SDR track + iOS client</td></tr>
+              <tr><td>website</td><td>111</td><td>—</td><td>Expression &amp; evidence system</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · Caliber warning</span>
+            <p>These are HEAD counts (<code>git log --oneline | wc -l</code>). Counting with <code>--all</code> produces materially different numbers for the same repositories — MRRC reaches 328 and the website repository 213 — because unmerged and side branches are included. Neither number is wrong; mixing them is. Every commit figure in this series uses the HEAD caliber, and the method-change error is about <strong>±10%</strong> from coarse prefix classification.</p>
+          </div>
+        </div></section>
+
+        <section id="boundaries" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · Boundaries</span>
+            <h2 class="ag-section-title">What these numbers can and cannot support</h2>
+            <p class="ag-section-subtitle">Every figure in this series lives inside these limits. They are stated, not implied.</p>
+          </header>
+          <ol>
+            <li><strong>Tokens cannot be attributed to a single commit.</strong> Every "commit × token" pairing is an aggregation at working-directory × time-window granularity.</li>
+            <li><strong>Every harness carries its own window.</strong> They start and end on different dates because the tools retain differently; comparing across windows is not the same as comparing across time.</li>
+            <li><strong>The total is not monotonic.</strong> It fell for one harness this week and rose for others. A decrease is reported as a decrease.</li>
+            <li><strong>The observer effect is unavoidable</strong> on this machine: the census includes the session performing it. A cutoff timestamp is the only mitigation.</li>
+            <li><strong>"Not recorded" requires evidence of absence.</strong> Before any harness is labelled unrecorded, every table in its store must be listed and checked. Three were mislabelled or missed under the weaker rule.</li>
+            <li><strong>Retention bias.</strong> claude-code retains only a window; iFlow, Hermes and Qoder record no usable session tokens in the places previously checked. All totals here are lower bounds of what was actually spent.</li>
+            <li><strong>Turns are not comparable across tools.</strong> Each counts a "turn" differently. Only tokens travel; per-commit and per-turn ratios stay inside one project. The MRRC W25 figure of <strong>27.6</strong> turns per commit is affected by an archive-caliber change and is treated as doubtful.</li>
+            <li><strong>Task classification is keyword-based</strong> on each session's first message with fewer than 65 samples per model — inference-grade, read for structure only. Sessions are attributed to the model with the highest token share, which hides secondary models in mixed sessions.</li>
+            <li><strong>Product numbers come from running the suites</strong>, not from changelogs. All three product repositories now use their own virtualenv (Python 3.13); running them under the system Python 3.9 fails at collection time on <code>X | None</code> annotations. That is an environment limit, not a product defect.</li>
+          </ol>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference</span>
+            <p>The census date for this volume is <strong>2026-09-12</strong>. Any figure quoted without that date, the cutoff of <code>2026-09-12T02:40:59Z</code> and its harness window has been quoted outside its support.</p>
+          </div>
+        </div></section>
+
+        <section id="verify" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · Verify</span>
+            <h2 class="ag-section-title">Field semantics, and how to check us</h2>
+            <p class="ag-section-subtitle">Each harness records usage differently. Summing the wrong field is the most common way to get a plausible wrong answer.</p>
+          </header>
+          <div class="ledger-scroll"><table class="ag-table ledger-table">
+            <thead><tr><th>Harness</th><th>Field(s) summed</th><th>The trap</th></tr></thead>
+            <tbody>
+              <tr><td>claude-code</td><td>input + output + cache_creation + cache_read</td><td>The four buckets are mutually exclusive and additive — but each chunk of one response is logged separately, so dedupe by <code>message.id</code> before believing the total</td></tr>
+              <tr><td>pi</td><td><code>totalTokens</code></td><td><code>input</code> does not include <code>cacheRead</code>; use the recorded total, not a sum of components</td></tr>
+              <tr><td>kimi-code</td><td>inputOther + output + inputCacheRead + inputCacheCreation</td><td>Only records with <code>usageScope == "turn"</code>; session scope would double count</td></tr>
+              <tr><td>codex</td><td>last cumulative <code>total_token_usage</code> per session</td><td><code>cached_input_tokens</code> is a subset of <code>input_tokens</code> — adding them overstates the total by roughly a third</td></tr>
+              <tr><td>mulerun / opencode</td><td>session token columns</td><td>Two different stores with the same shape; the shared store has no session-level token columns at all</td></tr>
+              <tr><td>cursor</td><td>per-bubble tokenCount</td><td>The values are cumulative snapshots — the last one per key wins. A subset tool shares the same keys and contributes nothing independently</td></tr>
+              <tr><td>Hermes</td><td>session input + output + cache_read + cache_write + reasoning</td><td>The message table's token column is all zeros; the totals are on <code>sessions</code></td></tr>
+              <tr><td>AgnesCode</td><td>usage ledger total</td><td>Its own accumulation column agrees exactly, which is a useful second opinion</td></tr>
+              <tr><td>DeepSeek Harness</td><td>per-step usage inside compressed session logs</td><td>The usage block is nested under the step chunk, not at the record's top level</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · Two independent cross-checks</span>
+            <p>codex's figure derived from session logs is <strong>547,796,667</strong>; the same tool's separate store reports <strong>546,858,767</strong> — a 0.17% difference from a second, independently written source. AgnesCode's ledger sums to <strong>82,931,675</strong> and its own per-session accumulation column sums to exactly the same value. Two agreements of this kind do not prove the whole ledger, but they do establish that the extraction method is not systematically broken.</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Thesis · What you can check yourself</span>
+            <p>Everything here is derived from files on the machine that produced it, so the census is reproducible by anyone with access to those logs — provided they fix a cutoff first. That is the point of writing the field semantics down: a number that cannot be re-derived is a claim, and a number that can is evidence. Return to the narrative in <a href="../">Seven Billion Tokens, Dissected</a>, or continue to the almanac and the playbook.</p>
+          </div>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>Companion volumes</h3>
+          <ul>
+            <li><a href="../">Seven Billion Tokens, Dissected — the main article</a></li>
+            <li><a href="../almanac/">The Model × Harness Almanac</a></li>
+            <li><a href="../playbook/">The Practitioner's Playbook</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="../"><i class="fas fa-arrow-left"></i> The main article</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=6" defer data-gn="1"></script>
+  </body>
+</html>

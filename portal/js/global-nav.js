@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════════════════
    VLSC Global Nav + UX Enhancements
-   Shared across all project sites (portal, MRRC, SunMRRC, SunsdrMobile).
+   Shared across all project sites (portal, MRRC, SunMRRC, EFHW).
    Injects: global top nav, scroll-progress bar, back-to-top button,
    scroll-reveal (IntersectionObserver), active-link highlighting,
    navbar scrolled state, mobile-menu overlay.
@@ -18,7 +18,6 @@
     else if (/\/agentic\.html/.test(p)) SITE = 'agentic';
     else if (/\/mrrc\//.test(p)) SITE = 'mrrc';
     else if (/\/sunmrrc\//.test(p)) SITE = 'sunmrrc';
-    else if (/\/sunsdrmobile\//.test(p)) SITE = 'sunsdrmobile';
     else if (/\/mrrc_modern\//.test(p)) SITE = 'mrrc_modern';
     else if (/\/mrrc_ft8\//.test(p)) SITE = 'mrrc_ft8';
     else if (/\/sdd\//.test(p)) SITE = 'sunmrrc';
@@ -37,7 +36,6 @@
     mrrc_modern: '/mrrc_modern/',
     mrrc_ft8: '/mrrc_ft8/',
     sunmrrc: '/sunmrrc/',
-    sunsdrmobile: '/sunsdrmobile/',
     blog: '/blog/'
   };
 
@@ -111,7 +109,6 @@
         siteLink('mrrc_modern', 'Modern') +
         siteLink('mrrc_ft8', 'FT-8') +
         siteLink('sunmrrc', 'SunMRRC') +
-        siteLink('sunsdrmobile', 'SunsdrMobile') +
         siteLink('blog', 'Blog') +
       '</nav>' +
       '<a class="vlsc-gn-gh" href="https://github.com/cheenle" target="_blank" rel="noopener" title="GitHub">' +

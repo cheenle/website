@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://www.vlsc.net/</loc><lastmod>2026-09-05</lastmod><changefreq>weekly</changefreq></url>
-<url><loc>https://www.vlsc.net/about.html</loc><lastmod>2026-09-02</lastmod></url>
+<url><loc>https://www.vlsc.net/</loc><lastmod>2026-09-12</lastmod><changefreq>weekly</changefreq></url>
+<url><loc>https://www.vlsc.net/about.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/agentic.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/blog/</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/blog/connections-recursive-intelligence/</loc><lastmod>2026-09-12</lastmod></url>
@@ -18,15 +18,15 @@
 <url><loc>https://www.vlsc.net/blog/seven-billion-tokens/playbook/</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/blog/seven-billion-tokens/playbook/zh/</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/blog/seven-billion-tokens/zh/</loc><lastmod>2026-09-12</lastmod></url>
-<url><loc>https://www.vlsc.net/contact.html</loc><lastmod>2026-09-02</lastmod></url>
+<url><loc>https://www.vlsc.net/contact.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/engineering.html</loc><lastmod>2026-09-12</lastmod></url>
-<url><loc>https://www.vlsc.net/privacy.html</loc><lastmod>2026-09-02</lastmod></url>
-<url><loc>https://www.vlsc.net/zh/</loc><lastmod>2026-09-05</lastmod></url>
-<url><loc>https://www.vlsc.net/zh/about.html</loc><lastmod>2026-09-02</lastmod></url>
+<url><loc>https://www.vlsc.net/privacy.html</loc><lastmod>2026-09-12</lastmod></url>
+<url><loc>https://www.vlsc.net/zh/</loc><lastmod>2026-09-12</lastmod></url>
+<url><loc>https://www.vlsc.net/zh/about.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/zh/agentic.html</loc><lastmod>2026-09-12</lastmod></url>
-<url><loc>https://www.vlsc.net/zh/contact.html</loc><lastmod>2026-09-02</lastmod></url>
+<url><loc>https://www.vlsc.net/zh/contact.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/zh/engineering.html</loc><lastmod>2026-09-12</lastmod></url>
-<url><loc>https://www.vlsc.net/zh/privacy.html</loc><lastmod>2026-09-02</lastmod></url>
+<url><loc>https://www.vlsc.net/zh/privacy.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/mrrc/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/mrrc/zh/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/mrrc_ft8/</loc><changefreq>weekly</changefreq></url>
@@ -35,8 +35,6 @@
 <url><loc>https://www.vlsc.net/mrrc_modern/zh/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/sunmrrc/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/sunmrrc/zh/</loc><changefreq>weekly</changefreq></url>
-<url><loc>https://www.vlsc.net/sunsdrmobile/</loc><changefreq>weekly</changefreq></url>
-<url><loc>https://www.vlsc.net/sunsdrmobile/zh/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/efhw/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/efhw/zh/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/efhw/baluns.html</loc><lastmod>2026-09-05</lastmod></url>

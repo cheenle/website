@@ -73,7 +73,7 @@ pages = find_html(ROOT)
 # mrrc_modern was missing from this list: its root and agentic.html were
 # never in the sitemap even though nginx serves them.
 SUBSITES = ['/mrrc/', '/mrrc_ft8/', '/mrrc_modern/',
-            '/sunmrrc/', '/sunsdrmobile/', '/efhw/']
+            '/sunmrrc/', '/efhw/']
 
 urls = []
 # The homepage is this entry's alone — find_html skips portal/index.html so

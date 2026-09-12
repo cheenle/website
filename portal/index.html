@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VLSC Projects — Open-source remote radio control ecosystem for modern HAM operators. Compare MRRC, MRRC Modern, SunMRRC, and SunsdrMobile in one place.">
-    <meta name="keywords" content="HAM Radio, Amateur Radio, Remote Control, SunSDR2 DX, SDR, MRRC, FT-710, SunMRRC, SunsdrMobile, iOS, SwiftUI">
+    <meta name="description" content="VLSC Projects — Open-source remote radio control ecosystem for modern HAM operators. Compare MRRC, MRRC Modern, SunMRRC, and EFHW in one place.">
+    <meta name="keywords" content="HAM Radio, Amateur Radio, Remote Control, SunSDR2 DX, SDR, MRRC, FT-710, SunMRRC, iOS, SwiftUI">
     <meta name="author" content="BG1SB">
     <meta name="theme-color" content="#000000">
 
@@ -119,12 +119,7 @@
                 <tr>
                     <td>SunSDR2 DX</td>
                     <td><a href="/sunmrrc/">SunMRRC</a></td>
-                    <td>SDR server with UDP IQ demodulation and real-time waterfall</td>
-                </tr>
-                <tr>
-                    <td>iPhone + SunSDR2 DX</td>
-                    <td><a href="/sunsdrmobile/">SunsdrMobile</a></td>
-                    <td>Native iOS client built on top of SunMRRC protocol</td>
+                    <td>SDR server + web frontend + native iOS client</td>
                 </tr>
                 <tr>
                     <td>EFHW antenna + auto-tuning</td>
@@ -198,22 +193,6 @@
                     <a href="/sunmrrc/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> Website</a>
                     <a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> Source</a>
                     <span style="color:var(--text-muted);font-size:0.85rem;display:inline-flex;align-items:center;gap:0.35rem;"><i class="fas fa-power-off"></i> Demo Offline</span>
-                </div>
-            </div>
-
-            <!-- SunsdrMobile -->
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-mobile-alt"></i></div>
-                <h3>SunsdrMobile</h3>
-                <p>Native iOS SwiftUI app for SunSDR2 DX remote control. Connects to the SunMRRC backend for real-time spectrum waterfall, low-latency audio, DSP noise reduction, one-touch PTT, 3×3 channel memory grid, and Keychain-secured auto-login. Zero third-party dependencies — pure Apple frameworks.</p>
-                <ul>
-                    <li>V1.0 · 9 commits · MIT</li>
-                    <li>SwiftUI · AVAudioEngine · Zero deps</li>
-                    <li>Single-commit V1.0 — protocol-driven</li>
-                </ul>
-                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
-                    <a href="/sunsdrmobile/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> Website</a>
-                    <a href="https://github.com/cheenle/SunsdrMobile" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> Source</a>
                 </div>
             </div>
 
@@ -377,7 +356,6 @@
                     <li><a href="/mrrc/">MRRC</a> — Universal HF Remote</li>
                     <li><a href="/mrrc_modern/">MRRC Modern</a> — FT-710 / IC-7300 Remote</li>
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX Server</li>
-                    <li><a href="/sunsdrmobile/">SunsdrMobile</a> — iOS Client</li>
                     <li><a href="/efhw/">EFHW</a> — Antenna Research &amp; Auto-Tuner</li>
                     <li><a href="/mrrc_ft8/">MRRC-FT8</a> — Headless FT8/FT4 Server</li>
                 </ul>
@@ -389,7 +367,6 @@
                     <li><a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener">MRRC Repository</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener">MRRC Modern Repository</a></li>
                     <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC Repository</a></li>
-                    <li><a href="https://github.com/cheenle/SunsdrMobile" target="_blank" rel="noopener">SunsdrMobile Repository</a></li>
                     <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">EFHW Repository</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_ft8" target="_blank" rel="noopener">MRRC-FT8 Repository</a></li>
                 </ul>

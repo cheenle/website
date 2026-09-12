@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VLSC 项目 — 面向现代 HAM 操作的开源远程控制生态。统一比较 MRRC、MRRC Modern、SunMRRC 与 SunsdrMobile。">
-    <meta name="keywords" content="HAM Radio, 业余无线电, 远程控制, SunSDR2 DX, SDR, MRRC, FT-710, SunMRRC, SunsdrMobile, iOS, SwiftUI">
+    <meta name="description" content="VLSC 项目 — 面向现代 HAM 操作的开源远程控制生态。统一比较 MRRC、MRRC Modern、SunMRRC 与 EFHW。">
+    <meta name="keywords" content="HAM Radio, 业余无线电, 远程控制, SunSDR2 DX, SDR, MRRC, FT-710, SunMRRC, iOS, SwiftUI">
     <meta name="author" content="BG1SB">
     <meta name="theme-color" content="#000000">
 
@@ -120,11 +120,6 @@
                     <td>UDP IQ 解调 + 实时瀑布图服务端</td>
                 </tr>
                 <tr>
-                    <td>iPhone + SunSDR2 DX</td>
-                    <td><a href="/sunsdrmobile/">SunsdrMobile</a></td>
-                    <td>基于 SunMRRC 协议的原生 iOS 客户端</td>
-                </tr>
-                <tr>
                     <td>EFHW 天线 + 自动调谐</td>
                     <td><a href="/efhw/">EFHW</a></td>
                     <td>ESP32-S3 伺服驱动 Fuchs ATU，偏压器供电，WiFi 控制</td>
@@ -192,21 +187,6 @@
                     <a href="/sunmrrc/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
                     <a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
                     <a href="https://radio.vlsc.net:8889" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-play"></i> 演示</a>
-                </div>
-            </div>
-
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-mobile-alt"></i></div>
-                <h3>SunsdrMobile</h3>
-                <p>SunSDR2 DX 原生 iOS SwiftUI 远程控制应用。连接 SunMRRC 后端，提供实时频谱瀑布、低延迟音频、DSP 降噪、一键 PTT、3×3 频道记忆网格、Keychain 安全自动登录。零第三方依赖 —— 纯 Apple 框架构建。</p>
-                <ul>
-                    <li>V1.0 · 9 提交 · MIT</li>
-                    <li>SwiftUI · AVAudioEngine · 零依赖</li>
-                    <li>单次提交 V1.0 — 协议驱动</li>
-                </ul>
-                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
-                    <a href="/sunsdrmobile/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
-                    <a href="https://github.com/cheenle/SunsdrMobile" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
                 </div>
             </div>
 
@@ -361,7 +341,6 @@
                     <li><a href="/mrrc/">MRRC</a> — 通用 HF 远程</li>
                     <li><a href="/mrrc_modern/">MRRC Modern</a> — FT-710 / IC-7300 远程</li>
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX 服务器</li>
-                    <li><a href="/sunsdrmobile/">SunsdrMobile</a> — iOS 客户端</li>
                     <li><a href="/efhw/">EFHW</a> — 天线研究与自动调谐</li>
                     <li><a href="/mrrc_ft8/">MRRC-FT8</a> — Headless FT8/FT4 服务器</li>
                 </ul>
@@ -373,7 +352,6 @@
                     <li><a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener">MRRC 仓库</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener">MRRC Modern 仓库</a></li>
                     <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC 仓库</a></li>
-                    <li><a href="https://github.com/cheenle/SunsdrMobile" target="_blank" rel="noopener">SunsdrMobile 仓库</a></li>
                     <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">EFHW 仓库</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_ft8" target="_blank" rel="noopener">MRRC-FT8 仓库</a></li>
                 </ul>

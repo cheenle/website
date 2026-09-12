@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VLSC 项目 — 面向现代 HAM 操作的开源远程控制生态。统一比较 MRRC、MRRC FT-710、SunMRRC 与 SunsdrMobile。">
+    <meta name="description" content="VLSC 项目 — 面向现代 HAM 操作的开源远程控制生态。统一比较 MRRC、MRRC Modern、SunMRRC 与 SunsdrMobile。">
     <meta name="keywords" content="HAM Radio, 业余无线电, 远程控制, SunSDR2 DX, SDR, MRRC, FT-710, SunMRRC, SunsdrMobile, iOS, SwiftUI">
     <meta name="author" content="BG1SB">
     <meta name="theme-color" content="#000000">
@@ -110,11 +110,6 @@
                     <td>通过 Hamlib/rigctld 的通用远程控制路径</td>
                 </tr>
                 <tr>
-                    <td>Yaesu FT-710</td>
-                    <td><a href="/mrrc_ft710/">MRRC FT-710</a></td>
-                    <td>软件化 SCU-LAN10 替代，一根 USB 线</td>
-                </tr>
-                <tr>
                     <td>Yaesu FT-710 或 Icom IC-7300</td>
                     <td><a href="/mrrc_modern/">MRRC Modern</a></td>
                     <td>可插拔后端 USB 远程（FT-710 / IC-7300 / IC-7300MK2）</td>
@@ -166,21 +161,6 @@
                     <a href="/mrrc/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
                     <a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
                     <a href="https://radio.vlsc.net:8877/mobile_modern.html" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-play"></i> 演示</a>
-                </div>
-            </div>
-
-            <div class="feature-card animate">
-                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-microchip"></i></div>
-                <h3>MRRC FT-710</h3>
-                <p>八重洲 FT-710 HF/50MHz 收发信机的软件 SCU-LAN10 替代方案。通过 FT4222 SPI 在 ~21fps 下获取真实频谱瀑布图，双向 Opus 48kHz 音频，4 条 WebSocket 通道完整 CAT 控制——直接串口驱动，无需 Hamlib。</p>
-                <ul>
-                    <li>v1.8.1 · 439 项测试 · GPLv3</li>
-                    <li>FT4222 SPI 真实频谱 + S-meter 回退</li>
-                    <li>单 Python 进程 · 一根 USB 线</li>
-                </ul>
-                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
-                    <a href="/mrrc_ft710/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
-                    <a href="https://github.com/cheenle/mrrc_ft710" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
                 </div>
             </div>
 
@@ -379,7 +359,6 @@
                 <h4>项目</h4>
                 <ul>
                     <li><a href="/mrrc/">MRRC</a> — 通用 HF 远程</li>
-                    <li><a href="/mrrc_ft710/">MRRC FT-710</a> — FT-710 远程</li>
                     <li><a href="/mrrc_modern/">MRRC Modern</a> — FT-710 / IC-7300 远程</li>
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX 服务器</li>
                     <li><a href="/sunsdrmobile/">SunsdrMobile</a> — iOS 客户端</li>
@@ -392,7 +371,6 @@
                 <ul>
                     <li><a href="/blog/">博客</a></li>
                     <li><a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener">MRRC 仓库</a></li>
-                    <li><a href="https://github.com/cheenle/mrrc_ft710" target="_blank" rel="noopener">FT-710 仓库</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener">MRRC Modern 仓库</a></li>
                     <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC 仓库</a></li>
                     <li><a href="https://github.com/cheenle/SunsdrMobile" target="_blank" rel="noopener">SunsdrMobile 仓库</a></li>

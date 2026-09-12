@@ -26,7 +26,13 @@ COMPANIONS = {
         "title_en": "The Ledger and Its Measurement Boundaries",
         "title_zh": "账本与测量边界",
     },
-    # 任务 5、6 追加 almanac / playbook
+    "almanac": {
+        "sections": {"eras", "shift", "benchmarks", "routing"},
+        "slug": "almanac",
+        "title_en": "The Model × Harness Almanac",
+        "title_zh": "模型 × harness 年鉴",
+    },
+    # 任务 6 追加 playbook
 }
 
 
@@ -90,6 +96,23 @@ DUAL_CALIBER_NOTE = {
 }
 # 裸日期陷阱：分册 A 必须写出可复制的正确命令
 BARE_DATE_FIX = {"en": "2026-09-05T00:00:00+08:00", "zh": "2026-09-05T00:00:00+08:00"}
+
+# 分册 B 专有：模型时代与主力切换（附录 A5）
+ALMANAC_TABLE = {
+    "era_count": "six",
+    "claude_top_model": "qwen3.8-max-0902",
+    "claude_top_model_calls": "3,883",
+    "claude_former_leader": "deepseek-v4-flash",
+    "pi_new_model": "glm-5.3-flash",
+    "pi_new_model_calls": "745",
+    "codex_leader": "gpt-5.6-sol",
+    "kimi_leader": "k3",
+}
+BENCHMARK_LAYERS = {
+    "en": ("Independent measurements", "Vendor claims"),
+    "zh": ("独立测评", "厂商口径"),
+}
+ROUTING_LABELS = ("big-pickle", "code-supernova-1-million", "kimi-for-coding")
 
 
 class ArticleParser(HTMLParser):
@@ -272,6 +295,32 @@ class CompanionPagesTests(unittest.TestCase):
             body = section_body(source, "verify", language)
             self.assertIn(LEDGER_TABLE["codex_crosscheck"], body, language)
             self.assertIn(LEDGER_TABLE["agnes_tokens"], body, language)
+
+    # ---------------------------------------------------------- 分册 B 专有
+    def test_almanac_records_the_current_shift(self) -> None:
+        """主力模型在一周内换人——新主力与调用次数必须逐字出现。"""
+        for language, path in companion_paths("almanac"):
+            source, _ = load(path)
+            body = section_body(source, "shift", language)
+            self.assertIn(ALMANAC_TABLE["claude_top_model"], body, language)
+            self.assertIn(ALMANAC_TABLE["claude_top_model_calls"], body, language)
+            self.assertIn(ALMANAC_TABLE["pi_new_model"], body, language)
+            self.assertIn(ALMANAC_TABLE["pi_new_model_calls"], body, language)
+
+    def test_almanac_layers_benchmarks(self) -> None:
+        """独立测评与厂商口径必须分层，不得混排。"""
+        for language, path in companion_paths("almanac"):
+            source, _ = load(path)
+            body = section_body(source, "benchmarks", language)
+            for phrase in BENCHMARK_LAYERS[language]:
+                self.assertIn(phrase, body, f"{language}: {phrase}")
+
+    def test_almanac_names_the_routing_labels(self) -> None:
+        for language, path in companion_paths("almanac"):
+            source, _ = load(path)
+            body = section_body(source, "routing", language)
+            for label in ROUTING_LABELS:
+                self.assertIn(label, body, f"{language}: {label}")
 
 
 if __name__ == "__main__":

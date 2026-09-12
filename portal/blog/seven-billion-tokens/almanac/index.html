@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Model × Harness Almanac — VLSC Blog</title>
+    <meta
+      name="description"
+      content="Six model eras, the week the main force changed, the task × model × harness matching table, benchmarks with independent measurements and vendor claims held apart, and the routing-label trap."
+    />
+    <meta name="keywords" content="model selection, agent harness, model eras, benchmarks, routing labels, agentic engineering, BG1SB" />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="The Model × Harness Almanac" />
+    <meta property="og:description" content="Measured from local logs, not vendor brochures. Six eras, one week that changed the main force, and the unit of selection: model × harness × task." />
+    <meta property="og:url" content="https://www.vlsc.net/blog/seven-billion-tokens/almanac/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/seven-billion-tokens/almanac/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/seven-billion-tokens/almanac/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/seven-billion-tokens/almanac/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/seven-billion-tokens/almanac/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=3" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Model × Harness Almanac",
+        "description": "Six model eras, the week the main force changed, the task × model × harness matching table, and the routing-label trap.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-12",
+        "dateModified": "2026-09-12",
+        "keywords": "model selection, agent harness, benchmarks, routing labels",
+        "articleSection": "Intelligence",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/almanac/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <a href="../">Seven Billion Tokens</a> › <span class="ba-crumb-cat">Companion · Almanac</span></span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-compass"></i><span>Companion II · Almanac</span></div>
+          <h1>The Model × Harness <span class="gradient">Almanac.</span></h1>
+          <p>Measured from local logs, not vendor brochures — and organised around the only unit that has held up: model × harness × task.</p>
+          <div class="ag-hero-stats" aria-label="Volume summary">
+            <span class="ag-pill"><i class="fas fa-clock-rotate-left"></i> six eras in seven months</span>
+            <span class="ag-pill"><i class="fas fa-arrows-rotate"></i> the main force changed in a week</span>
+            <span class="ag-pill"><i class="fas fa-scale-unbalanced"></i> claims kept in separate layers</span>
+          </div>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-12">Sep 12, 2026</time> &nbsp;·&nbsp; ~8 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#eras">Eras</a><a href="#shift">Shift</a><a href="#benchmarks">Benchmarks</a><a href="#routing">Labels</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">The narrative volume treats models as one variable among several and deliberately keeps the detail out of the way. This is where the detail lives: which model did what, on which harness, for how long — with the measurement window attached to each claim. Almost nothing here comes from a vendor page. Where it does, it is labelled as such, because an announcement and a measurement are not the same kind of number.</p>
+
+        <section id="eras" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Eras</span>
+            <h2 class="ag-section-title">Seven months, six eras</h2>
+            <p class="ag-section-subtitle">Each boundary is a change in what the work could be delegated to — not a release date.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Era</th><th>Period</th><th>Main force</th><th>Shape of the work</th></tr></thead>
+            <tbody>
+              <tr><td>Probing</td><td>autumn 2025</td><td>cursor (model unrecorded, ~26M)</td><td>In-editor completion</td></tr>
+              <tr><td>Bare dialogue</td><td>2025-10 → 2026-04</td><td>iFlow: qwen3-coder-plus, glm-5, kimi-k2.5, minimax-m2.5</td><td>Conversational, estimated ~230M (not recorded), zero sediment</td></tr>
+              <tr><td>GPT-5.5</td><td>2026-05 → 06</td><td>gpt-5.5 (mulerun + codex, 610M)</td><td>Repository-scale work begins</td></tr>
+              <tr><td>K3 family</td><td>mid-2026-07 → early 08</td><td>k3 (820M) + k3-256k + kimi-for-coding</td><td>Harness formation; broke through the FT-710</td></tr>
+              <tr><td>Flash hegemony</td><td>2026-08 onward</td><td>deepseek-v4-flash (4.0B, peak week 1.6B)</td><td>The value tier eats daily engineering</td></tr>
+              <tr><td>Multipolar competition</td><td>late 2026-08 → now</td><td>flash decayed to 26M/week; gpt-5.6, a gpt-5.5 resurgence, qwen3.8-flash, qwen3.8-max-0902</td><td>Models picked per task</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · Challenger rotation never stopped</span>
+            <p>Inside the "hegemony" there was continuous challenger rotation, and the rotation did not settle — it accelerated. W32 tried qwen3.8-max and glm-5.2 without adopting them; from W35 a new combination took hold and then itself changed again. The model market turns over every three to four weeks. Locking into a single model is a losing strategy, and the losing move is usually made by writing a model name into a config file.</p>
+          </div>
+        </div></section>
+
+        <section id="shift" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · Shift</span>
+            <h2 class="ag-section-title">The main force changed inside a week</h2>
+            <p class="ag-section-subtitle">Call counts inside each harness's retained window. Counts, not tokens — they show attention, not spend.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Harness</th><th>Leading models (calls)</th><th>What changed</th></tr></thead>
+            <tbody>
+              <tr><td>claude-code</td><td>deepseek-v4-flash 12,402 / <strong>qwen3.8-max-0902 3,883</strong> / qwen3.8-flash 1,077 / glm-5.2 800</td><td>The former leader is still in the logs but no longer drives the work; <strong>qwen3.8-max-0902</strong> took over within seven days</td></tr>
+              <tr><td>pi</td><td>deepseek-v4-flash 4,417 / gpt-5.6 2,721 / qwen3.8-flash 1,227 / <strong>glm-5.3-flash 745</strong> / deepseek-v4-flash-vision-exp 85</td><td><strong>glm-5.3-flash</strong> did not appear in the previous census at all; a vision variant has since appeared</td></tr>
+              <tr><td>kimi-code</td><td><strong>k3</strong> 5,891 / kimi-for-coding 2,097 / k3-256k 1,903</td><td>Stable — long-context work has a settled home</td></tr>
+              <tr><td>codex</td><td>gpt-5.5 143 / <strong>gpt-5.6-sol</strong> 128 / deepseek-v4-flash 17</td><td>Dormant since late August; its total has not moved a digit</td></tr>
+              <tr><td>mulerun</td><td>gpt-5.5 162 / deepseek-v4-flash-free 16</td><td>Content generation, unchanged</td></tr>
+            </tbody>
+          </table></div>
+          <h3>The matching table</h3>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Role</th><th>Measured combination</th><th>Evidence</th></tr></thead>
+            <tbody>
+              <tr><td>Greenfield / new features</td><td>deepseek-v4-pro</td><td>The only model with an absolute majority of new-feature work (68%)</td></tr>
+              <tr><td>Focused blitz</td><td>gpt-5.6-sol (codex)</td><td>Punched through ft8 inside a one-week window (235M), then withdrew — a blitz</td></tr>
+              <tr><td>Daily workhorse</td><td>deepseek-v4-flash (claude-code + pi)</td><td>4.0B total; ~70% fixes + analysis + ops; the claude-code side leans field ops, the pi side leans repair</td></tr>
+              <tr><td>Main development + long-context special</td><td>k3 / k3-256k (kimi-code)</td><td>k3 spent 417M in the FT-710 push; k3-256k's 165M went almost entirely to ft8</td></tr>
+              <tr><td>Delivery / release pipeline</td><td>gpt-5.6 (pi), gpt-5.5 (mulerun)</td><td>Website writing, docs, promo videos, installer packaging</td></tr>
+              <tr><td>Analysis / writing</td><td>qwen3.8-flash, qwen3.8-max-0902</td><td>60% of trial sessions are analysis-type; the newest entrant went straight at website analysis</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · The unit of selection</span>
+            <p>Flagship models buy direction, value models buy execution, long-context variants buy the specials, and harnesses buy the way of working. The same model shows a completely different task profile in a different harness — gpt-5.6 is a blitz squad in codex and a release pipeline in pi — so the unit of selection is the model × harness × task triple, never the model alone.</p>
+          </div>
+        </div></section>
+
+        <section id="benchmarks" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Benchmarks</span>
+            <h2 class="ag-section-title">Two kinds of number, kept apart</h2>
+            <p class="ag-section-subtitle">An independent measurement and a vendor announcement are different evidence. They are never averaged, never listed in one column.</p>
+          </header>
+          <h3><i class="fas fa-flask"></i> Independent measurements</h3>
+          <ul>
+            <li>Artificial Analysis intelligence index — Kimi K3 57, Qwen3.8-Max 56.</li>
+            <li>LMArena — Gemini 3 Pro at 1501 Elo, the first model past 1500.</li>
+            <li>Code Arena — GLM-5.2 at 1595 in the coding blind test, first among open-weights models.</li>
+          </ul>
+          <h3><i class="fas fa-bullhorn"></i> Vendor claims</h3>
+          <ul>
+            <li>DeepSeek-V4-Pro at Codeforces 3206.</li>
+            <li>Qwen3.8-Flash claims a 9.1-point SWE-bench Pro lead over Opus 4.6.</li>
+          </ul>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · The value tier is the hardest public narrative</span>
+            <p>V4-Flash (OpenRouter $0.14 / $0.27 per million), Qwen3.8-Flash (officially one third of that price), GPT-5.6 Luna and Gemini 3.1 Flash-Lite are all crowded into the same "affordable daily engineering" niche. That crowding is corroborated by the measured usage in this ecosystem, where the value tier absorbed the majority of daily work for months.</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Thesis · Your log is the benchmark that measures your work</span>
+            <p>Public leaderboards answer "how good is this model in general". They cannot answer "how good is this model at my task, in my harness, on my codebase". The only instrument that answers the second question is your own usage log — which is why this whole series keeps insisting it be snapshotted and dated.</p>
+          </div>
+        </div></section>
+
+        <section id="routing" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · Labels</span>
+            <h2 class="ag-section-title">A name in a log is not a model entity</h2>
+            <p class="ag-section-subtitle">Treat log identifiers as routing labels, not capability entities.</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card">
+              <h3><code>big-pickle</code></h3>
+              <p>A stealth model officially acknowledged by OpenCode. It is a real endpoint with a deliberately uninformative name, so any benchmark comparison against it is a comparison against an unknown.</p>
+            </article>
+            <article class="ag-card">
+              <h3><code>code-supernova-1-million</code></h3>
+              <p>A 2025 stealth marketing name. The original channel is gone, which means the label can no longer be resolved to anything — a log entry pointing at a retired alias.</p>
+            </article>
+            <article class="ag-card">
+              <h3><code>kimi-for-coding</code></h3>
+              <p>A subscription API alias. Two entries carrying this label may be served by different underlying models at different times, so consecutive calls are not a controlled comparison.</p>
+            </article>
+          </div>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · Why this matters for measurement</span>
+            <p>Every conclusion in the almanac is drawn from labels like these. That does not invalidate the conclusions, but it bounds them: "this label was used more this week" is a statement about routing, while "this model got better" is a statement about capability. The first is measurable from logs. The second is not, and conflating them is how a usage report quietly becomes a benchmark.</p>
+          </div>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>Companion volumes</h3>
+          <ul>
+            <li><a href="../">Seven Billion Tokens, Dissected — the main article</a></li>
+            <li><a href="../ledger/">The Ledger and Its Measurement Boundaries</a></li>
+            <li><a href="../playbook/">The Practitioner's Playbook</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="../ledger/"><i class="fas fa-arrow-left"></i> The ledger</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=6" defer data-gn="1"></script>
+  </body>
+</html>

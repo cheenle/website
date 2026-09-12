@@ -13,7 +13,7 @@ This is a workspace grouping HAM radio project websites. All are pure static HTM
 - **MRRC** (`mrrc/` → `/Users/cheenle/UHRR/MRRC/website/`) — Website for the MRRC (Mobile Remote Radio Control) project. Deployed to `https://www.vlsc.net/mrrc/`.
 - **MRRC FT-710** (`mrrc_ft710/` → `/Users/cheenle/HAM/mrrc_ft710/website/`) — **已归档 2026-09-12，并入 MRRC Modern。** 仓库只读（GitHub archived），网站 `/mrrc_ft710/` 已 301 到 `/mrrc_modern/`，`website/deploy.sh` 已加禁用守卫。 `mrrc_modern` 是严格超集（同一根提交 `9403e2e`，ft710 零独有代码模块），因此该目录仍保留作为历史入口与跨站 grep 目标。以下描述为归档前状态：Website for the MRRC FT-710 (Software SCU-LAN10 replacement for Yaesu FT-710). Uses octen.css with amber (`#f0a030`) brand overrides in `css/ft710.css`.
 - **SunMRRC** (`sunmrrc/` → `/Users/cheenle/HAM/sunsdr/sunmrrc/website/`) — Website for the SunMRRC (SunSDR2 DX Mobile Radio Control) project. Deployed to `https://www.vlsc.net/sunmrrc/`.
-- **SunsdrMobile** (`SunsdrMobile/` → `/Users/cheenle/HAM/sunsdr/SunsdrMobile/website/`) — Promotional website for the SunsdrMobile native iOS app for SunSDR2 DX. Deployed to `https://www.vlsc.net/sunsdrmobile/`.
+- **SunsdrMobile** (`SunsdrMobile/` → `/Users/cheenle/HAM/sunsdr/SunsdrMobile/website/`) — **已合并入 SunMRRC 2026-09-12。** 它不是独立产品，而是 SunMRRC 服务的**原生 iOS 客户端**（打开浏览器所用的同四条 WebSocket 连接）。网站 `/sunsdrmobile/` 已 301 到 `/sunmrrc/ios/`，仓库只读（GitHub archived），其 9 个提交已用 `git subtree` 导入 `sunsdr` 仓。以下描述为合并前状态：Promotional website for the SunsdrMobile native iOS app for SunSDR2 DX.
 - **EFHW** (`efhw/`) — Product website for the EFHW Fuchs ATU V3.0 and EFHW antenna knowledge ecosystem. Deployed to `https://www.vlsc.net/efhw/`. Uses octen.css with emerald green (`#10b981`) brand overrides in `css/efhw.css`.
 
 **Infrastructure:**
@@ -226,7 +226,26 @@ python3 build_sdd.py
 
 This regenerates all files in `sdd/`. Each output page embeds the FT-710 navbar, a sticky sidebar with all 16 SDD entries, and footer.
 
-## SunsdrMobile-specific (`SunsdrMobile/`)
+## SunsdrMobile-specific (`SunsdrMobile/`) — 已合并入 SunMRRC 2026-09-12
+
+> **合并说明**：`SunsdrMobile` 不是独立产品，而是 **SunMRRC 的原生 iOS 客户端**
+> （`ConnectionManager.swift` 注释："Manages the 4 WebSocket connections to sunmrrc"；
+> 默认服务器 `radio.vlsc.net:8889`）。合并后：
+>
+> - 代码与 **9 个提交的完整历史**经 `git subtree` 进入 `sunsdr` 仓的 `SunsdrMobile/`
+> - 网站页并入 `sunmrrc/website/ios/`（+`zh/ios/`），`/sunsdrmobile/` 全量
+>   **301 到 `/sunmrrc/ios/`**（nginx `location ^~`，必须用 `^~`——普通前缀会被
+>   `~*\.(css|js|…)$` 正则截走）；服务器目录已删除
+> - `SunsdrMobile` 的 GitHub 仓已归档只读，`website/deploy.sh` 已加禁用守卫
+> - portal 呈现层不再单列：产品矩阵/产品卡合并为一个 SunMRRC 条目
+>
+> **不得**把 SunsdrMobile 从导航/产品表重新加回 portal。
+> **但**证据层必须保留：`portal/agentic.html`（已用正确框架：*"SunMRRC is the station
+> system; Web and SunsdrMobile are clients"*）、`portal/engineering.html` 产品族表、
+> 博客系列账本表（`sunsdr 67+9 commits`）。
+>
+> **注意**：`portal/css/sunsdrmobile.css` 是 **portal 自己的共享样式表**（12 个 portal
+> 页面依赖 `.gradient`/`.btn-primary`/`.section-label` 等），文件名只是继承来源，**不得删除**。
 
 ```
 SunsdrMobile/

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Practitioner's Playbook — VLSC Blog</title>
+    <meta
+      name="description"
+      content="The four disciplines expanded into three copyable checklists, three templates, and a failure library where every entry traces to a real incident in this ecosystem."
+    />
+    <meta name="keywords" content="agentic engineering checklist, acceptance criteria, constraint registry, incident to rule, playbook, BG1SB" />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="The Practitioner's Playbook" />
+    <meta property="og:description" content="Checklists, templates and a failure library — every entry traceable to a real incident, none of them generic advice." />
+    <meta property="og:url" content="https://www.vlsc.net/blog/seven-billion-tokens/playbook/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/seven-billion-tokens/playbook/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/seven-billion-tokens/playbook/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/seven-billion-tokens/playbook/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/seven-billion-tokens/playbook/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=3" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Practitioner's Playbook",
+        "description": "Three checklists, three templates and a case-derived failure library for agentic engineering.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-12",
+        "dateModified": "2026-09-12",
+        "keywords": "agentic engineering checklist, acceptance criteria, constraint registry, incident to rule",
+        "articleSection": "Intelligence",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/playbook/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <a href="../">Seven Billion Tokens</a> › <span class="ba-crumb-cat">Companion · Playbook</span></span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-clipboard-check"></i><span>Companion III · Playbook</span></div>
+          <h1>The Practitioner's <span class="gradient">Playbook.</span></h1>
+          <p>Three checklists, three templates and one failure library — every entry traceable to something that actually happened here.</p>
+          <div class="ag-hero-stats" aria-label="Volume summary">
+            <span class="ag-pill"><i class="fas fa-list-check"></i> 3 checklists</span>
+            <span class="ag-pill"><i class="fas fa-file-lines"></i> 3 templates</span>
+            <span class="ag-pill"><i class="fas fa-bug"></i> every failure has a citation</span>
+          </div>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-12">Sep 12, 2026</time> &nbsp;·&nbsp; ~9 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#disciplines">Disciplines</a><a href="#checklists">Checklists</a><a href="#templates">Templates</a><a href="#incidents">Failure library</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">The narrative volume ends with four disciplines. This is the working version of them: the lists you run before you ship, the three artefacts that carry a judgment from a conversation into a repository, and a failure library in which every entry names the incident it came from. Nothing here is generic advice. Where a rule cannot be traced to an incident in this ecosystem, it was left out. For the underlying mechanism, read <a href="/engineering.html">the engineering system</a>; this volume only carries what the case itself taught.</p>
+
+        <section id="disciplines" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Disciplines</span>
+            <h2 class="ag-section-title">Four disciplines, expanded</h2>
+            <p class="ag-section-subtitle">Each one is a habit, not a tool. Each has a failure it prevents.</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card">
+              <h3>1 · Definition before implementation</h3>
+              <p>Acceptance criteria, non-goals and boundaries are written before the first line of code, and intent is phrased in business language that would still make sense with the word "AI" removed. <strong>Prevents:</strong> round-trips. The measured cost of an undecided direction is 17.1 turns per commit at its worst and 47.07 M tokens per commit last week on MRRC.</p>
+            </article>
+            <article class="ag-card">
+              <h3>2 · Every incident becomes a rule</h3>
+              <p>Fixing the bug is the first link of the chain, not the last. The chain is: field incident → design ruling → machine-readable constraint → pre-write interception. <strong>Prevents:</strong> the same class of mistake returning under a different symptom. This ecosystem's loops ran 13 and 7 days.</p>
+            </article>
+            <article class="ag-card">
+              <h3>3 · Watch where uncertainty spends</h3>
+              <p>Token peaks are a direction radar: wherever the spend spikes, the direction is undecided. Pair it with the snapshot habit — every important number gets two sources and a cutoff timestamp. <strong>Prevents:</strong> spending on the wrong problem, and quoting a number that has since changed underneath you.</p>
+            </article>
+            <article class="ag-card">
+              <h3>4 · Keep the two ledgers apart</h3>
+              <p>Product maturity and process evidence are separate books. A passing test suite never closes an open safety issue, and a beautiful registry never promotes a product claim. <strong>Prevents:</strong> the most comfortable form of self-deception available to an engineering team.</p>
+            </article>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Thesis · Why four and not fourteen</span>
+            <p>A discipline that is not habit-shaped will not survive contact with a deadline. These four were chosen because each maps to a single decision a person makes dozens of times a week: do I write this down first, do I close the loop, do I look at where the cost is, and do I keep the books apart. If you can only adopt one, adopt the first — the other three are cheaper once acceptance is written down.</p>
+          </div>
+        </div></section>
+
+        <section id="checklists" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · Checklists</span>
+            <h2 class="ag-section-title">Three lists, three moments</h2>
+            <p class="ag-section-subtitle">Before you accept a requirement, before an edit lands, before you call it released.</p>
+          </header>
+
+          <h3><i class="fas fa-1"></i> Before accepting a requirement</h3>
+          <ol>
+            <li>Can I state the acceptance condition as something a machine could check? If not, the requirement is not ready to be delegated.</li>
+            <li>What am I explicitly <em>not</em> doing? Non-goals written down now are the cheapest rework you will ever prevent.</li>
+            <li>Does the sentence survive with the word "AI" deleted? If it does not, this is a technology demo wearing a business case.</li>
+            <li>Which repository will own the result, and what evidence will the claim rest on — automated test, bench, or field?</li>
+          </ol>
+
+          <h3><i class="fas fa-2"></i> Before an edit lands</h3>
+          <ol>
+            <li>Does this change touch anything a registered constraint already covers? Two of the 52 rules exist because a plausible-looking edit was wrong: <code>cat-no-dn</code> and the deploy-backup rules.</li>
+            <li>If it touches hardware, is the radio's transmit state known right now — not assumed?</li>
+            <li>Is the vendor tree still read-only? Purchased decoder code is not ours to modify; adaptations belong in our own patch layer.</li>
+            <li>If this is a fix, which constraint will it become? A fix with no follow-up rule is a fix that will be needed again.</li>
+          </ol>
+
+          <h3><i class="fas fa-3"></i> Before calling it released</h3>
+          <ol>
+            <li>Which rung of the product ladder is being claimed — automated test, bench verified, or field verified? Say the rung out loud.</li>
+            <li>Is there an open known issue that contradicts the claim? FT710Mobile's unresolved P0 PTT issue stayed public exactly this way.</li>
+            <li>Do the two ledgers agree with each other? They are not supposed to.</li>
+            <li>If a number appears in the release note, does it carry a census date and a measurement window?</li>
+          </ol>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · Checks that already earned their keep</span>
+            <p>The pre-release item about the product ladder is what keeps the EFHW tuner's claim status at design target instead of "released" — no PCB exists yet. The pre-edit item about constraints is what makes the intercept reproducible, with an exit code, rather than a code review opinion.</p>
+          </div>
+        </div></section>
+
+        <section id="templates" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Templates</span>
+            <h2 class="ag-section-title">Three artefacts worth copying</h2>
+            <p class="ag-section-subtitle">Copy them literally on Monday. They are shaped this way because a weaker version failed.</p>
+          </header>
+
+          <h3>Template 1 · Acceptance condition</h3>
+          <div class="term-block"><div class="term-head">acceptance entry</div><pre>REQ   &lt;one-line requirement, business language, no "AI"&gt;
+DO    &lt;what changes for the user&gt;
+NON   &lt;what is explicitly out of scope&gt;
+CHECK &lt;how a machine decides pass/fail&gt;
+RUNG  design-target | simulation | automated-test | bench | field | released
+OPEN  &lt;known issues that this does NOT close, or "none"&gt;</pre></div>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · Why NON is not optional</span>
+            <p>Every rework spike measured in this ecosystem landed on a week where scope was still moving. The <code>NON</code> line is the cheapest instrument for holding it still, because it converts a boundary from something a human remembers into something an agent can read.</p>
+          </div>
+
+          <h3>Template 2 · Constraint registry entry</h3>
+          <div class="term-block"><div class="term-head">constraint entry</div><pre>id        &lt;short-slug, e.g. cat-no-dn&gt;
+severity  block | warn | info
+scope     &lt;glob of files this applies to&gt;
+pattern   &lt;what to match in the edit&gt;
+message   &lt;what the agent is told, in the imperative&gt;
+sdd_ref   &lt;document + section + ruling id, e.g. AD-014&gt;
+origin    &lt;the incident, with a date and a commit&gt;</pre></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · The field that makes it work</span>
+            <p><code>origin</code> is the field that turns a style rule into an argument. Every one of the 52 registered constraints traces to a decision or an accident; a rule that cannot fill in <code>origin</code> is an opinion, and opinions get deleted by the next person who disagrees. <code>sdd_ref</code> is what lets the block message explain itself at the moment it fires.</p>
+          </div>
+
+          <h3>Template 3 · Incident to constraint</h3>
+          <div class="term-block"><div class="term-head">closing the loop</div><pre>1  REPRODUCE  write the failing probe; capture the exit code
+2  RULE       write the design ruling into the SDD, with a ruling id
+3  ENCODE     add the registry entry: severity, scope, pattern, sdd_ref, origin
+4  PROVE      re-run the probe; it must now be blocked, with a nonzero exit
+5  RECORD     put the date and the commit hash in the origin field</pre></div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Thesis · A constraint that cannot block is not a constraint</span>
+            <p>Step 4 is the one teams skip, and skipping it is how a documented lesson becomes a documented lesson that nobody follows. If the probe still passes after the rule is written, the rule is decoration. The entire value of the contract era over the document era is that knowledge stops needing to be remembered and starts being enforced at the moment it matters.</p>
+          </div>
+        </div></section>
+
+        <section id="incidents" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · Failure library</span>
+            <h2 class="ag-section-title">Every rule here cost something</h2>
+            <p class="ag-section-subtitle">Symptom → root cause → what it cost → the rule it became → how to reproduce the check.</p>
+          </header>
+          <div class="ledger-scroll"><table class="ag-table ledger-table">
+            <thead><tr><th>Incident</th><th>Root cause</th><th>Cost</th><th>Rule it became</th><th>Reproduce</th></tr></thead>
+            <tbody>
+              <tr><td>FT-710 frequency drift</td><td><code>DN;</code> is a VFO step command, not a DNR query — polling it every 2 seconds</td><td>A live radio drifted about 20 Hz per call</td><td><code>cat-no-dn</code> (ruling AD-014)</td><td>Run the guardian check added in <code>2498ec2</code> against a probe file; the block exits nonzero</td></tr>
+              <tr><td>Deploy backups filled the disk</td><td>Whole-site copies including the server-managed binary directories</td><td>Server <code>/var/tmp</code> reached 100%</td><td>Per-site backup, thinned and rotated</td><td>Compare the archive contents against the exclude list</td></tr>
+              <tr><td>Portal backups had never worked</td><td>An unquoted remote heredoc let the local shell expand variables first</td><td>Every run printed a backup path that did not exist</td><td>Remote heredocs must be quoted (<code>067f565</code>)</td><td><code>git log -S</code> on the heredoc marker</td></tr>
+              <tr><td>The census was wrong by 1.6 billion</td><td>One tool's cached-input field is a subset of its input field; another's total already includes everything</td><td>A published figure that had to be corrected twice</td><td>Per-tool field semantics, written down</td><td>Sum both ways and compare to the independent store</td></tr>
+              <tr><td>A harness was published as "not recorded"</td><td>One table was queried; the totals lived in a different table</td><td>Understated by 485,213,348</td><td>No "unrecorded" verdict until every table is listed</td><td>Walk the schema and sum every token column</td></tr>
+              <tr><td>The ledger shrank and drifted</td><td>Log retention on one tool; the measuring session included itself</td><td>The same script gave different totals 12 minutes apart</td><td>Snapshot discipline: cutoff timestamp and a written window for every figure</td><td>Run the census twice and diff the totals</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · One of these is still open</span>
+            <p>The first four rows closed within days. The last two were found while writing this series, which is why they are the newest rules and the least tested. A failure library that only contains old, comfortably-solved failures is a museum; the entries that matter are the ones you added this month.</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Closing</span>
+            <p>Every entry above started as something that annoyed a person enough to write it down. That is the whole method: the annoyance is the raw material, the ruling is the refinement, the registry entry is the permanence — and the fourth step, proving the block actually fires, is the one that separates a lesson from a note. For how these pieces fit into a full engineering system, read <a href="/engineering.html">the engineering mechanism</a>; for the case that produced them, return to <a href="../">the main article</a>.</p>
+          </div>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>Companion volumes</h3>
+          <ul>
+            <li><a href="../">Seven Billion Tokens, Dissected — the main article</a></li>
+            <li><a href="../ledger/">The Ledger and Its Measurement Boundaries</a></li>
+            <li><a href="../almanac/">The Model × Harness Almanac</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="../almanac/"><i class="fas fa-arrow-left"></i> The almanac</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=6" defer data-gn="1"></script>
+  </body>
+</html>

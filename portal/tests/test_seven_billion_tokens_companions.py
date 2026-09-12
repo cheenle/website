@@ -32,7 +32,12 @@ COMPANIONS = {
         "title_en": "The Model × Harness Almanac",
         "title_zh": "模型 × harness 年鉴",
     },
-    # 任务 6 追加 playbook
+    "playbook": {
+        "sections": {"disciplines", "checklists", "templates", "incidents"},
+        "slug": "playbook",
+        "title_en": "The Practitioner's Playbook",
+        "title_zh": "实践手册",
+    },
 }
 
 
@@ -113,6 +118,21 @@ BENCHMARK_LAYERS = {
     "zh": ("独立测评", "厂商口径"),
 }
 ROUTING_LABELS = ("big-pickle", "code-supernova-1-million", "kimi-for-coding")
+
+# 分册 C：R9 —— 机制内容归 engineering.html，不得在本册重复
+R9_BANNED = (
+    "Harness × Loop",
+    "Living SDD",
+    "five engineering boundaries",
+    "五种工程边界",
+)
+INCIDENT_ANCHORS = (
+    "cat-no-dn",
+    "AD-014",
+    "DN;",
+    "067f565",
+    "2498ec2",
+)
 
 
 class ArticleParser(HTMLParser):
@@ -321,6 +341,23 @@ class CompanionPagesTests(unittest.TestCase):
             body = section_body(source, "routing", language)
             for label in ROUTING_LABELS:
                 self.assertIn(label, body, f"{language}: {label}")
+
+    # ---------------------------------------------------------- 分册 C 专有
+    def test_playbook_does_not_duplicate_mechanism(self) -> None:
+        """R9：机制归 engineering.html，分册 C 只装案例私有内容。"""
+        for language, path in companion_paths("playbook"):
+            source, _ = load(path)
+            for phrase in R9_BANNED:
+                self.assertNotIn(phrase, source, f"{language}: R9 — {phrase}")
+            self.assertIn("/engineering.html", source, language)
+
+    def test_playbook_incidents_trace_to_the_case(self) -> None:
+        """每条事故必须带可复现痕迹，不得是空泛建议。"""
+        for language, path in companion_paths("playbook"):
+            source, _ = load(path)
+            body = section_body(source, "incidents", language)
+            for token in INCIDENT_ANCHORS:
+                self.assertIn(token, body, f"{language}: {token}")
 
 
 if __name__ == "__main__":

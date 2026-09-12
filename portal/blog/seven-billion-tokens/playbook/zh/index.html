@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>实践手册 — VLSC Blog</title>
+    <meta
+      name="description"
+      content="四条纪律展开为三类可照抄的清单、三个可复制模板，以及一份失败模式库——每一条都能追溯到本生态里的一次真实事故。"
+    />
+    <meta name="keywords" content="智能体工程清单, 验收条件, 约束注册表, 事故转规则, 实践手册, BG1SB" />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="实践手册" />
+    <meta property="og:description" content="清单、模板与失败模式库——每条都能追溯到真实事故，没有一条是空泛建议。" />
+    <meta property="og:url" content="https://www.vlsc.net/blog/seven-billion-tokens/playbook/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/seven-billion-tokens/playbook/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/seven-billion-tokens/playbook/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/seven-billion-tokens/playbook/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/seven-billion-tokens/playbook/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../../css/blog-article.css?v=3" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "实践手册",
+        "description": "三类清单、三个模板，以及一份全部来自真实事故的失败模式库。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-12",
+        "dateModified": "2026-09-12",
+        "keywords": "智能体工程清单, 验收条件, 约束注册表, 事故转规则",
+        "articleSection": "Intelligence",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/playbook/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">首页</a> › <a href="/blog/">博客</a> › <a href="../">七十亿 token 的全程拆解</a> › <span class="ba-crumb-cat">分册 · 手册</span></span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-clipboard-check"></i><span>分册三 · 手册</span></div>
+          <h1>实践<span class="gradient">手册。</span></h1>
+          <p>三类清单、三个模板，一份失败模式库——每一条都能追溯到这里真实发生过的事。</p>
+          <div class="ag-hero-stats" aria-label="分册摘要">
+            <span class="ag-pill"><i class="fas fa-list-check"></i> 3 类清单</span>
+            <span class="ag-pill"><i class="fas fa-file-lines"></i> 3 个模板</span>
+            <span class="ag-pill"><i class="fas fa-bug"></i> 每条失败都有出处</span>
+          </div>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-09-12">2026 年 9 月 12 日</time> &nbsp;·&nbsp; 约 9 分钟阅读</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#disciplines">纪律</a><a href="#checklists">清单</a><a href="#templates">模板</a><a href="#incidents">失败库</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">叙事正文以四条纪律收尾。这里是它们的可工作版本：发布前要跑的清单、把一次判断从对话带进仓库的三个载体，以及一份写明出处的失败模式库。这里没有空泛建议——凡是无法追溯到本生态某次具体事故的规则，都没有被收进来。机制层面的原理见《<a href="/zh/engineering.html">工程机制</a>》；本册只装这个案例自己教出来的东西。</p>
+
+        <section id="disciplines" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 纪律</span>
+            <h2 class="ag-section-title">四条纪律，展开</h2>
+            <p class="ag-section-subtitle">每一条都是习惯，不是工具。每一条都对应一种它要防住的失败。</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card">
+              <h3>一 · 定义先于实现</h3>
+              <p>验收条件、非目标与边界写在第一行代码之前，意图用「去掉 AI 依然成立」的业务语言表达。<strong>防住的是：</strong>来来回回。方向未定的代价，最坏时是每提交 17.1 轮介入，上周 MRRC 是每提交 47.07 M token。</p>
+            </article>
+            <article class="ag-card">
+              <h3>二 · 事故必须变成规则</h3>
+              <p>把 bug 修好只是链条的第一环，不是最后一环。链条是：现场事故 → 设计裁决 → 机器可读约束 → 写前拦截。<strong>防住的是：</strong>同一类错误换一个症状再回来。本生态的两条闭环分别跑了 13 天和 7 天。</p>
+            </article>
+            <article class="ag-card">
+              <h3>三 · 盯着不确定性花钱</h3>
+              <p>token 峰值是方向雷达：花费在哪里尖起来，方向就在哪里没定。配合快照习惯——每个重要数字都要两个来源和一个截止时刻。<strong>防住的是：</strong>把钱花在错的问题上，以及引用一个已经在脚下变了的数字。</p>
+            </article>
+            <article class="ag-card">
+              <h3>四 · 两本账分开记</h3>
+              <p>产品成熟度与过程证据是两本独立的账。测试全过永远关不掉一个开放的安全问题，漂亮的注册表也永远不提升产品声明。<strong>防住的是：</strong>一个工程团队能获得的最舒服的那种自欺。</p>
+            </article>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">论点 · 为什么是四条而不是十四条</span>
+            <p>不成习惯形状的纪律，会在截止日期面前第一个消失。之所以选这四条，是因为每条都对应一个人每周要做几十次的决定：我先把这件事写下来了吗、我把闭环合上了吗、我去看钱花在哪了吗、我把两本账分开了吗。如果只能采纳一条，采纳第一条——验收写下来之后，另外三条都会变便宜。</p>
+          </div>
+        </div></section>
+
+        <section id="checklists" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 清单</span>
+            <h2 class="ag-section-title">三份清单，三个时刻</h2>
+            <p class="ag-section-subtitle">接受需求之前、编辑落盘之前、宣布发布之前。</p>
+          </header>
+
+          <h3><i class="fas fa-1"></i> 接受一个需求之前</h3>
+          <ol>
+            <li>验收条件能不能写成机器可判定的形式？不能，就说明这个需求还没准备好被委托。</li>
+            <li>我明确<b>不做</b>的是什么？现在写下的非目标，是你这辈子能预防的最便宜的返工。</li>
+            <li>把「AI」这个词删掉，这句话还成立吗？不成立，那它就是一个披着业务外衣的技术 demo。</li>
+            <li>结果由哪个仓库负责，这个声明将建立在什么证据上——自动化测试、台架，还是现场？</li>
+          </ol>
+
+          <h3><i class="fas fa-2"></i> 编辑落盘之前</h3>
+          <ol>
+            <li>这次改动碰到已注册约束覆盖的范围了吗？52 条里有两批规则的存在，正是因为一个看起来合理的编辑其实是错的：<code>cat-no-dn</code> 与部署备份规则。</li>
+            <li>如果碰到硬件，此刻电台的发射状态是<b>已知的</b>，还是<b>假设的</b>？</li>
+            <li>厂商目录还是只读的吗？买来的解码器代码不属于我们改，适配要放在自己的补丁层里。</li>
+            <li>如果这是一次修复，它将成为哪条约束？没有后续规则的修复，是一次还会再需要的修复。</li>
+          </ol>
+
+          <h3><i class="fas fa-3"></i> 宣布发布之前</h3>
+          <ol>
+            <li>这次要声明的是产品阶梯上的哪一级——自动化测试、台架验证，还是现场验证？把这一级说出口。</li>
+            <li>有没有一个开放的已知缺陷与这个声明矛盾？FT710Mobile 那个未解决的 P0 PTT 问题，正是这样被公开保留着的。</li>
+            <li>两本账互相印证了吗？它们本来就不该互相印证。</li>
+            <li>如果发布说明里出现了数字，它带普查日期和测量窗口了吗？</li>
+          </ol>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 已经回本的检查项</span>
+            <p>发布前清单里关于「产品阶梯」的那一条，正是 EFHW 调谐器声明状态停在设计目标、而不是「已发布」的原因——板子还不存在。编辑前清单里关于约束的那一条，让拦截变成可复现的、带退出码的事实，而不是一次代码评审里的意见。</p>
+          </div>
+        </div></section>
+
+        <section id="templates" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 模板</span>
+            <h2 class="ag-section-title">三个值得照抄的载体</h2>
+            <p class="ag-section-subtitle">周一就可以原样复制。它们长成这个样子，是因为更弱的版本失败过。</p>
+          </header>
+
+          <h3>模板一 · 验收条件</h3>
+          <div class="term-block"><div class="term-head">验收条目</div><pre>需求   &lt;一行需求，业务语言，不含「AI」&gt;
+变更   &lt;对用户而言什么变了&gt;
+非目标 &lt;明确不做什么&gt;
+判定   &lt;机器如何判断通过 / 不通过&gt;
+阶梯   design-target | simulation | automated-test | bench | field | released
+未关闭 &lt;本次不关闭的已知问题，没有则写 none&gt;</pre></div>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">推断 · 为什么「非目标」不是可选项</span>
+            <p>本生态测到的每一次返工尖峰，都落在范围还在移动的那一周。<code>非目标</code>这一行是固定范围最便宜的仪器：它把一条边界从「有人记得」变成「agent 读得到」。</p>
+          </div>
+
+          <h3>模板二 · 约束注册表条目</h3>
+          <div class="term-block"><div class="term-head">约束条目</div><pre>id        短标识，例如 cat-no-dn
+severity  block | warn | info
+scope     作用范围，文件 glob
+pattern   在编辑里匹配什么
+message   告诉 agent 什么，用祈使句
+sdd_ref   文档 + 章节 + 裁决编号，例如 AD-014
+origin    出处：事故、日期与提交号</pre></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 让它成立的那个字段</span>
+            <p><code>origin</code> 是把一条风格规则变成一条论据的字段。52 条已注册约束中每一条都能追溯到某次决策或某次事故；填不出 <code>origin</code> 的规则只是意见，而下一位不同意的人会把它删掉。<code>sdd_ref</code> 则让拦截消息在触发的那一刻能解释自己。</p>
+          </div>
+
+          <h3>模板三 · 从事故到约束</h3>
+          <div class="term-block"><div class="term-head">合上闭环</div><pre>1  复现  写下失败的探针，记录退出码
+2  裁决  把设计裁决写进 SDD，带裁决编号
+3  编码  加注册表条目：severity、scope、pattern、sdd_ref、origin
+4  验证  重跑探针；它现在必须被拦截，并给出非零退出码
+5  记录  把日期与提交号写进 origin 字段</pre></div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">论点 · 拦不住的约束不算约束</span>
+            <p>第 4 步是团队最常跳过的一步，而跳过它，正是一条被记录下来的教训变成一条没人遵守的教训的方式。规则写完探针仍然通过，这条规则就是装饰。契约时代相对文档时代的全部价值，就在于知识不再需要被记得，而是在该起作用的那一刻被执行。</p>
+          </div>
+        </div></section>
+
+        <section id="incidents" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 失败库</span>
+            <h2 class="ag-section-title">这里的每条规则都花了代价</h2>
+            <p class="ag-section-subtitle">现像 → 根因 → 代价 → 它变成了什么规则 → 怎么复现这个检查。</p>
+          </header>
+          <div class="ledger-scroll"><table class="ag-table ledger-table">
+            <thead><tr><th>事故</th><th>根因</th><th>代价</th><th>转成的规则</th><th>复现</th></tr></thead>
+            <tbody>
+              <tr><td>FT-710 频率漂移</td><td><code>DN;</code> 是 VFO 步进命令而不是 DNR 查询，却每 2 秒轮询一次</td><td>实机频率每次调用漂移约 20 Hz</td><td><code>cat-no-dn</code>（裁决 AD-014）</td><td>对探针文件跑 <code>2498ec2</code> 引入的 guardian 检查；拦截以非零码退出</td></tr>
+              <tr><td>部署备份打满磁盘</td><td>整站拷贝，把服务器自己管理的二进制目录也拷了进去</td><td>服务器 <code>/var/tmp</code> 到 100%</td><td>备份按站瘦身 + 轮转</td><td>把包内容与排除清单对一遍</td></tr>
+              <tr><td>portal 备份从未生效</td><td>远端 heredoc 未加引号，本地 shell 先展开了变量</td><td>每次都打印一个并不存在的备份路径</td><td>远端 heredoc 必须引号化（<code>067f565</code>）</td><td>用 <code>git log -S</code> 查 heredoc 标记</td></tr>
+              <tr><td>普查错了 16 亿</td><td>某个工具的缓存输入是输入的子集；另一个工具的总量已含全部</td><td>一个被修正了两次的已发表数字</td><td>逐工具的字段语义表</td><td>两种求法各算一遍，与独立存储对帐</td></tr>
+              <tr><td>某个 harness 被发表为「未记录」</td><td>只查了一张表，而合计在另一张表里</td><td>少算 485,213,348</td><td>不列出每一张表，不得下「未记录」结论</td><td>遍历 schema，对每个 token 列求和</td></tr>
+              <tr><td>账本倒退且漂移</td><td>某个工具的日志保留策略；测量会话把自己算进去了</td><td>同一个脚本相隔 12 分钟给出不同合计</td><td>快照纪律：每个数字带截止时刻与明写窗口</td><td>连跑两次普查并对比合计</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 其中两条还开着</span>
+            <p>前四行在几天内就闭环了。后两行是在写本系列的过程中才发现的，所以它们是最新的规则、也是被验证得最少的规则。一份只装着陈年旧疾、且都已舒服解决的失败库是一座博物馆；真正有价值的条目，是你这个月新加进去的那些。</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">收束</span>
+            <p>上表每一条最初都只是一件让人烦到愿意写下来的小事。这就是整套方法的全部：烦扰是原料，裁决是提炼，注册表条目是持久化——而第四步、证明拦截真的会触发，是「教训」与「便签」的分界线。这套零件如何组成完整体系，见《<a href="/zh/engineering.html">工程机制</a>》；它们来自哪个案例，回到《<a href="../">主文</a>》。</p>
+          </div>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电操作者与软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话记下来。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>分册</h3>
+          <ul>
+            <li><a href="../">七十亿 token 的全程拆解 — 主文</a></li>
+            <li><a href="../../ledger/zh/">账本与测量边界</a></li>
+            <li><a href="../../almanac/zh/">模型 × harness 年鉴</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="../../almanac/zh/"><i class="fas fa-arrow-left"></i> 年鉴</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../../js/global-nav.js?v=6" defer data-gn="1"></script>
+  </body>
+</html>

@@ -3,37 +3,73 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>七十亿 token 的全程拆解：一个业务意图如何从需求走到交付，效率究竟从哪里来 — VLSC Blog</title>
-    <meta name="description" content="一个真实案例的完整解剖：同一个操作者、同一个业余无线电业务生态、七个月、7.1B 已记录 tokens、七个代码仓库、六种 agent 工具、十几种模型——业务意图如何一步步变成交付物，效率究竟从哪里来。" />
-    <meta name="keywords" content="智能体工程, agentic engineering, 前沿部署工程, harness, 活的 SDD, 约束注册表, 过程效率, 模型选型, 证据纪律, 业余无线电, BG1SB" />
+    <title>七十亿 token 的全程拆解：一本会倒退的账 — VLSC Blog</title>
+    <meta
+      name="description"
+      content="一本已发表的 token 账本，同时虚高、虚低、还在漂移。一个业务意图、七个月、十一种记录用量的 agent harness——以及把测量变成证据的纪律：快照它、标注时间戳、两本账分开记。"
+    />
+    <meta
+      name="keywords"
+      content="智能体工程, agentic engineering, AI agent harness, token 计量, 测量边界, 过程效率, 活体 SDD, 约束注册表, 模型选型, 前沿部署工程, 业余无线电, BG1SB"
+    />
     <meta name="author" content="BG1SB" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="七十亿 token 的全程拆解：一个业务意图如何从需求走到交付，效率究竟从哪里来" />
-    <meta property="og:description" content="业务意图 → 过程效率 → 方法机制 → 模型演进与匹配 → 归因与建议。台账先行：7,007,437,567 个已记录 token、52 条机器可读约束、17.1 → 0.3 的介入曲线，每个数字有出处。" />
-    <meta property="og:url" content="https://www.vlsc.net/blog/seven-billion-tokens/zh/" />
+    <meta
+      property="og:title"
+      content="七十亿 token 的全程拆解：一本会倒退的账"
+    />
+    <meta
+      property="og:description"
+      content="意图 → 过程 → 方法 → 模型 → 归因，每个数字有出处。已发表的 census 在三个方向上同时出错；诚实重跑的结果是 7,404,583,808 个已记录 token，截止于 2026-09-12T02:40:59Z。"
+    />
+    <meta
+      property="og:url"
+      content="https://www.vlsc.net/blog/seven-billion-tokens/zh/"
+    />
     <meta property="og:site_name" content="VLSC Projects" />
-    <link rel="canonical" href="https://www.vlsc.net/blog/seven-billion-tokens/zh/" />
-    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/seven-billion-tokens/" />
-    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/seven-billion-tokens/zh/" />
-    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/seven-billion-tokens/" />
+    <link
+      rel="canonical"
+      href="https://www.vlsc.net/blog/seven-billion-tokens/zh/"
+    />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://www.vlsc.net/blog/seven-billion-tokens/"
+    />
+    <link
+      rel="alternate"
+      hreflang="zh-CN"
+      href="https://www.vlsc.net/blog/seven-billion-tokens/zh/"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://www.vlsc.net/blog/seven-billion-tokens/"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="../../../css/octen.css?v=6" />
     <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
-    <link rel="stylesheet" href="../../../css/blog-article.css?v=2" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=3" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "七十亿 token 的全程拆解：一个业务意图如何从需求走到交付，效率究竟从哪里来",
-        "description": "一个真实案例的完整解剖：业务意图、过程效率、方法机制、模型演进与归因建议，每个数字有出处，事实与推断分开标注。",
+        "headline": "七十亿 token 的全程拆解：一本会倒退的账",
+        "description": "一本已发表的 token 账本同时虚高、虚低、还在漂移；诚实重跑的结果、测量边界，以及背后的纪律。",
         "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
         "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
         "datePublished": "2026-09-05",
-        "dateModified": "2026-09-08",
-        "keywords": "智能体工程, harness, 活的 SDD, 约束注册表, 过程效率, 模型选型",
+        "dateModified": "2026-09-12",
+        "keywords": "智能体工程, harness, 活体 SDD, 约束注册表, 测量边界, 过程效率, 模型选型",
         "articleSection": "Intelligence",
         "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/zh/"
       }
@@ -47,35 +83,61 @@
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-receipt"></i><span>Intelligence · 证据台账</span></div>
           <h1>七十亿 token 的<br /><span class="gradient">全程拆解。</span></h1>
-          <p>一个业务意图如何从需求走到交付，效率究竟从哪里来——一个真实案例的完整解剖，每个数字有出处，事实与推断分开标注。</p>
+          <p>一个业务意图、七个月、十一种记录用量的 agent harness——以及一个在三个方向上同时出错的已发表数字。</p>
           <div class="ag-hero-stats" aria-label="文章摘要">
-            <span class="ag-pill"><i class="fas fa-database"></i> 7,007,437,567 个已记录 token</span>
+            <span class="ag-pill"><i class="fas fa-database"></i> 7,404,583,808 个已记录 token</span>
+            <span class="ag-pill"><i class="fas fa-arrow-trend-up"></i> 比已发表 census 多 397,146,241</span>
             <span class="ag-pill"><i class="fas fa-shield-halved"></i> 52 条机器可读约束</span>
-            <span class="ag-pill"><i class="fas fa-arrow-trend-down"></i> 17.1 → 0.3 轮介入 / 提交</span>
             <span class="ag-pill"><i class="fas fa-scale-balanced"></i> 证据先于声明</span>
           </div>
-          <p class="ba-meta">BG1SB · <time datetime="2026-09-05">2026 年 9 月 5 日</time> · 更新于 <time datetime="2026-09-08">9 月 8 日</time> · 约 27 分钟阅读</p>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-09-05">2026 年 9 月 5 日</time> &nbsp;·&nbsp; 更新于 <time datetime="2026-09-12">9 月 12 日</time> &nbsp;·&nbsp; 约 25 分钟阅读</p>
         </div>
       </header>
 
-      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#intents">意图</a><a href="#intervention">过程</a><a href="#method-timeline">方法</a><a href="#eras">模型</a><a href="#attribution">归因</a><a href="#four-dimensions">四个维度</a><a href="#appendix-ledger">附录</a></nav></div></div>
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#intents">意图</a><a href="#intervention">过程</a><a href="#method-timeline">方法</a><a href="#model-shift">模型</a><a href="#attribution">归因</a><a href="#four-dimensions">四个维度</a></nav></div></div>
 
       <main class="ba-main">
-        <p class="lede">写给所有想用 AI 做业务的人。这是一个真实案例的完整解剖：同一个操作者、同一个业余无线电业务生态、七个月（2026-03 → 2026-09，另有一段 2025-10 → 2026-04 的对照期）、7.1B 已记录 tokens、七个代码仓库、六种 agent 工具、十几种模型。全文只回答一条主线上的问题：业务意图如何一步步变成交付物；过程中「来来回回」了多少次、为什么越来越顺；模型、工具、方法各自起了什么作用；以及——你的下七个月可以怎么用。每个数字有出处，事实与推断分开标注，测量边界在附录。</p>
+        <p class="lede">写给所有想用 AI 做业务的人。这是一个真实案例的完整解剖：同一个操作者、同一个业余无线电业务生态、七个月（2026-03 → 2026-09，另有一段 2025-10 → 2026-04 的对照期）、七个代码仓库、十一种会记录用量的 agent harness、十几种模型。全文只回答一条主线：业务意图如何一步步变成交付物，「来来回回」了多少次、为什么越来越顺，以及支撑这个故事的每个数字到底能承担什么。每个数值都带来源与截止时间，事实与推断分开标注；完整的账本表与测量边界放在分册里，这篇文章只做叙事。</p>
 
         <div class="ba-tldr" id="tldr">
           <div class="ba-tldr-card">
             <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR——五条结论拿到骨架</p>
             <ul class="ba-tldr-list">
-              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>效率曲线是真的。</strong>三条仓库曲线同向下降：ft8 每提交人类介入轮次从 17.1 降到 0.3（约 30 倍）。「越来越顺」有量化形状。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>token 跟随不确定性，不跟随产出。</strong>ft8 的 DSP 与时序安全代码约 26,800 tokens/行，只读参考树 136 tokens/行——近 200 倍密度差。它是不确定性仪表，不是生产力奖杯。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>方法才是你控制的变量。</strong>同一模型探索期 75.5 M/提交、维护期 0.9–3.8 M/提交。模型决定上限，方法决定你实际吃到上限的多大比例。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>最硬的证据是事故转化率。</strong>13 天（频率漂移）、7 天（备份磁盘）——从事故现场到「系统再也踩不了这个坑」。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>一句话纪律：</strong>先问「我的判断沉淀在哪里」，再问「AI 能帮我做什么」。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>一本账可以同时虚高和虚低。</strong>已发表的 7,007,437,567 个 token 既虚高（某个 harness 把同一 API 响应的分块重复计入，约 2.7 倍），又虚低（另一个被标为「未记录」的 harness，其实有 485,213,348 个 token 躺在一张没人查的表里）。诚实重跑的结果是 7,404,583,808。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>账本是读数，不是资产。</strong>某个 harness 在一周内删掉了自己的历史（少 679,899,086 个 token）；同一个脚本十二分钟后重跑，差额 51,427,037，因为做测量的那个会话本身也在被测量。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>效率曲线是真的。</strong>三条仓库曲线同向下降：ft8 每交付一个提交，人类介入轮次从 17.1 → 0.3（约 30 倍）；上周 mrrc_modern 在 41 个提交上维持在 0.73 轮/提交。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>模型能力定上限，方法决定你实际吃到多少。</strong>同一个模型在 ft8 探索期是 75.5 M/提交，维护期是 0.9 M/提交。两个变量里只有一个在你手里。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>一句话纪律：</strong>先问「我的判断沉淀在哪里」，再问「AI 能帮我做什么」——引用任何数字之前，先把它快照下来。</li>
             </ul>
-            <div class="ba-readpath"><span>三分钟速读：</span><a href="#intervention">§3 介入轮次</a><a href="#incident-chains">§8 事故链</a><a href="#attribution">§13 归因</a><a href="#four-dimensions">卷六 · 四条纪律</a></div>
+            <div class="ba-readpath"><span>三分钟速读：</span><a href="#ledger-shrank">§01 会倒退的账本</a><a href="#incident-chains">§09 事故链</a><a href="#attribution">§12 归因</a><a href="#four-dimensions">卷六 · 四条纪律</a></div>
           </div>
         </div>
+
+        <section id="ledger-shrank" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 开篇</span>
+            <h2 class="ag-section-title">会倒退的账本</h2>
+            <p class="ag-section-subtitle">在讨论方法之前，先讲一条用代价换来的测量教训。</p>
+          </header>
+          <p>2026-09-05，本站发表了一份 token 台账：<strong>7,007,437,567</strong> 个已记录 token。一周后同一个测量重跑，结果是 <strong>7,404,583,808</strong>——<strong>多出 397,146,241</strong>。有意思的不是增长，而是旧数字同时在三个方向上都是错的。</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>方向</th><th>发生了什么</th><th>证据</th></tr></thead>
+            <tbody>
+              <tr><td><strong>虚高</strong></td><td>claude-code 的日志会为同一个 API 响应的每个分块各写一条 <code>usage</code> 记录，逐行求和会把总量放大约 2.7 倍。按 <code>message.id</code> 去重后只剩 <strong>818,520,401</strong>，整个账本也随之变成 <strong>5,695,506,675</strong>。</td><td>6,600 个不同的 API 响应</td></tr>
+              <tr><td><strong>虚低</strong></td><td>Hermes 曾被写成「未记录」。它记录得好好的——在 <code>sessions</code> 表里存着 <strong>485,213,348</strong> 个 token。上一次的检查查的是 <code>messages.token_count</code>，那一列全是 0。</td><td>292 个会话，2026-05-15 → 07-24</td></tr>
+              <tr><td><strong>漂移</strong></td><td>claude-code 在 <code>2026-09-07T13:13:57Z</code> 删掉了自己较早的日志，同一个 harness 因此比一周前少计 679,899,086 个 token。紧接着，同一个脚本十二分钟后重跑，又差了 <strong>51,427,037</strong>——因为执行这次测量的会话本身，正在往被测量的日志里写东西。</td><td>观察者效应，复现两次</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>反向校验和这个发现同样重要。</strong>codex 自八月下旬起停用，它的数字两次测量逐位相同：<strong>547,796,667</strong>——而且是用两条不同的代码路径算出来的。稳定的读数和不稳定的读数都是信息，但只有稳定的那个才配叫「总量」。</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实</span>
+            <p>本页所有数字都是 <code>2026-09-12T02:40:59Z</code> 这一时刻的快照，覆盖十一种 harness。逐 harness 的完整表格、每个 harness 各自的测量窗口、以及「什么可以比、什么不可以比」的规则，都在分册《<a href="../ledger/zh/">账本与测量边界</a>》里。已记录账与估算账<strong>不合并</strong>：iFlow 那约 2.47 亿 token 是按字符数估算的（它的用量字段全为零），不计入本页任何合计。</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">论点</span>
+            <p>证据必须被快照，不能被累计。一个没有截止时间的数字不是测量结果，是一个带小数点的传言。</p>
+          </div>
+        </div></section>
 
         <div class="volume" data-volume="intent">
           <header class="volume-head">
@@ -86,7 +148,7 @@
 
           <section id="intents" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">01 · 意图</span>
+              <span class="ag-section-label">02 · 意图</span>
               <h2 class="ag-section-title">四个业务意图，没有一个提到 AI</h2>
               <p class="ag-section-subtitle">AI 是后来被请来执行的手段，从来不是目的。</p>
             </header>
@@ -109,21 +171,21 @@
               </article>
             </div>
             <div class="claim-box" data-claim-type="thesis">
-              <span class="claim-label">主张</span>
+              <span class="claim-label">论点</span>
               <p>第一条规律：如果业务诉求离开 AI 就不成立，那它不是业务诉求，是技术 demo。</p>
             </div>
           </div></section>
 
           <section id="control-group" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">02 · 对照组</span>
-              <h2 class="ag-section-title">没有「沉淀地」的六个月</h2>
+              <span class="ag-section-label">03 · 对照组</span>
+              <h2 class="ag-section-title">六个月，知识没有载体</h2>
               <p class="ag-section-subtitle">模型并不弱，弱的是知识没有载体。</p>
             </header>
-            <p>2025-10-20 至 2026-04-16，同一个人用 iFlow 做了 185 个会话、37,202 轮对话、换了 6 个模型后端（qwen3-coder-plus、glm-5——单周就有 10,420 轮——kimi-k2.5、minimax-m2.5）。产出是真实的（MRRC 的祖先就出在这里），但工作没有任何地方可以沉淀。</p>
+            <p>2025-10-20 至 2026-04-16，同一个人用 iFlow 做了 <strong>185</strong> 个会话、<strong>37,202</strong> 轮对话，换了 6 个模型后端（qwen3-coder-plus、glm-5——单周就有 <strong>10,420</strong> 轮——kimi-k2.5、minimax-m2.5）。产出是真实的：MRRC 的祖先就出在这里。但没有任何东西留得下来。</p>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>37,202 轮对话的 usage 记录全零，且没有任何工程产物留下来：无契约、无文档体系、无门禁。会话结束，学到的东西随之消失。</p>
+              <p>37,202 轮对话的用量字段全部为零，且没有任何工程产物留下：无契约、无文档体系、无门禁。会话结束，这一轮学到的东西随之消失。</p>
             </div>
             <p>这就是卷三一切机制要解决的问题。</p>
           </div></section>
@@ -135,12 +197,12 @@
           <header class="volume-head">
             <span class="volume-num">卷二 · 过程</span>
             <h2>从「来来回回」到「一次做对」</h2>
-            <p class="volume-gloss">「越来越顺」是感觉，量化才是证据。三个指标，全部可复核（方法见附录 C）。</p>
+            <p class="volume-gloss">「越来越顺」是感觉，量化才是证据。三个指标，全部能从 git 历史与本机日志复核。</p>
           </header>
 
           <section id="intervention" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">03 · 介入</span>
+              <span class="ag-section-label">04 · 介入</span>
               <h2 class="ag-section-title">每交付一个提交，人需要介入的对话轮数</h2>
               <p class="ag-section-subtitle">「越来越顺」的量化形状。</p>
             </header>
@@ -150,17 +212,19 @@
                 <tr><td>ft8</td><td>W31：17.1 轮/提交（7 个提交烧 120 轮 + 5.3 亿 tokens）</td><td>W32–34：0.3–0.7 轮/提交</td><td>约 30 倍</td></tr>
                 <tr><td>ft710</td><td>W29–30：4.6–4.9 轮/提交</td><td>W33–34：0.7 轮/提交</td><td>约 6 倍</td></tr>
                 <tr><td>website</td><td>W34：1.6 轮/提交</td><td>W35–36：0.4 轮/提交</td><td>约 4 倍</td></tr>
+                <tr><td>mrrc_modern</td><td>—</td><td><strong>上周：0.73 轮/提交</strong>（41 个提交，30 轮人类输入）</td><td>守住</td></tr>
+                <tr><td>MRRC</td><td>—</td><td>上周：6.00 轮/提交（2 个提交，12 轮人类输入）</td><td>反转</td></tr>
               </tbody>
             </table></div>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>三条独立曲线同向下降。后期 &lt;1 的含义：一句话需求，agent 自主跑完多个提交，人只给意图和裁决。</p>
+              <p>三条独立曲线同向下降——ft8 那条读作 <strong>17.1 → 0.3</strong> 轮/提交——而且低数值在 mrrc_modern 上守住了第四周。后期 &lt;1 的含义：一句话需求，agent 自主跑完多个提交，人只给意图和裁决。MRRC 的上一周展示了同一条规律的另一面：两个还没定方向就落地的提交，每个花了 6.00 轮。</p>
             </div>
           </div></section>
 
           <section id="unit-cost" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">04 · 单位成本</span>
+              <span class="ag-section-label">05 · 单位成本</span>
               <h2 class="ag-section-title">tokens / 提交</h2>
               <p class="ag-section-subtitle">它是不确定性仪表，不是生产力奖杯。</p>
             </header>
@@ -170,43 +234,45 @@
                 <tr><td>ft710</td><td>15.2 M/提交（W30）</td><td>0.95 M/提交（W34）</td><td>16 倍</td></tr>
                 <tr><td>ft8</td><td>75.5 M/提交（W31）</td><td>0.9 M/提交（W36）</td><td>84 倍</td></tr>
                 <tr><td>sunsdr</td><td>1.9 M/提交（W25）</td><td>0.4 M/提交（W27）</td><td>5 倍</td></tr>
+                <tr><td>mrrc_modern</td><td>—</td><td><strong>上周：5.95 M/提交</strong>（244,037,840 / 41 个提交）</td><td>回升</td></tr>
+                <tr><td>MRRC</td><td>—</td><td>上周：47.07 M/提交（94,144,081 / 2 个提交）</td><td>回升</td></tr>
               </tbody>
             </table></div>
             <div class="claim-box" data-claim-type="inference">
-              <span class="claim-label">推论</span>
-              <p>高成本周 = 方向未定的探索；低成本周 = 模式已建立后的交付。token 峰值永远落在不确定性最高的地方——它是不确定性仪表，不是生产力奖杯。</p>
+              <span class="claim-label">推断</span>
+              <p>高成本周 = 方向未定的探索；低成本周 = 模式已建立后的交付。上周不是例外，恰恰是证明：mrrc_modern 的单位成本从 0.95 M 回升到 5.95 M，正是因为它五天里接了四个新功能版本；而 MRRC 那两个用于定方向的提交，每个花掉 47.07 M。token 峰值永远落在不确定性最高的地方——它是不确定性仪表，不是生产力奖杯。</p>
             </div>
           </div></section>
 
           <section id="rework" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">05 · 返工</span>
+              <span class="ag-section-label">06 · 返工</span>
               <h2 class="ag-section-title">不是单调下降，而是「弧形」</h2>
               <p class="ag-section-subtitle">返工集中在探索/整合周，维护周个位数。</p>
             </header>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>ft710 的 fix 提交占比从开坑周 36% 降到维护周 6–12%；ft8 从 29% 降到 17%——且是在提交量最大的两周（147/82 提交）做到的。</p>
+              <p>ft710 的 fix 提交占比从开坑周 36% 降到维护周 6–12%；ft8 从 29% 降到 17%——且是在提交量最大的两周（147 / 82 个提交）做到的。</p>
             </div>
-            <p><strong>反面证据同样真实</strong>：MRRC 在大整合周（W32，7.98 亿 tokens）fix 占比 50%；modern 在大重构周（W35）31%；sunsdr 早期硬调周 51%。新需求永远带来新返工，区别是返工越来越多由 agent 自主完成（modern W35：fix 31%，但人只介入 0.71 轮/提交）。</p>
+            <p><strong>反面证据同样真实，而且这一周就来了。</strong>MRRC 在大整合周（W32，7.98 亿 tokens）fix 占比 50%；modern 在大重构周（W35）31%；sunsdr 早期硬调周 51%。上一周 mrrc_modern 落了 <strong>41</strong> 个提交，其中 <strong>17</strong> 个是 fix——fix 占比 <strong>41%</strong>，是重构周以来的最高值。新需求永远带来新返工。区别在于返工由谁完成：人只介入了 0.73 轮/提交，也就是说这些返工几乎全部由 agent 自主完成。</p>
           </div></section>
 
           <section id="cadence" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">06 · 节奏</span>
+              <span class="ag-section-label">07 · 节奏</span>
               <h2 class="ag-section-title">工作流的成型</h2>
               <p class="ag-section-subtitle">契约测试先红，agent 交付到绿。</p>
             </header>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>发布在加速：modern 13 天 6 版（一天 3 版）；ft8 诞生周 3 天 3 版；MRRC 曾两天 9 版。</p>
+              <p>发布还在加速：这一周 mrrc_modern 从 <strong>v1.14.0</strong> 一路发到 <strong>v1.14.3</strong>——五天四个版本，而且版本自己的 changelog 在发布当天就被纠正。更早：modern 13 天 6 版（一天 3 版）；ft8 诞生周 3 天 3 版；MRRC 曾两天 9 版。</p>
             </div>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>website 仓从 2026-W35 起出现稳定的「契约测试先红、功能提交转绿」模式：5 次 test→feat 对，转绿中位 19 分钟（例：09-05 契约测试先红，19 分钟后文章功能转绿）。</p>
+              <p>website 仓从 2026-W35 起出现稳定的「契约测试先红、功能提交转绿」模式：5 次 test→feat 对，转绿中位 <strong>19</strong> 分钟。本系列文章自己也是用这套流程写出来的。</p>
             </div>
             <div class="claim-box" data-claim-type="inference">
-              <span class="claim-label">推论</span>
+              <span class="claim-label">推断</span>
               <p>先写契约、AI 交付到绿——这是后期才成型的制度化能力，也是「顺」的组织化形态。</p>
             </div>
           </div></section>
@@ -223,37 +289,38 @@
 
           <section id="method-timeline" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">07 · 时间线</span>
+              <span class="ag-section-label">08 · 时间线</span>
               <h2 class="ag-section-title">方法的长成</h2>
               <p class="ag-section-subtitle">从文档时代到契约时代：知识不需要被记得，会在该出现时自己出现。</p>
             </header>
             <div class="ag-table-wrap"><table class="ag-table">
               <thead><tr><th>日期</th><th>事件</th><th>意义</th></tr></thead>
               <tbody>
-                <tr><td>2026-05-02 / 05-10</td><td>MRRC 引入 SDD 框架（<code>58aa675</code>）；随后写下 FDE（前沿部署工程）实践指导书（<code>88f519f</code>）</td><td><strong>文档时代</strong>——知识有载体了，但会过期、会被跳过</td></tr>
+                <tr><td>2026-05-02 / 05-10</td><td>MRRC 引入 SDD（规格驱动开发）框架（<code>58aa675</code>）；随后写下 FDE（前沿部署工程）实践指导书（<code>88f519f</code>）</td><td><strong>文档时代</strong>——知识有载体了，但会过期、会被跳过</td></tr>
                 <tr><td>2026-07-06</td><td>ft710 起步即重写 SDD（<code>87297d1</code>）</td><td>契约先行</td></tr>
                 <tr><td>2026-07-20</td><td>sdd-guardian 诞生（<code>2498ec2</code>）：约束注册表 + 运行时门禁——会话开始注入约束（SessionStart → prime），编辑落盘前拦截（PreToolUse → hook）</td><td><strong>契约时代</strong>——知识不需要被记得</td></tr>
                 <tr><td>2026-08-02</td><td>ft8 第一个实质提交（<code>d4a7a32</code>）一次性带入全套 AGENTS.md + 15 章 SDD + guardian + 契约测试</td><td>方法成熟到可以整包继承，新项目第一天就有门禁</td></tr>
-                <tr><td>2026-08-26</td><td>modern 约束注册表扩到 21 条（<code>2bc3d30</code>）</td><td>至 2026-09-05，三仓合计 <strong>52 条机器可读约束</strong>（ft710 17 / modern 21 / ft8 14），每条带严重级别、作用范围、匹配模式和出处引用</td></tr>
+                <tr><td>2026-08-26</td><td>modern 约束注册表扩到 21 条（<code>2bc3d30</code>）</td><td>至 2026-09-12，三仓合计 <strong>52 条机器可读约束</strong>（<strong>ft710 17 / modern 21 / ft8 14</strong>），每条带严重级别、作用范围、匹配模式和出处引用</td></tr>
+                <tr><td>2026-09-05 → 09-12</td><td>约束条数没有变化</td><td><strong>一次诚实的走平。</strong>一整周的高强度交付没有新增约束条目——要么门禁守住了，要么有一类事故正在漏登记。两种读法都成立，账本目前还区分不了它们。</td></tr>
               </tbody>
             </table></div>
-            <p>这套机制的分工：外层 harness 定义业务/技术/产品约束（为什么做、边界在哪、什么证据能改变结论）；内环 Specify → Implement → Test → Review → Observe → Update SDD 整个委托给 agent；活的 SDD 让设计意图向下流、现场证据向上回流，生命周期状态显式标注、无自动晋级。</p>
+            <p>这套机制的分工：外层 harness 定义业务/技术/产品约束（为什么做、边界在哪、什么证据能改变结论）；内环 Specify → Implement → Test → Review → Observe → Update SDD 整个委托给 agent；活体 SDD 让设计意图向下流、现场证据向上回流，生命周期状态显式标注、无自动晋级。</p>
           </div></section>
 
           <section id="incident-chains" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">08 · 事故链</span>
+              <span class="ag-section-label">09 · 事故链</span>
               <h2 class="ag-section-title">方法有效性的最硬证据</h2>
               <p class="ag-section-subtitle">52 条约束没有一条是事先聪明地设计的，全部能追溯到具体事故。</p>
             </header>
             <div class="ag-loop-grid">
               <article class="ag-card" data-track="control">
                 <h3>FT-710 频率漂移 · 13 天闭环</h3>
-                <p><code>DN;</code> 不是 DNR 查询而是 VFO 步进命令，每 2 秒轮询导致实机频率每次漂移约 20 Hz——现场事故（07-07 修复 <code>72fd6f0</code>）→ 设计裁决 AD-014 入 SDD（07-08 <code>bb128ff</code>）→ 机器可读约束 <code>cat-no-dn</code>（07-20 <code>2498ec2</code>）→ 编辑前拦截可复现（退出码 2）。</p>
+                <p><code>DN;</code> 不是 DNR 查询而是 VFO 步进命令，每 2 秒轮询一次会让实机频率每次漂移约 20 Hz——现场事故（07-07 修复 <code>72fd6f0</code>）→ 设计裁决 AD-014 入 SDD（07-08 <code>bb128ff</code>）→ 机器可读约束 <code>cat-no-dn</code>（07-20 <code>2498ec2</code>）→ 编辑前拦截可复现（退出码 2）。</p>
               </article>
               <article class="ag-card" data-track="sdr">
                 <h3>部署备份打满磁盘 · 7 天闭环</h3>
-                <p>08-29 服务器 <code>/var/tmp</code> 100%（单份备份约 300 MB）→ 09-05 四个仓库同日姊妹修复，并顺藤挖出「portal 备份从未生效」的隐藏缺陷（远程 heredoc 未加引号，<code>067f565</code>）→ 规则升级为四条部署铁律。</p>
+                <p>08-29 服务器 <code>/var/tmp</code> 到 100%（单份备份约 300 MB）→ 09-05 四个仓库同日姊妹修复，并顺藤挖出「portal 备份从未生效」的隐藏缺陷（远程 heredoc 未加引号，<code>067f565</code>）→ 规则升级为四条部署铁律。</p>
               </article>
             </div>
             <div class="term-block"><div class="term-head">2026-09-05 在 mrrc_ft710 复现拦截</div><pre>$ python3 .agents/skills/sdd-guardian/harness/sdd_context.py check probe_b4_tmp.py
@@ -262,20 +329,20 @@ SDD-GUARDIAN: blocking violations found:
 $ echo $?
 2</pre></div>
             <div class="claim-box" data-claim-type="thesis">
-              <span class="claim-label">主张</span>
-              <p>事故转化率（事故→永久免疫的时间）是组织学习能力的真正度量。</p>
+              <span class="claim-label">论点</span>
+              <p>事故转化率——从事故到永久免疫的时间——是组织学习能力的真正度量。本生态跑在 <strong>13</strong> 天和 <strong>7</strong> 天。一个停止增长的注册表不自动等于好消息：它是一个问题，答案在下次事故发生时有没有新增条目。</p>
             </div>
           </div></section>
 
           <section id="evidence-ledgers" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">09 · 交付证据</span>
+              <span class="ag-section-label">10 · 交付证据</span>
               <h2 class="ag-section-title">两本永不相交的账</h2>
-              <p class="ag-section-subtitle">2026-09-05 当天实跑，不是引用旧记录。</p>
+              <p class="ag-section-subtitle">2026-09-12 普查当天实跑，不是引用旧记录。</p>
             </header>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>FT-710 <code>Ran 439 tests</code> / <code>OK</code>；modern <code>Ran 682 tests</code>（1 个 error 是 Windows-only 启动器在 macOS 的环境限制，非产品缺陷）；ft8 <code>937 tests collected</code>（collected ≠ passed，措辞必须区分）；MRRC V5.6.5 现场验证已发布（09-05 进 V6.0.0）；sunsdr V1.0（PTT 双向 ACK）。</p>
+              <p>FT-710：<code>439 passed</code>。mrrc_modern：<code>724 passed</code>，比一周前的 682 多。ft8：<code>935 passed, 1 skipped, 1 xfailed</code>——此前发表的是「937 collected」，而 collected ≠ passed，措辞必须随证据改。另外：三个产品仓库都已迁到各自的虚拟环境（Python 3.13），再用系统 Python 3.9 跑测试会在收集期因 <code>X | None</code> 注解直接报错。这是环境限制，不是产品缺陷——边界要写下来，而不是悄悄丢掉。</p>
             </div>
             <div class="ladder-pair">
               <div class="ladder ladder--product">
@@ -286,86 +353,39 @@ $ echo $?
                 <h4>B 账 · 过程证据</h4>
                 <ol><li>注册表有条目</li><li>有规格 / 计划轨迹</li><li>会话中被强制执行</li><li>拦截被复现验证</li></ol>
               </div>
-              <p class="ladder-note">两本账不相交：B 账再漂亮也不为 A 账背书。开放边界如实保留：FT710Mobile 有一个未解决的 P0 PTT 安全问题；EFHW 调谐器在 PCB 打样前声明状态停在 design-target。</p>
+              <p class="ladder-note">两本账不相交：B 账再漂亮也不为 A 账背书。开放边界如实保留：FT710Mobile 有一个未解决的 P0 PTT 安全问题；EFHW 调谐器在 PCB 打样与台架验证之前，声明状态停在设计目标。</p>
             </div>
             <div class="claim-box" data-claim-type="thesis">
-              <span class="claim-label">主张</span>
-              <p>可以委托「做」，不能委托「算不算」；责任不能委托。</p>
+              <span class="claim-label">论点</span>
+              <p>可以委托「做」，不能委托「算不算」。责任不能委托。</p>
             </div>
           </div></section>
 
-          <aside class="volume-takeaway"><span class="tk-label">卷小结</span><p>方法不是事先设计出来的，是从事故里长出来的。裁决 → 机器可读约束 → 写前拦截是闭环；52 条约束条条可溯源到具体决策或事故。</p></aside>
+          <aside class="volume-takeaway"><span class="tk-label">卷小结</span><p>方法不是事先设计出来的，是从事故里长出来的。裁决 → 机器可读约束 → 写前拦截是闭环；52 条约束条条可溯源到具体决策或事故，而不是某次规划会。</p></aside>
         </div>
 
         <div class="volume" data-volume="models">
           <header class="volume-head">
             <span class="volume-num">卷四 · 模型</span>
-            <h2>演进、评测与任务匹配</h2>
-            <p class="volume-gloss">本机日志实测，非厂商宣传；公开评测分层标注。</p>
+            <h2>模型不是长期变量</h2>
+            <p class="volume-gloss">七个月、六个时代，以及让整个问题变小的一周。年鉴另立分册。</p>
           </header>
 
-          <section id="eras" class="ag-section"><div class="container">
+          <section id="model-shift" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">10 · 时代</span>
-              <h2 class="ag-section-title">七个月，五个时代</h2>
+              <span class="ag-section-label">11 · 主力切换</span>
+              <h2 class="ag-section-title">主力在一周之内换了</h2>
               <p class="ag-section-subtitle">本机日志实测，非厂商宣传。</p>
             </header>
-            <div class="ag-table-wrap"><table class="ag-table">
-              <thead><tr><th>时代</th><th>时间</th><th>主力</th><th>形态</th></tr></thead>
-              <tbody>
-                <tr><td>试探</td><td>2025 秋</td><td>cursor（模型未记录，0.26 亿）</td><td>编辑器内补全</td></tr>
-                <tr><td>裸调</td><td>2025-10 → 2026-04</td><td>iFlow：qwen3-coder-plus、glm-5、kimi-k2.5、minimax-m2.5</td><td>对话式，约 2.3 亿估算（未记录），零沉淀</td></tr>
-                <tr><td>GPT-5.5</td><td>2026-05 → 06</td><td>gpt-5.5（mulerun + codex，6.1 亿）</td><td>仓库级工作开始</td></tr>
-                <tr><td>K3 家族</td><td>2026-07 中 → 08 初</td><td>k3（8.2 亿）+ k3-256k + kimi-for-coding</td><td>harness 成型期，砸穿 ft710</td></tr>
-                <tr><td>Flash 霸权</td><td>2026-08 起</td><td>deepseek-v4-flash（40 亿，峰值单周 16 亿）</td><td>性价比档吃下日常工程</td></tr>
-                <tr><td>多极竞争</td><td>2026-08 下 → 今</td><td>flash 衰减至周 0.26 亿；gpt-5.6、gpt-5.5 回潮、qwen3.8-flash、qwen3.8-max-0902（进场两天 1.06 亿）</td><td>按任务选模型</td></tr>
-              </tbody>
-            </table></div>
+            <p>2026-09-05，这个生态的 claude-code 工作负载由一个性价比档模型主导。七天之后，同一个 harness 已经被另一个模型接管：<strong>qwen3.8-max-0902</strong> 达到 <strong>3,883</strong> 次调用，而上一任主力仍在日志里，但已不再驱动工作。pi 那一侧，一个在上次普查里根本没出现过的模型——<strong>glm-5.3-flash</strong>——已经跑到 <strong>745</strong> 次，还多了一个视觉变体。</p>
             <div class="claim-box" data-claim-type="inference">
-              <span class="claim-label">推论</span>
-              <p>霸权内部有「挑战者轮换」：W32 试 qwen3.8-max 与 glm-5.2（单日 0.75 亿）未留用，W35 起新组合站稳。模型市场 3–4 周换一轮血，锁定单一模型是明确的不利策略。</p>
+              <span class="claim-label">推断</span>
+              <p>此前的「flash 霸权」内部一直在轮换挑战者，而且轮换没有停——它在加速。模型市场每三到四周换一轮血。任何把模型名写死的方法，都是在买入一个会折旧的资产；耐久的部分是选型机制，不是某一次选择。</p>
             </div>
+            <p>实测的分工依旧成立——旗舰模型买方向，性价比模型买执行，长上下文变体买专项，harness 买工作方式——而逐时代的完整记录、任务 × 模型 × harness 匹配表、公开评测（独立测评与厂商口径分层存放），以及路由标签的陷阱，都在分册《<a href="../almanac/zh/">模型 × harness 年鉴</a>》里。</p>
           </div></section>
 
-          <section id="benchmarks" class="ag-section"><div class="container">
-            <header class="ag-section-header">
-              <span class="ag-section-label">11 · 公开评测</span>
-              <h2 class="ag-section-title">口径分层的外部数字</h2>
-              <p class="ag-section-subtitle">独立测评与官方宣称不是同一种数字。</p>
-            </header>
-            <ul>
-              <li><strong>独立测评</strong>：Artificial Analysis 智能指数 Kimi K3 57 / Qwen3.8-Max 56；LMArena Gemini 3 Pro 1501 Elo（首个破 1500）；Code Arena GLM-5.2 编程盲测 1595 分、开源第一。</li>
-              <li><strong>官方宣称</strong>（单方口径）：DeepSeek-V4-Pro Codeforces 3206；Qwen3.8-Flash 称 SWE-bench Pro 领先 Opus 4.6 达 9.1 分。</li>
-              <li><strong>性价比档竞争是最硬的公开叙事</strong>：V4-Flash（OpenRouter $0.14/$0.27 每百万）、Qwen3.8-Flash（官方口径为其 1/3 价）、GPT-5.6 Luna、Gemini 3.1 Flash-Lite——全挤在「日常工程可负担」生态位，与实测的 flash 霸权互证。</li>
-              <li><strong>警示</strong>：日志里的模型名 ≠ 模型实体。<code>big-pickle</code> 是 OpenCode 官方承认的隐身模型；<code>code-supernova-1-million</code> 是 2025 年的隐身营销名（原渠道已下架）；<code>kimi-for-coding</code> 是套餐 API 别名。分析时把日志标识当「路由标签」，不当「能力实体」。</li>
-            </ul>
-          </div></section>
-
-          <section id="matching" class="ag-section"><div class="container">
-            <header class="ag-section-header">
-              <span class="ag-section-label">12 · 匹配</span>
-              <h2 class="ag-section-title">任务 × 模型 × harness 的实测匹配</h2>
-              <p class="ag-section-subtitle">没有任何模型在所有任务上占优；同一模型装进不同 harness 呈现完全不同的任务画像。</p>
-            </header>
-            <div class="ag-table-wrap"><table class="ag-table">
-              <thead><tr><th>角色</th><th>实测组合</th><th>证据</th></tr></thead>
-              <tbody>
-                <tr><td>开荒/新功能</td><td>deepseek-v4-pro</td><td>唯一新功能占比绝对多数的模型（68%）</td></tr>
-                <tr><td>集中攻坚</td><td>gpt-5.6-sol（codex）</td><td>一周窗口打穿 ft8（2.35 亿）后撤出——闪电战</td></tr>
-                <tr><td>日常主力</td><td>deepseek-v4-flash（claude-code + pi）</td><td>40 亿；修复+分析+运维约 70%；claude-code 侧偏现场运维、pi 侧偏修理</td></tr>
-                <tr><td>主力开发 + 长上下文专项</td><td>k3 / k3-256k（kimi-code）</td><td>k3 在 ft710 攻坚期 4.17 亿；k3-256k 的 1.65 亿几乎全投 ft8（时序安全代码需要长上下文）</td></tr>
-                <tr><td>交付/发布流水线</td><td>gpt-5.6（pi）、gpt-5.5（mulerun）</td><td>website 写作、文档、宣传片、安装包打包</td></tr>
-                <tr><td>分析/写作</td><td>qwen3.8-flash、qwen3.8-max-0902</td><td>试用会话分析类占 60%；最新进场直取 website 分析任务</td></tr>
-              </tbody>
-            </table></div>
-            <p>harness 分工同样清晰：claude-code 扛重工程（带门禁的三仓），pi 修理与发布，codex 集中攻坚，kimi-code 主力开发，mulerun 内容生成，opencode 试水（420 万）。</p>
-            <div class="claim-box" data-claim-type="inference">
-              <span class="claim-label">推论</span>
-              <p>旗舰模型买「方向」，性价比模型买「执行」，长上下文变体买「专项」，harness 买「工作方式」。同一模型装进不同 harness 呈现完全不同的任务画像（gpt-5.6 在 codex 是攻坚队，在 pi 是发布流水线）——选型的单位是「模型 × harness × 任务」三元组。</p>
-            </div>
-          </div></section>
-
-          <aside class="volume-takeaway"><span class="tk-label">卷小结</span><p>模型市场 3–4 周换一轮血，没有任何模型在所有任务上占优。选型单位是「模型 × harness × 任务」三元组。</p></aside>
+          <aside class="volume-takeaway"><span class="tk-label">卷小结</span><p>一个 harness 的主力可以在七天内换人。不要锁定模型，锁定你选模型的方式——并保留你自己的日志，因为那是唯一在测量你工作的评测。</p></aside>
         </div>
 
         <div class="volume" data-volume="verdict">
@@ -377,57 +397,58 @@ $ echo $?
 
           <section id="attribution" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">13 · 归因</span>
+              <span class="ag-section-label">12 · 归因</span>
               <h2 class="ag-section-title">模型变强，还是方法变厚？</h2>
               <p class="ag-section-subtitle">四条证据分离这两个变量。</p>
             </header>
             <div class="ag-loop-grid">
-              <article class="ag-card"><h3>1 · 同一模型，有无方法，差一个量级</h3><p>flash 在 W32 探索 ft8 是 75.5 M/提交，同一模型在维护期是 0.9–3.8 M/提交。模型没变，变的是契约厚度。</p></article>
-              <article class="ag-card"><h3>2 · 模型不弱的时代，方法缺位照样归零</h3><p>iFlow 期的 glm-5 单周 10,420 轮产出，但 37,202 轮零沉淀——方法缺位时模型强弱无关宏旨。</p></article>
-              <article class="ag-card"><h3>3 · 方法成型的时刻精确可见</h3><p>契约包 07-20 在 ft710 长出，08-02 被 ft8 整包继承，ft8 的介入轮次从 17.1 直降 0.3。</p></article>
+              <article class="ag-card"><h3>1 · 同一模型，有无方法，差一个量级</h3><p>flash 在 W32 探索 ft8 是 75.5 M/提交，同一模型在维护期是 0.9 M/提交。模型没变，变的是契约厚度。</p></article>
+              <article class="ag-card"><h3>2 · 模型不弱的时代，方法缺位照样归零</h3><p>iFlow 期的 glm-5 单周 10,420 轮产出，但 37,202 轮零沉淀——方法缺位时，模型强弱无关宏旨。</p></article>
+              <article class="ag-card"><h3>3 · 方法成型的时刻精确可见</h3><p>契约包 07-20 在 ft710 长出，08-02 被 ft8 整包继承，ft8 的介入轮次从 17.1 直降到 0.3。</p></article>
               <article class="ag-card"><h3>4 · 模型升级改变的是「可委托半径」</h3><p>单轮对话能可靠交付的任务粒度，从「改这个函数」长到「按这份规格交付功能并通过契约测试」。模型决定什么可以委托；方法决定委托出去的能不能收回来。</p></article>
             </div>
             <div class="claim-box" data-claim-type="inference">
-              <span class="claim-label">结论 · 推论</span>
+              <span class="claim-label">结论 · 推断</span>
               <p>归因比例无法从本数据精确分离，但方向明确：模型能力决定上限，工程方法决定你实际吃到上限的多大比例。两个变量里只有一个在你控制之内。</p>
             </div>
           </div></section>
 
           <section id="advice" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">14 · 建议</span>
+              <span class="ag-section-label">13 · 建议</span>
               <h2 class="ag-section-title">双轨建议</h2>
               <p class="ag-section-subtitle">工程能力轨是你控制的，模型能力轨是市场给的；复利在前者。</p>
             </header>
             <p><strong>工程能力轨</strong>（你控制的，复利在这边）：</p>
             <ol class="steps">
+              <li><h4>先快照，再引用</h4><p>任何你打算据此行动的数字，都要带截止时间与明写的窗口。本文的账本盖的是 <code>2026-09-12T02:40:59Z</code>，而且每个 harness 带自己的窗口——因为其中一个会删掉自己的历史。</p></li>
               <li><h4>先写验收条件，再写第一行代码</h4><p>「算不算完成」的标准先于实现，是「来来回回」的第一大杀手。</p></li>
               <li><h4>让约束机器可读、写前拦截</h4><p>修复只是第一环，裁决 → 约束 → 门禁才是闭环（本生态：13 天 / 7 天）。</p></li>
-              <li><h4>先红后绿</h4><p>契约测试先行、agent 交付到绿，本生态中位闭环 19 分钟。</p></li>
-              <li><h4>把 token 当不确定性仪表</h4><p>峰值落在哪，方向未定的地方就在哪。</p></li>
+              <li><h4>先红后绿</h4><p>契约测试先行、agent 交付到绿，本生态中位闭环 19 分钟；注册表走平这件事是被盯着的，不是被假设的。</p></li>
             </ol>
             <p><strong>模型能力轨</strong>（市场给的，策略是不锁定）：</p>
             <ol class="steps" style="counter-reset: step 4">
-              <li><h4>按任务选档，不按信仰选型</h4><p>开荒/攻坚用旗舰，日常用性价比档，长上下文用专项变体；实测中没有任何模型在所有任务上占优。</p></li>
-              <li><h4>每 3–4 周重新评估一次模型市场</h4><p>本文时间线里主力换了五代；选型机制（快速试炼 + 按周复盘）比任何一次选型都重要。</p></li>
-              <li><h4>警惕模型名</h4><p>路由标签 ≠ 模型实体，官方宣称 ≠ 独立测评；你自己的日志（什么任务、多少 token、几次来回、结果如何）是唯一不会骗你的评测。</p></li>
+              <li><h4>按任务选档，不按信仰选型</h4><p>开荒/攻坚用旗舰，日常用性价比档，长上下文用专项变体；实测中没有任何模型在所有任务上占优，而这一周主力就换了人。</p></li>
+              <li><h4>每 3–4 周重新评估一次模型市场</h4><p>本文时间线里主力换了六代；选型机制（快速试炼 + 按周复盘）比任何一次选型都重要。</p></li>
+              <li><h4>警惕模型名</h4><p>路由标签不等于模型实体，官方宣称不等于独立测评；你自己的日志（什么任务、多少 token、几次来回、结果如何）是唯一不会骗你的评测。</p></li>
             </ol>
+            <p>把这七条建议变成「周一就能照抄」的东西——三类清单、三个模板，以及一份全部来自真实事故的失败模式库——都在分册《<a href="../playbook/zh/">实践手册</a>》里。</p>
           </div></section>
 
           <section id="closing" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">15 · 收束</span>
-              <h2 class="ag-section-title">先问沉淀在哪里</h2>
+              <span class="ag-section-label">14 · 收束</span>
+              <h2 class="ag-section-title">先问判断沉淀在哪里</h2>
               <p class="ag-section-subtitle">七个月的全部教训收进一句话。</p>
             </header>
             <div class="claim-box" data-claim-type="thesis">
-              <span class="claim-label">主张</span>
+              <span class="claim-label">论点</span>
               <p>先问「我的判断沉淀在哪里」，再问「AI 能帮我做什么」。</p>
             </div>
-            <p>没有沉淀地的 AI 使用是消费——37,202 轮对话可以什么都不留下；有沉淀地的使用是资产积累——每次事故、每条约束、每份规格都在为下一次委托降低成本。模型每个季度换一代，契约每天都在变厚；前者是天气，后者是气候。你能建设的是气候。</p>
+            <p>没有载体的 AI 使用是消费——37,202 轮对话可以什么都不留下；有载体的使用是资产积累——每次事故、每条约束、每份规格都在为下一次委托降低成本。账本也是同一个道理：快照过、标注了时间的数字是资产；靠记忆引用的数字是天气。模型每个季度换一代，契约每天都在变厚。前者是天气，后者是气候。你能建设的是气候。</p>
           </div></section>
 
-          <aside class="volume-takeaway"><span class="tk-label">卷小结</span><p>模型决定上限，方法决定兑现比例。两个变量里只有一个在你手里——上面那句话告诉你从哪里开始。</p></aside>
+          <aside class="volume-takeaway"><span class="tk-label">卷小结</span><p>模型决定上限，方法决定兑现比例。而测量本身服从同一条规律——不快照、不标时间，它就会在你脚下悄悄改变。</p></aside>
         </div>
 
         <div class="volume" data-volume="dimensions">
@@ -439,85 +460,48 @@ $ echo $?
 
           <section id="four-dimensions" class="ag-section"><div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">16 · 四个维度</span>
+              <span class="ag-section-label">15 · 四个维度</span>
               <h2 class="ag-section-title">四个维度，四条纪律</h2>
-              <p class="ag-section-subtitle">合并后的提炼层：台账合上之后，这个案例到底说明什么。</p>
+              <p class="ag-section-subtitle">提炼层：台账合上之后，这个案例到底说明什么。</p>
             </header>
             <div class="claim-box" data-claim-type="thesis">
               <span class="claim-label">一句话方法</span>
-              <p>Agentic 工程不是「用 AI 写代码」，而是把判断从执行中分离：判断沉淀为契约，执行委托给 agent，证据决定契约的存亡。这一句话解释了为什么同一个操作者在对照期留下蒸发的聊天记录、在测量期留下七个仓库与 52 条机器可读约束——差别从不在模型，在于判断有没有一个比对话更长寿的载体。</p>
+              <p>智能体工程不是「用 AI 写代码」，而是把判断从执行中分离：判断沉淀为契约，执行委托给 agent，证据决定契约的存亡。这一句话解释了为什么同一个操作者在对照期只留下蒸发的聊天记录，在测量期留下七个仓库与 52 条机器可读约束——差别从不在模型，在于判断有没有一个比对话更长寿的载体。</p>
             </div>
             <div class="ag-loop-grid">
-              <article class="ag-card"><h3>一 · 工程史：抽象阶梯的又一次上移</h3><p>机器码 → 汇编 → 高级语言 → 框架 → 云：每一代工具把一层「怎么做」委托给机器。Agentic 把「实现」整层委托出去，人剩下三件事：定义意图、划定边界、行使裁决。工作量随之转移——12 份设计规格 + 10 份实施计划写在代码之前；ft8 第一个实质提交在任何业务代码之前带入 AGENTS.md、15 章 SDD 与契约测试。定义先于实现。</p></article>
+              <article class="ag-card"><h3>一 · 工程史：抽象阶梯的又一次上移</h3><p>机器码 → 汇编 → 高级语言 → 框架 → 云：每一代工具把一层「怎么做」委托给机器。智能体工程把「实现」整层委托出去，人剩下三件事：定义意图、划定边界、行使裁决。工作量随之转移——12 份设计规格 + 10 份实施计划写在代码之前；ft8 第一个实质提交在任何业务代码之前带入 AGENTS.md、15 章 SDD 与契约测试。定义先于实现。</p></article>
               <article class="ag-card"><h3>二 · 认识论：载体决定知识的寿命</h3><p>聊天记录随会话蒸发；文档会过期、会被跳过；机器可读约束 + 运行时门禁不需要被记得——它会在该出现时自己出现。52 条约束是 52 次判断的永生，换了六种 harness 一条没丢，因为载体在仓库里、与工具无关。事故转化率是组织学习能力的真正度量：本生态 13 天、7 天。</p></article>
-              <article class="ag-card"><h3>三 · 经济学：token 是不确定性的价格</h3><p>token 花费跟随不确定性密度，不跟随代码行数：ft8 的 DSP 与时序安全代码约 26,800 tokens/行，只读参考树 136 tokens/行。峰值永远落在方向未定处。已记录 token 的 95.2% 是 cache-read——这是「契约不够机器化」的税。降低消耗的方式不是少用 AI，是降低不确定性本身。</p></article>
-              <article class="ag-card"><h3>四 · 责任：两本账，三件不可委托的事</h3><p>产品成熟度与过程证据是两本永不互证的账：census 当天 439 个全过的 FT-710 测试关不掉客户端一个开放的 P0 PTT 安全问题。三件事永远不可委托——硬件打样与台架调试、实台 RF 安全、「证据是否充分」的裁决。不是因为 AI 不够强，而是责任不能委托。</p></article>
+              <article class="ag-card"><h3>三 · 经济学：token 是不确定性的价格，缓存读取是租金</h3><p>token 花费跟随不确定性密度，不跟随代码行数，峰值永远落在方向未定处。在三个有完整分列的 harness 里，缓存读取占全部已记录 token 的 <strong>93.7%</strong>——这是「上下文还没被切成机器可用的片段」所要长期支付的租金。降低消耗的方式不是少用 AI，是降低不确定性本身，并让必须重读的上下文变短。</p></article>
+              <article class="ag-card"><h3>四 · 责任：两本账，三件不可委托的事</h3><p>产品成熟度与过程证据是两本永不互证的账：普查当天 439 个全过的 FT-710 测试，关不掉客户端一个开放的 P0 PTT 安全问题。三件事永远不可委托——硬件打样与台架调试、实台 RF 安全、「证据是否充分」的裁决。不是因为 AI 不够强，而是责任不能委托。</p></article>
             </div>
             <div class="claim-box" data-claim-type="thesis">
               <span class="claim-label">四条纪律</span>
-              <p>1 · <strong>定义先于实现</strong>——验收条件、非目标、边界写在第一行业务代码之前；意图用业务语言表达，去掉「AI」依然成立。2 · <strong>事故必须变成规则</strong>——修复只是第一环；裁决 → 约束 → 写前拦截才是闭环。3 · <strong>盯着不确定性花钱</strong>——token 峰值是方向雷达；重要数字双源对账。4 · <strong>两本账分开记</strong>——过程徽章永不提升产品声明；「做」可以委托，「算不算」永远在你手里。</p>
+              <p>1 · <strong>定义先于实现</strong>——验收条件、非目标、边界写在第一行业务代码之前；意图用业务语言表达，去掉「AI」依然成立。2 · <strong>事故必须变成规则</strong>——修复只是第一环；裁决 → 约束 → 写前拦截才是闭环。3 · <strong>盯着不确定性花钱</strong>——token 峰值是方向雷达；重要数字双源对账，并且快照标时。4 · <strong>两本账分开记</strong>——过程徽章永不提升产品声明；「做」可以委托，「算不算」永远在你手里。</p>
             </div>
           </div></section>
         </div>
 
-        <section id="appendix-ledger" class="ag-section"><div class="container">
+        <section class="ag-section"><div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">附录 A · Token 台账</span>
-            <h2 class="ag-section-title">census 2026-09-05，双口径</h2>
-            <p class="ag-section-subtitle">claude-code 双口径两列并列；已发表 census 用行口径。</p>
+            <span class="ag-section-label">分册</span>
+            <h2 class="ag-section-title">离开本页的三册</h2>
+            <p class="ag-section-subtitle">这篇是因果链。查询型内容挪到隔壁，每一册都可以单独被引用。</p>
           </header>
-          <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>Harness</th><th>tokens（行 / 记录口径）</th><th>去重口径</th><th>turns</th><th>sessions</th><th>主要模型</th></tr></thead>
-            <tbody>
-              <tr><td>claude-code</td><td>3,207,496,620</td><td><strong>1,175,403,254</strong>（按 message.id 去重，7,519 次 API 响应）</td><td>22,184</td><td>218</td><td>deepseek-v4-flash 90.6%</td></tr>
-              <tr><td>pi</td><td>1,633,493,477</td><td>同左</td><td>8,921</td><td>61</td><td>ds-v4-flash 63% / gpt-5.6 24%</td></tr>
-              <tr><td>kimi-code</td><td>1,203,639,664</td><td>同左</td><td>9,816</td><td>233（wire 文件口径）</td><td>k3 65.9%</td></tr>
-              <tr><td>codex</td><td>547,796,667</td><td>同左</td><td>4,466（token_count 事件）</td><td>116</td><td>gpt-5.6-sol 53.7% / gpt-5.5 34%</td></tr>
-              <tr><td>mulerun</td><td>499,992,587</td><td>同左</td><td>182</td><td>182</td><td>gpt-5.5 80.1%</td></tr>
-              <tr><td>cursor</td><td>27,079,705</td><td>同左</td><td>217</td><td>96</td><td>code-supernova 78.9%</td></tr>
-              <tr><td>opencode</td><td>4,190,890</td><td>同左</td><td>6</td><td>6</td><td>big-pickle</td></tr>
-              <tr><td><strong>合计</strong></td><td><strong>7,123,689,610</strong></td><td><strong>5,091,596,244</strong></td><td></td><td></td><td></td></tr>
-            </tbody>
-          </table></div>
-          <p>发表版 census（2026-09-05 较早时刻）：7,007,437,567；差值为当日新增。双口径说明：claude-code 日志把同一 API 响应的分块重复记录 usage，行口径放大约 2.7 倍；其他工具无此问题。已记录与估算两列账不合并：iFlow 约 2.34 亿（usage 全零，按字符估算、未记录）、Hermes 无记录、Qoder 为 Cursor 重复子集，均不计入合计。</p>
-        </div></section>
-
-        <section id="appendix-repos" class="ag-section"><div class="container">
-          <header class="ag-section-header">
-            <span class="ag-section-label">附录 B · 仓库</span>
-            <h2 class="ag-section-title">仓库 × 提交 × 阶段</h2>
-            <p class="ag-section-subtitle">普查 2026-09-05。token 按记录的工作目录归属。</p>
-          </header>
-          <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>仓库</th><th>提交</th><th>跨度</th><th>阶段</th><th>主力 harness</th><th>记录 tokens</th></tr></thead>
-            <tbody>
-              <tr><td>MRRC</td><td>181</td><td>03-06 → 09-05</td><td>FDE 孵化 + 通用远控</td><td>claude / mulerun / kimi</td><td>11.6 亿</td></tr>
-              <tr><td>sunsdr(+Mobile)</td><td>67+9</td><td>06-21 → 09-03</td><td>SDR 轨 + iOS</td><td>codex / mulerun / claude</td><td>0.64 亿</td></tr>
-              <tr><td>mrrc_ft710</td><td>162</td><td>07-06 → 09-05</td><td>垂直切片 + harness 成型</td><td>pi / kimi / claude</td><td>12.8 亿</td></tr>
-              <tr><td>mrrc_modern</td><td>244</td><td>07-06 → 09-05</td><td>平台抽象（与 ft710 共享 149 提交）</td><td>claude-code</td><td>12.6 亿</td></tr>
-              <tr><td>ft8</td><td>253</td><td>08-03 → 09-05</td><td>工作流轨 + 契约首日复用</td><td>claude / pi / kimi / codex</td><td>18.8 亿</td></tr>
-              <tr><td>website</td><td>102</td><td>08-20 → 09-05</td><td>表达与证据系统</td><td>pi / claude / mulerun</td><td>9.2 亿</td></tr>
-            </tbody>
-          </table></div>
-        </div></section>
-
-        <section id="appendix-limits" class="ag-section"><div class="container">
-          <header class="ag-section-header">
-            <span class="ag-section-label">附录 C · 测量边界</span>
-            <h2 class="ag-section-title">八条诚实声明</h2>
-            <p class="ag-section-subtitle">本文每个数字都活在这些边界之内。</p>
-          </header>
-          <ol>
-            <li>token 不能精确归因到单次提交；所有「提交 × token」对应是工作目录 × 时间窗口级归集。</li>
-            <li>claude-code 双口径见附录 A；codex turns 口径以 token_count 事件计。</li>
-            <li>留存偏差：claude-code 日志自 2026-08-05 才留存；iFlow/Hermes 无 token 记录；父目录会话无法归属项目。<strong>所有总量是下限。</strong></li>
-            <li>turns/commit 只计人类输入轮次；MRRC W25 的 27.6 轮/提交受 codex 归档口径影响，存疑。</li>
-            <li>任务类型分类基于会话首条消息关键词，单模型样本 n&lt;65，属推断，只看结构。</li>
-            <li>会话按 tokens 占比最高模型归一，混用会话掩盖次要模型贡献。</li>
-            <li>ft710 与 modern 共享 149 个提交；提交分类按 message 前缀粗分，误差约 ±10%；&lt;5 提交的周不纳入趋势判断。</li>
-            <li>公开评测数字来自外部来源（AA / LMArena / Code Arena / 官方公告），官方宣称与独立测评已分层标注；<code>big-pickle</code>、<code>code-supernova-1-million</code>、<code>kimi-for-coding</code> 为路由标签，无官方实体对应。</li>
-          </ol>
-          <p>相关页面：<a href="/agentic.html">智能体工程</a>；<a href="/engineering.html">工程机制</a>。产品族：<a href="/mrrc/">MRRC</a>、<a href="/mrrc_ft710/">MRRC FT-710</a>、<a href="/mrrc_modern/">MRRC Modern</a>、<a href="/sunmrrc/">SunMRRC</a>、<a href="/sunsdrmobile/">SunsdrMobile</a>、<a href="/mrrc_ft8/">MRRC-FT8</a>、<a href="/efhw/">EFHW</a>。</p>
+          <div class="ag-loop-grid">
+            <article class="ag-card">
+              <h3><a href="../ledger/zh/">账本与测量边界</a></h3>
+              <p>十一种 harness 的完整普查，每个都带测量窗口；双口径说明、日志保留与观察者效应的实证，以及什么可以比、什么不可以比的规则。如果你只想核对一个数字，从这里开始。</p>
+            </article>
+            <article class="ag-card">
+              <h3><a href="../almanac/zh/">模型 × harness 年鉴</a></h3>
+              <p>六个模型时代、任务 × 模型 × harness 匹配表、把独立测评与厂商口径分层存放的公开评测，以及路由标签的陷阱。</p>
+            </article>
+            <article class="ag-card">
+              <h3><a href="../playbook/zh/">实践手册</a></h3>
+              <p>四条纪律展开为三类清单、三个可复制模板，以及一份失败模式库——每一条都能追溯到本生态里的一次真实事故。</p>
+            </article>
+          </div>
+          <p>相关页面：<a href="/zh/agentic.html">智能体工程</a>；<a href="/zh/engineering.html">工程机制</a>。产品族：<a href="/mrrc/zh/">MRRC</a>、<a href="/mrrc_ft710/zh/">MRRC FT-710</a>、<a href="/mrrc_modern/zh/">MRRC Modern</a>、<a href="/sunmrrc/zh/">SunMRRC</a>、<a href="/sunsdrmobile/zh/">SunsdrMobile</a>、<a href="/mrrc_ft8/zh/">MRRC-FT8</a>、<a href="/efhw/zh/">EFHW</a>。</p>
         </div></section>
       </main>
 
@@ -532,8 +516,8 @@ $ echo $?
         <div class="blog-related">
           <h3>延伸阅读</h3>
           <ul>
-            <li><a href="/agentic.html">智能体工程 — 人类意图、智能体执行、现场证据</a></li>
-            <li><a href="/engineering.html">Harness、Loop 与 Living SDD：VLSC 工程体系</a></li>
+            <li><a href="/zh/agentic.html">智能体工程 — 人类意图、智能体执行、现场证据</a></li>
+            <li><a href="/zh/engineering.html">Harness、Loop 与 Living SDD：VLSC 工程体系</a></li>
             <li><a href="/blog/connections-recursive-intelligence/zh/">链接为王：从神经元到文明级智能的递归升级</a></li>
           </ul>
         </div>

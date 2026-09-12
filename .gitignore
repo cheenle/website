@@ -13,3 +13,17 @@ feedback/.htpasswd
 __pycache__/
 *.pyc
 .worktrees/
+
+# ── Portal disk-only assets ────────────────────────────────────────────────
+# Deliberately NOT tracked (see CLAUDE.md "Site-wide editorial rules"):
+#   portal/images/  efhw/images/   the WeChat group QR is regenerated roughly
+#                           weekly, so tracking it would mean a churn commit
+#                           every week
+#   portal/IMG_*            raw source photos
+# Both are still shipped: portal/deploy.sh tars the WORKING TREE, not the git
+# index, so production is unaffected by these rules.
+# Spelled out here because `git add portal/` silently swept them into a commit
+# twice on 2026-09-12 while editing the blog series and the FT-710 archive.
+portal/images/
+portal/IMG_*
+efhw/images/

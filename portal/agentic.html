@@ -626,7 +626,7 @@
                     config and port conventions, and the
                     <code>/CONFIG</code> restart caveat are stated for agents
                     before they touch the Tornado app. No machine-readable
-                    constraint registry yet. Census 2026-09-05.
+                    constraint registry yet. Census 2026-09-12.
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -733,7 +733,7 @@
                     scope globs and patterns.
                     <code>SessionStart → prime</code> loads them;
                     <code>PreToolUse(Edit|Write) → hook</code> blocks violations
-                    before the edit lands. Census 2026-09-05.
+                    before the edit lands. Census 2026-09-12.
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -836,7 +836,7 @@
                     <code>sunsdr</code> repo root, in front of a
                     reverse-engineered protocol document and a living SDD. No
                     constraint registry — so no claim of a pre-edit gate here.
-                    Census 2026-09-05.
+                    Census 2026-09-12.
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -934,7 +934,7 @@
                     including <code>vendor-readonly</code>,
                     <code>no-direct-serial</code> and
                     <code>ptt-authority</code>, enforced through the same prime
-                    / hook pair. Census 2026-09-05.
+                    / hook pair. Census 2026-09-12.
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -1024,7 +1024,7 @@
                     Site and knowledge-base work runs under the workspace
                     <code>CLAUDE.md</code>; the antenna research corpus in
                     <code>efhw-knowledge/</code> is the shared ontology source.
-                    No firmware constraint registry. Census 2026-09-05.
+                    No firmware constraint registry. Census 2026-09-12.
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -1245,7 +1245,7 @@
             <strong
               >52 machine-readable constraints across three repositories</strong
             >
-            — mrrc_ft710: 17, mrrc_modern: 21, mrrc_ft8: 14 (census 2026-09-05).
+            — mrrc_ft710: 17, mrrc_modern: 21, mrrc_ft8: 14 (census 2026-09-12).
             Each rule carries a severity (<code>block</code> /
             <code>warn</code> / <code>info</code>), an
             <code>sdd_ref</code> pointing back at an architecture decision or a
@@ -1607,7 +1607,7 @@
             result less necessary.
           </div>
           <details class="ag-details" style="margin-top: 1.25rem">
-            <summary>The chain, reproduced end to end (2026-09-05)</summary>
+            <summary>The chain, reproduced end to end (2026-09-12)</summary>
             <div class="ag-details-body">
               <pre
                 class="ag-diagram"
@@ -1644,13 +1644,13 @@ $ echo $?
             <article class="ag-card">
               <h3>MRRC Modern</h3>
               <p>
-                <strong>Version:</strong> v1.12.1<br /><strong
+                <strong>Version:</strong> v1.14.3<br /><strong
                   >Profiles:</strong
                 >
                 FT-710, IC-7300, IC-7300MK2<br /><strong
                   >Automated tests:</strong
                 >
-                682
+                724
               </p>
               <p>
                 IC-series physical-radio acceptance is tracked separately from
@@ -1731,15 +1731,16 @@ $ echo $?
                       </td>
                     </tr>
                     <tr>
-                      <td>MRRC Modern v1.12.1</td>
-                      <td>Three declared radio profiles; 682 tests</td>
+                      <td>MRRC Modern v1.14.3</td>
+                      <td>Three declared radio profiles; 724 tests</td>
                       <td>Automated test</td>
                       <td>
                         IC physical-radio acceptance is separately recorded.
-                        682 ran on macOS 2026-09-05 with 1 collection error
-                        (test_macos_launcher, a Windows-only launcher test that
-                        cannot import on macOS) — an environment limit, not a
-                        product defect.
+                        724 ran on macOS 2026-09-12 inside the project's own virtualenv
+                        (Python 3.13), with no collection errors. Running the same
+                        suite under the system Python 3.9 fails at collection on
+                        <code>X | None</code> annotations — an environment limit,
+                        not a product defect.
                       </td>
                     </tr>
                     <tr>

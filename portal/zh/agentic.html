@@ -552,7 +552,7 @@
                       >/CONFIG</code
                     >
                     重启陷阱在行动前告知智能体。尚无机器可读约束注册表。普查
-                    2026-09-05。
+                    2026-09-12。
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -638,7 +638,7 @@
                     条、modern 21 条，带 severity、<code>sdd_ref</code>、scope
                     glob 与 patterns。<code>SessionStart → prime</code>
                     加载，<code>PreToolUse(Edit|Write) → hook</code>
-                    在落盘前阻断。普查 2026-09-05。
+                    在落盘前阻断。普查 2026-09-12。
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -723,7 +723,7 @@
                     <code>sunsdr</code> 仓库根的 <code>AGENTS.md</code> 与
                     <code>CLAUDE.md</code>，位于一份逆向协议文档与活体 SDD
                     之前。无约束注册表——因此本节不主张编辑前门禁。普查
-                    2026-09-05。
+                    2026-09-12。
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -799,7 +799,7 @@
                     <code>.agents/skills/sdd-guardian/</code>：14 条约束，含
                     <code>vendor-readonly</code
                     >、<code>no-direct-serial</code>、<code>ptt-authority</code>，由同一套
-                    prime / hook 执行。普查 2026-09-05。
+                    prime / hook 执行。普查 2026-09-12。
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -872,7 +872,7 @@
                   <dd>
                     站点与知识库工作在工作区
                     <code>CLAUDE.md</code> 下进行；<code>efhw-knowledge/</code>
-                    是共享本体来源。无固件约束注册表。普查 2026-09-05。
+                    是共享本体来源。无固件约束注册表。普查 2026-09-12。
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -1053,7 +1053,7 @@
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
             <strong>三个仓库共 52 条机器可读约束</strong>——mrrc_ft710 17
-            条、mrrc_modern 21 条、mrrc_ft8 14 条（普查日期 2026-09-05）。
+            条、mrrc_modern 21 条、mrrc_ft8 14 条（普查日期 2026-09-12）。
             每条规则带严重级别（<code>block</code> / <code>warn</code> /
             <code>info</code>）、指回某条架构裁决或真实事故的
             <code>sdd_ref</code>、<code>scope</code> glob 与
@@ -1340,7 +1340,7 @@
             级主张；约束条数再多，也不能减少一次台架验证的必要性。
           </div>
           <details class="ag-details" style="margin-top: 1.25rem">
-            <summary>这条链的端到端复现（2026-09-05）</summary>
+            <summary>这条链的端到端复现（2026-09-12）</summary>
             <div class="ag-details-body">
               <pre
                 class="ag-diagram"
@@ -1373,9 +1373,9 @@ $ echo $?
             <article class="ag-card">
               <h3>MRRC Modern</h3>
               <p>
-                <strong>版本：</strong>v1.12.1<br /><strong>Profile：</strong
+                <strong>版本：</strong>v1.14.3<br /><strong>Profile：</strong
                 >FT-710、IC-7300、IC-7300MK2<br /><strong>自动化测试：</strong
-                >682 项
+                >724 项
               </p>
               <p>
                 IC 系列真机验收与自动化覆盖单列。 <strong>过程证据：</strong>
@@ -1442,10 +1442,10 @@ $ echo $?
                       </td>
                     </tr>
                     <tr>
-                      <td>MRRC Modern v1.12.1</td>
-                      <td>三个机型 Profile；682 项测试</td>
+                      <td>MRRC Modern v1.14.3</td>
+                      <td>三个机型 Profile；724 项测试</td>
                       <td>自动化测试</td>
-                      <td>IC 真机验收单独记录。682 项于 2026-09-05 在 macOS 上运行，1 个收集错误（test_macos_launcher，Windows 专用启动器测试无法在 macOS 导入）——环境局限，非产品缺陷。</td>
+                      <td>IC 真机验收单独记录。724 项于 2026-09-12 在 macOS 上、用仓库自己的虚拟环境（Python 3.13）运行，无收集错误。用系统 Python 3.9 跑同一套测试会在收集期因 <code>X | None</code> 注解失败——环境局限，非产品缺陷。</td>
                     </tr>
                     <tr>
                       <td>SunMRRC / SunsdrMobile</td>

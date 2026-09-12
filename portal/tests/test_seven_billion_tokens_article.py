@@ -15,38 +15,40 @@ ARTICLES = {
     "zh": PORTAL / "blog" / SLUG / "zh" / "index.html",
 }
 ARTICLE_CSS = PORTAL / "css" / "blog-article.css"
-BLOG_INDEX = PORTAL / "blog" / "index.html"
-SITEMAP = PORTAL / "sitemap.xml"
 CANONICAL = {
     "en": f"https://www.vlsc.net/blog/{SLUG}/",
     "zh": f"https://www.vlsc.net/blog/{SLUG}/zh/",
 }
 
-# The merged article (2026-09-06): the 7B ledger + the four-dimension
-# distillation + process-efficiency and model-matching analysis, on one
-# narrative axis: intent → process → method → models → verdict → dimensions.
-# Sixteen sections in six volumes; the three appendices sit OUTSIDE every volume.
+# 2026-09-12 restructure: the main article keeps only the causal chain.
+# 15 sections in 6 volumes + one unvolumed prologue. The token ledger, the
+# model almanac and the practitioner playbook moved to three companion pages
+# (/ledger/, /almanac/, /playbook/) — see tests/test_seven_billion_tokens_companions.py.
 REQUIRED_SECTIONS = {
+    # 开篇（不属卷）
+    "ledger-shrank",
+    # 卷 I · 意图
     "intents",
     "control-group",
+    # 卷 II · 过程
     "intervention",
     "unit-cost",
     "rework",
     "cadence",
+    # 卷 III · 方法
     "method-timeline",
     "incident-chains",
     "evidence-ledgers",
-    "eras",
-    "benchmarks",
-    "matching",
+    # 卷 IV · 模型
+    "model-shift",
+    # 卷 V · 归因
     "attribution",
     "advice",
     "closing",
+    # 卷 VI · 四维度
     "four-dimensions",
-    "appendix-ledger",
-    "appendix-repos",
-    "appendix-limits",
 }
+
 # Grading discipline: measured/test-run results are fact, attribution and
 # trend judgments are inference, methodology claims are thesis.
 REQUIRED_CLAIM_TYPES = {"fact", "inference", "thesis"}
@@ -55,17 +57,18 @@ VOLUMES = (
     ("intent", ("intents", "control-group")),
     ("process", ("intervention", "unit-cost", "rework", "cadence")),
     ("method", ("method-timeline", "incident-chains", "evidence-ledgers")),
-    ("models", ("eras", "benchmarks", "matching")),
+    ("models", ("model-shift",)),
     ("verdict", ("attribution", "advice", "closing")),
     ("dimensions", ("four-dimensions",)),
 )
-UNVOLUMED_SECTIONS = ("appendix-ledger", "appendix-repos", "appendix-limits")
+UNVOLUMED_SECTIONS = ("ledger-shrank",)
+
 VOLUME_TITLES = {
     "en": {
         "intent": "Intent never starts with",
         "process": "From round-trips to right-first-time",
         "method": "What the harness and the SDD did at each stage",
-        "models": "Evolution, benchmarks, and task matching",
+        "models": "The model is not the long-term variable",
         "verdict": "Where the efficiency actually came from",
         "dimensions": "Separate judgment from execution",
     },
@@ -73,95 +76,66 @@ VOLUME_TITLES = {
         "intent": "意图从不以",
         "process": "从「来来回回」到「一次做对」",
         "method": "harness 与 SDD 在各阶段的作用",
-        "models": "演进、评测与任务匹配",
+        "models": "模型不是长期变量",
         "verdict": "效率究竟从哪里来",
         "dimensions": "把判断从执行中分离",
     },
 }
-EN_TITLE = "Seven Billion Tokens, Dissected"
-ZH_TITLE = "七十亿 token 的全程拆解"
 
-# Hard numbers from the 2026-09-06 unified draft. Every one of these strings
-# must appear verbatim in BOTH languages.
+EN_TITLE = "Seven Billion Tokens, Dissected: The Ledger That Shrank"
+ZH_TITLE = "七十亿 token 的全程拆解：一本会倒退的账"
+
+# Every one of these strings must appear verbatim in BOTH languages.
+# Only values that genuinely belong to the MAIN article live here — the full
+# ledger table, the measurement boundaries and the model almanac now belong to
+# the companion pages and are asserted there.
 LEDGER_CONSTANTS = {
-    # headline ledger
-    "recorded_tokens": "7,007,437,567",
+    # 三层误差：虚高 / 虚低 / 漂移
+    "published_line_census": "7,007,437,567",
+    "recomputed_line_census": "7,404,583,808",
+    "recomputed_dedup_census": "5,695,506,675",
+    "delta_vs_published": "397,146,241",
+    "claude_dedup_census": "818,520,401",
+    "hermes_tokens": "485,213,348",
+    "codex_tokens": "547,796,667",
+    "last_cleanup": "2026-09-07T13:13:57Z",
+    "observer_effect_delta": "51,427,037",
+    # 对照期（不变）
     "iflow_turns": "37,202",
     "iflow_sessions": "185",
     "glm5_peak_week_turns": "10,420",
-    # dual-caliber totals and per-harness figures (Appendix A)
-    "tokens_total_recorded": "7,123,689,610",
-    "tokens_total_dedup": "5,091,596,244",
-    "claude_line_caliber": "3,207,496,620",
-    "claude_dedup_caliber": "1,175,403,254",
-    "claude_api_responses": "7,519",
-    "pi_tokens": "1,633,493,477",
-    "kimi_tokens": "1,203,639,664",
-    "codex_tokens": "547,796,667",
-    "mulerun_tokens": "499,992,587",
-    "cursor_tokens": "27,079,705",
-    "opencode_tokens": "4,190,890",
-    "line_caliber_inflation": "2.7",
-    # process efficiency
+    # 过程（历史 + 上周）
     "intervention_drop": "17.1 → 0.3",
     "ft8_peak_unit_cost": "75.5",
     "ft8_maintenance_unit_cost": "0.9",
-    "ft710_peak_unit_cost": "15.2",
-    "ft710_maintenance_unit_cost": "0.95",
-    "rework_ft710_open": "36%",
-    "rework_ft8_from": "29%",
-    "rework_ft8_to": "17%",
-    "rework_mrrc_integration": "50%",
-    "rework_modern_refactor": "31%",
-    "rework_sunsdr_early": "51%",
-    "rework_modern_intervention": "0.71",
+    "modern_week_human_per_commit": "0.73",
+    "modern_week_megatokens_per_commit": "5.95",
+    "mrrc_week_human_per_commit": "6.00",
+    "mrrc_week_megatokens_per_commit": "47.07",
+    "modern_week_commits": "41",
+    "modern_week_fix_share": "41%",
+    "modern_week_fix_count": "17",
     "red_green_median_minutes": "19",
-    # method
-    "constraints_split": "ft710 17 / modern 21 / ft8 14",
+    # 方法
     "constraints_total": "52",
-    # delivery evidence
+    "constraints_split": "ft710 17 / modern 21 / ft8 14",
+    "incident_ft710_days": "13",
+    "incident_backup_days": "7",
+    # 产品（2026-09-12 实跑，与 /agentic.html#evidence 同值）
     "tests_ft710": "439",
-    "tests_modern": "682",
-    "tests_ft8_collected": "937",
-    "mrrc_version_before": "V5.6.5",
-    "mrrc_version_after": "V6.0.0",
-    # commits and hashes
-    "commit_ba66892": "ba66892",
-    "commit_38cb85e": "38cb85e",
-    "commit_9403e2e": "9403e2e",
-    "commit_58aa675": "58aa675",
-    "commit_88f519f": "88f519f",
-    "commit_87297d1": "87297d1",
-    "commit_2498ec2": "2498ec2",
-    "commit_d4a7a32": "d4a7a32",
-    "commit_2bc3d30": "2bc3d30",
-    "commit_72fd6f0": "72fd6f0",
-    "commit_bb128ff": "bb128ff",
-    "commit_067f565": "067f565",
-    "commits_mrrc": "181",
-    "commits_ft710": "162",
-    "commits_modern": "244",
-    "commits_ft8": "253",
-    "commits_website": "102",
-    "commits_sunsdr_pair": "67+9",
-    "shared_commits_ft710_modern": "149",
-    # models and benchmarks
-    "aa_kimi_k3": "Kimi K3 57",
-    "aa_qwen_max": "Qwen3.8-Max 56",
-    "lmarena_gemini": "1501",
-    "code_arena_glm": "1595",
-    "codeforces_v4pro": "3206",
-    "swe_bench_lead": "9.1",
-    "openrouter_flash": "$0.14",
-    "openrouter_flash_out": "$0.27",
-    "v4pro_new_feature_share": "68%",
-    "matching_analysis_share": "60%",
-    "flash_fix_share": "70%",
-    # measurement boundaries
-    "mrrc_w25_doubtful": "27.6",
-    "commit_class_error": "±10%",
-    "census_date": "2026-09-05",
-    "modified_date": "2026-09-08",
+    "tests_modern": "724",
+    "tests_ft8": "935",
+    "modern_version_early": "v1.14.0",
+    "modern_version_late": "v1.14.3",
+    # 模型
+    "claude_top_model": "qwen3.8-max-0902",
+    "claude_top_model_calls": "3,883",
+    "pi_new_model": "glm-5.3-flash",
+    "pi_new_model_calls": "745",
+    # 缓存经济
+    "cache_read_share": "93.7%",
+    # 日期
+    "census_date": "2026-09-12",
 }
 
 # Red lines: never claim a product family was built by AI.
@@ -179,6 +153,7 @@ FORBIDDEN = {
         "由智能体建造",
         "AI 打造",
         "智能体建造了",
+        "沉淀地",
     ),
 }
 
@@ -186,22 +161,12 @@ FORBIDDEN = {
 GATE_OWNERS = ("mrrc_ft710", "mrrc_modern", "ft8", "FT-710", "Modern", "MRRC-FT8")
 GATE_FORBIDDEN_NEIGHBOURS = ("SunMRRC", "SunsdrMobile", "EFHW", "MRRC Universal")
 
-# R7: estimates must be visibly labelled.
-ESTIMATE_PROBES = {
-    "en": ("234 million",),
-    "zh": ("2.34 亿",),
-}
-ESTIMATE_LABELS = {
-    "en": ("estimate", "not recorded", "unrecorded"),
-    "zh": ("估算", "未记录", "工具记 0"),
-}
-# The recorded vs estimated columns must never be merged.
+# R7: the estimate and the recorded ledger must never be merged.
 NO_MERGE_PHRASE = {"en": "must not be merged", "zh": "不合并"}
-# claude-code dual caliber: both columns side by side, plus the note that the
-# published census used the line caliber.
-DUAL_CALIBER_NOTE = {
-    "en": "the published census used the line caliber",
-    "zh": "已发表 census 用行口径",
+# R8: the ledger moves in both directions — that has to be stated, not hidden.
+BOTH_DIRECTIONS = {
+    "en": ("overstated", "understated"),
+    "zh": ("虚高", "虚低"),
 }
 
 
@@ -308,16 +273,22 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             ]
             self.assertEqual([], missing, language)
 
-    def test_estimates_are_labelled(self) -> None:
+    def test_no_unlabelled_estimate(self) -> None:
+        """R7: any approximate FIGURE must sit next to an estimate label.
+
+        只约束三位以上数字（量级数字），不约束 `~30 min read` 这类时长表述。
+        """
+        labels = {
+            "en": ("estimate", "estimated", "not recorded", "unrecorded", "lower bound"),
+            "zh": ("估算", "未记录", "工具记 0", "下界"),
+        }
         for language, path in ARTICLES.items():
             source, _ = load(path)
-            for value in ESTIMATE_PROBES[language]:
-                index = source.find(value)
-                self.assertNotEqual(-1, index, f"{language}: {value}")
-                window = source[max(0, index - 900) : index + 900].lower()
+            for match in re.finditer(r"[≈~]\s?\d[\d,]{2,}", source):
+                window = source[max(0, match.start() - 900): match.start() + 900].lower()
                 self.assertTrue(
-                    any(label in window for label in ESTIMATE_LABELS[language]),
-                    f"{language}: {value} needs an estimate/unrecorded label nearby",
+                    any(label in window for label in labels[language]),
+                    f"{language}: unlabelled estimate {match.group(0)!r} at {match.start()}",
                 )
 
     def test_recorded_and_estimated_ledgers_are_not_merged(self) -> None:
@@ -325,21 +296,19 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             source, _ = load(path)
             self.assertIn(NO_MERGE_PHRASE[language], source, language)
 
-    def test_dual_caliber_is_presented_side_by_side(self) -> None:
+    def test_both_error_directions_are_stated(self) -> None:
+        """R8: 已发表值是虚高且虚低——两个方向都必须写出来，不得只说一边。"""
         for language, path in ARTICLES.items():
             source, _ = load(path)
-            body = section_body(source, "appendix-ledger", language)
-            self.assertIn(LEDGER_CONSTANTS["claude_line_caliber"], body, language)
-            self.assertIn(LEDGER_CONSTANTS["claude_dedup_caliber"], body, language)
-            self.assertIn("message.id", body, language)
-            self.assertIn(DUAL_CALIBER_NOTE[language], source, language)
+            for word in BOTH_DIRECTIONS[language]:
+                self.assertIn(word, source, f"{language}: {word}")
 
     def test_gate_claims_only_near_owning_repos(self) -> None:
         pattern = re.compile(r"pre-edit gate|编辑前门禁|编辑前拦截|PreToolUse")
         for language, path in ARTICLES.items():
             source, _ = load(path)
             for match in pattern.finditer(source):
-                window = source[max(0, match.start() - 700) : match.start() + 700]
+                window = source[max(0, match.start() - 700): match.start() + 700]
                 self.assertTrue(
                     any(owner in window for owner in GATE_OWNERS),
                     f"{language}: gate claim at {match.start()} lacks an owning repo",
@@ -417,6 +386,28 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             self.assertRegex(source, r"exit|退出码|\$\?")
             self.assertIn("2", source)
 
+    def test_main_article_owns_no_ledger_tables(self) -> None:
+        """R5: 账本表唯一主人是分册 A；主文只许引结论句。"""
+        for language, path in ARTICLES.items():
+            source, _ = load(path)
+            for token in (
+                LEDGER_CONSTANTS["published_line_census"],
+                LEDGER_CONSTANTS["recomputed_line_census"],
+                LEDGER_CONSTANTS["recomputed_dedup_census"],
+            ):
+                self.assertIn(token, source, f"{language}: {token}")
+            self.assertLess(
+                source.count("<table"), 8,
+                f"{language}: 主文表格过多，账本/年鉴应外链",
+            )
+
+    def test_series_navigation_is_present(self) -> None:
+        """主文必须挂上三册分册，否则读者找不到被移出的内容。"""
+        for language, path in ARTICLES.items():
+            source, _ = load(path)
+            for slug in ("ledger/", "almanac/", "playbook/"):
+                self.assertIn(slug, source, f"{language}: {slug}")
+
     def test_ids_and_local_assets_are_valid(self) -> None:
         for language, path in ARTICLES.items():
             _, parser = load(path)
@@ -451,7 +442,7 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             ):
                 self.assertIn(field, article_data[0], f"{language}: {field}")
             self.assertEqual("2026-09-05", article_data[0]["datePublished"], language)
-            self.assertEqual("2026-09-08", article_data[0]["dateModified"], language)
+            self.assertEqual("2026-09-12", article_data[0]["dateModified"], language)
             self.assertEqual("Intelligence", article_data[0]["articleSection"], language)
 
     def test_links_to_thesis_and_mechanism_pages(self) -> None:
@@ -459,18 +450,6 @@ class SevenBillionTokensArticleTests(unittest.TestCase):
             source, _ = load(path)
             self.assertIn("/agentic.html", source, language)
             self.assertIn("/engineering.html", source, language)
-
-    def test_blog_index_lists_article(self) -> None:
-        source = BLOG_INDEX.read_text(encoding="utf-8")
-        self.assertIn(f"/blog/{SLUG}/", source)
-        self.assertIn('data-cat="intelligence"', source)
-        self.assertIn("Seven Billion Tokens", source)
-        self.assertIn("Sep 5, 2026", source)
-
-    def test_sitemap_lists_both_languages(self) -> None:
-        source = SITEMAP.read_text(encoding="utf-8")
-        self.assertIn(CANONICAL["en"], source)
-        self.assertIn(CANONICAL["zh"], source)
 
 
 if __name__ == "__main__":

@@ -73,11 +73,29 @@ grep -Rn "pattern" $SITES       # → 1 bogus arg, exit 2, 0 hits, looks like a 
 ```
 
 If a script must stay POSIX/bash-compatible, use `bash -c` with the array, or pass the
-directories as literal arguments. The trailing slash is for readability and to make a
-missing directory obvious — it is *not* load-bearing: ugrep follows a symlink given
-explicitly on the command line either way (`mrrc_ft710` and `mrrc_ft710/` both returned 2
-hits). An earlier revision of this file claimed the bare form was not followed; that was
-wrong for ugrep and has been corrected.
+directories as literal arguments.
+
+**The trailing slash IS load-bearing — re-measured 2026-09-12.** This section has now been
+wrong in *both* directions, so here is the measurement rather than a claim. On this machine
+`grep` is **BSD grep 2.6.0-FreeBSD** (`grep --version`) — *not* ugrep, as an earlier revision
+of this file stated. `-R` does **not** follow a symlink named without a trailing slash, and
+fails **silently**:
+
+```
+grep -Rn mrrc_modern mrrc/ --include='*.html'   →   2 hits   ✅
+grep -Rn mrrc_modern mrrc  --include='*.html'   →   0 hits   ❌  same directory, silently empty
+```
+
+(Measured 2026-09-12 with `mrrc/` → `/Users/cheenle/HAM/MRRC/website`. `--include` does not
+change the outcome: without it the same pair reads 3 vs 0. A bare-form false green is
+indistinguishable from a clean tree, which is exactly the failure this whole section exists to
+prevent. **Always write the trailing slash** — not for readability, but because without it the
+search reads nothing.
+
+Note the pattern has to still exist to be a valid test: an earlier draft of this paragraph
+used `mrrc_ft710`, which returned 5/0 — until that sub-site was archived the same day and both
+sides legitimately became 0. Verify with `grep --version` too: the tool here has changed at
+least once, and an earlier "correction" in this file was itself wrong.
 
 `find` needs the same care: use `find -L` to follow symlinks. Grepping `.` is only safe
 after `cd` into a sub-site's real repository directory (e.g. `/Users/cheenle/HAM/MRRC/website`).

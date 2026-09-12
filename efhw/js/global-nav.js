@@ -18,8 +18,8 @@
     else if (/\/agentic\.html/.test(p)) SITE = 'agentic';
     else if (/\/mrrc\//.test(p)) SITE = 'mrrc';
     else if (/\/sunmrrc\//.test(p)) SITE = 'sunmrrc';
-    else if (/\/sunsdrmobile\//.test(p)) SITE = 'sunsdrmobile';
-    else if (/\/mrrc_ft710\//.test(p)) SITE = 'mrrc_ft710';
+    else if (/\/efhw\//.test(p)) SITE = 'efhw';
+    else if (/\/mrrc_ft8\//.test(p)) SITE = 'mrrc_ft8';
     else if (/\/mrrc_modern\//.test(p)) SITE = 'mrrc_modern';
     else if (/\/sdd\//.test(p)) SITE = 'sunmrrc';
     else SITE = 'portal';
@@ -34,10 +34,10 @@
     portal: '/',
     agentic: '/agentic.html',
     mrrc: '/mrrc/',
-    mrrc_ft710: '/mrrc_ft710/',
     mrrc_modern: '/mrrc_modern/',
     sunmrrc: '/sunmrrc/',
-    sunsdrmobile: '/sunsdrmobile/',
+    efhw: '/efhw/',
+    mrrc_ft8: '/mrrc_ft8/',
     blog: '/blog/'
   };
 
@@ -108,10 +108,10 @@
       '<nav class="vlsc-gn-links">' +
         siteLink('agentic', 'Agentic') +
         siteLink('mrrc', 'MRRC') +
-        siteLink('mrrc_ft710', 'FT-710') +
         siteLink('mrrc_modern', 'Modern') +
+        siteLink('mrrc_ft8', 'FT-8') +
         siteLink('sunmrrc', 'SunMRRC') +
-        siteLink('sunsdrmobile', 'SunsdrMobile') +
+        siteLink('efhw', 'EFHW') +
         siteLink('blog', 'Blog') +
       '</nav>' +
       '<a class="vlsc-gn-gh" href="https://github.com/cheenle" target="_blank" rel="noopener" title="GitHub">' +

@@ -18,6 +18,7 @@
     else if (/\/agentic\.html/.test(p)) SITE = 'agentic';
     else if (/\/mrrc\//.test(p)) SITE = 'mrrc';
     else if (/\/sunmrrc\//.test(p)) SITE = 'sunmrrc';
+    else if (/\/efhw\//.test(p)) SITE = 'efhw';
     else if (/\/mrrc_modern\//.test(p)) SITE = 'mrrc_modern';
     else if (/\/mrrc_ft8\//.test(p)) SITE = 'mrrc_ft8';
     else if (/\/sdd\//.test(p)) SITE = 'sunmrrc';
@@ -36,6 +37,7 @@
     mrrc_modern: '/mrrc_modern/',
     mrrc_ft8: '/mrrc_ft8/',
     sunmrrc: '/sunmrrc/',
+    efhw: '/efhw/',
     blog: '/blog/'
   };
 
@@ -109,6 +111,7 @@
         siteLink('mrrc_modern', 'Modern') +
         siteLink('mrrc_ft8', 'FT-8') +
         siteLink('sunmrrc', 'SunMRRC') +
+        siteLink('efhw', 'EFHW') +
         siteLink('blog', 'Blog') +
       '</nav>' +
       '<a class="vlsc-gn-gh" href="https://github.com/cheenle" target="_blank" rel="noopener" title="GitHub">' +

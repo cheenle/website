@@ -62,7 +62,7 @@
     <main class="ba-main">
         <div class="ba-prose">
 
-        <p>Every remote radio system has the same invisible problem: <strong>the audio link.</strong> The RF path — IQ samples, spectrum, CAT commands — can all be engineered to fit a link. Audio is where it gets personal, because your ear is the one judging it. Ship raw PCM and a phone on LTE will stutter; compress it badly and a loud signal turns into mush. This article is about the codec decision in the <a href="/sunmrrc/">SunMRRC</a> remote server and the <a href="/sunsdrmobile/">SunsdrMobile</a> client — the same Opus approach the universal <a href="/mrrc/">MRRC</a> remote uses: why Opus, what it costs, and the implementation details that make it reliable.</p>
+        <p>Every remote radio system has the same invisible problem: <strong>the audio link.</strong> The RF path — IQ samples, spectrum, CAT commands — can all be engineered to fit a link. Audio is where it gets personal, because your ear is the one judging it. Ship raw PCM and a phone on LTE will stutter; compress it badly and a loud signal turns into mush. This article is about the codec decision in the <a href="/sunmrrc/">SunMRRC</a> remote server and the <a href="/sunmrrc/ios/">SunsdrMobile</a> client — the same Opus approach the universal <a href="/mrrc/">MRRC</a> remote uses: why Opus, what it costs, and the implementation details that make it reliable.</p>
 
         <h2 id="bandwidth">The bandwidth math: why PCM fails on mobile</h2>
 
@@ -159,7 +159,7 @@ Max packet:      4000 bytes         (TX worst-case 120 ms frame = 5760 samples)<
 
         <p>On TX, the client's 16&nbsp;kHz mic audio is Opus-encoded in the Worker, decoded server-side, then run through a <strong>300&nbsp;Hz 4th-order Butterworth high-pass filter</strong> (AD-015) before SSB modulation. That filter is a measurable win: it drops sub-300&nbsp;Hz envelope power from 30.4% to 3.7% of the total, pushing 96% of PA power into the 300–2800&nbsp;Hz voice band. The modulation chain ends with a tanh soft-limiter and a linear ramp, so the transmitted envelope never slams into the PA.</p>
 
-        <p>This article pulls from the <a href="/sunmrrc/">SunMRRC</a> server and its <a href="/sunsdrmobile/">SunsdrMobile</a> iOS client, both open source. The architecture decisions (AD-004 dual-codec transport, AD-014 ring buffer, AD-015 TX filter) are documented in the <a href="/sunmrrc/sdd/">SunMRRC Software Design Document</a>.</p>
+        <p>This article pulls from the <a href="/sunmrrc/">SunMRRC</a> server and its <a href="/sunmrrc/ios/">SunsdrMobile</a> iOS client, both open source. The architecture decisions (AD-004 dual-codec transport, AD-014 ring buffer, AD-015 TX filter) are documented in the <a href="/sunmrrc/sdd/">SunMRRC Software Design Document</a>.</p>
 
         </div>
 </main>

@@ -11,7 +11,7 @@ This is a workspace grouping HAM radio project websites. All are pure static HTM
 
 **Project sub-sites (symlinks):**
 - **MRRC** (`mrrc/` → `/Users/cheenle/UHRR/MRRC/website/`) — Website for the MRRC (Mobile Remote Radio Control) project. Deployed to `https://www.vlsc.net/mrrc/`.
-- **MRRC FT-710** (`mrrc_ft710/` → `/Users/cheenle/HAM/mrrc_ft710/website/`) — Website for the MRRC FT-710 (Software SCU-LAN10 replacement for Yaesu FT-710). Deployed to `https://www.vlsc.net/mrrc_ft710/`. Uses octen.css with amber (`#f0a030`) brand overrides in `css/ft710.css`.
+- **MRRC FT-710** (`mrrc_ft710/` → `/Users/cheenle/HAM/mrrc_ft710/website/`) — **已归档 2026-09-12，并入 MRRC Modern。** 仓库只读（GitHub archived），网站 `/mrrc_ft710/` 已 301 到 `/mrrc_modern/`，`website/deploy.sh` 已加禁用守卫。 `mrrc_modern` 是严格超集（同一根提交 `9403e2e`，ft710 零独有代码模块），因此该目录仍保留作为历史入口与跨站 grep 目标。以下描述为归档前状态：Website for the MRRC FT-710 (Software SCU-LAN10 replacement for Yaesu FT-710). Uses octen.css with amber (`#f0a030`) brand overrides in `css/ft710.css`.
 - **SunMRRC** (`sunmrrc/` → `/Users/cheenle/HAM/sunsdr/sunmrrc/website/`) — Website for the SunMRRC (SunSDR2 DX Mobile Radio Control) project. Deployed to `https://www.vlsc.net/sunmrrc/`.
 - **SunsdrMobile** (`SunsdrMobile/` → `/Users/cheenle/HAM/sunsdr/SunsdrMobile/website/`) — Promotional website for the SunsdrMobile native iOS app for SunSDR2 DX. Deployed to `https://www.vlsc.net/sunsdrmobile/`.
 - **EFHW** (`efhw/`) — Product website for the EFHW Fuchs ATU V3.0 and EFHW antenna knowledge ecosystem. Deployed to `https://www.vlsc.net/efhw/`. Uses octen.css with emerald green (`#10b981`) brand overrides in `css/efhw.css`.
@@ -179,7 +179,20 @@ python3 build_sdd.py
 
 This regenerates all files in `sdd/`. Each output page embeds the SunMRRC navbar, a sticky sidebar with all 15 SDD chapters, and footer. The script defines the file mapping and nav structure as Python lists near the top — edit those to add/remove chapters.
 
-## MRRC FT-710-specific (`mrrc_ft710/`)
+## MRRC FT-710-specific (`mrrc_ft710/`) — 已归档 2026-09-12
+
+> **归档说明**：本项目已并入 **MRRC Modern**，仓库设为只读（GitHub archived），
+> 网站 `https://www.vlsc.net/mrrc_ft710/` 全量 **301 到 `/mrrc_modern/`**（nginx `location ^~`，
+> 必须用 `^~`——普通前缀会被 `~*\.(css|js|…)$` 正则截走），服务器目录已删除，
+> `website/deploy.sh` 已加禁用守卫。
+>
+> **不得**把 `mrrc_ft710` 从导航/产品表重新加回 portal（那是已完成的归档工作）。
+> **但**血统与证据层必须保留：`portal/agentic.html`（血统图、`MRRC FT-710 inspired-by → MRRC Modern`）、
+> `portal/engineering.html`（产品族证据表、`FT-710: 439 tests`）、博客系列账本表/时间线/事故链/
+> 约束计数（17/21/14 = 52）。删这些等于抹掉论证起点。
+>
+> 归档时仓库 HEAD 在 `scope-redesign` 分支（`9c353a1`），另 13 个独有提交全在 `website/` 与
+> `docs/`，零源码差异。
 
 ```
 mrrc_ft710/ (→ /Users/cheenle/HAM/mrrc_ft710/website/)

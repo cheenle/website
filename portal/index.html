@@ -8,6 +8,22 @@
     <meta name="author" content="BG1SB">
     <meta name="theme-color" content="#000000">
 
+    <!-- Google tag (gtag.js) - Google's own install snippet, in the page itself
+         rather than only via the shared script. One deliberate addition: the two
+         gtag() calls sit behind the same vlsc.net host guard js/global-nav.js uses,
+         so local previews and file:// opens send nothing. Every other page on this
+         site receives the identical tag from js/global-nav.js. "One Google tag per
+         page" is enforced by the window.dataLayer check present in both places. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JQLSKV1MCT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      if (/(^|\.)vlsc\.net$/.test(location.hostname)) {
+        gtag('js', new Date());
+        gtag('config', 'G-JQLSKV1MCT');
+      }
+    </script>
+
     <title>VLSC Projects — Open-Source Remote Radio Control Ecosystem</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

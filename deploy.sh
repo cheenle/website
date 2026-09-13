@@ -1,49 +1,52 @@
 #!/bin/bash
 # ════════════════════════════════════════════════════════════════════
-# VLSC Unified Deploy — deploys all HAM-radio project sites to www.vlsc.net
+# VLSC Unified Deploy — dispatches to each site's own deploy.sh
 #
 # Usage:
-#   ./deploy.sh                 # deploy all 7 sites (prompt to confirm)
-#   ./deploy.sh portal          # deploy only named site(s)
-#   ./deploy.sh mrrc sunmrrc    # deploy several
-#   ./deploy.sh --yes           # skip confirmation prompt
-#   ./deploy.sh --list          # list configured sites and exit
+#   ./deploy.sh                  # every site below, one confirmation each
+#   ./deploy.sh portal mrrc      # only the named sites
+#   ./deploy.sh --yes            # auto-confirm (answers each prompt with "y")
+#   ./deploy.sh --list           # list configured sites and exit
 #
-# Server: nginx on www.vlsc.net (HTTPS via Let's Encrypt).
-# Each site is backed up before overwrite. Reloads nginx once at the end.
+# This script used to package, back up, set ownership and print rollback hints
+# itself — a second implementation of what every site's own deploy.sh already
+# does. The two copies drifted, and every drift was a live hazard (measured
+# 2026-09-13):
+#   • the table listed /mrrc_ft710/ and /sunsdrmobile/, which nginx 301-redirects
+#     and whose server directories are gone — a bare `./deploy.sh` would have
+#     resurrected both dead sites — and it omitted mrrc_modern entirely;
+#   • the pre-flight demanded js/global-nav.js, which sunmrrc and mrrc_ft8 do not
+#     ship (they load js/scope.js), so those two could never be deployed here;
+#   • the package excluded nothing, so mrrc_modern's 363MB downloads/ crossed the
+#     wire on every release, and the remote backup was a plain `cp -r` of it —
+#     the accumulation CLAUDE.md records as filling a volume to 100%;
+#   • ownership ran `chown -R` on the site directory, which for the portal IS
+#     /var/www/vlsc.net, the DocumentRoot shared with every sub-site;
+#   • the rollback hint printed `sudo rm -rf <remote_dir>` — for the portal,
+#     "delete the DocumentRoot and restore the landing page".
+# CLAUDE.md forbids all five. Rather than maintain a corrected second copy, this
+# script now runs each site's own deploy.sh, which owns packaging, backups,
+# permissions, rollback text and the nginx reload in one place per site.
 # ════════════════════════════════════════════════════════════════════
 set -euo pipefail
 
-# ── Config ──────────────────────────────────────────────────────────
 REMOTE_HOST="www.vlsc.net"
 REMOTE_USER="cheenle"
-REMOTE_ROOT="/var/www/vlsc.net" # nginx DocumentRoot
-BACKUP_BASE="/var/www/backups"
 
-# Each site: key | local dir | remote subdir (under REMOTE_ROOT) | URL
+# key | directory containing that site's deploy.sh | URL
+# Archived sub-sites (/mrrc_ft710/, /sunsdrmobile/) are deliberately absent:
+# nginx 301-redirects them, their server directories are deleted, and their own
+# deploy.sh scripts refuse to run. Deploying them would recreate directories
+# that nothing links to.
 SITES=(
-	"portal|/Users/cheenle/HAM/website/portal||https://$REMOTE_HOST/"
-	"mrrc|/Users/cheenle/HAM/MRRC/website|mrrc|https://$REMOTE_HOST/mrrc/"
-	"mrrc_ft710|/Users/cheenle/HAM/mrrc_ft710/website|mrrc_ft710|https://$REMOTE_HOST/mrrc_ft710/"
-	"mrrc_ft8|/Users/cheenle/HAM/ft8/website|mrrc_ft8|https://$REMOTE_HOST/mrrc_ft8/"
-	"sunmrrc|/Users/cheenle/HAM/sunsdr/sunmrrc/website|sunmrrc|https://$REMOTE_HOST/sunmrrc/"
-	"sunsdrmobile|/Users/cheenle/HAM/sunsdr/SunsdrMobile/website|sunsdrmobile|https://$REMOTE_HOST/sunsdrmobile/"
-	"efhw|/Users/cheenle/HAM/website/efhw|efhw|https://$REMOTE_HOST/efhw/"
+	"portal|/Users/cheenle/HAM/website/portal|https://$REMOTE_HOST/"
+	"efhw|/Users/cheenle/HAM/website/efhw|https://$REMOTE_HOST/efhw/"
+	"mrrc|/Users/cheenle/HAM/MRRC/website|https://$REMOTE_HOST/mrrc/"
+	"mrrc_modern|/Users/cheenle/HAM/mrrc_modern/website|https://$REMOTE_HOST/mrrc_modern/"
+	"mrrc_ft8|/Users/cheenle/HAM/ft8/website|https://$REMOTE_HOST/mrrc_ft8/"
+	"sunmrrc|/Users/cheenle/HAM/sunsdr/sunmrrc/website|https://$REMOTE_HOST/sunmrrc/"
 )
 
-# Files/dirs to exclude from every site's tarball
-EXCLUDES=(
-	--exclude='deploy.sh'
-	--exclude='.DS_Store'
-	--exclude='.claude'
-	--exclude='.iflow_logs'
-	--exclude='stats'
-	--exclude='logs'
-	--exclude='node_modules'
-	--exclude='*.tar.gz'
-)
-
-# ── Colors ──────────────────────────────────────────────────────────
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -52,18 +55,24 @@ BOLD='\033[1m'
 NC='\033[0m'
 
 # ── Functions ──────────────────────────────────────────────────────
+list_sites() {
+	for s in "${SITES[@]}"; do
+		IFS='|' read -r key ldir url <<<"$s"
+		printf "  ${CYAN}%-14s${NC} %s\n" "$key" "$url"
+	done
+}
+
 usage() {
-	sed -n '2,16p' "$0"
+	cat <<'USAGE'
+Usage:
+  ./deploy.sh                  deploy every configured site (one prompt each)
+  ./deploy.sh portal mrrc      deploy only the named sites
+  ./deploy.sh --yes            auto-confirm each site's prompt
+  ./deploy.sh --list           list configured sites and exit
+USAGE
 	echo
 	echo "Available sites:"
 	list_sites
-}
-
-list_sites() {
-	for s in "${SITES[@]}"; do
-		IFS='|' read -r key ldir rsub url <<<"$s"
-		printf "  ${CYAN}%-14s${NC} %s\n" "$key" "$url"
-	done
 }
 
 # ── Args ────────────────────────────────────────────────────────────
@@ -84,10 +93,9 @@ for arg in "$@"; do
 	esac
 done
 
-# Resolve which sites to deploy
 DEPLOY_KEYS=()
 for s in "${SITES[@]}"; do
-	IFS='|' read -r key _ _ _ <<<"$s"
+	IFS='|' read -r key _ _ <<<"$s"
 	if [ ${#ONLY[@]} -eq 0 ]; then
 		DEPLOY_KEYS+=("$key")
 	else
@@ -105,123 +113,86 @@ fi
 
 # ── Header ──────────────────────────────────────────────────────────
 echo -e "${BOLD}══════════════════════════════════════════════════════════════"
-echo -e "  VLSC Unified Deploy → $REMOTE_HOST (nginx)"
+echo -e "  VLSC Unified Deploy → $REMOTE_HOST (each site's own deploy.sh)"
 echo -e "══════════════════════════════════════════════════════════════${NC}"
 echo -e "Sites to deploy:"
 for k in "${DEPLOY_KEYS[@]}"; do
 	for s in "${SITES[@]}"; do
-		IFS='|' read -r key ldir rsub url <<<"$s"
+		IFS='|' read -r key ldir url <<<"$s"
 		[ "$key" = "$k" ] && printf "  ${GREEN}•${NC} %-12s %s\n" "$key" "$url"
 	done
 done
 echo
 
-# ── Pre-flight: verify local dirs + required files ──────────────────
+# ── Pre-flight: every selected site must own a runnable deploy.sh ───
 echo -e "${YELLOW}Pre-flight checks…${NC}"
 for k in "${DEPLOY_KEYS[@]}"; do
 	for s in "${SITES[@]}"; do
-		IFS='|' read -r key ldir rsub url <<<"$s"
+		IFS='|' read -r key ldir url <<<"$s"
 		[ "$key" = "$k" ] || continue
-		if [ ! -d "$ldir" ]; then
-			echo -e "  ${RED}✗ $key: local dir missing: $ldir${NC}"
+		if [ ! -x "$ldir/deploy.sh" ]; then
+			echo -e "  ${RED}✗ $key: no executable deploy.sh in $ldir${NC}"
 			exit 1
 		fi
-		ok=1
-		for f in index.html css/octen.css; do
-			[ -f "$ldir/$f" ] || {
-				echo -e "  ${RED}✗ $key: missing $f${NC}"
-				ok=0
-			}
-		done
-		[ -f "$ldir/js/global-nav.js" ] || {
-			echo -e "  ${RED}✗ $key: missing js/global-nav.js${NC}"
-			ok=0
-		}
-		[ $ok -eq 1 ] && echo -e "  ${GREEN}✓ $key${NC} ($ldir)"
+		echo -e "  ${GREEN}✓ $key${NC} ($ldir/deploy.sh)"
 	done
 done
 echo
 
-# ── Confirm ─────────────────────────────────────────────────────────
-if [ $ASSUME_YES -ne 1 ]; then
-	read -rp "Deploy these ${#DEPLOY_KEYS[@]} site(s) to $REMOTE_HOST? [y/N] " confirm
-	[[ "$confirm" =~ ^[yY]$ ]] || {
-		echo "Cancelled."
-		exit 0
-	}
-fi
-
-TS="$(date +%Y%m%d_%H%M%S)"
-
-# ── Deploy each site ───────────────────────────────────────────────
+# ── Deploy each site via its own script ─────────────────────────────
+# The site script owns packaging, backup + retention, ownership, rollback text
+# and reloading nginx — all of it scoped to that site's own directory.
 deploy_one() {
-	local key="$1"
-	local ldir rsub url remote_dir
+	local key="$1" ldir url
 	for s in "${SITES[@]}"; do
-		IFS='|' read -r k ldir rsub url <<<"$s"
+		IFS='|' read -r k ldir url <<<"$s"
 		[ "$k" = "$key" ] && break
 	done
-	remote_dir="$REMOTE_ROOT${rsub:+/$rsub}"
-	local pkg="/tmp/vlsc_${key}_${TS}.tar.gz"
-	local backup="${BACKUP_BASE}/${key}_${TS}"
 
 	echo -e "${BOLD}▼ [$key]${NC} $url"
-	echo -e "  local : $ldir"
-	echo -e "  remote: $remote_dir"
-
-	# 1. Package
-	tar -czf "$pkg" "${EXCLUDES[@]}" -C "$ldir" .
-	echo -e "  ${GREEN}✓${NC} packaged $(du -h "$pkg" | cut -f1)"
-
-	# 2. Remote: backup + prep + extract + perms (single SSH round-trip)
-	scp -q "$pkg" "$REMOTE_USER@$REMOTE_HOST:/tmp/"
-	ssh "$REMOTE_USER@$REMOTE_HOST" bash -s "$key" "$remote_dir" "$backup" "$pkg" <<'REMOTE'
-    set -e
-    KEY="$1"; REMOTE_DIR="$2"; BACKUP="$3"; PKG="$4"
-
-    # Backup current site if non-empty
-    if [ -d "$REMOTE_DIR" ] && [ "$(ls -A "$REMOTE_DIR" 2>/dev/null)" ]; then
-      sudo mkdir -p /var/www/backups
-      sudo cp -r "$REMOTE_DIR" "$BACKUP"
-      echo "  • backed up → $BACKUP"
-    else
-      echo "  • remote empty, skipped backup"
-    fi
-
-    sudo mkdir -p "$REMOTE_DIR"
-    sudo tar -xzf "$PKG" -C "$REMOTE_DIR" --overwrite
-    sudo chown -R www-data:www-data "$REMOTE_DIR"
-    sudo chmod -R 755 "$REMOTE_DIR"
-    sudo find "$REMOTE_DIR" -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -exec chmod 644 {} \;
-    rm -f "$PKG"
-    echo "  • extracted + permissions set"
-REMOTE
-	rm -f "$pkg"
+	if [ "$ASSUME_YES" -eq 1 ]; then
+		( cd "$ldir" && yes y | ./deploy.sh )
+	else
+		( cd "$ldir" && ./deploy.sh )
+	fi
 	echo -e "  ${GREEN}✓ [$key] done${NC}"
 	echo
 }
 
+FAILED=()
 for k in "${DEPLOY_KEYS[@]}"; do
-	deploy_one "$k"
+	deploy_one "$k" || FAILED+=("$k")
 done
 
-# ── Reload nginx once ───────────────────────────────────────────────
-echo -e "${YELLOW}Reloading nginx…${NC}"
-ssh "$REMOTE_USER@$REMOTE_HOST" 'sudo nginx -t && sudo systemctl reload nginx' &&
-	echo -e "${GREEN}✓ nginx reloaded${NC}" ||
-	echo -e "${RED}✗ nginx reload failed — check config${NC}"
+# ── Verify nginx once (each site's script has already reloaded it) ──
+echo -e "${YELLOW}Verifying nginx…${NC}"
+if ssh "$REMOTE_USER@$REMOTE_HOST" 'sudo nginx -t && sudo systemctl reload nginx'; then
+	echo -e "${GREEN}✓ nginx healthy${NC}"
+else
+	echo -e "${RED}✗ nginx check failed — inspect the config before serving again${NC}"
+	FAILED+=("nginx")
+fi
 
-# ── Summary ────────────────────────────────────────────────────────
+# ── Summary ─────────────────────────────────────────────────────────
 echo
 echo -e "${BOLD}══════════════════════════════════════════════════════════════${NC}"
-echo -e "${GREEN}  Deployment complete${NC}"
+if [ ${#FAILED[@]} -eq 0 ]; then
+	echo -e "${GREEN}  Deployment complete${NC}"
+else
+	echo -e "${RED}  Finished with failures: ${FAILED[*]}${NC}"
+fi
 echo -e "${BOLD}══════════════════════════════════════════════════════════════${NC}"
 for k in "${DEPLOY_KEYS[@]}"; do
 	for s in "${SITES[@]}"; do
-		IFS='|' read -r key ldir rsub url <<<"$s"
+		IFS='|' read -r key ldir url <<<"$s"
 		[ "$key" = "$k" ] && echo -e "  $url"
 	done
 done
 echo
-echo "Rollback: ssh $REMOTE_USER@$REMOTE_HOST"
-echo "  sudo rm -rf <remote_dir> && sudo cp -r /var/www/backups/<key>_${TS} <remote_dir>"
+echo "Rollback: each site's deploy.sh prints its own backup path and a restore"
+echo "command scoped to that site alone. Never 'rm -rf /var/www/vlsc.net/*':"
+echo "the sub-sites share that DocumentRoot and are not in the portal's backup."
+echo
+echo "Verify the deployed files: curl -s https://$REMOTE_HOST/<site>/ | head -1"
+
+[ ${#FAILED[@]} -eq 0 ]

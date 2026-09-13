@@ -31,7 +31,11 @@ echo "[OK] Required files present."
 echo "[..] Creating tarball..."
 cd "$(dirname "${LOCAL_WEBSITE_DIR}")"
 # check_baluns.py is a local verification gate, not site content — keep it out of the webroot.
-tar czf "${TARBALL}" --exclude='efhw/check_baluns.py' efhw/
+# deploy.sh likewise: until 2026-09-13 the package shipped it and https://www.vlsc.net/efhw/deploy.sh
+# answered HTTP 200, publishing internal paths and backup locations (CLAUDE.md: build-time
+# tooling must not be in the package at all — the DocumentRoot is world-readable).
+# No remote prune is needed here: this script wipes $REMOTE_WEBROOT before extracting.
+tar czf "${TARBALL}" --exclude='efhw/check_baluns.py' --exclude='efhw/deploy.sh' --exclude='efhw/.DS_Store' efhw/
 echo "[OK] Tarball created: ${TARBALL}"
 
 # Confirm

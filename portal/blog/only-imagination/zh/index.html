@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>只剩想不到：当想法可以立刻变成尝试 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="在历史上，想法都死于等待：从「想到」到「试一下」的距离以周、金钱和团队计。这道距离刚刚塌缩。这个时代最大的价值不是速度或成本，而是一个人与其可能性之间的距离变短了——白日梦终于有了一条路。同时给出诚实的另一半：便宜的是尝试，证据与裁决仍然昂贵，治库要你自己建。"
+    />
+    <meta
+      name="keywords"
+      content="从想到试, 白日梦, 智能体工程, AI 年代, 廉价尝试, 治理, 约束注册表, 人类判断, 现场证据, 开源, 独行维护者, MRRC Modern, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="只剩想不到：当想法可以立刻变成尝试" />
+    <meta
+      property="og:description"
+      content="想法库（智库）已经打开了出口。当尝试的代价塌缩，什么被释放——以及为什么治理库（治库）才是把白日梦变成可信增量的东西。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/only-imagination/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/only-imagination/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/only-imagination/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/only-imagination/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/only-imagination/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=3" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "只剩想不到：当想法可以立刻变成尝试",
+        "description": "想法库已经打开出口。当尝试的代价塌缩，什么被释放，为什么白日梦可以发生，以及为什么治库才让它们可信。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-09-19",
+        "keywords": "从想到试, 白日梦, 智能体工程, 廉价尝试, 治理, 人类判断, MRRC Modern",
+        "articleSection": "Method",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/only-imagination/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/zh/">首页</a> › <a href="/blog/">博客</a> › <span class="ba-crumb-cat">Method</span> › 只剩想不到</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-lightbulb"></i><span>方法 · 人的尺度</span></div>
+          <h1>只剩<span class="gradient">想不到</span>。</h1>
+          <p>开车时、吃饭时、凌晨三点惊醒时——一个半成形的想法。在全部历史里，这些火花只有一个去处：笔记本，或者遗忘。现在，任何一个都可以变成一条 intent，而一条 intent 可以在咖啡变凉之前变成一个尝试。这不是效率功能；这可能是这个时代给一个人最大的价值。</p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-hourglass-half"></i> 塌缩的距离：想法 → 尝试</span>
+            <span class="ag-pill"><i class="fas fa-coins"></i> 一次记录在案的尝试：$0.0036</span>
+            <span class="ag-pill"><i class="fas fa-user-check"></i> 裁决：仍然归人</span>
+            <span class="ag-pill"><i class="fas fa-scale-balanced"></i> 新的义务：治理</span>
+          </div>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-09-19">2026 年 9 月 19 日</time> &nbsp;·&nbsp; 约 17 分钟</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#bottleneck">瓶颈</a><a href="#collapsed">塌缩了什么</a><a href="#formula">诚实的公式</a><a href="#height">人的尺度</a><a href="#survive">活下来的条件</a><a href="#governance">治库</a><a href="#duty">义务</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">多数关于 AI 的文字都在测量它：token、基准、每百万成本、被影响的岗位。这篇做的是另一件事。它从一个几乎人人都有的经验出发——手在忙、脑子不忙时到来的那个想法——然后问那些测量答不出的问题：<strong>当「试一下」不再昂贵，一个人的一生会发生什么？</strong>这个站点记录的一切——契约、约束注册表、支持回路、独行维护者的仪器——都是这个问题的下游。这篇讲的是：为什么它们重要。</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 六条发现里的论证</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>想法从来不是死于「不好」，而是死于等待。</strong>从想到到试一下的距离，历史上以周、金钱和团队计——于是多数火花根本没被试过。世界上最大的未验证想法库不是图书馆，是记忆。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>这道距离刚刚塌缩。</strong>一条 intent 现在可以交给智能体，几分钟内产出一个初版尝试：一次记录在案的分诊式会话 <strong>$0.0036</strong>，顺畅周里每个落库变更只花 <strong>0.3–0.7 个人类回合</strong>，一个人没有团队在 75 天里提交了 435 次。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>变便宜的只是第一环。</strong>想法 → 尝试塌缩了；尝试 → 证据 → 裁决没有。尝试如今又多又便宜；知道一个尝试<em>是否真的成立</em>依然昂贵，决定它<em>算不算数</em>依然归人。「只剩想不到」是半个真相；另一半是「以及，判断仍然」。 </li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>廉价尝试改变了人的机会结构。</strong>学生、退休者、上夜班的人、小城里的爱好者——任何有品味和 intent 的人，现在都能跑过去需要一家公司才能跑的尝试。约束从「我能不能造出来」移到了「我能不能想到，以及我能不能诚实地判断它」。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>最大的价值不是速度或成本。</strong>而是一个人与其可能性之间的距离变短了。机器不替你做白日梦——它给白日梦一条路。这是人的命题，不是技术的命题。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>想法库（智库）打开了；治理库（治库）还没有。</strong>当尝试变便宜，稀缺的纪律变成了：决定什么值得存在、什么算证据、什么永远归人。这个库要你自己建——用契约、门禁、账本，以及一个永不委托的裁决。</li>
+            </ul>
+            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#collapsed">§02 塌缩了什么</a><a href="#formula">§03 诚实的公式</a><a href="#height">§04 人的尺度</a><a href="#duty">§07 义务</a></div>
+          </div>
+        </div>
+
+        <section id="bottleneck" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 瓶颈</span>
+            <h2 class="ag-section-title">最古老的瓶颈从来不是想象力</h2>
+            <p class="ag-section-subtitle">人类从来不缺想法。缺的是把想法试一下的办法。</p>
+          </header>
+          <p>想想你在车里、淋浴时、排队时、医院走廊里、临睡前半梦半醒时冒出的每一个想法。再想想其中有多少真的被<em>试过</em>。这个诚实比例很残酷，而且它不是个人的失败——它是前 AI 时代的算术：要试一件事，你需要你没有的时间、你没有的技能、你没有的钱，或者一个并不存在的团队。于是想法被写下来，或者没有；然后它加入了那个看不见的档案库：一切被想象过、从未被尝试的东西。</p>
+          <p>技术史可以读成一连串被挪开的约束，每一个都释放出不同的人类能量：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>出现的东西</th><th>挪开的约束</th><th>变得可能的事</th></tr></thead>
+            <tbody>
+              <tr><td>文字</td><td>记忆</td><td>思想能比思考者活得更久</td></tr>
+              <tr><td>印刷术</td><td>复制</td><td>思想能抵达陌生人</td></tr>
+              <tr><td>蒸汽与电力</td><td>肌肉</td><td>工作不再随身体数量缩放</td></tr>
+              <tr><td>计算机</td><td>计算</td><td>符号可以被执行</td></tr>
+              <tr><td>互联网</td><td>距离</td><td>知识与协作可以瞬时抵达</td></tr>
+              <tr><td><strong>智能体执行</strong></td><td><strong>尝试</strong></td><td><strong>一个想法可以无需凑齐「试它的能力」就去接触现实</strong></td></tr>
+            </tbody>
+          </table></div>
+          <p>上面每一行，最初都被误认作一个小玩意。每一行最终都改变了普通人能尝试什么。最后一行，正是这个站点一直在实践中记录的——也是其人类含义最被低估的一行。</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 最古老的一条路</span>
+            <p>李白醉后诗三千——诗不是酒写的，是意写的：<em>有意才有创</em>。一支笔、一个当下、一页纸：路很短，诗就发生了。而在这之前的绝大多数历史里，对我们其余的人，缺的从来不是意，是路。</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">作者论点</span>
+            <p>稀缺的从来不是想法，是尝试。一个文明真正未被开采的资源，是它的人民想象过、却从未有机会去试的全部总和——从来没有人统计过它，而这恰恰是重点。</p>
+          </div>
+        </div></section>
+
+        <section id="collapsed" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 塌缩了什么</span>
+            <h2 class="ag-section-title">从火花到尝试，只要一杯咖啡的时间</h2>
+            <p class="ag-section-subtitle">这不再是思想实验。这是一个普通的星期二。</p>
+          </header>
+          <p>这个经验值得被明确说出来，因为它是「作为一个人」的历史上的新事物：你凌晨三点惊醒，带着一个半成形的想法。你写下一段话——不是计划，不是规格，是一条 intent。智能体带着真实工具、真实仓库和你的约束接住它；到早上，那里有一个尝试：能跑起来、能被看见、能失败得有意义。这个想法没有等一个周末、一个合伙人，或者一次预算批准。它在你睡觉的时候见了现实。</p>
+          <p>这件事的经济账现在是被测量出来的，不是被断言的。在这个项目自己的记录里：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>什么</th><th>实测值</th><th>对一个想法意味着什么</th></tr></thead>
+            <tbody>
+              <tr><td>一次记录在案的分诊式智能体会话</td><td><strong>$0.0036</strong>（137 输入 · 1,229 输出 · 349,824 缓存）</td><td>一次初版尝试比一根咖啡搅拌棒还便宜</td></tr>
+              <tr><td>价值档推理</td><td>约 $0.14–$0.27/百万 token</td><td>个人可以负担每天制造尝试</td></tr>
+              <tr><td>每个落库变更的人类回合（顺畅周）</td><td><strong>0.3–0.7</strong></td><td>一句 intent 可以承载好几个完成的增量</td></tr>
+              <tr><td>一个人、没有团队、75 天</td><td>435 提交 · 67 行 SDD · 22 条约束 · 测试 262 → 1,299</td><td>过去需要一家小公司的产能，现在装进一个爱好</td></tr>
+              <tr><td>支持链（任何上报的首轮判读）</td><td>≤ 10 分钟，无人值守</td><td>连想法的<em>维护</em>也不再排在一个人的注意力后面</td></tr>
+            </tbody>
+          </table></div>
+          <p>再读一遍最后一行，因为它是人们最容易忽略的。不只是「建造」变便宜了，而是<strong>让一个东西活下来</strong>变便宜了——读取、答复、修复、记录。一个白日梦不会死于第一次尝试失败；它死于没有人负担得起第二次尝试。那笔成本也挪开了。</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 账本已经存在</span>
+            <p>以上数字不是预测；它们来自一个正在运行的系统——就是<a href="/blog/three-axes/zh/">《三板斧》</a>与<a href="/blog/seven-billion-tokens/zh/">《七十亿 token》</a>里描述的那一套。带日期与边界的可比数字在<a href="/zh/agentic.html#evidence">证据台账</a>。</p>
+          </div>
+        </div></section>
+
+        <section id="formula" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 诚实的公式</span>
+            <h2 class="ag-section-title">「只剩想不到」是半个真相</h2>
+            <p class="ag-section-subtitle">链条上有四个词，只有第一个变便宜了。</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>环节</th><th>过去的成本</th><th>现在的成本</th><th>仍然稀缺？</th></tr></thead>
+            <tbody>
+              <tr><td><strong>想到</strong>——有一个值得试的想法</td><td>免费（但无法留存）</td><td>免费（现在可以留存）</td><td>不——这正是礼物</td></tr>
+              <tr><td><strong>尝试</strong>——造出接触现实的东西</td><td>数周、金钱、团队</td><td><strong>几厘钱、几分钟</strong></td><td>不——这是革命</td></tr>
+              <tr><td><strong>验证</strong>——知道它到底成不成立</td><td>一个人常常做不到</td><td>仍然是实打实的工作：测试、台架、现场</td><td><strong>是——证据没有变免费</strong></td></tr>
+              <tr><td><strong>裁决</strong>——决定它算不算、能不能发、安不安全</td><td>一位资深的人</td><td>仍然是一位人</td><td><strong>是——而且永不委托</strong></td></tr>
+            </tbody>
+          </table></div>
+          <p>所以准确的口号不是「只剩想不到」，而是：<em>只剩想不到——以及，判断仍然</em>。这个区分不是较真——它是「发明时代」和「貌似合理垃圾时代」的分界。当尝试变免费，世界会充满<em>被造出来</em>但从未<em>被验证</em>的东西：漂亮的演示、自信的主张、无人审查的补丁。这个时代真正重要的组织与个人，不是能生成最多尝试的那些，而是能<strong>信任</strong>一个尝试的那些——因为他们建起了做判断的那道门。</p>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">推断 · 廉价尝试的陷阱</span>
+            <p>一个便宜的尝试感觉像进步。如果下游没有任何东西是昂贵的，这种感觉就是陷阱：没有测试、没有现场、没有裁决。尝试的价值不在于它存在，而在于它教会了什么。没有证据的尝试，是加了步骤的白日梦；证据，才是把白日梦变成知识的东西。</p>
+          </div>
+        </div></section>
+
+        <section id="height" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 人的尺度</span>
+            <h2 class="ag-section-title">一个人与其可能性之间的距离</h2>
+            <p class="ag-section-subtitle">这是任何基准都测不到的部分，也是真正的价值。</p>
+          </header>
+          <p>想一想，谁曾被结构性地挡在「试一下」之外。不是没有才华的人——是<strong>没有支撑的人</strong>：没有工程学位的自学建造者；有四十年判断力却没有一双写代码的手的退休者；最好的思考发生在凌晨四点的夜班工人；与任何分享其痴迷的人相距三个时区的爱好者；想法因为找不到一起建造的人而死亡的的学生。对他们每一个来说，瓶颈从来不是想象力的质量，是他们负担不起围在自己想法身边的那家公司。</p>
+          <p>当尝试变便宜，改变的不只是吞吐量，是<strong>许可</strong>。多数想法从未被尝试，原因不是懒，而是一个安静而理性的计算：<em>我没有条件，所以开始没有意义。</em>廉价尝试拆掉了这个计算。它们不保证成功；它们让第一步不再荒谬。而几乎全部人类潜能，正是丢在第一步上。</p>
+          <p>看看这个站点自己的实践已经证明的东西，在尽可能小的尺度上：一个人，没有预算，没有团队，一个爱好——却拥有一条带公开答复页的支持链、一个约束注册表、一个无人值守实施者。如果一个爱好是这个形状，那么同样的形状对一间教室、一家诊所、一个小农场、一个地方档案室、一个有问题却没有供应商的村庄都是可用的。这个时代的价值不是少数人变快了，而是<strong>想法库的出口变宽了</strong>。</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">作者论点 · 人的价值命题</span>
+            <p>机器不会替你做白日梦。它对想法没有利害、没有品味、没有理由在乎它是否存在。它提供的是路——以及历史上第一次，这条路不再要求你先变得有权力。这就是最大的价值：未被尝试的人生不再是默认。白日梦会发生。</p>
+          </div>
+          <p>还有一句话，让这一切不落入炒作：<strong>发生了的白日梦，就不再是白日梦。</strong>它是接触了现实的东西——意味着它会失败、会教会你、会接受裁决。喜悦不是「没有边界了」，喜悦是「不再有关于能力的借口了」。剩下的是诚实的工作：品味、纪律，以及发现自己错了的勇气。</p>
+        </div></section>
+
+        <section id="survive" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · 活下来的条件</span>
+            <h2 class="ag-section-title">一个白日梦要活过现实的接触，需要四样东西</h2>
+            <p class="ag-section-subtitle">方法篇章讲的是装置；这里讲每一件装置「为了人」的用途。</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card"><h3>一份契约——让尝试有靶子</h3><p>脑子里的想法无法被尝试；写成 intent 的想法可以。活体 SDD 的存在，是为了让凌晨三点的洞察变成一句带验收条件的话，而不是一个到早餐就淡掉的情绪。把它写下来，是你认真对待自己想法。
+
+的第一个动作。</p></article>
+            <article class="ag-card"><h3>一道护栏——让尝试不会伤人</h3><p>廉价尝试只有在有界时才安全。约束注册表、发射门禁、保护路径：它们的存在，是为了让你能让智能体高速试东西，而不会危及那些无法反悔的东西。门禁让胆量变得可负担。</p></article>
+            <article class="ag-card"><h3>一道门禁——让「能跑」有意义</h3><p>测试、台架、现场证据。门禁是白日梦付学费的地方。没有它，尝试是演示；有了它，尝试是你建下一个尝试所依赖的知识。</p></article>
+            <article class="ag-card"><h3>一本账——让尝试变成记忆</h3><p>版本行与证据台账，把一个人的试错变成下一个人（或下一个你）不必重新推导的东西。一段充满尝试的人生，是这样复利而不是蒸发的。</p></article>
+          </div>
+          <p>注意形状：<strong>左边是想象，中间是证据，右边是裁决</strong>。这就是总纲页说的分工——执行可被委托，判断不能——从人的一侧看过去的样子。<a href="/blog/solo-loop/zh/">《独行回路》</a>里的仪器不是来替你做白日梦的；它们是来把你的梦抬过无聊的部分，而不是弄丢它。</p>
+        </div></section>
+
+        <section id="governance" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · 治库</span>
+            <h2 class="ag-section-title">想法库打开了。治库还没有。</h2>
+            <p class="ag-section-subtitle">还有第二个库，而这个时代真正要你建的，是它。</p>
+          </header>
+          <p>如果尝试是廉价的，一个诚实的预测随之而来：世界会充满比以往任何时候都多的被造之物——以及比以往任何时候都多的貌似合理胡话，因为把好想法变成原型的同一台机器，也会把坏想法变得令人信服。应对方式不可能是停止尝试，只能是<strong>治理</strong>：一种个人与组织的容量，用来决定什么值得存在、什么算证据、人的线划在哪里。</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>治理问题</th><th>回答它的仪器</th></tr></thead>
+            <tbody>
+              <tr><td>这个尝试有靶子吗？</td><td>一份带验收条件的书面 intent</td></tr>
+              <tr><td>「能跑」是真的吗？</td><td>与主张等级匹配的证据：测试、台架、现场</td></tr>
+              <tr><td>它避开了我们已付过代价的错误吗？</td><td>约束注册表，在编辑落盘前检查</td></tr>
+              <tr><td>让它无人值守地跑安全吗？</td><td>护栏、隔离分支、无人值守不碰 <code>main</code></td></tr>
+              <tr><td>还有什么是未验证的？</td><td>写下来的边界，以及保持可见的已知问题清单</td></tr>
+              <tr><td>它算不算数？</td><td>人的裁决——唯一永不委托的一步</td></tr>
+            </tbody>
+          </table></div>
+          <p>这就是「治库」在实践中的含义，而且一个人就能建：一个注册表、一本账、一道门禁、一个把边界写下来的习惯。想法库已经被替你打开了。治库才是工作——它是「充满尝试的人生」与「充满噪声的人生」之间的区别。</p>
+        </div></section>
+
+        <section id="duty" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · 义务</span>
+            <h2 class="ag-section-title">祝福与责任</h2>
+            <p class="ag-section-subtitle">门的两侧，各一句话。</p>
+          </header>
+          <ol class="steps">
+            <li><h4>想法来了就抓住它</h4><p>凌晨三点、车里、队伍里：一个没有被写成 intent 的想法已经在死去。一段话的收件箱就够了——重点在于路已经开了，而你的工作是把那个念头走到路上。</p></li>
+            <li><h4>做能诚实失败的最小尝试</h4><p>不是完整的梦——是能证明或推翻风险最高假设的那一小块。廉价尝试是一种特权；用它去买信息，不是用它去回避决策。</p></li>
+            <li><h4>先要证据，再庆祝</h4><p>尝试不是成就，学到的东西才是。如果你说不出「怎样算它失败了」，你就还没在尝试——你在表演。</p></li>
+            <li><h4>裁决留给自己</h4><p>算不算完成、能不能发、安不安全，是人的问题，因为它关乎问责，而非能力。把「做」委托出去；永远别把「判」委托出去。</p></li>
+            <li><h4>留下痕迹</h4><p>写下版本行、约束、边界。下一个人——下一个你——应该从这次尝试结束的地方开始，而不是从它开始的地方。</p></li>
+            <li><h4>让更多人进来</h4><p>如果这条路只服务已经很强的人，这个时代最大的价值就没有兑现。把回路教出去，把仪器分享出去，把入口做得无聊而短。</p></li>
+          </ol>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">一句话义务</span>
+            <p>只剩想不到——所以认真地想，便宜地试，诚实地验，把裁决留给人。机器能造出你梦到的东西；它不能替你做梦，也不会替你负责。</p>
+          </div>
+          <p>这个站点全部论证的人话版本：<a href="/zh/agentic.html#thesis">执行可被委托，判断不能</a> · <a href="/blog/three-axes/zh/">把想法带到现场的方法</a> · <a href="/blog/solo-loop/zh/">让一个人把它养活下来的仪器</a> · <a href="/zh/agentic.html#evidence">让它保持诚实的账本</a>。门开着。这就是新闻。</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电操作者，软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话写下来。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>延伸阅读</h3>
+          <ul>
+            <li><a href="/blog/solo-loop/zh/">独行回路：零资金、零团队的开源项目，如何像团队一样响应</a></li>
+            <li><a href="/blog/three-axes/zh/">三板斧：从业务意图到现场证据，端到端</a></li>
+            <li><a href="/blog/support-loop/zh/">支持回路：一周的 🐞 上报，如何变成两次发布</a></li>
+            <li><a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解——尝试时代到底花多少</a></li>
+            <li><a href="/zh/agentic.html">智能体工程——人类意图、智能体执行、现场证据</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

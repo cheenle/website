@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Only Imagination Left: When an Idea Becomes an Attempt Immediately — VLSC Blog</title>
+    <meta
+      name="description"
+      content="For all of history, ideas died of waiting: the gap between imagining and trying was measured in weeks, money and teams. That gap just collapsed. The largest value of this era is not speed or cost — it is that the distance between a person and their possibility shrank, and the daydream finally has a road. With the honest counterpoint: cheap attempts need governance, evidence and a human verdict."
+    />
+    <meta
+      name="keywords"
+      content="intent to attempt, daydreams, agentic engineering, AI era, cheap attempts, governance, constraint registry, human judgment, field evidence, open source, solo maintainer, MRRC Modern, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Only Imagination Left: When an Idea Becomes an Attempt Immediately"
+    />
+    <meta
+      property="og:description"
+      content="The idea vault has an exit now. What opens when attempt cost collapses — and why the governance vault is what turns daydreams into trustworthy increments."
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/only-imagination/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/only-imagination/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/only-imagination/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/only-imagination/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/only-imagination/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=3" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Only Imagination Left: When an Idea Becomes an Attempt Immediately",
+        "description": "The idea vault has an exit now. What opens when the cost of an attempt collapses, why daydreams can finally happen, and why the governance vault is what keeps them trustworthy.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-09-19",
+        "keywords": "intent to attempt, daydreams, agentic engineering, cheap attempts, governance, human judgment, MRRC Modern",
+        "articleSection": "Method",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/only-imagination/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <span class="ba-crumb-cat">Method</span> › Only Imagination Left</span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-lightbulb"></i><span>Method · The Human Stake</span></div>
+          <h1>Only Imagination <span class="gradient">Left.</span></h1>
+          <p>Driving. Eating. Waking at 3 a.m. with an idea half-formed. For all of history those sparks had one destination: a notebook, or oblivion. Now any of them can become an intent, and an intent can become an attempt — before the coffee gets cold. That is not a productivity feature; it may be the largest value this era offers a human being.</p>
+          <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-hourglass-half"></i> the gap that collapsed: idea → attempt</span>
+            <span class="ag-pill"><i class="fas fa-coins"></i> one recorded attempt: $0.0036</span>
+            <span class="ag-pill"><i class="fas fa-user-check"></i> the verdict: still human</span>
+            <span class="ag-pill"><i class="fas fa-scale-balanced"></i> the new duty: governance</span>
+          </div>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-19">Sep 19, 2026</time> &nbsp;·&nbsp; ~17 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#bottleneck">The bottleneck</a><a href="#collapsed">What collapsed</a><a href="#formula">The honest formula</a><a href="#height">At human height</a><a href="#survive">What survives</a><a href="#governance">The governance vault</a><a href="#duty">The duty</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">Most writing about AI measures it: tokens, benchmarks, cost per million, jobs disrupted. This piece does something else. It starts from an experience almost everyone has had — the idea that arrives when your hands are busy and your mind is not — and asks the question that measurements miss: <strong>what happens to a human life when the attempt stops being expensive?</strong> Everything this site documents — the contracts, the constraint registry, the support loop, the solo maintainer's instruments — exists downstream of that question. This is the piece about why any of it matters.</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the argument in six findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Ideas never died of being bad. They died of waiting.</strong> The historical gap between imagining and trying was measured in weeks, money and teams — so most sparks were never tried at all. The world's largest archive of untested ideas was not a library. It was memory.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>That gap just collapsed.</strong> An intent can now be handed to an agent that produces a first attempt in minutes: a recorded triage-style session cost <strong>$0.0036</strong>, a committed change in a smooth week cost <strong>0.3–0.7 human turns</strong>, and one person with no team shipped 435 commits in 75 days.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>Only the first link got cheap.</strong> Idea → attempt collapsed; attempt → evidence → verdict did not. Attempts are now abundant and cheap; knowing whether one <em>worked</em> is still expensive, and deciding whether it <em>counts</em> is still human. "Only imagination left" is half the truth; the other half is "and judgment, still".</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>Cheap attempts change the human opportunity structure.</strong> A student, a retiree, a night-shift worker, a hobbyist in a small town — anyone with taste and intent can now run attempts that previously required a company. The constraint moved from "can I build it?" to "can I imagine it, and will I judge it honestly?"</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>The biggest value is not speed or cost.</strong> It is that the distance between a person and their possibility shrank. The machine does not dream for you — it gives the dream a road. That is a human stake, not a technical one.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>The idea vault is open; the governance vault is not.</strong> When attempts are cheap, the scarce discipline becomes deciding what deserves to exist, what counts as evidence, and what stays human. That vault you have to build yourself — with contracts, gates, ledgers, and a verdict you never delegate.</li>
+            </ul>
+            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#collapsed">§02 what collapsed</a><a href="#formula">§03 the honest formula</a><a href="#height">§04 at human height</a><a href="#duty">§07 the duty</a></div>
+          </div>
+        </div>
+
+        <section id="bottleneck" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · The bottleneck</span>
+            <h2 class="ag-section-title">The oldest bottleneck was never imagination</h2>
+            <p class="ag-section-subtitle">Humans have never been short of ideas. They have been short of ways to try them.</p>
+          </header>
+          <p>Think of every idea you have ever had in a car, a shower, a queue, a hospital corridor, the half-dream before sleep. Now try to recall how many of them were ever <em>tried</em>. The honest ratio is brutal, and it is not a personal failing — it is the arithmetic of the pre-AI world: to try something, you needed time you did not have, skills you did not have, money you did not have, or a team that did not exist. So the idea was written down, or not; and then it joined the invisible archive of everything imagined and never attempted.</p>
+          <p>Technology history can be read as a sequence of constraints being moved, each one releasing a different kind of human energy:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>What appeared</th><th>Constraint it moved</th><th>What became possible</th></tr></thead>
+            <tbody>
+              <tr><td>Writing</td><td>Memory</td><td>Thought could outlive the thinker</td></tr>
+              <tr><td>Printing</td><td>Copying</td><td>Thought could reach strangers</td></tr>
+              <tr><td>Engines and electricity</td><td>Muscle</td><td>Work stopped scaling with bodies</td></tr>
+              <tr><td>Computers</td><td>Calculation</td><td>Symbols could be executed</td></tr>
+              <tr><td>The internet</td><td>Distance</td><td>Knowledge and collaboration could travel instantly</td></tr>
+              <tr><td><strong>Agentic execution</strong></td><td><strong>The attempt</strong></td><td><strong>An idea can meet reality without assembling the capacity to try it</strong></td></tr>
+            </tbody>
+          </table></div>
+          <p>Every row above was, at first, mistaken for a gadget. Each one turned out to be a change in what an ordinary person could attempt. The last row is the one this site has been documenting in practice — and it is the one whose human meaning is least understood.</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · the oldest form of the road</span>
+            <p>Li Bai is said to have written three thousand poems in his cups. The wine did not write them — the intent did: <em>yǒu yì cái yǒu chuàng</em> — only where there is intent is there creation. A brush, a moment, a page: the road was short, and the poems happened. For the rest of us across most of history, the missing piece was never the intent. It was the road.</p>
+          </div>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis</span>
+            <p>The scarcity was never ideas. It was attempts. A civilization's true untapped resource is the sum of everything its people imagined and never got to try — and no one has ever counted it, which is precisely the point.</p>
+          </div>
+        </div></section>
+
+        <section id="collapsed" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · What collapsed</span>
+            <h2 class="ag-section-title">From spark to attempt, in the time it takes to make coffee</h2>
+            <p class="ag-section-subtitle">This is no longer a thought experiment. It is a Tuesday.</p>
+          </header>
+          <p>Here is the experience, and it is worth stating plainly because it is new in the history of being a person: you wake at 3 a.m. with a half-formed idea. You write one paragraph — not a plan, not a spec, an intent. An agent picks it up with real tools, a real repository, and your own constraints; by morning there is an attempt: something that runs, that can be looked at, that can fail informatively. The idea did not wait for a weekend, a co-founder, or a budget approval. It met reality while you slept.</p>
+          <p>The economics of that are measured now, not asserted. In this project's own records:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>What</th><th>Measured value</th><th>What it means for an idea</th></tr></thead>
+            <tbody>
+              <tr><td>One recorded triage-style agent session</td><td><strong>$0.0036</strong> (137 in · 1,229 out · 349,824 cached)</td><td>A first attempt costs less than a coffee stirrer</td></tr>
+              <tr><td>Value-tier inference</td><td>~$0.14–$0.27 per million tokens</td><td>Daily attempt-making is affordable for an individual</td></tr>
+              <tr><td>Human turns per committed change (smooth weeks)</td><td><strong>0.3–0.7</strong></td><td>One sentence of intent can carry several finished increments</td></tr>
+              <tr><td>One person, no team, 75 days</td><td>435 commits · 67 SDD rows · 22 constraints · 262 → 1,299 tests</td><td>The capacity that used to require a small company now fits a hobby</td></tr>
+              <tr><td>Support chain (first reading of any report)</td><td>≤ 10 minutes, unattended</td><td>Even the <em>maintenance</em> of an idea no longer queues behind a human</td></tr>
+            </tbody>
+          </table></div>
+          <p>Read the last row again, because it is the one people miss. It is not just that building got cheap. It is that <em>keeping something alive</em> got cheap — the reading, the answering, the fixing, the documenting. A daydream does not die when the first attempt fails; it dies when nobody can afford the second one. That cost moved too.</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · the ledger already exists</span>
+            <p>None of these figures are projections; they come from a running system — the same one described in <a href="/blog/three-axes/">The Three Axes</a> and <a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected</a>. Comparable numbers with dates and boundaries live in <a href="/agentic.html#evidence">the evidence ledger</a>.</p>
+          </div>
+        </div></section>
+
+        <section id="formula" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · The honest formula</span>
+            <h2 class="ag-section-title">"Only imagination left" is half the truth</h2>
+            <p class="ag-section-subtitle">Four words in the chain, and only the first one became cheap.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Link</th><th>Cost before</th><th>Cost now</th><th>Still scarce?</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Imagine</strong> — have an idea worth trying</td><td>Free (but unrecorded)</td><td>Free (now recordable)</td><td>No — and this is the gift</td></tr>
+              <tr><td><strong>Attempt</strong> — produce something that meets reality</td><td>Weeks, money, teams</td><td><strong>Cents, minutes</strong></td><td>No — this is the revolution</td></tr>
+              <tr><td><strong>Verify</strong> — know whether it actually works</td><td>Often impossible alone</td><td>Still real work: tests, benches, fields</td><td><strong>Yes — evidence did not get free</strong></td></tr>
+              <tr><td><strong>Judge</strong> — decide whether it counts, ships, is safe</td><td>A senior human</td><td>Still a human</td><td><strong>Yes — and never delegated</strong></td></tr>
+            </tbody>
+          </table></div>
+          <p>So the accurate slogan is not "only imagination left". It is: <em>only imagination left, and judgment still</em>. That distinction is not pedantry — it is the difference between an era of invention and an era of plausible garbage. When attempts become free, the world fills with things that were <em>made</em> but never <em>verified</em>: beautiful demos, confident claims, unreviewed patches. The organisations and the individuals who will matter in this era are not the ones who can generate the most attempts. They are the ones who can <em>trust</em> an attempt — because they built the gate that decides.</p>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · the cheap-attempt trap</span>
+            <p>A cheap attempt feels like progress. That feeling is a trap if nothing downstream is expensive: no test, no field, no verdict. The value of an attempt is not its existence — it is what it teaches. Attempts without evidence are daydreams with extra steps; evidence is what turns a daydream into knowledge.</p>
+          </div>
+        </div></section>
+
+        <section id="height" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · At human height</span>
+            <h2 class="ag-section-title">The distance between a person and their possibility</h2>
+            <p class="ag-section-subtitle">This is the part that no benchmark captures, and it is the real value.</p>
+          </header>
+          <p>Consider who was structurally excluded from trying things. Not the untalented — the <em>unsupported</em>: the self-taught builder with no engineering degree; the retiree with forty years of judgment and no coding hands; the night-shift worker whose best thinking happens at 4 a.m.; the hobbyist three time zones from anyone who shares their obsession; the student whose idea dies because there is no one to build it with. For every one of them, the bottleneck was never the quality of their imagination. It was the company they could not afford to keep around their idea.</p>
+          <p>What changes when the attempt gets cheap is not just throughput. It is <strong>permission</strong>. The reason most ideas are never tried is not laziness; it is a quiet, rational calculation: <em>I do not have the means, so there is no point in starting.</em> Cheap attempts dismantle that calculation. They do not guarantee success; they make the first step not absurd. And the first step is where nearly all human potential is lost.</p>
+          <p>Look at what this site's own practice already demonstrates, at the smallest possible scale: one person, no budget, no team, a hobby — and a product line with a public support chain, a constraint registry, and an unattended implementer. If that is the shape of one hobby, the same shape is available to a classroom, a clinic, a small farm, a local archive, a village with a problem and no vendor. The value of the era is not that a few people get faster. It is that the <em>exit from the idea vault widens</em>.</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis · the human stake</span>
+            <p>The machine does not dream for you. It has no stake in your idea, no taste, no reason to care whether it exists. What it provides is a road — and the first time in history that the road does not require you to already be powerful. That is the largest value: the un-attempted life stops being the default. Daydreams can happen.</p>
+          </div>
+          <p>And here is the sentence that keeps this from being hype: <strong>a daydream that happens is not a daydream anymore.</strong> It is a thing that meets reality — which means it can fail, teach, and be judged. The joy is not "no more limits". The joy is "no more excuses about capability". What remains is the honest work: taste, discipline, and the courage to find out that you were wrong.</p>
+        </div></section>
+
+        <section id="survive" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · What survives</span>
+            <h2 class="ag-section-title">For a daydream to survive contact with reality, it needs four things</h2>
+            <p class="ag-section-subtitle">The method pages describe the machinery. Here is what each piece is for, in human terms.</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card"><h3>A contract — so the trial has a target</h3><p>An idea in your head cannot be attempted; an idea written down as intent can. The living SDD exists so that a 3 a.m. insight becomes a sentence with acceptance conditions, not a mood that fades by breakfast. Writing it down is the first act of taking your own idea seriously.</p></article>
+            <article class="ag-card"><h3>A guard — so the attempt cannot wound</h3><p>Cheap attempts are only safe when bounded. The constraint registry, the transmit gate, the protected paths: they exist so that you can let an agent try things at speed without risking the things you cannot un-break. The gates are what make boldness affordable.</p></article>
+            <article class="ag-card"><h3>A gate — so "it works" means something</h3><p>Tests, benches, field evidence. The gate is where a daydream pays its dues. Without it, an attempt is a demo; with it, an attempt is knowledge you can build the next attempt on.</p></article>
+            <article class="ag-card"><h3>A ledger — so the attempt becomes memory</h3><p>The version row and the evidence ledger turn one person's trial into something the next person — or the next you — does not have to re-derive. This is how a life of attempts compounds instead of evaporating.</p></article>
+          </div>
+          <p>Notice the shape: <strong>imagination on the left, evidence in the middle, verdict on the right</strong>. That is the same split the thesis page states — execution can be delegated, judgment cannot — seen from the human side. The instruments in <a href="/blog/solo-loop/">The Solo Loop</a> are not there to replace your dreaming; they are there to carry your dream through the boring parts without losing it.</p>
+        </div></section>
+
+        <section id="governance" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · The governance vault</span>
+            <h2 class="ag-section-title">The idea vault is open. The governance vault is not.</h2>
+            <p class="ag-section-subtitle">There is a second vault, and it is the one this era actually asks you to build.</p>
+          </header>
+          <p>If attempts are cheap, one honest prediction follows: the world will fill with more made things than ever — and with more plausible nonsense than ever, because the same machine that turns your good idea into a prototype turns a bad idea into a convincing one. The response cannot be to stop attempting. It has to be <strong>governance</strong>: a personal and organisational capacity for deciding what deserves to exist, what counts as proof, and where the human line stays.</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Governance question</th><th>The instrument that answers it</th></tr></thead>
+            <tbody>
+              <tr><td>Does this attempt have a target?</td><td>A written intent with acceptance conditions</td></tr>
+              <tr><td>Is "it works" real?</td><td>Evidence at the level of the claim: test, bench, field</td></tr>
+              <tr><td>Did it avoid the mistakes we already paid for?</td><td>The constraint registry, checked before the edit lands</td></tr>
+              <tr><td>Is it safe to let this run unattended?</td><td>Guards, isolated branches, no unattended <code>main</code></td></tr>
+              <tr><td>What is still unproven?</td><td>A boundary written down, and a known-issue list that stays visible</td></tr>
+              <tr><td>Does it count?</td><td>A human verdict — the one step that never delegates</td></tr>
+            </tbody>
+          </table></div>
+          <p>This is what a "governance vault" means in practice, and it is buildable by one person: one registry, one ledger, one gate, one habit of writing the boundary down. The idea vault was opened for you. The governance vault is the work — and it is the difference between a life of attempts and a life of noise.</p>
+        </div></section>
+
+        <section id="duty" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · The duty</span>
+            <h2 class="ag-section-title">The blessing and the responsibility</h2>
+            <p class="ag-section-subtitle">One sentence for each side of the door.</p>
+          </header>
+          <ol class="steps">
+            <li><h4>Capture the idea when it arrives</h4><p>3 a.m., the car, the queue: an idea that is not written as intent is already dying. A one-paragraph inbox is enough — the point is that the road is open, and your job is to walk the thought to it.</p></li>
+            <li><h4>Make the smallest attempt that can fail honestly</h4><p>Not the full dream — the piece that proves or disproves the riskiest assumption. Cheap attempts are a privilege; use them to buy information, not to avoid decisions.</p></li>
+            <li><h4>Demand evidence before you celebrate</h4><p>The attempt is not the achievement. The learning is. If you cannot say how you would know it failed, you are not attempting yet — you are performing.</p></li>
+            <li><h4>Keep the verdict yours</h4><p>Whether it is done, shipped, or safe is a human question, because it is about accountability, not capability. Delegate the doing; never the judging.</p></li>
+            <li><h4>Leave a trace</h4><p>Write the version row, the constraint, the boundary. The next person — the next you — should start where this attempt ended, not where it began.</p></li>
+            <li><h4>Let more people in</h4><p>If the road only serves the already-empowered, the era's biggest value stays unrealised. Teach the loop; share the instruments; make the on-ramp boring and short.</p></li>
+          </ol>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">The one-sentence duty</span>
+            <p>Only imagination is left — so imagine seriously, attempt cheaply, verify honestly, and keep the verdict human. The machine can build what you dreamed; it cannot dream it for you, and it will not answer for it.</p>
+          </div>
+          <p>The human-size version of this site's whole argument: <a href="/agentic.html#thesis">execution can be delegated, judgment cannot</a> · <a href="/blog/three-axes/">the method that carries an idea to the field</a> · <a href="/blog/solo-loop/">the instruments that let one person keep it alive</a> · <a href="/agentic.html#evidence">the ledger that keeps it honest</a>. The door is open. That is the news.</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>Related reading</h3>
+          <ul>
+            <li><a href="/blog/solo-loop/">The Solo Loop: A One-Person Open-Source Project That Answers Like a Team</a></li>
+            <li><a href="/blog/three-axes/">The Three Axes: From Business Intent to Field Evidence, End to End</a></li>
+            <li><a href="/blog/support-loop/">The Support Loop: How a Week of 🐞 Reports Became Two Releases</a></li>
+            <li><a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected — what an era of attempts actually costs</a></li>
+            <li><a href="/agentic.html">Agentic Engineering — Human Intent, Agentic Execution, Field Evidence</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

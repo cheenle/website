@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Support Loop: How a Week of 🐞 Reports Became Two Releases — VLSC Blog</title>
+    <meta
+      name="description"
+      content="Two product lines shipped ten releases in one week — MRRC v6.1.15→v6.1.18 and MRRC Modern v1.18.0/v1.18.1 — on a support chain that runs release → upgrade → diagnose → analyze → answer, and then one step further: a public board where classification is the decision, and an unattended implementer that lands tested patches on isolated branches while main never moves."
+    />
+    <meta
+      name="keywords"
+      content="agentic engineering, loop engineering, product support, self-service, self-diagnosis, support bundle, autopilot triage, one-click upgrade, hotfix, FDE board, classification is the decision, unattended implementation, RNNoise, NR3, rigctld, macOS signing, amateur radio, remote control, MRRC, MRRC Modern, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="The Support Loop: How a Week of 🐞 Reports Became Two Releases"
+    />
+    <meta
+      property="og:description"
+      content="Ten releases in one week across MRRC and MRRC Modern — and the fourth loop practice that followed: a public FDE board where classification is the decision, and an unattended implementer gated by the full test suite. Every verdict cites raw log lines."
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/support-loop/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/support-loop/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/support-loop/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/support-loop/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/support-loop/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=3" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Support Loop: How a Week of 🐞 Reports Became Two Releases",
+        "description": "Ten releases in one week across MRRC and MRRC Modern, shipped on a five-stage support chain — and the fourth loop practice that followed: a public board where classification dispatches, and an unattended implementer that proposes guarded, test-gated patches on isolated branches.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-09-19",
+        "dateModified": "2026-09-19",
+        "keywords": "agentic engineering, loop engineering, product support, self-service, self-diagnosis, support bundle, autopilot triage, one-click upgrade, hotfix, FDE board, unattended implementation, RNNoise, rigctld, macOS signing",
+        "articleSection": "Deployment",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/support-loop/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <span class="ba-crumb-cat">Deployment</span> › The Support Loop</span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-arrows-rotate"></i><span>Deployment · Release &amp; Support</span></div>
+          <h1>The Support <span class="gradient">Loop.</span></h1>
+          <p>Two product lines shipped ten releases in one week. Behind the installers sits a five-stage chain — release → upgrade → diagnose → analyze → answer — and then, one step further: a public board where <em>classification is the decision</em>, and an unattended implementer that proposes tested patches on an isolated branch while <code>main</code> never moves.</p>
+          <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-box-open"></i> 10 releases · Sep 17–18, 2026</span>
+            <span class="ag-pill"><i class="fas fa-bug"></i> 🐞 → answer, searchable by report ID</span>
+            <span class="ag-pill"><i class="fas fa-stopwatch"></i> symptom → hotfix, same day</span>
+            <span class="ag-pill"><i class="fas fa-columns"></i> FDE board · the loop now reaches the code</span>
+          </div>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-19">Sep 19, 2026</time> &nbsp;·&nbsp; ~16 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#releases">Releases</a><a href="#chain">The chain</a><a href="#walls">Walls → features</a><a href="#triage">First reading</a><a href="#fourth-loop">The fourth loop</a><a href="#loops">Loops, honestly</a><a href="#closing">Closing</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">This is a release note with the scenery left in. Two product lines — <strong>MRRC</strong> (the universal Hamlib-based remote station, Windows line, <code>v6.1.x</code>) and <strong>MRRC Modern</strong> (its modernized sibling for FT-710 and IC-7300-class radios, Windows + macOS, <code>v1.18.x</code>) — shipped ten releases in the 48 hours of Sep 17–18, 2026. The installers are the visible half. The other half is the support chain that produced them: one-click upgrade and rollback on the user's side, a redacted diagnostics bundle, a machine first-reading on a ten-minute cron, and a public answers page where every verdict cites raw log lines — and, since Sep 19, a public board with an unattended implementer behind it. This page records what shipped, what the first days of triage taught, and what the chain says about agentic engineering — the discipline of separating judgment from execution — applied outside the repository, where the users are.</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the loop in six findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Two lines, one week, ten releases.</strong> MRRC shipped three installers (v6.1.15 / v6.1.16 / v6.1.18) and five hotfixes; MRRC Modern shipped v1.18.0 (macOS DMG + live update channel) and v1.18.1 (signing and mic-permission fixes, Windows rebuilt in sync).</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The chain is a loop with self-service at both ends.</strong> Users upgrade, roll back, bundle diagnostics, and read answers without filing a ticket; the maintainer's side triages on a ten-minute cron. Four days of machine triage: 7 published replies on MRRC (6 answered, 1 returned for more evidence) plus 1 known-issue card (fixed in 6.1.13); 2 replies on Modern within 48 hours of its first bundles.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>One report is a case; a repeated signature is a requirement.</strong> Two users hit the identical rigctld wall within two hours on Sep 17; the auto-start fix shipped the same day. The NR2 water-sound answer became a level-table change, then exposed knobs, then a third denoising engine.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>The verdict ontology is the requirements sieve.</strong> Environment ≠ defect is not bureaucracy: misclassify environment as defect and the roadmap fills with phantom requirements; misclassify defect as environment and users strand. Every published card carries raw evidence lines so the reader can check the reasoning.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>The loop now reaches the code.</strong> MRRC Modern's fourth loop practice (Sep 19): every analysis lands classified on a public board — noise closes, bug auto-schedules, feature waits — and a cron implementer proposes a guarded unified-diff patch on an isolated <code>fde/&lt;id&gt;</code> branch, committed only when the full test suite is green. <code>main</code> is never touched; the merge stays human.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>Support is the outermost loop of agentic engineering.</strong> The unit of iteration is not the commit — it is the unanswered user symptom. A loop that closes inside the repository can stay open to the field for months; this chain closes it.</li>
+            </ul>
+            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#releases">§01 the ten releases</a><a href="#walls">§03 walls that became features</a><a href="#fourth-loop">§05 the fourth loop</a></div>
+          </div>
+        </div>
+
+        <section id="releases" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Releases</span>
+            <h2 class="ag-section-title">One week, two lines, ten releases</h2>
+            <p class="ag-section-subtitle">What a user actually gets — not a changelog, the experience.</p>
+          </header>
+
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Artifact</th><th>Day</th><th>What the user gets</th></tr></thead>
+            <tbody>
+              <tr><td><strong>MRRC V6.1.15</strong> (installer)</td><td>Sep 17</td><td>The Windows install auto-starts <code>rigctld</code> — the radio's CAT daemon ships inside the package (vendor <code>rigctld.exe</code> + DLLs), with model-name → number resolution so a config that says <code>FT-891</code> works, not just <code>-m 1036</code>.</td></tr>
+              <tr><td><strong>MRRC V6.1.16</strong> (installer)</td><td>Sep 17</td><td>Hardening: the bundled rigctld path is manager-primary and the fallback <em>yields</em> instead of ever blocking startup — a self-start must never cost a boot.</td></tr>
+              <tr><td><strong>MRRC V6.1.18</strong> (installer)</td><td>Sep 18</td><td>A third noise-reduction engine: <strong>NR3 — RNNoise</strong> (Xiph's neural denoiser, v0.2, BSD-3) with <code>[WDSP] nr3 = plus|only|off</code>; libwdsp rebuilt with new EMNR <code>alpha</code>/<code>npMax</code> knobs; the NR2 level table moved down (−6/−9/−12/−16); and a gating fix — denoise off now means <em>true bypass</em>.</td></tr>
+              <tr><td><strong>MRRC hotfixes 6.1.14 → 6.1.18</strong></td><td>Sep 17–18</td><td>Same fixes, hotfix channel: no reinstall — <strong>restart MRRC and they apply</strong>. Auto-start (6.1.14), name→number (6.1.15), fallback-yields (6.1.16), NR2 table (6.1.17), NR3 + gating (6.1.18).</td></tr>
+              <tr><td><strong>MRRC Modern v1.18.0</strong></td><td>Sep 17</td><td>First-class <strong>macOS</strong> (Apple Silicon DMG, macOS 11+) alongside the Windows installer, plus a live update channel (<code>latest.json</code> with SHA-256 taken from the artifacts) and the full support chain: 🐞 bundle, answers page, packaged builds that keep logs.</td></tr>
+              <tr><td><strong>MRRC Modern v1.18.1</strong></td><td>Sep 18</td><td>Two macOS fixes: the app is <strong>signed</strong> (no more "damaged and can't be opened"), and the bundle <strong>requests microphone permission</strong> (no more silent RX). The Windows package was rebuilt in sync from the same source.</td></tr>
+            </tbody>
+          </table></div>
+
+          <p>Alongside the releases, the same week carried performance work now in Modern's line: the TX→RX capture reopen after a transmission dropped from ~270 ms to ~200 ms, muted RX frames stopped being broadcast while the radio is keyed, and PTT release latency got its own SDD version row (V2.55). None of it is glamorous. All of it is measurable.</p>
+
+          <p>And the loop itself shipped that week too: on Sep 19, MRRC Modern deployed the <strong>FDE board</strong> — the lineage's fourth loop practice — a public kanban where every analysis lands classified (bug / feature / noise), plus an unattended implementer that turns scheduled entries into test-gated patches on isolated branches. It is not an installer, so it is not in the table. It is the subject of §05.</p>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · the release discipline behind the table</span>
+            <p>Every installer keeps its <code>previous</code> on the server — git-tracked, because the deploy is <code>rsync --delete</code> and an untracked server file gets deleted (a rollback button once went 404 in exactly this way). Hotfix-channel versions must stay below the installer version; a rollback target must exist and must not be a known-bad build; and the manifest's SHA-256 is verified <em>server-side</em>, because the local download path is not trusted. The comparable cross-project numbers (tests, constraints, versions per family) live in one place: <a href="/agentic.html#evidence">the evidence ledger</a> — sub-sites and blog posts link to it rather than re-stating them.</p>
+          </div>
+        </div></section>
+
+        <section id="chain" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · The chain</span>
+            <h2 class="ag-section-title">What "self-service" and "self-diagnosis" actually mean</h2>
+            <p class="ag-section-subtitle">Five stages — release → upgrade → diagnose → analyze → answer — with the round-trips engineered out.</p>
+          </header>
+
+          <p>Most support chains are an email alias with hope. This one is a pipeline with an instrument on each end. On the <strong>user's side</strong>, the app is built so that the four things a user needs never require a ticket:</p>
+
+          <div class="ag-loop-grid">
+            <article class="ag-card"><h3>⬆️ Upgrade without a download page</h3><p>One button in the web UI (or <code>U</code> in the launcher). The server enforces a PTT gate first — an upgrade is refused with HTTP 423 while the radio is transmitting. The download stages to a <code>.part</code> file, verifies SHA-256, renames atomically, installs, and the launcher hands over cleanly.</p></article>
+            <article class="ag-card"><h3>↩️ Success that can't be faked</h3><p>"Installing" is not success. The only success verdict is <code>state.json → lastResult.status == "ok"</code>, attested by the <em>new</em> version at its own startup. Until the new build says so, the upgrade did not happen. One-click rollback runs the same silent path against the previous installer.</p></article>
+            <article class="ag-card"><h3>🐞 Diagnose without reading logs</h3><p>One menu entry builds a redacted bundle: log tails, a whitelist-redacted config, an environment snapshot (version, platform, audio device table, active hotfix layers), and an auto health summary — <code>diagnostics/summary.txt</code> — that distinguishes restarts from crashes by launch count and time span. Passwords, keys, tokens, recordings, memory channels and tuner learning data never leave the machine.</p></article>
+            <article class="ag-card"><h3>📖 Answers without an email</h3><p>The public <a href="https://www.vlsc.net/mrrc/answers/">answers page</a> is searchable and deep-linkable by report ID. Every card has the same anatomy: ID / symptom / diagnosis with raw evidence / verdict / <em>your move</em> / status. Fixed cards flip to "fixed · version" when the release lands.</p></article>
+          </div>
+
+          <p>On the <strong>maintainer's side</strong>, the same chain runs on a ten-minute cron: fetch new bundles → summarize (reusing the exact summarizer the client ran, so both ends agree on what the summary means) → model analysis under a written discipline → a structured JSON verdict → a rendered card → publish. Publishing is default-deny, runs are idempotent per bundle ID, half-packages are skipped, and each pass caps at two bundles.</p>
+
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · the bundle is the hinge</span>
+            <p>Support used to be an interview: one email = one question, with hours of latency per exchange, and the user answering from memory. The bundle converts the interview into a measurement: one upload = one scene, with capture-health percentages, device tables, and restart-versus-crash discrimination. That conversion is not a UX nicety — it is what makes machine triage possible at all. You cannot delegate the first reading of an interview; you can delegate the first reading of a measurement.</p>
+          </div>
+
+          <p>Both product families now run this identical chain. Modern inherited it whole with v1.18.0 — bundle format, summarizer, answers page, update check — and its first two auto-triaged replies went out on Sep 19, within a day of its first bundles arriving.</p>
+        </div></section>
+
+        <section id="walls" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Walls → features</span>
+            <h2 class="ag-section-title">Three incidents that became shipped product</h2>
+            <p class="ag-section-subtitle">How solved problems mine new requirements — the mechanism, not the slogan.</p>
+          </header>
+        </div></section>
+
+        <section id="wall-rigctld" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03.1 · The rigctld wall</span>
+            <h2 class="ag-section-title">The same wall, twice in one morning</h2>
+          </header>
+          <p>On Sep 17, two FT-891 reports arrived within two hours — <code>20260917-073700-14ef</code> at 07:36, <code>20260917-085736-ebd2</code> at 08:53. Same symptom ("can't connect to the radio; audio syncs fine"), same verdict from the bundles: the CAT daemon <code>rigctld</code> wasn't running, the config was correct, three logged timeouts, no crash. Per the verdict table, both cases were <em>environment</em>, and both answer cards taught the user the same PowerShell incantation.</p>
+          <p>Individually closed. Together, a product gap: a "universal remote" that requires every new user to hand-launch a daemon is making the same ask of everyone. The repetition converted it. <strong>The same day</strong>: hotfix 6.1.14 shipped auto-start (<code>rigctld_supervisor.py</code>); hotfix 6.1.15 fixed model-name→number resolution (<code>rigctld --list</code>) and vendored <code>rigctld.exe</code> into the installer (V6.1.15); V6.1.16 made the fallback yield instead of ever blocking a boot. A public answer card now tells FT-891 owners to just update.</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">The conversion rule</span>
+            <p>The verdict "environment" answers the user. The <em>co-occurrence</em> of two environment verdicts within hours answers the roadmap. The interesting engineering quantity was never any single verdict — it is the signature across reports, and the time from signature to shipped fix: here, under a day.</p>
+          </div>
+        </div></section>
+
+        <section id="wall-nr" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03.2 · Water sound</span>
+            <h2 class="ag-section-title">An answer became a default; a default became an engine</h2>
+          </header>
+          <p>Report <code>20260917-132643-020a</code>: "water flowing, distortion after denoising" on NR2 level 2. The bundle's own numbers made the verdict provable rather than plausible — audio capture health 99.9%, no Traceback, no double-denoise stack — so the card diagnosed the classic spectral-subtraction <em>musical noise</em> artifact and taught the moves: level 2→1, AGC mode, bandwidth.</p>
+          <p>Then the product absorbed the lesson in three steps over three days. <strong>Default changed:</strong> the NR2 level table moved down a notch (hotfix 6.1.17), then to −6/−9/−12/−16. <strong>Knobs exposed:</strong> C-layer <code>alpha</code>/<code>npMax</code> setters in a rebuilt libwdsp, with new defaults closed-loop measured (<code>npmax 0.98</code>, AE 20/0.50). <strong>Engine added:</strong> NR3 — RNNoise, a neural denoiser from Xiph — selectable as <code>plus|only|off</code>, shipped in V6.1.18 together with the gating fix that makes "off" a true bypass (users had reported distortion persisting <em>after</em> turning denoise off — itself a report worth mining).</p>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · three timescales, one arc</span>
+            <p>An answer card fixes one station in minutes. A changed default fixes every future station silently. A new engine changes what is possible. Support that stops at step one is a cost center; the arc that runs answer → default → engine is how a support queue becomes a requirements pipeline.</p>
+          </div>
+        </div></section>
+
+        <section id="wall-macos" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03.3 · macOS silence</span>
+            <h2 class="ag-section-title">Two silent failures, and the regression protocol</h2>
+          </header>
+          <p>Modern's first macOS release hit two silent failures, and both fixes are lessons in observability. <strong>"Damaged":</strong> every macOS build so far had shipped unsigned — the signing step had been failing silently in the build — so Gatekeeper refused the app with a dialog no right-click bypasses. The fix is twofold: lay the bundle out the way <code>codesign</code> requires, and make a failed signature <em>abort the build</em>. The silent failure was the defect; the dialog was only the symptom. <strong>Silent RX:</strong> the bundle declared no audio-input permission, and macOS answered by opening the capture stream and filling it with zeros — the log said "check the radio" while CoreAudio reported no error. The fix requests the permission properly and points the warning at System Settings, not the radio.</p>
+          <p>The third case is the triage system biting its own tail, productively. Bundle <code>20260918-114118-9ad3</code> carried a "Recording dropped / queue full" signature matching a defect fixed in V2.44/V2.45 — but every matching log line was dated Sep 12, before the fix shipped. The published verdict refused both easy answers ("already fixed" / "regression!") and ran a protocol instead: the user records one new QSO and reports back; the follow-up bundle (<code>20260919-085517-b3aa</code>) closed it, with Sep-19 logs healthy and the old lines identified as pre-fix residue. The harness change that made this possible is one line of process, committed as <code>ecb2652</code>: <em>the model reads the project's own incident history before writing verdicts</em> — SDD version history, CHANGELOG, and exact code positions are inputs, not afterthoughts.</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · what the cards cite</span>
+            <p>Both Modern verdicts cite evidence line by line: <code>server.py:348 _ensure_rec_writer()</code> (the fix, present in shipped code), the SDD V2.44/V2.45 rows, timestamped summary lines, and the healthy Sep-19 session logs. Where material was insufficient, the card says so instead of guessing — one of MRRC's first seven replies is still standing at "need more info", which is the honest rung, not a failure state.</p>
+          </div>
+        </div></section>
+
+        <section id="triage" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · First reading</span>
+            <h2 class="ag-section-title">The machine's first reading, the human's verdict</h2>
+            <p class="ag-section-subtitle">Triage is a contract, not a vibe: a structured output, a verdict ontology, and guardrails that fail closed.</p>
+          </header>
+
+          <p>The analyzer's output is a fixed JSON contract — <code>verdict</code>, <code>status</code> (<code>answered | needs_fix | need_more_info</code>), <code>category</code>, <code>diagnosis[]</code>, <code>solution[]</code>, <code>evidence[]</code>, <code>keys[]</code>, <code>needs_code_change</code>, <code>code_hint</code> — rendered into the answer card verbatim, evidence lines included. The verdict ontology is written down as a table, not a feeling: Traceback or a repeating exception → defect; many launches without a Traceback → not a crash; <code>-9996</code> with an empty device table → environment (a VM without a sound card); <code>rigctld not running</code> → environment; capture health below threshold → performance; certificate warnings → normal noise.</p>
+
+          <div class="ag-loop-grid">
+            <article class="ag-card"><h3>The ontology is the sieve</h3><p>Environment ≠ defect is a requirements decision, not pedantry. Misclassify environment as defect and the roadmap fills with phantom requirements ("auto-launch things users never asked for"). Misclassify defect as environment and users strand with a workaround that never becomes a fix. The table keeps both errors expensive.</p></article>
+            <article class="ag-card"><h3>Conservative by rule</h3><p>Insufficient material → <code>need_more_info</code>. No Traceback → never call it a crash. Environment → never a defect. Conclusions must land on a user action — "go to Settings and re-select the audio device", never "wait for the maintainer". And the answers page is public: only publishable conclusions, no user data.</p></article>
+            <article class="ag-card"><h3>Guardrails that fail closed</h3><p>Default-deny publishing (an explicit flag publishes). Idempotent per bundle ID. Half-packages and non-zip payloads skip without retry. Two bundles per pass, a nine-minute model timeout, cron with absolute venv paths. The automation is allowed to do nothing; it is not allowed to do something wrong.</p></article>
+            <article class="ag-card"><h3>The division of labor</h3><p>The machine does the first reading — cheap, consistent, tireless, on a ten-minute cadence, with every claim tied to a log line. The human owns <code>needs_code_change</code>: the code change, the release decision, and the call that an answer is safe to publish as written. The products are built by the maintainer; the agent triages, drafts, and renders.</p></article>
+          </div>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · the scorecard so far</span>
+            <p>MRRC's answers page: 7 triage replies — 6 answered with actionable steps (4 environment, 1 audio tuning, 1 no-fix-needed), 1 returned for more evidence — plus 1 known-issue card written to the user-visible symptom ("buttons dead"), whose cause (an inline JS syntax error in 6.1.12) became <code>tests/test_web_inline_js.py</code>: every inline script now passes <code>node --check</code> on every release. MRRC Modern: 2 replies in its first 48 hours, both citing code positions and version history. Zero replies ended in "wait for the maintainer".</p>
+          </div>
+        </div></section>
+
+        <section id="fourth-loop" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · The fourth loop</span>
+            <h2 class="ag-section-title">From answered to implemented</h2>
+            <p class="ag-section-subtitle">On Sep 19 the chain grew a public board and an unattended implementer — the loop now reaches the code.</p>
+          </header>
+        </div></section>
+
+        <section id="fourth-loop-board" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05.1 · The board</span>
+            <h2 class="ag-section-title">Classification is the decision</h2>
+          </header>
+          <p>Until Sep 19 the loop could read and answer, but the bug/feature split it produced had nowhere to go — a human still had to pick what to fix, fix it, and close the case by hand. The board (<a href="https://www.vlsc.net/mrrc_modern/board/">vlsc.net/mrrc_modern/board</a>) supplies the missing halves, and its rule is one sentence: <strong>classification is the decision</strong>. The analysis contract gained three optional fields (<code>kind</code>: bug / feature / noise, plus <code>severity</code> and <code>title</code>), and the taxonomy became a dispatcher:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Classification</th><th>Automatic action</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td><strong>noise</strong> — environment / false alarm / already-fixed signature</td><td>Answer the user; board column <em>answered</em> — terminal, no code work</td><td>The answer is already on the answers page</td></tr>
+              <tr><td><strong>bug</strong> — a locatable product defect</td><td>Answer the user <em>and</em> auto-schedule into the unattended implementation queue</td><td>Fixing it is a verification problem, not a product choice</td></tr>
+              <tr><td><strong>feature</strong> — new capability / new parameter</td><td>Answer the user; board column <em>backlog</em> — waits for the operator</td><td>Scheduling a feature is a product decision; it does not automate</td></tr>
+              <tr><td><strong>need_more_info</strong></td><td>Never closes — stays in the backlog for follow-up</td><td>An un-answered report must not pretend the loop closed</td></tr>
+            </tbody>
+          </table></div>
+          <p>The board and the answers page share one privacy filter (<code>redact_public</code>) and link to each other. A user's report becomes a card with a status column — feedback stops being a mailbox and becomes a queue with a visible position, which is also a public promise: what got closed, what got scheduled, what is still waiting, and why.</p>
+        </div></section>
+
+        <section id="fourth-loop-implement" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05.2 · Unattended implement</span>
+            <h2 class="ag-section-title">A tested patch on a branch, while <code>main</code> sleeps</h2>
+          </header>
+          <p>The same cron that triages now carries <code>--implement</code>. For each scheduled entry, <strong>single-flight</strong> — one entry per run, and only from a clean <code>main</code> worktree — the pipeline runs the model with read-only tools (<code>read,grep,find,ls</code>) and asks for a JSON contract: understanding, a unified-diff patch, a test plan, a risk level, a commit message — or <code>no_action</code>, which lands on the board as Rejected with the reason. The model has no write permission; the patch is text until the pipeline decides otherwise.</p>
+          <p>What the pipeline does with that text is where the safety lives:</p>
+          <ul>
+            <li><strong>Guards first</strong> — the two cross-file tooling-guard scripts, <code>certs/</code>, <code>win/</code>, <code>packaging/</code> and the installer manifests (<code>.iss</code>) are refused outright; a single patch may touch at most eight files.</li>
+            <li><strong><code>git apply --check</code></strong> before anything moves; a failed check ends the attempt with the reason recorded on the board.</li>
+            <li><strong>An isolated branch</strong> — the patch is applied only on a fresh <code>fde/&lt;id&gt;</code> branch, never on <code>main</code>.</li>
+            <li><strong>The full test suite is the gate</strong> — green commits to the branch (the board records <code>branch@hash</code> plus the test line); red deletes the branch, restores the worktree, and records <em>failed</em> with the tail.</li>
+            <li><strong><code>main</code> never moves.</strong> An unattended process cannot reach it; merging the branch is a human act.</li>
+          </ul>
+          <p>The design view is the same one behind the PTT gate: the machine may propose, evidence decides, the human accepts. Nothing about the radio is automated away, and nothing about the code lands unreviewed — what changes is that a scheduled bug no longer waits for a human to be at a keyboard to even begin.</p>
+        </div></section>
+
+        <section id="fourth-loop-incidents" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05.3 · The loop's own incidents</span>
+            <h2 class="ag-section-title">Two failures of the loop itself — and what they prove</h2>
+          </header>
+          <p>An unattended loop has failure modes of its own, and two of them surfaced within the first day — each worth more than the feature it delayed.</p>
+          <p><strong>The model runner that couldn't run.</strong> The cron triage <code>pi</code> had been dying with SIGABRT two days running. Root cause: a Homebrew upgrade had broken the bottled Node's dylib linkage (llhttp) — the model <em>runner</em>, not the model. The fix was not a retry but a diagnosis: <code>run_pi</code> now names signal death and its likely cause in the log. A loop that fails wordlessly is indistinguishable from a loop with nothing to do; an unattended loop must be able to explain its own silence.</p>
+          <p><strong>The test fixture that reached production.</strong> Test runs patched the local page paths but still shipped their <em>fixture</em> answers/board pages to the live server — discovered because the production board suddenly displayed a test bundle ID. The fix made page shipping one patchable seam (<code>_ship_page()</code>), and the verification is the point: a full 1,299-test run now leaves both the local board state and the live board page byte-identical. The loop's own release path is under test.</p>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · failures on the evidence surface</span>
+            <p>Both incidents were caught because the loop's artifacts are public and byte-checked. Private automation can fail silently for weeks; a public loop leaks its own failures into the same evidence surface as the product's. The board showing a test ID was ugly — and exactly why the seam was fixed the same day.</p>
+          </div>
+        </div></section>
+
+        <section id="fourth-loop-distilled" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05.4 · Distillation</span>
+            <h2 class="ag-section-title">The human's job compresses to two verbs</h2>
+          </header>
+          <p>Read against §04, the board changes what the automation is allowed to decide. Before: the machine read and classified, and a human chose, fixed, and released. After: <em>classification dispatches</em> — noise closes itself, bugs enqueue themselves — and the human's intervention collapses to <strong>decide</strong> (one scheduling note per feature) and <strong>merge</strong> (accept a tested branch). That is the same division of labor as the rest of the engineering system — judgment human, execution delegated, evidence gates — now applied to the product's own backlog rather than its source tree.</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis</span>
+            <p>The loop's boundary moved again. It used to end at an answered ticket; then at a shipped fix; now it ends at a <em>reviewed branch</em> — a tested, reversible patch produced while no human was awake, waiting for a human to say yes. The last word stays human not because the machine cannot merge, but because "does it count" is the one act this project refuses to delegate.</p>
+          </div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · the honest boundary</span>
+            <p>As of this writing the live board holds two classified entries, both noise → answered; the first real bug is still waiting for its first real scheduling, and the first unattended patch for its first human merge. The end-to-end path — report → schedule → unattended implement → merge — is verified by tests, not yet by a real case, and the SDD entry (V2.56) writes the same boundary down: the implementation model's exploration budget and diff quality await calibration on real samples. The gate count of that week's pipeline: 1,299 tests in the Sep 19 commits; the maintained comparable counts live in the <a href="/agentic.html#evidence">evidence ledger</a>.</p>
+          </div>
+        </div></section>
+
+        <section id="loops" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · Loops, honestly</span>
+            <h2 class="ag-section-title">What this chain says about agentic engineering</h2>
+            <p class="ag-section-subtitle">Agentic engineering separates judgment from execution. The support chain is that separation applied where the users are.</p>
+          </header>
+        </div></section>
+
+        <section id="loop-boundary" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06.1 · Boundaries</span>
+            <h2 class="ag-section-title">Loops have boundaries — and the repo is the wrong one</h2>
+          </header>
+          <p>The ledger article (<a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected</a>) measured the inner loop: contract tests go red first, agents deliver to green, median 19 minutes. That loop closes <em>inside the repository</em>. But a green suite is a loop closed around the wrong boundary if the unit of iteration for a product is not the commit — it is the <strong>unanswered user symptom</strong>. A product can ship for months with every test green and every third user stuck on the same wall, because nothing inside the repository boundary can see the wall. The support chain extends the loop: field → bundle → verdict → product change → release → user self-service. The loop only counts as closed when the user's next click succeeds without a human in the path.</p>
+        </div></section>
+
+        <section id="loop-bandwidth" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06.2 · Bandwidth</span>
+            <h2 class="ag-section-title">Self-service is bandwidth, not courtesy</h2>
+          </header>
+          <p>Every step moved to the user's side removes a round-trip from the loop: upgrade without a download page, rollback without a reinstall, a diagnosis without reading logs, an answer without an email. The design test for each is the same sentence: <em>can the user complete the move without understanding the log?</em> This is why "self-diagnosis" is not a marketing word — the bundle is an instrument placed on the user's side, designed for the receiver rather than the sender: redaction by whitelist, a summary written to be read at a glance, restarts discriminated from crashes, device tables attached. And it is why the answers page publishes <em>raw evidence lines</em>: a user who can check the reasoning can trust the next answer before reading it.</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis</span>
+            <p>Self-service is the loop's bandwidth. A support chain that requires a human to relay every message caps the product's total iteration speed at one human's attention. A chain where the user's side can complete upgrade, rollback, measurement, and answer-lookup alone lets the loop run at the cadence of the slowest automated stage instead.</p>
+          </div>
+        </div></section>
+
+        <section id="loop-conversion" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06.3 · Conversion</span>
+            <h2 class="ag-section-title">Signatures, not verdicts, promote into the roadmap</h2>
+          </header>
+          <p>One report is a case. A repeated signature is a requirement. The verdict ontology is what keeps this honest — it is the sieve that protects the roadmap from phantom requirements (environment misread as defect) and protects users from abandonment (defect misread as environment). But the quantity that actually drives iteration is the <strong>signature across reports, plus the time from signature to shipped fix</strong>. Sep 17: two environment verdicts, two hours apart → same-day hotfix. Sep 17–18: one tuning answer → level table → knobs → third engine. The support queue and the roadmap are the same ledger, read at different periods.</p>
+        </div></section>
+
+        <section id="loop-cadence" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06.4 · Cadence</span>
+            <h2 class="ag-section-title">A cadence stack, not a single loop</h2>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Loop</th><th>Period (measured)</th><th>Captures</th></tr></thead>
+            <tbody>
+              <tr><td>Triage</td><td>10 min (cron)</td><td>Every bundle gets a first reading; nothing waits in a mailbox</td></tr>
+              <tr><td>Answer</td><td>same day</td><td>User-side resolution for environment / usage / tuning classes</td></tr>
+              <tr><td>Implement</td><td>minutes–hours per entry (single-flight, test-gated)</td><td>Scheduled bugs become tested patches on an isolated branch; the merge stays human</td></tr>
+              <tr><td>Hotfix</td><td>hours (6.1.14 → 6.1.16 within a day)</td><td>Defects and gaps inside the hotfix-able surface (<code>www/**</code>, app modules, vendor)</td></tr>
+              <tr><td>Release</td><td>days (V6.1.15 → V6.1.18; v1.18.0 → v1.18.1)</td><td>Installer-level changes: bundled engines, signing, permissions</td></tr>
+              <tr><td>Immunity</td><td>incident → guard, permanent</td><td>Each incident leaves a guard behind: the inline-JS guard, the site's test-count and bilingual-pair checks, the signature-aborts-build rule</td></tr>
+            </tbody>
+          </table></div>
+          <p>A system's learning rate is set by the fastest loop able to capture each <em>class</em> of incident. The support chain adds the outermost period to the stack — the only one that can capture classes that never appear inside a repository: virtual machines without sound cards, USB re-enumeration, macOS permission dialogs, Gatekeeper. The ledger's incident chains (13 days, then 7 days, from incident to machine-enforced constraint) and this week's same-day support arcs are the same principle measured at different radii.</p>
+        </div></section>
+
+        <section id="loop-ledgers" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06.5 · Two ledgers</span>
+            <h2 class="ag-section-title">The ledgers apply to answers, too</h2>
+          </header>
+          <p>"Answered" is process evidence: it says the case was read, classified, and given an actionable move. "Fixed · 6.1.13" is a product claim bound to a shipped artifact. The answers page keeps the two apart, and <code>need_more_info</code> exists as the honest rung — one of the first seven replies stands there. Nothing in a support card promotes a product claim; the version row in the release ledger does. This is the same discipline as the main evidence ledger (<a href="/agentic.html#evidence">/agentic.html#evidence</a>): a process badge never promotes a product claim, and the boundaries stay written down.</p>
+        </div></section>
+
+        <section id="loop-human" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06.6 · The non-delegable core</span>
+            <h2 class="ag-section-title">What stays human, on purpose</h2>
+          </header>
+          <p>Three things in this chain are deliberately human-only. <strong>RF safety:</strong> the upgrade path refuses to touch a transmitting radio (the 423 gate) — no automation overrides the PTT gate, and no automated verdict touches transmit behavior. <strong>Privacy anchors:</strong> keys, passwords, recordings, and memory channels never leave the user's machine; redaction is a whitelist, not a promise. <strong>The verdict on code:</strong> <code>needs_code_change</code>, the change itself, and the release are maintainer-owned — the machine's reach ends where the diff begins. Deep hardware bring-up (marginal USB power, CI-V quirks) also remains manual, and the lifecycle documentation writes its limits down explicitly — summary-based triage reads summaries, not whole environments — instead of implying automation it doesn't have.</p>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · same topology, new economics</span>
+            <p>In the lineage on <a href="/agentic.html">the thesis page</a>, FDE — 前沿部署工程 — was the first loop to carry field evidence back into design: Echo → Delta → Product, staffed by an engineer in the field. The support chain changes nothing about that loop's shape and everything about its staffing: it now runs on a cron, with instruments on both ends, and the deployment engineer in the path is a pipeline. Same topology, new economics — which is what it means for a practice to graduate from heroics to engineering.</p>
+          </div>
+        </div></section>
+
+        <section id="loop-claims" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06.7 · Claims</span>
+            <h2 class="ag-section-title">What I claim — and what I don't</h2>
+          </header>
+          <p><strong>Claimed:</strong> the chain converts field symptoms into shipped product changes with cited evidence at every step; users resolve the majority of issue classes without a human round-trip; every published verdict is checkable against raw log lines; the failure modes of the triage automation itself are bounded and written down. <strong>Not claimed:</strong> autonomy over the roadmap — a human reads the answers page and decides what a signature is worth; safety automation — nothing in the pipeline touches transmit; completeness — summary-based triage cannot see everything a full environment shows, which is exactly why <code>need_more_info</code> is a first-class outcome. The products were built by the maintainer's hands and pipeline; the agent's role is triage, first reading, and the mechanics of publishing — and the products are better <em>this week</em> because of what the loop carried back, not because of who did the typing.</p>
+        </div></section>
+
+        <section id="closing" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · Closing</span>
+            <h2 class="ag-section-title">Close the loop that touches the user</h2>
+            <p class="ag-section-subtitle">One week, two releases, and a sentence to keep.</p>
+          </header>
+          <p>Self-service is not a cost optimization; it is the sensor network of the product. A support chain that only answers mail is a cost center. A support chain that turns repeated signatures into shipped features — same-day hotfixes, changed defaults, new engines — is a requirements engine. The loop that touches the user decides whether the product evolves, so close it deliberately: instrument the failure before fixing it, make the answer self-service before scaling the queue, and let the repeated signature promote itself into the roadmap while the verdict stays human. And when the loop grows an implementer, the same discipline scales: classification decides, the machine proposes, the tests gate, and the merge stays human.</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">The one-sentence discipline</span>
+            <p>First make the failure observable. Then make the answer self-service. Then let the repeated signature promote itself into the roadmap — and keep the verdict human.</p>
+          </div>
+          <p>Try the endpoints: <a href="https://www.vlsc.net/mrrc/answers/">MRRC answers</a> · <a href="https://www.vlsc.net/mrrc_modern/answers/">MRRC Modern answers</a> · <a href="https://www.vlsc.net/mrrc/">MRRC download</a> · <a href="https://www.vlsc.net/mrrc_modern/">MRRC Modern download</a>. Comparable cross-project numbers (tests, constraints, versions) live in one place: <a href="/agentic.html#evidence">the evidence ledger</a>.</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>Related reading</h3>
+          <ul>
+            <li><a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected — the ledger behind the inner loop</a></li>
+            <li><a href="/agentic.html">Agentic Engineering — Human Intent, Agentic Execution, Field Evidence</a></li>
+            <li><a href="/engineering.html">Harness, Loops &amp; Living SDD: the VLSC Engineering System</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

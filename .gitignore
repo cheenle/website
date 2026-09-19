@@ -27,3 +27,17 @@ __pycache__/
 portal/images/
 portal/IMG_*
 efhw/images/
+
+# ── Local media working sets (disk-only) ──────────────────────────────────
+# Raw shoots and video production trees are referenced by
+# docs/superpowers/plans/* but never published through the git index:
+# promo-videos/ (1.5G) + promo-videos-long/ (669M) would break any clone.
+# .superpowers/ is brainstorm tool state. Keep `git status` clean without
+# ever sweeping these into a commit.
+.superpowers/
+IMG_9385.jpg
+ma.jpg
+shot3.mp4
+shot4.mp4
+promo-videos/
+promo-videos-long/

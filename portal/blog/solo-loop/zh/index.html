@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>独行回路：零资金、零团队的开源项目，如何像团队一样响应 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="没有预算、没有团队、没有背书——爱好驱动的开源项目却可以做到：每条上报十分钟内拿到首轮判读、当天拿到可核对的公开答复、数天内拿到经测试的修复。AI 年代真正改变了什么、三个真实约束（注意力、连续性、正当性）、独行维护者的操作系统、有凭据的相信，以及一份 30 天启动计划。"
+    />
+    <meta
+      name="keywords"
+      content="独行维护者, 无资金开源, 爱好项目, 智能体工程, 支持回路, 自动分诊, 自助服务, 约束注册表, 活体 SDD, 现场证据, 注意力预算, AI 年代, 业余无线电, MRRC Modern, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="独行回路：零资金、零团队的开源项目，如何像团队一样响应" />
+    <meta
+      property="og:description"
+      content="零预算、零团队、一个维护者：让爱好项目具备小公司级响应的九件仪器——十分钟首轮判读、当天答复、数天修复——以及失效模式、诚实边界与 30 天计划。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/solo-loop/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/solo-loop/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/solo-loop/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/solo-loop/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/solo-loop/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=3" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "独行回路：零资金、零团队的开源项目，如何像团队一样响应",
+        "description": "没有预算、没有团队、没有背书。AI 年代对爱好开源项目真正改变了什么、三个真实约束、独行维护者的操作系统、有凭据的相信，以及 30 天启动计划。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-09-19",
+        "keywords": "独行维护者, 开源, 智能体工程, 支持回路, 注意力预算, 约束注册表, MRRC Modern",
+        "articleSection": "Method",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/solo-loop/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/zh/">首页</a> › <a href="/blog/">博客</a> › <span class="ba-crumb-cat">Method</span> › 独行回路</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-user-astronaut"></i><span>方法 · 独行维护者</span></div>
+          <h1>独行<span class="gradient">回路</span>。</h1>
+          <p>零预算、零团队、零背书，一个维护者。让爱好项目像小公司一样响应它的用户——并且让这句话可被验证，而不是停留在愿望。</p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-stopwatch"></i> 首轮判读 ≤ 10 分钟</span>
+            <span class="ag-pill"><i class="fas fa-user-check"></i> 答复当天出</span>
+            <span class="ag-pill"><i class="fas fa-code-branch"></i> 数天内出经测试修复，合入归人</span>
+            <span class="ag-pill"><i class="fas fa-coins"></i> 一次记录在案的分诊会话：$0.0036</span>
+          </div>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-09-19">2026 年 9 月 19 日</time> &nbsp;·&nbsp; 约 20 分钟</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#constraints">约束</a><a href="#changed">改变了什么</a><a href="#assets">三个资产</a><a href="#os">操作系统</a><a href="#belief">相信</a><a href="#failures">失效模式</a><a href="#money">诚实边界</a><a href="#plan">30 天计划</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">这篇写给那样一个人：夜里把一个东西做出来，只因为它应该存在；然后撞上没人提醒过他的那一部分——<strong>用户</strong>。他们带着问题、你从未见过的环境、以及不在你路线图上的需求到来。没有预算、没有支持合同、没有团队、没有值班表——只有你、一个爱好，和一个未读收件箱带来的安静愧疚。这篇是那个处境的工程版答案，取自一个真实生态（就是这里）：没有资金、没有雇员，产品线却能给每份上报十分钟内的首轮判读，给每个用户一条公开、可核对的答复。下面讲 AI 年代真正改变了什么、没改变什么，以及如何把「可能」变成你几周内就能建起的仪器。</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 六条发现里的论证</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>真正的紧约束从来不是钱。</strong>独行项目的稀缺资源是注意力（一个人的小时数）、连续性（能挺过一次糟糕一周的记忆）、正当性（陌生人凭什么信你的二进制）。钱能买来对三者的帮助，但只有方法能把它们建起来。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>四个「岗位」如今是仪器。</strong>分诊分析师、发布工程师、文档作者、支持客服，都可以跑在 cron 上、由人握着裁决：本生态一次记录在案的分诊会话花 <strong>$0.0036</strong>；价值档推理约 <strong>$0.14–$0.27/百万 token</strong>。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>证明正在运行。</strong>一个维护者、75 天：435 个提交、67 行 SDD 版本记录、22 条机器可读约束、测试 262 → 1,299、发布 v1.0.0 → v1.18.1——以及三天四片建成的支持链。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>维护者的工作压缩成两个动词。</strong><em>决策</em>做什么、<em>合入</em>通过了门禁的东西。上游的一切——读取、分类、答复、提出补丁、跑测试——都可以无人值守，因为「算不算数」的裁决始终归人。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>爱好项目死于摩擦和愧疚，不死于技术失败。</strong>仪器吸收摩擦，可核对的答复消解愧疚。最初的快乐不是靠远离用户来保护，而是靠不让维护者独自搬运每一条消息。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>想象是下注，方法是凭据。</strong>「相信相信的力量」是让你在第一个回路回本之前就敢建第二个——但每个回路都必须从最小可验证的证明开始。相信你能验证的回路，然后让凭据复利。</li>
+            </ul>
+            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#assets">§03 三个资产</a><a href="#os">§04 操作系统</a><a href="#belief">§05 有凭据的相信</a><a href="#plan">§08 30 天计划</a></div>
+          </div>
+        </div>
+
+        <section id="constraints" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 约束</span>
+            <h2 class="ag-section-title">诚实地重述稀缺</h2>
+            <p class="ag-section-subtitle">「没钱、没人」是前提。要问的是：这两件缺失到底在收你什么费。</p>
+          </header>
+          <p>把三个约束写成工程需求，而不是情绪。这是「我好累」和「我的注意力预算是每周 6 小时，它必须买到什么」的区别。</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>约束</th><th>它实际是什么</th><th>不管理时收什么费</th></tr></thead>
+            <tbody>
+              <tr><td><strong>没有团队</strong></td><td>注意力：一个人的小时数，还要和本职工作与生活共享</td><td>收件箱变成积压；积压变成愧疚；愧疚杀死爱好</td></tr>
+              <tr><td><strong>没有资金</strong></td><td>连续性：没有付费基础设施、没有能接手的承包商、没有为糟糕月份准备的预算</td><td>知识与运维挤在一个脑袋里；一个糟糕的星期就变成弃坑</td></tr>
+              <tr><td><strong>没有背书</strong></td><td>正当性：下载链接背后没有品牌、没有证书、没有法律实体</td><td>用户分不清用心的项目和废弃的项目；每次更新都要重新花掉信任</td></tr>
+            </tbody>
+          </table></div>
+          <p>注意什么<em>不在</em>这张表上：能力。一个有动力的独行者一直都能写出软件。他从来无法配备的是软件周围的<strong>服务</strong>——读、答、验证、记录、发布——那恰好是支持客服、测试工程师和发布经理曾被付钱去做的按小时工作。AI 年代挪动的，就是这个缺口。</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">作者论点</span>
+            <p>独行项目的现实目标不是「成为一家公司」，而是：<em>小公司级的服务水平，由仪器值守，由一个人握判断。</em>这篇的一切，都是把这句话建出来，而不是欣赏它。</p>
+          </div>
+        </div></section>
+
+        <section id="changed" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 改变了什么</span>
+            <h2 class="ag-section-title">AI 年代换掉了四个岗位——和零个裁决</h2>
+            <p class="ag-section-subtitle">把炒作和真实的位移分开。位移很具体，而且已经足够。</p>
+          </header>
+          <p>真正改变的不是「AI 会写代码」。而是四个过去需要耐心和小时数的岗位，如今以排程仪器的方式运行：<strong>读者</strong>（把一份上报变成证据）、<strong>答者</strong>（起草可核对的答复）、<strong>实施者</strong>（提出经过测试的变更）、<strong>记录者</strong>（让契约保持同步）。它们都不需要被信任；每一个都有明确的输出契约和门禁——这正是它们能在没有团队的情况下被委托的原因。</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>岗位</th><th>过去</th><th>作为仪器</th><th>让它安全的门禁</th></tr></thead>
+            <tbody>
+              <tr><td>读者 / 分诊分析师</td><td>维护者的一个夜晚，数天延迟</td><td>读脱敏诊断包、分类、逐行引用原始日志</td><td>保守规则；未答复的上报永不闭环</td></tr>
+              <tr><td>答者 / 支持客服</td><td>一封封邮件，凭记忆</td><td>渲染公开答复卡：症状、诊断、你要做的、状态</td><td>默认拒绝发布；隐私过滤；不带用户数据</td></tr>
+              <tr><td>实施者</td><td>只在维护者有空闲周末时</td><td>只读模型在隔离分支上提出 unified-diff 补丁</td><td>护栏、≤8 文件、全量测试、<code>main</code> 不被触碰、人工合入</td></tr>
+              <tr><td>记录者 / 发布工程师</td><td>永远被推迟的那件事</td><td>版本行、changelog、清单与检查由同一个提交驱动</td><td>一致性测试；产物按大小与 SHA-256 验证</td></tr>
+            </tbody>
+          </table></div>
+          <p>经济账让这件事从理论变成现实。日常工作用的推理落在价值档——本生态测到的价格约 <strong>$0.14–$0.27/百万 token</strong>——而本项目日志里一次记录在案的分诊式会话是 <strong>$0.0036</strong>（137 输入、1,229 输出、349,824 缓存读）。拿这个数字对比真正的替代成本——不是钱，而是维护者的一个晚上：仪器的职责，是花掉三厘钱，让任何人都不必先花四十分钟才做出判断。</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 没有改变的东西</span>
+            <p>判断、责任、品味、安全，以及「算不算数」这个问题。对照期就证明了这一点：在这套方法出现之前，同一位操作者跑过 185 个 agent 会话、37,202 轮对话——知识没有留下任何痕迹。模型能力从来不是缺失的那块；缺失的是判断的载体。<a href="/blog/seven-billion-tokens/zh/">账本长文</a>测量了两个时代。</p>
+          </div>
+        </div></section>
+
+        <section id="assets" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 三个资产</span>
+            <h2 class="ag-section-title">每个约束一个答案</h2>
+            <p class="ag-section-subtitle">注意力变成回路。连续性变成契约。正当性变成证据。</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card"><h3>注意力 → 回路</h3><p>维护者不再做每条消息的中转站。十分钟一次的 cron 读取新上报；分诊分类；环境问题带着公开答复自行闭环；缺陷自动排期；feature 只等一次决策。人的一周花在两个动词上——<em>决策</em>与<em>合入</em>——以及不可委托的事：安全、硬件、路线图。</p></article>
+            <article class="ag-card"><h3>连续性 → 契约</h3><p>一份活体文档，一次变更一行记录（信号、证据、决策、边界），是能挺过会话、生病与中断的记忆。约束注册表把项目的伤疤变成编辑前的拒绝，让同一个错误无法在维护者离开期间悄悄回来。项目能否继续，不再取决于任何人记得。</p></article>
+            <article class="ag-card"><h3>正当性 → 证据</h3><p>没人会因为品牌而信任一个独行项目，所以信任只能被制造：逐行引用日志的答复、按 SHA-256 核对的下载产物、公开看板显示什么已闭环、什么还在等，以及先于用户发现的、写下来的限制。每个可核对的声明都是一笔存入；每次意外都是一笔支出。</p></article>
+          </div>
+          <p>顺序很重要。没有契约的回路会快速生产噪声；没有证据的契约是私人日记；没有回路的证据无法在独行尺度上被生产。三者是一个系统——与<a href="/blog/three-axes/zh/">《三板斧》</a>里同一套轴线，只是换到了维护者的椅子上看。</p>
+        </div></section>
+
+        <section id="os" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 操作系统</span>
+            <h2 class="ag-section-title">独行维护者的技术栈：九件仪器</h2>
+            <p class="ag-section-subtitle">以下全部已在本生态的生产中运行。没有任何一件需要预算科目。</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>#</th><th>仪器</th><th>职责</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><strong>一个仓库</strong></td><td>代码、契约与历史的唯一载体；人与智能体读同一棵树</td></tr>
+              <tr><td>2</td><td><strong>一份活体契约（SDD）</strong></td><td>带目标与方法的需求；版本行即项目的学习台账</td></tr>
+              <tr><td>3</td><td><strong>一个约束注册表</strong></td><td>教训变成机器可读的拒绝，在每次编辑的路径上被检查</td></tr>
+              <tr><td>4</td><td><strong>一个收件端</strong></td><td>自托管、纯标准库的脱敏诊断包接收端——不用 SaaS，数据不离开你的控制</td></tr>
+              <tr><td>5</td><td><strong>一个分诊 cron</strong></td><td>每十分钟：取包、摘要、分类、引用、起草</td></tr>
+              <tr><td>6</td><td><strong>一个答复页</strong></td><td>公开、可检索、逐行引证：答复就是最后一道文档</td></tr>
+              <tr><td>7</td><td><strong>一块看板</strong></td><td>公开队列，分类即调度：已闭环 / 已排期 / 待决策 / 已拒绝附理由</td></tr>
+              <tr><td>8</td><td><strong>一个实施者</strong></td><td>无人值守、单飞、带护栏、隔离分支、全量测试门禁；永不触碰 <code>main</code></td></tr>
+              <tr><td>9</td><td><strong>一本证据台账</strong></td><td>带日期与边界的数字——可比主张只允许住在这里</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 style="margin-top:2.5rem">三个承诺（没有值班的 SLA）</h3>
+          <ol class="steps">
+            <li><h4>每份上报都有首轮判读——几分钟内</h4><p>不是人的首轮判读，而是排程的、保守的机器判读，附引用证据。承诺不是「我们醒着」，而是「你发来的东西不会被搁置」。 </p></li>
+            <li><h4>每条答复都可核对——不充分时就直说</h4><p>答复卡引用原始日志行，落在用户能做的动作上。材料不足时，卡片写<em>需要补充信息</em>而不是猜。「我还不知道」是一种服务，不是失败。</p></li>
+            <li><h4>每个被接受的修复都经测试、可回退</h4><p>修复走在测试门禁之后；无人值守时落在隔离分支；发布有真实存在的回退路径。用户永远不是测试环境。</p></li>
+          </ol>
+
+          <h3 style="margin-top:2.5rem">注意力预算</h3>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>只有人做</th><th>仪器做</th></tr></thead>
+            <tbody>
+              <tr><td>对「什么算完成」的裁决；合入分支</td><td>读取、摘要、分类、起草、渲染、发布安全类别</td></tr>
+              <tr><td>排期 feature（每条一句备注）；附理由地拒绝</td><td>自动排期缺陷；闭环环境噪声；维护队列次序</td></tr>
+              <tr><td>安全决策——发射、电台权限、实物硬件</td><td>执行门禁，让那些决策很难被无意违反</td></tr>
+              <tr><td>与用户的关系：道歉、感谢、路线图</td><td>确保没有一队需要道歉的事在排队</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 style="margin-top:2.5rem">启动顺序（先建什么）</h3>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>时间</th><th>建什么</th><th>为什么是这个顺序</th></tr></thead>
+            <tbody>
+              <tr><td>第 1 周</td><td>诊断包 + 接收端 + 答复页</td><td>把含糊的上报变成几分钟能读懂的测量；答复页消掉第二个问题</td></tr>
+              <tr><td>第 2 周</td><td>用你已经知道的事故写成约束注册表</td><td>你的伤疤是最便宜、价值最高的自动化；从 5–10 条可复现的规则开始</td></tr>
+              <tr><td>第 3–4 周</td><td>带安全发布类的分诊 cron + 公开看板</td><td>消掉每日中转；让队列可见且诚实；噪声自行闭环</td></tr>
+              <tr><td>第 2 个月起</td><td>无人值守实施者（只读提议、隔离分支、测试门禁）</td><td>只有队列已被分类、测试套件可信之后才值得建——否则是在自动化混乱</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">事实 · 运行中的证明</span>
+            <p>本生态正是围绕一条真实产品线（MRRC Modern）建起了这一整套：支持链三天四片上线，第一批答复在第一批诊断包到达当天发布。机制见<a href="/zh/engineering.html#field-loop">机制分册</a>，日志见<a href="/blog/support-loop/zh/">《支持回路》</a>。</p>
+          </div>
+        </div></section>
+
+        <section id="belief" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · 相信</span>
+            <h2 class="ag-section-title">想象力是一种工程材料</h2>
+            <p class="ag-section-subtitle">回路存在之前，得先有人看见它。纪律发生在看见之后。</p>
+          </header>
+          <p>§04 里的每一件仪器，被建造之前都先被想象过：支持队列被想象成传感网络；用户上报被想象成远程测量；产品自己的待办被想象成在维护者睡觉时运行的回路；聊天记录被想象成一份本可以活下来的文档。这些都不在模型的默认输出里。它们是设计工作——而对独行维护者来说，这是杠杆率最高的工作，因为一个对的回路替代一百个夜晚。</p>
+          <p>「相信」的价值就在这里。「相信相信的力量」的诚实版本不是心态口号，而是一句关于次序的经济学陈述：第一个回路总是在它回本<strong>之前</strong>被建起来——先有诊断包，才有第一次分诊；先有注册表，才有它防住的那次事故；先有答复页，才有需要它的那个用户。你是在拿爱好的小时数，赌一个回路会把它还回来的未来。这个赌注需要想象力——而它配得上凭据。</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">作者论点 · 相信你能验证的回路</span>
+            <p>不要相信炒作；相信回路。穿过不确定性的方式，是让每个回路从最小可验证的证明开始：一条被一条约束挡住的可复现事故，一份被一张卡答复的诊断包，一个通过一套测试的分支。每份证明都买回一点委托权——而这些凭据的复利，最终看起来就像信仰。</p>
+          </div>
+          <p>「相信」不该做的事同样具体：不要赌模型品牌（账本的测量里，主力模型一周内就换过），不要赌无界委托（合入始终归人），不要赌量（更多自动输出不等于更多价值）。赌回路的形状，以及它尽头的那道门。</p>
+        </div></section>
+
+        <section id="failures" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · 失效模式</span>
+            <h2 class="ag-section-title">独行项目真正的死法——以及每种的守卫</h2>
+            <p class="ag-section-subtitle">不是「代码坏了」：是维护者垮了。所以要守卫维护者。</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>失效模式</th><th>它长什么样</th><th>守卫</th></tr></thead>
+            <tbody>
+              <tr><td><strong>注意力坍缩</strong></td><td>收件箱在长；维护者开始回避打开它；爱好变成负债</td><td>分诊 cron 与答复页——没有东西堆积着无人应答，安全类别无需维护者即可闭环</td></tr>
+              <tr><td><strong>静默失败</strong></td><td>某件仪器悄悄死了（运行器停了、页面不再更新），几天没人发现</td><td>给仪器本身装可观测性：在日志里点名自己的失败；公开产物逐字节核对；回路必须能解释自己的沉默（本生态从一次以 SIGABRT 死亡的 cron 运行器、以及一次短暂发布到生产看板的测试夹具中学到）</td></tr>
+              <tr><td><strong>范围蔓延</strong></td><td>每个「要是能……就好了」都变成承诺；路线图变成威胁</td><td>Feature 按策略等待人类；路线图从真实上报中反复出现的签名长出，而不是从某个状态很好的晚上的热情</td></tr>
+              <tr><td><strong>信任欠账</strong></td><td>用户发现了发布说明没提的问题；下一次更新被犹豫地安装</td><td>诚实的边界、可见的已知问题、成熟度状态之间没有自动升级、真实存在的回退目标</td></tr>
+              <tr><td><strong>一个人的巴士系数</strong></td><td>项目只有建造者能操作；离开一个月就是致命的</td><td>记忆放进仓库：契约行、约束注册表、真相源地图、写下来的恢复路径——为下一位运行它的陌生人而写</td></tr>
+              <tr><td><strong>没有凭据的相信</strong></td><td>堆起从未被验证的自动化；一个没人能检查的「系统」</td><td>每个回路带着它的门禁和证据上线；不能大声失败的回路，不算完成</td></tr>
+            </tbody>
+          </table></div>
+        </div></section>
+
+        <section id="money" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · 诚实边界</span>
+            <h2 class="ag-section-title">钱仍然能买到什么——方法买不到什么</h2>
+            <p class="ag-section-subtitle">解放注意力的意义，在于把它花到只有有资源的人才能行动的地方。</p>
+          </header>
+          <ul>
+            <li><strong>硬件真相。</strong>台架、参考仪器、备用电台，以及跑验收测试的小时数。没有任何回路能虚构物理验证；本生态的答案是让未验证机型停在发射门禁后面并如实说明，而不是假装。</li>
+            <li><strong>别人的时间。</strong>第二位维护者、译者、律师、会计。方法降低了增加一个人的协调成本——契约就是入职材料——但它不能替代一个人。</li>
+            <li><strong>法律与财务实体。</strong>公司、商标、付费支持协议、保险。爱好项目可以没有这些而且很优秀；但没有这些就无法成为供应商。</li>
+            <li><strong>担保。</strong>公司可以承诺 SLA 并用合同背书。独行项目只能承诺仪器与诚实——而做得好时，这离用户真正需要的东西出人意料地近。</li>
+          </ul>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">推断 · 正确的读法</span>
+            <p>这套方法不会把一个人变成一家公司，也不是为了这个。它把一个人的<em>注意力</em>变成一个触达超过其小时数的系统——好让那些小时能花到只有他能做的事上：判断、品味、安全，以及他当初开始的原因。</p>
+          </div>
+        </div></section>
+
+        <section id="plan" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · 30 天计划</span>
+            <h2 class="ag-section-title">从「相信可能」到「正在运行」</h2>
+            <p class="ag-section-subtitle">给已有代码、已有用户的独行项目的一份具体启动顺序。</p>
+          </header>
+          <ol class="steps">
+            <li><h4>第 1–2 天 · 让上报可测量</h4><p>上线诊断包（脱敏配置、环境快照、日志尾部、自动体检摘要）与接收端。保持纯标准库、自托管。从这一刻起，上报到达时是一份现场，而不是一段故事。</p></li>
+            <li><h4>第 3–5 天 · 发布答复页</h4><p>一页，可按上报编号检索，固定卡片结构：症状 / 附原始证据的诊断 / 你要做的 / 状态。哪怕前三条答复是手工写的——这一页让承诺变得可见。</p></li>
+            <li><h4>第 2 周 · 把你已经挣到的注册表写出来</h4><p>列出最近十次事故；写 5–10 条带复现说明的机器可读约束；把检查接进编辑路径。这是项目回报最高的一周。</p></li>
+            <li><h4>第 3 周 · 让分诊跑在 cron 上</h4><p>取包 → 摘要 → 分类 → 起草。在你信任草稿之前，发布保持默认拒绝；让「需要补充信息」作为一等结果存在。等第一次分类明显错了，再加公开看板——你会想要那条可见的队列。</p></li>
+            <li><h4>第 4 周 · 小心地闭上回环</h4><p>到这时才加无人值守实施者：只读提议、护栏、隔离分支、全量测试、<code>main</code> 无人值守不可触碰。人工合入不是瓶颈，它是信任锚。</p></li>
+            <li><h4>始终 · 维护账本与边界</h4><p>一个带日期的、存放可比数字的地方；一份写下来的、什么没做以及为什么的清单。账本是你向自己证明进步的方式；边界是你守住已挣来信任的方式。</p></li>
+          </ol>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">一句话纪律</span>
+            <p>给摩擦装仪器，把记忆写成契约，用证据挣信任——然后只把时间花在没有任何仪器能承载的判断上。爱好不是靠保持渺小而活下来；它靠<em>回路化</em>活下来。</p>
+          </div>
+          <p>继续深入：<a href="/blog/three-axes/zh/">《三板斧》</a>（端到端方法）· <a href="/blog/support-loop/zh/">《支持回路》</a>（仪器实战）· <a href="/zh/engineering.html#field-loop">现场回路机制</a> · <a href="/zh/agentic.html#evidence">证据台账</a>。如果你正在为自己的项目建这套东西，想对对表，联系页就是门。</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电操作者，软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话写下来。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>延伸阅读</h3>
+          <ul>
+            <li><a href="/blog/three-axes/zh/">三板斧：从业务意图到现场证据，端到端</a></li>
+            <li><a href="/blog/support-loop/zh/">支持回路：一周的 🐞 上报，如何变成两次发布</a></li>
+            <li><a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解——AI 时代的工作到底花多少</a></li>
+            <li><a href="/zh/agentic.html">智能体工程——人类意图、智能体执行、现场证据</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

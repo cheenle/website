@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Solo Loop: A One-Person Open-Source Project That Answers Like a Team — VLSC Blog</title>
+    <meta
+      name="description"
+      content="No budget, no team, no backing — and yet a hobby open-source project can give every user a first reading in ten minutes, a checkable answer the same day, and a tested fix within days. What the AI era actually changed, the three real constraints (attention, continuity, legitimacy), the solo maintainer's operating system, belief with receipts, and a 30-day starting plan."
+    />
+    <meta
+      name="keywords"
+      content="solo maintainer, open source without funding, hobby project, agentic engineering, support loop, triage autopilot, self-service, constraint registry, living SDD, field evidence, attention budget, AI era, amateur radio, MRRC Modern, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="The Solo Loop: A One-Person Open-Source Project That Answers Like a Team"
+    />
+    <meta
+      property="og:description"
+      content="Zero budget, zero team, one maintainer: the instruments that let a hobby project respond to users like a small company — first reading in 10 minutes, answers the same day, tested fixes in days — plus the failure modes, honest limits, and a 30-day plan."
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/solo-loop/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/solo-loop/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/solo-loop/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/solo-loop/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/solo-loop/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=3" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Solo Loop: A One-Person Open-Source Project That Answers Like a Team",
+        "description": "No budget, no team, no backing. What the AI era actually changed for a hobby open-source project, the three real constraints, the solo maintainer's operating system, belief with receipts, and a 30-day plan.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-09-19",
+        "keywords": "solo maintainer, open source, agentic engineering, support loop, attention budget, constraint registry, MRRC Modern",
+        "articleSection": "Method",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/solo-loop/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <span class="ba-crumb-cat">Method</span> › The Solo Loop</span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-user-astronaut"></i><span>Method · Solo Maintainer</span></div>
+          <h1>The Solo <span class="gradient">Loop.</span></h1>
+          <p>Zero budget. Zero team. Zero backing. One maintainer. The instruments that let a hobby project answer its users like a small company — and the method that makes that claim checkable instead of aspirational.</p>
+          <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-stopwatch"></i> first reading in ≤ 10 min</span>
+            <span class="ag-pill"><i class="fas fa-user-check"></i> answer the same day</span>
+            <span class="ag-pill"><i class="fas fa-code-branch"></i> tested fix in days, human merge</span>
+            <span class="ag-pill"><i class="fas fa-coins"></i> a recorded triage session: $0.0036</span>
+          </div>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-19">Sep 19, 2026</time> &nbsp;·&nbsp; ~20 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#constraints">Constraints</a><a href="#changed">What changed</a><a href="#assets">Three assets</a><a href="#os">Operating system</a><a href="#belief">Belief</a><a href="#failures">Failure modes</a><a href="#money">Honest limits</a><a href="#plan">30-day plan</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">This article is for the person who built something at night because they wanted it to exist, and then discovered the part nobody warns you about: <strong>users</strong>. They arrive with questions, environments you have never seen, and needs that are not on your roadmap. There is no budget, no support contract, no team, no on-call rotation — just you, a hobby, and the quiet guilt of an unanswered inbox. This is the practical, engineering version of the answer to that situation, drawn from a real ecosystem (this one) that operates that way: no funding, no staff, and a product line that nonetheless gives every report a first reading within ten minutes and every user a public, checkable answer. What follows is what the AI era actually changed, what it didn't, and how to turn the possibility into instruments you can build in weeks.</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the argument in six findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The binding constraints were never money.</strong> For a solo project the scarce resources are attention (one person's hours), continuity (memory that outlives a bad week), and legitimacy (why a stranger should trust your binary). Funding would buy help with all three — but only method can build them.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Four staffed roles now exist as instruments.</strong> Triage analyst, release engineer, documentation writer and support desk can run on a cron with a human holding the verdicts: a recorded triage session in this ecosystem cost <strong>$0.0036</strong>; value-tier inference runs at roughly $0.14–$0.27 per million tokens.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The proof is running.</strong> One maintainer, 75 days: 435 commits, 67 SDD version rows, 22 machine-readable constraints, tests 262 → 1,299, releases v1.0.0 → v1.18.1 — and a support chain built in four slices in three days.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>The maintainer's job compresses to two verbs.</strong> <em>Decide</em> what gets built and <em>merge</em> what passed the gate. Everything upstream — reading, classifying, answering, proposing patches, testing them — can run unattended, because the verdict on "does it count" stays human.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>Hobby projects die of friction and guilt, not of technical failure.</strong> Instruments absorb the friction; checkable answers retire the guilt. The initial joy survives not by protecting it from users, but by not making the maintainer carry every message.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>Imagination is the bet; method is the receipt.</strong> "Belief" is what makes you build the second loop before the first one pays off — but each loop must start as the smallest testable proof. Believe in the loop you can verify, and let the receipts compound.</li>
+            </ul>
+            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#assets">§03 three assets</a><a href="#os">§04 the operating system</a><a href="#belief">§05 belief with receipts</a><a href="#plan">§08 the 30-day plan</a></div>
+          </div>
+        </div>
+
+        <section id="constraints" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Constraints</span>
+            <h2 class="ag-section-title">Scarcity, restated honestly</h2>
+            <p class="ag-section-subtitle">"No money, no team" is the premise. The question is what those absences actually cost you.</p>
+          </header>
+          <p>Write the three constraints down as engineering requirements rather than moods. It is the difference between "I'm exhausted" and "my attention budget is 6 hours a week; what must it buy?"</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Constraint</th><th>What it really is</th><th>What it costs when unmanaged</th></tr></thead>
+            <tbody>
+              <tr><td><strong>No team</strong></td><td>Attention: one person's hours, shared with a day job and a life</td><td>An inbox becomes a backlog; backlog becomes guilt; guilt kills the hobby</td></tr>
+              <tr><td><strong>No funding</strong></td><td>Continuity: no paid infrastructure, no contractor to take over, no budget for a bad month</td><td>Knowledge and operations live in one head; a bad week becomes an abandoned project</td></tr>
+              <tr><td><strong>No backing</strong></td><td>Legitimacy: no brand, no certificate, no legal entity behind the download</td><td>Users can't tell a careful project from an abandoned one; trust is spent on every update</td></tr>
+            </tbody>
+          </table></div>
+          <p>Notice what is <em>not</em> on the list: capability. A motivated solo maintainer has always been able to write the software. What they could never staff was the <strong>service</strong> around it — the reading, the answering, the verifying, the documenting, the releasing — which is exactly the hourly work that a support desk, a QA engineer and a release manager used to be paid to do. That gap is what the AI era moved.</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis</span>
+            <p>The realistic goal for a solo project is not "become a company". It is: <em>the service level of a small company, staffed by instruments, with one human holding judgment.</em> Everything in this article is about building that sentence instead of admiring it.</p>
+          </div>
+        </div></section>
+
+        <section id="changed" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · What changed</span>
+            <h2 class="ag-section-title">The AI era changed four jobs — and none of the verdicts</h2>
+            <p class="ag-section-subtitle">Separate the hype from the actual shift. The shift is specific and it is enough.</p>
+          </header>
+          <p>What genuinely changed is not "AI writes code". It is that four roles which used to require patience and hours now run as scheduled instruments: <strong>the reader</strong> (turns a report into evidence), <strong>the answerer</strong> (drafts a checkable reply), <strong>the implementer</strong> (proposes a tested change), and <strong>the documenter</strong> (keeps the contract in sync). None of them need to be trusted. Each has a defined output contract and a gate — and that is precisely why they can be delegated without a team.</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Role</th><th>Yesterday</th><th>As an instrument</th><th>Gate that makes it safe</th></tr></thead>
+            <tbody>
+              <tr><td>Reader / triage analyst</td><td>A maintainer's evening, days of latency</td><td>Reads a redacted diagnostics bundle, classifies it, cites raw log lines</td><td>Conservative rules; an un-answered report never closes</td></tr>
+              <tr><td>Answerer / support desk</td><td>Email by email, from memory</td><td>Renders a public answer card: symptom, diagnosis, your move, status</td><td>Publishing is default-deny; privacy filter; no user data</td></tr>
+              <tr><td>Implementer</td><td>Only when the maintainer has a free weekend</td><td>Read-only model proposes a unified-diff patch on an isolated branch</td><td>Guards, ≤8 files, full test suite, <code>main</code> untouched, human merge</td></tr>
+              <tr><td>Documenter / release engineer</td><td>The task that always slips</td><td>Version rows, changelogs, manifests and checks driven by the same commit</td><td>Consistency tests; artifacts verified by size and SHA-256</td></tr>
+            </tbody>
+          </table></div>
+          <p>The economics make this real rather than theoretical. Inference for daily work sits in a value tier — roughly <strong>$0.14–$0.27 per million tokens</strong> in the pricing this ecosystem measures — and a recorded triage-style session in this project's own logs came to <strong>$0.0036</strong> (137 input, 1,229 output, 349,824 cache reads). Read that number against the alternative cost, which is not money but the maintainer's evening: the instrument's job is to spend three-tenths of a cent so that no human spends forty minutes before deciding.</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · what did not change</span>
+            <p>Judgment, responsibility, taste, safety, and the question "does it count". The control period proves the point: before this method existed, the same operator ran 185 agent sessions and 37,202 turns — and the knowledge left no trace. Model capability was never the missing piece; a carrier for judgment was. <a href="/blog/seven-billion-tokens/">The ledger article</a> measures both eras.</p>
+          </div>
+        </div></section>
+
+        <section id="assets" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Three assets</span>
+            <h2 class="ag-section-title">One answer per constraint</h2>
+            <p class="ag-section-subtitle">Attention becomes loops. Continuity becomes contract. Legitimacy becomes evidence.</p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card"><h3>Attention → loops</h3><p>The maintainer stops being the relay for every message. A ten-minute cron reads new reports; a triage pass classifies them; environment problems close themselves with a published answer; defects auto-schedule; features wait for a single decision. The human's week is spent on two verbs — <em>decide</em> and <em>merge</em> — plus the non-delegable work: safety, hardware, and the roadmap.</p></article>
+            <article class="ag-card"><h3>Continuity → contract</h3><p>A living document with one version row per episode (signal, evidence, decision, boundary) is memory that survives sessions, illnesses and interruptions. A constraint registry turns the project's scars into pre-edit refusals, so the same mistake cannot quietly return while the maintainer is away. The project's ability to continue stops depending on anyone remembering.</p></article>
+            <article class="ag-card"><h3>Legitimacy → evidence</h3><p>No one can trust a solo project because of its brand, so trust is manufactured: answers that cite raw log lines, download artifacts checked by SHA-256, a public board that shows what was closed and what is still waiting, and limitations written down before a user discovers them. Every checkable claim is a deposit; every surprise is a withdrawal.</p></article>
+          </div>
+          <p>The order matters. Loops without a contract produce fast noise; a contract without evidence is a private diary; evidence without loops cannot be produced at solo scale. The three are one system — the same three axes described in <a href="/blog/three-axes/">The Three Axes</a>, viewed from the maintainer's chair rather than the project's architecture.</p>
+        </div></section>
+
+        <section id="os" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · Operating system</span>
+            <h2 class="ag-section-title">The solo maintainer's stack: nine instruments</h2>
+            <p class="ag-section-subtitle">Everything below is in production in this ecosystem today. Nothing requires a budget line.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>#</th><th>Instrument</th><th>Job</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><strong>One repository</strong></td><td>The single carrier for code, contract and history; agents and humans read the same tree</td></tr>
+              <tr><td>2</td><td><strong>One living contract (SDD)</strong></td><td>Requirements with targets and methods; version rows as the project's learning ledger</td></tr>
+              <tr><td>3</td><td><strong>One constraint registry</strong></td><td>Lessons as machine-readable refusals, checked in the path of every edit</td></tr>
+              <tr><td>4</td><td><strong>One inbox</strong></td><td>A self-hosted, stdlib-only receiver for redacted diagnostics bundles — no SaaS, no data leaving your control</td></tr>
+              <tr><td>5</td><td><strong>One triage cron</strong></td><td>Every ten minutes: fetch, summarize, classify, cite, draft</td></tr>
+              <tr><td>6</td><td><strong>One answers page</strong></td><td>Public, searchable, line-cited: the answer is the documentation of last resort</td></tr>
+              <tr><td>7</td><td><strong>One board</strong></td><td>Public queue where classification dispatches: closed / scheduled / waiting / rejected with reasons</td></tr>
+              <tr><td>8</td><td><strong>One implementer</strong></td><td>Unattended, single-flight, guarded, isolated branch, full-suite gate; never touches <code>main</code></td></tr>
+              <tr><td>9</td><td><strong>One evidence ledger</strong></td><td>Numbers with dates and boundaries — the only place comparable claims are allowed to live</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 style="margin-top:2.5rem">The three promises (your SLA without on-call)</h3>
+          <ol class="steps">
+            <li><h4>Every report gets a first reading — within minutes</h4><p>Not a human first reading: a scheduled, conservative machine reading with cited evidence. The promise is not "we will be awake"; it is "nothing you send will sit unread".</p></li>
+            <li><h4>Every answer is checkable — and honest when it isn't</h4><p>Cards cite raw log lines and end in an action the user can take. When the material is insufficient, the card says <em>need more information</em> instead of guessing. An honest "I don't know yet" is a service, not a failure.</p></li>
+            <li><h4>Every accepted fix is tested and reversible</h4><p>Fixes land behind a test gate, on an isolated branch when unattended, with rollback paths verified for releases. The user is never the test environment.</p></li>
+          </ol>
+
+          <h3 style="margin-top:2.5rem">The attention budget</h3>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Only the human does</th><th>Instruments do</th></tr></thead>
+            <tbody>
+              <tr><td>The verdict on what counts as done; merging the branch</td><td>Reading, summarizing, classifying, drafting, rendering, publishing the safe classes</td></tr>
+              <tr><td>Scheduling features (one note per item); rejecting with a reason</td><td>Auto-scheduling defects; closing environment noise; keeping the queue ordered</td></tr>
+              <tr><td>Safety decisions — transmit, radio authority, physical hardware</td><td>Enforcing the gates that make those decisions hard to violate by accident</td></tr>
+              <tr><td>The relationship with users: the apology, the thanks, the roadmap</td><td>Making sure there is no queue of things to apologize for</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 style="margin-top:2.5rem">The startup sequence (what to build first)</h3>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>When</th><th>Build</th><th>Why in this order</th></tr></thead>
+            <tbody>
+              <tr><td>Week 1</td><td>Diagnostics bundle + receiver + answers page</td><td>Converts your inbox of vague reports into measurements you can read in minutes; the answer page removes the second question</td></tr>
+              <tr><td>Week 2</td><td>Constraint registry from the incidents you already know</td><td>Your scar tissue is the cheapest, highest-value automation you will ever write; start with 5–10 rules you can reproduce</td></tr>
+              <tr><td>Weeks 3–4</td><td>Triage cron with publish-safe classes + public board</td><td>Removes the daily relay; makes the queue visible and honest; noise closes itself</td></tr>
+              <tr><td>Month 2+</td><td>Unattended implementer (read-only proposal, isolated branch, test gate)</td><td>Only worth building once the queue is classified and the test suite is trustworthy — otherwise you are automating chaos</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · the running proof</span>
+            <p>This ecosystem built exactly this stack around a real product line (MRRC Modern): the support chain shipped in four slices in three days, and the first answers were published the day the first bundles arrived. The mechanism is documented in <a href="/engineering.html#field-loop">the mechanism volume</a> and journaled in <a href="/blog/support-loop/">The Support Loop</a>.</p>
+          </div>
+        </div></section>
+
+        <section id="belief" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · Belief</span>
+            <h2 class="ag-section-title">Imagination is an engineering material</h2>
+            <p class="ag-section-subtitle">Someone has to see the loop before it exists. The discipline is what happens next.</p>
+          </header>
+          <p>Every instrument in §04 was imagined before it was built: a support queue imagined as a sensor network; a user's report imagined as a remote measurement; the product's own backlog imagined as a loop that runs while the maintainer sleeps; a chat log imagined as a document that could have survived. None of that is in a model's default output. It is design work — and for a solo maintainer it is the highest-leverage work there is, because one good loop replaces a hundred evenings.</p>
+          <p>This is where "belief" earns its place. The honest version of <em>believe in the power of belief</em> is not a mindset slogan; it is an economic statement about sequencing. The first loop is always built <strong>before it pays off</strong>: the bundle before the first triage, the registry before the incident it prevents, the answers page before the user who needs it. You are betting your hobby hours on a future where the loop returns them. That bet requires imagination — and it deserves receipts.</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis · believe in the loop you can verify</span>
+            <p>Do not believe in the hype; believe in the loop. The way through the uncertainty is to make each loop start as the smallest testable proof: one reproduced incident blocked by one constraint, one bundle answered by one card, one branch passing one suite. Each proof buys a little more delegation — and the compounding of those receipts is what eventually feels like faith.</p>
+          </div>
+          <p>What belief must <em>not</em> do is equally concrete: do not bet on a model brand (the main force changed within a week in the ledger's measurements), do not bet on unbounded delegation (the merge stays human), and do not bet on volume (more automated output is not more value). Bet on the shape of the loop and on the gate at its end.</p>
+        </div></section>
+
+        <section id="failures" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · Failure modes</span>
+            <h2 class="ag-section-title">How solo projects actually die — and the guard for each</h2>
+            <p class="ag-section-subtitle">Not "the code breaks": the maintainer does. Guard the maintainer.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Failure mode</th><th>How it looks</th><th>Guard</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Attention collapse</strong></td><td>The inbox grows; the maintainer avoids opening it; the hobby becomes a debt</td><td>The triage cron and the answers page — nothing piles up unanswered, and the safe classes close without the maintainer</td></tr>
+              <tr><td><strong>Silent failure</strong></td><td>An instrument dies quietly (a runner stopped, a page stopped updating) and nobody notices for days</td><td>Instrument observability: name your own failures in logs; byte-check public artifacts; the loop must explain its own silence (this ecosystem learned it from a cron runner that died with SIGABRT — and from a test fixture that briefly reached a production board)</td></tr>
+              <tr><td><strong>Scope creep</strong></td><td>Every "wouldn't it be nice" becomes a promise; the roadmap becomes a threat</td><td>Features wait for the human by policy; the roadmap grows from repeated signatures in real reports, not from enthusiasm on a good evening</td></tr>
+              <tr><td><strong>Trust debt</strong></td><td>A user finds an issue your release notes didn't mention; the next update is installed reluctantly</td><td>Honest boundaries, visible known issues, no automatic promotion between maturity states, rollback targets that exist</td></tr>
+              <tr><td><strong>Bus factor of one</strong></td><td>The project is only operable by the person who built it; a month away is fatal</td><td>Memory in the repo: contract rows, constraint registry, source-of-truth map, documented recovery paths — written for the stranger who will run this next</td></tr>
+              <tr><td><strong>Belief without receipts</strong></td><td>Piling up automation that was never verified; a "system" nobody can check</td><td>Every loop ships with its gate and its evidence; if it cannot fail loudly, it is not finished</td></tr>
+            </tbody>
+          </table></div>
+        </div></section>
+
+        <section id="money" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · Honest limits</span>
+            <h2 class="ag-section-title">What money still buys — and the method cannot</h2>
+            <p class="ag-section-subtitle">The point of freeing attention is to spend it where only a human with resources can act.</p>
+          </header>
+          <ul>
+            <li><strong>Hardware truth.</strong> A bench, reference instruments, spare radios, and the hours to run acceptance tests. No loop fabricates physical verification; this ecosystem's answer is to keep unverified models behind a transmit gate and say so, rather than pretend.</li>
+            <li><strong>Other people's time.</strong> A second maintainer, a translator, a lawyer, an accountant. The method reduces the coordination cost of adding a person — the contract is the onboarding — but it cannot substitute for one.</li>
+            <li><strong>Legal and financial substance.</strong> An entity, a trademark, a paid support agreement, insurance. A hobby project can be excellent without them; it cannot be a vendor without them.</li>
+            <li><strong>Guarantees.</strong> A corporation can promise an SLA and back it with a contract. A solo project can only promise instruments and honesty — which, done well, is surprisingly close to what users actually need.</li>
+          </ul>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · the right way to read this</span>
+            <p>The method does not turn one person into a company, and it is not meant to. It turns one person's <em>attention</em> into a system whose reach exceeds their hours — so that the hours can go to the things only they can do: judgment, taste, safety, and the reasons they started.</p>
+          </div>
+        </div></section>
+
+        <section id="plan" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · 30-day plan</span>
+            <h2 class="ag-section-title">From "believing it's possible" to running it</h2>
+            <p class="ag-section-subtitle">A concrete starting order for a solo project with an existing codebase and users.</p>
+          </header>
+          <ol class="steps">
+            <li><h4>Days 1–2 · Make reports measurable</h4><p>Ship a diagnostics bundle (redacted config, environment snapshot, log tails, an auto health summary) and a receiver. Keep it stdlib-simple and self-hosted. From now on, a report arrives as a scene, not a story.</p></li>
+            <li><h4>Days 3–5 · Publish the answers page</h4><p>One page, searchable by report ID, with a fixed card structure: symptom / diagnosis with raw evidence / your move / status. Publish the first three answers by hand if you must — the page is what makes the promise visible.</p></li>
+            <li><h4>Week 2 · Write the registry you already earned</h4><p>List your last ten incidents; write 5–10 machine-readable constraints with reproduction notes; wire the check into your pre-edit path. This is the highest-return week of the project.</p></li>
+            <li><h4>Week 3 · Triage on a cron</h4><p>Fetch → summarize → classify → draft. Keep publishing default-deny until you trust the drafts; keep "need more info" as a first-class outcome. Add the public board when the first classification feels wrong — you will want the visible queue.</p></li>
+            <li><h4>Week 4 · Close the loop, carefully</h4><p>Only now add the unattended implementer: read-only proposal, guards, isolated branch, full test suite, no unattended <code>main</code>. The human merge is not a bottleneck; it is the trust anchor.</p></li>
+            <li><h4>Always · Keep the ledger and the boundaries</h4><p>One dated place for comparable numbers; one written list of what is not done and why. The ledger is how you prove progress to yourself; the boundaries are how you keep the trust you have earned.</p></li>
+          </ol>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">The one-sentence discipline</span>
+            <p>Instrument the friction, contract the memory, evidence the trust — and spend your own hours only on the judgment no instrument can hold. The hobby does not survive by being small; it survives by being <em>looped</em>.</p>
+          </div>
+          <p>Go deeper: <a href="/blog/three-axes/">The Three Axes</a> (the method end to end) · <a href="/blog/support-loop/">The Support Loop</a> (the instruments in action) · <a href="/engineering.html#field-loop">the field loop mechanism</a> · <a href="/agentic.html#evidence">the evidence ledger</a>. If you are building this for your own project and want to compare notes, the contact page is the door.</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>Related reading</h3>
+          <ul>
+            <li><a href="/blog/three-axes/">The Three Axes: From Business Intent to Field Evidence, End to End</a></li>
+            <li><a href="/blog/support-loop/">The Support Loop: How a Week of 🐞 Reports Became Two Releases</a></li>
+            <li><a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected — what AI-era work actually costs</a></li>
+            <li><a href="/agentic.html">Agentic Engineering — Human Intent, Agentic Execution, Field Evidence</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

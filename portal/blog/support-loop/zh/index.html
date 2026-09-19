@@ -109,7 +109,7 @@
             <tbody>
               <tr><td><strong>MRRC V6.1.15</strong>（安装版）</td><td>9 月 17 日</td><td>Windows 安装版自动拉起 <code>rigctld</code>——电台 CAT 守护进程随包分发（vendor 内置 <code>rigctld.exe</code> + DLL），并带机型名 → 编号解析：配置里写 <code>FT-891</code> 就能用，不再要求 <code>-m 1036</code>。</td></tr>
               <tr><td><strong>MRRC V6.1.16</strong>（安装版）</td><td>9 月 17 日</td><td>加固：内置 rigctld 路径以 manager 为主，兜底实现只<em>让位</em>、绝不阻塞启动，自启动不能变成「起不来」。</td></tr>
-              <tr><td><strong>MRRC V6.1.18</strong>（安装版）</td><td>9 月 18 日</td><td>第三种降噪引擎：<strong>NR3 —— RNNoise</strong>（Xiph 神经降噪，v0.2，BSD-3），<code>[WDSP] nr3 = plus|only|off</code>；libwdsp 重建，暴露新的 EMNR <code>alpha</code>/<code>npMax</code> 旋钮；NR2 等级表下移（−6/−9/−12/−16）；以及一个门控修复，关降噪现在是<em>真旁路</em>。</td></tr>
+              <tr><td><strong>MRRC V6.1.18</strong>（安装版）</td><td>9 月 18 日</td><td>第三种降噪引擎：<strong>NR3 —— RNNoise</strong>（Xiph 神经降噪，v0.2，BSD-3），<code>[WDSP] nr3 = plus|only|off</code>；libwdsp 重建，暴露新的 EMNR <code>alpha</code>/<code>npMax</code> 旋钮；NR2 等级表下移（−6/−9/−12/−16）；以及一个门控修复：关降噪现在是<em>真旁路</em>。</td></tr>
               <tr><td><strong>MRRC 热修 6.1.14 → 6.1.18</strong></td><td>9 月 17–18 日</td><td>同一批修复走热修通道：不用重装——<strong>重启 MRRC 即生效</strong>。自启动（6.1.14）、名字→编号（6.1.15）、兜底让位（6.1.16）、NR2 等级表（6.1.17）、NR3 + 门控（6.1.18）。</td></tr>
               <tr><td><strong>MRRC Modern v1.18.0</strong></td><td>9 月 17 日</td><td>首个正式 <strong>macOS</strong> 版（Apple Silicon DMG，macOS 11+）与 Windows 安装版并行，加上实时更新通道（<code>latest.json</code>，SHA-256 直接取自产物）和完整的支持链：🐞 诊断包、答复页、打包版日志落盘。</td></tr>
               <tr><td><strong>MRRC Modern v1.18.1</strong></td><td>9 月 18 日</td><td>两个 macOS 修复：应用<strong>签名</strong>了（不再「已损坏，无法打开」）；.bundle 正确<strong>申请麦克风权限</strong>（不再无声 RX）。Windows 包从同一份源码同步重建。</td></tr>
@@ -130,13 +130,13 @@
           <header class="ag-section-header">
             <span class="ag-section-label">02 · 链条</span>
             <h2 class="ag-section-title">「自助服务」和「自诊断」到底是什么意思</h2>
-            <p class="ag-section-subtitle">五段，发布 → 升级 → 诊断 → 分析 → 答复，把往返都工程掉。</p>
+            <p class="ag-section-subtitle">五段：发布 → 升级 → 诊断 → 分析 → 答复，把往返都工程掉。</p>
           </header>
 
           <p>大多数支持链是一个带希望的邮箱别名。这一条是两端各装了一台仪器的流水线。在<strong>用户侧</strong>，应用的设计目标是：用户需要的四件事，永远不需要开工单——</p>
 
           <div class="ag-loop-grid">
-            <article class="ag-card"><h3>⬆️ 升级，不用去找下载页</h3><p>Web 界面一个按钮（或启动器里按 <code>U</code>）。服务端先做 PTT 门禁，电台发射中，升级请求直接被 423 拒绝。下载先写 <code>.part</code> 文件，校验 SHA-256，原子改名，再静默安装，启动器干净交接。</p></article>
+            <article class="ag-card"><h3>⬆️ 升级，不用去找下载页</h3><p>Web 界面一个按钮（或启动器里按 <code>U</code>）。服务端先做 PTT 门禁：电台发射中，升级请求直接被 423 拒绝。下载先写 <code>.part</code> 文件，校验 SHA-256，原子改名，再静默安装，启动器干净交接。</p></article>
             <article class="ag-card"><h3>↩️ 成功判据造不了假</h3><p>「已拉起安装器」不算成功。唯一的成功判定是 <code>state.json → lastResult.status == "ok"</code>，由<em>新版本</em>在自己的启动时自证。新版没说话之前，升级就没发生。一键回退走同一条静默安装路径，指向上一个安装包。</p></article>
             <article class="ag-card"><h3>🐞 诊断，不用读日志</h3><p>菜单里一个入口生成脱敏诊断包：日志尾部、白名单脱敏的配置、环境快照（版本、平台、音频设备表、生效的热修层），以及自动体检摘要 <code>diagnostics/summary.txt</code>，它用启动次数和时间跨度区分「重启」与「崩溃」。密码、密钥、令牌、录音、存储信道、天调学习数据永远不出机器。</p></article>
             <article class="ag-card"><h3>📖 答复，不用写邮件</h3><p>公开的<a href="https://www.vlsc.net/mrrc/answers/">答复页</a>可搜索、可按上报编号直达。每张卡结构固定：编号 / 症状 / 诊断（附原始证据）/ 结论 / <em>你要做的</em> / 状态。缺陷修复发布后，卡片翻成「已修复 · 版本号」。</p></article>
@@ -149,14 +149,14 @@
             <p>支持曾经是一场访谈：一封邮件 = 一个问题，每个来回隔着几小时，用户靠记忆作答。诊断包把访谈变成测量：一次上传 = 一个现场，带采集健康度百分比、设备表、重启与崩溃的判别。这个转换不是 UX 修饰，它是机器分诊成为可能的前提。你无法委托机器去「访谈的第一轮判读」；你可以委托它去「测量的第一轮判读」。</p>
           </div>
 
-          <p>两个产品族现在跑的是同一条链。Modern 在 v1.18.0 整体继承了它，包格式、摘要器、答复页、更新检查，它的前两个自动分诊答复已于 9 月 19 日发出，距第一批诊断包到达不到一天。</p>
+          <p>两个产品族现在跑的是同一条链。Modern 在 v1.18.0 整体继承了它：包格式、摘要器、答复页、更新检查。它的前两个自动分诊答复已于 9 月 19 日发出，距第一批诊断包到达不到一天。</p>
         </div></section>
 
         <section id="walls" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">03 · 墙 → 功能</span>
             <h2 class="ag-section-title">三起事故，三个已发布的功能</h2>
-            <p class="ag-section-subtitle">被解决的问题如何挖出新需求，讲机制，不讲口号。</p>
+            <p class="ag-section-subtitle">被解决的问题如何挖出新需求：讲机制，不讲口号。</p>
           </header>
         </div></section>
 
@@ -178,7 +178,7 @@
             <span class="ag-section-label">03.2 · 水声</span>
             <h2 class="ag-section-title">一条答复变成默认值；一个默认值变成引擎</h2>
           </header>
-          <p>上报 <code>20260917-132643-020a</code>：「NR2 开 2 级后水声大、有失真」。诊断包自己的数字让结论可证而非可信，音频采集健康度 99.9%、无 Traceback、无双重降噪叠加，答复卡据此判定为经典的谱减法<em>音乐噪声</em>副作用，并给出动作：级别 2→1、AGC 模式、带宽。</p>
+          <p>上报 <code>20260917-132643-020a</code>：「NR2 开 2 级后水声大、有失真」。诊断包自己的数字让结论可证而非可信：音频采集健康度 99.9%、无 Traceback、无双重降噪叠加，答复卡据此判定为经典的谱减法<em>音乐噪声</em>副作用，并给出动作：级别 2→1、AGC 模式、带宽。</p>
           <p>然后，产品在三天里分三步吸收了这条结论。<strong>默认值改变：</strong>NR2 等级表整体下移一档（热修 6.1.17），再落到 −6/−9/−12/−16。<strong>旋钮暴露：</strong>重建的 libwdsp 增加 C 层 <code>alpha</code>/<code>npMax</code> 设置接口，新默认值经闭环实测（<code>npmax 0.98</code>，AE 20/0.50）。<strong>引擎增加：</strong>NR3 —— Xiph 的神经降噪 RNNoise，可选 <code>plus|only|off</code>，随 V6.1.18 上线，同时带上让「关」成为真旁路的门控修复（此前有用户报告<em>关掉降噪后仍失真</em>，这本身也是一条值得挖的上报）。</p>
           <div class="claim-box" data-claim-type="inference">
             <span class="claim-label">推断 · 三个时间尺度，一条弧线</span>
@@ -191,7 +191,7 @@
             <span class="ag-section-label">03.3 · macOS 的两种静默</span>
             <h2 class="ag-section-title">两次静默失败，与一套回归协议</h2>
           </header>
-          <p>Modern 的第一个 macOS 版撞上两个静默失败，两个修复都是可观测性的教材。<strong>「已损坏」：</strong>此前所有 macOS 构建其实都没签上名，签名步骤一直在静默失败，于是 Gatekeeper 弹出一个右键也绕不开的对话框。修复是双的：把 bundle 按 <code>codesign</code> 的要求重新布局，并让签名失败<em>直接中止构建</em>。静默失败才是缺陷；对话框只是症状。<strong>无声 RX：</strong>bundle 没有声明音频输入权限，macOS 的回应是把采集流打开、往里填零，日志提示「检查电台」，CoreAudio 却报无错误。修复是正确申请权限，并把警告指向系统设置而不是电台。</p>
+          <p>Modern 的第一个 macOS 版撞上两个静默失败，两个修复都是可观测性的教材。<strong>「已损坏」：</strong>此前所有 macOS 构建其实都没签上名：签名步骤一直在静默失败，于是 Gatekeeper 弹出一个右键也绕不开的对话框。修复是双的：把 bundle 按 <code>codesign</code> 的要求重新布局，并让签名失败<em>直接中止构建</em>。静默失败才是缺陷；对话框只是症状。<strong>无声 RX：</strong>bundle 没有声明音频输入权限，macOS 的回应是把采集流打开、往里填零，日志提示「检查电台」，CoreAudio 却报无错误。修复是正确申请权限，并把警告指向系统设置而不是电台。</p>
           <p>第三个案例是分诊系统咬了自己的尾巴，还咬出了价值。诊断包 <code>20260918-114118-9ad3</code> 带着一条「录音掉块 / 队列满」的签名，与 V2.44/V2.45 修掉的缺陷同签名，但所有命中行都落在 9 月 12 日（修复发布之前）。公开结论拒绝了两个顺手答案（「早已修复」/「回归了！」），改为执行一套协议：用户录一段新 QSO 再回报；后续包（<code>20260919-085517-b3aa</code>）关闭了它——9 月 19 日的日志健康，旧行被确认为修复前的残留。让这一切成为可能的，是一条作为流程提交的改动（<code>ecb2652</code>）：<em>模型在写结论前必须先读项目自己的事故史</em>——SDD 版本史、CHANGELOG、精确到行的代码位置是输入，不是事后补充。</p>
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 答复卡引用了什么</span>

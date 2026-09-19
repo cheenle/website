@@ -127,7 +127,7 @@
             <span class="claim-label">事实 · 驱动 SDD V1.0 的 Demo 定义</span>
             <p>「用浏览器遥控 FT-710，用一根 USB 线替代 SCU-LAN10，不加任何硬件。实时瀑布（FT4222 SPI）。双向 48 kHz Opus 音频。移动优先 UI。四条 WebSocket 通道（控制、音频 RX、音频 TX、频谱）。」</p>
           </div>
-          <p>Echo 的输入都是具体的：作者本人在多设备上的日常操作；对已有开源 FT-710 遥控项目（F4HTB）的评估（没有 SPI 频谱、没有双向 Opus、没有移动 UI）；对照 Hamlib 记录的差距；以及那个不公平优势，从更早的 MRRC 项目继承的可复用模式（PTT 安全、多实例架构、SDD 模板本身）。这段话变成了基线：全部 15 章一次性写就，其中包含一张带目标值与验证方法的编号 NFR 表。在这个项目里，需求写成「现场测试可以裁定的义务」：</p>
+          <p>Echo 的输入都是具体的：作者本人在多设备上的日常操作；对已有开源 FT-710 遥控项目（F4HTB）的评估（没有 SPI 频谱、没有双向 Opus、没有移动 UI）；对照 Hamlib 记录的差距；以及那个不公平优势：从更早的 MRRC 项目继承来的可复用模式（PTT 安全、多实例架构、SDD 模板本身）。这段话变成了基线：全部 15 章一次性写就，其中包含一张带目标值与验证方法的编号 NFR 表。在这个项目里，需求写成「现场测试可以裁定的义务」：</p>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>需求</th><th>目标</th><th>验证方法</th></tr></thead>
             <tbody>
@@ -154,7 +154,7 @@
           </table></div>
 
           <h3 style="margin-top:2.5rem">2.3 · 版本行是学习的最小单位</h3>
-          <p>SDD 的版本历史不是 changelog 的复制品，它是项目的学习台账。一次变更一段记录：现场信号或需求、证据、决策、仍未闭合的边界。75 天 67 行，有的只有一行修复，有的是一整条支持链。V2.45 行读起来像一份带结论的现场报告：静音录音的日志签名（开始后 6 ms 就出现 <code>Recording writer is falling behind — dropping audio</code>，22 秒里 950+ 次丢弃）、用 <code>ffmpeg</code> 测出的产物（<code>-91 dB</code>，即数字静音，时长正确）、根因、修复、三个回归测试，以及边界，「长时间连续录制与树莓派 SD 卡写入仍未验证」。</p>
+          <p>SDD 的版本历史不是 changelog 的复制品，它是项目的学习台账。一次变更一段记录：现场信号或需求、证据、决策、仍未闭合的边界。75 天 67 行，有的只有一行修复，有的是一整条支持链。V2.45 行读起来像一份带结论的现场报告：静音录音的日志签名（开始后 6 ms 就出现 <code>Recording writer is falling behind — dropping audio</code>，22 秒里 950+ 次丢弃）、用 <code>ffmpeg</code> 测出的产物（<code>-91 dB</code>，即数字静音，时长正确）、根因、修复、三个回归测试，以及边界：「长时间连续录制与树莓派 SD 卡写入仍未验证」。</p>
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 没有自动升级</span>
             <p>生命周期状态是显式的——<code>planned</code>、<code>implemented</code>、<code>tested</code>、<code>bench-verified</code>、<code>field-verified</code>、<code>released</code>、<code>deferred</code>、<code>known-issue</code>，而且没有任何状态会自己前进。一个已发布的子系统不能把成熟度借给别的客户端或机型；未验证的 Icom 与 Yaesu 机型带着发射门禁发布，并且如实写明。</p>
@@ -172,7 +172,7 @@
           <p>Harness 有外层（业务、技术、产品约束，即 SDD 的三组章节）与内层执行层（人 + 智能体、仓库、工具、测试 + 审查、部署、现场遥测）。本文关注内层最锋利的仪器：约束注册表。</p>
 
           <h3 style="margin-top:2.5rem">3.2 · 约束注册表：22 条教训变成机器</h3>
-          <p><code>.agents/skills/sdd-guardian/harness/constraints.json</code> 保存着 22 条规则，从 SDD 与真实事故中提炼，每条带严重级、理由和匹配模式。智能体（或人）在会话开始时拿到它们；编辑前的检查会以退出码 2 阻断违规。注册表的来历才是重点，这些不是风格偏好：</p>
+          <p><code>.agents/skills/sdd-guardian/harness/constraints.json</code> 保存着 22 条规则，从 SDD 与真实事故中提炼，每条带严重级、理由和匹配模式。智能体（或人）在会话开始时拿到它们；编辑前的检查会以退出码 2 阻断违规。注册表的来历才是重点。这些不是风格偏好：</p>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>约束</th><th>严重级</th><th>它固化了什么</th></tr></thead>
             <tbody>
@@ -184,7 +184,7 @@
               <tr><td><code>password-constant-time</code></td><td>warn</td><td>口令比较必须使用 <code>hmac.compare_digest</code></td></tr>
             </tbody>
           </table></div>
-          <p>转换规则：<strong>事故只有变成守卫才算修完</strong>。修复是链路第一环；SDD 里的裁决是第二环；阻断下一次尝试的机器可读约束是第三环。这也是注册表小而单调的原因，每一行都付过真实的代价。</p>
+          <p>转换规则：<strong>事故只有变成守卫才算修完</strong>。修复是链路第一环；SDD 里的裁决是第二环；阻断下一次尝试的机器可读约束是第三环。这也是注册表小而单调的原因：每一行都付过真实的代价。</p>
 
           <h3 style="margin-top:2.5rem">3.3 · 门禁与唯一真相源</h3>
           <p>注册表周围还有整套装置：unittest 套件（7 月第 12 个循环时 262 项 → 9 月 FDE 看板提交时 <strong>1,299</strong> 项）、离线 <code>release_check</code> 规则（发布记录中报 29 项通过 / 0 失败）、保存每份产物版本/大小/SHA-256 的发布产物注册表，以及强制文档一致的测试，版本历史首行的 SDD 版本必须与 README、生成页和落地页一致。给人看的入口是 <code>docs/PROJECT_MAP.md</code>：它回答一个问题，「我改 X，必须同步哪些东西？」，每个主题一行：</p>

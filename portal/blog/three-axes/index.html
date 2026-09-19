@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Three Axes: From Business Intent to Field Evidence, End to End — VLSC Blog</title>
+    <meta
+      name="description"
+      content="MRRC Modern as a worked example of the full lifecycle: one vision sentence → a 15-chapter SDD baseline → 67 version rows in 75 days → field incidents → a support chain that classifies, answers and implements. SDD, Harness and FDE as the method, with evidence at every station and a recommendations section."
+    />
+    <meta
+      name="keywords"
+      content="agentic engineering, SDD, living design document, engineering harness, constraint registry, forward deployed engineering, FDE, requirements engineering, field evidence, support loop, product iteration, open source, MRRC Modern, amateur radio, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="The Three Axes: From Business Intent to Field Evidence, End to End"
+    />
+    <meta
+      property="og:description"
+      content="One project, 75 days, 67 SDD version rows, 22 machine-readable constraints, 262 → 1,299 tests: how a vision sentence travels to requirements, design, real users, support — and back into new requirements. With an adoption ladder and eight transferable rules."
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/three-axes/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/three-axes/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/three-axes/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/three-axes/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/three-axes/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=3" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Three Axes: From Business Intent to Field Evidence, End to End",
+        "description": "MRRC Modern as a worked example of the full lifecycle under SDD, Harness and FDE — business intent → requirements → design → field → support → new requirements — with evidence at every station and eight transferable rules.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-09-19",
+        "keywords": "agentic engineering, SDD, harness, constraint registry, FDE, requirements engineering, field evidence, support loop, MRRC Modern",
+        "articleSection": "Method",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/three-axes/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/blog/">Blog</a> › <span class="ba-crumb-cat">Method</span> › The Three Axes</span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-compass-drafting"></i><span>Method · End-to-End Practice</span></div>
+          <h1>The Three <span class="gradient">Axes.</span></h1>
+          <p>How an open-source project travels from a business sentence to requirements, design, real users, support — and back into new requirements. MRRC Modern as the worked example, with SDD, Harness and FDE as the method, and evidence at every station.</p>
+          <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-calendar-days"></i> 75 days · 67 SDD version rows</span>
+            <span class="ag-pill"><i class="fas fa-shield-halved"></i> 22 machine-readable constraints</span>
+            <span class="ag-pill"><i class="fas fa-arrow-trend-up"></i> 262 → 1,299 tests</span>
+            <span class="ag-pill"><i class="fas fa-box-open"></i> v1.0.0 → v1.18.1 · 3 platforms</span>
+          </div>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-19">Sep 19, 2026</time> &nbsp;·&nbsp; ~22 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#chain">The chain</a><a href="#sdd">SDD</a><a href="#harness">Harness</a><a href="#fde">FDE</a><a href="#threads">End to end</a><a href="#evidence">Evidence</a><a href="#recommendations">Recommendations</a><a href="#closing">Closing</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">Most engineering write-ups start halfway: a requirement appears, a design follows, tests pass. This one starts where projects actually start — with a business sentence a person said out loud — and follows <strong>MRRC Modern</strong> for its first 75 days (2026-07-06 → 2026-09-19): one remote-control server for amateur radio that grew from a single-radio experiment into a three-platform, ten-model-key product with a public support chain. The method on display is the same three axes used across this ecosystem — a <strong>living SDD</strong> (the contract), an <strong>engineering harness</strong> (the machinery that enforces it), and <strong>FDE</strong> (the field loops that keep correcting both). Every station below is anchored to a commit, an SDD row, a test, a release artifact, or a public answer card.</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the journey in six findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>One sentence became a contract on day one.</strong> The Echo output — "a browser-based FT-710 remote control that replaces SCU-LAN10 with zero additional hardware, one USB cable" — drove SDD V1.0: all 15 chapters, written concurrently with the first commit.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The field wrote the roadmap.</strong> 12 git-verifiable FDE cycles in 16 days, each triggered by exactly one real field signal — 16 kHz TX crackling → AD-011; a ~20 Hz frequency drift → the <code>DN;</code> ruling and constraint; filter races → stale-read discard.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Knowledge became machinery.</strong> 22 machine-readable constraints (block / warn / info) distilled from real incidents, checked before edits (exit code 2); the test suite grew 262 → 1,299; <code>release_check</code> holds offline release rules; PROJECT_MAP names the single source of truth per topic.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>Support became the sensor network.</strong> Built as four slices in three days: bundle → triage + answers → update check → board + unattended implement. Classification is the decision; the loop now ends at a reviewed branch, never at <code>main</code>.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>New requirements arrive through the same door as old ones.</strong> Recording silence (field log), macOS "damaged" and silent RX (release week), PTT release latency (field feel) — each became an SDD row, a guard, a release, and a public answer card.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>The method transfers; the counts do not.</strong> Definition before implementation, every incident becomes a rule, instrument the field, automate the doing and never the verdict. §07 turns this into eight rules and a three-stage adoption ladder.</li>
+            </ul>
+            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#sdd">§02 the contract</a><a href="#harness">§03 the machinery</a><a href="#threads">§05 two threads end to end</a><a href="#recommendations">§07 recommendations</a></div>
+          </div>
+        </div>
+
+        <section id="chain" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · The chain</span>
+            <h2 class="ag-section-title">One project, two ways the chain breaks</h2>
+            <p class="ag-section-subtitle">Business intent → requirements → design → field → support → new requirements. Every project walks it; the failures are what differ.</p>
+          </header>
+          <p>The chain looks linear on a slide and behaves like a loop in reality: a requirement is only real when a field signal confirms it mattered, and a field signal is only useful when it can change the design. When the loop closes, the project compounds. It breaks in two recognizable ways instead.</p>
+          <div class="ag-loop-grid">
+            <article class="ag-card"><h3>The vision never lands</h3><p>A business sentence is repeated in pitch decks while requirements drift into feature lists. Nobody can point at the artifact where the sentence became a measurable obligation — so every argument restarts from opinion.</p></article>
+            <article class="ag-card"><h3>The field never returns</h3><p>Iteration is fast, but what the field taught lives in chat logs and a maintainer's memory. The same incident is rediscovered each quarter; a version number tells you what shipped but not what it learned.</p></article>
+          </div>
+          <p>MRRC Modern was built to make both failures expensive to commit. It began on <strong>2026-07-06</strong> with the initial commit of a single-radio experiment (FT-710 over its own USB cable), and by <strong>2026-09-19</strong> had produced 435 commits, 67 SDD version rows, 22 architecture decisions, 22 machine-readable constraints, 37 changelog entries, releases from v1.0.0 to v1.18.1 across Windows, macOS and a Raspberry Pi image — and a public support chain with answers, a board and an unattended implementer. None of the numbers are the point; what follows is the machinery that produced them.</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis</span>
+            <p>The three axes are one system. The SDD settles judgment into a contract; the harness makes forgetting structurally impossible; FDE keeps letting the field correct both. Remove any one and you can name the failure that follows — a beautiful document nobody obeys, a fast loop with no memory, or a contract that has stopped listening.</p>
+          </div>
+        </div></section>
+
+        <section id="sdd" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · Axis 1 — SDD</span>
+            <h2 class="ag-section-title">The contract that outlives the conversation</h2>
+            <p class="ag-section-subtitle">A living design document in three harness levels: business (what), technical (how), product (deliverable).</p>
+          </header>
+
+          <h3>2.1 · From a sentence to measurable requirements</h3>
+          <p>The project's Echo phase produced one paragraph before any architecture:</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · the demo definition that drove SDD V1.0</span>
+            <p>"A browser-based FT-710 remote control that replaces SCU-LAN10 with zero additional hardware. One USB cable. Real-time waterfall via FT4222 SPI. Bidirectional 48 kHz Opus audio. Mobile-first UI. Four WebSocket channels (control, audio RX, audio TX, spectrum)."</p>
+          </div>
+          <p>Echo inputs were concrete: daily operation by the author across devices; an evaluation of the existing open-source FT-710 remote (F4HTB) that found no SPI scope, no bidirectional Opus, no mobile UI; the gaps documented against Hamlib; and — the unfair advantage — reusable patterns inherited from the older MRRC project (PTT safety, multi-instance architecture, the SDD template itself). The paragraph became the baseline: all 15 SDD chapters in one burst, including a numbered NFR table with targets and verification methods. Requirements in this project are written as obligations a field test can settle:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Requirement</th><th>Target</th><th>Verification method</th></tr></thead>
+            <tbody>
+              <tr><td>NFR-001 · RX audio latency (radio speaker → browser speaker)</td><td>&lt; 500 ms end-to-end</td><td>Listening test</td></tr>
+              <tr><td>NFR-002 · Control response</td><td>UI command ack within 200 ms on LAN</td><td>WebSocket round-trip observation</td></tr>
+              <tr><td>NFR-008 · PTT response</td><td>&lt; 100 ms from touch to TX command</td><td>Timing logs</td></tr>
+              <tr><td>SC8 · Success criterion</td><td>PTT cannot stick</td><td>Safety architecture + watchdog tests</td></tr>
+            </tbody>
+          </table></div>
+          <p>The pattern to copy is small and strict: a requirement without a target and a verification method is an opinion. "PTT cannot stick" survives because a chapter (SDD 15, PTT safety architecture) and a watchdog exist; it is not a slogan.</p>
+
+          <h3 style="margin-top:2.5rem">2.2 · From requirements to design decisions</h3>
+          <p>Design decisions in this project are numbered, dated, and traceable: <strong>AD-001 … AD-022</strong>, one decision register. Every one of them has an Echo behind it, and several have field incidents behind them:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Decision</th><th>What it settled</th><th>What forced it</th></tr></thead>
+            <tbody>
+              <tr><td>AD-002</td><td>Direct CAT via pyserial instead of Hamlib for the FT-710 path</td><td>Hamlib gap analysis; the in-cable protocol was simpler and gave real spectrum</td></tr>
+              <tr><td>AD-011</td><td>48 kHz codec domain with a frame-aligned 44.1 kHz bridge</td><td>Field signal: "16 kHz TX crackling"</td></tr>
+              <tr><td>AD-014</td><td><code>DN;</code> is never polled — it steps the VFO down ~20 Hz per call</td><td>A live frequency-drift incident</td></tr>
+              <tr><td>AD-017</td><td>Recording writer is per-session and idempotently rebuilt; a full queue drops the oldest block</td><td>The 2026-09-12 silent-MP3 field report</td></tr>
+              <tr><td>AD-019</td><td>Unverified radio models refuse transmit unless explicitly allowed</td><td>New model families arriving faster than hardware acceptance</td></tr>
+              <tr><td>AD-021 / AD-022</td><td>Support bundle, triage and the provable update channel</td><td>Support itself: first-round emails only ever asked for evidence</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3 style="margin-top:2.5rem">2.3 · The version row is the atom of learning</h3>
+          <p>The SDD's version history is not a changelog duplicate; it is the project's learning ledger. One row per change episode: the field signal or requirement, the evidence, the decision, the boundary that remains. 67 rows in 75 days — some spanning a one-line fix, some an entire support chain. Row V2.45 reads like a field report with a conclusion: the log signature of the silent recording ("Recording writer is falling behind — dropping audio" appearing 6 ms after start, 950+ drops in 22 s), the <code>ffmpeg</code> measurement of the output (<code>-91 dB</code> = digital silence, duration correct), the root cause, the fix, the three regression tests, and the boundary — "long recordings and Raspberry Pi SD-card writes remain unverified".</p>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · no automatic promotion</span>
+            <p>Lifecycle states are explicit — <code>planned</code>, <code>implemented</code>, <code>tested</code>, <code>bench-verified</code>, <code>field-verified</code>, <code>released</code>, <code>deferred</code>, <code>known-issue</code> — and nothing advances by itself. A released subsystem cannot lend its maturity to another client or radio model; unverified Icom and Yaesu profiles ship behind a transmit gate and say so.</p>
+          </div>
+        </div></section>
+
+        <section id="harness" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Axis 2 — Harness</span>
+            <h2 class="ag-section-title">Constraints that don't need remembering</h2>
+            <p class="ag-section-subtitle">If a lesson only lives in a document, it will be skipped. The harness is what makes skipping it fail loudly.</p>
+          </header>
+
+          <h3>3.1 · Two layers, one job: make failure visible</h3>
+          <p>The harness has an outer layer (business, technical and product constraints — the three SDD groups) and an inner execution layer (human + agents, repository, tools, tests + review, deployment, field telemetry). This article is about the inner layer's sharpest instrument: the constraint registry.</p>
+
+          <h3 style="margin-top:2.5rem">3.2 · The constraint registry: 22 lessons as machinery</h3>
+          <p><code>.agents/skills/sdd-guardian/harness/constraints.json</code> holds 22 rules distilled from the SDD and from real incidents, each with a severity, a rationale, and match patterns. An agent (or human) asking for a brief gets them at session start; a pre-edit check blocks violations with exit code 2. The registry's origin stories are the point — these are not style-guide preferences:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Constraint</th><th>Severity</th><th>What it encodes</th></tr></thead>
+            <tbody>
+              <tr><td><code>cat-no-dn</code></td><td>block</td><td><code>DN;</code> steps the active VFO DOWN ~20 Hz per call — a live frequency-drift incident, now impossible to re-introduce by accident</td></tr>
+              <tr><td><code>cat-direct-serial-io</code></td><td>block</td><td>Serial I/O only inside radio controllers — keeps the asyncio transport from being touched from everywhere</td></tr>
+              <tr><td><code>audio-16k-rate</code></td><td>block</td><td>Audio rates are 44.1 kHz device / 48 kHz codec — never 16 kHz in the audio path (the crackling incident); 16 kHz is a storage domain</td></tr>
+              <tr><td><code>poll-stale-guard</code></td><td>info</td><td>Poll loops discard stale in-flight reads (the "filter switch works 50% of the time" race)</td></tr>
+              <tr><td><code>ptt-release-no-verify</code></td><td>info</td><td>TX0 is fire-and-forget — verify loops on release are how PTT gets stuck</td></tr>
+              <tr><td><code>password-constant-time</code></td><td>warn</td><td>Password checks use <code>hmac.compare_digest</code></td></tr>
+            </tbody>
+          </table></div>
+          <p>The conversion rule: <strong>an incident is only fixed when it becomes a guard</strong>. Repair is link one of three; the ruling in the SDD is link two; the machine-readable constraint that blocks the next attempt is link three. This is why the registry is small and boring — every row cost something real.</p>
+
+          <h3 style="margin-top:2.5rem">3.3 · Gates and single sources of truth</h3>
+          <p>Around the registry sits the rest of the machinery: the unittest suite (262 tests at the 12th cycle in July → <strong>1,299</strong> by the FDE-board commits in September), offline <code>release_check</code> rules (reported as 29 checks / 0 failing on release rows), a release-artifacts registry holding per-file version, size and SHA-256, and tests that enforce document consistency — the SDD version in the version-history first row must match the README, generated pages and landing page. For humans, <code>docs/PROJECT_MAP.md</code> answers one question — "if I change X, what must move with it?" — with a table per topic:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Topic</th><th>Single source of truth</th><th>Enforced by</th></tr></thead>
+            <tbody>
+              <tr><td>App version</td><td><code>CHANGELOG.md</code> top entry</td><td>Build scripts parse it; <code>release_check</code></td></tr>
+              <tr><td>SDD version</td><td><code>SDD/14-version-history.md</code> first row</td><td><code>test_sdd_docs_consistency.py</code></td></tr>
+              <tr><td>Design decisions</td><td><code>SDD/08-architecture-decisions.md</code> (AD-001…AD-022)</td><td><code>release_check</code> AD index + the guardian registry</td></tr>
+              <tr><td>Engineering constraints</td><td><code>constraints.json</code></td><td><code>sdd_context.py check</code> — block violations exit 2</td></tr>
+              <tr><td>Release artifacts</td><td><code>release-artifacts.json</code> (version / size / SHA-256)</td><td><code>release_check.py</code> + artifact tests</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · the harness is what makes delegation safe</span>
+            <p>You can hand a repository to an agent only if the repository can refuse. The registry turns the project's scar tissue into pre-edit interception — which is the same design view as the product's transmit gate: authority is bounded, refusals are explicit, and every refusal cites where it came from.</p>
+          </div>
+        </div></section>
+
+        <section id="fde" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · Axis 3 — FDE</span>
+            <h2 class="ag-section-title">Echo → Delta → Product, and the fourth practice</h2>
+            <p class="ag-section-subtitle">The lineage's field loops: deploy where reality is, prove the riskiest assumption, abstract what survived — then let support run the same loop on the product itself.</p>
+          </header>
+
+          <h3>4.1 · Twelve cycles, one field signal each</h3>
+          <p>The first era is documented as a git-verified cycle map. Each row is one Echo (a field signal), one Delta (the riskiest proof), one Product output (an abstraction that stays). A sample:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Cycle</th><th>Field signal (Echo)</th><th>What got built (Delta → Product)</th></tr></thead>
+            <tbody>
+              <tr><td>V1.0 · Jul 6</td><td>Replace SCU-LAN10, one USB cable, no extra hardware</td><td>Full 15-chapter SDD baseline + 7 core modules, in one day</td></tr>
+              <tr><td>V1.1 · Jul 6</td><td>"16 kHz TX crackling"</td><td>AD-011: 48 kHz codec domain + 44.1 kHz frame-aligned bridge</td></tr>
+              <tr><td>V1.2 · Jul 8</td><td>"Frequency drifts ~20 Hz; TX meters blank"</td><td>Active-VFO tracking, meter calibration — and the ruling that became <code>cat-no-dn</code></td></tr>
+              <tr><td>V1.7 · Jul 19</td><td>"Filter switch works 50% of the time"</td><td>Stale-read discard after each poll query + 3 regression tests</td></tr>
+              <tr><td>V1.9 · Jul 21</td><td>"USB reconnect → waterfall frozen forever"</td><td><code>on_reconnected</code> hook re-runs scope init after reconnect</td></tr>
+              <tr><td>V2.1 · Jul 22</td><td>"PTT keys but no voice / no RF power"</td><td>TX uplink ownership promotion + per-session TX counters + 5 regression tests</td></tr>
+            </tbody>
+          </table></div>
+          <p>Four patterns made this era work, and all four are copyable: <strong>one cycle = one real signal</strong> (no speculative features); <strong>documentation is concurrent, not retrospective</strong> (the version-history row lands with the fix); <strong>the riskiest assumption gets the prototype</strong> (direct CAT first, 48 kHz pipeline second, multi-client ownership later); and <strong>start from leverage</strong> (six assets inherited from the older project meant cycle one began at "integrate", not "invent").</p>
+
+          <h3 style="margin-top:2.5rem">4.2 · Product means abstraction — and then a platform</h3>
+          <p>The Product phase is where field hacks become assets other work can stand on: a standalone scope subprocess with a length-prefixed pipe (byte-wise resync on the FT4222 was proven impossible), a frame-aligned 44.1↔48 kHz resampler, adaptive polling with skip-on-command and stale-read discard, a tagged dual-codec audio frame, and per-PTT TX session logging. The decisive abstraction arrived in August: a <strong>pluggable radio backend</strong>. The server, polling and state layers became radio-agnostic; radio-specific behaviour moved behind profiles. That single move turned the FT-710 solution into a platform — five Icom models via a shared CI-V core and four Yaesu models via a shared ASCII-CAT core, all built on the field-proven FT-710 transport, arriving behind a transmit gate until hardware acceptance catches up.</p>
+
+          <h3 style="margin-top:2.5rem">4.3 · Practice 4: the support loop</h3>
+          <p>The fourth loop practice turns the same Echo→Delta→Product discipline on the product's own support. It shipped as four slices in three days: (1) the redacted diagnostics bundle; (2) the triage autopilot and the public answers page; (3) the read-only update check with a generated manifest; (4) the public field board and the unattended implementer. The rule that organizes it: <strong>classification is the decision</strong> — noise closes as answered, bugs auto-schedule into the implementation queue, features wait for the operator, and an un-answered report never closes. The implementer runs single-flight from a clean <code>main</code> worktree: a read-only model proposes a unified-diff JSON contract; guards refuse protected paths and oversized patches; the patch lands only on an isolated <code>fde/&lt;id&gt;</code> branch and commits only if the full test suite is green. <code>main</code> is never touched by an unattended process; the merge stays human. The mechanism is specified in the <a href="/engineering.html#field-loop">mechanism volume, §Field Loop</a>; the journal of its first week is in <a href="/blog/support-loop/">The Support Loop</a>.</p>
+        </div></section>
+
+        <section id="threads" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · End to end</span>
+            <h2 class="ag-section-title">Two threads, every station</h2>
+            <p class="ag-section-subtitle">A field incident is only interesting if you can watch it travel. Two real ones, from symptom to shipped fix to public answer.</p>
+          </header>
+
+          <h3>5.1 · Thread A — "the recording was silent, but the file looked right"</h3>
+          <p><strong>Field (2026-09-12, 22:26).</strong> A live session produced an MP3 with the correct duration and size — and no audio. The logs carried the signature: <code>Recording writer is falling behind — dropping audio</code> as early as 6 ms after start, 950+ drops over 21.9 seconds, ending in <code>Recording queue full on stop — finishing directly</code>. <code>ffmpeg</code> measured the output at <strong>-91 dB</strong>: digital silence.</p>
+          <p><strong>Design (V2.44/V2.45).</strong> The writer task was one-shot per session by design — it consumes the stop sentinel and finishes — but it was created only once at process start. After the first recording, every later session had no consumer; the bounded queue filled in milliseconds and <code>stop()</code> back-filled the timeline with silence. The fix: an idempotent <code>_ensure_rec_writer()</code> rebuilt on every audio block, stop enqueue and REC; a WARNING when the writer dies (the observability the incident lacked); a full queue drops the oldest block instead of synchronously finishing. Three regression tests; shipped in <strong>v1.15.0</strong>.</p>
+          <p><strong>Support (2026-09-18).</strong> A new diagnostics bundle arrived carrying the same signature — but every matching log line was dated Sep 12, before the fix. The triage model, required to read the project's own incident history before writing a verdict, cross-referenced the CHANGELOG and the SDD version-history rows, cited <code>server.py:348</code> in the shipped code, and refused both easy answers ("already fixed" / "regression"): it ran a protocol instead — record one new QSO and report back. The follow-up bundle closed the case with healthy Sep-19 logs. The public answer card states the reasoning and the raw evidence lines.</p>
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">Inference · the version row is where the thread settles</span>
+            <p>Without the row, the second report starts from zero and the maintainer re-derives a two-week-old diagnosis. With it, triage is a lookup: signature → history → verdict → protocol. The SDD row is not documentation debt; it is the project's immune memory.</p>
+          </div>
+
+          <h3 style="margin-top:2.5rem">5.2 · Thread B — "the app is damaged and cannot be opened"</h3>
+          <p><strong>Field (release week, v1.18.0).</strong> The first macOS installer shipped; users met a Gatekeeper dialog no right-click can bypass, and a second, quieter failure — RX audio was silent while the log told them to "check the radio".</p>
+          <p><strong>Design (V2.54, shipped as v1.18.1).</strong> Two root causes, both instances of silent failure. The signing step had been failing silently since the first macOS build (the build script treated it as non-fatal), so every bundle shipped unsigned; the fix laid the resource tree out the way <code>codesign</code> requires and made a failed signature <em>abort the build</em>. Silent RX was a missing permission key: macOS happily opened the capture stream and filled it with zeros, reporting no error, because the bundle never asked for microphone access; the fix declares the key (asserted at build time) and points the warning at System Settings instead of the radio. Verification was artifact-level, not vibes: <code>codesign --verify</code> valid, the designated requirement satisfied, <code>spctl</code> complaining only about the absent Developer ID, and the system's own permission log moving from <code>Refusing…</code> to <code>AUTHREQ_PROMPTING</code>. The documentation answered the next user before they wrote in: the macOS guide explains both dialogs and the landing page says plainly that pre-v1.18.1 downloads must be replaced.</p>
+
+          <h3 style="margin-top:2.5rem">5.3 · Thread C — "PTT release feels laggy" (a one-paragraph case)</h3>
+          <p>A field feeling ("too long after release before RX returns") was decomposed from logs into ~470–870 ms: a 262–300 ms capture reopen, a ~70–130 ms drain, poll ordering, and ~120 ms of muted Opus frames queued in client jitter buffers. V2.55 shipped three independent fixes — skip the TX-status poll before the release drain, stop broadcasting muted RX frames while keyed, and remember the last-good capture device to skip a full enumeration on reopen — with the reopen later measured down from ~270 ms to ~200 ms. The boundary stayed written down: the end-to-end improvement needs real-radio verification.</p>
+
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · what the three threads share</span>
+            <p>The same six stations: <strong>field signal → evidence in the log → SDD row (root cause + decision + boundary) → regression tests → release → public answer card</strong>. The differences are only cadence — the recording thread took a day from signal to fix and a week to the follow-up closure; the macOS thread took an evening; the latency thread took two days. The cadence is set by the slowest station, which is usually evidence, not code.</p>
+          </div>
+        </div></section>
+
+        <section id="evidence" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · Evidence</span>
+            <h2 class="ag-section-title">What the numbers can and cannot support</h2>
+            <p class="ag-section-subtitle">Counts are process evidence. They show the machinery ran; they do not promote a product claim by themselves.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Observation</th><th>Value (as of 2026-09-19)</th><th>What it supports</th></tr></thead>
+            <tbody>
+              <tr><td>Repo span</td><td>2026-07-06 → 2026-09-19, 435 commits</td><td>Sustained cadence on one product line</td></tr>
+              <tr><td>SDD</td><td>15 chapters; 67 version rows; AD-001…AD-022; 36 NFRs; SC1–SC9</td><td>Requirements and decisions are traceable artifacts, not memory</td></tr>
+              <tr><td>Harness</td><td>22 constraints (block/warn/info); pre-edit gate exit 2; release_check 29 checks; artifact registry with SHA-256</td><td>Lessons are enforced, not archived</td></tr>
+              <tr><td>Tests</td><td>262 at the 12th cycle (Jul 22) → 1,299 (Sep 19)</td><td>Each incident bought regression coverage</td></tr>
+              <tr><td>Releases</td><td>37 changelog entries; v1.0.0 → v1.18.1; Windows, macOS, rpi64</td><td>Shipping is routine; rollback targets exist</td></tr>
+              <tr><td>Radio surface</td><td>10 model keys across 3 protocol families</td><td>The platform abstraction survived contact with other hardware</td></tr>
+              <tr><td>Support chain</td><td>4 slices in 3 days; 2 published answers for Modern; board live</td><td>Field feedback has a pipeline, not a mailbox</td></tr>
+            </tbody>
+          </table></div>
+          <div class="claim-box" data-claim-type="fact">
+            <span class="claim-label">Fact · the honest boundaries (written down, not smoothed over)</span>
+            <p>Unverified Icom and Yaesu models refuse transmit until hardware acceptance; the Yaesu family is receive-only in this phase; the update channel ships read-only (download/install is a later slice); the FDE board's first real bug is still waiting for its first real scheduling, and the first unattended patch for its first human merge; summary-based triage reads summaries, not whole environments. Comparable cross-project numbers — including the currently maintained test counts — live in one place: <a href="/agentic.html#evidence">the evidence ledger</a>.</p>
+          </div>
+        </div></section>
+
+        <section id="recommendations" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · Recommendations</span>
+            <h2 class="ag-section-title">What transfers, and in what order to build it</h2>
+            <p class="ag-section-subtitle">Eight rules extracted from the practice — then a three-stage adoption ladder with the trap at each stage.</p>
+          </header>
+
+          <ol class="steps">
+            <li><h4>Write the contract with the first commit</h4><p>One vision paragraph, then all the chapters — including the NFR table with targets and verification methods. The first commit is the cheapest moment to have a contract; every later moment costs a retrofit.</p></li>
+            <li><h4>Give every requirement a target and a method</h4><p>"&lt; 500 ms, listening test" is a requirement; "should be fast" is a preference. Success criteria like "PTT cannot stick" need an architecture chapter and a watchdog behind them.</p></li>
+            <li><h4>Let the field pick the roadmap</h4><p>One cycle = one real signal. No speculative features. The version-history row — signal, evidence, decision, boundary — is the roadmap log, and 67 of them make an argument no feature list can.</p></li>
+            <li><h4>Turn every incident into a rule, not a memory</h4><p>Repair is link one. The ruling is link two. The machine-readable constraint checked before the next edit is link three — only then is an incident permanently fixed. Keep the registry small; every row should have cost something real.</p></li>
+            <li><h4>Instrument the field before scaling features</h4><p>A redacted diagnostics bundle converts an interview into a measurement. Build the sensor before you need the data; the support chain here shipped in four slices, sensor first.</p></li>
+            <li><h4>Make classification the decision</h4><p>Answer the taxonomy question once and let it dispatch: environment noise closes, defects schedule, features wait for a human. Never let an un-answered report close — "closed" is a promise.</p></li>
+            <li><h4>Automate the doing, never the verdict</h4><p>Unattended implementation is safe only when bounded: read-only proposal, guards, isolated branch, full test gate, <code>main</code> untouched, human merge. Keep the two ledgers apart — process evidence never promotes a product claim.</p></li>
+            <li><h4>Write the boundaries down</h4><p>No automatic promotion between lifecycle states; unverified hardware refuses transmit; the update channel says it is read-only; the known issue stays visible. A boundary written down is a trust asset; a boundary discovered by a user is a breach.</p></li>
+          </ol>
+
+          <h3 style="margin-top:2.5rem">The adoption ladder</h3>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Stage</th><th>What you build</th><th>You are done when…</th><th>The trap</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1 · Document era</strong></td><td>SDD baseline (business / technical / product chapters) + a version-history row per change + a changelog</td><td>You can name the requirement and the decision behind any shipped behavior</td><td>Docs written once and quietly abandoned — the row must land with the fix, or it will always be "later"</td></tr>
+              <tr><td><strong>2 · Contract era</strong></td><td>Constraint registry from real incidents + pre-edit checks + tests/release rules + a source-of-truth map</td><td>A known failure cannot be re-introduced without a red gate</td><td>Collecting rules nobody runs — enforcement (exit codes in the path of edits) is the whole point</td></tr>
+              <tr><td><strong>3 · Field-loop era</strong></td><td>Bundle → triage → answers → board → unattended implement, with human merge</td><td>A user symptom becomes a tested patch on a branch while the verdict stays human</td><td>Automating past the guardrails — the loop must fail closed, or it becomes an unreviewed <code>main</code> history</td></tr>
+            </tbody>
+          </table></div>
+
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">Author's thesis · what to copy</span>
+            <p>Copy the discipline, not the counts. Nobody else needs this project's test number or release cadence; what transfers is the shape: a contract that settles judgment, machinery that refuses known mistakes, a field loop that is allowed to correct both — and a human holding the verdict on what counts as done.</p>
+          </div>
+        </div></section>
+
+        <section id="closing" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · Closing</span>
+            <h2 class="ag-section-title">One sentence, three axes</h2>
+          </header>
+          <p>A vision sentence became a contract; the contract became requirements with targets; the requirements became decisions; the decisions met reality and were corrected; the corrections became guards; the guards made the next delegation safe; and the support chain closed the circle by letting users report reality back in — with answers, a board, and a tested patch waiting for a human yes. That is the whole journey. The three axes are one sentence:</p>
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">The one-sentence discipline</span>
+            <p>Let judgment settle into a contract, let machinery refuse the mistakes you have already paid for, and let the field — through the users — correct both. The verdict stays human, always.</p>
+          </div>
+          <p>Go deeper on the mechanism: <a href="/engineering.html">Harness, Loops &amp; Living SDD</a> · <a href="/engineering.html#field-loop">the field loop</a> · <a href="/agentic.html">Agentic Engineering</a>. The journal behind this case study: <a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected</a> · <a href="/blog/support-loop/">The Support Loop</a>. Live surfaces: the <a href="https://www.vlsc.net/mrrc_modern/">MRRC Modern site</a>, its <a href="https://www.vlsc.net/mrrc_modern/answers/">answers page</a>, and the <a href="https://www.vlsc.net/mrrc_modern/board/">FDE board</a>.</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and writes down what the radios say.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>Related reading</h3>
+          <ul>
+            <li><a href="/blog/support-loop/">The Support Loop: How a Week of 🐞 Reports Became Two Releases</a></li>
+            <li><a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected — the ledger behind the process</a></li>
+            <li><a href="/engineering.html">Harness, Loops &amp; Living SDD: the VLSC Engineering System</a></li>
+            <li><a href="/agentic.html">Agentic Engineering — Human Intent, Agentic Execution, Field Evidence</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

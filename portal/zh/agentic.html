@@ -247,6 +247,42 @@
                 产品证据稳定词汇、暴露不变量；模型再为下一轮工作——无论人做还是智能体做——提供更干净的问题、更明确的边界，以及更少的偶然协议假设。
               </p>
             </article>
+            <article class="ag-card">
+              <h3>现场支持回路——FDE 实践 4</h3>
+              <div class="ag-flow" aria-label="上报、分诊、分类、答复、无人值守实施、人工合入">
+                <span class="ag-flow-step">上报</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">分诊</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">分类</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">答复</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">实施</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">合入</span>
+              </div>
+              <p>
+                支持链对自己迭代。每条 🐞
+                上报都带着分类（bug / feature / noise）落进
+                <a href="https://www.vlsc.net/mrrc_modern/board/"
+                  >公开看板</a
+                >；分类即决策——noise 闭环、bug 自动排期、feature
+                等操作员——无人值守实施者产出受护栏保护的 unified diff
+                补丁，只落在隔离的 <code>fde/&lt;id&gt;</code>
+                分支，全套测试绿才提交。<code>main</code>
+                永不被触碰；合入仍是人的动作。回路的边界已从一条已答复工单移动到了一处已审查分支。
+              </p>
+            </article>
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>实践 4 延续这条前史：</strong
+            >上面的 FDE
+            回路产出了智能体今天加载的契约；现场支持回路是同一套「判断 /
+            执行 / 证据」分工在用户所在之处的应用——完整机制见机制分册的<a
+              href="engineering.html#field-loop"
+              >现场回路</a
+            >一节。
           </div>
           <h3 style="margin-top: 2.5rem">智能体不能压缩的部分</h3>
           <div class="ag-plane-grid">

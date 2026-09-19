@@ -280,6 +280,45 @@
                 assumptions.
               </p>
             </article>
+            <article class="ag-card">
+              <h3>Field support loop — FDE practice 4</h3>
+              <div
+                class="ag-flow"
+                aria-label="Report to triage, classification, answer, unattended implement, human merge"
+              >
+                <span class="ag-flow-step">Report</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">Triage</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">Classify</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">Answer</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">Implement</span
+                ><span class="ag-flow-arrow">→</span
+                ><span class="ag-flow-step">Merge</span>
+              </div>
+              <p>
+                The support chain iterating on itself. Every 🐞 report lands
+                classified (bug / feature / noise) on a
+                <a href="https://www.vlsc.net/mrrc_modern/board/"
+                  >public board</a
+                >; classification is the decision — noise closes, bugs
+                auto-schedule, features wait for the operator — and an
+                unattended implementer proposes a guarded unified-diff patch on
+                an isolated <code>fde/&lt;id&gt;</code> branch, committed only
+                when the full test suite is green. <code>main</code> is never
+                touched; the merge stays human. The loop's boundary has moved
+                from an answered ticket to a reviewed branch.
+              </p>
+            </article>
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>Practice 4 extends the lineage:</strong> the FDE loops above
+            produced the contracts agents now load. The field support loop runs
+            the same judgment / execution / evidence split where the users are —
+            the full mechanism is specified in the mechanism volume under
+            <a href="engineering.html#field-loop">Field Loop</a>.
           </div>
           <h3 style="margin-top: 2.5rem">What an agent may not compress</h3>
           <div class="ag-plane-grid">

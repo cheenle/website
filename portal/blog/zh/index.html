@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VLSC 博客 — 远程电台、工程方法与智能体时代的思考</title>
+    <meta name="description" content="VLSC 开源业余无线电项目的工程笔记与思考：远程电台控制、天线调谐、SDD × Harness × FDE 的方法论，以及智能体时代的命、力、道、天。">
+    <meta name="keywords" content="业余无线电, 远程控制, SDR, EFHW, 天调, Opus, FT-710, ESP32, SDD, FDE, 智能体工程, VLSC, BG1SB">
+    <meta name="author" content="BG1SB">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="VLSC 博客 — 远程电台、工程方法与智能体时代的思考">
+    <meta property="og:description" content="VLSC 开源业余无线电项目的工程笔记与思考。">
+    <meta property="og:url" content="https://www.vlsc.net/blog/zh/">
+    <meta property="og:site_name" content="VLSC Projects">
+    <link rel="canonical" href="https://www.vlsc.net/blog/zh/">
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/">
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/octen.css?v=6">
+    <link rel="stylesheet" href="../../css/agentic.css?v=2">
+    <link rel="stylesheet" href="../../css/blog-article.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "VLSC 博客",
+      "url": "https://www.vlsc.net/blog/zh/",
+      "description": "VLSC 开源业余无线电项目的工程笔记与思考。",
+      "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+      "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" }
+    }
+    </script>
+</head>
+<body data-site="portal">
+
+<header class="ag-hero ba-hero">
+    <div class="ag-hero-inner">
+        <h1>VLSC <span class="gradient">博客</span></h1>
+        <p>VLSC 开源业余无线电项目的工程笔记——远程电台控制、信号链、天线调谐，以及这些现场工作背后的方法。作者 <a href="https://github.com/cheenle" target="_blank" rel="noopener" style="color:var(--accent);">BG1SB</a>。<a href="/blog/" lang="en" style="color:var(--accent);">English</a></p>
+    </div>
+</header>
+
+<main>
+<section class="ag-section">
+    <div class="container">
+    <div class="blog-cat-filter" id="cat-filter">
+        <button type="button" data-filter="all" class="is-active">全部</button>
+        <button type="button" data-filter="mrrc">MRRC</button>
+        <button type="button" data-filter="ft710">FT-710</button>
+        <button type="button" data-filter="efhw">EFHW</button>
+        <button type="button" data-filter="sunsdr">SunSDR</button>
+        <button type="button" data-filter="audio">音频</button>
+        <button type="button" data-filter="deployment">部署</button>
+        <button type="button" data-filter="field">现场</button>
+        <button type="button" data-filter="intelligence">智能</button>
+        <button type="button" data-filter="method">方法</button>
+    </div>
+
+    <div class="ba-grid">
+
+        <article class="ag-card blog-card" data-cat="intelligence">
+            <div class="bc-cat">智能</div>
+            <h2><a href="/blog/ming-li-dao-tian/zh/">命 · 力 · 道 · 天 —— 识命、修力、立道、敬天</a></h2>
+            <p class="bc-excerpt">「天命之谓性」（《中庸》）；「工欲善其事，必先利其器」（《论语》）；「道虽迩，不行不至」（《荀子》）；「天何言哉，四时行焉」。整本实践日志的最后四字：三样可修，一样只能敬。</p>
+            <div class="bc-chips">
+                <a href="/blog/coda/zh/">跋</a>
+                <a href="/blog/faculties/zh/">斫轮</a>
+                <a href="/blog/juekun/">昆木物语</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-19 · 约 12 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="intelligence">
+            <div class="bc-cat">智能 · 一日对话</div>
+            <h2><a href="/blog/juekun/">昆木物语 — 一个理科男的 AI 时代的思考（物理149·化学148·作文满分·语文128·数学87）</a></h2>
+            <p class="bc-excerpt">2026-09-19 一日对话的沉淀。五个数字，五种能力，从不合成一个值。从一台电台的发版与支持，聊到三板斧与孤路我独行，聊到意图、文化、文明与闭环之外的笑声，聊到华盖与伤官，最后落在「还能干点什么」。原话按原意理顺，每段附它催生了什么。</p>
+            <div class="bc-chips">
+                <a href="/blog/coda/zh/">跋</a>
+                <a href="/blog/faculties/zh/">斫轮</a>
+                <a href="/blog/only-imagination/zh/">思接千载，行在须臾</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-19 · 对话沉淀</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="intelligence">
+            <div class="bc-cat">智能</div>
+            <h2><a href="/blog/faculties/zh/">斫轮：可传的与不可传的</a></h2>
+            <p class="bc-excerpt">桓公读书于堂上，轮扁斫轮于堂下：「得之于手而应于心，口不能言。」可传的皆糟粕，不可传的才是智慧——借《庄子·天道》给智力、智商、情商、认识、智慧、直觉重新定价，兼论入世与出世。</p>
+            <div class="bc-chips">
+                <a href="/blog/coda/zh/">跋</a>
+                <a href="/blog/only-imagination/zh/">思接千载，行在须臾</a>
+                <a href="/zh/agentic.html#roles">分工</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-19 · 约 15 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="method">
+            <div class="bc-cat">方法</div>
+            <h2><a href="/blog/coda/zh/">跋：意图、文化、文明，以及闭环之外的笑声</a></h2>
+            <p class="bc-excerpt">日志的收束：从意图到文化到文明，一路走到每个闭环的外侧——那个不跟你商量的回答。昆德拉的笑声读作反馈，「每次闭环都是一次有回信的祈祷」，以及一句要留下的话。</p>
+            <div class="bc-chips">
+                <a href="/blog/only-imagination/zh/">思接千载，行在须臾</a>
+                <a href="/blog/three-axes/zh/">三板斧</a>
+                <a href="/zh/agentic.html#thesis">总纲</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-19 · 约 12 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="method">
+            <div class="bc-cat">方法</div>
+            <h2><a href="/blog/only-imagination/zh/">思接千载，行在须臾：当想法可以立刻变成尝试</a></h2>
+            <p class="bc-excerpt">开车、吃饭、凌晨三点惊醒——历来这些火花只有一个去处：笔记本，或遗忘。想象与尝试之间的距离刚刚塌缩，这是这个时代给一个人最大的价值。也有诚实的反面：廉价的尝试需要治理、证据，和留在人手里的裁决。</p>
+            <div class="bc-chips">
+                <a href="/blog/solo-loop/zh/">孤路我独行</a>
+                <a href="/blog/three-axes/zh/">三板斧</a>
+                <a href="/zh/agentic.html#thesis">总纲</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-19 · 约 17 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="method">
+            <div class="bc-cat">方法</div>
+            <h2><a href="/blog/solo-loop/zh/">孤路我独行：零资金、零团队的开源项目，如何像团队一样响应</a></h2>
+            <p class="bc-excerpt">零预算、零团队、零背书：九样工具，让爱好项目给每份上报十分钟内的初步研判、当天可核对的答复、数天内经测试的修复。AI 时代真正改变了什么，三个真实约束（注意力、连续性、信任），失效模式，和一份 30 天启动计划。</p>
+            <div class="bc-chips">
+                <a href="/blog/three-axes/zh/">三板斧</a>
+                <a href="/blog/support-loop/zh/">闻过则喜</a>
+                <a href="/zh/agentic.html#evidence">证据记录</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-19 · 约 20 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="method">
+            <div class="bc-cat">方法</div>
+            <h2><a href="/blog/three-axes/zh/">三板斧：从业务意图到现场证据，端到端</a></h2>
+            <p class="bc-excerpt">MRRC Modern 全生命周期实战：一句愿景 → 15 章 SDD 基线 → 75 天 67 行版本记录 → 现场事故 → 会分类、答复、实施的支持链。SDD × Harness × FDE 的方法，两条线索走完全程，八条可迁移规则加三级采纳阶梯。</p>
+            <div class="bc-chips">
+                <a href="/zh/engineering.html#field-loop">现场闭环</a>
+                <a href="/zh/agentic.html#evidence">证据记录</a>
+                <a href="/mrrc_modern/board/">FDE 进度板</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-19 · 约 22 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="deployment">
+            <div class="bc-cat">部署</div>
+            <h2><a href="/blog/support-loop/zh/">闻过则喜：一周的 🐞 上报，如何变成两次发布</a></h2>
+            <p class="bc-excerpt">两条产品线一周十次发布——然后闭环自己也发布了：公开的 FDE 进度板，分类即决策（noise 闭环、bug 自动排期、feature 等人拍板），无人值守的实施者把带护栏、过测试的补丁落在隔离分支上，main 永不被碰。</p>
+            <div class="bc-chips">
+                <a href="/mrrc/answers/">MRRC 答复页</a>
+                <a href="/mrrc_modern/answers/">Modern 答复页</a>
+                <a href="/mrrc_modern/board/">FDE 进度板</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-19 · 约 16 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="intelligence">
+            <div class="bc-cat">智能</div>
+            <h2><a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解：一本会倒退的账</a></h2>
+            <p class="bc-excerpt">已公布的 7,007,437,567 普查在三个方向上同时错了：双算、漏算、漂移。诚实的重算是 7,404,583,808——以及它产出的纪律：快照计时、带日期的证据、两本互不背书的账。</p>
+            <div class="bc-chips">
+                <a href="/blog/seven-billion-tokens/ledger/zh/">账本</a>
+                <a href="/blog/seven-billion-tokens/almanac/zh/">年鉴</a>
+                <a href="/blog/seven-billion-tokens/playbook/zh/">手册</a>
+            </div>
+            <div class="bc-meta">BG1SB · 2026-09-05 · 约 18 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="intelligence">
+            <div class="bc-cat">智能</div>
+            <h2><a href="/blog/connections-recursive-intelligence/zh/">链接为王：从神经元到文明级智能的递归升级</a></h2>
+            <p class="bc-excerpt">四步论证：数字果蝇证明结构能产出可检验的预测；连接是骨架，不是机体；稀缺的不是边的数量，而是连接质量——六条工程性质；治理连接，是下一项工程任务。</p>
+            <div class="bc-meta">BG1SB · 2026-08-28 · 约 26 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="ft710">
+            <div class="bc-cat">FT-710 · 英文</div>
+            <h2><a href="/blog/ft710-usb-remote-control/">一根 USB 线遥控 Yaesu FT-710</a></h2>
+            <p class="bc-excerpt">FT-710 内置的 FT4222 SPI 桥，在你已有的那根 USB 线上送出真实频谱——CAT、瀑布图、音频共走一条链路，不需要 SCU-LAN10。</p>
+            <div class="bc-meta">BG1SB · 2026-08-12 · 约 9 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="efhw">
+            <div class="bc-cat">EFHW · 英文</div>
+            <h2><a href="/blog/efhw-esp32s3-auto-tuner/">设计一台 ESP32-S3 舵机驱动的天线调谐器</a></h2>
+            <p class="bc-excerpt">一个舵机、一只空气可变电容、不带机内驻波桥：430 元的天调经 WebSocket 读驻波，覆盖 40 米到 10 米。</p>
+            <div class="bc-meta">BG1SB · 2026-08-12 · 约 8 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="audio">
+            <div class="bc-cat">音频 · 英文</div>
+            <h2><a href="/blog/opus-vs-pcm-remote-audio/">Opus 对 PCM：HF 远程音频的延迟、带宽与取舍</a></h2>
+            <p class="bc-excerpt">十倍以上的带宽压缩，让移动网络上的远程电台真正可用——代价是 20 毫秒的帧、一个 arm64 ctypes bug，和 1 字节的编码标记。</p>
+            <div class="bc-meta">BG1SB · 2026-08-12 · 约 8 分钟</div>
+        </article>
+
+        <article class="ag-card blog-card" data-cat="field">
+            <div class="bc-cat">现场 · 英文</div>
+            <h2><a href="/blog/psk-reporter-dxcc-hunting/">用 PSK Reporter 猎新 DXCC：数据驱动的 DX 工作流</a></h2>
+            <p class="bc-excerpt">看几百公里外的电台在解码谁，你就知道稀有 DXCC 什么时候能从你的 QTH 通到。15 米波段的一个真实傍晚。</p>
+            <div class="bc-meta">BG1SB · 2026-08-12 · 约 7 分钟</div>
+        </article>
+
+    </div>
+    </div>
+</section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>VLSC Projects</h4>
+                <p>
+                    开源业余无线电远程控制工具。<br>
+                    作者 <a href="https://github.com/cheenle" style="color:var(--accent);">BG1SB</a> ·
+                    部署于 <code style="background:var(--bg-tertiary);padding:1px 6px;border-radius:3px;">www.vlsc.net</code>
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>项目</h4>
+                <ul>
+                    <li><a href="/mrrc/">MRRC</a> — 通用 HF 远程</li>
+                    <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX 服务器</li>
+                    <li><a href="/efhw/">EFHW</a> — 天线自动调谐</li>
+                    <li><a href="/mrrc_ft8/">MRRC-FT8</a> — 无头 FT8/FT4 服务器</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>站点</h4>
+                <ul>
+                    <li><a href="/blog/zh/">博客</a></li>
+                    <li><a href="/zh/about.html">关于</a></li>
+                    <li><a href="/zh/contact.html">联系</a></li>
+                    <li><a href="/zh/privacy.html">隐私政策</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VLSC Projects · 以 GPLv3 与 MIT 许可证开源</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function () {
+  var buttons = document.querySelectorAll('#cat-filter button');
+  var cards = document.querySelectorAll('.blog-card');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      var f = btn.getAttribute('data-filter');
+      cards.forEach(function (c) {
+        c.style.display = (f === 'all' || c.getAttribute('data-cat') === f) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
+
+<script src="../../js/global-nav.js?v=7" defer data-gn="1"></script>
+</body>
+</html>

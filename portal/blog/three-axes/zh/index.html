@@ -6,18 +6,18 @@
     <title>三板斧：从业务意图到现场证据，端到端 — VLSC 博客</title>
     <meta
       name="description"
-      content="以 MRRC Modern 为完整实践样本：一句愿景 → 15 章 SDD 基线 → 75 天 67 行版本记录 → 现场事故 → 分类、答复并实施的支撑链。SDD、Harness、FDE 作为方法，每一站都有证据，最后给出建议。"
+      content="以 MRRC Modern 为完整样本走一遍：从一句愿景，到 15 章 SDD 基线，到 75 天 67 行版本记录，再到现场事故，以及把事故分类、答复、落实的支持链。方法是 SDD、Harness、FDE 三板斧，每一站都拿得出证据，最后给出建议。"
     />
     <meta
       name="keywords"
-      content="智能体工程, SDD, 活体设计文档, 工程 Harness, 约束注册表, 前沿部署工程, FDE, 需求工程, 现场证据, 支持回路, 产品迭代, 开源, MRRC Modern, 业余无线电, BG1SB"
+      content="智能体工程, SDD, 设计文档, 工程 Harness, 约束清单, 前沿部署工程, FDE, 需求工程, 现场证据, 支持闭环, 产品迭代, 开源, MRRC Modern, 业余无线电, BG1SB"
     />
     <meta name="author" content="BG1SB" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="三板斧：从业务意图到现场证据，端到端" />
     <meta
       property="og:description"
-      content="一个项目、75 天、67 行 SDD 版本记录、22 条机器可读约束、测试 262 → 1,299：一句愿景如何走到需求、设计、真实用户、支持——再回到新需求。附三级采纳阶梯与八条可迁移规则。"
+      content="一个项目，75 天，67 行 SDD 版本记录，22 条机器可读的约束，测试从 262 到 1,299：一句愿景如何走到需求、设计、真实用户和支持，再回到新需求。附三级采纳阶梯和八条可迁移规则。"
     />
     <meta property="og:url" content="https://www.vlsc.net/blog/three-axes/zh/" />
     <meta property="og:site_name" content="VLSC Projects" />
@@ -43,7 +43,7 @@
         "@context": "https://schema.org",
         "@type": "Article",
         "headline": "三板斧：从业务意图到现场证据，端到端",
-        "description": "以 MRRC Modern 为完整实践样本，在 SDD、Harness、FDE 三板斧下走完整个生命周期：业务意图 → 需求 → 设计 → 现场 → 支持 → 新需求，每一站都有证据，并给出八条可迁移规则。",
+        "description": "以 MRRC Modern 为完整样本，用 SDD、Harness、FDE 三板斧走完整条生命周期：业务意图 → 需求 → 设计 → 现场 → 支持 → 新需求，每一站都有证据，并给出八条可迁移规则。",
         "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
         "publisher": {
           "@type": "Organization",
@@ -51,7 +51,7 @@
           "url": "https://www.vlsc.net/"
         },
         "datePublished": "2026-09-19",
-        "keywords": "智能体工程, SDD, Harness, 约束注册表, FDE, 需求工程, 现场证据, 支持回路, MRRC Modern",
+        "keywords": "智能体工程, SDD, Harness, 约束清单, FDE, 需求工程, 现场证据, 支持闭环, MRRC Modern",
         "articleSection": "Method",
         "mainEntityOfPage": "https://www.vlsc.net/blog/three-axes/zh/"
       }
@@ -65,7 +65,7 @@
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-compass-drafting"></i><span>方法 · 端到端实践</span></div>
           <h1>三<span class="gradient">板斧</span>。</h1>
-          <p>一个开源项目如何从一句业务话走到需求、设计、真实用户、支持，再走回新需求。以 MRRC Modern 为完整样本，以 SDD、Harness、FDE 为方法，每一站都有证据。</p>
+          <p>一个开源项目，如何从一句业务上的话走到需求、设计、真实用户和支持，再回到新需求。以 MRRC Modern 为完整样本，方法是 SDD、Harness、FDE，每一站都有证据。</p>
           <div class="ag-hero-stats" aria-label="文章摘要">
             <span class="ag-pill"><i class="fas fa-calendar-days"></i> 75 天 · 67 行 SDD 版本记录</span>
             <span class="ag-pill"><i class="fas fa-shield-halved"></i> 22 条机器可读约束</span>
@@ -79,38 +79,38 @@
       <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#chain">链条</a><a href="#sdd">SDD</a><a href="#harness">Harness</a><a href="#fde">FDE</a><a href="#threads">端到端</a><a href="#evidence">证据</a><a href="#recommendations">建议</a><a href="#closing">结语</a></nav></div></div>
 
       <main class="ba-main">
-        <p class="lede">多数工程文章都从半截说起：需求来了，照着做设计，测试通过，收工。这篇想从项目真正开始的地方说起：一个人开口讲出的一句业务话。然后跟着 <strong>MRRC Modern</strong> 走过它的前 75 天（2026-07-06 → 2026-09-19）：一台业余无线电的远程控制服务器，从单电台的小实验，长成三个平台、十个机型的产品，还带着一条对外的支持链。用到的办法，就是这套生态反复打磨的三板斧：<strong>活体 SDD</strong>（契约）、<strong>工程 Harness</strong>（让契约变成机器执行力的装置）、<strong>FDE</strong>（不断让现场来修正前两者的回路）。下面每一站，都能落到某个提交、某行 SDD、某个测试、某份发布产物，或某张公开答复卡上。</p>
+        <p class="lede">大多数工程文章都从半截讲起：需求来了，照着做设计，测试通过，收工。这篇想从项目真正开始的地方讲起：一个人开口说出的那句业务上的话。然后跟着 <strong>MRRC Modern</strong> 走完它的前 75 天（2026-07-06 → 2026-09-19）：一台业余无线电的远程控制服务器，从单电台的小实验，长成覆盖三个平台、十个机型的产品，还带着一条对外的支持链。用的办法，就是这套生态里反复打磨的三板斧：<strong>持续更新的 SDD</strong>（契约）、<strong>工程 Harness</strong>（把契约变成机器执行力的装置）、<strong>FDE</strong>（让现场不断回头修正前两者的闭环）。下面每一站，都能落到某个提交、某行 SDD、某个测试、某份发布产物，或者某张公开答复卡上。</p>
 
         <div class="ba-tldr" id="tldr">
           <div class="ba-tldr-card">
-            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 六条发现里的旅程</p>
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 整段旅程的六条发现</p>
             <ul class="ba-tldr-list">
-              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>一句话在第一天变成了契约。</strong>Echo 的产出，「用浏览器遥控 FT-710，用一根 USB 线替代 SCU-LAN10，不加任何硬件」，直接驱动 SDD V1.0：全部 15 章与第一个提交同时写就。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>路线图是现场写的。</strong>16 天里 12 个 git 可查的 FDE 循环，每个都只由一个真实现场信号触发——16 kHz TX 爆裂声 → AD-011；约 20 Hz 的频率漂移 → <code>DN;</code> 裁决与约束；滤波器竞态 → 丢弃过期读。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>知识变成了机器。</strong>22 条机器可读约束（block / warn / info）从真实事故中提炼，编辑前检查（退出码 2）；测试套件 262 → 1,299；<code>release_check</code> 持离线发布规则；PROJECT_MAP 为每个主题指定唯一真相源。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>支持变成了传感网络。</strong>三天里分四片建成：诊断包 → 分诊 + 答复页 → 更新检查 → 看板 + 无人值守实施。分类即决策；回路现在止于一处已审查分支，永不落在 <code>main</code>。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>新需求与旧需求走同一扇门。</strong>录音静音（现场日志）、macOS「已损坏」与无声 RX（发布周）、PTT 释放延迟（现场体感），每一个都变成了 SDD 行、守卫、发布和一张公开答复卡。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>方法可迁移，数字不可。</strong>定义先于实现、每次事故变成规则、先给现场装仪器、把「做」自动化而永不自动化「裁决」。§07 把它落成八条规则和三级采纳阶梯。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>一句话在第一天就变成了契约。</strong>Echo 的产出——「用浏览器遥控 FT-710，用一根 USB 线替代 SCU-LAN10，不加任何硬件」——直接催生了 SDD V1.0：全部 15 章和第一个提交同时写完。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>路线图是现场写出来的。</strong>16 天里 12 个 git 可查的 FDE 循环，每个都只由一个真实现场信号触发：16 kHz TX 爆裂声 → AD-011；约 20 Hz 的频率漂移 → <code>DN;</code> 的裁决与约束；滤波器竞态 → 丢弃过期读数。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>知识变成了机器。</strong>从真实事故中提炼出 22 条机器可读的约束（block / warn / info），编辑前的检查会以退出码 2 拦下违规；测试套件 262 → 1,299；<code>release_check</code> 把发布规则做成离线可跑；PROJECT_MAP 给每个主题指定唯一的事实来源。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>支持变成了一张传感网。</strong>三天分四块建成：诊断包 → 预检 + 答复页 → 更新检查 → 进度板 + 无人值守落实。分类就是决策；这条闭环如今收口在一个审查过的分支上，永远不落到 <code>main</code>。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>新需求和旧需求走同一扇门。</strong>录音无声（现场日志）、macOS「已损坏」和 RX 无声（发布周）、PTT 释放延迟（现场体感），每一个都变成了 SDD 里的一行、一条守卫、一次发布和一张公开答复卡。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>方法可以搬走，数字搬不走。</strong>定义先于实现；每次事故都变成规则；先给现场装上传感器；「做」可以自动化，「裁决」永远不自动化。§07 把这些落成八条规则和三级采纳阶梯。</li>
             </ul>
-            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#sdd">§02 契约</a><a href="#harness">§03 装置</a><a href="#threads">§05 两条端到端线程</a><a href="#recommendations">§07 建议</a></div>
+            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#sdd">§02 契约</a><a href="#harness">§03 装置</a><a href="#threads">§05 两条线索走完全程</a><a href="#recommendations">§07 建议</a></div>
           </div>
         </div>
 
         <section id="chain" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">01 · 链条</span>
-            <h2 class="ag-section-title">一个项目，链条断掉的两种方式</h2>
-            <p class="ag-section-subtitle">业务意图 → 需求 → 设计 → 现场 → 支持 → 新需求。每个项目都走这条链；区别在于断在哪里。</p>
+            <h2 class="ag-section-title">同一条链，两种断法</h2>
+            <p class="ag-section-subtitle">业务意图 → 需求 → 设计 → 现场 → 支持 → 新需求。每个项目都在走这条链，区别只在断在哪里。</p>
           </header>
-          <p>链条在幻灯片上是线性的，在现实里是回环的：需求只有在现场信号确认它重要之后才算成立，而现场信号只有在能改变设计时才有用。回环闭上，项目就复利；断掉则有两种典型形态。</p>
+          <p>这条链在幻灯片上是直线，在现实里是个环：需求要等现场信号确认它重要，才算真的成立；现场信号要能改变设计，才算没有白费。环闭上了，项目就开始复利；断了，通常是两种样子。</p>
           <div class="ag-loop-grid">
-            <article class="ag-card"><h3>愿景从不落地</h3><p>业务话在路演里反复出现，需求却漂成一张功能清单。没人能指出「这句话在哪个产物里变成了可度量的义务」，于是每次争论都从观点重新开始。</p></article>
-            <article class="ag-card"><h3>现场从不回来</h3><p>迭代很快，但现场教会的东西留在聊天记录和维护者的记忆里。同一个事故每季度被重新发现；版本号能告诉你发布了什么，却告诉不了它学到了什么。</p></article>
+            <article class="ag-card"><h3>愿景落不了地</h3><p>业务上的那句话在路演里反复出现，需求却慢慢漂成一张功能清单。没人说得清「这句话在哪个产物里变成了可度量的义务」，于是每次争论都从观点重新开始。</p></article>
+            <article class="ag-card"><h3>现场回不来</h3><p>迭代很快，但现场教会的东西只留在聊天记录和维护者的记忆里。同一个事故，每个季度都被重新发现一次；版本号能告诉你发布了什么，却说不出它学到了什么。</p></article>
           </div>
-          <p>MRRC Modern 的设计就是让这两种失败变得昂贵。它始于 <strong>2026-07-06</strong>——一个单电台（FT-710 走自己的 USB 线）实验的初始提交；到 <strong>2026-09-19</strong>，它已经产出 435 个提交、67 行 SDD 版本记录、22 条架构决策、22 条机器可读约束、37 条 changelog 记录，从 v1.0.0 走到横跨 Windows、macOS 与树莓派镜像的 v1.18.1，以及一条带答复页、看板和无人值守实施者的公开支持链。数字不是重点；下面是产出这些数字的装置。</p>
+          <p>MRRC Modern 的设计，就是要让这两种失败变得很贵。它始于 <strong>2026-07-06</strong>——一个单电台实验（FT-710 走自己的 USB 线）的初始提交；到 <strong>2026-09-19</strong>，已经攒下 435 个提交、67 行 SDD 版本记录、22 条架构决策、22 条机器可读的约束、37 条 changelog 记录，版本从 v1.0.0 走到横跨 Windows、macOS 和树莓派镜像的 v1.18.1，外加一条公开的支持链，带答复页、进度板和无人值守的落实环节。数字不是重点，重点是产出这些数字的这套装置。</p>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">作者论点</span>
-            <p>三板斧是一个系统。SDD 把判断沉淀成契约；Harness 让「忘记」在结构上不可能；FDE 持续让现场修正两者。抽掉任何一根，你都能立刻说出随之而来的失败：没人遵守的漂亮文档、没有记忆的快速回路，或者一个已经不再倾听的契约。这也是总纲页的论点——<em>执行可被委托，判断不能</em>——在整条生命周期上的展开；那一页承诺的可证伪链条（现场事故 → SDD 裁决 → 约束 → 阻止重演）正是 §02–§05 走过的路（<a href="/zh/agentic.html#thesis">总纲</a>）。</p>
+            <p>三板斧是一个系统：SDD 把判断沉淀成契约，Harness 让「忘记」在结构上不可能发生，FDE 让现场持续修正前两者。抽掉任何一根，你立刻就能说出对应的失败：一份没人遵守的漂亮文档、一个没有记忆的快速迭代，或者一份不再听现场说话的契约。这也是总纲页的论点——<em>执行可以委托，判断不能</em>——在整条生命周期上的展开；那一页承诺的可证伪链条（现场事故 → SDD 裁决 → 约束 → 阻止重演），正是 §02–§05 要走的路（<a href="/zh/agentic.html#thesis">总纲</a>）。</p>
           </div>
         </div></section>
 
@@ -118,16 +118,16 @@
           <header class="ag-section-header">
             <span class="ag-section-label">02 · 第一板斧 — SDD</span>
             <h2 class="ag-section-title">活得比对话更久的契约</h2>
-            <p class="ag-section-subtitle">三层 Harness 的活体设计文档：业务（为什么）、技术（怎么做）、产品（交付什么）。</p>
+            <p class="ag-section-subtitle">Harness 三层结构里，那份随代码一起演进的设计文档：业务（为什么）、技术（怎么做）、产品（交付什么）。</p>
           </header>
 
           <h3>2.1 · 从一句话到可度量的需求</h3>
-          <p>项目的 Echo 阶段在任何架构之前只产出了一段话：</p>
+          <p>项目的 Echo 阶段先于一切架构，只产出了一段话：</p>
           <div class="claim-box" data-claim-type="fact">
-            <span class="claim-label">事实 · 驱动 SDD V1.0 的 Demo 定义</span>
+            <span class="claim-label">事实 · 催生了 SDD V1.0 的 Demo 定义</span>
             <p>「用浏览器遥控 FT-710，用一根 USB 线替代 SCU-LAN10，不加任何硬件。实时瀑布（FT4222 SPI）。双向 48 kHz Opus 音频。移动优先 UI。四条 WebSocket 通道（控制、音频 RX、音频 TX、频谱）。」</p>
           </div>
-          <p>Echo 的输入都是具体的：作者本人在多设备上的日常操作；对已有开源 FT-710 遥控项目（F4HTB）的评估（没有 SPI 频谱、没有双向 Opus、没有移动 UI）；对照 Hamlib 记录的差距；以及那个不公平优势：从更早的 MRRC 项目继承来的可复用模式（PTT 安全、多实例架构、SDD 模板本身）。这段话变成了基线：全部 15 章一次性写就，其中包含一张带目标值与验证方法的编号 NFR 表。在这个项目里，需求写成「现场测试可以裁定的义务」：</p>
+          <p>Echo 的输入都很具体：作者本人在多台设备上的日常操作；对已有开源 FT-710 遥控项目（F4HTB）的评估——没有 SPI 频谱、没有双向 Opus、没有移动 UI；对照 Hamlib 记下的差距；还有那个不公平的优势：从更早的 MRRC 项目继承来的可复用模式（PTT 安全、多实例架构，以及 SDD 模板本身）。这段话变成了基线：全部 15 章一次写完，其中有一张编号的 NFR 表，每条都带目标值和验证方法。在这个项目里，需求要写成「现场测试能裁定的义务」：</p>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>需求</th><th>目标</th><th>验证方法</th></tr></thead>
             <tbody>
@@ -137,27 +137,27 @@
               <tr><td>SC8 · 成功标准</td><td>PTT 不能卡死</td><td>安全架构 + 看门狗测试</td></tr>
             </tbody>
           </table></div>
-          <p>要复制的模式很小、很严格：没有目标值和验证方法的需求只是意见。「PTT 不能卡死」之所以成立，是因为背后有一章（SDD 15，PTT 安全架构）和一个看门狗；它不是口号。</p>
+          <p>这个模式很小，也很严格：没有目标值和验证方法的需求，只能算意见。「PTT 不能卡死」之所以成立，是因为背后有一整章（SDD 15，PTT 安全架构）和一只看门狗撑着——它不是口号。</p>
 
           <h3 style="margin-top:2.5rem">2.2 · 从需求到设计决策</h3>
-          <p>设计决策在这里是编号的、带日期的、可追溯的：<strong>AD-001 … AD-022</strong> 一张决策登记表。每一条背后都有 Echo，其中几条背后是真实事故：</p>
+          <p>设计决策在这里是编号的、带日期的、可追溯的：<strong>AD-001 … AD-022</strong>，一张决策登记表。每一条背后都有 Echo，有几条背后是真实的事故：</p>
           <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>决策</th><th>定下了什么</th><th>被什么逼出来</th></tr></thead>
+            <thead><tr><th>决策</th><th>定了什么</th><th>被什么逼出来的</th></tr></thead>
             <tbody>
-              <tr><td>AD-002</td><td>FT-710 路径直接走 pyserial CAT，不用 Hamlib</td><td>Hamlib 差距分析；线内协议更简单，还能拿到真频谱</td></tr>
+              <tr><td>AD-002</td><td>FT-710 这条路直接走 pyserial CAT，不用 Hamlib</td><td>Hamlib 差距分析；直连协议更简单，还能拿到真频谱</td></tr>
               <tr><td>AD-011</td><td>48 kHz 编解码域 + 帧对齐的 44.1 kHz 桥</td><td>现场信号：「16 kHz TX 爆裂声」</td></tr>
-              <tr><td>AD-014</td><td>永不轮询 <code>DN;</code>，它每次调用把 VFO 向下步进约 20 Hz</td><td>一次真实频率漂移事故</td></tr>
-              <tr><td>AD-017</td><td>录音写入器按会话幂等重建；队列满丢最旧块</td><td>2026-09-12 的静音 MP3 现场报告</td></tr>
-              <tr><td>AD-019</td><td>未验证机型拒绝发射，除非显式放开</td><td>新机型比硬件验收来得更快</td></tr>
-              <tr><td>AD-021 / AD-022</td><td>支持诊断包、分诊，以及可自证的更新通道</td><td>支持本身：第一轮邮件永远在要证据</td></tr>
+              <tr><td>AD-014</td><td>永不轮询 <code>DN;</code>——每调一次，VFO 就向下走约 20 Hz</td><td>一次真实的频率漂移事故</td></tr>
+              <tr><td>AD-017</td><td>录音写入线程按会话幂等重建；队列满时丢最旧的块</td><td>2026-09-12 那份录音无声的 MP3 现场报告</td></tr>
+              <tr><td>AD-019</td><td>未验证机型拒绝发射，除非明确放开</td><td>新机型来得比硬件验收更快</td></tr>
+              <tr><td>AD-021 / AD-022</td><td>支持诊断包、初步研判，以及能自证的更新通道</td><td>支持这件事本身：第一轮邮件永远在要证据</td></tr>
             </tbody>
           </table></div>
 
           <h3 style="margin-top:2.5rem">2.3 · 版本行是学习的最小单位</h3>
-          <p>SDD 的版本历史不是 changelog 的复制品，它是项目的学习台账。一次变更一段记录：现场信号或需求、证据、决策、仍未闭合的边界。75 天 67 行，有的只有一行修复，有的是一整条支持链。V2.45 行读起来像一份带结论的现场报告：静音录音的日志签名（开始后 6 ms 就出现 <code>Recording writer is falling behind — dropping audio</code>，22 秒里 950+ 次丢弃）、用 <code>ffmpeg</code> 测出的产物（<code>-91 dB</code>，即数字静音，时长正确）、根因、修复、三个回归测试，以及边界：「长时间连续录制与树莓派 SD 卡写入仍未验证」。</p>
+          <p>SDD 的版本历史不是 changelog 的副本，它是项目的学习记录。一次变更一段：现场信号或需求、证据、决策、还没闭合的边界。75 天 67 行，有的只是一行修复，有的是一整条支持链。V2.45 那行读起来像一份带结论的现场报告：录音无声的日志特征（开始 6 ms 后就出现 <code>Recording writer is falling behind — dropping audio</code>，22 秒里丢弃 950+ 次）、用 <code>ffmpeg</code> 测出的产物（<code>-91 dB</code>，即数字静音，时长却是对的）、根因、修复、三个回归测试，外加边界：「长时间连续录制和树莓派 SD 卡写入仍未验证」。</p>
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 没有自动升级</span>
-            <p>生命周期状态是显式的——<code>planned</code>、<code>implemented</code>、<code>tested</code>、<code>bench-verified</code>、<code>field-verified</code>、<code>released</code>、<code>deferred</code>、<code>known-issue</code>，而且没有任何状态会自己前进。一个已发布的子系统不能把成熟度借给别的客户端或机型；未验证的 Icom 与 Yaesu 机型带着发射门禁发布，并且如实写明。</p>
+            <p>生命周期状态是显式的——<code>planned</code>、<code>implemented</code>、<code>tested</code>、<code>bench-verified</code>、<code>field-verified</code>、<code>released</code>、<code>deferred</code>、<code>known-issue</code>——没有任何一个状态会自己往前走。一个已发布的子系统，不能把成熟度借给别的客户端或机型；未验证的 Icom 和 Yaesu 机型带着发射限制发布，并且如实写明。</p>
           </div>
         </div></section>
 
@@ -165,42 +165,42 @@
           <header class="ag-section-header">
             <span class="ag-section-label">03 · 第二板斧 — Harness</span>
             <h2 class="ag-section-title">不需要被记住的约束</h2>
-            <p class="ag-section-subtitle">如果一条教训只活在文档里，它迟早被跳过。Harness 的职责是让「跳过」大声失败。</p>
+            <p class="ag-section-subtitle">一条教训如果只活在文档里，迟早会被跳过。Harness 的职责，是让「跳过」当场失败。</p>
           </header>
 
           <h3>3.1 · 两层，一个目标：让失败可见</h3>
-          <p>Harness 有外层（业务、技术、产品约束，即 SDD 的三组章节）与内层执行层（人 + 智能体、仓库、工具、测试 + 审查、部署、现场遥测）。本文关注内层最锋利的仪器：约束注册表。</p>
+          <p>Harness 分外层和内层：外层是业务、技术、产品三组约束（即 SDD 的三组章节），内层是执行层（人 + 智能体、仓库、工具、测试 + 审查、部署、现场遥测）。本文聚焦内层最锋利的一件工具：约束清单。</p>
 
-          <h3 style="margin-top:2.5rem">3.2 · 约束注册表：22 条教训变成机器</h3>
-          <p><code>.agents/skills/sdd-guardian/harness/constraints.json</code> 保存着 22 条规则，从 SDD 与真实事故中提炼，每条带严重级、理由和匹配模式。智能体（或人）在会话开始时拿到它们；编辑前的检查会以退出码 2 阻断违规。注册表的来历才是重点。这些不是风格偏好：</p>
+          <h3 style="margin-top:2.5rem">3.2 · 约束清单：22 条教训变成机器</h3>
+          <p><code>.agents/skills/sdd-guardian/harness/constraints.json</code> 里存着 22 条规则，从 SDD 和真实事故中提炼，每条带严重级、理由和匹配模式。智能体（或人）在会话一开始就拿到它们；编辑前的检查会以退出码 2 拦下违规。重点是这份清单的来历——它们不是风格偏好：</p>
           <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>约束</th><th>严重级</th><th>它固化了什么</th></tr></thead>
+            <thead><tr><th>约束</th><th>严重级</th><th>固化的是什么</th></tr></thead>
             <tbody>
-              <tr><td><code>cat-no-dn</code></td><td>block</td><td><code>DN;</code> 每次调用把活动 VFO 向下步进约 20 Hz——一次真实频率漂移事故，现在无法再被无意引入</td></tr>
+              <tr><td><code>cat-no-dn</code></td><td>block</td><td><code>DN;</code> 每调一次，活动 VFO 就向下走约 20 Hz——一次真实的频率漂移事故，如今不可能再被无意间写回来</td></tr>
               <tr><td><code>cat-direct-serial-io</code></td><td>block</td><td>串口 I/O 只允许出现在电台控制器内部，防止 asyncio 传输层被到处直接触碰</td></tr>
-              <tr><td><code>audio-16k-rate</code></td><td>block</td><td>音频速率是 44.1 kHz 设备 / 48 kHz 编解码，音频路径永不出现 16 kHz（爆裂声事故）；16 kHz 只是存储域</td></tr>
-              <tr><td><code>poll-stale-guard</code></td><td>info</td><td>轮询循环丢弃过期的在途读（「滤波器切换只有 50% 生效」竞态）</td></tr>
-              <tr><td><code>ptt-release-no-verify</code></td><td>info</td><td>TX0 是即发即忘，释放时的校验循环正是 PTT 卡死的来源</td></tr>
+              <tr><td><code>audio-16k-rate</code></td><td>block</td><td>音频速率是 44.1 kHz 设备 / 48 kHz 编解码，音频路径上永不出现 16 kHz（爆裂声事故）；16 kHz 只属于存储</td></tr>
+              <tr><td><code>poll-stale-guard</code></td><td>info</td><td>轮询循环丢弃过期的在途读数（「滤波器切换只有 50% 生效」那次竞态）</td></tr>
+              <tr><td><code>ptt-release-no-verify</code></td><td>info</td><td>TX0 是发完即忘；松开时的校验循环正是 PTT 卡死的根源</td></tr>
               <tr><td><code>password-constant-time</code></td><td>warn</td><td>口令比较必须使用 <code>hmac.compare_digest</code></td></tr>
             </tbody>
           </table></div>
-          <p>转换规则：<strong>事故只有变成守卫才算修完</strong>。修复是链路第一环；SDD 里的裁决是第二环；阻断下一次尝试的机器可读约束是第三环。这也是注册表小而单调的原因：每一行都付过真实的代价。</p>
+          <p>换算规则只有一条：<strong>事故变成守卫，才算修完</strong>。修复是第一环；SDD 里的裁决是第二环；能在下一次动手前拦住的机器可读约束是第三环。这份清单之所以又小又单调，原因就在这里：每一行都付过真实的代价。</p>
 
-          <h3 style="margin-top:2.5rem">3.3 · 门禁与唯一真相源</h3>
-          <p>注册表周围还有整套装置：unittest 套件（7 月第 12 个循环时 262 项 → 9 月 FDE 看板提交时 <strong>1,299</strong> 项）、离线 <code>release_check</code> 规则（发布记录中报 29 项通过 / 0 失败）、保存每份产物版本/大小/SHA-256 的发布产物注册表，以及强制文档一致的测试，版本历史首行的 SDD 版本必须与 README、生成页和落地页一致。给人看的入口是 <code>docs/PROJECT_MAP.md</code>：它回答一个问题，「我改 X，必须同步哪些东西？」，每个主题一行：</p>
+          <h3 style="margin-top:2.5rem">3.3 · 把关与唯一事实来源</h3>
+          <p>清单周围还有一整套装置：unittest 套件（7 月第 12 个循环时 262 项 → 9 月 FDE 进度板那次提交时 <strong>1,299</strong> 项）、离线可跑的 <code>release_check</code> 规则（发布记录里 29 项通过 / 0 失败）、记录每份产物版本/大小/SHA-256 的发布产物清单，以及强制文档一致的测试——版本历史首行的 SDD 版本，必须和 README、生成页、落地页一致。给人看的入口是 <code>docs/PROJECT_MAP.md</code>：它只回答一个问题，「我改了 X，必须同步哪些东西？」每个主题一行：</p>
           <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>主题</th><th>唯一真相源</th><th>由什么强制</th></tr></thead>
+            <thead><tr><th>主题</th><th>唯一事实来源</th><th>靠什么强制</th></tr></thead>
             <tbody>
               <tr><td>应用版本</td><td><code>CHANGELOG.md</code> 顶部条目</td><td>构建脚本解析它；<code>release_check</code></td></tr>
               <tr><td>SDD 版本</td><td><code>SDD/14-version-history.md</code> 首行</td><td><code>test_sdd_docs_consistency.py</code></td></tr>
-              <tr><td>设计决策</td><td><code>SDD/08-architecture-decisions.md</code>（AD-001…AD-022）</td><td><code>release_check</code> 的 AD 索引 + 守护注册表</td></tr>
+              <tr><td>设计决策</td><td><code>SDD/08-architecture-decisions.md</code>（AD-001…AD-022）</td><td><code>release_check</code> 的 AD 索引 + 守护清单</td></tr>
               <tr><td>工程约束</td><td><code>constraints.json</code></td><td><code>sdd_context.py check</code>——block 级违规退出码 2</td></tr>
               <tr><td>发布产物</td><td><code>release-artifacts.json</code>（版本 / 大小 / SHA-256）</td><td><code>release_check.py</code> + 产物测试</td></tr>
             </tbody>
           </table></div>
           <div class="claim-box" data-claim-type="inference">
-            <span class="claim-label">推断 · Harness 是让委托安全的东西</span>
-            <p>只有仓库会拒绝，你才能把仓库交给智能体。注册表把项目的伤疤变成编辑前拦截，这与产品的发射门禁是同一设计观：权限有界、拒绝显式，且每次拒绝都注明来历。</p>
+            <span class="claim-label">推断 · Harness 让委托这件事变得安全</span>
+            <p>只有仓库自己会拒绝，你才能放心把仓库交给智能体。约束清单把项目的伤疤变成编辑前的拦截，这和产品里的发射限制是同一个设计观：权限有边界、拒绝要显式，每次拒绝都注明来历。</p>
           </div>
         </div></section>
 
@@ -208,57 +208,57 @@
           <header class="ag-section-header">
             <span class="ag-section-label">04 · 第三板斧 — FDE</span>
             <h2 class="ag-section-title">Echo → Delta → Product，以及第四项实践</h2>
-            <p class="ag-section-subtitle">血统里的现场回路：到现实里去、证明风险最高的假设、把活下来的东西抽象出来，然后让支持链对产品自己跑同一个循环。</p>
+            <p class="ag-section-subtitle">刻在血统里的现场闭环：到现实里去、证明风险最高的假设、把活下来的东西抽象出来，再让支持链对产品自己跑同一个循环。</p>
           </header>
 
           <h3>4.1 · 十二个循环，每个只由一个现场信号触发</h3>
-          <p>第一个时代被记录成一张 git 可查的循环表。每一行是一个 Echo（现场信号）、一个 Delta（最高风险的证明）、一个 Product 产出（留下来了的抽象）。节选：</p>
+          <p>第一个时代留下了一张 git 可查的循环表。每一行三样：一个 Echo（现场信号）、一个 Delta（对最高风险的证明）、一个 Product 产出（活下来的抽象）。节选：</p>
           <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>循环</th><th>现场信号（Echo）</th><th>被建造的东西（Delta → Product）</th></tr></thead>
+            <thead><tr><th>循环</th><th>现场信号（Echo）</th><th>造出来的东西（Delta → Product）</th></tr></thead>
             <tbody>
-              <tr><td>V1.0 · 7 月 6 日</td><td>替代 SCU-LAN10：一根 USB 线、不加硬件</td><td>一整天内写就全部 15 章 SDD 基线 + 7 个核心模块</td></tr>
+              <tr><td>V1.0 · 7 月 6 日</td><td>替代 SCU-LAN10：一根 USB 线、不加硬件</td><td>一整天写完 15 章 SDD 基线 + 7 个核心模块</td></tr>
               <tr><td>V1.1 · 7 月 6 日</td><td>「16 kHz TX 爆裂声」</td><td>AD-011：48 kHz 编解码域 + 44.1 kHz 帧对齐桥</td></tr>
-              <tr><td>V1.2 · 7 月 8 日</td><td>「频率漂移约 20 Hz；TX 表头空白」</td><td>活动 VFO 跟踪、表头校准，以及后来成为 <code>cat-no-dn</code> 的裁决</td></tr>
-              <tr><td>V1.7 · 7 月 19 日</td><td>「滤波器切换只有 50% 生效」</td><td>每次轮询查询后丢弃过期读 + 3 个回归测试</td></tr>
+              <tr><td>V1.2 · 7 月 8 日</td><td>「频率漂移约 20 Hz；TX 表头空白」</td><td>活动 VFO 跟踪、表头校准，以及后来成为 <code>cat-no-dn</code> 的那条裁决</td></tr>
+              <tr><td>V1.7 · 7 月 19 日</td><td>「滤波器切换只有 50% 生效」</td><td>每次轮询查询后丢弃过期读数 + 3 个回归测试</td></tr>
               <tr><td>V1.9 · 7 月 21 日</td><td>「USB 重连后瀑布永远冻结」</td><td><code>on_reconnected</code> 钩子在重连后重跑频谱初始化</td></tr>
-              <tr><td>V2.1 · 7 月 22 日</td><td>「PTT 键控了但没有声音 / 没有功率」</td><td>TX 上行归属提升 + 每会话 TX 计数 + 5 个回归测试</td></tr>
+              <tr><td>V2.1 · 7 月 22 日</td><td>「PTT 键控了但没有声音 / 没有功率」</td><td>TX 上行归因改进 + 每会话 TX 计数 + 5 个回归测试</td></tr>
             </tbody>
           </table></div>
-          <p>四个模式让这个时代成立，且四者都可复制：<strong>一个循环 = 一个真实信号</strong>（不做投机功能）；<strong>文档是并发的，不是回溯的</strong>（版本行随修复一起落地）；<strong>风险最高的假设先做原型</strong>（先直连 CAT，再 48 kHz 管线，最后多客户端归属）；<strong>从既有杠杆出发</strong>（从更早的项目继承六项资产，意味着第一个循环从「集成」开始，而不是从「发明」开始）。</p>
+          <p>四个模式撑起了这个时代，而且四个都可以复制：<strong>一个循环 = 一个真实信号</strong>（不做投机性的功能）；<strong>文档同步写，不是事后补</strong>（版本行随修复一起落地）；<strong>风险最高的假设先做原型</strong>（先直连 CAT，再 48 kHz 管线，最后多客户端归属）；<strong>从既有杠杆出发</strong>（从更早的项目继承了六项资产，第一个循环做的是「集成」，不是「发明」）。</p>
 
           <h3 style="margin-top:2.5rem">4.2 · Product 意味着抽象，然后成为平台</h3>
-          <p>Product 阶段是现场偏方变成资产的阶段：带长度前缀管道的独立频谱子进程（FT4222 的逐字节重同步已被证明不可能）、帧对齐的 44.1↔48 kHz 重采样、带命令跳过与过期读丢弃的自适应轮询、带标签的双编解码音频帧、逐次 PTT 的 TX 会话日志。决定性的抽象出现在八月：<strong>可插拔电台后端</strong>。服务端、轮询与状态层变得与电台无关；机型差异退到 profile 之后。这一步把 FT-710 的解法变成了平台，共享 CI-V 核心的五个 Icom 机型、共享 ASCII-CAT 核心的四个 Yaesu 机型，全部建立在已现场验证的 FT-710 传输层上，并且在硬件验收追上之前带着发射门禁发布。</p>
+          <p>Product 阶段，是把现场的偏方变成资产的阶段：独立频谱子进程走带长度前缀的管道（FT4222 的逐字节重同步已被证明走不通）、帧对齐的 44.1↔48 kHz 重采样、带命令跳过和过期读丢弃的自适应轮询、带标签的双编解码音频帧、按次记录的 PTT TX 会话日志。决定性的抽象出现在八月：<strong>可插拔电台后端</strong>。服务端、轮询和状态层不再关心是哪台电台，机型差异全部收进 profile。这一步把 FT-710 的解法变成了平台：共享 CI-V 核心的五个 Icom 机型、共享 ASCII-CAT 核心的四个 Yaesu 机型，全部跑在已经现场验证过的 FT-710 传输层上，并且在硬件验收追上之前，带着发射限制发布。</p>
 
-          <h3 style="margin-top:2.5rem">4.3 · 第四项实践：支持回路</h3>
-          <p>第四项回路实践把同样的 Echo→Delta→Product 纪律对准产品自己的支持链。它分四片、三天上线：（1）脱敏诊断包；（2）自动分诊与公开答复页；（3）带生成式清单的只读更新检查；（4）公开现场看板与无人值守实施者。组织它的规则是：<strong>分类即决策</strong>——noise 以「已答复」闭环，bug 自动排期进实施队列，feature 等待操作员，未答复的上报永不闭环。实施者从干净的 <code>main</code> 工作区单飞运行：只读模型提出 unified-diff JSON 契约；护栏拒绝保护路径与超大补丁；补丁只落在隔离的 <code>fde/&lt;id&gt;</code> 分支，且只有整套测试全绿才提交。<code>main</code> 永不被无人值守进程触碰；合入始终是人。机制写在<a href="/zh/engineering.html#field-loop">机制分册 · 现场回路</a>；它第一周的日志在<a href="/blog/support-loop/zh/">《支持回路》</a>。</p>
+          <h3 style="margin-top:2.5rem">4.3 · 第四项实践：支持闭环</h3>
+          <p>第四项实践把同一套 Echo→Delta→Product 的纪律，对准产品自己的支持链。它分四块、三天上线：（1）脱敏诊断包；（2）自动预检和公开答复页；（3）带生成式清单的只读更新检查；（4）公开的现场进度板和无人值守的落实者。组织它的规则是：<strong>分类就是决策</strong>——noise 以「已答复」关闭，bug 自动排进落实队列，feature 等操作员拍板，没答复的上报永远不关闭。落实者从干净的 <code>main</code> 工作区独立运行：只读模型按 unified-diff JSON 契约提补丁；护栏拒绝受保护路径和超大补丁；补丁只落在隔离的 <code>fde/&lt;id&gt;</code> 分支上，整套测试全绿才提交。<code>main</code> 永远不让无人值守的进程碰，合入始终是人来做。机制写在<a href="/zh/engineering.html#field-loop">机制分册 · 现场闭环</a>；第一周的日志在<a href="/blog/support-loop/zh/">《闻过则喜》</a>。</p>
         </div></section>
 
         <section id="threads" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">05 · 端到端</span>
-            <h2 class="ag-section-title">两条线程，每一站</h2>
-            <p class="ag-section-subtitle">现场事故只有能看着它走完全程才有意思。两个真实案例：从症状到已发布修复，再到公开答复。</p>
+            <h2 class="ag-section-title">两条线索，一站不漏</h2>
+            <p class="ag-section-subtitle">现场事故，只有能看着它走完全程才有意思。两个真实案例：从症状到已发布的修复，再到公开答复。</p>
           </header>
 
-          <h3>5.1 · 线程 A ——「录音是静音的，但文件看起来完全正常」</h3>
-          <p><strong>现场（2026-09-12 22:26）。</strong>一次真实会话产出的 MP3 时长和大小都正确，却没有声音。日志带着签名：开始后仅 6 ms 就出现 <code>Recording writer is falling behind — dropping audio</code>，21.9 秒里 950+ 次丢弃，最后以 <code>Recording queue full on stop — finishing directly</code> 收尾。<code>ffmpeg</code> 测得产物为 <strong>-91 dB</strong>：数字静音。</p>
-          <p><strong>设计（V2.44/V2.45）。</strong>写入器任务按设计是「每会话一次性」的，它消费 stop 哨兵后结束，但任务只在进程启动时创建过一次。第一次录音之后，后续每个会话都没有消费者；有界队列在毫秒级填满，<code>stop()</code> 再按时间戳把整条时间轴补成静音。修复：幂等的 <code>_ensure_rec_writer()</code>，在每次音频块入队、stop 入队和每次 REC 时重建；写入器异常死亡时打 WARNING（这就是事故最缺的可观测性）；队列满时丢最旧块而不是同步收尾。三个回归测试；随 <strong>v1.15.0</strong> 发布。</p>
-          <p><strong>支持（2026-09-18）。</strong>一份新的诊断包带着同样的签名到达，但所有命中日志行都落在 9 月 12 日，修复之前。分诊模型被要求在手写结论前先读项目自己的事故史，于是交叉引用了 CHANGELOG 与 SDD 版本行，指向当代码里的 <code>server.py:348</code>，并拒绝两个顺手答案（「早已修复」/「回归了！」）：改为执行一套协议，录一段新 QSO 再回报。后续诊断包以 9 月 19 日的健康日志关闭了它。公开答复卡写明推理与原始证据行。</p>
+          <h3>5.1 · 线索 A ——「录音没有声音，但文件看上去完全正常」</h3>
+          <p><strong>现场（2026-09-12 22:26）。</strong>一次真实会话录出的 MP3，时长和大小都对，就是没有声音。日志里有明显的特征：开始仅 6 ms 就出现 <code>Recording writer is falling behind — dropping audio</code>，21.9 秒里丢弃 950+ 次，最后以 <code>Recording queue full on stop — finishing directly</code> 收尾。<code>ffmpeg</code> 测得产物为 <strong>-91 dB</strong>：数字静音。</p>
+          <p><strong>设计（V2.44/V2.45）。</strong>按设计，写入线程是「每会话跑一次」的：消费到 stop 哨兵就退出，可它只在进程启动时创建了一次。第一次录音之后，后面每个会话都没有消费者；有界队列毫秒级就灌满，<code>stop()</code> 再按时间戳把整条时间轴补成静音。修复：幂等的 <code>_ensure_rec_writer()</code>，每次音频块入队、stop 入队和每次 REC 时都重建；写入线程异常死亡就打 WARNING（这正是那次事故最缺的可观测性）；队列满时丢最旧的块，不再同步收尾。三个回归测试，随 <strong>v1.15.0</strong> 发布。</p>
+          <p><strong>支持（2026-09-18）。</strong>一份新的诊断包带着同样的特征到了，但所有命中的日志行都停在 9 月 12 日——修复之前。预检模型被要求：下结论之前，先读项目自己的事故史。于是它交叉对照了 CHANGELOG 和 SDD 版本行，定位到当前代码里的 <code>server.py:348</code>，并且顶住了两个顺手的答案（「早就修好了」/「回归了！」），改为执行一套流程：录一段新的 QSO 再回报。后续诊断包带着 9 月 19 日的健康日志，关掉了这一单。公开答复卡上写明了推理过程和原始证据行。</p>
           <div class="claim-box" data-claim-type="inference">
-            <span class="claim-label">推断 · 版本行是线程沉淀的地方</span>
-            <p>没有这一行，第二份上报从零开始，维护者要重新推导两周前的诊断。有了它，分诊就是一次查找：签名 → 历史 → 结论 → 协议。SDD 版本行不是文档债；它是这个项目的免疫记忆。</p>
+            <span class="claim-label">推断 · 版本行是线索沉淀的地方</span>
+            <p>没有这一行，第二份上报就得从零开始，维护者要把两周前的诊断重新推导一遍。有了它，预检就是一次查找：特征 → 历史 → 结论 → 流程。SDD 版本行不是文档债，它是这个项目的免疫记忆。</p>
           </div>
 
-          <h3 style="margin-top:2.5rem">5.2 · 线程 B ——「应用已损坏，无法打开」</h3>
-          <p><strong>现场（发布周，v1.18.0）。</strong>第一个 macOS 安装包发布；用户遇到一个右键也绕不过去的 Gatekeeper 对话框，以及第二个更安静的失败——RX 没声音，而日志让他们「检查电台」。</p>
-          <p><strong>设计（V2.54，随 v1.18.1 发布）。</strong>两个根因，都是静默失败。签名步骤自第一个 macOS 构建起就一直在静默失败（构建脚本把它当非致命警告），于是每个包其实都没签上名；修复按 <code>codesign</code> 要求重排资源树布局，并让签名失败<em>中止构建</em>。无声 RX 是一个缺失的权限键：bundle 从未申请麦克风权限，macOS 于是正常打开采集流、往里填零，且不报任何错误；修复声明该键（构建期断言）并把警告指向系统设置而不是电台。验证到产物级：<code>codesign --verify</code> 有效、指定要求满足、<code>spctl</code> 只抱怨缺 Developer ID，系统权限日志从 <code>Refusing…</code> 变为 <code>AUTHREQ_PROMPTING</code>。文档替下一个用户先回答：macOS 指南解释两种对话框，落地页直说 v1.18.1 之前的下载必须换包。</p>
+          <h3 style="margin-top:2.5rem">5.2 · 线索 B ——「应用已损坏，无法打开」</h3>
+          <p><strong>现场（发布周，v1.18.0）。</strong>第一个 macOS 安装包发布，用户先是撞上了一个连右键都绕不过去的 Gatekeeper 对话框，接着又遇到第二个更安静的失败——RX 没有声音，日志却让他们「检查电台」。</p>
+          <p><strong>设计（V2.54，随 v1.18.1 发布）。</strong>两个根因，都是静默失败。签名步骤从第一个 macOS 构建起就一直在悄悄失败——构建脚本只把它当非致命警告，所以每个包其实都没签上名；修复按 <code>codesign</code> 的要求重排了资源树布局，并让签名失败直接<em>中止构建</em>。RX 无声则是一个缺失的权限键：bundle 从未申请过麦克风权限，macOS 便照常打开采集流、往里填零，一个错误都不报；修复补上这个键（构建期断言），并把警告指向系统设置，而不是电台。验证做到产物级：<code>codesign --verify</code> 通过、指定要求满足、<code>spctl</code> 只剩缺 Developer ID 的抱怨，系统权限日志从 <code>Refusing…</code> 变成 <code>AUTHREQ_PROMPTING</code>。文档替下一个用户先回答了问题：macOS 指南解释两种对话框的区别，落地页直说 v1.18.1 之前的下载必须换包。</p>
 
-          <h3 style="margin-top:2.5rem">5.3 · 线程 C ——「PTT 释放体感延迟」（一段话的案例）</h3>
-          <p>一个现场体感（「松开后 RX 回来太慢」）被日志分解为约 470–870 ms：262–300 ms 的采集重开、约 70–130 ms 的排空、轮询次序，以及客户端抖动缓冲里积压的约 120 ms 静音 Opus 帧。V2.55 发了三个独立修复，释放排空与 unkey 之前跳过 TX 状态轮询、键控期间不再广播静音 RX 帧、记住上次成功的采集设备以跳过重开时的全量枚举，重开后来实测从约 270 ms 降到约 200 ms。边界照旧写下来：端到端改善仍需真机验收。</p>
+          <h3 style="margin-top:2.5rem">5.3 · 线索 C ——「PTT 松开后的体感延迟」（一段话讲完的案例）</h3>
+          <p>一个现场体感——「松开 PTT 后 RX 回来得太慢」——被日志拆成了约 470–870 ms：采集重开 262–300 ms、排空约 70–130 ms、轮询次序，再加上客户端抖动缓冲里积压的约 120 ms 静音 Opus 帧。V2.55 发了三个独立的修复：释放排空和 unkey 之前跳过 TX 状态轮询、键控期间不再广播静音 RX 帧、记住上次成功的采集设备以跳过重开时的全量枚举——重开延迟后来实测从约 270 ms 降到约 200 ms。边界照旧写清楚：端到端的改善仍需真机验收。</p>
 
           <div class="claim-box" data-claim-type="fact">
-            <span class="claim-label">事实 · 三条线程共享的东西</span>
-            <p>同样六站：<strong>现场信号 → 日志证据 → SDD 行（根因 + 决策 + 边界）→ 回归测试 → 发布 → 公开答复卡</strong>。差别只在节拍，录音线程从信号到修复用了一天，到后续闭环用了一周；macOS 线程用了一个晚上；延迟线程用了两天。节拍由最慢的一站决定，而那一站通常是证据，不是代码。</p>
+            <span class="claim-label">事实 · 三条线索共同的部分</span>
+            <p>同样六站：<strong>现场信号 → 日志证据 → SDD 行（根因 + 决策 + 边界）→ 回归测试 → 发布 → 公开答复卡</strong>。差别只在节拍：录音这条线，从信号到修复用了一天，到后续闭环用了一周；macOS 这条线用了一个晚上；延迟这条线用了两天。节拍由最慢的一站决定，而那一站通常是证据，不是代码。</p>
           </div>
         </div></section>
 
@@ -266,23 +266,23 @@
           <header class="ag-section-header">
             <span class="ag-section-label">06 · 证据</span>
             <h2 class="ag-section-title">这些数字能支撑什么、不能支撑什么</h2>
-            <p class="ag-section-subtitle">计数是过程证据。它们说明装置在运转；仅凭它们，不晋升任何产品主张。</p>
+            <p class="ag-section-subtitle">计数只是过程证据：它们能说明装置在运转，但单凭它们，撑不起任何产品主张。</p>
           </header>
           <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>观察</th><th>数值（截至 2026-09-19）</th><th>支撑什么</th></tr></thead>
+            <thead><tr><th>观察</th><th>数值（截至 2026-09-19）</th><th>能支撑什么</th></tr></thead>
             <tbody>
-              <tr><td>仓库跨度</td><td>2026-07-06 → 2026-09-19，435 个提交</td><td>单条产品线上持续交付</td></tr>
-              <tr><td>SDD</td><td>15 章；67 行版本记录；AD-001…AD-022；36 条 NFR；SC1–SC9</td><td>需求与决策是可追溯的工件，不是记忆</td></tr>
-              <tr><td>Harness</td><td>22 条约束（block/warn/info）；编辑前门禁退出码 2；release_check 29 项；产物注册表带 SHA-256</td><td>教训被强制执行，而不是归档</td></tr>
+              <tr><td>仓库跨度</td><td>2026-07-06 → 2026-09-19，435 个提交</td><td>同一条产品线上的持续交付</td></tr>
+              <tr><td>SDD</td><td>15 章；67 行版本记录；AD-001…AD-022；36 条 NFR；SC1–SC9</td><td>需求和决策是可追溯的工件，不是谁的记忆</td></tr>
+              <tr><td>Harness</td><td>22 条约束（block/warn/info）；编辑前的关卡，违规退出码 2；release_check 29 项；产物清单带 SHA-256</td><td>教训被强制执行，而不是归档了事</td></tr>
               <tr><td>测试</td><td>第 12 个循环 262 项（7 月 22 日）→ 1,299 项（9 月 19 日）</td><td>每次事故都买回了回归覆盖</td></tr>
               <tr><td>发布</td><td>37 条 changelog 记录；v1.0.0 → v1.18.1；Windows、macOS、rpi64</td><td>发布是常规动作；回退目标真实存在</td></tr>
-              <tr><td>电台面</td><td>3 个协议族、10 个机型键</td><td>平台抽象经住了与其他硬件的接触</td></tr>
-              <tr><td>支持链</td><td>3 天 4 片；Modern 已发布 2 条答复；看板在线</td><td>现场反馈有一条流水线，而不是一个邮箱</td></tr>
+              <tr><td>电台面</td><td>3 个协议族、10 个机型键</td><td>平台抽象经受住了和其他硬件的接触</td></tr>
+              <tr><td>支持链</td><td>3 天 4 块；Modern 已发布 2 条答复；进度板在线</td><td>现场反馈有一条流水线，而不是一个邮箱</td></tr>
             </tbody>
           </table></div>
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 诚实的边界（写下来，不抹平）</span>
-            <p>未验证的 Icom 与 Yaesu 机型在硬件验收前拒绝发射；Yaesu 系列在此阶段只收不发；更新通道目前是只读的（下载/安装是后续分片）；FDE 看板的第一条真实 bug 还在等它的第一次真实排期，第一份无人值守补丁还在等第一次人工合入；基于摘要的分诊读的是摘要，不是完整环境。跨项目可比的数字，包括当前维护中的测试计数，只在<a href="/zh/agentic.html#evidence">证据台账</a>一处。</p>
+            <p>未验证的 Icom 和 Yaesu 机型，在硬件验收前一律拒绝发射；Yaesu 系列现阶段只收不发；更新通道目前是只读的（下载/安装是后续分块）；FDE 进度板上的第一条真实 bug 还在等它的第一次真实排期，第一份无人值守补丁还在等第一次人工合入；基于摘要的预检读到的是摘要，不是完整环境。跨项目可比的数字，包括当前维护中的测试计数，只放在<a href="/zh/agentic.html#evidence">证据记录</a>一处。</p>
           </div>
         </div></section>
 
@@ -290,33 +290,33 @@
           <header class="ag-section-header">
             <span class="ag-section-label">07 · 建议</span>
             <h2 class="ag-section-title">什么可以迁移，按什么顺序建</h2>
-            <p class="ag-section-subtitle">从实践中提炼的八条规则，然后是三级采纳阶梯，以及每一级的陷阱。</p>
+            <p class="ag-section-subtitle">从实践里提炼的八条规则，然后是三级采纳阶梯，以及每一级的陷阱。</p>
           </header>
 
           <ol class="steps">
-            <li><h4>契约与第一个提交一起写</h4><p>一段愿景文字，然后是全部章节，包括带目标值与验证方法的 NFR 表。第一个提交是拥有契约最便宜的时刻；之后每一个时刻都是一次返工。</p></li>
-            <li><h4>给每条需求配一个目标和一个方法</h4><p>「&lt; 500 ms，听感测试」是需求；「应该快一点」是偏好。「PTT 不能卡死」这样的成功标准，背后要有安全架构章节和看门狗。</p></li>
-            <li><h4>让现场选路线图</h4><p>一个循环 = 一个真实信号。不做投机功能。版本行，信号、证据、决策、边界，就是路线图日志，67 行构成的论证是任何功能清单给不出的。</p></li>
-            <li><h4>把每次事故变成规则，而不是记忆</h4><p>修复是第一环，裁决是第二环，下一次编辑前就会被检查的机器可读约束是第三环，只有到这一步，事故才算永久修好。注册表要小；每一行都该付过真实代价。</p></li>
-            <li><h4>先给现场装仪器，再扩功能</h4><p>脱敏诊断包把访谈变成测量。在需要数据之前先造传感器；这里的支持链分四片上线，传感器排第一。</p></li>
-            <li><h4>让分类即决策</h4><p>分类问题只回答一次，然后让它调度：环境噪声闭环、缺陷排期、feature 等人类。未答复的上报永不闭环，「闭环」是一个承诺。</p></li>
-            <li><h4>把「做」自动化，永不自动化「裁决」</h4><p>无人值守实施只有被围住才安全：只读提议、护栏、隔离分支、全量测试门禁、<code>main</code> 不被触碰、人工合入。两本账分开记，过程证据永不晋升产品主张。总纲把保留的一半命名为，意图、边界、裁决；理由是问责，而不是任务大小（<a href="/zh/agentic.html#roles">分工</a>）。</p></li>
-            <li><h4>把边界写下来</h4><p>生命周期状态之间没有自动升级；未验证硬件拒绝发射；更新通道自述只读；已知问题保持可见。写下来的边界是信任资产；被用户发现的边界是事故。</p></li>
+            <li><h4>契约与第一个提交一起写</h4><p>一段愿景文字，然后是全部章节，包括带目标值和验证方法的 NFR 表。第一个提交，是拥有契约最便宜的时刻；往后每拖一刻，都是一次返工。</p></li>
+            <li><h4>给每条需求配一个目标和一个方法</h4><p>「&lt; 500 ms，听感测试」才叫需求；「应该快一点」只是偏好。像「PTT 不能卡死」这样的成功标准，背后要有一章安全架构和一只看门狗。</p></li>
+            <li><h4>让现场选路线图</h4><p>一个循环 = 一个真实信号，不做投机性的功能。版本行——信号、证据、决策、边界——就是路线图的日志；67 行构成的论证，任何功能清单都给不出来。</p></li>
+            <li><h4>把每次事故变成规则，而不是记忆</h4><p>修复是第一环，裁决是第二环，下一次动手编辑前就会被检查的机器可读约束是第三环——到这一步，事故才算彻底修好。清单要小，每一行都该付过真实的代价。</p></li>
+            <li><h4>先给现场装上传感器，再扩功能</h4><p>脱敏诊断包把访谈变成了测量。传感器要在需要数据之前就造好；这条支持链分四块上线，它排第一块。</p></li>
+            <li><h4>让分类就是决策</h4><p>分类这个问题只回答一次，之后就让它自动调度：环境噪声直接关闭、缺陷排期、feature 等人来拍板。没答复的上报永远不关闭——「闭环」在这里是一个承诺。</p></li>
+            <li><h4>把「做」自动化，永不自动化「裁决」</h4><p>无人值守的落实，只有被围起来才安全：只读提议、护栏、隔离分支、全量测试把关、<code>main</code> 不许碰、人工合入。两本账分开记，过程证据永远不能升级成产品主张。总纲把留给人的那一半命名为：意图、边界、裁决；理由是问责，不是任务大小（<a href="/zh/agentic.html#roles">分工</a>）。</p></li>
+            <li><h4>把边界写下来</h4><p>生命周期状态之间没有自动升级；未验证的硬件拒绝发射；更新通道自己写明只读；已知问题保持可见。写下来的边界是信任资产，被用户撞见的边界是事故。</p></li>
           </ol>
 
           <h3 style="margin-top:2.5rem">采纳阶梯</h3>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>阶段</th><th>建什么</th><th>完成判据</th><th>陷阱</th></tr></thead>
             <tbody>
-              <tr><td><strong>1 · 文档时代</strong></td><td>SDD 基线（业务/技术/产品章节）+ 每次变更一行版本记录 + changelog</td><td>任何已发布行为，你都能说出它背后的需求与决策</td><td>文档写完就被悄悄放弃，版本行必须随修复落地，否则永远是「回头补」</td></tr>
-              <tr><td><strong>2 · 契约时代</strong></td><td>从真实事故提炼的约束注册表 + 编辑前检查 + 测试/发布规则 + 真相源地图</td><td>已知失败无法再被引入而不触发红灯</td><td>收集一堆没人运行的规则，强制执行（编辑路径上的退出码）才是全部意义</td></tr>
-              <tr><td><strong>3 · 现场回路时代</strong></td><td>诊断包 → 分诊 → 答复 → 看板 → 无人值守实施，合入归人</td><td>用户症状在无人醒着时变成分支上经测试的补丁，而裁决仍归人</td><td>把手伸过护栏，回路必须失败即关闭，否则它就变成一段无人审查的 <code>main</code> 历史</td></tr>
+              <tr><td><strong>1 · 文档时代</strong></td><td>SDD 基线（业务/技术/产品章节）+ 每次变更一行版本记录 + changelog</td><td>随便挑一个已发布的行为，你都能说出它背后的需求和决策</td><td>文档写完就被悄悄放弃——版本行必须随修复一起落地，否则永远是「回头补」</td></tr>
+              <tr><td><strong>2 · 契约时代</strong></td><td>从真实事故提炼的约束清单 + 编辑前检查 + 测试/发布规则 + 事实来源地图</td><td>已知的失败不可能再被写进来而不亮红灯</td><td>收集一堆没人运行的规则——强制执行（编辑路径上的退出码）才是全部意义</td></tr>
+              <tr><td><strong>3 · 现场闭环时代</strong></td><td>诊断包 → 预检 → 答复 → 进度板 → 无人值守落实，合入归人</td><td>没人在线的时候，用户报告的症状也能变成分支上经过测试的补丁，而裁决仍然归人</td><td>把手伸过护栏——闭环必须失败即关闭，否则它就变成一段没人审查的 <code>main</code> 历史</td></tr>
             </tbody>
           </table></div>
 
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">作者论点 · 该复制什么</span>
-            <p>复制纪律，不要复制数字。没有第二个项目需要这个项目的测试数或发布节拍；可迁移的是形状：一个沉淀判断的契约、一套拒绝已知错误的装置、一个被允许修正两者的现场回路，以及一个始终握着「什么算完成」裁决权的人。</p>
+            <p>复制纪律，别复制数字。没有第二个项目需要这个项目的测试数或发布节拍；能迁移的是形状：一份沉淀判断的契约、一套拒绝已知错误的装置、一个被允许修正前两者的现场闭环，以及一个始终握着「什么算完成」裁决权的人。</p>
           </div>
         </div></section>
 
@@ -325,12 +325,12 @@
             <span class="ag-section-label">08 · 结语</span>
             <h2 class="ag-section-title">一句话，三板斧</h2>
           </header>
-          <p>一句愿景变成契约；契约变成带目标的需求；需求变成决策；决策撞上现实并被修正；修正变成守卫；守卫让下一次委托变得安全；支持链闭上圆环，让用户把现实报回来，附带答复、一块看板，以及一份等着人点头的、经测试的补丁。这就是整段旅程。三板斧是一句话：</p>
+          <p>一句愿景变成契约，契约变成带目标的需求，需求变成决策，决策撞上现实然后被修正，修正变成守卫，守卫让下一次委托变得更安全；支持链把环闭上，让用户把现实报回来——附带答复、一块进度板，以及一份测过了、等着人点头的补丁。这就是整段旅程。三板斧，说到底是一句话：</p>
           <div class="claim-box" data-claim-type="thesis">
-            <span class="claim-label">一句话纪律</span>
-            <p>让判断沉淀成契约，让机器拒绝你已经付过代价的错误，让现场，经由用户，修正两者。裁决，始终归人。</p>
+            <span class="claim-label">一句话的纪律</span>
+            <p>让判断沉淀成契约，让机器拒绝那些你已经付过代价的错误，让现场经由用户修正前两者。裁决，始终归人。</p>
           </div>
-          <p>深入机制：<a href="/zh/engineering.html">Harness、Loop 与 Living SDD</a> · <a href="/zh/engineering.html#field-loop">现场回路</a> · <a href="/zh/agentic.html">智能体工程</a>。本案例背后的日志：<a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解</a> · <a href="/blog/support-loop/zh/">支持回路</a>。线上入口：<a href="https://www.vlsc.net/mrrc_modern/">MRRC Modern 站点</a>、<a href="https://www.vlsc.net/mrrc_modern/answers/">答复页</a>、<a href="https://www.vlsc.net/mrrc_modern/board/">FDE 看板</a>。</p>
+          <p>深入机制：<a href="/zh/engineering.html">Harness、Loop 与 Living SDD</a> · <a href="/zh/engineering.html#field-loop">现场闭环</a> · <a href="/zh/agentic.html">智能体工程</a>。本案例背后的日志：<a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解</a> · <a href="/blog/support-loop/zh/">闻过则喜</a>。线上入口：<a href="https://www.vlsc.net/mrrc_modern/">MRRC Modern 站点</a>、<a href="https://www.vlsc.net/mrrc_modern/answers/">答复页</a>、<a href="https://www.vlsc.net/mrrc_modern/board/">FDE 进度板</a>。</p>
         </div></section>
       </main>
 
@@ -339,17 +339,17 @@
           <div class="ba-icon"><i class="fas fa-user"></i></div>
           <div>
             <h3>BG1SB</h3>
-            <p>业余无线电操作者，软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话写下来。</p>
+            <p>业余无线电爱好者，软件工程师。构建 VLSC 开源远程控制生态，也把电台说的话写下来。</p>
           </div>
         </div>
         <div class="blog-related">
           <h3>延伸阅读</h3>
           <ul>
-            <li><a href="/blog/ming-li-dao-tian/zh/">命 · 力 · 道 · 天 —— 最终提炼</a></li>
-            <li><a href="/blog/faculties/zh/">诸力：智力、智商、情商、认识、智慧、直觉，与入世出世</a></li>
-            <li><a href="/blog/coda/zh/">跋：意图、文化、文明，以及回路之外的笑声</a></li>
-            <li><a href="/blog/support-loop/zh/">支持回路：一周的 🐞 上报，如何变成两次发布</a></li>
-            <li><a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解，过程背后的账本</a></li>
+            <li><a href="/blog/ming-li-dao-tian/zh/">命 · 力 · 道 · 天 —— 识命、修力、立道、敬天</a></li>
+            <li><a href="/blog/faculties/zh/">斫轮：可传的与不可传的</a></li>
+            <li><a href="/blog/coda/zh/">跋：意图、文化、文明，以及闭环之外的笑声</a></li>
+            <li><a href="/blog/support-loop/zh/">闻过则喜：一周的 🐞 上报，如何变成两次发布</a></li>
+            <li><a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解：一本会倒退的账</a></li>
             <li><a href="/zh/engineering.html">Harness、Loop 与 Living SDD：VLSC 工程体系</a></li>
             <li><a href="/zh/agentic.html">智能体工程，人类意图、智能体执行、现场证据</a></li>
           </ul>

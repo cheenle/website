@@ -3,21 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>支持回路：一周的 🐞 上报，如何变成两次发布 — VLSC 博客</title>
+    <title>闻过则喜：一周的 🐞 上报，如何变成两次发布 — VLSC 博客</title>
     <meta
       name="description"
-      content="两条产品线在一周内发出十个发布物——MRRC v6.1.15→v6.1.18 与 MRRC Modern v1.18.0/v1.18.1。支撑它们的，是一条「发布 → 升级 → 诊断 → 分析 → 答复」的支持链，再往前一步：一块公开看板，让分类即决策；一个无人值守的实施者，在隔离分支上产出经测试的补丁，而 main 永不移动。"
+      content="两条产品线，一周，十个发布物——MRRC v6.1.15→v6.1.18 与 MRRC Modern v1.18.0/v1.18.1。背后撑着它们的，是一条「发布 → 升级 → 诊断 → 分析 → 答复」的支持链。这周链上又多了一环：一块公开的进度板，分类即决策；一个无人值守的执行者，在隔离分支上交出测过的补丁，main 纹丝不动。"
     />
     <meta
       name="keywords"
-      content="智能体工程, 回路工程, 产品支持, 自助服务, 自诊断, 诊断包, 自动分诊, 一键升级, 热修, FDE 看板, 分类即决策, 无人值守实施, RNNoise, NR3, rigctld, macOS 签名, 业余无线电, 远程控制, MRRC, MRRC Modern, BG1SB"
+      content="智能体工程, 闭环工程, 产品支持, 自助服务, 自诊断, 诊断包, 自动预检, 一键升级, 热修, FDE 进度板, 分类即决策, 无人值守实施, RNNoise, NR3, rigctld, macOS 签名, 业余无线电, 远程控制, MRRC, MRRC Modern, BG1SB"
     />
     <meta name="author" content="BG1SB" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="支持回路：一周的 🐞 上报，如何变成两次发布" />
+    <meta property="og:title" content="闻过则喜：一周的 🐞 上报，如何变成两次发布" />
     <meta
       property="og:description"
-      content="两条产品线、一周、十个发布物，跑在同一条五段式支持链上——以及随后的第四项回路实践：一块公开看板，让分类即调度；一个无人值守的实施者，以全量测试为门、只落在隔离分支。每条答复都附原始日志行。"
+      content="两条产品线、一周、十个发布物，跑在同一条五段式支持链上——随后还有第四项闭环实践：一块公开进度板，分类即调度；一个无人值守的执行者，测试全绿才算过，补丁只落在隔离分支上。每条答复都附原始日志行。"
     />
     <meta property="og:url" content="https://www.vlsc.net/blog/support-loop/zh/" />
     <meta property="og:site_name" content="VLSC Projects" />
@@ -42,8 +42,8 @@
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "支持回路：一周的 🐞 上报，如何变成两次发布",
-        "description": "两条产品线、一周、十个发布物，跑在同一条五段式支持链上，以及随后的第四项回路实践：公开看板让分类即调度，无人值守实施者产出受护栏保护、经全量测试的隔离分支补丁。",
+        "headline": "闻过则喜：一周的 🐞 上报，如何变成两次发布",
+        "description": "两条产品线、一周、十个发布物，跑在同一条五段式支持链上；随后的第四项闭环实践：公开进度板让分类即调度，无人值守的执行者在护栏约束下产出经过全量测试的补丁，只落在隔离分支上。",
         "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
         "publisher": {
           "@type": "Organization",
@@ -52,7 +52,7 @@
         },
         "datePublished": "2026-09-19",
         "dateModified": "2026-09-19",
-        "keywords": "智能体工程, 回路工程, 产品支持, 自助服务, 自诊断, 诊断包, 自动分诊, 一键升级, 热修, FDE 看板, 分类即决策, 无人值守实施, RNNoise, rigctld, macOS 签名",
+        "keywords": "智能体工程, 闭环工程, 产品支持, 自助服务, 自诊断, 诊断包, 自动预检, 一键升级, 热修, FDE 进度板, 分类即决策, 无人值守实施, RNNoise, rigctld, macOS 签名",
         "articleSection": "Deployment",
         "mainEntityOfPage": "https://www.vlsc.net/blog/support-loop/zh/"
       }
@@ -60,40 +60,40 @@
   </head>
   <body data-site="portal">
     <article class="ba-article">
-      <nav class="ba-topbar"><span class="ba-crumb"><a href="/zh/">首页</a> › <a href="/blog/">博客</a> › <span class="ba-crumb-cat">Deployment</span> › 支持回路</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/zh/">首页</a> › <a href="/blog/">博客</a> › <span class="ba-crumb-cat">Deployment</span> › 闻过则喜</span><a class="ba-lang" href="../" lang="en">English</a></nav>
 
       <header class="ag-hero ba-hero">
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-arrows-rotate"></i><span>部署 · 发布与支持</span></div>
-          <h1>支持<span class="gradient">回路</span>。</h1>
-          <p>两条产品线在一周内发出十个发布物。安装包背后，是一条五段式链条：发布 → 升级 → 诊断 → 分析 → 答复，再往前一步：一块公开看板，让<em>分类即决策</em>；一个无人值守的实施者，在隔离分支上产出经过测试的补丁，而 <code>main</code> 永不移动。</p>
+          <h1>闻过<span class="gradient">则喜</span>。</h1>
+          <p>两条产品线，一周发出去十个发布物。安装包背后是一条五段式链条：发布 → 升级 → 诊断 → 分析 → 答复。这周又往前走了一步：一块公开的进度板，<em>分类即决策</em>；一个无人值守的执行者，在隔离分支上交出测过的补丁，<code>main</code> 始终不动。</p>
           <div class="ag-hero-stats" aria-label="文章摘要">
             <span class="ag-pill"><i class="fas fa-box-open"></i> 10 个发布物 · 2026-09-17/18</span>
             <span class="ag-pill"><i class="fas fa-bug"></i> 🐞 → 答复，按编号可检索</span>
             <span class="ag-pill"><i class="fas fa-stopwatch"></i> 症状 → 热修，当天闭环</span>
-            <span class="ag-pill"><i class="fas fa-columns"></i> FDE 看板 · 回路已触达代码</span>
+            <span class="ag-pill"><i class="fas fa-columns"></i> FDE 进度板 · 闭环够到代码了</span>
           </div>
           <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-09-19">2026 年 9 月 19 日</time> &nbsp;·&nbsp; 约 16 分钟</p>
         </div>
       </header>
 
-      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#releases">发布</a><a href="#chain">链条</a><a href="#walls">墙 → 功能</a><a href="#triage">首轮判读</a><a href="#fourth-loop">第四条回路</a><a href="#loops">回路，诚实版</a><a href="#closing">结语</a></nav></div></div>
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#releases">发布</a><a href="#chain">链条</a><a href="#walls">墙 → 功能</a><a href="#triage">初步判读</a><a href="#fourth-loop">第四条闭环</a><a href="#loops">闭环，诚实版</a><a href="#closing">结语</a></nav></div></div>
 
       <main class="ba-main">
-        <p class="lede">这是一篇发布记，也是一篇把幕后风景一起写下来的记录。两条产品线同时赶工：<strong>MRRC</strong>（基于 Hamlib 的通用远程电台，走 Windows 线，<code>v6.1.x</code>）和 <strong>MRRC Modern</strong>（面向 FT-710、IC-7300 这类电台的现代化姊妹线，Windows + macOS，<code>v1.18.x</code>）。2026 年 9 月 17 日前后，48 小时里，十个发布物出去了。安装包只是看得见的那一半；另一半是背后那条支持链：用户侧一键升级、一键回退，一份脱敏诊断包；维护者侧，十分钟一轮的 cron 跑首轮判读，再加一个每条结论都附原始日志的公开答复页。这篇要记下发了什么、头几天的分诊教了什么，也要说清楚：把判断和执行分开之后，在仓库之外、在用户身边，会长出什么。9 月 19 日起，链上又长出了公开看板和无人值守的实施者，那是它的第四项回路实践。</p>
+        <p class="lede">这既是一篇发布记录，也想把幕后的东西一并写下来。两条产品线同时赶工：<strong>MRRC</strong>（基于 Hamlib 的通用远程电台软件，走 Windows 线，<code>v6.1.x</code>）和 <strong>MRRC Modern</strong>（面向 FT-710、IC-7300 这类电台的姊妹产品线，更现代，Windows + macOS，<code>v1.18.x</code>）。2026 年 9 月 17 日前后的 48 小时里，发出去十个发布物。安装包只是看得见的那一半；另一半是背后的支持链：用户这边，一键升级、一键回退、一份脱敏诊断包；维护者这边，cron 每十分钟跑一轮初步研判，外加一个公开答复页，每条结论都附原始日志。这篇文章要记下发了什么、头几天的研判教会了我什么，也想讲清楚一件事：把判断和执行分开之后，仓库之外、用户身边，会长出什么东西。9 月 19 日起，链上又长出了公开进度板和无人值守的执行者——那是它的第四项闭环实践。</p>
 
         <div class="ba-tldr" id="tldr">
           <div class="ba-tldr-card">
-            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 六条发现里的回路</p>
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 六条发现里的闭环</p>
             <ul class="ba-tldr-list">
               <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>两条线，一周，十个发布物。</strong>MRRC 发了三个安装版（v6.1.15 / v6.1.16 / v6.1.18）和五个热修；MRRC Modern 发了 v1.18.0（macOS DMG + 实时更新通道）与 v1.18.1（签名与麦克风权限修复，Windows 包同步重建）。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>这条链是一个两端自助的回路。</strong>用户不开工单就能升级、回退、打包诊断、按编号查到答复；维护者侧由十分钟 cron 自动分诊。机器分诊的头四天：MRRC 公开答复 7 条（6 条已答复、1 条退回补证据），另有 1 张已知问题卡（6.1.13 已修复）；Modern 的前两个诊断包到达后一天内出了 2 条答复。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>一次上报是案例；重复出现的签名是需求。</strong>9 月 17 日的两个小时里，两个用户撞上同一堵 rigctld 墙；自启动修复当天发布。NR2 水声的答复先变成等级表改动，再变成暴露的旋钮，最后变成第三种降噪引擎。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>判定本体论就是需求筛。</strong>环境 ≠ 缺陷不是官僚流程：把环境误判成缺陷，路线图会被幽灵需求填满；把缺陷误判成环境，用户会被搁浅。每张公开答复卡都附原始证据行，读者可以核对推理。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>回路现在触达代码。</strong>MRRC Modern 的第四项回路实践（9 月 19 日）：每条分析都带着分类落进公开看板——noise 自行闭环、bug 自动排期、feature 等待决策——cron 实施者对已排期条目产出受护栏保护的 unified diff 补丁，只落在隔离的 <code>fde/&lt;id&gt;</code> 分支，全套测试绿才提交。<code>main</code> 永不被触碰；合入仍是人的动作。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>支持是智能体工程最外侧的回路。</strong>迭代单位不是提交，是未被解答的用户症状。在仓库内闭合的回路，可以对现场敞开几个月；这条链把它闭上。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>这条链是一个两端都能自助的闭环。</strong>用户不用开工单，就能升级、回退、打包诊断、按编号查到答复；维护者这边，cron 每十分钟自动做一轮预检。机器预检的头四天：MRRC 公开答复 7 条（6 条已答复、1 条退回补证据），另有 1 张已知问题卡（6.1.13 已修复）；Modern 的前两个诊断包到达后，一天内就出了 2 条答复。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>一次上报是案例，反复出现的特征才是需求。</strong>9 月 17 日的两个小时里，两个用户撞上同一堵 rigctld 的墙，自启动修复当天就发了。NR2 水声那条答复，先变成等级表的改动，再变成新开放的调节参数，最后变成第三种降噪引擎。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>判定规则就是需求筛子。</strong>「环境 ≠ 缺陷」不是官僚主义：把环境误判成缺陷，路线图里会塞满幽灵需求；把缺陷误判成环境，用户就被晾在一边。每张公开答复卡都附原始证据行，读者可以自己核对推理过程。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>闭环现在够得着代码了。</strong>MRRC Modern 的第四项闭环实践（9 月 19 日）：每条分析都带着分类落到公开进度板上——noise 自行闭环、bug 自动排期、feature 等待决策。cron 执行者对排了期的条目产出 unified diff 补丁，全程有护栏约束，只落在隔离的 <code>fde/&lt;id&gt;</code> 分支上，全套测试跑绿才提交。<code>main</code> 谁也碰不到，合入永远是人的动作。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>支持是智能体工程最外侧的闭环。</strong>迭代的单位不是 commit，而是还没得到解答的用户症状。只在仓库内部闭合的循环，可以对着现场敞开好几个月；这条链把它闭上了。</li>
             </ul>
-            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#releases">§01 十个发布物</a><a href="#walls">§03 变成功能的墙</a><a href="#fourth-loop">§05 第四条回路</a></div>
+            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#releases">§01 十个发布物</a><a href="#walls">§03 撞墙撞出的功能</a><a href="#fourth-loop">§05 第四条闭环</a></div>
           </div>
         </div>
 
@@ -101,28 +101,28 @@
           <header class="ag-section-header">
             <span class="ag-section-label">01 · 发布</span>
             <h2 class="ag-section-title">一周，两条线，十个发布物</h2>
-            <p class="ag-section-subtitle">用户实际拿到的东西，不是 changelog，是体验。</p>
+            <p class="ag-section-subtitle">用户真正拿到手的，不是 changelog，是体验。</p>
           </header>
 
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>发布物</th><th>日期</th><th>用户拿到什么</th></tr></thead>
             <tbody>
-              <tr><td><strong>MRRC V6.1.15</strong>（安装版）</td><td>9 月 17 日</td><td>Windows 安装版自动拉起 <code>rigctld</code>——电台 CAT 守护进程随包分发（vendor 内置 <code>rigctld.exe</code> + DLL），并带机型名 → 编号解析：配置里写 <code>FT-891</code> 就能用，不再要求 <code>-m 1036</code>。</td></tr>
-              <tr><td><strong>MRRC V6.1.16</strong>（安装版）</td><td>9 月 17 日</td><td>加固：内置 rigctld 路径以 manager 为主，兜底实现只<em>让位</em>、绝不阻塞启动，自启动不能变成「起不来」。</td></tr>
-              <tr><td><strong>MRRC V6.1.18</strong>（安装版）</td><td>9 月 18 日</td><td>第三种降噪引擎：<strong>NR3 —— RNNoise</strong>（Xiph 神经降噪，v0.2，BSD-3），<code>[WDSP] nr3 = plus|only|off</code>；libwdsp 重建，暴露新的 EMNR <code>alpha</code>/<code>npMax</code> 旋钮；NR2 等级表下移（−6/−9/−12/−16）；以及一个门控修复：关降噪现在是<em>真旁路</em>。</td></tr>
-              <tr><td><strong>MRRC 热修 6.1.14 → 6.1.18</strong></td><td>9 月 17–18 日</td><td>同一批修复走热修通道：不用重装——<strong>重启 MRRC 即生效</strong>。自启动（6.1.14）、名字→编号（6.1.15）、兜底让位（6.1.16）、NR2 等级表（6.1.17）、NR3 + 门控（6.1.18）。</td></tr>
-              <tr><td><strong>MRRC Modern v1.18.0</strong></td><td>9 月 17 日</td><td>首个正式 <strong>macOS</strong> 版（Apple Silicon DMG，macOS 11+）与 Windows 安装版并行，加上实时更新通道（<code>latest.json</code>，SHA-256 直接取自产物）和完整的支持链：🐞 诊断包、答复页、打包版日志落盘。</td></tr>
+              <tr><td><strong>MRRC V6.1.15</strong>（安装版）</td><td>9 月 17 日</td><td>Windows 安装版会自动拉起 <code>rigctld</code>——电台 CAT 守护进程随安装包分发（vendor 内置 <code>rigctld.exe</code> + DLL），还支持机型名 → 编号解析：配置里写 <code>FT-891</code> 就行，不用再写 <code>-m 1036</code>。</td></tr>
+              <tr><td><strong>MRRC V6.1.16</strong>（安装版）</td><td>9 月 17 日</td><td>加固：内置 rigctld 以 manager 的路径为准，兜底逻辑只<em>让位</em>、绝不阻塞启动——自启动不能反过来变成「起不来」。</td></tr>
+              <tr><td><strong>MRRC V6.1.18</strong>（安装版）</td><td>9 月 18 日</td><td>第三种降噪引擎：<strong>NR3 —— RNNoise</strong>（Xiph 的神经降噪，v0.2，BSD-3），<code>[WDSP] nr3 = plus|only|off</code>；重建了 libwdsp，新开放 EMNR 的 <code>alpha</code>/<code>npMax</code> 两个调节参数；NR2 等级表整体下移（−6/−9/−12/−16）；外加一个门控修复：关掉降噪现在是<em>真旁路</em>。</td></tr>
+              <tr><td><strong>MRRC 热修 6.1.14 → 6.1.18</strong></td><td>9 月 17–18 日</td><td>同一批修复也走热修通道：不用重装，<strong>重启 MRRC 就生效</strong>。自启动（6.1.14）、名字→编号（6.1.15）、兜底让位（6.1.16）、NR2 等级表（6.1.17）、NR3 + 门控（6.1.18）。</td></tr>
+              <tr><td><strong>MRRC Modern v1.18.0</strong></td><td>9 月 17 日</td><td>首个正式 <strong>macOS</strong> 版（Apple Silicon DMG，macOS 11+），和 Windows 安装版同步发布，外加实时更新通道（<code>latest.json</code>，SHA-256 直接取自产物）和完整的支持链：🐞 诊断包、答复页、打包版日志落盘。</td></tr>
               <tr><td><strong>MRRC Modern v1.18.1</strong></td><td>9 月 18 日</td><td>两个 macOS 修复：应用<strong>签名</strong>了（不再「已损坏，无法打开」）；.bundle 正确<strong>申请麦克风权限</strong>（不再无声 RX）。Windows 包从同一份源码同步重建。</td></tr>
             </tbody>
           </table></div>
 
-          <p>与发布物同周进场的，还有 Modern 线上的性能工作：发射后的 TX→RX 采集重开从约 270 ms 降到约 200 ms；PTT 按住期间不再广播已静音的 RX 帧；PTT 释放延迟在 SDD 有了自己的版本行（V2.55）。没有一项光鲜，但全部可测。</p>
+          <p>同一周进场的还有 Modern 线上的性能活儿：发射结束后 TX→RX 重新打开采集的时间，从约 270 ms 降到约 200 ms；PTT 按住期间，不再把已静音的 RX 帧广播出去；PTT 释放延迟在 SDD 里有了自己的版本行（V2.55）。这些没有一项光鲜，但每一项都可测。</p>
 
-          <p>回路自身当周也发布了：9 月 19 日，MRRC Modern 上线 <strong>FDE 看板</strong>——血统里的第四项回路实践，一块公开看板，让每条分析带着分类落板（bug / feature / noise），后面接一个无人值守实施者，把已排期条目变成隔离分支上、以全量测试为门的补丁。它不是安装包，所以不在表里；它是 §05 的主题。</p>
+          <p>闭环自己这周也发了版：9 月 19 日，MRRC Modern 上线 <strong>FDE 进度板</strong>——这个项目一脉相承的第四项闭环实践。一块公开的进度板，让每条分析带着分类落上去（bug / feature / noise），后面跟着一个无人值守的执行者，把排了期的条目变成隔离分支上的补丁，全量测试过了才算。它不是安装包，所以不进这张表；它是 §05 的主角。</p>
 
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 表格背后的发布纪律</span>
-            <p>每个安装版的 <code>previous</code> 都留在服务器上，而且必须 git 入库，因为部署是 <code>rsync --delete</code>，没入库的服务器文件会被删掉（回退按钮就曾这样 404 过一次）。热修通道版本必须低于安装版版本；回退目标必须真实存在、不能是已知坏版本；清单的 SHA-256 在<em>服务器侧</em>复核，因为本机下载链路不可信。跨项目可比的数字（测试数、约束数、各产品族版本）只在一个地方：<a href="/zh/agentic.html#evidence">证据台账</a>——子站和博客链接它，不复述它。</p>
+            <p>每个安装版的 <code>previous</code> 都留在服务器上，而且必须 git 入库——部署用的是 <code>rsync --delete</code>，服务器上没入库的文件会被删掉（回退按钮就这么 404 过一次）。热修通道的版本号必须低于安装版；回退目标必须真实存在、不能是已知的坏版本；清单里的 SHA-256 要在<em>服务器侧</em>复核，因为本机下载链路不可信。跨项目可比的数字（测试数、约束数、各产品族版本）只放在一个地方：<a href="/zh/agentic.html#evidence">证据清单</a>——子站和博客都链接过去，不复述。</p>
           </div>
         </div></section>
 
@@ -130,33 +130,33 @@
           <header class="ag-section-header">
             <span class="ag-section-label">02 · 链条</span>
             <h2 class="ag-section-title">「自助服务」和「自诊断」到底是什么意思</h2>
-            <p class="ag-section-subtitle">五段：发布 → 升级 → 诊断 → 分析 → 答复，把往返都工程掉。</p>
+            <p class="ag-section-subtitle">五段：发布 → 升级 → 诊断 → 分析 → 答复，把来回沟通都工程化掉。</p>
           </header>
 
-          <p>大多数支持链是一个带希望的邮箱别名。这一条是两端各装了一台仪器的流水线。在<strong>用户侧</strong>，应用的设计目标是：用户需要的四件事，永远不需要开工单——</p>
+          <p>大多数产品的支持链，说到底是一个邮箱别名，外加一点指望。这一条不是：它是两端各装了一套工具的流水线。<strong>用户侧</strong>的应用按一个目标设计——用户最常做的四件事，永远不用开工单：</p>
 
           <div class="ag-loop-grid">
-            <article class="ag-card"><h3>⬆️ 升级，不用去找下载页</h3><p>Web 界面一个按钮（或启动器里按 <code>U</code>）。服务端先做 PTT 门禁：电台发射中，升级请求直接被 423 拒绝。下载先写 <code>.part</code> 文件，校验 SHA-256，原子改名，再静默安装，启动器干净交接。</p></article>
-            <article class="ag-card"><h3>↩️ 成功判据造不了假</h3><p>「已拉起安装器」不算成功。唯一的成功判定是 <code>state.json → lastResult.status == "ok"</code>，由<em>新版本</em>在自己的启动时自证。新版没说话之前，升级就没发生。一键回退走同一条静默安装路径，指向上一个安装包。</p></article>
-            <article class="ag-card"><h3>🐞 诊断，不用读日志</h3><p>菜单里一个入口生成脱敏诊断包：日志尾部、白名单脱敏的配置、环境快照（版本、平台、音频设备表、生效的热修层），以及自动体检摘要 <code>diagnostics/summary.txt</code>，它用启动次数和时间跨度区分「重启」与「崩溃」。密码、密钥、令牌、录音、存储信道、天调学习数据永远不出机器。</p></article>
-            <article class="ag-card"><h3>📖 答复，不用写邮件</h3><p>公开的<a href="https://www.vlsc.net/mrrc/answers/">答复页</a>可搜索、可按上报编号直达。每张卡结构固定：编号 / 症状 / 诊断（附原始证据）/ 结论 / <em>你要做的</em> / 状态。缺陷修复发布后，卡片翻成「已修复 · 版本号」。</p></article>
+            <article class="ag-card"><h3>⬆️ 升级，不用去找下载页</h3><p>Web 界面点一个按钮（或者在启动器里按 <code>U</code>）。服务端先过 PTT 这关：电台正在发射，升级请求直接被 423 拒掉。下载先写 <code>.part</code> 文件，校验 SHA-256，原子改名，再静默安装，启动器干干净净地交接。</p></article>
+            <article class="ag-card"><h3>↩️ 成功判据造不了假</h3><p>「安装器拉起来了」不算成功。唯一的成功判据是 <code>state.json → lastResult.status == "ok"</code>，而且要由<em>新版本</em>在自己启动时自证。新版本没开口之前，这次升级就不算发生过。一键回退走的是同一条静默安装路径，只是指向上一个安装包。</p></article>
+            <article class="ag-card"><h3>🐞 诊断，不用读日志</h3><p>菜单里一个入口就能生成脱敏诊断包：日志尾部、按白名单脱敏的配置、环境快照（版本、平台、音频设备表、已生效的热修层），外加一份自动体检摘要 <code>diagnostics/summary.txt</code>——它按启动次数和时间跨度来区分「重启」和「崩溃」。密码、密钥、令牌、录音、存储信道、天调学习数据，永远不出这台机器。</p></article>
+            <article class="ag-card"><h3>📖 答复，不用写邮件</h3><p>公开的<a href="https://www.vlsc.net/mrrc/answers/">答复页</a>可以搜索、可以按上报编号直达。每张卡片的结构是固定的：编号 / 症状 / 诊断（附原始证据）/ 结论 / <em>你要做的</em> / 状态。缺陷修复发布后，卡片就翻成「已修复 · 版本号」。</p></article>
           </div>
 
-          <p>在<strong>维护者侧</strong>，同一条链跑在十分钟 cron 上：取新包 → 摘要（复用客户端跑的同一个摘要器，两端对「摘要意味着什么」有共同语言）→ 模型在成文纪律下分析 → 结构化 JSON 结论 → 渲染答复卡 → 发布。发布默认拒绝（显式参数才发布）；按包 ID 幂等；半包跳过；每轮最多处理两条。</p>
+          <p><strong>维护者这边</strong>，同一条链跑在每十分钟一轮的 cron 上：取新包 → 生成摘要（复用客户端那个摘要器，两端对「摘要说明了什么」有共同语言）→ 模型按成文的纪律分析 → 结构化 JSON 结论 → 渲染答复卡 → 发布。默认不发布，要显式参数才发；按包 ID 幂等；不完整的包跳过；每轮最多处理两条。</p>
 
           <div class="claim-box" data-claim-type="inference">
-            <span class="claim-label">推断 · 诊断包是铰链</span>
-            <p>支持曾经是一场访谈：一封邮件 = 一个问题，每个来回隔着几小时，用户靠记忆作答。诊断包把访谈变成测量：一次上传 = 一个现场，带采集健康度百分比、设备表、重启与崩溃的判别。这个转换不是 UX 修饰，它是机器分诊成为可能的前提。你无法委托机器去「访谈的第一轮判读」；你可以委托它去「测量的第一轮判读」。</p>
+            <span class="claim-label">推断 · 诊断包是关键枢纽</span>
+            <p>以前的支持像一场访谈：一封邮件问一个问题，每个来回隔几个小时，用户全凭记忆回答。诊断包把访谈变成了测量：一次上传就是一个现场，带着采集健康度百分比、设备表、重启和崩溃的判别。这个转变不是 UX 上的润色，而是机器预检得以成立的前提。「访谈的第一轮」你没法交给机器做，「测量的第一轮」可以。</p>
           </div>
 
-          <p>两个产品族现在跑的是同一条链。Modern 在 v1.18.0 整体继承了它：包格式、摘要器、答复页、更新检查。它的前两个自动分诊答复已于 9 月 19 日发出，距第一批诊断包到达不到一天。</p>
+          <p>两个产品族现在跑的是同一条链。Modern 在 v1.18.0 把它整套继承了下来：包格式、摘要器、答复页、更新检查。它的前两条自动预检答复已经在 9 月 19 日发出，离第一批诊断包到达不到一天。</p>
         </div></section>
 
         <section id="walls" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">03 · 墙 → 功能</span>
             <h2 class="ag-section-title">三起事故，三个已发布的功能</h2>
-            <p class="ag-section-subtitle">被解决的问题如何挖出新需求：讲机制，不讲口号。</p>
+            <p class="ag-section-subtitle">问题解决之后，怎么挖出新需求：讲机制，不喊口号。</p>
           </header>
         </div></section>
 
@@ -165,11 +165,11 @@
             <span class="ag-section-label">03.1 · rigctld 之墙</span>
             <h2 class="ag-section-title">同一堵墙，一个早晨撞了两次</h2>
           </header>
-          <p>9 月 17 日，两份 FT-891 上报在两小时内先后到达——<code>20260917-073700-14ef</code>（07:36）与 <code>20260917-085736-ebd2</code>（08:53）。症状相同（「电台连不上；音频同步正常」），诊断包给出的结论相同：CAT 守护进程 <code>rigctld</code> 没在跑，配置正确，日志里三次超时，无崩溃。按判定表，两例都是<em>环境</em>，两张答复卡教的是同一段 PowerShell 咒语。</p>
-          <p>单个看都关闭了。合起来看是一条产品裂缝：一台「通用遥控」要求每个新用户手工拉起守护进程，等于对所有人提出同一个要求。重复本身完成了转换。<strong>当天</strong>：热修 6.1.14 发布自启动（<code>rigctld_supervisor.py</code>）；热修 6.1.15 修复机型名→编号解析（<code>rigctld --list</code>）并把 <code>rigctld.exe</code> 收进安装包（V6.1.15）；V6.1.16 让兜底路径让位、永不阻塞启动。答复页新增一张公开卡：FT-891 用户升级即可。</p>
+          <p>9 月 17 日，两份 FT-891 上报在两小时内先后到达——<code>20260917-073700-14ef</code>（07:36）与 <code>20260917-085736-ebd2</code>（08:53）。症状相同（「电台连不上；音频同步正常」），诊断包给出的结论也相同：CAT 守护进程 <code>rigctld</code> 没在跑，配置正确，日志里三次超时，无崩溃。按判定表，两例都判为<em>环境</em>，两张答复卡教的是同一套 PowerShell 操作。</p>
+          <p>单独看，两例都能关掉。放在一起看，是产品上的一道裂缝：一个自称「通用遥控」的软件，要求每个新用户手工拉起守护进程，等于给所有人出了同一道题。重复本身，就完成了定性。<strong>当天</strong>：热修 6.1.14 加上自启动（<code>rigctld_supervisor.py</code>）；热修 6.1.15 修好机型名→编号解析（<code>rigctld --list</code>），并把 <code>rigctld.exe</code> 打进安装包（V6.1.15）；V6.1.16 让兜底路径只让位、永不阻塞启动。答复页新增一张公开卡：FT-891 用户升级即可。</p>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">转换规则</span>
-            <p>「环境」这个判定回答用户。<em>几小时内两次环境判定同时出现</em>回答路线图。真正值得关注的工程量从来不是单次判定，而是跨上报的签名，以及从签名到修复上线的时长：这一次，不到一天。</p>
+            <p>判成「环境」，回答的是用户；<em>几小时内连续两次「环境」</em>，回答的就是路线图。真正值得盯的量从来不是单次判定，而是跨上报的故障特征，以及从特征出现到修复上线隔了多久——这一次，不到一天。</p>
           </div>
         </div></section>
 
@@ -178,11 +178,11 @@
             <span class="ag-section-label">03.2 · 水声</span>
             <h2 class="ag-section-title">一条答复变成默认值；一个默认值变成引擎</h2>
           </header>
-          <p>上报 <code>20260917-132643-020a</code>：「NR2 开 2 级后水声大、有失真」。诊断包自己的数字让结论可证而非可信：音频采集健康度 99.9%、无 Traceback、无双重降噪叠加，答复卡据此判定为经典的谱减法<em>音乐噪声</em>副作用，并给出动作：级别 2→1、AGC 模式、带宽。</p>
-          <p>然后，产品在三天里分三步吸收了这条结论。<strong>默认值改变：</strong>NR2 等级表整体下移一档（热修 6.1.17），再落到 −6/−9/−12/−16。<strong>旋钮暴露：</strong>重建的 libwdsp 增加 C 层 <code>alpha</code>/<code>npMax</code> 设置接口，新默认值经闭环实测（<code>npmax 0.98</code>，AE 20/0.50）。<strong>引擎增加：</strong>NR3 —— Xiph 的神经降噪 RNNoise，可选 <code>plus|only|off</code>，随 V6.1.18 上线，同时带上让「关」成为真旁路的门控修复（此前有用户报告<em>关掉降噪后仍失真</em>，这本身也是一条值得挖的上报）。</p>
+          <p>上报 <code>20260917-132643-020a</code>：「NR2 开到 2 级后水声大、有失真」。诊断包里的数字让结论可以验证，而不只是听起来可信：音频采集健康度 99.9%、没有 Traceback、没有双重降噪叠加。答复卡据此判定，这是谱减法典型的<em>音乐噪声</em>副作用，并给出操作建议：级别 2→1、调整 AGC 模式和带宽。</p>
+          <p>接下来的三天里，产品分三步吸收了这条结论。<strong>改默认值：</strong>NR2 等级表整体下移一档（热修 6.1.17），再落到 −6/−9/−12/−16。<strong>开放参数：</strong>重建的 libwdsp 增加了 C 层的 <code>alpha</code>/<code>npMax</code> 设置接口，新默认值经过闭环实测（<code>npmax 0.98</code>，AE 20/0.50）。<strong>加引擎：</strong>NR3 —— Xiph 的神经降噪 RNNoise，可选 <code>plus|only|off</code>，随 V6.1.18 上线，同时带上让「关」成为真旁路的门控修复（此前有用户报告<em>关掉降噪后仍然失真</em>，这本身也是一条值得挖的上报）。</p>
           <div class="claim-box" data-claim-type="inference">
             <span class="claim-label">推断 · 三个时间尺度，一条弧线</span>
-            <p>答复卡在几分钟内修好一个电台。改默认值在无声处修好所有未来的电台。新引擎改变可能性的边界。停在第一步的支持是成本中心；跑完「答复 → 默认值 → 引擎」这条弧的支持队列，才是需求流水线。</p>
+            <p>答复卡在几分钟内修好一部电台；改默认值，无声无息地修好以后所有的电台；新引擎改变的是可能性的边界。只走第一步的支持是成本中心；能把「答复 → 默认值 → 引擎」这条弧线走完的支持队列，才是需求流水线。</p>
           </div>
         </div></section>
 
@@ -191,90 +191,90 @@
             <span class="ag-section-label">03.3 · macOS 的两种静默</span>
             <h2 class="ag-section-title">两次静默失败，与一套回归协议</h2>
           </header>
-          <p>Modern 的第一个 macOS 版撞上两个静默失败，两个修复都是可观测性的教材。<strong>「已损坏」：</strong>此前所有 macOS 构建其实都没签上名：签名步骤一直在静默失败，于是 Gatekeeper 弹出一个右键也绕不开的对话框。修复是双的：把 bundle 按 <code>codesign</code> 的要求重新布局，并让签名失败<em>直接中止构建</em>。静默失败才是缺陷；对话框只是症状。<strong>无声 RX：</strong>bundle 没有声明音频输入权限，macOS 的回应是把采集流打开、往里填零，日志提示「检查电台」，CoreAudio 却报无错误。修复是正确申请权限，并把警告指向系统设置而不是电台。</p>
-          <p>第三个案例是分诊系统咬了自己的尾巴，还咬出了价值。诊断包 <code>20260918-114118-9ad3</code> 带着一条「录音掉块 / 队列满」的签名，与 V2.44/V2.45 修掉的缺陷同签名，但所有命中行都落在 9 月 12 日（修复发布之前）。公开结论拒绝了两个顺手答案（「早已修复」/「回归了！」），改为执行一套协议：用户录一段新 QSO 再回报；后续包（<code>20260919-085517-b3aa</code>）关闭了它——9 月 19 日的日志健康，旧行被确认为修复前的残留。让这一切成为可能的，是一条作为流程提交的改动（<code>ecb2652</code>）：<em>模型在写结论前必须先读项目自己的事故史</em>——SDD 版本史、CHANGELOG、精确到行的代码位置是输入，不是事后补充。</p>
+          <p>Modern 的第一个 macOS 版撞上两个不吭声的失败，两个修复都堪称可观测性的教材。<strong>「已损坏」：</strong>此前所有 macOS 构建其实都没签上名——签名步骤一直在悄悄失败，于是 Gatekeeper 弹出一个点右键也绕不开的对话框。修复是双份的：按 <code>codesign</code> 的要求重新布局 bundle，并且签名一旦失败就<em>直接中止构建</em>。静默失败才是缺陷，对话框只是症状。<strong>无声 RX：</strong>bundle 没有声明音频输入权限，macOS 的对策是把采集流照常打开、往里填零，日志提示「检查电台」，CoreAudio 却不报任何错误。修复是正确申请权限，并把警告指向系统设置，而不是电台。</p>
+          <p>第三个案例，是预检系统咬到了自己的尾巴，还咬出了价值。诊断包 <code>20260918-114118-9ad3</code> 带着「录音掉块 / 队列满」的故障特征，跟 V2.44/V2.45 修掉的那个缺陷特征相同，但所有命中的日志行都落在 9 月 12 日，也就是修复发布之前。公开结论没有采信两个顺手的答案（「早就修了」/「回归了！」），而是走了一套流程：请用户录一段新 QSO 再回报。后续的包（<code>20260919-085517-b3aa</code>）关闭了这个问题——9 月 19 日的日志是健康的，旧日志行被确认为修复前的残留。让这一切成为可能的，是一条作为流程改动提交的东西（<code>ecb2652</code>）：<em>模型在写结论之前，必须先读项目自己的事故史</em>——SDD 版本史、CHANGELOG、精确到行的代码位置，这些是输入，不是事后补的注解。</p>
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 答复卡引用了什么</span>
-            <p>Modern 的两条结论都逐行引用证据：<code>server.py:348 _ensure_rec_writer()</code>（修复本体，已在当代码中）、SDD V2.44/V2.45 的记录行、带时间戳的摘要行、健康的 9 月 19 日会话日志。材料不足时，卡片明说，而不是猜——MRRC 最早的七条答复里有一条至今停在「需要补充信息」，那是诚实的台阶，不是失败状态。</p>
+            <p>Modern 的两条结论都逐行引用了证据：<code>server.py:348 _ensure_rec_writer()</code>（修复本体，已在当前代码里）、SDD V2.44/V2.45 的记录行、带时间戳的摘要行、健康的 9 月 19 日会话日志。材料不够的时候，卡片会明说，而不是猜——MRRC 最早的七条答复里，有一条至今停在「需要补充信息」。那是一个诚实的台阶，不是失败状态。</p>
           </div>
         </div></section>
 
         <section id="triage" class="ag-section"><div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">04 · 首轮判读</span>
-            <h2 class="ag-section-title">机器的首轮判读，人的判定</h2>
-            <p class="ag-section-subtitle">分诊是一份契约，不是一种感觉：结构化输出、判定本体论、失败即关闭的护栏。</p>
+            <span class="ag-section-label">04 · 初步判读</span>
+            <h2 class="ag-section-title">机器的初步判读，人的判定</h2>
+            <p class="ag-section-subtitle">预检靠的是契约，不是感觉：结构化输出、白纸黑字的判定规则、出错就停手的护栏。</p>
           </header>
 
-          <p>分析器的输出是一份固定的 JSON 契约——<code>verdict</code>、<code>status</code>（<code>answered | needs_fix | need_more_info</code>）、<code>category</code>、<code>diagnosis[]</code>、<code>solution[]</code>、<code>evidence[]</code>、<code>keys[]</code>、<code>needs_code_change</code>、<code>code_hint</code>——原样渲染进答复卡，证据行一并呈现。判定本体论写成表格，不写成感觉：Traceback 或反复同一处异常 → 缺陷；多次启动而无 Traceback → 不是崩溃；<code>-9996</code> 且设备表为空 → 环境（无声卡的虚拟机）；<code>rigctld 未运行</code> → 环境；采集健康度低于阈值 → 性能；证书告警 → 正常噪声。</p>
+          <p>分析器的输出是一份固定的 JSON 契约——<code>verdict</code>、<code>status</code>（<code>answered | needs_fix | need_more_info</code>）、<code>category</code>、<code>diagnosis[]</code>、<code>solution[]</code>、<code>evidence[]</code>、<code>keys[]</code>、<code>needs_code_change</code>、<code>code_hint</code>——原样渲染进答复卡，证据行一并呈现。判定规则写成表格，不凭感觉：Traceback 或同一处异常反复出现 → 缺陷；多次启动而没有 Traceback → 不是崩溃；<code>-9996</code> 且设备表为空 → 环境（没声卡的虚拟机）；<code>rigctld 未运行</code> → 环境；采集健康度低于阈值 → 性能；证书告警 → 正常噪声。</p>
 
           <div class="ag-loop-grid">
-            <article class="ag-card"><h3>本体论就是筛子</h3><p>环境 ≠ 缺陷是需求决策，不是较真。把环境误判成缺陷，路线图会被幽灵需求填满（「自动拉起用户从没要求过的东西」）。把缺陷误判成环境，用户会被搁浅在一个永远变不成修复的规避动作里。这张表让两种错误都变得昂贵。</p></article>
-            <article class="ag-card"><h3>按规则保守</h3><p>材料不足 → <code>need_more_info</code>。没有 Traceback → 永远不叫崩溃。环境类 → 永远不算缺陷。结论必须落到用户动作，「去系统设置重选音频设备」，绝不写「等维护者修」。答复页是公开页面：只发可公开的结论，不带用户数据。</p></article>
-            <article class="ag-card"><h3>失败即关闭的护栏</h3><p>默认拒绝发布（显式参数才发布）。按包 ID 幂等。半包与非 zip 载荷跳过、不重试。每轮两条上限、九分钟模型超时、cron 用绝对 venv 路径。自动化允许「什么都没做」；不允许「做错了什么」。</p></article>
-            <article class="ag-card"><h3>分工</h3><p>机器做首轮判读，便宜、一致、不疲倦，十分钟一轮，每个论断都挂在某行日志上。人拥有 <code>needs_code_change</code>：改代码、决定发版、判定答复能否按原文发布。产品由维护者构建；智能体负责分诊、起草与渲染。</p></article>
+            <article class="ag-card"><h3>判定规则就是筛子</h3><p>「环境 ≠ 缺陷」是一个需求决策，不是较真。把环境误判成缺陷，路线图会被幽灵需求填满（「自动拉起用户从没要求过的东西」）；把缺陷误判成环境，用户就被晾在一个永远变不成修复的变通办法里。这张表让两种错误都代价高昂。</p></article>
+            <article class="ag-card"><h3>按规则保守</h3><p>材料不足 → <code>need_more_info</code>。没有 Traceback → 永远不叫崩溃。环境类 → 永远不算缺陷。结论必须落成用户能执行的动作——「去系统设置里重选音频设备」——绝不写「等维护者修」。答复页是公开页面：只发可公开的结论，不带用户数据。</p></article>
+            <article class="ag-card"><h3>出错就停手的护栏</h3><p>默认拒绝发布（显式参数才发布）。按包 ID 幂等。不完整的包和非 zip 载荷，直接跳过、不重试。每轮两条上限、九分钟模型超时、cron 用绝对 venv 路径。自动化允许「什么都没做」，不允许「做错了什么」。</p></article>
+            <article class="ag-card"><h3>分工</h3><p>机器做初步判读：便宜、一致、不知疲倦，十分钟一轮，每个论断都挂在某一行日志上。人握着 <code>needs_code_change</code>：改不改代码、发不发版、答复能不能照原文发布，都由人定。产品是维护者构建的；智能体负责预检、起草和渲染。</p></article>
           </div>
 
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 目前的记分板</span>
-            <p>MRRC 答复页：7 条分诊答复——6 条给出可执行步骤（4 条环境、1 条音频调参、1 条无需修复），1 条退回补证据，另有 1 张已知问题卡，按用户可见的现象写（「页面按钮点不动」），其根因（6.1.12 的内联 JS 语法错误）变成了 <code>tests/test_web_inline_js.py</code>：如今每次发布，所有内联脚本都要过 <code>node --check</code>。MRRC Modern：上线 48 小时内 2 条答复，都引用了代码位置与版本史。零条答复以「等维护者修」收尾。</p>
+            <p>MRRC 答复页：7 条预检答复——6 条给出了可执行的步骤（4 条环境、1 条音频调参、1 条无需修复），1 条退回补证据。另有 1 张已知问题卡，按用户看得见的现象来写（「页面按钮点不动」），它的根因（6.1.12 的内联 JS 语法错误）变成了 <code>tests/test_web_inline_js.py</code>：如今每次发布，所有内联脚本都要过 <code>node --check</code>。MRRC Modern：上线 48 小时内出了 2 条答复，都引用了代码位置和版本史。没有一条答复以「等维护者修」收尾。</p>
           </div>
         </div></section>
 
         <section id="fourth-loop" class="ag-section"><div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">05 · 第四条回路</span>
+            <span class="ag-section-label">05 · 第四条闭环</span>
             <h2 class="ag-section-title">从已答复到已实施</h2>
-            <p class="ag-section-subtitle">9 月 19 日，这条链长出了公开看板与无人值守实施者，回路触达了代码。</p>
+            <p class="ag-section-subtitle">9 月 19 日，这条链长出了公开进度板和无人值守的执行者，闭环够到了代码。</p>
           </header>
         </div></section>
 
         <section id="fourth-loop-board" class="ag-section"><div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">05.1 · 看板</span>
+            <span class="ag-section-label">05.1 · 进度板</span>
             <h2 class="ag-section-title">分类即决策</h2>
           </header>
-          <p>9 月 19 日之前，回路能读、能答；但分析产出的 bug/feature 分类无处可去，仍要由人挑出要修的、动手修、手动收尾。看板（<a href="https://www.vlsc.net/mrrc_modern/board/">vlsc.net/mrrc_modern/board</a>）补上了缺的另一半，它的规则只有一句：<strong>分类即决策</strong>。分析契约增加三个可选字段（<code>kind</code>：bug / feature / noise，外加 <code>severity</code> 与 <code>title</code>），分类学就此变成调度器：</p>
+          <p>9 月 19 日之前，这个闭环能读、能答；但分析出来的 bug/feature 分类没有去处，还是得靠人挑出要修的、动手修、手动收尾。进度板（<a href="https://www.vlsc.net/mrrc_modern/board/">vlsc.net/mrrc_modern/board</a>）补上了缺的另一半。它的规则只有一句话：<strong>分类即决策</strong>。分析契约加了三个可选字段（<code>kind</code>：bug / feature / noise，外加 <code>severity</code> 和 <code>title</code>），分类从此变成调度：</p>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>分类</th><th>自动动作</th><th>依据</th></tr></thead>
             <tbody>
-              <tr><td><strong>noise</strong>——环境 / 误报 / 已修复签名</td><td>答复客户；看板列「已答复」，终态，无代码工作</td><td>答复页已回，无需代码</td></tr>
-              <tr><td><strong>bug</strong>，可定位的产品缺陷</td><td>答复客户，<em>并</em>自动排期进无人值守实施队列</td><td>修它是验证问题，不是产品选择</td></tr>
-              <tr><td><strong>feature</strong>——新能力 / 新参数</td><td>答复客户；看板列「待决策」，等操作员</td><td>排期是产品决策，不自动化</td></tr>
-              <tr><td><strong>need_more_info</strong></td><td>永不闭环，留在待决策跟进</td><td>未答复的上报不允许假装闭环</td></tr>
+              <tr><td><strong>noise</strong>——环境 / 误报 / 已修复的故障特征</td><td>答复用户；进度板上标「已答复」，终态，不动代码</td><td>答复页已答复，不需要改代码</td></tr>
+              <tr><td><strong>bug</strong>，可定位的产品缺陷</td><td>答复用户，<em>同时</em>自动排进无人值守的实施队列</td><td>修不修只是验证问题，不是产品取舍</td></tr>
+              <tr><td><strong>feature</strong>——新能力 / 新参数</td><td>答复用户；进度板上标「待决策」，等操作员</td><td>排不排期是产品决策，不交给自动化</td></tr>
+              <tr><td><strong>need_more_info</strong></td><td>永不闭环，留在「待决策」里跟进</td><td>没答复的上报，不许假装闭环</td></tr>
             </tbody>
           </table></div>
-          <p>看板与答复页共用同一个隐私过滤器（<code>redact_public</code>），互链。一次用户上报变成一张带状态列的卡片，反馈不再是邮箱，而是位置可见的队列；这也是一份公开承诺：什么闭环了、什么排期了、什么还在等，以及为什么。</p>
+          <p>进度板和答复页共用同一个隐私过滤器（<code>redact_public</code>），互相链接。一次用户上报变成一张带状态的卡片：反馈不再躺在邮箱里，而是站在一个看得见位置的队列里。这也是一份公开承诺：什么闭环了、什么排期了、什么还在等，以及为什么。</p>
         </div></section>
 
         <section id="fourth-loop-implement" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">05.2 · 无人值守实施</span>
-            <h2 class="ag-section-title">一个测试过的补丁落在分支上，而 <code>main</code> 在睡觉</h2>
+            <h2 class="ag-section-title">一个测过的补丁落在分支上，而 <code>main</code> 在睡觉</h2>
           </header>
-          <p>同一条 cron 现在带着 <code>--implement</code> 运行。对每条已排期条目，<strong>单飞</strong>——每轮一条，且只在干净的 <code>main</code> 工作区上，流水线用只读工具（<code>read,grep,find,ls</code>）调用模型，要求一份 JSON 契约：understanding、unified diff 补丁、test_plan、risk、commit_message——或 <code>no_action</code>，后者带理由落进看板 Rejected。模型没有写权限；补丁在流水线决定采纳之前只是文本。</p>
+          <p>同一条 cron 现在带着 <code>--implement</code> 在跑。对每条排了期的条目，<strong>一次只办一件</strong>——每轮一条，而且只在干净的 <code>main</code> 工作区上动手。流水线用只读工具（<code>read,grep,find,ls</code>）调用模型，要求它交出一份 JSON 契约：understanding、unified diff 补丁、test_plan、risk、commit_message——或者 <code>no_action</code>，后者带着理由落到进度板的 Rejected 里。模型没有写权限；补丁在流水线决定采纳之前，只是一段文本。</p>
           <p>流水线拿到这段文本之后做的事，才是安全所在：</p>
           <ul>
-            <li><strong>护栏先行</strong>——两个跨文件工具护栏脚本、<code>certs/</code>、<code>win/</code>、<code>packaging/</code> 与安装器清单（<code>.iss</code>）一律拒绝；单个补丁最多 8 个文件。</li>
-            <li><strong><code>git apply --check</code></strong> 先跑；失败即终止，理由记入看板。</li>
+            <li><strong>护栏先行</strong>——两个跨文件的工具护栏脚本、<code>certs/</code>、<code>win/</code>、<code>packaging/</code> 和安装器清单（<code>.iss</code>），一律拒绝；单个补丁最多 8 个文件。</li>
+            <li><strong><code>git apply --check</code></strong> 先跑；失败即终止，理由记进进度板。</li>
             <li><strong>隔离分支</strong>——补丁只落在新拉出的 <code>fde/&lt;id&gt;</code> 分支，永不落在 <code>main</code>。</li>
-            <li><strong>全量测试是门</strong>——绿则提交到分支（看板记录 <code>branch@hash</code> 与测试结果行）；红则删除分支、还原工作区，记 <em>failed</em> 与日志尾部。</li>
+            <li><strong>全量测试把关</strong>——绿了就提交到分支（进度板记下 <code>branch@hash</code> 和测试结果行）；红了就删掉分支、还原工作区，记 <em>failed</em> 并附上日志尾部。</li>
             <li><strong><code>main</code> 永不移动。</strong>无人值守进程碰不到它；合入分支是人的动作。</li>
           </ul>
-          <p>设计观与 PTT 门禁同源：机器可以提议，证据决定，人接受。电台相关没有任何东西被自动化掉，代码也没有一行未经审查地落地，变化在于：一条已排期的 bug，不再需要等一个人坐到键盘前才能开始。</p>
+          <p>设计思路和 PTT 把关一脉相承：机器可以提议，证据说了算，人来拍板。跟电台相关的部分没有任何东西被自动化掉，代码也没有一行能不经审查落地。变化在于：一条排了期的 bug，不再需要等有人坐到键盘前才能开工。</p>
         </div></section>
 
         <section id="fourth-loop-incidents" class="ag-section"><div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">05.3 · 回路自己的事故</span>
-            <h2 class="ag-section-title">回路自身的两次失败，以及它们证明了什么</h2>
+            <span class="ag-section-label">05.3 · 闭环自己的事故</span>
+            <h2 class="ag-section-title">闭环自身的两次失败，以及它们证明了什么</h2>
           </header>
-          <p>无人值守回路有自己的失效模式，头一天就冒出两个，每一个都比它拖延的功能更有价值。</p>
-          <p><strong>跑不起来的模型运行器。</strong>cron 分诊的 <code>pi</code> 连续两天以 SIGABRT 死亡。根因：一次 Homebrew 升级打断了 bottled Node 的 dylib 链接（llhttp），是模型<em>运行器</em>，不是模型。修复不是重试，而是诊断：<code>run_pi</code> 现在会在信号死亡时点名成因。无声失败的回路与无事可做的回路无法区分；无人值守回路必须能解释自己的沉默。</p>
-          <p><strong>进入生产的测试夹具。</strong>测试运行只改写了本地页面路径，却仍把<em>夹具</em>版答复页/看板页发布到了线上服务器，发现它，是因为生产看板上突然出现了一个测试包编号。修复把页面发布收敛为唯一一个可拦截的接缝（<code>_ship_page()</code>），而验证才是重点：完整跑一轮 1,299 项测试后，本地看板状态与线上看板页逐字节一致。回路自己的发布路径也在测试之下。</p>
+          <p>无人值守的闭环有自己的失效模式，头一天就冒出来两个，每一个都比它耽误的那点功能更有价值。</p>
+          <p><strong>跑不起来的模型运行器。</strong>cron 预检用的 <code>pi</code> 连续两天死于 SIGABRT。根因是一次 Homebrew 升级弄断了 bottled Node 的 dylib 链接（llhttp）——出问题的是模型的<em>运行器</em>，不是模型本身。修复不是加重试，而是加诊断：<code>run_pi</code> 现在会在死于信号时点名死因。一声不吭地失败和无事可做，从外面看一模一样；无人值守的闭环，必须解释得了自己的沉默。</p>
+          <p><strong>混进生产环境的测试夹具。</strong>测试运行只改写了本地页面路径，却还是把<em>夹具</em>版的答复页/进度板页发到了线上服务器。能发现它，是因为生产进度板上突然冒出一个测试包编号。修复把页面发布收敛成唯一一个可拦截的口子（<code>_ship_page()</code>），但重头戏是验证：完整跑完一轮 1,299 项测试后，本地进度板状态和线上页面逐字节一致。闭环自己的发布路径，同样置于测试之下。</p>
           <div class="claim-box" data-claim-type="inference">
             <span class="claim-label">推断 · 失败也落在证据面上</span>
-            <p>两次事故之所以被抓到，是因为回路的产物是公开且逐字节核对的。私有自动化可以静默失败数周；公开回路会把自己的失败泄漏进与产品同一个证据面。看板上出现测试编号很难看，也正因如此，接缝当天就修了。</p>
+            <p>这两起事故之所以能被抓住，是因为这个闭环的产出是公开的、逐字节核对的。私有自动化可以悄无声息地失败好几个星期；公开的闭环会把自己的失败漏进和产品同一个证据面上。进度板上冒出测试编号很难看，但也正因如此，那个口子当天就修掉了。</p>
           </div>
         </div></section>
 
@@ -283,31 +283,31 @@
             <span class="ag-section-label">05.4 · 提炼</span>
             <h2 class="ag-section-title">人的工作压缩成两个动词</h2>
           </header>
-          <p>对照 §04 读，看板改变了自动化的权限边界。之前：机器读并分类，人挑、人修、人发。之后：<em>分类即调度</em>——noise 自行闭环、bug 自行入队，人的介入压缩为<strong>决策</strong>（每个 feature 一次排期备注）与<strong>合入</strong>（接受一个已测试分支）。这与整个工程体系是同一套分工，判断归人、执行委托、证据把关，只是作用对象从源码树变成了产品自己的待办。</p>
+          <p>对照 §04 看，进度板改变了自动化的权限边界。之前：机器读、机器分类，人挑、人修、人发。之后：<em>分类即调度</em>——noise 自行闭环、bug 自行入队，人要做的事情压缩成两件：<strong>决策</strong>（每个 feature 写一条排期备注）和<strong>合入</strong>（接受一个测过的分支）。这和整个工程体系是同一套分工——判断归人、执行下放、证据把关——只是作用对象从源码树换成了产品自己的待办清单。</p>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">作者论点</span>
-            <p>回路的边界又移动了。它曾止于一条已答复的工单；后来止于一个已发布的修复；现在止于一个<em>已审查的分支</em>——一份无人醒着时产出、经测试、可回滚的补丁，等待人点头。最后一句留给人，不是因为机器不能合入，而是因为「算不算数」是这个项目唯一拒绝委托的动作。</p>
+            <p>闭环的边界又挪了一次。它曾经止于一条已答复的工单，后来止于一个已发布的修复，现在止于一个<em>已审查的分支</em>——一份在没人醒着的时候产出、测过、可回滚的补丁，等人点头。最后一步留给人，不是机器不会合入，而是「算不算数」是这个项目唯一不肯交出去的动作。</p>
           </div>
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 诚实的边界</span>
-            <p>截至写作时，线上看板有两条已分类条目，都是 noise → 已答复；第一条真实 bug 还在等它的第一次真实排期，第一份无人值守补丁还在等它的第一次人工合入。端到端路径，上报 → 排期 → 无人值守实施 → 合入，由测试验证，尚未由真实案例验证；SDD 条目（V2.56）写下了同一道边界：实施模型的探查预算与 diff 质量待真实样本校准。当周流水线的门槛计数：9 月 19 日提交中的 1,299 项测试；维护中的可比数字在<a href="/zh/agentic.html#evidence">证据台账</a>。</p>
+            <p>截至写作时，线上进度板上只有两条已分类条目，都是 noise → 已答复；第一条真实的 bug 还在等它第一次真实的排期，第一份无人值守补丁还在等它第一次人工合入。端到端这条路径——上报 → 排期 → 无人值守实施 → 合入——有测试验证，但还没有真实案例验证；SDD 条目（V2.56）也写明了同一道边界：实施模型的探查预算和 diff 质量，有待真实样本来校准。这周流水线的门槛数字：9 月 19 日那次提交里的 1,299 项测试；持续维护的可比数字在<a href="/zh/agentic.html#evidence">证据清单</a>里。</p>
           </div>
         </div></section>
 
         <section id="loops" class="ag-section"><div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">06 · 回路，诚实版</span>
+            <span class="ag-section-label">06 · 闭环，诚实版</span>
             <h2 class="ag-section-title">这条链对智能体工程说了什么</h2>
-            <p class="ag-section-subtitle">智能体工程把判断与执行分离。支持链是这套分离在用户所在之处的应用。</p>
+            <p class="ag-section-subtitle">智能体工程把判断和执行分开。支持链，就是这套分法用在用户身边的样子。</p>
           </header>
         </div></section>
 
         <section id="loop-boundary" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">06.1 · 边界</span>
-            <h2 class="ag-section-title">回路有边界，而仓库是错误的那一个</h2>
+            <h2 class="ag-section-title">闭环有边界，而仓库是错误的那一个</h2>
           </header>
-          <p>台账一文（<a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解</a>）测量的是内环：契约测试先红、智能体交付到绿、中位 19 分钟。那个回路闭合在<em>仓库内部</em>。但如果产品的迭代单位不是提交，而是<strong>未被解答的用户症状</strong>，那么全绿的测试套件就是绕着错误边界闭合的回路。产品可以连续几个月测试全绿、同时每个新用户都卡在同一堵墙上，因为仓库边界之内没有任何东西看得见那堵墙。支持链把回路拉长：现场 → 诊断包 → 判定 → 产品变更 → 发布 → 用户自助。只有当用户的下一次点击在没有人工介入的路径上成功时，回路才算闭合。</p>
+          <p>账本那篇（<a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解</a>）量的是内环：契约测试先红、智能体交付到绿、中位 19 分钟。那个闭环闭合在<em>仓库内部</em>。但如果产品的迭代单位不是 commit，而是<strong>没被解答的用户症状</strong>，那么一套全绿的测试，就是绕着错误边界闭合的环。产品完全可以连着几个月测试全绿，同时每个新用户都卡在同一堵墙上——因为仓库边界之内，没有任何东西看得见那堵墙。支持链把环拉长了：现场 → 诊断包 → 判定 → 产品变更 → 发布 → 用户自助。只有当用户的下一次点击，在没有任何人工介入的情况下走通了，这个环才算闭合。</p>
         </div></section>
 
         <section id="loop-bandwidth" class="ag-section"><div class="container">
@@ -315,38 +315,38 @@
             <span class="ag-section-label">06.2 · 带宽</span>
             <h2 class="ag-section-title">自助是带宽，不是客气</h2>
           </header>
-          <p>每向用户侧移动一步，就从回路里减掉一个往返：升级不用找下载页、回退不用重装、诊断不用读日志、答复不用写邮件。每一步的设计检验是同一句话：<em>用户能不能在不理解日志的前提下完成这个动作？</em>这就是「自诊断」不是营销词的原因，诊断包是放在用户侧的一台仪器，为接收者而不是发送者设计：白名单脱敏、为「一眼读」写的摘要、重启与崩溃的判别、附上的设备表。这也是答复页公开<em>原始证据行</em>的原因：一个能核对推理的用户，会在读下一条答复之前就信任它。</p>
+          <p>每往用户侧挪一步，环里就少一个来回：升级不用找下载页、回退不用重装、诊断不用读日志、答复不用写邮件。每一步的设计检验都是同一句话：<em>用户看不懂日志，能不能完成这个动作？</em>这就是「自诊断」不是营销词的原因。诊断包是放在用户侧的一件工具，为接收的人设计，而不是为发送的人：白名单脱敏、按「一眼能读完」写的摘要、重启与崩溃的判别、附上的设备表。这也是答复页公开<em>原始证据行</em>的原因：能自己核对推理的用户，在读下一条答复之前就已经信了。</p>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">作者论点</span>
-            <p>自助是回路的带宽。一条需要人来中转每条消息的支持链，把产品的总迭代速度封顶在一个人的注意力上。一条用户侧能独立完成升级、回退、测量、查答复的链，让回路的速度由最慢的自动化环节决定，而不是由人决定。</p>
+            <p>自助就是闭环的带宽。每条消息都要人来中转的支持链，会把产品的总迭代速度封顶在一个人的注意力上。而一条用户自己能完成升级、回退、测量、查答复的链，让闭环的速度由最慢的那个自动化环节决定，而不是由人决定。</p>
           </div>
         </div></section>
 
         <section id="loop-conversion" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">06.3 · 转换</span>
-            <h2 class="ag-section-title">晋升进路线图的是签名，不是单次判定</h2>
+            <h2 class="ag-section-title">进路线图的是故障特征，不是单次判定</h2>
           </header>
-          <p>一次上报是案例。重复的签名是需求。判定本体论是保持诚实的东西，它是那个筛子，替路线图挡住幽灵需求（环境被误读为缺陷），也替用户挡住搁浅（缺陷被误读为环境）。但真正驱动迭代的量是<strong>跨上报的签名，加上从签名到修复上线的时长</strong>。9 月 17 日：两条环境判定，相隔两小时 → 当天热修。9 月 17–18 日：一条调参答复 → 等级表 → 旋钮 → 第三引擎。支持队列和路线图是同一本账，只是读取的周期不同。</p>
+          <p>一次上报是案例，反复出现的特征才是需求。判定规则负责让人诚实——它是那个筛子，替路线图挡住幽灵需求（把环境误读成缺陷），也替用户挡住干等（把缺陷误读成环境）。但真正驱动迭代的量，是<strong>跨上报的特征，加上从特征出现到修复上线的时长</strong>。9 月 17 日：两条环境判定，相隔两小时 → 当天热修。9 月 17–18 日：一条调参答复 → 等级表 → 参数 → 第三种引擎。支持队列和路线图是同一本账，只是读的周期不同。</p>
         </div></section>
 
         <section id="loop-cadence" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">06.4 · 节拍</span>
-            <h2 class="ag-section-title">是一个节拍栈，不是一条回路</h2>
+            <h2 class="ag-section-title">这是一整套节奏，不是一个环</h2>
           </header>
           <div class="ag-table-wrap"><table class="ag-table">
-            <thead><tr><th>回路</th><th>周期（实测）</th><th>捕捉什么</th></tr></thead>
+            <thead><tr><th>闭环</th><th>周期（实测）</th><th>捕捉什么</th></tr></thead>
             <tbody>
-              <tr><td>分诊</td><td>10 分钟（cron）</td><td>每个诊断包都得到首轮判读；没有东西在邮箱里排队</td></tr>
-              <tr><td>答复</td><td>当天</td><td>环境 / 使用 / 调参类问题的用户侧解决</td></tr>
-              <tr><td>实施</td><td>每条分钟–小时级（单飞、测试为门）</td><td>已排期的 bug 变成隔离分支上经测试的补丁；合入仍归人</td></tr>
-              <tr><td>热修</td><td>小时级（6.1.14 → 6.1.16 一天之内）</td><td>可热修面内的缺陷与缺口（<code>www/**</code>、应用模块、vendor）</td></tr>
+              <tr><td>预检</td><td>10 分钟（cron）</td><td>每个诊断包都能得到初步判读；没有东西在邮箱里排队</td></tr>
+              <tr><td>答复</td><td>当天</td><td>环境 / 使用 / 调参类问题，在用户侧就解决掉</td></tr>
+              <tr><td>实施</td><td>每条分钟到小时级（一次一件、测试把关）</td><td>排了期的 bug 变成隔离分支上测过的补丁；合入仍归人</td></tr>
+              <tr><td>热修</td><td>小时级（6.1.14 → 6.1.16 一天之内）</td><td>热修覆盖范围内的缺陷和缺口（<code>www/**</code>、应用模块、vendor）</td></tr>
               <tr><td>发布</td><td>天级（V6.1.15 → V6.1.18；v1.18.0 → v1.18.1）</td><td>安装器级变更：内置引擎、签名、权限</td></tr>
-              <tr><td>免疫</td><td>事故 → 守卫，永久</td><td>每起事故留下一道守卫：内联 JS 守卫、站点的测试数与中英成对检查、签名失败即中止构建</td></tr>
+              <tr><td>免疫</td><td>事故 → 防线，永久有效</td><td>每起事故留下一道防线：内联 JS 检查、站点测试数与中英成对检查、签名失败即中止构建</td></tr>
             </tbody>
           </table></div>
-          <p>系统的学习速率，由「能捕捉每一类事故的最快回路」决定。支持链给节拍栈补上了最外侧的周期，唯一能捕捉那些永远不会出现在仓库里的事故类别的回路：没有声卡的虚拟机、USB 重枚举、macOS 权限弹窗、Gatekeeper。台账里的事故链从事故到机器强制约束跑了 13 天、再 7 天；本周的当天支持弧是同一个原理在不同半径上的测量。</p>
+          <p>一个系统的学习速度，取决于「能抓住每一类事故的最快那环」。支持链给这叠节奏补上了最外侧的一拍——它是唯一能抓住那些永远不会出现在仓库里的事故的环：没有声卡的虚拟机、USB 重枚举、macOS 权限弹窗、Gatekeeper。账本里那条事故链，从事故到机器强制的约束跑了 13 天、又 7 天；这一周的当天支持弧线，是同一个原理在不同半径上的又一次测量。</p>
         </div></section>
 
         <section id="loop-ledgers" class="ag-section"><div class="container">
@@ -354,7 +354,7 @@
             <span class="ag-section-label">06.5 · 两本账</span>
             <h2 class="ag-section-title">两本账的纪律同样适用于答复</h2>
           </header>
-          <p>「已答复」是过程证据：它说这个案例被读过、被分类、得到了一个可执行的动作。「已修复 · 6.1.13」是绑定到已发布产物的产品主张。答复页把两者分开，而 <code>need_more_info</code> 是那个诚实的台阶，最早的七条答复里有一条站在那里。支持卡里的任何内容都不晋升产品主张；晋升它的是发布台账里的版本行。这与主证据台账（<a href="/zh/agentic.html#evidence">/zh/agentic.html#evidence</a>）是同一门纪律：过程徽章永远不晋升产品主张，边界永远写下来。</p>
+          <p>「已答复」是过程证据：说明这个案例被读过、被分类、拿到了一个可执行的动作。「已修复 · 6.1.13」则是绑定在已发布产物上的产品主张。答复页把两者分开；<code>need_more_info</code> 是那个诚实的台阶，最早的七条答复里就有一条站在那儿。支持卡里的任何内容都不能升格为产品主张，能让它升格的只有发布记录里的版本行。这和主证据清单（<a href="/zh/agentic.html#evidence">/zh/agentic.html#evidence</a>）是同一门纪律：过程徽章永远不升格为产品主张，边界永远白纸黑字写下来。</p>
         </div></section>
 
         <section id="loop-human" class="ag-section"><div class="container">
@@ -362,10 +362,10 @@
             <span class="ag-section-label">06.6 · 不可委托的核心</span>
             <h2 class="ag-section-title">哪些环节故意留给人</h2>
           </header>
-          <p>这条链里有三件事是刻意只留给人的。<strong>射频安全：</strong>升级路径拒绝触碰正在发射的电台（423 门禁），没有自动化可以越过 PTT 门禁，也没有自动化结论可以触碰发射行为。<strong>隐私锚点：</strong>密钥、密码、录音、存储信道永不离开用户的机器；脱敏是白名单，不是承诺。<strong>对代码的判定：</strong><code>needs_code_change</code>、改动本身、发布决定，都归维护者，机器的边界止步于 diff 之前。深度硬件排障（边缘的 USB 供电、CI-V 的怪癖）也依然是手工活，而且生命周期文档把自身的边界明明白白写下来，基于摘要的分诊读的是摘要，不是完整环境，而不是暗示一种自己并不具备的自动化。总纲把保留的这一半命名为，意图、边界与裁决；它的规则正是这一节存在的原因：智能体承担执行，不承担问责（<a href="/zh/agentic.html#roles">分工</a>）。</p>
+          <p>这条链里有三件事，是刻意只留给人的。<strong>射频安全：</strong>升级路径拒绝触碰正在发射的电台（423 拦截），任何自动化都越不过 PTT 这道关，任何自动化结论也碰不了发射行为。<strong>隐私底线：</strong>密钥、密码、录音、存储信道，永远不离开用户的机器；脱敏靠白名单，不靠口头承诺。<strong>对代码的判定：</strong><code>needs_code_change</code>、改动本身、发版决定，都归维护者，机器的边界到 diff 为止。深度硬件排障（挑剔的 USB 供电、CI-V 的怪癖）也依然是手工活。生命周期文档同样把自己的边界写得明明白白：基于摘要的预检，读的是摘要，不是完整环境——它不会暗示自己拥有并不具备的自动化能力。总纲把留给人的这一半叫作「意图、边界与裁决」，那条规则正是这一节存在的原因：智能体承担执行，不承担问责（<a href="/zh/agentic.html#roles">分工</a>）。</p>
           <div class="claim-box" data-claim-type="inference">
             <span class="claim-label">推断 · 同一拓扑，新的经济学</span>
-            <p>在<a href="/zh/agentic.html">论纲页</a>的血统里，FDE——前沿部署工程，是第一个把现场证据带回设计的回路：Echo → Delta → Product，由一名身处现场的工程师承担。支持链没有改变这个回路的形状，改变的是它的 staffing：它现在跑在 cron 上，两端各有一台仪器，路径上那位「现场部署工程师」变成了一条流水线。同一拓扑，新的经济学，这就是一个实践从「依赖英雄」毕业为「工程」的含义。</p>
+            <p>按<a href="/zh/agentic.html">论纲页</a>的谱系，FDE——前沿部署工程——是第一个把现场证据带回设计的闭环：Echo → Delta → Product，由一名扎在现场的工程师承担。支持链没有改变这个环的形状，改变的是由谁来跑：现在它跑在 cron 上，两端各有一套工具，路径上那位「现场部署工程师」变成了一条流水线。同一个拓扑，换了一套经济账——这就是一门手艺从「靠英雄」毕业成「工程」的意思。</p>
           </div>
         </div></section>
 
@@ -374,21 +374,21 @@
             <span class="ag-section-label">06.7 · 主张的边界</span>
             <h2 class="ag-section-title">我主张什么，不主张什么</h2>
           </header>
-          <p><strong>主张：</strong>这条链把现场症状转变成已发布的产品变更，且每一步都有可引用的证据；多数问题类别用户不需要人工往返即可解决；每条已发布的结论都可以对着原始日志行核对；分诊自动化自身的失效模式是有界且成文的。<strong>不主张：</strong>对路线图的自主权，人读答复页，人决定一个签名值多少；安全自动化，流水线里没有任何东西触碰发射路径；完备性，基于摘要的分诊不可能看见完整环境的一切，这就是 <code>need_more_info</code> 作为一等结果存在的原因。产品由维护者的双手和流水线构建；智能体的角色是分诊、首轮判读与发布机制，产品<em>这一周</em>变得更好，是因为回路带回了什么，而不是因为打字的是谁。</p>
+          <p><strong>主张：</strong>这条链能把现场症状变成已发布的产品变更，每一步都有可引用的证据；多数类别的问题，用户不需要人工往返就能解决；每条已发布的结论都可以对着原始日志行逐条核对；预检自动化自身的失效模式是有界的、成文的。<strong>不主张：</strong>路线图的自主权——答复页由人读，一个特征值多少由人定；安全自动化——流水线里没有任何东西触碰发射路径；完备性——基于摘要的预检不可能看见完整环境的一切，<code>need_more_info</code> 作为一等结果存在，就是这个原因。产品是维护者的双手和流水线一起构建的；智能体的角色是预检、初步判读和发布机制。产品<em>这一周</em>变得更好，是因为闭环带回来的东西，而不是因为打字的是谁。</p>
         </div></section>
 
         <section id="closing" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">07 · 结语</span>
-            <h2 class="ag-section-title">闭上那个触碰用户的回路</h2>
+            <h2 class="ag-section-title">闭上那个够得着用户的环</h2>
             <p class="ag-section-subtitle">一周，两次发布，一句留下来。</p>
           </header>
-          <p>自助不是成本优化；它是产品的传感网络。只会回邮件的支持链是成本中心；能把重复签名变成已发布功能的支持链，当天热修、改掉的默认值、新引擎，是需求引擎。触碰用户的那个回路决定产品是否进化，所以要刻意地闭上它：先让故障可观测，再让答复自助化，让重复签名自己晋升进路线图，而判定始终留在人手里。当回路长出实施者，同一门纪律继续放大：分类决策、机器提议、测试把关、合入归人。</p>
+          <p>自助不是成本优化，它是产品的传感网络。只会回邮件的支持链是成本中心；能把反复出现的特征变成已发布功能的支持链——当天热修、改掉的默认值、新引擎——是需求引擎。够得着用户的那个环，决定产品会不会进化，所以要有意地把它闭上：先让故障可观测，再让答复自助化，让重复出现的特征自己走进路线图，而判定始终留在人手里。当闭环长出执行者，同一门纪律接着放大：分类即决策、机器提议、测试把关、合入归人。</p>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">一句话纪律</span>
-            <p>先让失败可观测。再让答复自助化。然后让重复签名自己晋升进路线图，判定，留给人类。</p>
+            <p>先让失败可观测，再让答复自助化，然后让重复出现的特征自己走进路线图——判定，留给人。</p>
           </div>
-          <p>去试试这些端点：<a href="https://www.vlsc.net/mrrc/answers/">MRRC 答复页</a> · <a href="https://www.vlsc.net/mrrc_modern/answers/">MRRC Modern 答复页</a> · <a href="https://www.vlsc.net/mrrc/">MRRC 下载</a> · <a href="https://www.vlsc.net/mrrc_modern/">MRRC Modern 下载</a>。跨项目可比的数字（测试数、约束数、版本）只在一个地方：<a href="/zh/agentic.html#evidence">证据台账</a>。</p>
+          <p>去试试这几个入口：<a href="https://www.vlsc.net/mrrc/answers/">MRRC 答复页</a> · <a href="https://www.vlsc.net/mrrc_modern/answers/">MRRC Modern 答复页</a> · <a href="https://www.vlsc.net/mrrc/">MRRC 下载</a> · <a href="https://www.vlsc.net/mrrc_modern/">MRRC Modern 下载</a>。跨项目可比的数字（测试数、约束数、版本）只在一个地方：<a href="/zh/agentic.html#evidence">证据清单</a>。</p>
         </div></section>
       </main>
 
@@ -403,9 +403,9 @@
         <div class="blog-related">
           <h3>延伸阅读</h3>
           <ul>
-            <li><a href="/blog/ming-li-dao-tian/zh/">命 · 力 · 道 · 天 —— 最终提炼</a></li>
-            <li><a href="/blog/faculties/zh/">诸力：智力、智商、情商、认识、智慧、直觉，与入世出世</a></li>
-            <li><a href="/blog/coda/zh/">跋：意图、文化、文明，以及回路之外的笑声</a></li>
+            <li><a href="/blog/ming-li-dao-tian/zh/">命 · 力 · 道 · 天 —— 识命、修力、立道、敬天</a></li>
+            <li><a href="/blog/faculties/zh/">斫轮：可传的与不可传的</a></li>
+            <li><a href="/blog/coda/zh/">跋：意图、文化、文明，以及闭环之外的笑声</a></li>
             <li><a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解，内环背后的那本账</a></li>
             <li><a href="/zh/agentic.html">智能体工程，人类意图、智能体执行、现场证据</a></li>
             <li><a href="/zh/engineering.html">Harness、回路与活体 SDD：VLSC 工程体系</a></li>

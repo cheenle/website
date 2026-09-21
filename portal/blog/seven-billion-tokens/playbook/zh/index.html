@@ -6,9 +6,9 @@
     <title>实践手册 — VLSC Blog</title>
     <meta
       name="description"
-      content="四条纪律展开为三类可照抄的清单、三个可复制模板，以及一份失败模式库——每一条都能追溯到本生态里的一次真实事故。"
+      content="四条纪律落地成三类可照抄的清单、三个可复制的模板，外加一份失败模式库——每一条都能追溯到本生态里的一次真实事故。"
     />
-    <meta name="keywords" content="智能体工程清单, 验收条件, 约束注册表, 事故转规则, 实践手册, BG1SB" />
+    <meta name="keywords" content="智能体工程清单, 验收条件, 约束清单, 事故转规则, 实践手册, BG1SB" />
     <meta name="author" content="BG1SB" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="实践手册" />
@@ -36,7 +36,7 @@
         "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
         "datePublished": "2026-09-12",
         "dateModified": "2026-09-12",
-        "keywords": "智能体工程清单, 验收条件, 约束注册表, 事故转规则",
+        "keywords": "智能体工程清单, 验收条件, 约束清单, 事故转规则",
         "articleSection": "Intelligence",
         "mainEntityOfPage": "https://www.vlsc.net/blog/seven-billion-tokens/playbook/zh/"
       }
@@ -50,7 +50,7 @@
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-clipboard-check"></i><span>分册三 · 手册</span></div>
           <h1>实践<span class="gradient">手册。</span></h1>
-          <p>三类清单、三个模板，一份失败模式库——每一条都能追溯到这里真实发生过的事。</p>
+          <p>三类清单、三个模板，一份失败模式库——每一条都来自这里真实发生过的事故。</p>
           <div class="ag-hero-stats" aria-label="分册摘要">
             <span class="ag-pill"><i class="fas fa-list-check"></i> 3 类清单</span>
             <span class="ag-pill"><i class="fas fa-file-lines"></i> 3 个模板</span>
@@ -63,35 +63,35 @@
       <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#disciplines">纪律</a><a href="#checklists">清单</a><a href="#templates">模板</a><a href="#incidents">失败库</a></nav></div></div>
 
       <main class="ba-main">
-        <p class="lede">叙事正文以四条纪律收尾。这里是它们的可工作版本：发布前要跑的清单、把一次判断从对话带进仓库的三个载体，以及一份写明出处的失败模式库。这里没有空泛建议——凡是无法追溯到本生态某次具体事故的规则，都没有被收进来。机制层面的原理见《<a href="/zh/engineering.html">工程机制</a>》；本册只装这个案例自己教出来的东西。</p>
+        <p class="lede">叙事正文以四条纪律收尾，这一册是它们的落地版本：发布前要过的清单、把一次判断从对话固化进仓库的三个载体，以及一份条条都有出处的失败模式库。这里没有空泛建议——凡是追溯不到本生态某次具体事故的规则，一律不收。机制层面的原理见《<a href="/zh/engineering.html">工程机制</a>》；本册只写这个案例自己蹚出来的东西。</p>
 
         <section id="disciplines" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">01 · 纪律</span>
             <h2 class="ag-section-title">四条纪律，展开</h2>
-            <p class="ag-section-subtitle">每一条都是习惯，不是工具。每一条都对应一种它要防住的失败。</p>
+            <p class="ag-section-subtitle">每一条都是习惯，不是工具；每一条都对应一种它要防住的失败。</p>
           </header>
           <div class="ag-loop-grid">
             <article class="ag-card">
               <h3>一 · 定义先于实现</h3>
-              <p>验收条件、非目标与边界写在第一行代码之前，意图用「去掉 AI 依然成立」的业务语言表达。<strong>防住的是：</strong>来来回回。方向未定的代价，最坏时是每提交 17.1 轮介入，上周 MRRC 是每提交 47.07 M token。</p>
+              <p>验收条件、非目标和边界，都要写在第一行代码之前；意图要用「去掉 AI 依然成立」的业务语言来表达。<strong>防的是：</strong>来回折腾。方向没定死的代价，最坏可以到每个提交介入 17.1 轮；上周的 MRRC，是每个提交烧掉 47.07 M token。</p>
             </article>
             <article class="ag-card">
               <h3>二 · 事故必须变成规则</h3>
-              <p>把 bug 修好只是链条的第一环，不是最后一环。链条是：现场事故 → 设计裁决 → 机器可读约束 → 写前拦截。<strong>防住的是：</strong>同一类错误换一个症状再回来。本生态的两条闭环分别跑了 13 天和 7 天。</p>
+              <p>修好 bug 只是链条的第一环，不是最后一环。完整的链条是：现场事故 → 设计裁决 → 机器可读约束 → 写前拦截。<strong>防的是：</strong>同一类错误换个症状卷土重来。本生态的两条闭环，分别跑了 13 天和 7 天。</p>
             </article>
             <article class="ag-card">
               <h3>三 · 盯着不确定性花钱</h3>
-              <p>token 峰值是方向雷达：花费在哪里尖起来，方向就在哪里没定。配合快照习惯——每个重要数字都要两个来源和一个截止时刻。<strong>防住的是：</strong>把钱花在错的问题上，以及引用一个已经在脚下变了的数字。</p>
+              <p>token 峰值就是方向雷达：开销在哪儿冒尖，方向就在哪儿没定。再配合快照习惯——每个重要数字都要有两个来源和一个截止时刻。<strong>防的是：</strong>钱花在了错的问题上，以及引用一个早已悄悄变掉的数字。</p>
             </article>
             <article class="ag-card">
               <h3>四 · 两本账分开记</h3>
-              <p>产品成熟度与过程证据是两本独立的账。测试全过永远关不掉一个开放的安全问题，漂亮的注册表也永远不提升产品声明。<strong>防住的是：</strong>一个工程团队能获得的最舒服的那种自欺。</p>
+              <p>产品成熟度与过程证据是两本独立的账。测试全过，永远抹不掉一个悬而未决的安全问题；规则库再漂亮，也永远抬不动产品声明。<strong>防的是：</strong>一个工程团队所能拥有的、最舒服的那种自欺。</p>
             </article>
           </div>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">论点 · 为什么是四条而不是十四条</span>
-            <p>不成习惯形状的纪律，会在截止日期面前第一个消失。之所以选这四条，是因为每条都对应一个人每周要做几十次的决定：我先把这件事写下来了吗、我把闭环合上了吗、我去看钱花在哪了吗、我把两本账分开了吗。如果只能采纳一条，采纳第一条——验收写下来之后，另外三条都会变便宜。</p>
+            <p>长不成习惯的纪律，会在截止日期面前第一个牺牲。之所以选这四条，是因为每条都对应一个人每周要做几十次的决定：这件事我先写下来了吗？闭环合上了吗？我去看钱花在哪了吗？两本账分开了吗？如果只能采纳一条，就采纳第一条——验收写下来之后，另外三条的成本都会跟着降下来。</p>
           </div>
         </div></section>
 
@@ -104,31 +104,31 @@
 
           <h3><i class="fas fa-1"></i> 接受一个需求之前</h3>
           <ol>
-            <li>验收条件能不能写成机器可判定的形式？不能，就说明这个需求还没准备好被委托。</li>
-            <li>我明确<b>不做</b>的是什么？现在写下的非目标，是你这辈子能预防的最便宜的返工。</li>
+            <li>验收条件能不能写成机器可判定的形式？不能，就说明这个需求还没准备好交出去。</li>
+            <li>我明确<b>不做</b>的是什么？此刻写下的非目标，是你这辈子能防住的最便宜的返工。</li>
             <li>把「AI」这个词删掉，这句话还成立吗？不成立，那它就是一个披着业务外衣的技术 demo。</li>
-            <li>结果由哪个仓库负责，这个声明将建立在什么证据上——自动化测试、台架，还是现场？</li>
+            <li>成果归哪个仓库负责？这个声明要建立在什么证据上——自动化测试、台架，还是现场？</li>
           </ol>
 
           <h3><i class="fas fa-2"></i> 编辑落盘之前</h3>
           <ol>
-            <li>这次改动碰到已注册约束覆盖的范围了吗？52 条里有两批规则的存在，正是因为一个看起来合理的编辑其实是错的：<code>cat-no-dn</code> 与部署备份规则。</li>
+            <li>这次改动落进已登记约束的覆盖范围了吗？52 条里有两批规则之所以存在，正是因为一个看起来合理的编辑其实是错的：<code>cat-no-dn</code> 与部署备份规则。</li>
             <li>如果碰到硬件，此刻电台的发射状态是<b>已知的</b>，还是<b>假设的</b>？</li>
-            <li>厂商目录还是只读的吗？买来的解码器代码不属于我们改，适配要放在自己的补丁层里。</li>
-            <li>如果这是一次修复，它将成为哪条约束？没有后续规则的修复，是一次还会再需要的修复。</li>
+            <li>厂商目录还是只读的吗？买来的解码器代码不归我们改，适配要放在自己的补丁层里。</li>
+            <li>如果这是一次修复，它会成为哪条约束？没有后续规则跟进的修复，迟早还得再做一次。</li>
           </ol>
 
           <h3><i class="fas fa-3"></i> 宣布发布之前</h3>
           <ol>
             <li>这次要声明的是产品阶梯上的哪一级——自动化测试、台架验证，还是现场验证？把这一级说出口。</li>
-            <li>有没有一个开放的已知缺陷与这个声明矛盾？FT710Mobile 那个未解决的 P0 PTT 问题，正是这样被公开保留着的。</li>
+            <li>有没有哪个悬而未决的已知缺陷与这个声明矛盾？FT710Mobile 那个未解决的 P0 PTT 问题，就是这样公开挂着的。</li>
             <li>两本账互相印证了吗？它们本来就不该互相印证。</li>
             <li>如果发布说明里出现了数字，它带普查日期和测量窗口了吗？</li>
           </ol>
 
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 已经回本的检查项</span>
-            <p>发布前清单里关于「产品阶梯」的那一条，正是 EFHW 调谐器声明状态停在设计目标、而不是「已发布」的原因——板子还不存在。编辑前清单里关于约束的那一条，让拦截变成可复现的、带退出码的事实，而不是一次代码评审里的意见。</p>
+            <p>发布前清单里关于「产品阶梯」的那一条，正是 EFHW 调谐器的声明状态停在设计目标、而不是「已发布」的原因——板子还不存在。编辑前清单里关于约束的那一条，让拦截成为一个可复现、带退出码的事实，而不是代码评审里的一句意见。</p>
           </div>
         </div></section>
 
@@ -136,7 +136,7 @@
           <header class="ag-section-header">
             <span class="ag-section-label">03 · 模板</span>
             <h2 class="ag-section-title">三个值得照抄的载体</h2>
-            <p class="ag-section-subtitle">周一就可以原样复制。它们长成这个样子，是因为更弱的版本失败过。</p>
+            <p class="ag-section-subtitle">周一上班就能原样照抄。它们长成今天这个样子，是因为更弱的版本都失败过。</p>
           </header>
 
           <h3>模板一 · 验收条件</h3>
@@ -148,10 +148,10 @@
 未关闭 &lt;本次不关闭的已知问题，没有则写 none&gt;</pre></div>
           <div class="claim-box" data-claim-type="inference">
             <span class="claim-label">推断 · 为什么「非目标」不是可选项</span>
-            <p>本生态测到的每一次返工尖峰，都落在范围还在移动的那一周。<code>非目标</code>这一行是固定范围最便宜的仪器：它把一条边界从「有人记得」变成「agent 读得到」。</p>
+            <p>本生态测到的每一次返工高峰，都落在范围还在移动的那一周。<code>非目标</code>这一行是锁定范围成本最低的手段：它把一条边界从「有人记得」变成「agent 读得到」。</p>
           </div>
 
-          <h3>模板二 · 约束注册表条目</h3>
+          <h3>模板二 · 约束清单条目</h3>
           <div class="term-block"><div class="term-head">约束条目</div><pre>id        短标识，例如 cat-no-dn
 severity  block | warn | info
 scope     作用范围，文件 glob
@@ -161,7 +161,7 @@ sdd_ref   文档 + 章节 + 裁决编号，例如 AD-014
 origin    出处：事故、日期与提交号</pre></div>
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 让它成立的那个字段</span>
-            <p><code>origin</code> 是把一条风格规则变成一条论据的字段。52 条已注册约束中每一条都能追溯到某次决策或某次事故；填不出 <code>origin</code> 的规则只是意见，而下一位不同意的人会把它删掉。<code>sdd_ref</code> 则让拦截消息在触发的那一刻能解释自己。</p>
+            <p><code>origin</code> 这个字段，能把一条「风格规则」变成一条有据可查的论据。52 条已登记的约束，条条都能追溯到某次决策或某次事故；填不出 <code>origin</code> 的规则只是意见，下一位不同意的人会把它删掉。<code>sdd_ref</code> 则让拦截消息在触发的那一刻，能自己说清来历。</p>
           </div>
 
           <h3>模板三 · 从事故到约束</h3>
@@ -172,7 +172,7 @@ origin    出处：事故、日期与提交号</pre></div>
 5  记录  把日期与提交号写进 origin 字段</pre></div>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">论点 · 拦不住的约束不算约束</span>
-            <p>第 4 步是团队最常跳过的一步，而跳过它，正是一条被记录下来的教训变成一条没人遵守的教训的方式。规则写完探针仍然通过，这条规则就是装饰。契约时代相对文档时代的全部价值，就在于知识不再需要被记得，而是在该起作用的那一刻被执行。</p>
+            <p>第 4 步是团队最常跳过的一步；跳过它，一条记在案上的教训就会沦为一条没人遵守的教训。规则写完，探针却仍然能通过，这条规则就是装饰。契约时代相对文档时代的全部价值，就在于知识不再需要有人记得，而是在该起作用的那一刻自动生效。</p>
           </div>
         </div></section>
 
@@ -180,26 +180,26 @@ origin    出处：事故、日期与提交号</pre></div>
           <header class="ag-section-header">
             <span class="ag-section-label">04 · 失败库</span>
             <h2 class="ag-section-title">这里的每条规则都花了代价</h2>
-            <p class="ag-section-subtitle">现像 → 根因 → 代价 → 它变成了什么规则 → 怎么复现这个检查。</p>
+            <p class="ag-section-subtitle">现象 → 根因 → 代价 → 它变成了什么规则 → 怎么复现这个检查。</p>
           </header>
           <div class="ledger-scroll"><table class="ag-table ledger-table">
             <thead><tr><th>事故</th><th>根因</th><th>代价</th><th>转成的规则</th><th>复现</th></tr></thead>
             <tbody>
-              <tr><td>FT-710 频率漂移</td><td><code>DN;</code> 是 VFO 步进命令而不是 DNR 查询，却每 2 秒轮询一次</td><td>实机频率每次调用漂移约 20 Hz</td><td><code>cat-no-dn</code>（裁决 AD-014）</td><td>对探针文件跑 <code>2498ec2</code> 引入的 guardian 检查；拦截以非零码退出</td></tr>
+              <tr><td>FT-710 频率漂移</td><td>误把 VFO 步进命令 <code>DN;</code> 当成 DNR 查询，每 2 秒轮询一次</td><td>实机频率每次调用漂移约 20 Hz</td><td><code>cat-no-dn</code>（裁决 AD-014）</td><td>对探针文件跑 <code>2498ec2</code> 引入的 guardian 检查；拦截后以非零码退出</td></tr>
               <tr><td>部署备份打满磁盘</td><td>整站拷贝，把服务器自己管理的二进制目录也拷了进去</td><td>服务器 <code>/var/tmp</code> 到 100%</td><td>备份按站瘦身 + 轮转</td><td>把包内容与排除清单对一遍</td></tr>
-              <tr><td>portal 备份从未生效</td><td>远端 heredoc 未加引号，本地 shell 先展开了变量</td><td>每次都打印一个并不存在的备份路径</td><td>远端 heredoc 必须引号化（<code>067f565</code>）</td><td>用 <code>git log -S</code> 查 heredoc 标记</td></tr>
-              <tr><td>普查错了 16 亿</td><td>某个工具的缓存输入是输入的子集；另一个工具的总量已含全部</td><td>一个被修正了两次的已发表数字</td><td>逐工具的字段语义表</td><td>两种求法各算一遍，与独立存储对帐</td></tr>
-              <tr><td>某个 harness 被发表为「未记录」</td><td>只查了一张表，而合计在另一张表里</td><td>少算 485,213,348</td><td>不列出每一张表，不得下「未记录」结论</td><td>遍历 schema，对每个 token 列求和</td></tr>
-              <tr><td>账本倒退且漂移</td><td>某个工具的日志保留策略；测量会话把自己算进去了</td><td>同一个脚本相隔 12 分钟给出不同合计</td><td>快照纪律：每个数字带截止时刻与明写窗口</td><td>连跑两次普查并对比合计</td></tr>
+              <tr><td>portal 备份从未生效</td><td>远端 heredoc 未加引号，本地 shell 先展开了变量</td><td>每次都打印一个并不存在的备份路径</td><td>远端 heredoc 必须加引号（<code>067f565</code>）</td><td>用 <code>git log -S</code> 查 heredoc 标记</td></tr>
+              <tr><td>普查错了 16 亿</td><td>某个工具的缓存只覆盖了输入的子集；另一个工具的总量却已包含全部</td><td>一个发表后改了两次的数字</td><td>逐工具整理字段语义表</td><td>两种求法各算一遍，与独立存储对账</td></tr>
+              <tr><td>把某个 harness 报成了「未记录」</td><td>只查了一张表，而合计在另一张表里</td><td>少算 485,213,348</td><td>不列出每一张表，不得下「未记录」结论</td><td>遍历 schema，对每个 token 列求和</td></tr>
+              <tr><td>台账倒退且漂移</td><td>某个工具的日志保留策略；测量会话把自己算进去了</td><td>同一个脚本相隔 12 分钟给出不同合计</td><td>快照纪律：每个数字都要带截止时刻和写明的窗口</td><td>连跑两次普查并对比合计</td></tr>
             </tbody>
           </table></div>
           <div class="claim-box" data-claim-type="fact">
-            <span class="claim-label">事实 · 其中两条还开着</span>
-            <p>前四行在几天内就闭环了。后两行是在写本系列的过程中才发现的，所以它们是最新的规则、也是被验证得最少的规则。一份只装着陈年旧疾、且都已舒服解决的失败库是一座博物馆；真正有价值的条目，是你这个月新加进去的那些。</p>
+            <span class="claim-label">事实 · 其中两条还没闭环</span>
+            <p>前四行在几天内就闭环了。后两行是写本系列的过程中才发现的，所以它们是最新的规则，也是验证最少的规则。一座只装陈年旧疾、而且件件都已妥善解决的失败库，是博物馆；真正有价值的条目，是你这个月新添进去的那些。</p>
           </div>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">收束</span>
-            <p>上表每一条最初都只是一件让人烦到愿意写下来的小事。这就是整套方法的全部：烦扰是原料，裁决是提炼，注册表条目是持久化——而第四步、证明拦截真的会触发，是「教训」与「便签」的分界线。这套零件如何组成完整体系，见《<a href="/zh/engineering.html">工程机制</a>》；它们来自哪个案例，回到《<a href="../">主文</a>》。</p>
+            <p>上表的每一条，最初都只是一件烦到让人愿意写下来的小事。这就是整套方法的全部：烦扰是原料，裁决是提炼，写进规则库是持久化；而第四步——证明拦截真的会触发——才是「教训」与「便签」的分界线。这些零件如何组装成完整体系，见《<a href="/zh/engineering.html">工程机制</a>》；它们来自哪个案例，回到《<a href="../">主文</a>》。</p>
           </div>
         </div></section>
       </main>

@@ -6,13 +6,13 @@
     <title>模型 × harness 年鉴 — VLSC Blog</title>
     <meta
       name="description"
-      content="六个模型时代、主力在一周内换人的实录、任务 × 模型 × harness 匹配表、把独立测评与厂商口径分层存放的公开评测，以及路由标签的陷阱。"
+      content="六个模型时代、主力一周内换人的实录、任务 × 模型 × harness 匹配表、分层收录独立测评与厂商口径的公开评测，以及路由标签的陷阱。"
     />
     <meta name="keywords" content="模型选型, agent harness, 模型时代, 公开评测, 路由标签, 智能体工程, BG1SB" />
     <meta name="author" content="BG1SB" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="模型 × harness 年鉴" />
-    <meta property="og:description" content="本机日志实测，不是厂商宣传。六个时代、改变主力的一周，以及唯一站得住的选型单位：模型 × harness × 任务。" />
+    <meta property="og:description" content="本机日志实测，不是厂商宣传。六个时代、主力一周内易主的实录，以及唯一立得住的选型单位：模型 × harness × 任务。" />
     <meta property="og:url" content="https://www.vlsc.net/blog/seven-billion-tokens/almanac/zh/" />
     <meta property="og:site_name" content="VLSC Projects" />
     <link rel="canonical" href="https://www.vlsc.net/blog/seven-billion-tokens/almanac/zh/" />
@@ -31,7 +31,7 @@
         "@context": "https://schema.org",
         "@type": "Article",
         "headline": "模型 × harness 年鉴",
-        "description": "六个模型时代、主力一周换人的实录、任务 × 模型 × harness 匹配表，以及路由标签的陷阱。",
+        "description": "六个模型时代、主力一周内换人的实录、任务 × 模型 × harness 匹配表，以及路由标签的陷阱。",
         "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
         "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
         "datePublished": "2026-09-12",
@@ -50,7 +50,7 @@
         <div class="ag-hero-inner">
           <div class="hero-badge"><i class="fas fa-compass"></i><span>分册二 · 年鉴</span></div>
           <h1>模型 × harness<span class="gradient">年鉴。</span></h1>
-          <p>本机日志实测，不是厂商宣传——组织方式只用唯一站得住的单位：模型 × harness × 任务。</p>
+          <p>本机日志实测，不是厂商宣传——全文只按一个立得住的单位来组织：模型 × harness × 任务。</p>
           <div class="ag-hero-stats" aria-label="分册摘要">
             <span class="ag-pill"><i class="fas fa-clock-rotate-left"></i> 七个月六个时代</span>
             <span class="ag-pill"><i class="fas fa-arrows-rotate"></i> 主力一周内换人</span>
@@ -63,13 +63,13 @@
       <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#eras">时代</a><a href="#shift">主力切换</a><a href="#benchmarks">公开评测</a><a href="#routing">路由标签</a></nav></div></div>
 
       <main class="ba-main">
-        <p class="lede">叙事正文把模型当成若干变量之一，并有意把细节挪开。细节住在这里：哪个模型、在哪个 harness 上、做了多久——每条结论都带着测量窗口。这里几乎没有数字来自厂商页面；凡是的，都标出来了，因为一则公告和一次测量不是同一种数字。</p>
+        <p class="lede">叙事正文把模型当作若干变量之一，有意把细节挪开了。细节都收在这里：哪个模型、在哪个 harness 上、用了多久——每条结论都标注测量窗口。这里的数字几乎都不来自厂商页面；凡是来自的，都单独标出，因为公告里的数字和实测出来的数字不是一回事。</p>
 
         <section id="eras" class="ag-section"><div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">01 · 时代</span>
             <h2 class="ag-section-title">七个月，六个时代</h2>
-            <p class="ag-section-subtitle">每一道分界都是「工作能被委托到什么程度」的变化，而不是某个发布日期。</p>
+            <p class="ag-section-subtitle">每一道分界对应的都是「工作能交出去多少」的变化，而不是某个发布日期。</p>
           </header>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>时代</th><th>时间</th><th>主力</th><th>工作的形态</th></tr></thead>
@@ -84,7 +84,7 @@
           </table></div>
           <div class="claim-box" data-claim-type="inference">
             <span class="claim-label">推断 · 挑战者轮换从未停止</span>
-            <p>「霸权」内部一直在轮换挑战者，而且没有稳定下来——它在加速。W32 试过 qwen3.8-max 与 glm-5.2 未留用；W35 起新组合站稳，随后又变了。模型市场每三到四周换一轮血。锁定单一模型是明确的不利策略，而做出这个错误动作的方式，通常是把一个模型名写进配置文件。</p>
+            <p>「霸权」内部一直在轮换挑战者，而且非但没有稳定下来，还在加速。W32 试过 qwen3.8-max 和 glm-5.2，都没留用；W35 起新组合站稳，随后又有变化。模型市场每三到四周换一轮血。锁定单一模型是明摆着的下策，而犯这个错最常见的方式，就是把一个模型名写进配置文件。</p>
           </div>
         </div></section>
 
@@ -92,15 +92,15 @@
           <header class="ag-section-header">
             <span class="ag-section-label">02 · 主力切换</span>
             <h2 class="ag-section-title">主力在一周之内换了</h2>
-            <p class="ag-section-subtitle">各 harness 保留窗口内的调用次数。是次数不是 token——它反映注意力，不反映花费。</p>
+            <p class="ag-section-subtitle">这里统计各 harness 保留窗口内的调用次数。是次数，不是 token——它反映注意力，不反映花费。</p>
           </header>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>harness</th><th>领先模型（调用次数）</th><th>变化</th></tr></thead>
             <tbody>
-              <tr><td>claude-code</td><td>deepseek-v4-flash 12,402 / <strong>qwen3.8-max-0902 3,883</strong> / qwen3.8-flash 1,077 / glm-5.2 800</td><td>上一任主力仍在日志里，但已不再驱动工作；<strong>qwen3.8-max-0902</strong> 在七天内接管</td></tr>
+              <tr><td>claude-code</td><td>deepseek-v4-flash 12,402 / <strong>qwen3.8-max-0902 3,883</strong> / qwen3.8-flash 1,077 / glm-5.2 800</td><td>上一任主力还留在日志里，但已不再驱动工作；<strong>qwen3.8-max-0902</strong> 在七天内接管</td></tr>
               <tr><td>pi</td><td>deepseek-v4-flash 4,417 / gpt-5.6 2,721 / qwen3.8-flash 1,227 / <strong>glm-5.3-flash 745</strong> / deepseek-v4-flash-vision-exp 85</td><td><strong>glm-5.3-flash</strong> 在上一次普查里根本没出现；随后又多了一个视觉变体</td></tr>
               <tr><td>kimi-code</td><td><strong>k3</strong> 5,891 / kimi-for-coding 2,097 / k3-256k 1,903</td><td>稳定——长上下文工作有固定归属</td></tr>
-              <tr><td>codex</td><td>gpt-5.5 143 / <strong>gpt-5.6-sol</strong> 128 / deepseek-v4-flash 17</td><td>八月下旬起停用；总量一位数字都没动</td></tr>
+              <tr><td>codex</td><td>gpt-5.5 143 / <strong>gpt-5.6-sol</strong> 128 / deepseek-v4-flash 17</td><td>八月下旬起停用；总量连一个数字都没动过</td></tr>
               <tr><td>mulerun</td><td>gpt-5.5 162 / deepseek-v4-flash-free 16</td><td>内容生成，未变</td></tr>
             </tbody>
           </table></div>
@@ -108,9 +108,9 @@
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>角色</th><th>实测组合</th><th>证据</th></tr></thead>
             <tbody>
-              <tr><td>开荒 / 新功能</td><td>deepseek-v4-pro</td><td>唯一新功能占比绝对多数的模型（68%）</td></tr>
+              <tr><td>开荒 / 新功能</td><td>deepseek-v4-pro</td><td>新功能占比唯一过半的模型（68%）</td></tr>
               <tr><td>集中攻坚</td><td>gpt-5.6-sol（codex）</td><td>一周窗口打穿 ft8（2.35 亿）后撤出——闪电战</td></tr>
-              <tr><td>日常主力</td><td>deepseek-v4-flash（claude-code + pi）</td><td>40 亿；修复 + 分析 + 运维约 70%；claude-code 侧偏现场运维、pi 侧偏修理</td></tr>
+              <tr><td>日常主力</td><td>deepseek-v4-flash（claude-code + pi）</td><td>40 亿；修复 + 分析 + 运维约 70%；claude-code 侧偏现场运维，pi 侧偏修复</td></tr>
               <tr><td>主力开发 + 长上下文专项</td><td>k3 / k3-256k（kimi-code）</td><td>k3 在 FT-710 攻坚期花掉 4.17 亿；k3-256k 的 1.65 亿几乎全投 ft8</td></tr>
               <tr><td>交付 / 发布流水线</td><td>gpt-5.6（pi）、gpt-5.5（mulerun）</td><td>网站写作、文档、宣传片、安装包打包</td></tr>
               <tr><td>分析 / 写作</td><td>qwen3.8-flash、qwen3.8-max-0902</td><td>试用会话中分析类占 60%；最新进场者直取网站分析任务</td></tr>
@@ -118,7 +118,7 @@
           </table></div>
           <div class="claim-box" data-claim-type="inference">
             <span class="claim-label">推断 · 选型单位</span>
-            <p>旗舰模型买「方向」，性价比模型买「执行」，长上下文变体买「专项」，harness 买「工作方式」。同一模型装进不同 harness 会呈现完全不同的任务画像——gpt-5.6 在 codex 是攻坚队，在 pi 是发布流水线——所以选型单位是「模型 × harness × 任务」三元组，从来不是模型本身。</p>
+            <p>旗舰模型买「方向」，性价比模型买「执行」，长上下文变体买「专项」，harness 买「工作方式」。同一个模型装进不同 harness，会呈现完全不同的任务画像——gpt-5.6 在 codex 是攻坚队，在 pi 是发布流水线——所以选型单位是「模型 × harness × 任务」三元组，从来不是模型本身。</p>
           </div>
         </div></section>
 
@@ -126,7 +126,7 @@
           <header class="ag-section-header">
             <span class="ag-section-label">03 · 公开评测</span>
             <h2 class="ag-section-title">两种数字，分层存放</h2>
-            <p class="ag-section-subtitle">独立测评与厂商公告是不同性质的证据。它们永远不被平均，也不会并列在同一列里。</p>
+            <p class="ag-section-subtitle">独立测评和厂商公告是两种不同性质的证据：既不混在一起求平均，也不并列放进同一列。</p>
           </header>
           <h3><i class="fas fa-flask"></i> 独立测评</h3>
           <ul>
@@ -140,12 +140,12 @@
             <li>Qwen3.8-Flash 宣称在 SWE-bench Pro 上领先 Opus 4.6 达 9.1 分。</li>
           </ul>
           <div class="claim-box" data-claim-type="fact">
-            <span class="claim-label">事实 · 性价比档是最硬的公开叙事</span>
-            <p>V4-Flash（OpenRouter 每百万 $0.14 / $0.27）、Qwen3.8-Flash（官方口径为其三分之一价）、GPT-5.6 Luna、Gemini 3.1 Flash-Lite——全部挤在同一个「日常工程可负担」的生态位。这种拥挤与本生态实测的用量互相印证：性价比档在数月里吃下了日常工作的绝大部分。</p>
+            <span class="claim-label">事实 · 性价比档是最扎实的公开叙事</span>
+            <p>V4-Flash（OpenRouter 每百万 $0.14 / $0.27）、Qwen3.8-Flash（官方口径为其三分之一价）、GPT-5.6 Luna、Gemini 3.1 Flash-Lite——全挤在「日常工程负担得起」这同一个生态位上。这种拥挤与本地实测的用量互相印证：过去几个月，性价比档吃下了日常工作的绝大部分。</p>
           </div>
           <div class="claim-box" data-claim-type="thesis">
             <span class="claim-label">论点 · 只有你自己的日志在测量你的工作</span>
-            <p>公开榜单回答的是「这个模型总体有多好」，它回答不了「这个模型在我的任务、我的 harness、我的代码库上有多好」。能回答第二个问题的仪器只有一件：你自己的用量日志——这也正是本系列一直坚持要快照它、标注它的原因。</p>
+            <p>公开榜单回答的是「这个模型总体上有多好」，回答不了「这个模型在我的任务、我的 harness、我的代码库上有多好」。能回答后一个问题的工具只有一件：你自己的用量日志——这正是本系列一直坚持为它做快照、加标注的原因。</p>
           </div>
         </div></section>
 
@@ -153,25 +153,25 @@
           <header class="ag-section-header">
             <span class="ag-section-label">04 · 路由标签</span>
             <h2 class="ag-section-title">日志里的名字不是模型实体</h2>
-            <p class="ag-section-subtitle">把日志标识当路由标签，不要当能力实体。</p>
+            <p class="ag-section-subtitle">把日志里的标识当路由标签看，别当能力实体看。</p>
           </header>
           <div class="ag-loop-grid">
             <article class="ag-card">
               <h3><code>big-pickle</code></h3>
-              <p>OpenCode 官方承认的隐身模型。它是一个真实端点，名字刻意不提供任何信息——任何针对它的评测，都是针对一个未知量的评测。</p>
+              <p>OpenCode 官方承认的隐身模型。它是一个真实端点，名字故意不透露任何信息——任何针对它的评测，评的都是一个未知量。</p>
             </article>
             <article class="ag-card">
               <h3><code>code-supernova-1-million</code></h3>
-              <p>2025 年的隐身营销名。原渠道已下架，这意味着这个标签再也解析不到任何实体——一条指向已退役别名的日志记录。</p>
+              <p>2025 年的隐身营销名。原渠道已经下架，这个标签再也对应不到任何实体——日志里留下的，是一条指向已退役别名的记录。</p>
             </article>
             <article class="ag-card">
               <h3><code>kimi-for-coding</code></h3>
-              <p>套餐 API 别名。两条带这个标签的调用，可能在不同时间由不同的底层模型提供，所以相邻调用之间不构成受控比较。</p>
+              <p>套餐 API 的别名。同样带着这个标签的两次调用，可能在不同时间由不同的底层模型响应，所以相邻调用之间不构成受控对比。</p>
             </article>
           </div>
           <div class="claim-box" data-claim-type="inference">
             <span class="claim-label">推断 · 为什么这对测量重要</span>
-            <p>年鉴里每一条结论都是从这类标签上得出的。这不会让结论失效，但会给它划界：「这个标签这周用得更多」是关于路由的陈述，而「这个模型变强了」是关于能力的陈述。前者可以从日志里测出来，后者不能——把两者混为一谈，就是一份用量报告悄悄变成一份评测榜单的方式。</p>
+            <p>年鉴里的每条结论都建立在这类标签之上。这不会让结论失效，但会给它划出边界：「这个标签这周用得更多」是关于路由的陈述，「这个模型变强了」是关于能力的陈述。前者能从日志里测出来，后者不能——一旦把两者混为一谈，一份用量报告就会悄悄变成一份评测榜单。</p>
           </div>
         </div></section>
       </main>
@@ -181,7 +181,7 @@
           <div class="ba-icon"><i class="fas fa-user"></i></div>
           <div>
             <h3>BG1SB</h3>
-            <p>业余无线电操作者与软件工程师。构建 VLSC 开源远程控制生态，并把电台说的话记下来。</p>
+            <p>业余无线电操作员，也是软件工程师。搭建 VLSC 开源远程控制生态，并把电台说的话记下来。</p>
           </div>
         </div>
         <div class="blog-related">

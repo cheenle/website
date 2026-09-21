@@ -127,7 +127,7 @@ class ConnectionsArticleTests(unittest.TestCase):
     def test_connectome_facts_and_boundaries_are_present(self) -> None:
         required = {
             "en": ("139,255", "50 million", "not sufficient", "neuromodulation"),
-            "zh": ("139,255", "5×10", "并不充分", "神经调质"),
+            "zh": ("139,255", "5×10", "光有链接不够", "神经调质"),
         }
         forbidden = {
             "en": (

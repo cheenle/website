@@ -42,7 +42,6 @@ CLAIM_TYPES = {"fact", "inference", "thesis", "analogy"}
 
 # 语体阈值挂起项（今天是 5 篇破折号超标）
 PENDING_DASH: dict[str, str] = {
-    "ming-li-dao-tian": "batch2",
     "support-loop": "batch3",
     "seven-billion-tokens": "batch3",
     "seven-billion-tokens/almanac": "batch3",
@@ -50,7 +49,6 @@ PENDING_DASH: dict[str, str] = {
 
 # 结构/镜像/引文/标点/元数据挂起项（按文章 × 语言）
 PENDING_ARTICLES: dict[tuple[str, str], str] = {
-    ("ming-li-dao-tian", "en"): "batch2", ("ming-li-dao-tian", "zh"): "batch2",
     ("only-imagination", "en"): "batch2", ("only-imagination", "zh"): "batch2",
     ("connections-recursive-intelligence", "en"): "batch2",
     ("connections-recursive-intelligence", "zh"): "batch2",

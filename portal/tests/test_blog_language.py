@@ -49,6 +49,11 @@ PENDING_ARTICLES: dict[tuple[str, str], str] = {
     ("juekun", "root"): "batch9",
 }
 
+THESIS_PAGES = {
+    "agentic": {"en": PORTAL / "agentic.html", "zh": PORTAL / "zh/agentic.html"},
+    "engineering": {"en": PORTAL / "engineering.html", "zh": PORTAL / "zh/engineering.html"},
+}
+
 BANNED_PHRASES = ("代理式工程", "三款产品", "由 Agent 写成", "written by AI", "被用来",
                   "值得注意的是", "在当今时代", "深入探讨", "综上所述")
 
@@ -289,6 +294,25 @@ class LanguageSystemTests(unittest.TestCase):
                 parser = load(p)[1]
                 for legacy in ("ba-prose", "ba-tags"):
                     self.assertNotIn(legacy, parser.classes, f"{slug}/{lang}: 旧版式 {legacy}")
+
+    def test_thesis_pages_carry_terms_anchors_and_mirrored_quotes(self) -> None:
+        for name, pages in THESIS_PAGES.items():
+            parsed = {}
+            for lang, path in pages.items():
+                source, parser = load(path)
+                parsed[lang] = parser
+                where = f"{name}/{lang}"
+                self.assertIn("ag-term-grid", parser.classes, f"{where}: 缺术语中英对照")
+                for target in parser.anchor_targets:
+                    self.assertIn(target, parser.ids, f"{where}: 死锚 #{target}")
+                for phrase in BANNED_PHRASES:
+                    self.assertNotIn(phrase, source, f"{where}: 命中禁用词「{phrase}」")
+            self.assertEqual(
+                sorted(parsed["en"].quote_ids),
+                sorted(parsed["zh"].quote_ids),
+                f"{name}: 总纲引文 id 不对等",
+            )
+            self.assertTrue(parsed["en"].quote_ids, f"{name}: 总纲页应至少有一处立论引文")
 
     def test_blog_indexes_mirror_each_other(self) -> None:
         en = (BLOG / "index.html").read_text(encoding="utf-8")

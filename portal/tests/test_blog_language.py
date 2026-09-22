@@ -49,8 +49,6 @@ PENDING_DASH: dict[str, str] = {
 
 # 结构/镜像/引文/标点/元数据挂起项（按文章 × 语言）
 PENDING_ARTICLES: dict[tuple[str, str], str] = {
-    ("connections-recursive-intelligence", "en"): "batch2",
-    ("connections-recursive-intelligence", "zh"): "batch2",
     ("efhw-esp32s3-auto-tuner", "en"): "batch4", ("efhw-esp32s3-auto-tuner", "zh"): "batch4",
     ("opus-vs-pcm-remote-audio", "en"): "batch4", ("opus-vs-pcm-remote-audio", "zh"): "batch4",
     ("psk-reporter-dxcc-hunting", "en"): "batch4", ("psk-reporter-dxcc-hunting", "zh"): "batch4",

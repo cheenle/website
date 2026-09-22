@@ -784,15 +784,15 @@ del.stale {
 	font-family: var(--font-mono);
 	font-weight: 700;
 }
-.citation {
+.ba-cite-ref {
 	margin-left: 0.12em;
 	color: var(--accent);
 	font-size: 0.78em;
 	vertical-align: super;
 	text-decoration: none;
 }
-.citation:hover,
-.citation:focus-visible {
+.ba-cite-ref:hover,
+.ba-cite-ref:focus-visible {
 	text-decoration: underline;
 }
 .references-list li {

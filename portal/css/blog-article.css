@@ -298,6 +298,74 @@
 	color: var(--ag-edge);
 }
 
+/* ── ba-quote: 引文块 ──
+   data-quote-id 是 EN/ZH 配对的锚（语言体系规范 §4）：
+   原文恒在 ba-quote-orig；译本用本页语言写在 ba-quote-trans。
+   中文页的「」由 CSS 生成，标记里不要手写引号。 */
+.ba-quote {
+	border: 1px solid var(--border);
+	border-left: 3px solid var(--text-muted);
+	border-radius: 0 1rem 1rem 0;
+	padding: 1.15rem 1.25rem;
+	margin: 1.6rem 0;
+	background: var(--bg-card);
+}
+.ba-quote-orig {
+	margin: 0 0 0.6rem;
+	font-size: 1.05rem;
+	line-height: 1.75;
+	color: var(--text-primary);
+}
+.ba-quote-orig::before {
+	content: "\300c";
+}
+.ba-quote-orig::after {
+	content: "\300d";
+}
+html[lang="en"] .ba-quote-orig::before,
+html[lang="en"] .ba-quote-orig::after {
+	content: "";
+}
+.ba-quote-trans {
+	margin: 0;
+	font-size: 0.92rem;
+	line-height: 1.7;
+	color: var(--text-muted);
+}
+.ba-quote-by {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	font-style: normal;
+	letter-spacing: 0.04em;
+	white-space: nowrap;
+}
+.ba-quote-cite {
+	display: block;
+	margin-top: 0.7rem;
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	letter-spacing: 0.04em;
+	color: var(--text-muted);
+}
+.ba-quote[data-quote-kind="classic"] {
+	border-left-color: var(--ag-edge);
+}
+.ba-quote[data-quote-kind="engineering"] {
+	border-left-color: var(--ag-control);
+}
+.ba-quote[data-quote-kind="project"] {
+	border-left-color: var(--ag-safe);
+}
+.ba-quote[data-quote-kind="classic"] .ba-quote-cite {
+	color: var(--ag-edge);
+}
+.ba-quote[data-quote-kind="engineering"] .ba-quote-cite {
+	color: var(--ag-control);
+}
+.ba-quote[data-quote-kind="project"] .ba-quote-cite {
+	color: var(--ag-safe);
+}
+
 /* ── prov: the minimum evidence record under a claim ── */
 .prov {
 	border-left: 3px solid var(--border);

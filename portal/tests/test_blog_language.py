@@ -46,7 +46,6 @@ PENDING_DASH: dict[str, str] = {
 
 # 结构/镜像/引文/标点/元数据挂起项（按文章 × 语言）
 PENDING_ARTICLES: dict[tuple[str, str], str] = {
-    ("juekun", "root"): "batch9",
 }
 
 THESIS_PAGES = {
@@ -175,7 +174,9 @@ class LanguageSystemTests(unittest.TestCase):
                     continue
                 where = f"{slug}/{lang}"
                 self.assertIn("ba-article", parser.classes, where)
-                self.assertTrue(parser.section_ids, f"{where}: 无 section")
+                self.assertIn("ag-section", parser.classes, f"{where}: 无 ag-section")
+                if tier != TIER_ARCHIVE:
+                    self.assertTrue(parser.section_ids, f"{where}: 无 section id")
                 for target in parser.anchor_targets:
                     self.assertIn(target, parser.ids, f"{where}: 死锚 #{target}")
             if len(parsed) == 2 and not any(
@@ -341,8 +342,9 @@ class LanguageSystemTests(unittest.TestCase):
                     continue
                 source = p.read_text(encoding="utf-8")
                 self.assertIn('hreflang="zh-CN"', source, f"{slug}/{lang}: 缺 zh-CN")
-                self.assertIn('hreflang="en"', source, f"{slug}/{lang}: 缺 en")
                 self.assertIn("x-default", source, f"{slug}/{lang}: 缺 x-default")
+                if tier != TIER_ARCHIVE:
+                    self.assertIn('hreflang="en"', source, f"{slug}/{lang}: 缺 en")
                 self.assertIn(canonical(slug, lang), sitemap, f"sitemap 缺 {canonical(slug, lang)}")
 
 

@@ -56,7 +56,6 @@ PENDING_ARTICLES: dict[tuple[str, str], str] = {
     ("only-imagination", "en"): "batch2", ("only-imagination", "zh"): "batch2",
     ("connections-recursive-intelligence", "en"): "batch2",
     ("connections-recursive-intelligence", "zh"): "batch2",
-    ("ft710-usb-remote-control", "en"): "batch4", ("ft710-usb-remote-control", "zh"): "batch4",
     ("efhw-esp32s3-auto-tuner", "en"): "batch4", ("efhw-esp32s3-auto-tuner", "zh"): "batch4",
     ("opus-vs-pcm-remote-audio", "en"): "batch4", ("opus-vs-pcm-remote-audio", "zh"): "batch4",
     ("psk-reporter-dxcc-hunting", "en"): "batch4", ("psk-reporter-dxcc-hunting", "zh"): "batch4",

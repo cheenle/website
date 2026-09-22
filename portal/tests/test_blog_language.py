@@ -42,9 +42,6 @@ CLAIM_TYPES = {"fact", "inference", "thesis", "analogy"}
 
 # 语体阈值挂起项（今天是 5 篇破折号超标）
 PENDING_DASH: dict[str, str] = {
-    "support-loop": "batch3",
-    "seven-billion-tokens": "batch3",
-    "seven-billion-tokens/almanac": "batch3",
 }
 
 # 结构/镜像/引文/标点/元数据挂起项（按文章 × 语言）

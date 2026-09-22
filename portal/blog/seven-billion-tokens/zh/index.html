@@ -101,10 +101,10 @@
 
         <div class="ba-tldr" id="tldr">
           <div class="ba-tldr-card">
-            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR——五条结论，撑起全文骨架</p>
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR：五条结论，撑起全文骨架</p>
             <ul class="ba-tldr-list">
               <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>一本账可以同时虚高又虚低。</strong>发表过的 7,007,437,567 个 token，既虚高（某个 harness 把同一个 API 响应的每个分块都记了一次，总量放大约 2.7 倍），又虚低（另一个被标成「未记录」的 harness，其实有 485,213,348 个 token 躺在一张没人查的表里）。老老实实重跑一遍，结果是 7,404,583,808。</li>
-              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>账上的读数不是资产。</strong>某个 harness 一周之内删掉了自己的历史（少了 679,899,086 个 token）；同一个脚本隔十二分钟再跑一次，又差 51,427,037——因为做测量的那个会话，本身也在被测量。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>账上的读数不是资产。</strong>某个 harness 一周之内删掉了自己的历史（少了 679,899,086 个 token）；同一个脚本隔十二分钟再跑一次，又差 51,427,037，因为做测量的那个会话，本身也在被测量。</li>
               <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>效率曲线是真的。</strong>三个仓库的曲线同向下降：ft8 每交付一个提交，人工介入的轮次从 17.1 降到 0.3（约 30 倍）；上周 mrrc_modern 在 41 个提交上维持在 0.73 轮/提交。</li>
               <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>模型能力决定上限，方法决定你实际吃到多少。</strong>同一个模型，在 ft8 探索期是 75.5 M/提交，维护期是 0.9 M/提交。两个变量里只有一个在你手里。</li>
               <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>一句话纪律：</strong>先问「我的判断沉淀在哪儿」，再问「AI 能帮我做什么」；任何数字，引用之前先快照。</li>
@@ -119,16 +119,16 @@
             <h2 class="ag-section-title">会倒退的账本</h2>
             <p class="ag-section-subtitle">在谈方法之前，先讲一条花钱买来的测量教训。</p>
           </header>
-          <p>2026-09-05，本站发布了一份 token 台账：<strong>7,007,437,567</strong> 个已记录 token。一周后把同一个测量重跑一遍，结果是 <strong>7,404,583,808</strong>——<strong>多了 397,146,241</strong>。有意思的不是涨了多少，而是旧数字在三个方向上同时出错。</p>
+          <p>2026-09-05，本站发布了一份 token 台账：<strong>7,007,437,567</strong> 个已记录 token。一周后把同一个测量重跑一遍，结果是 <strong>7,404,583,808</strong>，<strong>多了 397,146,241</strong>。有意思的不是涨了多少，而是旧数字在三个方向上同时出错。</p>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>方向</th><th>发生了什么</th><th>证据</th></tr></thead>
             <tbody>
               <tr><td><strong>虚高</strong></td><td>claude-code 的日志会给同一个 API 响应的每个分块各写一条 <code>usage</code> 记录，逐行相加就把总量放大了约 2.7 倍。按 <code>message.id</code> 去重后只剩 <strong>818,520,401</strong>，整本账随之变成 <strong>5,695,506,675</strong>。</td><td>6,600 个不同的 API 响应</td></tr>
               <tr><td><strong>虚低</strong></td><td>Hermes 之前被写成「未记录」。其实它记得好好的：<code>sessions</code> 表里躺着 <strong>485,213,348</strong> 个 token。上次检查查的是 <code>messages.token_count</code>，那一列全是 0。</td><td>292 个会话，2026-05-15 → 07-24</td></tr>
-              <tr><td><strong>漂移</strong></td><td>claude-code 在 <code>2026-09-07T13:13:57Z</code> 删掉了自己的早期日志，同一个 harness 因此比一周前少记 679,899,086 个 token。紧接着，同一个脚本隔十二分钟再跑，又差出 <strong>51,427,037</strong>——因为做这次测量的会话本身，也在往被测的日志里写东西。</td><td>观测者效应，复现两次</td></tr>
+              <tr><td><strong>漂移</strong></td><td>claude-code 在 <code>2026-09-07T13:13:57Z</code> 删掉了自己的早期日志，同一个 harness 因此比一周前少记 679,899,086 个 token。紧接着，同一个脚本隔十二分钟再跑，又差出 <strong>51,427,037</strong>，因为做这次测量的会话本身，也在往被测的日志里写东西。</td><td>观测者效应，复现两次</td></tr>
             </tbody>
           </table></div>
-          <p><strong>反向校验同样重要。</strong>codex 从八月下旬就停用了，它的数字两次测量逐位一致：<strong>547,796,667</strong>——而且是用两条不同的代码路径算出来的。稳定的读数和不稳定的读数都是信息，但只有稳定的那个才配叫「总量」。</p>
+          <p><strong>反向校验同样重要。</strong>codex 从八月下旬就停用了，它的数字两次测量逐位一致：<strong>547,796,667</strong>，而且是用两条不同的代码路径算出来的。稳定的读数和不稳定的读数都是信息，但只有稳定的那个才配叫「总量」。</p>
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实</span>
             <p>本页所有数字都是 <code>2026-09-12T02:40:59Z</code> 这一刻的快照，覆盖十一种 harness。每个 harness 的完整数字、各自的测量窗口，以及「什么能比、什么不能比」的规则，都在分册《<a href="../ledger/zh/">账本与测量边界</a>》里。已记录的账和估算的账<strong>不合并</strong>：iFlow 那约 2.47 亿 token 是按字符数估出来的（它的用量字段全是零），不计入本页任何合计。</p>
@@ -143,7 +143,7 @@
           <header class="volume-head">
             <span class="volume-num">卷一 · 业务与需求</span>
             <h2>意图从不以「AI」开头</h2>
-            <p class="volume-gloss">这个生态里的每个产品，都起于一句用业务语言说的话——把「AI」这个词拿掉，它依然成立。</p>
+            <p class="volume-gloss">这个生态里的每个产品，都起于一句用业务语言说的话，把「AI」这个词拿掉，它依然成立。</p>
           </header>
 
           <section id="intents" class="ag-section"><div class="container">
@@ -163,7 +163,7 @@
               </article>
               <article class="ag-card" data-track="edge">
                 <h3>MRRC FT-710 · 2026-07-06 · <code>9403e2e</code></h3>
-                <p>那台 FT-710 桌上就插着一根 USB 线——就用这根线顶替 SCU-LAN10 配件做远程操控（事后证明：线里的 FT4222 桥给出了约 21 fps 的真实频谱、48 kHz 双向 Opus 音频和完整的 CAT 控制）。<em>省钱。</em></p>
+                <p>那台 FT-710 桌上就插着一根 USB 线，就用这根线顶替 SCU-LAN10 配件做远程操控（事后证明：线里的 FT4222 桥给出了约 21 fps 的真实频谱、48 kHz 双向 Opus 音频和完整的 CAT 控制）。<em>省钱。</em></p>
               </article>
               <article class="ag-card">
                 <h3>MRRC-FT8 · 2026-08-03</h3>
@@ -182,7 +182,7 @@
               <h2 class="ag-section-title">六个月，知识没有载体</h2>
               <p class="ag-section-subtitle">模型并不弱，弱的是知识没有载体。</p>
             </header>
-            <p>2025-10-20 至 2026-04-16，同一个人用 iFlow 开了 <strong>185</strong> 个会话、打了 <strong>37,202</strong> 轮对话，换了 6 个模型后端（qwen3-coder-plus、glm-5——单周就有 <strong>10,420</strong> 轮——kimi-k2.5、minimax-m2.5）。产出是真的：MRRC 的前身就诞生在这里。但没有一样东西留得下来。</p>
+            <p>2025-10-20 至 2026-04-16，同一个人用 iFlow 开了 <strong>185</strong> 个会话、打了 <strong>37,202</strong> 轮对话，换了 6 个模型后端（qwen3-coder-plus、glm-5，单周就有 <strong>10,420</strong> 轮，kimi-k2.5、minimax-m2.5）。产出是真的：MRRC 的前身就诞生在这里。但没有一样东西留得下来。</p>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
               <p>37,202 轮对话，用量字段全是零，工程产物一样没留下：没有契约、没有文档体系、没有任何把关。会话一结束，这一轮学到的东西就跟着消失了。</p>
@@ -218,7 +218,7 @@
             </table></div>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>三条独立的曲线同向下降——ft8 那条读作 <strong>17.1 → 0.3</strong> 轮/提交——而且低数值在 mrrc_modern 上守住了第四周。后期 &lt;1 的含义是：人只说一句话需求，agent 自己跑完多个提交，人只出意图和裁决。MRRC 上一周展示了同一条规律的另一面：两个方向未定就落地的提交，每个花了 6.00 轮。</p>
+              <p>三条独立的曲线同向下降，ft8 那条读作 <strong>17.1 → 0.3</strong> 轮/提交，而且低数值在 mrrc_modern 上守住了第四周。后期 &lt;1 的含义是：人只说一句话需求，agent 自己跑完多个提交，人只出意图和裁决。MRRC 上一周展示了同一条规律的另一面：两个方向未定就落地的提交，每个花了 6.00 轮。</p>
             </div>
           </div></section>
 
@@ -240,7 +240,7 @@
             </table></div>
             <div class="claim-box" data-claim-type="inference">
               <span class="claim-label">推断</span>
-              <p>高成本周 = 方向未定的探索；低成本周 = 模式成型后的交付。上周不是例外，恰恰是证明：mrrc_modern 的单位成本从 0.95 M 回升到 5.95 M，正是因为它五天接了四个新功能版本；MRRC 那两个用来定方向的提交，每个花掉 47.07 M。token 的峰值永远落在不确定性最高的地方——它是不确定性的仪表，不是生产力的奖杯。</p>
+              <p>高成本周 = 方向未定的探索；低成本周 = 模式成型后的交付。上周不是例外，恰恰是证明：mrrc_modern 的单位成本从 0.95 M 回升到 5.95 M，正是因为它五天接了四个新功能版本；MRRC 那两个用来定方向的提交，每个花掉 47.07 M。token 的峰值永远落在不确定性最高的地方，它是不确定性的仪表，不是生产力的奖杯。</p>
             </div>
           </div></section>
 
@@ -252,9 +252,9 @@
             </header>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>ft710 的 fix 提交占比，从开坑周的 36% 降到维护周的 6–12%；ft8 从 29% 降到 17%——而且是在提交量最大的两周（147 / 82 个提交）做到的。</p>
+              <p>ft710 的 fix 提交占比，从开坑周的 36% 降到维护周的 6–12%；ft8 从 29% 降到 17%，而且是在提交量最大的两周（147 / 82 个提交）做到的。</p>
             </div>
-            <p><strong>反面证据同样真实，而且就发生在这一周。</strong>MRRC 在大整合周（W32，7.98 亿 tokens）fix 占比 50%；modern 在大重构周（W35）31%；sunsdr 早期攻坚周 51%。上一周 mrrc_modern 落了 <strong>41</strong> 个提交，其中 <strong>17</strong> 个是 fix——fix 占比 <strong>41%</strong>，是重构周以来的最高值。新需求永远带来新返工，区别在于返工由谁来做：人只介入了 0.73 轮/提交，也就是说，这些返工几乎全是 agent 自己完成的。</p>
+            <p><strong>反面证据同样真实，而且就发生在这一周。</strong>MRRC 在大整合周（W32，7.98 亿 tokens）fix 占比 50%；modern 在大重构周（W35）31%；sunsdr 早期攻坚周 51%。上一周 mrrc_modern 落了 <strong>41</strong> 个提交，其中 <strong>17</strong> 个是 fix，fix 占比 <strong>41%</strong>，是重构周以来的最高值。新需求永远带来新返工，区别在于返工由谁来做：人只介入了 0.73 轮/提交，也就是说，这些返工几乎全是 agent 自己完成的。</p>
           </div></section>
 
           <section id="cadence" class="ag-section"><div class="container">
@@ -265,7 +265,7 @@
             </header>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
-              <p>发布还在加速：这一周 mrrc_modern 从 <strong>v1.14.0</strong> 一路发到 <strong>v1.14.3</strong>——五天四个版本，连版本自己的 changelog 都在发布当天做了更正。更早的时候：modern 13 天 6 版（一天 3 版）；ft8 诞生周 3 天 3 版；MRRC 曾两天发 9 版。</p>
+              <p>发布还在加速：这一周 mrrc_modern 从 <strong>v1.14.0</strong> 一路发到 <strong>v1.14.3</strong>，五天四个版本，连版本自己的 changelog 都在发布当天做了更正。更早的时候：modern 13 天 6 版（一天 3 版）；ft8 诞生周 3 天 3 版；MRRC 曾两天发 9 版。</p>
             </div>
             <div class="claim-box" data-claim-type="fact">
               <span class="claim-label">事实</span>
@@ -273,7 +273,7 @@
             </div>
             <div class="claim-box" data-claim-type="inference">
               <span class="claim-label">推断</span>
-              <p>先写契约、AI 交付到绿——这是后期才长出来的制度化能力，也是「顺」在组织层面的样子。</p>
+              <p>先写契约、AI 交付到绿，这是后期才长出来的制度化能力，也是「顺」在组织层面的样子。</p>
             </div>
           </div></section>
 
@@ -301,7 +301,7 @@
                 <tr><td>2026-07-20</td><td>sdd-guardian 诞生（<code>2498ec2</code>）：机器可读的约束清单 + 运行时把关——会话开始时注入约束（SessionStart → prime），编辑落盘前拦截（PreToolUse → hook）</td><td><strong>契约时代</strong>——知识不用人去记</td></tr>
                 <tr><td>2026-08-02</td><td>ft8 第一个实质提交（<code>d4a7a32</code>）一次性带入全套 AGENTS.md + 15 章 SDD + guardian + 契约测试</td><td>方法成熟到可以整包继承，新项目第一天就有把关</td></tr>
                 <tr><td>2026-08-26</td><td>modern 的约束清单扩到 21 条（<code>2bc3d30</code>）</td><td>至 2026-09-12，三仓合计 <strong>52 条机器可读约束</strong>（<strong>ft710 17 / modern 21 / ft8 14</strong>），每条带严重级别、作用范围、匹配模式和出处引用</td></tr>
-                <tr><td>2026-09-05 → 09-12</td><td>约束条数没有变化</td><td><strong>一次诚实的走平。</strong>一整周高强度交付，没有新增一条约束——要么把关守住了，要么有一类事故漏登记了。两种读法都成立，这本账目前还区分不开。</td></tr>
+                <tr><td>2026-09-05 → 09-12</td><td>约束条数没有变化</td><td><strong>一次诚实的走平。</strong>一整周高强度交付，没有新增一条约束，要么把关守住了，要么有一类事故漏登记了。两种读法都成立，这本账目前还区分不开。</td></tr>
               </tbody>
             </table></div>
             <p>这套机制的分工是：外层 harness 定义业务/技术/产品约束（为什么做、边界在哪、什么证据能改变结论）；内环 Specify → Implement → Test → Review → Observe → Update SDD 整个交给 agent；持续演进的 SDD 让设计意图往下流、现场证据往上回流，生命周期状态显式标注，不自动晋级。</p>
@@ -316,7 +316,7 @@
             <div class="ag-loop-grid">
               <article class="ag-card" data-track="control">
                 <h3>FT-710 频率漂移 · 13 天闭环</h3>
-                <p><code>DN;</code> 不是 DNR 查询，而是 VFO 步进命令；每 2 秒轮询一次，实机频率每次就漂约 20 Hz——现场事故（07-07 修复 <code>72fd6f0</code>）→ 设计裁决 AD-014 写入 SDD（07-08 <code>bb128ff</code>）→ 机器可读约束 <code>cat-no-dn</code>（07-20 <code>2498ec2</code>）→ 编辑前拦截，可复现（退出码 2）。</p>
+                <p><code>DN;</code> 不是 DNR 查询，而是 VFO 步进命令；每 2 秒轮询一次，实机频率每次就漂约 20 Hz，现场事故（07-07 修复 <code>72fd6f0</code>）→ 设计裁决 AD-014 写入 SDD（07-08 <code>bb128ff</code>）→ 机器可读约束 <code>cat-no-dn</code>（07-20 <code>2498ec2</code>）→ 编辑前拦截，可复现（退出码 2）。</p>
               </article>
               <article class="ag-card" data-track="sdr">
                 <h3>部署备份打满磁盘 · 7 天闭环</h3>

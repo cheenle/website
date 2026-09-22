@@ -59,6 +59,28 @@ print(f'汉字={n} 句={sents} 均句长={n/max(sents,1):.1f} 破折号={d} {d/m
 
 ---
 
+## 执行中发现（2026-09-22，批次 0/1 完成后补记）
+
+1. **sitemap 只能在主检出生成。** `mrrc_modern` / `SunsdrMobile` / `ft8` 是**相对**符号链接（如 `mrrc_modern -> ../mrrc_modern/website`），在任何 `.worktrees/*` 里都会断链；`make_sitemap.py` 的 `os.walk` 不会跟随断裂链接，于是**静默丢掉 6 个 mrrc_modern URL**。在 worktree 里生成前必须先把这三个链接临时换成绝对路径，生成后用 `git checkout mrrc_modern SunsdrMobile ft8` 还原（否则符号链接变更会被提交）。任务 9 按此执行。
+
+2. **`tests/test_sitemap.py` 是 pytest 风格**（裸 `def test_`），`python3 -m unittest discover` **一个都不收集**，而本机没有 pytest。它是全站唯一校验「sitemap 与生成器一致 / 子站页面全收录」的文件。手工执行：
+
+   ```bash
+   cd portal && python3 -c "
+   import sys; sys.path.insert(0,'tests'); import test_sitemap as t
+   [getattr(t,n)() for n in dir(t) if n.startswith('test_')]; print('sitemap 契约测试通过')"
+   ```
+
+   批次 7 验收必须包含这一步，否则「全绿」是缺面的。
+
+3. **索引与 sitemap 改为随页增量更新**（原计划排在批次 6）：`test_blog_indexes_mirror_each_other` 以页面存在性推断，新 ZH 页一落地就要求两侧索引同时收录该篇，否则假红。批次 6 因此只剩 landing 8 页术语核对与最终复核。
+
+4. **老 4 篇保留原 section id**（`ft4222` / `scopeframe` / `tx` / `fallback` / `vs-sculan10`），不采用任务 7 表格里的重命名 id，避免存量外链失效；另加 `closing` 一节。
+
+5. **`ba-quote-cite` 必须渲染出来**，不能只写在 `data-quote-cite` 属性里——测试已加断言，任务 5/6/8 照此办理。
+
+---
+
 ## 任务 1：`.ba-quote` 组件与 CSS 版本 bump
 
 **文件：**

@@ -13,6 +13,9 @@
     <meta property="og:url" content="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/">
     <meta property="og:site_name" content="VLSC Projects">
     <link rel="canonical" href="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/">
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/">
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -48,27 +51,42 @@
             <h1>Opus vs PCM for HF Remote Audio: Latency, Bandwidth, and Trade-offs</h1>
             <p>The codec decision behind remote radio that works on a phone — a &gt;10× bandwidth cut for a 20 ms frame of latency, and a surprising ctypes bug that changed how bitrate is controlled.</p>
             <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">Aug 12, 2026</time> &nbsp;·&nbsp; ~8 min read</p>
-            <ul class="ba-tags">
-            <li><a href="/blog/">#opus</a></li>
-            <li><a href="/blog/">#codec</a></li>
-            <li><a href="/blog/">#audio</a></li>
-            <li><a href="/blog/">#low-latency</a></li>
-            <li><a href="/blog/">#websocket</a></li>
-        </ul>
+            <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-compress"></i> >12× bandwidth cut</span>
+            <span class="ag-pill"><i class="fas fa-clock"></i> 20 ms frames</span>
+            <span class="ag-pill"><i class="fas fa-sliders"></i> 64 kbps default</span>
+            <span class="ag-pill"><i class="fas fa-code"></i> 1-byte codec switch</span>
+            </div>
         </div>
     </header>
 
 
-    <main class="ba-main">
-        <div class="ba-prose">
+            <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#bandwidth">01</a><a href="#settings">02</a><a href="#quirk">03</a><a href="#switching">04</a><a href="#latency">05</a><a href="#transport">06</a><a href="#signal">07</a></nav></div></div>
 
-        <p>Every remote radio system has the same invisible problem: <strong>the audio link.</strong> The RF path — IQ samples, spectrum, CAT commands — can all be engineered to fit a link. Audio is where it gets personal, because your ear is the one judging it. Ship raw PCM and a phone on LTE will stutter; compress it badly and a loud signal turns into mush. This article is about the codec decision in the <a href="/sunmrrc/">SunMRRC</a> remote server and the <a href="/sunmrrc/ios/">SunsdrMobile</a> client — the same Opus approach the universal <a href="/mrrc/">MRRC</a> remote uses: why Opus, what it costs, and the implementation details that make it reliable.</p>
+      <main class="ba-main">
+        <p class="lede">Every remote radio system has the same invisible problem: <strong>the audio link.</strong> The RF path — IQ samples, spectrum, CAT commands — can all be engineered to fit a link. Audio is where it gets personal, because your ear is the one judging it. Ship raw PCM and a phone on LTE will stutter; compress it badly and a loud signal turns into mush. This article is about the codec decision in the <a href="/sunmrrc/">SunMRRC</a> remote server and the <a href="/sunmrrc/ios/">SunsdrMobile</a> client — the same Opus approach the universal <a href="/mrrc/">MRRC</a> remote uses: why Opus, what it costs, and the implementation details that make it reliable.</p>
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Receive audio as 16-bit PCM is ~768 kbit/s; Opus at 64 kbps is more than twelve times smaller.</strong></li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The frame is 20 ms — 960 samples at 48 kHz — and the encoder runs OPUS_APPLICATION_AUDIO, not the VOIP profile.</strong></li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>The ctypes variadic-ABI bug mattered because it silently changed which bitrate-control path the encoder took instead of failing loudly.</strong></li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Switching between PCM and Opus is signalled by one byte in the payload; there is no handshake to negotiate.</strong></li>
+            </ul>
+            <div class="ba-readpath"><span>3-minute read:</span><a href="#bandwidth">§01</a><a href="#settings">§02</a><a href="#quirk">§03</a><a href="#switching">§04</a><a href="#latency">§05</a><a href="#transport">§06</a><a href="#signal">§07</a></div>
+          </div>
+        </div>
 
-        <h2 id="bandwidth">The bandwidth math: why PCM fails on mobile</h2>
+        <section id="bandwidth" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · The bandwidth math</span>
+            <h2 class="ag-section-title">The bandwidth math: why PCM fails on mobile</h2>
+            <p class="ag-section-subtitle">16-bit PCM is brutal on a network. Opus is not.</p>
+          </header>
+          <p>Uncompressed Int16 PCM is brutal on a network. The SunMRRC server broadcasts receive audio at 48&nbsp;kHz mono and captures the transmit microphone at 16&nbsp;kHz:</p>
 
-        <p>Uncompressed Int16 PCM is brutal on a network. The SunMRRC server broadcasts receive audio at 48&nbsp;kHz mono and captures the transmit microphone at 16&nbsp;kHz:</p>
-
-        <table>
+        <div class="ag-table-wrap"><table class="ag-table">
             <thead>
                 <tr><th>Link</th><th>PCM bandwidth</th><th>Opus bandwidth</th><th>Compression</th></tr>
             </thead>
@@ -76,13 +94,17 @@
                 <tr><td>RX audio (server → client)</td><td>~768 kbit/s (48 kHz, 16-bit mono)</td><td>~18–24 kbit/s (64 kbps target)</td><td>&gt;10×</td></tr>
                 <tr><td>TX audio (client → server)</td><td>~256 kbit/s (16 kHz)</td><td>~18–24 kbit/s</td><td>&gt;10×</td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <p>768&nbsp;kbit/s of continuous receive audio is a non-starter for most mobile uplinks — and even where the pipe is big enough, packet loss on a congested LTE cell turns a PCM stream into audible stutter. The team's own note on the codec puts it plainly: 64&nbsp;kbps mono is <em>"the sweet spot for remote WFM listening: near-transparent on broadcast music yet only 1/12 the 768 kbps Int16 PCM rate, so a remote link stops underrunning (the PCM stutter)."</em></p>
-
-        <h2 id="settings">The Opus encoder settings</h2>
-
-        <p>The settings live in one module (<code>opus_rx.py</code>):</p>
+        </div></section>
+        <section id="settings" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · The Opus encoder setti</span>
+            <h2 class="ag-section-title">The Opus encoder settings</h2>
+            <p class="ag-section-subtitle">The exact configuration, and the two choices that decide how it sounds.</p>
+          </header>
+          <p>The settings live in one module (<code>opus_rx.py</code>):</p>
 
         <pre><code>RX rate:         48 kHz mono        (raised from 16 kHz so WFM keeps its ~15 kHz band)
 TX rate:         16 kHz mono        (phone mic)
@@ -92,10 +114,14 @@ Application:     OPUS_APPLICATION_AUDIO (2049)  ← not OPUS_APPLICATION_VOIP
 Max packet:      4000 bytes         (TX worst-case 120 ms frame = 5760 samples)</code></pre>
 
         <p>Two choices here are worth calling out. The RX rate was raised from 16&nbsp;kHz to 48&nbsp;kHz specifically so <strong>WFM broadcast</strong> keeps its full ~15&nbsp;kHz audio band — a 16&nbsp;kHz stream would make FM broadcast sound dull. And the encoder uses <code>OPUS_APPLICATION_AUDIO</code> rather than the voice profile: that's the flag that tells Opus to favor full-bandwidth fidelity over telephony intelligibility, which suits both WFM music and clear SSB.</p>
-
-        <h2 id="quirk">A real-world ctypes quirk: the variadic ABI bug</h2>
-
-        <p>This is the kind of bug that eats a weekend. Opus controls its bitrate through <code>opus_encoder_ctl()</code>, a C <em>variadic</em> function. On Apple Silicon (arm64), the variadic ABI passes trailing arguments on the stack, but ctypes with pinned <code>argtypes</code> passes them in a register — so <strong>every SET control call returns <code>OPUS_BAD_ARG</code> and silently no-ops</strong>. The bitrate you thought you configured was never configured.</p>
+        </div></section>
+        <section id="quirk" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · A real-world ctypes qu</span>
+            <h2 class="ag-section-title">A real-world ctypes quirk: the variadic ABI bug</h2>
+            <p class="ag-section-subtitle">A 64-bit ABI detail that silently changed how bitrate was controlled.</p>
+          </header>
+          <p>This is the kind of bug that eats a weekend. Opus controls its bitrate through <code>opus_encoder_ctl()</code>, a C <em>variadic</em> function. On Apple Silicon (arm64), the variadic ABI passes trailing arguments on the stack, but ctypes with pinned <code>argtypes</code> passes them in a register — so <strong>every SET control call returns <code>OPUS_BAD_ARG</code> and silently no-ops</strong>. The bitrate you thought you configured was never configured.</p>
 
         <p>The workaround is elegant: skip the control API entirely and cap the output with the <code>max_data_bytes</code> argument to <code>opus_encode()</code>:</p>
 
@@ -103,10 +129,14 @@ Max packet:      4000 bytes         (TX worst-case 120 ms frame = 5760 samples)<
 # 64 kbps → 160 bytes per frame</code></pre>
 
         <p>Verified in practice: a 40-byte cap yields ~13&nbsp;kbps, 60 bytes ~20&nbsp;kbps, both with clean decode round-trips. Forcing the encoder to fit a byte budget turns out to be just as controllable as the proper API — and it works on every architecture.</p>
-
-        <h2 id="switching">PCM ↔ Opus switching without a handshake</h2>
-
-        <p>The stream can flip codecs mid-session without any control-channel negotiation, thanks to a <strong>1-byte codec tag prefix</strong> on every audio frame (SDD AD-004):</p>
+        </div></section>
+        <section id="switching" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · PCM ↔ Opus switching w</span>
+            <h2 class="ag-section-title">PCM ↔ Opus switching without a handshake</h2>
+            <p class="ag-section-subtitle">One byte in the payload is the whole protocol.</p>
+          </header>
+          <p>The stream can flip codecs mid-session without any control-channel negotiation, thanks to a <strong>1-byte codec tag prefix</strong> on every audio frame (SDD AD-004):</p>
 
         <pre><code>0x00  =  raw Int16 PCM
 0x01  =  Opus packet</code></pre>
@@ -118,12 +148,16 @@ Max packet:      4000 bytes         (TX worst-case 120 ms frame = 5760 samples)<
             <li>The user can toggle codec live from the audio menu (<code>setOpus:</code>, plus <code>setOpusBitrate:</code> for 16–128&nbsp;kbps).</li>
             <li>An encode failure mid-stream logs a warning and sends the PCM fallback for that frame instead of dropping audio.</li>
         </ul>
+        </div></section>
+        <section id="latency" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · The latency budget</span>
+            <h2 class="ag-section-title">The latency budget</h2>
+            <p class="ag-section-subtitle">Where the 20 ms frame goes, and what it costs.</p>
+          </header>
+          <p>The honest question about Opus is always <em>"how much delay does it add?"</em> The encoder frame is 20&nbsp;ms — a rounding error against the real contributors, which are the jitter buffers:</p>
 
-        <h2 id="latency">The latency budget</h2>
-
-        <p>The honest question about Opus is always <em>"how much delay does it add?"</em> The encoder frame is 20&nbsp;ms — a rounding error against the real contributors, which are the jitter buffers:</p>
-
-        <table>
+        <div class="ag-table-wrap"><table class="ag-table">
             <thead>
                 <tr><th>Stage</th><th>Value</th></tr>
             </thead>
@@ -136,13 +170,17 @@ Max packet:      4000 bytes         (TX worst-case 120 ms frame = 5760 samples)<
                 <tr><td>Steady-state TX queue</td><td>~80 packets ≈ 410 ms</td></tr>
                 <tr><td>TX modulation pre-settle</td><td>17 zero-IQ packets ≈ 87 ms + 200-sample ramp ≈ 5.1 ms</td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <p>The lesson: <strong>Opus is not the latency problem.</strong> The buffer strategy is. The 200&nbsp;ms WebSocket prime and ~307&nbsp;ms mic prime exist to soak up network jitter so the audio never clicks — and for a hobby remote-radio session, hundreds of milliseconds of buffering is the right trade against a single dropout.</p>
-
-        <h2 id="transport">The WebSocket audio transport</h2>
-
-        <p>Four WebSocket endpoints carry the whole remote session:</p>
+        </div></section>
+        <section id="transport" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · The WebSocket audio tr</span>
+            <h2 class="ag-section-title">The WebSocket audio transport</h2>
+            <p class="ag-section-subtitle">Binary frames, no base64, and a text channel for control.</p>
+          </header>
+          <p>Four WebSocket endpoints carry the whole remote session:</p>
 
         <ul>
             <li><code>/WSCTRX</code> — control channel, text commands, PING/PONG for round-trip measurement</li>
@@ -152,17 +190,20 @@ Max packet:      4000 bytes         (TX worst-case 120 ms frame = 5760 samples)<
         </ul>
 
         <p>The TX path has one more trick (SDD AD-014): a <strong>lock-free ring buffer</strong> in a <code>SharedArrayBuffer</code> passes audio samples between an <code>AudioWorklet</code> (producer, real-time priority) and a dedicated Web Worker (consumer, which runs the Opus WASM encoder and owns its own WebSocket). The main browser thread never touches audio samples, so a garbage-collection pause can't cause a dropout. That requires <code>Cross-Origin-Opener-Policy: same-origin</code> and <code>Cross-Origin-Embedder-Policy: credentialless</code> headers — worth knowing if you self-host.</p>
-
-        <h2 id="signal">Sample rates and the signal path</h2>
-
-        <p>The SunSDR2 DX streams IQ at rates that are multiples of 5⁷ = 78,125&nbsp;Hz (39k/78k/156k/312k). The base 39,062.5&nbsp;Hz rate gives a ~19.5&nbsp;kHz Nyquist, enough for WFM; the demodulator then resamples to 48&nbsp;kHz with Catmull-Rom cubic interpolation for the Opus encoder and the browser's AudioContext.</p>
+        </div></section>
+        <section id="signal" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · Sample rates and the s</span>
+            <h2 class="ag-section-title">Sample rates and the signal path</h2>
+            <p class="ag-section-subtitle">Why receive runs at 48 kHz and transmit at 16 kHz.</p>
+          </header>
+          <p>The SunSDR2 DX streams IQ at rates that are multiples of 5⁷ = 78,125&nbsp;Hz (39k/78k/156k/312k). The base 39,062.5&nbsp;Hz rate gives a ~19.5&nbsp;kHz Nyquist, enough for WFM; the demodulator then resamples to 48&nbsp;kHz with Catmull-Rom cubic interpolation for the Opus encoder and the browser's AudioContext.</p>
 
         <p>On TX, the client's 16&nbsp;kHz mic audio is Opus-encoded in the Worker, decoded server-side, then run through a <strong>300&nbsp;Hz 4th-order Butterworth high-pass filter</strong> (AD-015) before SSB modulation. That filter is a measurable win: it drops sub-300&nbsp;Hz envelope power from 30.4% to 3.7% of the total, pushing 96% of PA power into the 300–2800&nbsp;Hz voice band. The modulation chain ends with a tanh soft-limiter and a linear ramp, so the transmitted envelope never slams into the PA.</p>
 
         <p>This article pulls from the <a href="/sunmrrc/">SunMRRC</a> server and its <a href="/sunmrrc/ios/">SunsdrMobile</a> iOS client, both open source. The architecture decisions (AD-004 dual-codec transport, AD-014 ring buffer, AD-015 TX filter) are documented in the <a href="/sunmrrc/sdd/">SunMRRC Software Design Document</a>.</p>
-
-        </div>
-</main>
+        </div></section>
+      </main>
 
     <footer class="ba-footer">
         <div class="ba-footer-inner">

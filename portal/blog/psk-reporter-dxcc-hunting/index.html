@@ -13,6 +13,9 @@
     <meta property="og:url" content="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/">
     <meta property="og:site_name" content="VLSC Projects">
     <link rel="canonical" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/">
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/">
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -48,39 +51,62 @@
             <h1>Finding New DXCC with PSK Reporter: A Data-Driven DX Hunting Workflow</h1>
             <p>Stop calling into the void. Watch what stations a few hundred kilometers away are decoding, and you'll know exactly when a rare one is workable from your QTH.</p>
             <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">Aug 12, 2026</time> &nbsp;·&nbsp; ~7 min read</p>
-            <ul class="ba-tags">
-            <li><a href="/blog/">#dxcc</a></li>
-            <li><a href="/blog/">#psk-reporter</a></li>
-            <li><a href="/blog/">#ft8</a></li>
-            <li><a href="/blog/">#propagation</a></li>
-            <li><a href="/blog/">#dxing</a></li>
-        </ul>
+            <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-location-dot"></i> grid ON80da</span>
+            <span class="ag-pill"><i class="fas fa-tower-broadcast"></i> 15 m evening</span>
+            <span class="ag-pill"><i class="fas fa-list-check"></i> worked-DXCC driven</span>
+            <span class="ag-pill"><i class="fas fa-chart-line"></i> self-hosted dashboard</span>
+            </div>
         </div>
     </header>
 
 
-    <main class="ba-main">
-        <div class="ba-prose">
+            <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#oracle">01</a><a href="#tool">02</a><a href="#how">03</a><a href="#reading">04</a><a href="#session">05</a><a href="#action">06</a><a href="#lessons">07</a><a href="#field-notes">08</a></nav></div></div>
 
-        <p>DX hunting has a classic loop: watch the cluster, hear <em>DX</em> CQ'd by somebody, tune in, call, call again, give up. It works, but it's blind. You're gambling on propagation you can't see. Over the last year I've switched to a different signal that costs nothing and is far more reliable: <strong>what stations near me are decoding right now.</strong> If a station 500&nbsp;km away is decoding Franz Josef Land on 15 meters, the path from my QTH to the high Arctic is open too — at this exact moment.</p>
-
+      <main class="ba-main">
+        <p class="lede">DX hunting has a classic loop: watch the cluster, hear <em>DX</em> CQ'd by somebody, tune in, call, call again, give up. It works, but it's blind. You're gambling on propagation you can't see. Over the last year I've switched to a different signal that costs nothing and is far more reliable: <strong>what stations near me are decoding right now.</strong> If a station 500&nbsp;km away is decoding Franz Josef Land on 15 meters, the path from my QTH to the high Arctic is open too — at this exact moment.</p>
         <p>This article is the workflow I actually use, built around a small self-hosted tool that turns <a href="https://pskreporter.info" target="_blank" rel="noopener">PSK Reporter</a>'s public spot data into a short list of DXCC entities I haven't worked yet but realistically can, right now.</p>
 
-        <h2 id="oracle">Your neighbors are a propagation oracle</h2>
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>PSK Reporter publishes decoded-spot records worldwide; the useful signal is what stations near your QTH are decoding right now.</strong></li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The dashboard recomputes a recommendation set every few minutes from spots, the worked-DXCC list and grid ON80da.</strong></li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>A neighbour's decode is evidence about the path, not a guarantee — your antenna and noise floor still decide.</strong></li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The output is a short list of entities you still need and can realistically work now, not a wall of spots.</strong></li>
+            </ul>
+            <div class="ba-readpath"><span>3-minute read:</span><a href="#oracle">§01</a><a href="#tool">§02</a><a href="#how">§03</a><a href="#reading">§04</a><a href="#session">§05</a><a href="#action">§06</a><a href="#lessons">§07</a><a href="#field-notes">§08</a></div>
+          </div>
+        </div>
 
-        <p>PSK Reporter already publishes millions of decoded-spot records a day: station A decoded callsign B on frequency F with signal strength S at time T. The data is a living map of who is hearing whom across every band, worldwide.</p>
+        <section id="oracle" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Your neighbors are a p</span>
+            <h2 class="ag-section-title">Your neighbors are a propagation oracle</h2>
+            <p class="ag-section-subtitle">Propagation is regional: if they decode it, you can probably hear it too.</p>
+          </header>
+          <p>PSK Reporter already publishes millions of decoded-spot records a day: station A decoded callsign B on frequency F with signal strength S at time T. The data is a living map of who is hearing whom across every band, worldwide.</p>
 
         <p>The trick is that <strong>propagation is regional</strong>. If a station in my propagation zone decodes a DXCC entity, the same opening is almost certainly reaching my antenna too. This is the principle behind propagation beacons — except instead of one beacon, I have thousands of nearby operators, each reporting in real time. The hard part is never the data; it's filtering it down to: <em>"which DXCC do people around me hear that I still need?"</em></p>
-
-        <h2 id="tool">A personal PSK Reporter analysis dashboard</h2>
-
-        <p>To answer that question continuously, I run a small dashboard that ingests PSK Reporter spots into a database, keeps my worked-DXCC list, and recomputes a recommendation set every few minutes. It's the kind of thing that started as a script and grew into a proper page — full-data explorer, a map of nearby spots, and a DXCC recommendation view.</p>
+        </div></section>
+        <section id="tool" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · A personal PSK Reporte</span>
+            <h2 class="ag-section-title">A personal PSK Reporter analysis dashboard</h2>
+            <p class="ag-section-subtitle">Spots into a database, a worked-DXCC list on disk, recommendations recomputed every few minutes.</p>
+          </header>
+          <p>To answer that question continuously, I run a small dashboard that ingests PSK Reporter spots into a database, keeps my worked-DXCC list, and recomputes a recommendation set every few minutes. It's the kind of thing that started as a script and grew into a proper page — full-data explorer, a map of nearby spots, and a DXCC recommendation view.</p>
 
         <p>It runs at <code>radio.vlsc.net</code> and knows my station: Beijing, grid <code>ON80da</code>. Everything downstream is relative to that QTH.</p>
-
-        <h2 id="how">How the recommendation works</h2>
-
-        <p>Under the hood it's a single question, restated as a query:</p>
+        </div></section>
+        <section id="how" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · How the recommendation</span>
+            <h2 class="ag-section-title">How the recommendation works</h2>
+            <p class="ag-section-subtitle">Which entities nearby stations are hearing that you still need.</p>
+          </header>
+          <p>Under the hood it's a single question, restated as a query:</p>
 
         <blockquote>
             <p>Within the last N hours, which DXCC entities were decoded by stations within 1000&nbsp;km of me — that I have not yet confirmed in my log?</p>
@@ -93,10 +119,14 @@
             <li><strong>The radius.</strong> 1000&nbsp;km is a good default: close enough that propagation correlates, wide enough that there are stations to watch. Widen it and you get more candidates but weaker correlation to your own path.</li>
             <li><strong>The worked list.</strong> This is what turns a wall of spots into a shortlist. Mine has 163 confirmed entities, and anything not on it is a candidate.</li>
         </ul>
-
-        <h2 id="reading">Reading the table</h2>
-
-        <p>The recommendation view is a small table — DXCC, band, spot count, distinct calls, average SNR, most recent time, and a status flag. Two columns matter more than the rest:</p>
+        </div></section>
+        <section id="reading" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · Reading the table</span>
+            <h2 class="ag-section-title">Reading the table</h2>
+            <p class="ag-section-subtitle">Distance, strength and time — and what each column is not.</p>
+          </header>
+          <p>The recommendation view is a small table — DXCC, band, spot count, distinct calls, average SNR, most recent time, and a status flag. Two columns matter more than the rest:</p>
 
         <ul>
             <li><strong>🆕 First seen.</strong> The tool tags an entity the first time it ever appears in my analysis window. That flag is the single highest-value signal in the whole app: rare entities almost always surface first as one quiet spot from one station. When it shows up, drop what you're doing.</li>
@@ -104,12 +134,16 @@
         </ul>
 
         <p>Spot count and distinct calls tell you how <em>solid</em> an opening is: five spots from three different German stations means a healthy path; one spot from one station means a fragile but possibly precious one.</p>
+        </div></section>
+        <section id="session" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · A real evening session</span>
+            <h2 class="ag-section-title">A real evening session</h2>
+            <p class="ag-section-subtitle">One evening on 15 metres, replayed from the log.</p>
+          </header>
+          <p>Here's a live example from tonight. The 2-hour window returned two candidates:</p>
 
-        <h2 id="session">A real evening session</h2>
-
-        <p>Here's a live example from tonight. The 2-hour window returned two candidates:</p>
-
-        <table>
+        <div class="ag-table-wrap"><table class="ag-table">
             <thead>
                 <tr><th>DXCC</th><th>Band</th><th>Spots</th><th>Calls</th><th>SNR</th><th>Last heard</th><th>Status</th></tr>
             </thead>
@@ -117,17 +151,21 @@
                 <tr><td>Franz Josef Land (R1FJZ)</td><td>15 m</td><td>1</td><td>1</td><td>−16 dB</td><td>18:49 local</td><td>🆕 First seen</td></tr>
                 <tr><td>Fed. Rep. of Germany (DL)</td><td>15 m</td><td>5</td><td>3</td><td>−14 dB</td><td>18:44 local</td><td>Already appeared</td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <p>The headline is <strong>Franz Josef Land</strong> — an Arctic entity I've never worked, flagged <em>first seen</em>, one spot, one call, on 15 meters, heard at 18:49 local. A station near me was decoding it twenty minutes before I looked. The Arctic path was open. That's the moment the tool exists for: not "someday workable," but <em>workable right now.</em></p>
 
         <p>Germany was the volume play — five spots from three calls, a solid but ordinary path to a common entity that still counts toward the DXCC total. And earlier, before it slipped out of the 2-hour window, <strong>Dodecanese</strong> had shown up on 20 meters — a reminder that keeping a couple of windows open catches the ones you'd otherwise miss.</p>
 
         <p>Behind it all, the propagation backdrop: <strong>F10.7 at 200</strong> (high solar flux — the high bands are alive), <strong>Kp 1.7</strong> (a quiet geomagnetic field), Bz positive. That combination is exactly why the action was on 15 meters rather than 40.</p>
-
-        <h2 id="action">The action sequence</h2>
-
-        <p>The tool narrows the world down to a shortlist; the QSO still happens at the radio. When a candidate looks fresh, my sequence is:</p>
+        </div></section>
+        <section id="action" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · The action sequence</span>
+            <h2 class="ag-section-title">The action sequence</h2>
+            <p class="ag-section-subtitle">What to do tonight, in order.</p>
+          </header>
+          <p>The tool narrows the world down to a shortlist; the QSO still happens at the radio. When a candidate looks fresh, my sequence is:</p>
 
         <ol>
             <li><strong>Get the callsign.</strong> The recommendation is at DXCC granularity. I open the live map or full-data view filtered to the last few hours to pull the actual callsigns and frequencies.</li>
@@ -137,23 +175,30 @@
         </ol>
 
         <p>None of this is magic. The tool just makes sure I'm at the right frequency at the right time, and tells me which entity to chase in the first place.</p>
-
-        <h2 id="lessons">What I've learned</h2>
-
-        <ul>
+        </div></section>
+        <section id="lessons" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · What I've learned</span>
+            <h2 class="ag-section-title">What I've learned</h2>
+            <p class="ag-section-subtitle">The workflow's failure modes, and what fixed them.</p>
+          </header>
+          <ul>
             <li><strong>First seen beats volume.</strong> One fresh spot from a rare entity is worth more than ten stale spots from a common country.</li>
             <li><strong>Freshness beats everything.</strong> A single spot from the last half hour is actionable; a burst from last night is a memory.</li>
             <li><strong>The radius is a patience dial.</strong> Wide radius, more candidates, worse correlation. Start tight, widen when quiet.</li>
             <li><strong>Your log is the engine.</strong> The recommendations are only as good as the worked list. Logging discipline is what makes the whole loop converge.</li>
         </ul>
-
-        <h2 id="field-notes">Field notes</h2>
-
-        <p>Tonight's session ended the way most good ones do: a short list, one clear priority, and the clock already past 21:00 local. The 15-meter path to the Arctic that had been open at 18:49 was fading by the time I had the rig warmed. That's the honest part of this workflow — the tool tells you the window exists, but it doesn't hold it open for you. The value isn't in the recommendation itself; it's in being ready when the flag goes up: tuned, decoding, and pointed at the right band.</p>
-
-        </div>
-</main>
-
+        </div></section>
+        <section id="field-notes" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · Field notes</span>
+            <h2 class="ag-section-title">Field notes</h2>
+            <p class="ag-section-subtitle">Small operating notes that did not fit anywhere else.</p>
+          </header>
+          <p>Tonight's session ended the way most good ones do: a short list, one clear priority, and the clock already past 21:00 local. The 15-meter path to the Arctic that had been open at 18:49 was fading by the time I had the rig warmed. That's the honest part of this workflow — the tool tells you the window exists, but it doesn't hold it open for you. The value isn't in the recommendation itself; it's in being ready when the flag goes up: tuned, decoding, and pointed at the right band.</p>
+        </div></section>
+      
+      </main>
     <footer class="ba-footer">
         <div class="ba-footer-inner">
         <div class="blog-author">

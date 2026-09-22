@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>设计一台 ESP32-S3 舵机驱动的天线调谐器 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="EFHW Fuchs ATU V3.0 的硬件、匹配网络与调谐算法：一个舵机、一只空气可变电容、不含机内驻波桥，430 元的物料经 WebSocket 读驻波，覆盖 40 米到 10 米全部 WARC 波段。"
+    />
+    <meta
+      name="keywords"
+      content="EFHW, 端馈半波天线, ATU, 天调, ESP32-S3, 舵机, 空气可变电容, 驻波, bias-T, FreeRTOS, WARC, 业余无线电, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="设计一台 ESP32-S3 舵机驱动的天线调谐器" />
+    <meta
+      property="og:description"
+      content="一个舵机、一只空气可变电容、不带机内驻波桥：430 元的天调经 WebSocket 读驻波，覆盖 40 米到 10 米。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "设计一台 ESP32-S3 舵机驱动的天线调谐器",
+        "description": "EFHW Fuchs ATU V3.0 的硬件、匹配网络与调谐算法：一个舵机、一只空气可变电容、不含机内驻波桥，430 元的物料覆盖 40 米到 10 米。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-08-12",
+        "dateModified": "2026-09-22",
+        "inLanguage": "zh-CN",
+        "keywords": "EFHW, ATU, ESP32-S3, 舵机, 空气可变电容, 驻波",
+        "articleSection": "EFHW",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/zh/">首页</a> › <a href="/blog/zh/">博客</a> › <span class="ba-crumb-cat">EFHW</span> › 设计 ESP32-S3 自动天调</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-wave-square"></i><span>EFHW · 硬件记录</span></div>
+          <h1>一个舵机，一只<span class="gradient">可变电容</span>。</h1>
+          <p>端馈半波天线挂起来极简单，调起来极烦。这台天调就是来终结这件事的：ESP32-S3 转一只舵机，把驻波压下去——而驻波桥根本不装在天调里。</p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-wave-square"></i> 40–10 米 · 含全部 WARC</span>
+            <span class="ag-pill"><i class="fas fa-microchip"></i> ESP32-S3 · FreeRTOS</span>
+            <span class="ag-pill"><i class="fas fa-coins"></i> 物料约 430 元</span>
+            <span class="ag-pill"><i class="fas fa-bolt"></i> 同轴馈电供电</span>
+          </div>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">2026 年 8 月 12 日</time> &nbsp;·&nbsp; 约 8 分钟</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#hardware">01</a><a href="#matching">02</a><a href="#swr">03</a><a href="#algorithm">04</a><a href="#safety">05</a><a href="#rtos">06</a><a href="#protocol">07</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">端馈半波天线（EFHW）挂起来简单得让人愉快，调起来烦得让人恼火。在同一个波段里挪一挪频率，馈点阻抗就远远跑开 50 欧；要是跨三个波段换着用，你会在那儿拧半天旋钮、反复读驻波表。EFHW Fuchs ATU V3.0 就是为了终结这件事造的：ESP32-S3 转一只舵机带动的空气可变电容，把驻波压下来——而驻波桥完全不在天调里。</p>
+        <p>这篇走一遍硬件、匹配网络和调谐算法，讲清一台约 430 元的设备为什么能覆盖 40 米到 10 米，还包括全部 WARC 波段。</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 四条结论</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>一个舵机加一只空气可变电容，覆盖 40 米到 10 米</strong>，含全部 WARC 波段。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>驻波桥完全不在天调里。</strong>因此这只盒子不会跟台面那一端争论「到底谁测的准」。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>电从同轴电缆上来。</strong>13.8 伏经 bias-T 注入，分成 12 伏、6 伏、3.3 伏三路；舵机那一路空闲时直接断电。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>调谐先查缓存</strong>，再粗扫；只有粗扫没中才细扫，最后把胜出的位置存下来。</li>
+            </ul>
+            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#hardware">§01 硬件</a><a href="#matching">§02 匹配</a><a href="#swr">§03 驻波在哪</a><a href="#algorithm">§04 算法</a></div>
+          </div>
+        </div>
+
+        <section id="hardware" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 硬件平台</span>
+            <h2 class="ag-section-title">硬件平台</h2>
+            <p class="ag-section-subtitle">一颗 ESP32-S3、一个舵机、一只空气可变电容，没有 Arduino 层。</p>
+          </header>
+          <p>核心是 ESP32-S3-WROOM-1：双核 Xtensa LX7 跑到 240 MHz，512 KB SRAM，16 MB flash，跑 ESP-IDF v5.x 的原生 C 加 FreeRTOS。没有 Arduino 层，也没有 Linux：只有一个实时内核，和三个职责定义得非常清楚的任务。</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>部件</th><th>规格</th></tr></thead>
+            <tbody>
+              <tr><td>主控</td><td>ESP32-S3-WROOM-1，LX7 双核 240 MHz，512 KB SRAM，16 MB flash</td></tr>
+              <tr><td>舵机</td><td>MG996R，6 伏，10 kg·cm，0.17 秒/60°</td></tr>
+              <tr><td>舵机 PWM</td><td>GPIO1 上的 LEDC，50 Hz，500–2500 微秒 ↔ 0–180°</td></tr>
+              <tr><td>舵机供电</td><td>GPIO2 → 2N2222A → IRF9540 P 沟道 MOS，用来开关 6 伏那一路</td></tr>
+              <tr><td>bias-T 监视</td><td>GPIO5，ADC1_CH4，12 位，47 k + 10 k 分压（5.7:1）</td></tr>
+              <tr><td>状态灯 / 蜂鸣器</td><td>GPIO6 / GPIO7</td></tr>
+            </tbody>
+          </table></div>
+          <p>供电链路值得从上到下看一遍，因为它解决的是远程天线的一个经典问题：<strong>从同轴电缆上取电</strong>。bias-T 把 13.8 伏直流注到馈线上；天调把它分成三路：LM2940CT-12 出 12 伏，DC-DC 降压出舵机要的 6 伏，AMS1117-3.3 给 ESP32。一根同轴电缆，不用第二块电池，不用太阳能板——那只盒子除了天线和馈线，什么也不用接。</p>
+          <p>舵机供电由 MOS 管门控，理由是：通电但闲置的舵机，在无人值守的天线端是白白的 300 毫安消耗。一次调谐结束，固件把 6 伏整条切断；电容靠机械结构停在原位，所以天线保持匹配，而舵机静态电流为零。</p>
+        </div></section>
+
+        <section id="matching" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 匹配网络</span>
+            <h2 class="ag-section-title">匹配网络</h2>
+            <p class="ag-section-subtitle">舵机驱动的 L 型网络，以及为什么一只可变电容就够了。</p>
+          </header>
+          <p>天调用一只 T200-6 羰基铁粉环做阻抗变换，再加一只舵机带动的空气可变电容：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>参数</th><th>取值</th></tr></thead>
+            <tbody>
+              <tr><td>磁环</td><td>T200-6（μ=8），外径 50.8 mm，内径 31.8 mm，高 14 mm，AL ≈ 10.5 nH/N²</td></tr>
+              <tr><td>匝数</td><td>初级 2 匝 : 次级 14 匝</td></tr>
+              <tr><td>阻抗比</td><td>(14/2)² = 49:1 → 输入 50 欧，输出约 2450 欧</td></tr>
+              <tr><td>电容</td><td>发射机级空气可变，10–500 pF，耐压 ≥5 kV（片距 ≥1.5 mm）</td></tr>
+              <tr><td>舵机耦合</td><td>MG996R 经 3:1–6:1 减速</td></tr>
+              <tr><td>调谐范围</td><td>10 pF 时最高 35.1 MHz → 500 pF 时最低 4.96 MHz</td></tr>
+            </tbody>
+          </table></div>
+          <p>这里有两个工程细节值得说。第一，<strong>空气可变电容是唯一的调谐元件</strong>：没有切换电感组，没有继电器噼啪响。这是物料能压到 430 元、故障模式能收敛到「只有一个运动部件」的原因。第二，<strong>磁环被大幅低于额定值使用</strong>：7.1 MHz、100 瓦时峰值磁通约 12.7 mT，而饱和极限是 600 mT，余量 47 倍，所以就算比赛日下午连续工作，磁芯也不会明显发热。</p>
+        </div></section>
+
+        <section id="swr" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 驻波在哪</span>
+            <h2 class="ag-section-title">驻波检测到底在哪</h2>
+            <p class="ag-section-subtitle">有意思的地方，是这只桥不在哪儿。</p>
+          </header>
+          <p>让这个设计有意思的决定是：<strong>天调里没有驻波桥</strong>。没有串联匹配检波器，没有 BAT41 二极管对，没有 FT37-43 磁环，也没有校准电位器。驻波由一台完全独立的仪表测量，再经 WebSocket 送过来：</p>
+          <p><code>ATR-1000 → MRRC 服务器 → WebSocket（JSON）→ ESP32-S3 → tune_engine_feed_swr()</code></p>
+          <p>这是 SDD 里明确记下的一条架构决策（AD-003）：把桥从天调的物料表里删掉，等于把一整类校准与元件公差问题，从一台挂在天线杆上的设备里删掉。代价也是诚实的，而且必须说清楚：<strong>网络断开时这只天调无法调谐</strong>。对一台常设台站、MRRC 服务器常年在线的场景，这笔交换很划算；对便携架台，这是一条你该提前知道的约束。</p>
+        </div></section>
+
+        <section id="algorithm" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 调谐算法</span>
+            <h2 class="ag-section-title">调谐算法</h2>
+            <p class="ag-section-subtitle">四个阶段：查缓存、粗扫、细扫、锁定。</p>
+          </header>
+          <p>调谐引擎（<code>tune_engine.c</code>）是一台四阶段状态机：</p>
+          <ul>
+            <li><strong>阶段一 · 查缓存（不到 1 秒）</strong>：每次调谐成功，把胜出的电容位置写进 NVS flash，按频率作键（<code>"f" + 频率 kHz</code>，例如 7.040 MHz 记作 <code>f7040</code>）。模糊查找接受目标频率 ±50 kHz 内的存档位置。命中率很高，因为 40 米到 10 米按 50 kHz 步进，大约 2000 条就能覆盖，只占 24 KB 分区。</li>
+            <li><strong>阶段二 · 粗扫</strong>：以较大的角度步进扫过电容行程，先找出驻波下降的大致区间。粗扫只求方向对，不求精确。</li>
+            <li><strong>阶段三 · 细扫（仅在粗扫没命中时）</strong>：在最有希望的角度附近小步进收窄，直到驻波到阈值以内。</li>
+            <li><strong>阶段四 · 锁定并保存</strong>：停舵机、断 6 伏舵机供电、把最终角度写回缓存。整个过程有超时保护：扫完一圈仍不达标就停下来报告，而不是一直转下去。</li>
+          </ul>
+        </div></section>
+
+        <section id="safety" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · 安全</span>
+            <h2 class="ag-section-title">安全与故障检测</h2>
+            <p class="ag-section-subtitle">驻波压不下去的时候，会发生什么。</p>
+          </header>
+          <p>远程天线调谐器的失败方式必须被预先设计，否则它会在你不在场的时候把功放烧掉。几条基本规则：调谐期间发射功率受到限制；bias-T 电压由 ADC 持续监视，异常时停止动作；舵机有动作时间上限，避免堵转；任何阶段只要驻波不降反升，就回退到上一个已知良好的位置。天调不做「猜」，它做的是：停在一个已知安全的位置，并把这次失败如实报告上去。</p>
+        </div></section>
+
+        <section id="rtos" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · 实时内核</span>
+            <h2 class="ag-section-title">FreeRTOS 架构</h2>
+            <p class="ag-section-subtitle">三个任务，各干各的活。</p>
+          </header>
+          <p>固件里只有三个任务，职责边界划得很清楚：一个负责网络与协议（WebSocket 连接、JSON 收发），一个负责舵机与调谐状态机，一个负责监视与看门狗（bias-T 电压、超时、异常上报）。这样划分的好处是：网络卡住不会让舵机停在半路，调谐中的长动作也不会把心跳饿死。</p>
+        </div></section>
+
+        <section id="protocol" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · 协议</span>
+            <h2 class="ag-section-title">JSON 协议</h2>
+            <p class="ag-section-subtitle">一次调谐一条消息，带一个用于比较候选位置的分数。</p>
+          </header>
+          <p>服务器与天调之间是一条很薄的 JSON 契约：天调上报状态与当前驻波，服务器下发调谐指令与功率许可。每次尝试都会带一个分数回传，于是服务器能比较不同候选位置的优劣，而不只是看「过没过阈值」。协议保持薄的另一个好处是：它可以在没有天线、没有射频的环境里被完整测试。</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电爱好者，软件工程师。构建 VLSC 开源远程控制生态，也把电台说的话写下来。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>延伸阅读</h3>
+          <ul>
+            <li><a href="/efhw/">EFHW 产品站：Fuchs ATU V3.0</a></li>
+            <li><a href="/blog/opus-vs-pcm-remote-audio/zh/">Opus 对 PCM：HF 远程音频的延迟、带宽与取舍</a></li>
+            <li><a href="/blog/ft710-usb-remote-control/zh/">一根 USB 线遥控 Yaesu FT-710</a></li>
+            <li><a href="/blog/three-axes/zh/">三板斧：从业务意图到现场证据，端到端</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/zh/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

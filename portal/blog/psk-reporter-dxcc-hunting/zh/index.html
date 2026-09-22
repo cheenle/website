@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>用 PSK Reporter 猎新 DXCC：数据驱动的 DX 工作流 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="别再对着虚空呼叫。看站在几百公里外的电台正在解码谁，你就知道稀有的 DXCC 什么时候能从你的 QTH 通到。一台自建看板、一个 1000 公里半径、一个 15 米波段的真实傍晚。"
+    />
+    <meta
+      name="keywords"
+      content="PSK Reporter, DXCC, DX, FT8, 传播, 短波, 网格 ON80da, 15 米波段, 自建看板, 业余无线电, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="用 PSK Reporter 猎新 DXCC：数据驱动的 DX 工作流" />
+    <meta
+      property="og:description"
+      content="看几百公里外的电台在解码谁，你就知道稀有 DXCC 什么时候能从你的 QTH 通到。15 米波段的一个真实傍晚。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "用 PSK Reporter 猎新 DXCC：数据驱动的 DX 工作流",
+        "description": "看几百公里外的电台在解码谁，你就知道稀有 DXCC 什么时候能从你的 QTH 通到。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-08-12",
+        "dateModified": "2026-09-22",
+        "inLanguage": "zh-CN",
+        "keywords": "PSK Reporter, DXCC, DX, FT8, 传播, 工作流",
+        "articleSection": "Field Notes",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/psk-reporter-dxcc-hunting/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/zh/">首页</a> › <a href="/blog/zh/">博客</a> › <span class="ba-crumb-cat">现场笔记</span> › 用 PSK Reporter 猎 DXCC</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-tower-broadcast"></i><span>现场笔记 · DX 工作流</span></div>
+          <h1>别再对着虚空<span class="gradient">呼叫</span>。</h1>
+          <p>看站在几百公里外的电台此刻正在解码谁，你就知道稀有的 DXCC 什么时候能从你的 QTH 通到——不用赌看不见的传播。</p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-location-dot"></i> 网格 ON80da</span>
+            <span class="ag-pill"><i class="fas fa-tower-broadcast"></i> 15 米的一个傍晚</span>
+            <span class="ag-pill"><i class="fas fa-list-check"></i> 以已通清单为输入</span>
+            <span class="ag-pill"><i class="fas fa-chart-line"></i> 自建看板</span>
+          </div>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">2026 年 8 月 12 日</time> &nbsp;·&nbsp; 约 7 分钟</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#oracle">01</a><a href="#tool">02</a><a href="#how">03</a><a href="#reading">04</a><a href="#session">05</a><a href="#action">06</a><a href="#lessons">07</a><a href="#field-notes">08</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">打 DX 有一套经典循环：盯着 cluster，听见有人把 DX 呼叫出来，转过去，呼叫，再呼叫，然后放弃。它有效，但它是盲的：你在赌一个你看不见的传播。过去这一年我换了另一种信号源，它不花钱，而且可靠得多，那就是我附近有哪些台此刻正在解码谁。如果五百公里外的一个台能在 15 米上解码法兰士约瑟夫地群岛，那么从我的 QTH 到高纬北极的路径此刻也是通的。</p>
+        <p>这篇写的是我实际在用的工作流，围绕一台自建的小工具：它把 PSK Reporter 的公开 spot 数据变成一张短清单，列的是我还没通、但此刻有可能通到的 DXCC 实体。</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 四条结论</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>PSK Reporter 每天发布海量解码记录</strong>；其中有用的信号，是离你 QTH 不远的台此刻正在解码什么。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>看板每隔几分钟重算一次推荐集</strong>，输入是 spot 数据、已通 DXCC 清单，以及网格 ON80da。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>邻居的解码是关于路径的证据，不是保证</strong>：你的天线和噪声底仍然说了算。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>输出是一张短清单</strong>：你还需要、而且现在能现实的通到的实体，不是一屏 spot。</li>
+            </ul>
+            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#oracle">§01 预言机</a><a href="#how">§03 推荐算法</a><a href="#session">§05 真实傍晚</a><a href="#action">§06 行动顺序</a></div>
+          </div>
+        </div>
+
+        <section id="oracle" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 预言机</span>
+            <h2 class="ag-section-title">你的邻居就是一台传播预言机</h2>
+            <p class="ag-section-subtitle">传播是区域性的：他们能解到的，你大概也能听到。</p>
+          </header>
+          <p>PSK Reporter 每天已经在发布上百万条解码记录：某台在某个频率上、某个时刻、以某个信号强度，解码到了某个呼号。这批数据是一张活地图，画出的是全世界每个波段上「谁在听谁」。</p>
+          <p>诀窍在于：<strong>传播是区域性的</strong>。如果我的传播区里的某个台解码到了某个 DXCC 实体，同一个开通几乎必然也照到了我的天线。这就是传播信标的原理，只不过我用的不是一只信标，而是成千上万个就在附近、各自实时上报的电台。难的部分从来不是数据，而是把它过滤成一句话：<strong>我附近的人在听、而我还缺的 DXCC，是哪些？</strong></p>
+        </div></section>
+
+        <section id="tool" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 自建看板</span>
+            <h2 class="ag-section-title">一台个人的 PSK Reporter 分析看板</h2>
+            <p class="ag-section-subtitle">spot 进数据库，已通清单在磁盘上，推荐集每隔几分钟重算一次。</p>
+          </header>
+          <p>为了持续回答这个问题，我跑着一台小看板：它把 PSK Reporter 的 spot 吃进数据库，保存我的已通 DXCC 清单，并且每隔几分钟重算一次推荐集。这类东西通常起于一个脚本，后来长成一个正经页面：全量数据浏览器、附近 spot 的地图，以及一个 DXCC 推荐视图。它跑在 <code>radio.vlsc.net</code> 上，并且知道我的台站位置：北京，网格 <strong>ON80da</strong>。下游的一切都是相对于这个 QTH 的。</p>
+        </div></section>
+
+        <section id="how" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 推荐算法</span>
+            <h2 class="ag-section-title">推荐是怎么算出来的</h2>
+            <p class="ag-section-subtitle">附近的台在听、而你还缺的那些实体。</p>
+          </header>
+          <p>背后其实只有一个问题，被改写成一条查询：<strong>在过去 N 小时内，离我一小时车程（1000 公里）以内的台，解码到了哪些我日志里还没确认的 DXCC 实体？</strong></p>
+          <p>三个参数决定答案，三个我都学会了尊重：</p>
+          <ul>
+            <li><strong>时间窗口。</strong>短窗口（1–2 小时）只显示此刻正在发生的；长窗口（8 小时）能抓到短暂开通、可能已经消失的实体。我通常用 2 小时做行动、8 小时做计划。</li>
+            <li><strong>半径。</strong>1000 公里是个不错的默认值：近到传播相关，宽到有台可看。把半径拉大，候选变多，但与你自己的路径相关性变弱。</li>
+            <li><strong>已通清单。</strong>正是它把一屏 spot 变成一张短清单。我这份有 163 个已确认实体，不在清单上的都是候选。</li>
+          </ul>
+        </div></section>
+
+        <section id="reading" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 读表</span>
+            <h2 class="ag-section-title">怎么读这张表</h2>
+            <p class="ag-section-subtitle">距离、强度、时间，以及每一列不是什么。</p>
+          </header>
+          <p>推荐视图是一张小表：DXCC 实体、波段、spot 数、不同呼号数、平均信噪比、最近一次时间，以及一个状态标记。其中两列的份量远超其余：</p>
+          <ul>
+            <li><strong>首次出现。</strong>某个实体第一次进入分析窗口时，工具会打上这个标记。它是整个应用里价值最高的单个信号：稀有实体几乎总是先以「一个台的一条安静 spot」的形式冒出来。它一亮，就放下手里的事。</li>
+            <li><strong>最近一次时间。</strong>新鲜度就是一切。二十分钟前的 spot 意味着那个台大概还在；八小时前的 spot 是历史。</li>
+          </ul>
+          <p>spot 数与不同呼号数告诉你一个开通有多稳：来自三个不同德国台的五条 spot，是一条健康的路径；来自一个台的一条 spot，是脆弱但可能很珍贵的一条。后面还压着传播背景：F10.7 在 200（太阳通量高，高波段活着）、Kp 1.7（地磁安静）、Bz 为正。这组合正是当时开通落在 15 米而不是 40 米的原因。</p>
+        </div></section>
+
+        <section id="session" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · 真实傍晚</span>
+            <h2 class="ag-section-title">一个真实的傍晚</h2>
+            <p class="ag-section-subtitle">15 米上的一个傍晚，从日志里回放一遍。</p>
+          </header>
+          <p>今晚 2 小时窗口返回了两个候选：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>DXCC</th><th>波段</th><th>spot</th><th>呼号</th><th>信噪比</th><th>最近听到</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>法兰士约瑟夫地群岛（R1FJZ）</td><td>15 m</td><td>1</td><td>1</td><td>−16 dB</td><td>本地 18:49</td><td>🆕 首次出现</td></tr>
+              <tr><td>德意志联邦共和国（DL）</td><td>15 m</td><td>5</td><td>3</td><td>−14 dB</td><td>本地 18:44</td><td>已出现过</td></tr>
+            </tbody>
+          </table></div>
+          <p>头条是法兰士约瑟夫地群岛：一个我从未通过、被标成「首次出现」的北极实体，一条 spot、一个呼号、在 15 米上、本地 18:49 被听到。我附近的一个台在我查看之前二十分钟解到了它——北极路径是通的。这就是这台工具存在的意义所在：不是「某天也许能通」，而是「此刻就能通」。</p>
+          <p>德国那一行是数量上的选择：三个呼号、五条 spot，一条稳定但平常的路径，通到一个常见实体，但它同样计入 DXCC 总数。再往前一点，在滑出 2 小时窗口之前，十二群岛曾在 20 米上出现过，这提醒我：同时开两三个窗口，才能抓到本来会漏掉的那些。</p>
+          <p>而 15 米上的那次开通，结束得跟大多数好开通一样：一张短清单、一个明确的优先项，时间已经过了本地 21:00。等我把电台预热好，18:49 还开着的那条通往北极的 15 米路径已经在衰落了。这是这个工作流诚实的一面：工具告诉你窗口存在，但它不会替你按住那个窗口。</p>
+        </div></section>
+
+        <section id="action" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · 行动顺序</span>
+            <h2 class="ag-section-title">行动顺序</h2>
+            <p class="ag-section-subtitle">今晚按这个顺序做。</p>
+          </header>
+          <p>工具把世界缩成一张短清单，通联还是要到电台前完成。当某个候选看起来很新鲜时，我的顺序是：</p>
+          <ol>
+            <li><strong>拿到呼号。</strong>推荐是 DXCC 粒度的。我打开实时地图或全量视图，过滤到最近几小时，把实际呼号和频率取出来。</li>
+            <li><strong>相信波段。</strong>工具说 15 米，我就去 15 米。它在哪个波段被解码，就说明路径支持哪个波段。</li>
+            <li><strong>调准并解码。</strong>设好频率，让解码器跑起来，呼号第一次出现时就回答。用 FT8，在对方发射时你已经调准，是这件事的一半。</li>
+            <li><strong>记录。</strong>确认后写进日志，日志构成了已通清单，也就构成了整个推荐引擎的准确性来源。</li>
+          </ol>
+          <p>这里没有魔法。工具只是确保我在对的时间待在对的频率上，并且一开始就告诉我该追哪个实体。</p>
+        </div></section>
+
+        <section id="lessons" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · 学到的东西</span>
+            <h2 class="ag-section-title">学到的东西</h2>
+            <p class="ag-section-subtitle">这套工作流的失效模式，以及各自的对策。</p>
+          </header>
+          <ul>
+            <li><strong>首次出现胜过数量。</strong>来自稀有实体的一条新鲜 spot，比来自常见国家的十条陈旧 spot 更值钱。</li>
+            <li><strong>新鲜度胜过一切。</strong>过去半小时的一条 spot 是可行动的；昨晚的一堆 spot 是回忆。</li>
+            <li><strong>半径是耐心旋钮。</strong>半径越大，候选越多，相关性越差。先窄，安静了再放宽。</li>
+            <li><strong>日志才是引擎。</strong>推荐的质量取决于已通清单的质量。记录纪律是让整个回路收敛的东西。</li>
+          </ul>
+        </div></section>
+
+        <section id="field-notes" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · 现场笔记</span>
+            <h2 class="ag-section-title">现场笔记</h2>
+            <p class="ag-section-subtitle">几条塞不进别处的小操作笔记。</p>
+          </header>
+          <p>价值不在推荐本身，而在于标记亮起时你已经准备好了：调准了、在解码、指向正确的波段。窗口会关，这不算工具的失败，只是传播的常态。真正要练的是反应速度：看到「首次出现」，坐下、调准、解码、呼叫，中间不夹别的事。</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电爱好者，软件工程师。构建 VLSC 开源远程控制生态，也把电台说的话写下来。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>延伸阅读</h3>
+          <ul>
+            <li><a href="/mrrc_ft8/">MRRC-FT8：无头 FT8/FT4 服务器</a></li>
+            <li><a href="/blog/efhw-esp32s3-auto-tuner/zh/">设计一台 ESP32-S3 舵机驱动的天线调谐器</a></li>
+            <li><a href="/blog/opus-vs-pcm-remote-audio/zh/">Opus 对 PCM：HF 远程音频的延迟、带宽与取舍</a></li>
+            <li><a href="/blog/solo-loop/zh/">孤路我独行：零资金、零团队的开源项目，如何像团队一样响应</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/zh/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

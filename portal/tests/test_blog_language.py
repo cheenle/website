@@ -51,7 +51,6 @@ PENDING_DASH: dict[str, str] = {
 
 # 结构/镜像/引文/标点/元数据挂起项（按文章 × 语言）
 PENDING_ARTICLES: dict[tuple[str, str], str] = {
-    ("coda", "en"): "batch0", ("coda", "zh"): "batch0",
     ("faculties", "en"): "batch2", ("faculties", "zh"): "batch2",
     ("ming-li-dao-tian", "en"): "batch2", ("ming-li-dao-tian", "zh"): "batch2",
     ("only-imagination", "en"): "batch2", ("only-imagination", "zh"): "batch2",
@@ -230,6 +229,7 @@ class LanguageSystemTests(unittest.TestCase):
                     children = parser.quote_children[q["id"]]
                     self.assertIn("ba-quote-orig", children, f"{where}: 缺原文")
                     self.assertIn("ba-quote-trans", children, f"{where}: 缺译本")
+                    self.assertIn("ba-quote-cite", children, f"{where}: 出处未渲染")
 
     def test_tier_citation_rules(self) -> None:
         for slug, (tier, langs) in ARTICLES.items():

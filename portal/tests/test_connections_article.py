@@ -150,7 +150,7 @@ class ConnectionsArticleTests(unittest.TestCase):
         doi_sets: dict[str, set[str]] = {}
         for language, path in ARTICLES.items():
             source, _ = load(path)
-            cited = set(re.findall(r'class="citation" href="#ref-(\d+)"', source))
+            cited = set(re.findall(r'class="ba-cite-ref" href="#ref-(\d+)"', source))
             listed = set(re.findall(r'<li id="ref-(\d+)"', source))
             self.assertEqual(cited, listed, language)
             self.assertGreaterEqual(len(cited), 12, language)

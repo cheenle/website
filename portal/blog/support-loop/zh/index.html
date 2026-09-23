@@ -33,7 +33,7 @@
     />
     <link rel="stylesheet" href="../../../css/octen.css?v=6" />
     <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
-    <link rel="stylesheet" href="../../../css/blog-article.css?v=3" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -80,7 +80,7 @@
       <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#releases">发布</a><a href="#chain">链条</a><a href="#walls">墙 → 功能</a><a href="#triage">初步判读</a><a href="#fourth-loop">第四条闭环</a><a href="#loops">闭环，诚实版</a><a href="#closing">结语</a></nav></div></div>
 
       <main class="ba-main">
-        <p class="lede">这既是一篇发布记录，也想把幕后的东西一并写下来。两条产品线同时赶工：<strong>MRRC</strong>（基于 Hamlib 的通用远程电台软件，走 Windows 线，<code>v6.1.x</code>）和 <strong>MRRC Modern</strong>（面向 FT-710、IC-7300 这类电台的姊妹产品线，更现代，Windows + macOS，<code>v1.18.x</code>）。2026 年 9 月 17 日前后的 48 小时里，发出去十个发布物。安装包只是看得见的那一半；另一半是背后的支持链：用户这边，一键升级、一键回退、一份脱敏诊断包；维护者这边，cron 每十分钟跑一轮初步研判，外加一个公开答复页，每条结论都附原始日志。这篇文章要记下发了什么、头几天的研判教会了我什么，也想讲清楚一件事：把判断和执行分开之后，仓库之外、用户身边，会长出什么东西。9 月 19 日起，链上又长出了公开进度板和无人值守的执行者——那是它的第四项闭环实践。</p>
+        <p class="lede">这既是一篇发布记录，也想把幕后的东西一并写下来。两条产品线同时赶工：<strong>MRRC</strong>（基于 Hamlib 的通用远程电台软件，走 Windows 线，<code>v6.1.x</code>）和 <strong>MRRC Modern</strong>（面向 FT-710、IC-7300 这类电台的姊妹产品线，更现代，Windows + macOS，<code>v1.18.x</code>）。2026 年 9 月 17 日前后的 48 小时里，发出去十个发布物。安装包只是看得见的那一半；另一半是背后的支持链：用户这边，一键升级、一键回退、一份脱敏诊断包；维护者这边，cron 每十分钟跑一轮初步研判，外加一个公开答复页，每条结论都附原始日志。这篇文章要记下发了什么、头几天的研判教会了我什么，也想讲清楚一件事：把判断和执行分开之后，仓库之外、用户身边，会长出什么东西。9 月 19 日起，链上又长出了公开进度板和无人值守的执行者，那是它的第四项闭环实践。</p>
 
         <div class="ba-tldr" id="tldr">
           <div class="ba-tldr-card">
@@ -118,11 +118,11 @@
 
           <p>同一周进场的还有 Modern 线上的性能活儿：发射结束后 TX→RX 重新打开采集的时间，从约 270 ms 降到约 200 ms；PTT 按住期间，不再把已静音的 RX 帧广播出去；PTT 释放延迟在 SDD 里有了自己的版本行（V2.55）。这些没有一项光鲜，但每一项都可测。</p>
 
-          <p>闭环自己这周也发了版：9 月 19 日，MRRC Modern 上线 <strong>FDE 进度板</strong>——这个项目一脉相承的第四项闭环实践。一块公开的进度板，让每条分析带着分类落上去（bug / feature / noise），后面跟着一个无人值守的执行者，把排了期的条目变成隔离分支上的补丁，全量测试过了才算。它不是安装包，所以不进这张表；它是 §05 的主角。</p>
+          <p>闭环自己这周也发了版：9 月 19 日，MRRC Modern 上线 <strong>FDE 进度板</strong>，这个项目一脉相承的第四项闭环实践。一块公开的进度板，让每条分析带着分类落上去（bug / feature / noise），后面跟着一个无人值守的执行者，把排了期的条目变成隔离分支上的补丁，全量测试过了才算。它不是安装包，所以不进这张表；它是 §05 的主角。</p>
 
           <div class="claim-box" data-claim-type="fact">
             <span class="claim-label">事实 · 表格背后的发布纪律</span>
-            <p>每个安装版的 <code>previous</code> 都留在服务器上，而且必须 git 入库——部署用的是 <code>rsync --delete</code>，服务器上没入库的文件会被删掉（回退按钮就这么 404 过一次）。热修通道的版本号必须低于安装版；回退目标必须真实存在、不能是已知的坏版本；清单里的 SHA-256 要在<em>服务器侧</em>复核，因为本机下载链路不可信。跨项目可比的数字（测试数、约束数、各产品族版本）只放在一个地方：<a href="/zh/agentic.html#evidence">证据清单</a>——子站和博客都链接过去，不复述。</p>
+            <p>每个安装版的 <code>previous</code> 都留在服务器上，而且必须 git 入库——部署用的是 <code>rsync --delete</code>，服务器上没入库的文件会被删掉（回退按钮就这么 404 过一次）。热修通道的版本号必须低于安装版；回退目标必须真实存在、不能是已知的坏版本；清单里的 SHA-256 要在<em>服务器侧</em>复核，因为本机下载链路不可信。跨项目可比的数字（测试数、约束数、各产品族版本）只放在一个地方：<a href="/zh/agentic.html#evidence">证据清单</a>，子站和博客都链接过去，不复述。</p>
           </div>
         </div></section>
 
@@ -133,12 +133,12 @@
             <p class="ag-section-subtitle">五段：发布 → 升级 → 诊断 → 分析 → 答复，把来回沟通都工程化掉。</p>
           </header>
 
-          <p>大多数产品的支持链，说到底是一个邮箱别名，外加一点指望。这一条不是：它是两端各装了一套工具的流水线。<strong>用户侧</strong>的应用按一个目标设计——用户最常做的四件事，永远不用开工单：</p>
+          <p>大多数产品的支持链，说到底是一个邮箱别名，外加一点指望。这一条不是：它是两端各装了一套工具的流水线。<strong>用户侧</strong>的应用按一个目标设计：用户最常做的四件事，永远不用开工单：</p>
 
           <div class="ag-loop-grid">
             <article class="ag-card"><h3>⬆️ 升级，不用去找下载页</h3><p>Web 界面点一个按钮（或者在启动器里按 <code>U</code>）。服务端先过 PTT 这关：电台正在发射，升级请求直接被 423 拒掉。下载先写 <code>.part</code> 文件，校验 SHA-256，原子改名，再静默安装，启动器干干净净地交接。</p></article>
             <article class="ag-card"><h3>↩️ 成功判据造不了假</h3><p>「安装器拉起来了」不算成功。唯一的成功判据是 <code>state.json → lastResult.status == "ok"</code>，而且要由<em>新版本</em>在自己启动时自证。新版本没开口之前，这次升级就不算发生过。一键回退走的是同一条静默安装路径，只是指向上一个安装包。</p></article>
-            <article class="ag-card"><h3>🐞 诊断，不用读日志</h3><p>菜单里一个入口就能生成脱敏诊断包：日志尾部、按白名单脱敏的配置、环境快照（版本、平台、音频设备表、已生效的热修层），外加一份自动体检摘要 <code>diagnostics/summary.txt</code>——它按启动次数和时间跨度来区分「重启」和「崩溃」。密码、密钥、令牌、录音、存储信道、天调学习数据，永远不出这台机器。</p></article>
+            <article class="ag-card"><h3>🐞 诊断，不用读日志</h3><p>菜单里一个入口就能生成脱敏诊断包：日志尾部、按白名单脱敏的配置、环境快照（版本、平台、音频设备表、已生效的热修层），外加一份自动体检摘要 <code>diagnostics/summary.txt</code>，它按启动次数和时间跨度来区分「重启」和「崩溃」。密码、密钥、令牌、录音、存储信道、天调学习数据，永远不出这台机器。</p></article>
             <article class="ag-card"><h3>📖 答复，不用写邮件</h3><p>公开的<a href="https://www.vlsc.net/mrrc/answers/">答复页</a>可以搜索、可以按上报编号直达。每张卡片的结构是固定的：编号 / 症状 / 诊断（附原始证据）/ 结论 / <em>你要做的</em> / 状态。缺陷修复发布后，卡片就翻成「已修复 · 版本号」。</p></article>
           </div>
 

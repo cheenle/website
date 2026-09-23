@@ -13,12 +13,15 @@
     <meta property="og:url" content="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/">
     <meta property="og:site_name" content="VLSC Projects">
     <link rel="canonical" href="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/">
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/">
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/efhw-esp32s3-auto-tuner/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/octen.css?v=6">
     <link rel="stylesheet" href="../../css/agentic.css?v=2">
-    <link rel="stylesheet" href="../../css/blog-article.css?v=3">
+    <link rel="stylesheet" href="../../css/blog-article.css?v=4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="application/ld+json">
     {
@@ -48,29 +51,44 @@
             <h1>Designing an ESP32-S3 Servo-Driven Antenna Tuner: The Fuchs ATU V3.0</h1>
             <p>One servo, one air variable capacitor, and a 430-CNY bill of materials. The interesting part is where the SWR sensor does <em>not</em> live — and what that decision buys you in the field.</p>
             <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">Aug 12, 2026</time> &nbsp;·&nbsp; ~8 min read</p>
-            <ul class="ba-tags">
-            <li><a href="/blog/">#efhw</a></li>
-            <li><a href="/blog/">#esp32</a></li>
-            <li><a href="/blog/">#atu</a></li>
-            <li><a href="/blog/">#servo</a></li>
-            <li><a href="/blog/">#swr</a></li>
-        </ul>
+            <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-wave-square"></i> 40–10 m incl. WARC</span>
+            <span class="ag-pill"><i class="fas fa-microchip"></i> ESP32-S3 · FreeRTOS</span>
+            <span class="ag-pill"><i class="fas fa-coins"></i> ~430 CNY BOM</span>
+            <span class="ag-pill"><i class="fas fa-bolt"></i> bias-T power over coax</span>
+            </div>
         </div>
     </header>
 
 
-    <main class="ba-main">
-        <div class="ba-prose">
+            <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#hardware">01</a><a href="#matching">02</a><a href="#swr">03</a><a href="#algorithm">04</a><a href="#safety">05</a><a href="#rtos">06</a><a href="#protocol">07</a></nav></div></div>
 
-        <p>An End-Fed Half-Wave antenna is wonderfully simple to hang and wonderfully annoying to tune. Move the frequency across a band and the feed-point impedance wanders far from 50&nbsp;Ω; dial across three bands and you'll be turning a knurled knob and re-reading an SWR meter for a while. The <a href="/efhw/">EFHW Fuchs ATU V3.0</a> is an automatic tuner built to end that: an ESP32-S3 turns a single servo-driven air variable capacitor until the SWR comes down — <strong>with the SWR bridge living entirely off the tuner</strong>.</p>
-
+      <main class="ba-main">
+        <p class="lede">An End-Fed Half-Wave antenna is wonderfully simple to hang and wonderfully annoying to tune. Move the frequency across a band and the feed-point impedance wanders far from 50&nbsp;Ω; dial across three bands and you'll be turning a knurled knob and re-reading an SWR meter for a while. The <a href="/efhw/">EFHW Fuchs ATU V3.0</a> is an automatic tuner built to end that: an ESP32-S3 turns a single servo-driven air variable capacitor until the SWR comes down — <strong>with the SWR bridge living entirely off the tuner</strong>.</p>
         <p>This article walks through the hardware, the matching network, and the tuning algorithm that makes a ~430&nbsp;CNY device cover 40&nbsp;m through 10&nbsp;m including every WARC band.</p>
 
-        <h2 id="hardware">Hardware platform</h2>
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>One servo and one air variable capacitor cover 40 m through 10 m, WARC bands included.</strong></li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The SWR bridge lives entirely off the tuner, so the box never argues with the shack end about who measured what.</strong></li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Power arrives over the coax: 13.</strong>8 V in through a bias-T, out as 12 V, 6 V and 3.3 V rails — and the servo rail is switched off when idle.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Tuning is cache-first, then a coarse sweep, then a fine sweep only if the coarse pass missed; the winner is persisted.</strong></li>
+            </ul>
+            <div class="ba-readpath"><span>3-minute read:</span><a href="#hardware">§01</a><a href="#matching">§02</a><a href="#swr">§03</a><a href="#algorithm">§04</a><a href="#safety">§05</a><a href="#rtos">§06</a><a href="#protocol">§07</a></div>
+          </div>
+        </div>
 
-        <p>The core is an <strong>ESP32-S3-WROOM-1</strong> — dual-core Xtensa LX7 at 240&nbsp;MHz, 512&nbsp;KB SRAM, 16&nbsp;MB flash — running ESP-IDF v5.x native C with FreeRTOS. No Arduino layer, no Linux: just a real-time kernel and three tasks doing precisely defined jobs.</p>
+        <section id="hardware" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Hardware platform</span>
+            <h2 class="ag-section-title">Hardware platform</h2>
+            <p class="ag-section-subtitle">An ESP32-S3, one servo, one air variable capacitor — and no Arduino layer.</p>
+          </header>
+          <p>The core is an <strong>ESP32-S3-WROOM-1</strong> — dual-core Xtensa LX7 at 240&nbsp;MHz, 512&nbsp;KB SRAM, 16&nbsp;MB flash — running ESP-IDF v5.x native C with FreeRTOS. No Arduino layer, no Linux: just a real-time kernel and three tasks doing precisely defined jobs.</p>
 
-        <table>
+        <div class="ag-table-wrap"><table class="ag-table">
             <thead>
                 <tr><th>Component</th><th>Detail</th></tr>
             </thead>
@@ -82,17 +100,21 @@
                 <tr><td>Bias-T monitor</td><td>GPIO5, ADC1_CH4, 12-bit, 47 k+10 k divider (5.7:1)</td></tr>
                 <tr><td>Status LED / buzzer</td><td>GPIO6 / GPIO7</td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <p>The power chain is worth reading top to bottom, because it solves a classic remote-antenna problem: <strong>power over the coax</strong>. A bias-T injects 13.8&nbsp;V DC onto the feed line; the tuner splits it: LM2940CT-12 to a 12&nbsp;V rail, a DC-DC stepdown for the 6&nbsp;V servo rail, and an AMS1117-3.3 for the ESP32. One coax run, no second battery, no solar panel — the tuner is a weatherproof box with nothing but the antenna and the coax attached.</p>
 
         <p>Servo power is gated by a MOSFET because a powered but idle servo is an unnecessary 300&nbsp;mA drain at a remote site. After a tune completes, the firmware cuts the 6&nbsp;V rail entirely; the capacitor holds its position mechanically, so the antenna stays matched with zero quiescent servo current.</p>
+        </div></section>
+        <section id="matching" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · The matching network</span>
+            <h2 class="ag-section-title">The matching network</h2>
+            <p class="ag-section-subtitle">The L-network the servo drives, and why a single variable capacitor is enough.</p>
+          </header>
+          <p>The tuner uses a <strong>single T200-6 carbonyl-iron toroid</strong> as an impedance transformer plus a servo-turned air variable capacitor:</p>
 
-        <h2 id="matching">The matching network</h2>
-
-        <p>The tuner uses a <strong>single T200-6 carbonyl-iron toroid</strong> as an impedance transformer plus a servo-turned air variable capacitor:</p>
-
-        <table>
+        <div class="ag-table-wrap"><table class="ag-table">
             <thead>
                 <tr><th>Parameter</th><th>Value</th></tr>
             </thead>
@@ -104,21 +126,29 @@
                 <tr><td>Servo coupling</td><td>MG996R through a 3:1–6:1 gear reduction</td></tr>
                 <tr><td>Tuning range</td><td>f_max 35.1 MHz @ 10 pF → f_min 4.96 MHz @ 500 pF</td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <p>Two engineering details here matter. First, the air variable capacitor is the only tuned component — no switched inductor bank, no relay clacking. That's what keeps the BOM at 430&nbsp;CNY and the failure modes down to "one moving part." Second, the transformer is massively under-run: peak flux at 100&nbsp;W on 7.1&nbsp;MHz is about <strong>12.7&nbsp;mT against a 600&nbsp;mT saturation limit</strong> — a 47× margin, so the core never heats meaningfully even on a contest afternoon.</p>
-
-        <h2 id="swr">Where the SWR sensing actually lives</h2>
-
-        <p>Here's the decision that makes this design interesting: <strong>the tuner has no on-board SWR bridge</strong>. No tandem match detector, no BAT41 diode pair, no FT37-43 toroid, no calibration pot. Instead, SWR is measured by a completely separate instrument and delivered over a WebSocket:</p>
+        </div></section>
+        <section id="swr" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Where the SWR sensing </span>
+            <h2 class="ag-section-title">Where the SWR sensing actually lives</h2>
+            <p class="ag-section-subtitle">The interesting part is where the bridge is not.</p>
+          </header>
+          <p>Here's the decision that makes this design interesting: <strong>the tuner has no on-board SWR bridge</strong>. No tandem match detector, no BAT41 diode pair, no FT37-43 toroid, no calibration pot. Instead, SWR is measured by a completely separate instrument and delivered over a WebSocket:</p>
 
         <pre><code>ATR-1000  →  MRRC server  →  WebSocket (JSON)  →  ESP32-S3 → tune_engine_feed_swr()</code></pre>
 
         <p>This is an explicit architecture decision (AD-003 in the SDD): removing the bridge from the tuner's bill of materials eliminates a whole class of calibration and component-tolerance problems from the device that lives up a pole. The cost is honest and important: <strong>the tuner cannot tune when the network is down.</strong> For a permanently installed station whose MRRC server is always on, that's a fine trade; for a portable field setup it's a constraint you should know about.</p>
-
-        <h2 id="algorithm">The tuning algorithm</h2>
-
-        <p>The tuning engine (<code>tune_engine.c</code>) is a four-phase state machine:</p>
+        </div></section>
+        <section id="algorithm" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · The tuning algorithm</span>
+            <h2 class="ag-section-title">The tuning algorithm</h2>
+            <p class="ag-section-subtitle">Four phases: cache, coarse sweep, fine sweep, lock.</p>
+          </header>
+          <p>The tuning engine (<code>tune_engine.c</code>) is a four-phase state machine:</p>
 
         <h3>Phase 1 — cache lookup (&lt;1 s)</h3>
         <p>Every completed tune writes the winning capacitor position to NVS flash, keyed by frequency (<code>"f" + freq_khz</code>, e.g. <code>f7040</code> for 7.040&nbsp;MHz). A fuzzy lookup accepts a stored position within ±50&nbsp;kHz of the target. Hit rate is high because 40&nbsp;m–10&nbsp;m at 50&nbsp;kHz steps fits in ~2000 entries across a 24&nbsp;KB partition. On a hit, the servo drives straight to the cached angle, reports <code>tune_done</code>, and powers off — the whole thing completes in under a second.</p>
@@ -133,10 +163,14 @@
         <p>The servo moves to the best position, the result is written to NVS <em>only</em> if the final SWR is below 2.0:1, the servo MOSFET is switched off, and <code>tune_done {cap_pct, swr_final, elapsed_ms}</code> goes out over the WebSocket.</p>
 
         <p>Timing: each step costs about 80&nbsp;ms of servo travel plus ~100&nbsp;ms of SWR network round-trip — roughly 180&nbsp;ms per step. A full coarse sweep is ~6.5&nbsp;s; a worst-case coarse-plus-fine sweep is ~12&nbsp;s (the SDD targets under 10&nbsp;s). For a band change from the couch, that's plenty fast.</p>
-
-        <h2 id="safety">Safety and fault detection</h2>
-
-        <p>Transmitting into a badly-tuned matching network can damage a finals stage, so the engine treats every SWR sample as a safety gate. Every <code>feed_swr()</code> call checks forward power and aborts with a specific error code:</p>
+        </div></section>
+        <section id="safety" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · Safety and fault detec</span>
+            <h2 class="ag-section-title">Safety and fault detection</h2>
+            <p class="ag-section-subtitle">What happens when the SWR will not come down.</p>
+          </header>
+          <p>Transmitting into a badly-tuned matching network can damage a finals stage, so the engine treats every SWR sample as a safety gate. Every <code>feed_swr()</code> call checks forward power and aborts with a specific error code:</p>
 
         <ul>
             <li>Forward power &gt; <strong>15 W</strong> → abort <code>TUNE_ERR_OVERPOWER</code></li>
@@ -145,20 +179,28 @@
         </ul>
 
         <p>Firmware also monitors bias-T voltage (10–15&nbsp;V window), ESP32 die temperature (&gt;80&nbsp;°C alerts), WiFi (auto-reconnect every 10&nbsp;s), WebSocket (reconnect every 3&nbsp;s), NVS corruption (auto-erase and rebuild), and a 5-second task watchdog. Equally important is what it <em>cannot</em> detect with no extra sensors: servo mechanical stall, a stripped gear or coupler slip, a failed MOSFET, capacitor arc-over, core overheating, or water ingress. The field notes below are where those lessons belong.</p>
-
-        <h2 id="rtos">FreeRTOS architecture</h2>
-
-        <p>Three tasks, three priorities, three stacks:</p>
+        </div></section>
+        <section id="rtos" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · FreeRTOS architecture</span>
+            <h2 class="ag-section-title">FreeRTOS architecture</h2>
+            <p class="ag-section-subtitle">Three tasks with precisely defined jobs.</p>
+          </header>
+          <p>Three tasks, three priorities, three stacks:</p>
 
         <pre><code>ws_client_task    pri 3 · 8192 B stack   WiFi STA + WebSocket client + JSON dispatch
 tune_engine_task  pri 2 · 4096 B stack   tuning state machine
 health_mon_task   pri 1 · 3072 B stack   bias-V ADC, die temp, health FSM</code></pre>
 
         <p>The two directions of communication are deliberately asymmetric. Inbound, the WebSocket task calls <code>tune_engine_feed_swr()</code> directly — a synchronous function call, no queueing, because SWR samples must never be dropped. Outbound, the engine calls a <code>ws_client_send()</code> callback that pushes into a FreeRTOS Queue (depth 16, 512-byte messages), so the tuner never blocks on the network.</p>
-
-        <h2 id="protocol">The JSON protocol</h2>
-
-        <p>Five inbound commands and five outbound events (cJSON, <code>protocol.c</code>):</p>
+        </div></section>
+        <section id="protocol" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · The JSON protocol</span>
+            <h2 class="ag-section-title">The JSON protocol</h2>
+            <p class="ag-section-subtitle">One message per tune, with a score to compare candidates.</p>
+          </header>
+          <p>Five inbound commands and five outbound events (cJSON, <code>protocol.c</code>):</p>
 
         <ul>
             <li><strong>Commands:</strong> <code>tune_start {freq_hz, swr, fwd_pwr_w}</code> · <code>swr_update {swr, fwd_pwr_w}</code> · <code>tune_abort</code> · <code>set_bypass</code> · <code>get_status</code></li>
@@ -168,10 +210,9 @@ health_mon_task   pri 1 · 3072 B stack   bias-V ADC, die temp, health FSM</code
         <p>Because the SWR source is remote, the MRRC server drives the whole session: it reads the ATR-1000, decides when to call <code>tune_start</code>, and streams <code>swr_update</code> at whatever cadence the tuner asks for. The tuner stays a dumb, reliable actuator — which is exactly what you want at the far end of a WebSocket across a field.</p>
 
         <p>For the deeper engineering write-up — the fault-detection boundary, the bench test matrix, and the full SDD — see the project's documentation. The <a href="/efhw/">EFHW product page</a> covers the buying and building story, and the deep-dive research lives under <a href="/mrrc/efhw/">MRRC's EFHW research section</a>.</p>
-
-        </div>
-</main>
-
+        </div></section>
+      
+      </main>
     <footer class="ba-footer">
         <div class="ba-footer-inner">
         <div class="blog-author">

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opus 对 PCM：HF 远程音频的延迟、带宽与取舍 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="远程电台的音频链路选型实录：16 位 PCM 在移动网络上为什么不行，Opus 如何用 20 毫秒帧换来十倍以上的带宽压缩，以及一个静默改掉码率控制路径的 arm64 ctypes 变参 ABI 缺陷。"
+    />
+    <meta
+      name="keywords"
+      content="Opus, PCM, 编解码, 远程电台, 低延迟, 音频链路, WebSocket, ctypes, arm64, SunMRRC, SunsdrMobile, 业余无线电, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Opus 对 PCM：HF 远程音频的延迟、带宽与取舍" />
+    <meta
+      property="og:description"
+      content="十倍以上的带宽压缩，让移动网络上的远程电台真正可用——代价是 20 毫秒的帧、一个 arm64 ctypes 缺陷，和 1 字节的编码标记。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Opus 对 PCM：HF 远程音频的延迟、带宽与取舍",
+        "description": "远程电台的音频链路选型实录：为什么选 Opus，它花掉了什么，以及让它在各种架构上都可靠的实现细节。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-08-12",
+        "dateModified": "2026-09-22",
+        "inLanguage": "zh-CN",
+        "keywords": "Opus, PCM, 编解码, 远程电台, 低延迟, ctypes",
+        "articleSection": "Audio",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/opus-vs-pcm-remote-audio/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/zh/">首页</a> › <a href="/blog/zh/">博客</a> › <span class="ba-crumb-cat">音频</span> › Opus 对 PCM</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-headphones"></i><span>音频 · 编解码记录</span></div>
+          <h1>让耳朵挑不出毛病的那个<span class="gradient">编解码</span>。</h1>
+          <p>每个远程电台系统都藏着同一个看不见的问题：音频链路。射频那一侧可以慢慢调，音频这一侧是你的耳朵在当场判分。</p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-compress"></i> 带宽压到 1/12</span>
+            <span class="ag-pill"><i class="fas fa-clock"></i> 20 毫秒帧</span>
+            <span class="ag-pill"><i class="fas fa-sliders"></i> 默认 64 kbps</span>
+            <span class="ag-pill"><i class="fas fa-code"></i> 1 字节切换编码</span>
+          </div>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">2026 年 8 月 12 日</time> &nbsp;·&nbsp; 约 8 分钟</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#bandwidth">01</a><a href="#settings">02</a><a href="#quirk">03</a><a href="#switching">04</a><a href="#latency">05</a><a href="#transport">06</a><a href="#signal">07</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">每个远程电台系统都藏着同一个看不见的问题：音频链路。射频那一侧，IQ 采样、频谱、CAT 指令，都可以按链路能力去设计。音频这一侧不一样，因为当场判分的是你的耳朵。直接送原始 PCM，手机在 LTE 上就会卡成一片；压得太狠，一个强信号就糊成一团。这篇讲 SunMRRC 服务端与 SunsdrMobile 客户端里的编解码决策，也通用遥控 MRRC 用的是同一套 Opus 方案：为什么是 Opus、花了什么代价，以及那些让它真正可靠的实现细节。</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 四条结论</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>16 位 PCM 的接收音频约 768 kbit/s</strong>；64 kbps 的 Opus 比它小十二倍以上。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>帧长 20 毫秒</strong>（48 kHz 下 960 个采样），编码器跑的是 OPUS_APPLICATION_AUDIO，不是语音档。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>那个 ctypes 变参 ABI 缺陷要紧，就因为它是静默的</strong>：编码器悄悄换了码率控制路径，而不是报错。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>PCM 与 Opus 的切换靠载荷里的 1 个字节</strong>，没有握手要谈。</li>
+            </ul>
+            <div class="ba-readpath"><span>3 分钟读完：</span><a href="#bandwidth">§01 带宽</a><a href="#quirk">§03 ctypes</a><a href="#latency">§05 延迟</a><a href="#signal">§07 信号链</a></div>
+          </div>
+        </div>
+
+        <section id="bandwidth" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 带宽算术</span>
+            <h2 class="ag-section-title">带宽算术：PCM 为什么在移动网络上不行</h2>
+            <p class="ag-section-subtitle">16 位 PCM 对网络很残忍，Opus 不残忍。</p>
+          </header>
+          <p>未压缩的 Int16 PCM 对网络非常残忍。SunMRRC 服务端以 48 kHz 单声道广播接收音频，以 16 kHz 采集发射麦克风：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>链路</th><th>PCM 带宽</th><th>Opus 带宽</th><th>压缩比</th></tr></thead>
+            <tbody>
+              <tr><td>接收音频（服务端 → 客户端）</td><td>约 768 kbit/s（48 kHz，16 位单声道）</td><td>约 18–24 kbit/s（目标 64 kbps）</td><td>&gt;10×</td></tr>
+              <tr><td>发射音频（客户端 → 服务端）</td><td>约 256 kbit/s（16 kHz）</td><td>约 18–24 kbit/s</td><td>&gt;10×</td></tr>
+            </tbody>
+          </table></div>
+          <p>768 kbit/s 的持续接收音频，对大多数移动上行链路来说是直接出局。就算管道够粗，拥挤 LTE 小区里的丢包也会把 PCM 流变成一阵一阵可听见的卡顿。项目自己关于编解码的记录说得更直白：64 kbps 单声道是远程宽带调频收听的最优点，在广播音乐上接近透明，而码率只有 768 kbps Int16 PCM 的 1/12，于是远程链路不再欠载，那种 PCM 卡顿也就消失了。</p>
+        </div></section>
+
+        <section id="settings" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 编码器设置</span>
+            <h2 class="ag-section-title">Opus 编码器设置</h2>
+            <p class="ag-section-subtitle">完整配置，以及决定音质的那两个选择。</p>
+          </header>
+          <p>这些设置集中在一个模块里（<code>opus_rx.py</code>）：</p>
+          <pre><code>RX rate:         48 kHz mono        (raised from 16 kHz so WFM keeps its ~15 kHz band)
+TX rate:         16 kHz mono        (phone mic)
+Frame:           20 ms              (= 960 samples @ 48 kHz)
+Bitrate:         64 kbps default    (range 8–128 kbps)
+Application:     OPUS_APPLICATION_AUDIO (2049)  ← not OPUS_APPLICATION_VOIP
+Max packet:      4000 bytes         (TX worst-case 120 ms frame = 5760 samples)</code></pre>
+          <p>这里有两个选择值得单独点出来。接收采样率从 16 kHz 提到 48 kHz，是为了让宽带调频广播保住它完整的约 15 kHz 音频带宽；16 kHz 的流会把调频广播听得发闷。编码器用 <code>OPUS_APPLICATION_AUDIO</code> 而不是语音档，这个标志告诉 Opus 优先保真度而不是电话可懂度，对调频音乐和清晰的单边带都合适。</p>
+        </div></section>
+
+        <section id="quirk" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · ctypes 缺陷</span>
+            <h2 class="ag-section-title">一个真实的 ctypes 缺陷：变参 ABI</h2>
+            <p class="ag-section-subtitle">一个 64 位 ABI 细节，静默改掉了码率的控制方式。</p>
+          </header>
+          <p>这是那种会吃掉一个周末的缺陷。Opus 通过 <code>opus_encoder_ctl()</code> 控制码率，而这是一个 C 变参函数。在 Apple Silicon（arm64）上，变参 ABI 把尾部参数放在栈上，而固定了 argtypes 的 ctypes 把它们放进寄存器，于是每一次 SET 调用都返回 <code>OPUS_BAD_ARG</code> 并静默变成空操作。你以为配置好的码率，其实从来没有被配置过。</p>
+          <p>绕开的办法很干净：完全跳过控制 API，改用 <code>opus_encode()</code> 的 <code>max_data_bytes</code> 参数给输出封顶：</p>
+          <pre><code>cap = max(16, min(4000, bitrate * 20 // 1000 // 8))   # 64 kbps → 160 bytes per frame</code></pre>
+          <p>实测有效：40 字节的上限得到约 13 kbps，60 字节约 20 kbps，两条路径的解码往返都干净。让编码器去适配一个字节预算，事实证明和用正式 API 一样可控，而且在所有架构上都成立。</p>
+        </div></section>
+
+        <section id="switching" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 切换</span>
+            <h2 class="ag-section-title">没有握手的 PCM ↔ Opus 切换</h2>
+            <p class="ag-section-subtitle">载荷里的 1 个字节，就是整个协议。</p>
+          </header>
+          <p>会话中途可以随时切换编解码，不需要任何控制通道协商，靠的是每个音频帧前面那 1 个字节的编码标记（SDD AD-004）：</p>
+          <ul>
+            <li><code>0x00</code> = 原始 Int16 PCM</li>
+            <li><code>0x01</code> = Opus 包</li>
+          </ul>
+          <p>每个 <code>/WSaudioRX</code> 帧就是 <code>[标记][载荷]</code>。客户端看标记决定怎么解，于是 PCM 与 Opus 可以自由交错，没有握手，也没有竞态。这让系统在两个方向上都能优雅降级：服务端缺 libopus 或编码失败时，透明退回 Int16 PCM；用户可以在音频菜单里实时切换编码（<code>setOpus:</code>，以及 16–128 kbps 的 <code>setOpusBitrate:</code>）；流中途某次编码失败，就记一条警告并为那一帧发送 PCM 回退，而不是把音频丢掉。</p>
+        </div></section>
+
+        <section id="latency" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · 延迟预算</span>
+            <h2 class="ag-section-title">延迟预算</h2>
+            <p class="ag-section-subtitle">那 20 毫秒的帧花在哪儿了，代价又是什么。</p>
+          </header>
+          <p>关于 Opus，真正该问的问题是它到底加了多少延迟。编码帧是 20 毫秒，对着真正的延迟来源几乎是个舍入误差，后者是抖动缓冲：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>环节</th><th>取值</th></tr></thead>
+            <tbody>
+              <tr><td>Opus 帧</td><td>20 毫秒</td></tr>
+              <tr><td>WebSocket 抖动缓冲，预充</td><td>10 帧 = 200 毫秒</td></tr>
+              <tr><td>WebSocket 抖动缓冲，上限</td><td>60 帧 = 1200 毫秒</td></tr>
+              <tr><td>发射麦克风抖动缓冲，预充</td><td>60 包 ≈ 307 毫秒</td></tr>
+              <tr><td>发射麦克风抖动缓冲，重新预充</td><td>8 包 ≈ 41 毫秒</td></tr>
+              <tr><td>稳态发射队列</td><td>约 80 包 ≈ 410 毫秒</td></tr>
+              <tr><td>调制前静默</td><td>17 个零 IQ 包 ≈ 87 毫秒，加 200 采样斜坡 ≈ 5.1 毫秒</td></tr>
+            </tbody>
+          </table></div>
+          <p>结论是：Opus 不是延迟问题，缓冲策略才是。200 毫秒的 WebSocket 预充和约 307 毫秒的麦克风预充，存在意义是把网络抖动吸收掉，让音频永远不出现咔哒声。对一次业余远程通联来说，用几百毫秒的缓冲换掉一次爆音，是正确的交换。</p>
+        </div></section>
+
+        <section id="transport" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · 传输</span>
+            <h2 class="ag-section-title">WebSocket 音频通路</h2>
+            <p class="ag-section-subtitle">二进制帧、不用 base64，控制走文本通道。</p>
+          </header>
+          <p>整个远程会话由四条 WebSocket 承载：</p>
+          <ul>
+            <li><code>/WSCTRX</code>：控制通道，文本命令，用 PING/PONG 测往返。</li>
+            <li><code>/WSaudioRX</code>：服务端 → 客户端，带标记的二进制音频帧。</li>
+            <li><code>/WSaudioTX</code>：客户端 → 服务端，同样的带标记格式，由 <code>TxOpusDecoder</code> 解码。</li>
+            <li><code>/WSspectrum</code>：512 字节的 uint8 行，帧率 1–38 fps 可配。</li>
+          </ul>
+          <p>发射路径还有一个技巧（SDD AD-014）：在一段 SharedArrayBuffer 上放一个无锁环形缓冲，把音频采样在 AudioWorklet（生产者，实时优先级）与一个专用 Web Worker（消费者，跑 Opus WASM 编码器并独占自己的 WebSocket）之间传递。浏览器主线程从不碰音频采样，所以一次垃圾回收停顿不会造成断音。代价是需要 <code>Cross-Origin-Opener-Policy: same-origin</code> 与 <code>Cross-Origin-Embedder-Policy: credentialless</code> 两个响应头，自建部署时需要知道这一点。</p>
+        </div></section>
+
+        <section id="signal" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · 采样率</span>
+            <h2 class="ag-section-title">采样率与信号链</h2>
+            <p class="ag-section-subtitle">为什么接收跑 48 kHz、发射跑 16 kHz。</p>
+          </header>
+          <p>SunSDR2 DX 送 IQ 的采样率是 5⁷ = 78,125 Hz 的倍数（39k / 78k / 156k / 312k）。基础的 39,062.5 Hz 给出约 19.5 kHz 的奈奎斯特带宽，够宽带调频用；随后解调器用 Catmull-Rom 三次插值重采样到 48 kHz，供 Opus 编码器和浏览器的 AudioContext 使用。</p>
+          <p>发射侧，客户端的 16 kHz 麦克风音频在 Worker 里 Opus 编码，服务端解码后，先过一只 300 Hz 四阶巴特沃斯高通（AD-015）再进单边带调制。这只滤波器是能测出来的收益：300 Hz 以下的包络功率占比从 30.4% 降到 3.7%，把 96% 的功放功率推进 300–2800 Hz 话音带。调制链末端是 tanh 软限幅加线性斜坡，所以发射包络不会一头撞进功放。</p>
+          <p>这篇取材于 SunMRRC 服务端与它的 SunsdrMobile iOS 客户端，两者都开源。相关架构决策（AD-004 双编码传输、AD-014 环形缓冲、AD-015 发射滤波器）记录在 SunMRRC 的软件设计文档里。</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电爱好者，软件工程师。构建 VLSC 开源远程控制生态，也把电台说的话写下来。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>延伸阅读</h3>
+          <ul>
+            <li><a href="/sunmrrc/">SunMRRC：SunSDR2 DX 服务器</a></li>
+            <li><a href="/blog/ft710-usb-remote-control/zh/">一根 USB 线遥控 Yaesu FT-710</a></li>
+            <li><a href="/blog/efhw-esp32s3-auto-tuner/zh/">设计一台 ESP32-S3 舵机驱动的天线调谐器</a></li>
+            <li><a href="/zh/agentic.html">智能体工程，人类意图、智能体执行、现场证据</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/zh/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

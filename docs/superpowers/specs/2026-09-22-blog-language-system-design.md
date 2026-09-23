@@ -115,17 +115,25 @@
 引文必须先成为机器可识别的结构，"镜像"才可断言。现有中文引文是裸文本（`<p>` 里的「志不立，天下无可成之事。」），无法配对。
 
 ```html
-<blockquote class="ba-quote" data-quote-id="wang-yangming-lichang" data-quote-kind="classic"
+<!-- 中文页 /blog/coda/zh/ -->
+<blockquote class="ba-quote" data-quote-id="wang-yangming-zhi-bu-li" data-quote-kind="classic"
             data-quote-cite="王阳明《教条示龙场诸生》">
   <p class="ba-quote-orig" lang="zh">志不立，天下无可成之事。</p>
-  <p class="ba-quote-trans" lang="en">Without resolve, nothing in the world can be accomplished.
+  <p class="ba-quote-trans" lang="zh">无志，则天下无事可成。</p>
+</blockquote>
+
+<!-- 英文页 /blog/coda/ -->
+<blockquote class="ba-quote" data-quote-id="wang-yangming-zhi-bu-li" data-quote-kind="classic"
+            data-quote-cite="Wang Yangming, *Instructions for Longchang*">
+  <p class="ba-quote-orig" lang="zh">志不立，天下无可成之事。</p>
+  <p class="ba-quote-trans" lang="en">When resolve is not established, nothing in the world can be accomplished.
     <span class="ba-quote-by">trans.</span></p>
 </blockquote>
 ```
 
 - `data-quote-kind`：`classic`（中国经典）/ `engineering`（工程文献、数据手册、论文）/ `project`（项目自身证据：事故、答复页、版本行）
 - `data-quote-id`：全篇唯一，**EN 与 ZH 必须同名**——这就是镜像断言的锚
-- 两侧都必须有 `ba-quote-orig` 与 `ba-quote-trans`（原文与可读译本）
+- 两侧都必须有 `ba-quote-orig`（**恒为原文**）与 `ba-quote-trans`（**用本页语言书写**：中文页放白话，英文页放可核对英译、自译标 `trans.`）。中文页不塞英文，英文页不塞中文白话——语体一致优先，镜像由 `data-quote-id` 承担
 - 无障碍：语义用 `<blockquote>`，出处用 `data-quote-cite` 并在视觉上以 `.ba-quote-cite` 呈现
 - CSS 落在 `css/blog-article.css`，版本 `?v=3 → ?v=4`（引用该 CSS 的页面同步 bump）
 

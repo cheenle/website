@@ -13,12 +13,15 @@
     <meta property="og:url" content="https://www.vlsc.net/blog/ft710-usb-remote-control/">
     <meta property="og:site_name" content="VLSC Projects">
     <link rel="canonical" href="https://www.vlsc.net/blog/ft710-usb-remote-control/">
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/ft710-usb-remote-control/">
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/ft710-usb-remote-control/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/ft710-usb-remote-control/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/octen.css?v=6">
     <link rel="stylesheet" href="../../css/agentic.css?v=2">
-    <link rel="stylesheet" href="../../css/blog-article.css?v=3">
+    <link rel="stylesheet" href="../../css/blog-article.css?v=4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="application/ld+json">
     {
@@ -48,29 +51,44 @@
             <h1>Remote-Controlling a Yaesu FT-710 with Just a USB Cable</h1>
             <p>Reverse-engineering the FT4222 SPI scope path means you can drop the SCU-LAN10 dongle entirely — CAT, waterfall, and audio all ride on the same USB cable you already own.</p>
             <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-08-12">Aug 12, 2026</time> &nbsp;·&nbsp; ~9 min read</p>
-            <ul class="ba-tags">
-            <li><a href="/blog/">#ft710</a></li>
-            <li><a href="/blog/">#cat</a></li>
-            <li><a href="/blog/">#spi</a></li>
-            <li><a href="/blog/">#waterfall</a></li>
-            <li><a href="/blog/">#sdr</a></li>
-        </ul>
+          <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-plug"></i> one cable · three interfaces</span>
+            <span class="ag-pill"><i class="fas fa-wave-square"></i> FT4222 SPI · 4096-byte frames</span>
+            <span class="ag-pill"><i class="fas fa-microchip"></i> no SCU-LAN10</span>
+            <span class="ag-pill"><i class="fas fa-box-archive"></i> archived 2026-09-12</span>
+          </div>
         </div>
     </header>
 
 
-    <main class="ba-main">
-        <div class="ba-prose">
+            <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#anatomy">01</a><a href="#ft4222">02</a><a href="#scopeframe">03</a><a href="#cat">04</a><a href="#pipeline">05</a><a href="#tx">06</a><a href="#fallback">07</a><a href="#vs-sculan10">08</a><a href="#closing">09</a></nav></div></div>
 
-        <p>If you own a Yaesu FT-710 and have looked at remote control at all, you've met the <strong>SCU-LAN10</strong> — Yaesu's network dongle that bridges the radio to your LAN. It works, but it is an extra box, a proprietary protocol, and a closed black box. This article is about a different path: controlling a FT-710 over <strong>a single USB cable</strong>, reading its real spectrum/waterfall data, and streaming audio — with no additional hardware at all.</p>
+      <main class="ba-main">
+        <p class="lede">If you own a Yaesu FT-710 and have looked at remote control at all, you've met the <strong>SCU-LAN10</strong> — Yaesu's network dongle that bridges the radio to your LAN. It works, but it is an extra box, a proprietary protocol, and a closed black box. This article is about a different path: controlling a FT-710 over <strong>a single USB cable</strong>, reading its real spectrum/waterfall data, and streaming audio — with no additional hardware at all.</p>
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — five findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The USB port exposes three devices at once.</strong> A CP210x UART for CAT, an FTDI FT4222 SPI bridge for spectrum, and a C-Media audio codec — all on the cable you already own.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Spectrum arrives pre-computed.</strong> 850 amplitude bins per receiver in 4096-byte frames at roughly 30 fps; the radio's own SDR engine does the FFT.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Audio is a standard UAC device.</strong> 44.1 kHz capture and playback ride the same cable with no extra hardware.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>The three links are independent.</strong> CAT, spectrum and audio fail separately, so each one can degrade on its own instead of taking the session down.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>MRRC Modern drives this path today.</strong> The single-radio project was archived on 2026-09-12 and now runs as one backend among several.</li>
+            </ul>
+            <div class="ba-readpath"><span>3-minute read:</span><a href="#anatomy">§01 Anatomy</a><a href="#ft4222">§02 Spectrum</a><a href="#tx">§06 Transmit</a><a href="#closing">§09 Status</a></div>
+          </div>
+        </div>
 
-        <p>This is the story behind the <a href="/mrrc_modern/">MRRC FT-710</a> open-source project, and it starts with a fact most owners don't realize: <strong>the FT-710 already contains everything needed for high-quality remote control.</strong> The USB port on the back is not just a CAT serial port — it exposes three independent interfaces at once.</p>
+        <section id="anatomy" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Anatomy</span>
+            <h2 class="ag-section-title">Anatomy of the FT-710 USB port</h2>
+            <p class="ag-section-subtitle">One cable, three devices — CAT, spectrum, audio.</p>
+          </header>
+          <p>This is the story behind the <a href="/mrrc_modern/">MRRC FT-710</a> open-source project, and it starts with a fact most owners don't realize: <strong>the FT-710 already contains everything needed for high-quality remote control.</strong> The USB port on the back is not just a CAT serial port — it exposes three independent interfaces at once.</p>
+<p>Plug one USB cable from your computer into the FT-710 and the OS sees <em>three</em> devices, not one:</p>
 
-        <h2 id="anatomy">Anatomy of the FT-710 USB port</h2>
-
-        <p>Plug one USB cable from your computer into the FT-710 and the OS sees <em>three</em> devices, not one:</p>
-
-        <table>
+        <div class="ag-table-wrap"><table class="ag-table">
             <thead>
                 <tr><th>Interface</th><th>USB endpoint</th><th>What it carries</th></tr>
             </thead>
@@ -79,13 +97,17 @@
                 <tr><td>FT4222 SPI Bridge</td><td>FTDI D2XX</td><td>850-point FFT spectrum for two receivers, ~30 fps</td></tr>
                 <tr><td>USB Audio Codec</td><td>C-Media</td><td>44.1 kHz RX audio capture + TX playback</td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <p>The reason most people think "USB = CAT only" is that only the serial port is user-visible. The FT4222 SPI bridge and the C-Media audio codec are usually consumed internally by the front-panel display and by Yaesu's own SCU-LAN10. When you open the device with the FTDI D2XX driver by its descriptor string <code>"FT4222 A"</code>, the hidden spectrum interface is right there.</p>
-
-        <h2 id="ft4222">The FT4222 SPI bridge: spectrum without a dongle</h2>
-
-        <p>The FT4222 is an FTDI USB-to-SPI bridge IC soldered onto the FT-710's main board. In our setup it is driven with a deliberately conservative configuration (mirrored from wfview's <code>ft4222handler.cpp</code>):</p>
+        </div></section>
+        <section id="ft4222" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · Spectrum path</span>
+            <h2 class="ag-section-title">The FT4222 SPI bridge: spectrum without a dongle</h2>
+            <p class="ag-section-subtitle">850 bins per receiver straight off the SPI bus — no dongle, no IQ stream.</p>
+          </header>
+          <p>The FT4222 is an FTDI USB-to-SPI bridge IC soldered onto the FT-710's main board. In our setup it is driven with a deliberately conservative configuration (mirrored from wfview's <code>ft4222handler.cpp</code>):</p>
 
         <pre><code>SPI mode:    single I/O (SPI_IO_SINGLE)
 Clock:       SYS_CLK_24 (24 MHz) ÷ CLK_DIV_64  →  375 kHz SPI clock
@@ -96,12 +118,16 @@ Read size:   4096 bytes per transaction</code></pre>
         <p>The SPI clock divider is even tunable at runtime through the <code>FT710_FT4222_CLK_DIV</code> environment variable — handy when a particular USB cable or hub needs a more conservative timing. Each SPI transaction returns one <strong>4096-byte scope frame</strong>.</p>
 
         <p>Here is the key architectural point: <strong>what comes off the SPI bus is already-processed amplitude data, not raw IQ samples.</strong> The FT-710's internal SDR engine computes the FFT and hands us 850 amplitude bins per receiver. This is fundamentally different from streaming SDRs like a KiwiSDR or RX888, which ship raw IQ and push the FFT work to the host. For remote control, receiving pre-computed spectra means a laptop or even a Raspberry Pi can render a waterfall with trivial CPU.</p>
+        </div></section>
+        <section id="scopeframe" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Frame format</span>
+            <h2 class="ag-section-title">Inside the 4096-byte scope frame</h2>
+            <p class="ag-section-subtitle">Two receivers plus a 150-byte metadata block, checked against a 4-byte sync tail.</p>
+          </header>
+          <p>Each frame is a compact structure that carries two receivers' spectra plus a dense metadata block:</p>
 
-        <h2 id="scopeframe">Inside the 4096-byte scope frame</h2>
-
-        <p>Each frame is a compact structure that carries two receivers' spectra plus a dense metadata block:</p>
-
-        <table>
+        <div class="ag-table-wrap"><table class="ag-table">
             <thead>
                 <tr><th>Offset</th><th>Size</th><th>Content</th></tr>
             </thead>
@@ -112,15 +138,19 @@ Read size:   4096 bytes per transaction</code></pre>
                 <tr><td>2900–3049</td><td>150 B</td><td>Metadata block</td></tr>
                 <tr><td>4092–4095</td><td>4 B</td><td>Sync tail <code>0xFF 0x01 0xEE 0x01</code></td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <p>That 150-byte metadata block is where the radio tells us almost everything about its current state: scope mode, preamp and attenuator bits, span, operating mode, the VFO-A frequency in both 5-byte BCD and 4-byte big-endian form, the raw S-meter value, and the scope's start frequency. Frame synchronization is validated against the 4-byte sync tail, and the SPI bus delivers roughly <strong>30 frames per second</strong>.</p>
 
         <p>One quirk worth knowing: the spectrum bytes are <em>inverted</em>. Early on, a naive read produced a waterfall that looked like a photographic negative — the fix is a single <code>~b &amp; 0xFF</code> per byte.</p>
-
-        <h2 id="cat">CAT control over the Enhanced COM Port</h2>
-
-        <p>Control runs over the CP210x serial port using <strong>native Yaesu CAT</strong> — no Hamlib, no rigctld. The project deliberately avoids the Hamlib dependency (an explicit architecture decision, AD-002 in the SDD): for the FT-710's CAT dialect, a direct implementation is smaller and faster.</p>
+        </div></section>
+        <section id="cat" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · CAT</span>
+            <h2 class="ag-section-title">CAT control over the Enhanced COM Port</h2>
+            <p class="ag-section-subtitle">Native Yaesu CAT at 38400 baud — no Hamlib, no rigctld.</p>
+          </header>
+          <p>Control runs over the CP210x serial port using <strong>native Yaesu CAT</strong> — no Hamlib, no rigctld. The project deliberately avoids the Hamlib dependency (an explicit architecture decision, AD-002 in the SDD): for the FT-710's CAT dialect, a direct implementation is smaller and faster.</p>
 
         <p>The protocol is the familiar two-letter command format:</p>
 
@@ -141,10 +171,14 @@ Read size:   4096 bytes per transaction</code></pre>
 EX040200   # set scope to CENTER mode (not FIX mode)</code></pre>
 
         <p>Without these two commands, the FT4222 sits silent no matter how hard you read from it — a classic gotcha for anyone starting from scratch.</p>
-
-        <h2 id="pipeline">From SPI to browser: the data pipeline</h2>
-
-        <p>Reading the SPI bus is blocking, and the FTDI D2XX ctypes calls can stall unpredictably. So the spectrum reader runs as a <strong>separate OS subprocess</strong> (<code>scope_pipe.py</code>), isolated from the server. If it crashes, the server detects the dead pipe and restarts it — the web client never notices.</p>
+        </div></section>
+        <section id="pipeline" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · Pipeline</span>
+            <h2 class="ag-section-title">From SPI to browser: the data pipeline</h2>
+            <p class="ag-section-subtitle">A separate process reads, the server broadcasts, the browser draws.</p>
+          </header>
+          <p>Reading the SPI bus is blocking, and the FTDI D2XX ctypes calls can stall unpredictably. So the spectrum reader runs as a <strong>separate OS subprocess</strong> (<code>scope_pipe.py</code>), isolated from the server. If it crashes, the server detects the dead pipe and restarts it — the web client never notices.</p>
 
         <p>The pipeline has three clean stages:</p>
 
@@ -155,22 +189,34 @@ EX040200   # set scope to CENTER mode (not FIX mode)</code></pre>
         </ol>
 
         <p>The WebSocket frame format is deliberately minimal — <strong>1701 bytes</strong>: a 1-byte version, then 850 bytes of WF1, then 850 bytes of WF2. The broadcast loop runs at <strong>5 fps</strong> (200 ms intervals), which is smooth for a remote waterfall without burning bandwidth.</p>
-
-        <h2 id="tx">What happens when you transmit</h2>
-
-        <p>The FT-710 garbles its scope stream while transmitting — the spectrum data becomes noise mid-key. Rather than fight the radio, the server pauses the SPI read loop during TX by sending <code>TX:1</code> down the subprocess's stdin. On PTT release, the pipe does a full device close, settle, and reopen to re-sync the stream cleanly.</p>
+        </div></section>
+        <section id="tx" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · Transmit</span>
+            <h2 class="ag-section-title">What happens when you transmit</h2>
+            <p class="ag-section-subtitle">The radio garbles its own scope stream, so the pipe closes and reopens.</p>
+          </header>
+          <p>The FT-710 garbles its scope stream while transmitting — the spectrum data becomes noise mid-key. Rather than fight the radio, the server pauses the SPI read loop during TX by sending <code>TX:1</code> down the subprocess's stdin. On PTT release, the pipe does a full device close, settle, and reopen to re-sync the stream cleanly.</p>
 
         <p>That close/reopen dance exists because an earlier version tried to just resume reading — and hit a <code>fatal: too_many_reinits</code> crash loop after repeated TX cycles. Re-opening the FT4222 device after each transmission turned out to be the reliable fix.</p>
-
-        <h2 id="fallback">Graceful degradation: S-meter fallback</h2>
-
-        <p>Not every host has the FT4222 D2XX driver, and not every cable/OS combo cooperates. When the SPI bridge is unavailable, the server synthesizes a plausible spectrum from the CAT S-meter reading: a Gaussian peak centered in the current span, scaled by S-meter value, with secondary peaks and noise speckle for realism.</p>
+        </div></section>
+        <section id="fallback" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · Fallback</span>
+            <h2 class="ag-section-title">Graceful degradation: S-meter fallback</h2>
+            <p class="ag-section-subtitle">When the SPI bridge is missing, the interface still works.</p>
+          </header>
+          <p>Not every host has the FT4222 D2XX driver, and not every cable/OS combo cooperates. When the SPI bridge is unavailable, the server synthesizes a plausible spectrum from the CAT S-meter reading: a Gaussian peak centered in the current span, scaled by S-meter value, with secondary peaks and noise speckle for realism.</p>
 
         <p>It isn't real RF data, but it keeps the entire UI functional — tuning, mode changes, band changes — so the remote experience degrades gracefully instead of dying. The fallback runs at the same 5 fps as the real path, and the client can't tell the difference from the protocol side.</p>
-
-        <h2 id="vs-sculan10">FT-710 + USB vs the SCU-LAN10</h2>
-
-        <table>
+        </div></section>
+        <section id="vs-sculan10" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · Comparison</span>
+            <h2 class="ag-section-title">FT-710 + USB vs the SCU-LAN10</h2>
+            <p class="ag-section-subtitle">What the dongle gives you that this does not.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
             <thead>
                 <tr><th></th><th>SCU-LAN10</th><th>MRRC FT-710 (USB)</th></tr>
             </thead>
@@ -181,15 +227,21 @@ EX040200   # set scope to CENTER mode (not FIX mode)</code></pre>
                 <tr><td>Spectrum fallback</td><td>None</td><td>S-meter synthetic spectrum when FT4222 is absent</td></tr>
                 <tr><td>Auditability</td><td>Closed black box</td><td>Fully documented frame format and CAT implementation</td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <p>The trade-offs are honest ones. The SCU-LAN10 puts the radio on your LAN, so any machine on the network can reach it. The USB path binds the radio to a single host computer — which then shares it out over the network itself. If you're running a 24/7 shack computer anyway, that's not a limitation at all; it's a simplification.</p>
 
         <p>The full architecture — component inventory, WebSocket message specs, and the seven-layer PTT safety model — is documented in the <a href="/mrrc_modern/sdd/">Software Design Document</a>. The code is open source on <a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener">GitHub</a>.</p>
-        <p class="citation"><strong>Archived 2026-09-12.</strong> The original single-radio repository (<code>cheenle/mrrc_ft710</code>) is now read-only and its site 301-redirects to MRRC Modern, which drives the FT-710 as well as the IC-7300 / IC-7300MK2 through a pluggable backend. This article is kept as the technical record of how the USB path was discovered.</p>
-
-        </div>
-</main>
+        </div></section>
+        <section id="closing" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">09 · Status</span>
+            <h2 class="ag-section-title">Where this path goes now</h2>
+            <p class="ag-section-subtitle">Archived 2026-09-12 — the USB path lives on in MRRC Modern.</p>
+          </header>
+          <p class="ag-note"><strong>Archived 2026-09-12.</strong> The original single-radio repository (<code>cheenle/mrrc_ft710</code>) is now read-only and its site 301-redirects to MRRC Modern, which drives the FT-710 as well as the IC-7300 / IC-7300MK2 through a pluggable backend. This article is kept as the technical record of how the USB path was discovered.</p>
+        </div></section>
+      </main>
 
     <footer class="ba-footer">
         <div class="ba-footer-inner">

@@ -23,19 +23,22 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import llm_proxy  # noqa: E402
 
-MAX_CHARS = 460
+MAX_CHARS = 480
 JUDGE_PROMPT = (
     "你是易学文本评审。下面是一条 AI 易经解读及其输入事实。按四个维度各打 1–5 分："
     "xiangshu（是否真用了爻位/互错综等象数事实而非泛谈）、jingwen（引经是否准确且服务于论证）、"
     "shili（事理是否贴合所问类别、具体不空泛）、xingdong（建议是否可执行、忌是否明确）。"
-    "只输出 JSON：{\"xiangshu\":n,\"jingwen\":n,\"shili\":n,\"xingdong\":n,\"comment\":\"一句话\"}"
+    "回复的第一个字符必须是 {，只输出 JSON：{\"xiangshu\":n,\"jingwen\":n,\"shili\":n,\"xingdong\":n,\"comment\":\"20字内\"}，禁止任何解释性文字"
 )
 
 
 def hard_check(case, text):
     problems = []
     for m in case["must"]:
-        if m not in text:
+        if m.startswith("re:"):
+            if not re.search(m[3:], text):
+                problems.append("缺必备要素(正则)：%s" % m[3:])
+        elif m not in text:
             problems.append("缺必备要素：%s" % m)
     if len(re.sub(r"\s", "", text)) > MAX_CHARS:
         problems.append("超过 %d 字" % MAX_CHARS)
@@ -45,7 +48,7 @@ def hard_check(case, text):
 def judge(case, text):
     payload = {
         "model": os.environ.get("LLM_MODEL", llm_proxy.DEFAULT_MODEL),
-        "max_tokens": 600,
+        "max_tokens": 1200,
         "thinking": {"type": "enabled", "budget_tokens": 256},
         "messages": [{"role": "user", "content": JUDGE_PROMPT + "\n\n【输入事实】\n" +
                       case["req"].get("question", "") + " / " + case["category"] +

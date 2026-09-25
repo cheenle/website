@@ -29,6 +29,7 @@ ARTICLES: dict[str, tuple[str, tuple[str, ...]]] = {
     "efhw-esp32s3-auto-tuner": (TIER_FIELD, ("en", "zh")),
     "opus-vs-pcm-remote-audio": (TIER_FIELD, ("en", "zh")),
     "psk-reporter-dxcc-hunting": (TIER_FIELD, ("en", "zh")),
+    "moon-loop": (TIER_ESSAY, ("en", "zh")),
     "juekun": (TIER_ARCHIVE, ("root",)),
     "from-intent-to-delivery": (TIER_STUB, ("en", "zh")),
 }

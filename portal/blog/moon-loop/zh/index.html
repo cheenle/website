@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>月闭环：一座不眠电台的中秋祝福 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="2026 中秋：满月既是灯笼，也是无线电最古老的反射体。一点月面反射通信（1953 年第一次回声，1960 年第一次双向通联，往返约 2.5 秒），一点今夜的电台值勤表（MRRC、MRRC Modern、SunMRRC、EFHW、MRRC-FT8），以及为什么守夜的闭环正是智能体工程的意义所在。BG1SB 送上 73 与 88。"
+    />
+    <meta
+      name="keywords"
+      content="中秋节, 月面反射, EME, 业余无线电, 远程控制, MRRC, MRRC Modern, SunMRRC, EFHW, MRRC-FT8, FT8, 智能体工程, 支持闭环, BG1SB"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="月闭环：一座不眠电台的中秋祝福" />
+    <meta
+      property="og:description"
+      content="满月是灯笼，也是无线电最古老的反射体。月面反射七十年，今夜五个项目的节日值勤表，以及守夜的闭环：让人去赏月，正是智能体工程的意义。73 与 88。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/moon-loop/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/moon-loop/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/moon-loop/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/moon-loop/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/moon-loop/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "月闭环：一座不眠电台的中秋祝福",
+        "description": "2026 中秋：月亮作为无线电最古老的反射体，今夜 VLSC 五个项目的节日值勤表，以及守夜的闭环——让人去赏月，正是智能体工程的意义。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-09-25",
+        "dateModified": "2026-09-25",
+        "keywords": "中秋节, 月面反射, EME, 业余无线电, MRRC, MRRC Modern, SunMRRC, EFHW, MRRC-FT8, 智能体工程",
+        "articleSection": "Festival",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/moon-loop/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/zh/">首页</a> › <a href="/blog/zh/">博客</a> › <span class="ba-crumb-cat">Festival</span> › 月闭环</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge"><i class="fas fa-moon"></i><span>中秋 · 八月十五 · 2026</span></div>
+          <h1>月之<span class="gradient">闭环</span>。</h1>
+          <p>今夜是八月十五。对多数人来说，满月是一盏灯笼；对无线电爱好者来说，它还是天空中最古老的反射体。一篇简短的节日文字：一点月面反射，一张今夜的电台值勤表，和一声送给所有电台的问候。</p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-moon"></i> 八月十五 · 2026-09-25</span>
+            <span class="ag-pill"><i class="fas fa-satellite-dish"></i> EME · 往返约 2.5 秒</span>
+            <span class="ag-pill"><i class="fas fa-broadcast-tower"></i> 73 与 88 de BG1SB</span>
+            <span class="ag-pill"><i class="fas fa-arrows-rotate"></i> 闭环今夜值守</span>
+          </div>
+          <p class="ba-meta">BG1SB &nbsp;·&nbsp; <time datetime="2026-09-25">2026 年 9 月 25 日</time> &nbsp;·&nbsp; 约 8 分钟</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#moon-link">月链</a><a href="#station-tonight">今夜电台</a><a href="#loop-on-duty">守夜闭环</a><a href="#cq-moon">CQ 中秋</a></nav></div></div>
+
+      <main class="ba-main">
+        <p class="lede">中秋是一年中唯一一个夜晚：整个文明在同一时刻仰望天上的同一个物体。无线电爱好者对此有一个私人版本：月亮不只是用来看的，还是可以拿来<em>发射</em>的。信号以光速往返，约 2.5 秒；回来时衰减约 250 dB。那是你自己的声音，走过 38 万公里之后回到你耳边。今夜，在月饼的间隙，这篇短文走一条最短的路：看看无线电里最古老的链路，查查电台的夜班，最后送上一声问候。闭环在值守，人在桌边。</p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR —— 四条摘要看完全文</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>月面反射是真的，比晶体管收音机还老。</strong>1953 年，爱好者第一次听到自己的信号从月球返回；1960 年，第一次双向 EME 通联完成。往返约 2.5 秒，144 MHz 上的路径损耗约 250 dB。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>电台今夜上夜班。</strong>MRRC-FT8 在 FT-710 上整夜解码 FT8，<a href="https://radio.vlsc.net:9988">实况在这里</a>；EFHW 自动天调站在院里的同一轮月下，把驻波守在 1:1 附近。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>闭环就是为这样的夜晚存在的。</strong>定时预检、FDE 进度板、过测试才提交的无人实施者，今夜照常值守。智能体工程（agentic engineering）的意义正在于此：裁决留在人手里，而人获准去吃月饼。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="analogy">类比</span><strong>「海上生明月，天涯共此时」是一句伪装成诗的链路预算。</strong>一个发光源，覆盖区内所有接收者共享同一时刻。它写在无线电诞生前十二个世纪，至今仍是对传播最干净的描述。</li>
+            </ul>
+            <div class="ba-readpath"><span>两分钟速读：</span><a href="#moon-link">§01 月链</a><a href="#loop-on-duty">§03 守夜</a><a href="#cq-moon">§04 问候</a></div>
+          </div>
+        </div>
+
+        <section id="moon-link" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 月链</span>
+            <h2 class="ag-section-title">无线电里最古老的链路</h2>
+            <p class="ag-section-subtitle">每个文明都对准过这颗卫星。</p>
+          </header>
+
+          <p>月面反射通信，EME，名字就是全部：把定向天线对准月球，发射，然后听 384,400 公里外那颗岩质星球送回来的回声。月面只反射入射能量的几个百分点，144 MHz 上路径损耗约 250 dB，回来的信号是耳语的耳语。但它确实回来了。1953 年，业余爱好者第一次听到自己的信号从月球返回；1960 年，第一次双向月面反射通联完成。那比多数家庭拥有晶体管收音机还要早。此后 EME 一直是弱信号操作的顶峰，为深空噪声设计的数字模式又把它拉进了普通电台的射程。</p>
+
+          <p>它有一种别的通联给不了的乐趣：你能听见<em>自己的</em>信号回家。按下 PTT，等两秒半，你就在那里了，走过 25 万英里，老了两秒半。不用感谢电离层，不用感谢中继台的管理员，也没有哪颗卫星转发器带着主人和时刻表。只有你、物理定律，和那颗夜半球所有人同时看得见的反射体。</p>
+
+          <blockquote class="ba-quote" data-quote-id="zhangjiuling-moon-afar" data-quote-kind="classic" data-quote-cite="张九龄《望月怀远》（唐）">
+            <p class="ba-quote-orig" lang="zh">海上生明月，天涯共此时。</p>
+            <p class="ba-quote-trans" lang="en">Over the sea the bright moon rises; at the far edge of the sky, we share this very hour. <span class="ba-quote-by">英译</span></p>
+            <span class="ba-quote-cite">张九龄《望月怀远》（唐，八世纪）</span>
+          </blockquote>
+
+          <p>张九龄写下这一句，比马可尼早了十二个世纪。它至今仍是关于传播最干净的一句话：一个发光源，覆盖区里每个接收者共享同一时刻。无线电只是把这份共享变成了双向。对火腿来说，天涯共此时不是比喻，而是一张覆盖图。今夜月亮在你的天空，也在我的天空，那么我们之间就有一条路径。代价约 250 dB，四十亿年来分文未取。</p>
+
+          <div class="claim-box" data-claim-type="inference">
+            <span class="claim-label">推论 · 所有人共享的那台中继</span>
+            <p>月亮是唯一一台没有经过任何机构指配、也没有管理员维护的中继：没有协调委员会，没有执照条款，没有订阅费。它的停机时刻表（月相、天平动、近地点）写在人类最古老的一本历法里。其他所有越视距的手段都是基础设施，只有这一台是地貌。</p>
+          </div>
+        </div></section>
+
+        <section id="station-tonight" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 今夜电台</span>
+            <h2 class="ag-section-title">五个项目的节日值勤表</h2>
+            <p class="ag-section-subtitle">夜班不吃月饼，夜班吃 15 秒的时隙。</p>
+          </header>
+
+          <p>中秋是家人的节日，电台知道。今夜 VLSC 的几个项目照常值守，只是值勤表多了点仪式感：</p>
+
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>项目</th><th>日常职责</th><th>今夜的节日值勤</th></tr></thead>
+            <tbody>
+              <tr><td><strong><a href="/mrrc/">MRRC</a></strong></td><td>基于 Hamlib/rigctld 的通用 HF 远程</td><td>让 HF 电台在饭桌旁仍然可达：电台留在机房里，人不必留下。</td></tr>
+              <tr><td><strong><a href="/mrrc_modern/">MRRC Modern</a></strong></td><td>FT-710 / IC-7300 的 USB 原生远程</td><td>驱动桌面电台：一根线走频谱与音频，瀑布图稳如月光。</td></tr>
+              <tr><td><strong><a href="/sunmrrc/">SunMRRC</a></strong></td><td>SunSDR2 DX 服务器，IQ 解调 + FFT</td><td>今夜它的 512 点瀑布图是它一直秘密充当的东西：一片浮着月亮的深色海面。</td></tr>
+              <tr><td><strong><a href="/efhw/">EFHW</a></strong></td><td>ESP32-S3 舵机驱动的 Fuchs 自动天调</td><td>站在院里的秋夜空气中，馈电走同轴，把匹配守在 1:1 附近，头顶满月。</td></tr>
+              <tr><td><strong><a href="/mrrc_ft8/">MRRC-FT8</a></strong></td><td>无头 FT8/FT4 服务器，WSJT-X Improved 内核</td><td>真正的夜班：整夜 UTC 时隙纪律，全家入睡时它还在记 QSO。<a href="https://radio.vlsc.net:9988">点这里看实况</a>。</td></tr>
+            </tbody>
+          </table></div>
+
+          <p>如果你想做一个自己的小实验：节日晴夜里的 FT8，本身就是另一种赏月。打开瀑布图，看 15 秒的时隙从三个大洲依次亮起。记住，每一道痕迹都是另一个人的电台、另一个人的夜晚，是另一个人在发射的间隙，抬头看了看同一片天空。</p>
+
+          <blockquote class="ba-quote" data-quote-id="sushi-ask-sky" data-quote-kind="classic" data-quote-cite="苏轼《水调歌头》（1076）">
+            <p class="ba-quote-orig" lang="zh">明月几时有？把酒问青天。</p>
+            <p class="ba-quote-trans" lang="en">When did the bright moon first appear? Cup in hand, I ask the blue sky. <span class="ba-quote-by">英译</span></p>
+            <span class="ba-quote-cite">苏轼《水调歌头》（1076 年）</span>
+          </blockquote>
+
+          <p>苏轼在 1076 年只按过一次发射键，回声却到今天还没收完：九个半世纪里，每个中秋都有一个听者抬头应答。这是有记录以来最古老的、发给天空的 CQ。和多数 CQ 不同，它从未落空。</p>
+        </div></section>
+
+        <section id="loop-on-duty" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 守夜闭环</span>
+            <h2 class="ag-section-title">闭环今夜不休息，这正是意义所在</h2>
+            <p class="ag-section-subtitle">用一个节日来演示智能体工程。</p>
+          </header>
+
+          <p>这个站点写过很多闭环：<a href="/blog/seven-billion-tokens/zh/">契约测试的内环</a>，<a href="/blog/support-loop/zh/">把现场症状变成已发布修复的支持环</a>，还有那块「分类即决策」的进度板。今夜就是它们全部存在的理由。家人吃月饼的时候，定时任务仍然每十分钟取一次诊断包；初步研判仍然分类落在 FDE 进度板上；无人值守的实施者仍然把过测试的补丁提交到隔离分支，main 安睡不动；PTT 闸门仍然不许任何自动化碰正在发射的电台。节日没有改变任何节奏。这份不变，本身就是节日礼物。</p>
+
+          <p><a href="/zh/agentic.html">总纲页</a>上的分工是：智能体扛执行，人扛意图、边界与裁决。这套分工通常用吞吐和证据来论证，但它真正的回报更安静：在一年中这个专为仰望天空设下的夜晚，人可以去仰望天空。裁决保持待命，守夜不必用人。</p>
+
+          <div class="claim-box" data-claim-type="thesis">
+            <span class="claim-label">论点 · 闭环是为什么存在的</span>
+            <p>一个不能在节日夜晚无人运行的闭环，不算闭环，只是一条挂了 cron 的杂务。衡量自动化的标准，不是你盯着时它做了多少，而是这个夜晚本身能否存在：两端有仪表，裁决在人，操作者坐在桌边，而不是坐在控制台前。</p>
+          </div>
+
+          <p><a href="/blog/coda/zh/">《跋》</a>里写过，每次闭环都是一次有回信的祈祷。今夜回信就在头顶：一台反射体，25 万英里之外，光速往返两秒半。以家人的速度算，还要再慢一些。过节，这个速度才对。</p>
+        </div></section>
+
+        <section id="cq-moon" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · CQ 中秋</span>
+            <h2 class="ag-section-title">给覆盖区内每一座电台的问候</h2>
+            <p class="ag-section-subtitle">CQ CQ CQ de BG1SB：中秋问候，全波段，全模式。</p>
+          </header>
+
+          <p>给这个博客的每一位读者，给每一位在用 MRRC、MRRC Modern、SunMRRC、EFHW 或 MRRC-FT8 的操作者，给微信群里的每一位朋友，给每一座应答过这个 QTH 的 CQ 的电台：中秋快乐。愿你的驻波守在 1:1，愿你的月饼甜。愿你的噪底随夜色一起降。愿 DX 一声就叫应，愿功放凉快，电池常满，QSL 卡来得快。如果你今夜对着黑暗呼叫，愿有回答。哪怕那只是你自己的回声，老了两秒半，但摸过月亮。</p>
+
+          <blockquote class="ba-quote" data-quote-id="sushi-thousand-li" data-quote-kind="classic" data-quote-cite="苏轼《水调歌头》（1076）">
+            <p class="ba-quote-orig" lang="zh">但愿人长久，千里共婵娟。</p>
+            <p class="ba-quote-trans" lang="en">May we live long, sharing this fair moon though a thousand miles apart. <span class="ba-quote-by">英译</span></p>
+            <span class="ba-quote-cite">苏轼《水调歌头》（1076 年）</span>
+          </blockquote>
+
+          <p>苏轼这一句就是整篇文章：长久是愿望，共月是事实。每年重测一次，有眼睛的人都能测，有接收机的人也能测。桌面电台、机架服务器、院里的天调，以及照看它们全部的闭环，一起送上这句话：中秋快乐，阖家团圆。73 与 88 de BG1SB。</p>
+        </div></section>
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电爱好者、软件工程师。搭建 VLSC 开源远程控制生态，并把电台说的话记下来。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>延伸阅读</h3>
+          <ul>
+            <li><a href="/blog/support-loop/zh/">闻过则喜：一周的 🐞 上报，如何变成两次发布</a></li>
+            <li><a href="/blog/coda/zh/">跋：意图、文化、文明，以及闭环之外的笑声</a></li>
+            <li><a href="/blog/solo-loop/zh/">孤路我独行：零资金、零团队的开源项目，如何像团队一样响应</a></li>
+            <li><a href="/zh/agentic.html">智能体工程总纲：人类意图，智能体执行，现场证据</a></li>
+            <li><a href="/mrrc_ft8/">MRRC-FT8：今夜值守的无头服务器</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/blog/zh/"><i class="fas fa-arrow-left"></i> 返回博客</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

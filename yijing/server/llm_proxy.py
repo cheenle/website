@@ -30,7 +30,7 @@ DEFAULT_MODEL = "qwen3.8-max-0902"
 DEFAULT_LOG_DIR = "/home/cheenle/yijing-llm-logs"
 MAX_BODY = 64 * 1024
 UPSTREAM_TIMEOUT = 90
-PROMPT_VERSION = "2026-09-26.v7"
+PROMPT_VERSION = "2026-09-26.v8"
 
 SYSTEM_PROMPT = (
     "你是兼通象数与义理的易学解读者，熟稔《周易》经传与朱熹《易学启蒙》断法。"
@@ -58,9 +58,24 @@ CATEGORY_FOCUS = {
 }
 
 
+MEIHUA_SYSTEM = (
+    "你是精通梅花易数的解读者（邵雍《梅花易数》体用生克一路），与朱熹六爻断法不同：以体用生克定吉凶大势，"
+    "以卦象取象辅证，不以爻辞为主断。用户给出梅花起卦事实：起卦方式、本卦/变卦/互卦、动爻、体卦用卦及其五行与生克关系，"
+    "以及本卦变卦卦辞供辅证。\n"
+    "写作要求：\n"
+    "1. 结构固定四段，段首用【体用大势】【卦象辅证】【事理推断】【行动建议】；\n"
+    "2. 【体用大势】首句点明本卦全称与体用生克关系（如「用克体」），并释其势；\n"
+    "3. 【卦象辅证】用上下经卦取象、互卦内情与变卦走向辅证，可引所给卦辞原句（用「」标出）；\n"
+    "4. 【事理推断】针对所问类别落到具体事理；【行动建议】二至四条，末条以「忌：」开头；\n"
+    "5. 全文不超过五百字（含标点）；不得编造未提供的经文；结尾另起一行写：占断仅供参考，事在人为。"
+)
+
+
 def system_prompt(category, mode="reading"):
     """按问事类别与模式动态组装 System Prompt。"""
-    if mode == "chat":
+    if mode == "meihua":
+        base = MEIHUA_SYSTEM
+    elif mode == "chat":
         base = (
             "你是兼通易理的疏导者，正就一次已成的卦象与用户多轮对话。规则：\n"
             "1. 紧扣所给卦象事实与此前解读，不另起新卦、不脱离上下文；\n"
@@ -76,6 +91,8 @@ def system_prompt(category, mode="reading"):
 
 def build_payload(req):
     """由前端请求体构造上游 Messages 请求（纯函数，便于测试）。"""
+    if req.get("method") == "meihua":
+        return _build_meihua_payload(req)
     ben = req.get("ben") or {}
     zhi = req.get("zhi")
     moving = req.get("moving") or []
@@ -132,6 +149,32 @@ def build_chat_payload(req):
         "thinking": {"type": "enabled", "budget_tokens": 512},
         "system": system_prompt(req.get("category", "综合"), "chat"),
         "messages": msgs,
+    }
+
+
+def _build_meihua_payload(req):
+    mh = req.get("meihua") or {}
+    ben = req.get("ben") or {}
+    lines = ["所问之事：%s" % (req.get("question") or "心中默念"),
+             "问事类别：%s" % req.get("category", "综合"),
+             "起卦方式：%s" % (mh.get("methodNote") or "梅花易数"),
+             "本卦：%s　变卦：%s　互卦：%s" % (mh.get("ben") or "?", mh.get("zhi") or "?", mh.get("hu") or "?"),
+             "动爻：%s" % (mh.get("movingWei") or "?"),
+             "体卦：%s　用卦：%s　生克关系：%s（%s）" % (
+                 mh.get("ti") or "?", mh.get("yong") or "?", mh.get("relation") or "?", mh.get("relationNote") or "")]
+    if ben.get("tuan"):
+        lines.append("本卦彖传：%s" % ben["tuan"])
+    if ben.get("xiang"):
+        lines.append("本卦大象：%s" % ben["xiang"])
+    lines.append("辅证卦辞：")
+    for e in req.get("duanci") or []:
+        lines.append("- %s：%s（白话：%s）" % (e.get("source", "?"), e.get("ci", ""), e.get("baihua", "")))
+    return {
+        "model": os.environ.get("LLM_MODEL", DEFAULT_MODEL),
+        "max_tokens": 2048,
+        "thinking": {"type": "enabled", "budget_tokens": 1024},
+        "system": system_prompt(req.get("category", "综合"), "meihua"),
+        "messages": [{"role": "user", "content": "\n".join(lines)}],
     }
 
 

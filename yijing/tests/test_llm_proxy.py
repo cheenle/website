@@ -131,3 +131,26 @@ class ValidateFeedbackTest(unittest.TestCase):
         self.assertIsNone(llm_proxy.validate_feedback(bad))
         self.assertIsNone(llm_proxy.validate_feedback({"kind": "outcome", "rating": 1}))
         self.assertIsNone(llm_proxy.validate_feedback({"kind": "nope", "rating": 1}))
+
+
+class MeihuaPromptTest(unittest.TestCase):
+    def test_meihua_system_and_payload(self):
+        req = {
+            "method": "meihua", "category": "财运", "question": "合伙开店",
+            "meihua": {"methodNote": "数字起卦：5、3", "ben": "火风鼎", "zhi": "火水未济", "hu": "泽天夬",
+                       "ti": "巽（木）", "yong": "离（火）", "relation": "体生用", "relationNote": "耗费泄气之象",
+                       "movingWei": "九二"},
+            "ben": {"fullName": "火风鼎", "tuan": "彖曰：鼎，象也。", "xiang": "象曰：木上有火，鼎。"},
+            "duanci": [{"source": "本卦火风鼎·卦辞", "ci": "鼎：元吉，亨。", "baihua": "大吉而亨。"}],
+        }
+        p = llm_proxy.build_payload(req)
+        self.assertIn("梅花易数", p["system"])
+        self.assertIn("【体用大势】", p["system"])
+        content = p["messages"][0]["content"]
+        for frag in ["体生用", "耗费泄气之象", "火风鼎", "数字起卦：5、3", "鼎：元吉，亨。"]:
+            self.assertIn(frag, content)
+
+    def test_reading_mode_unchanged(self):
+        p = llm_proxy.build_payload(SAMPLE)
+        self.assertIn("【卦象大势】", p["system"])
+        self.assertNotIn("梅花", p["system"])

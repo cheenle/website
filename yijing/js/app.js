@@ -1,4 +1,4 @@
-/* global TRIGRAMS, HEXAGRAMS, castLine, huBits, trigramName, findHexagram, duanCi, yaoFacts, cuoBits, zongBits */
+/* global TRIGRAMS, HEXAGRAMS, castLine, huBits, trigramName, findHexagram, duanCi, yaoFacts, cuoBits, zongBits, meihuaByTime, meihuaByNumbers */
 
 const HISTORY_KEY = "yijing-history";
 const HISTORY_MAX = 50;
@@ -17,11 +17,31 @@ function showScreen(name) {
   }
 }
 
+function currentMethod() {
+  const m = document.querySelector('input[name="method"]:checked');
+  return m ? m.value : "tongqian";
+}
+
 function startCast() {
   state.question = $("question").value.trim();
   const checked = document.querySelector('input[name="category"]:checked');
   state.category = checked ? checked.value : "综合";
+  state.method = currentMethod();
+  state.meihua = null;
   state.lines = [];
+  if (state.method === "meihua-time") { renderMeihuaResult(meihuaByTime(new Date())); return; }
+  if (state.method === "meihua-num") {
+    const n1 = parseInt($("num1").value, 10);
+    const n2 = parseInt($("num2").value, 10);
+    if (!n1 || !n2 || n1 < 1 || n2 < 1) return;
+    renderMeihuaResult(meihuaByNumbers(n1, n2));
+    return;
+  }
+  if (state.method === "random") {
+    state.lines = castGua(Math.random);
+    renderResult();
+    return;
+  }
   showScreen("cast");
   $("cast-lines").innerHTML = "";
   tossStep(0);
@@ -331,6 +351,22 @@ function clearHistory() {
 
 // —— AI 进一步解读：经 nginx → 本机代理 → LLM，浏览器不持密钥 ——
 function llmPayload(r) {
+  if (state.meihua) {
+    const m = state.meihua;
+    return {
+      method: "meihua",
+      question: state.question,
+      category: state.category,
+      meihua: {
+        methodNote: m.methodNote, ben: m.benName, zhi: m.zhiName, hu: m.huName,
+        ti: `${m.ti}（${m.tiWuxing}）`, yong: `${m.yong}（${m.yongWuxing}）`,
+        relation: m.relation, relationNote: m.relationNote,
+        movingWei: ["初", "二", "三", "四", "五", "上"][m.moving] + (m.bits[m.moving] === 1 ? "九" : "六"),
+      },
+      ben: r ? { fullName: m.benName, tuan: (findHexagram(m.bits, HEXAGRAMS) || {}).tuan, xiang: (findHexagram(m.bits, HEXAGRAMS) || {}).xiang } : null,
+      duanci: (r ? r.entries : []).map((e) => ({ source: e.source, ci: e.ci, baihua: e.baihua })),
+    };
+  }
   const hu = huBits(r.bits);
   const huHex = findHexagram(hu.lower.concat(hu.upper), HEXAGRAMS);
   const cuoHex = findHexagram(cuoBits(r.bits), HEXAGRAMS);
@@ -354,7 +390,15 @@ function llmPayload(r) {
 }
 
 function requestInterpret() {
-  const r = state.lastResult;
+  let r = state.lastResult;
+  if (!r && state.meihua) {
+    const m = state.meihua;
+    const ben = findHexagram(m.bits, HEXAGRAMS);
+    const zhi = findHexagram(m.zbits, HEXAGRAMS);
+    r = { ben, zhi, moving: [m.moving], bits: m.bits, zbits: m.zbits,
+      rule: `梅花易数：${m.relation}（${m.relationNote}）`,
+      entries: ben ? [{ kind: "guaci", source: `本卦${ben.fullName}·卦辞`, ci: ben.guaci, tuan: ben.tuan, xiang: ben.xiang, baihua: ben.guaciBaihua, primary: true }] : [] };
+  }
   if (!r) return;
   const panel = $("llm-panel");
   const btn = $("btn-llm");
@@ -425,6 +469,86 @@ function renderLlm(text, id) {
   panel.appendChild(note);
 }
 
+
+
+// —— 梅花易数结果：体用生克为主，经传为辅 ——
+function renderMeihuaResult(m) {
+  state.meihua = m;
+  state.lastResult = null;
+  state.chat = [];
+  state.lastReading = "";
+  $("llm-panel").classList.add("hidden");
+  $("llm-panel").innerHTML = "";
+  $("chat-box").classList.add("hidden");
+  $("chat-log").innerHTML = "";
+  $("btn-llm").disabled = false;
+
+  const ben = findHexagram(m.bits, HEXAGRAMS);
+  const zhi = findHexagram(m.zbits, HEXAGRAMS);
+  const hu = findHexagram([m.bits[1], m.bits[2], m.bits[3], m.bits[2], m.bits[3], m.bits[4]], HEXAGRAMS);
+  const weiName = ["初", "二", "三", "四", "五", "上"][m.moving];
+
+  $("result-summary").innerHTML =
+    `<p>所问：${escapeHtml(state.question || "心中默念")}（${state.category}）· ${escapeHtml(m.methodNote)}</p>` +
+    `<p>得 <strong>${m.benName || "?"}</strong> 之 <strong>${m.zhiName || "?"}</strong>，动爻：${weiName}${m.bits[m.moving] === 1 ? "九" : "六"}</p>` +
+    `<p class="facts">体卦 ${m.ti}（${m.tiWuxing}） · 用卦 ${m.yong}（${m.yongWuxing}） · <strong class="rule">${m.relation}</strong>：${m.relationNote}</p>` +
+    `<p class="facts">互卦 ${m.huName || "?"}</p>`;
+
+  const guas = $("result-guas");
+  guas.innerHTML = "";
+  guas.appendChild(guaCard("本卦", ben, [m.moving]));
+  guas.appendChild(guaCard("变卦", zhi, []));
+  guas.appendChild(guaCard("互卦", hu, []));
+
+  const duan = $("result-duan");
+  duan.innerHTML = "";
+  const head = document.createElement("div");
+  head.className = "duan-entry";
+  head.innerHTML = `<div class="source">梅花断：体用生克</div>` +
+    `<p class="ci">${escapeHtml(m.relation)}——${escapeHtml(m.relationNote)}。体卦为我、用卦为事，生克定吉凶大势。</p>`;
+  duan.appendChild(head);
+  for (const h of [ben, zhi]) {
+    if (!h) continue;
+    duan.appendChild(entryBlock({
+      source: `${h === ben ? "本卦" : "变卦"}${h.fullName}·卦辞`,
+      ci: h.guaci, tuan: h.tuan, xiang: h.xiang, baihua: h.guaciBaihua, primary: h === ben,
+    }));
+  }
+  const advice = document.createElement("div");
+  advice.className = "advice";
+  const tip = ben && ben.advice ? ben.advice[state.category] : "经文数据缺失";
+  advice.innerHTML = `<h3>问「${state.category}」要点</h3><p>${escapeHtml(tip || "经文数据缺失")}</p>`;
+  duan.appendChild(advice);
+
+  saveMeihuaRecord(m, ben, zhi);
+  showScreen("result");
+}
+
+function saveMeihuaRecord(m, ben, zhi) {
+  try {
+    const list = loadHistory();
+    const period = $("track-period") ? $("track-period").value : "0";
+    const days = TRACK_DAYS[period];
+    list.unshift({
+      time: new Date().toISOString(),
+      question: state.question,
+      category: state.category,
+      method: "meihua",
+      lines: m.bits,
+      benId: ben ? ben.id : null,
+      benName: m.benName,
+      zhiId: zhi ? zhi.id : null,
+      zhiName: m.zhiName,
+      moving: [m.moving],
+      meihua: { ti: m.ti, yong: m.yong, relation: m.relation },
+      llmId: state.lastLlmId || null,
+      reading: String(state.lastReading || "").slice(0, 300),
+      trackUntil: days ? Date.now() + days * 86400000 : null,
+      outcome: null,
+    });
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, HISTORY_MAX)));
+  } catch (e) { /* 隐私模式等场景静默跳过 */ }
+}
 
 // —— 多轮追问：/yijing/api/chat，上下文 = 卦象事实 + 首轮解读 ——
 function chatContext(r) {
@@ -645,6 +769,11 @@ document.addEventListener("DOMContentLoaded", () => {
   $("chat-send").addEventListener("click", sendChat);
   $("btn-poster").addEventListener("click", showPoster);
   $("btn-poster-close").addEventListener("click", () => $("poster-modal").classList.add("hidden"));
+  for (const radio of document.querySelectorAll('input[name="method"]')) {
+    radio.addEventListener("change", () => {
+      $("num-row").classList.toggle("hidden", currentMethod() !== "meihua-num");
+    });
+  }
   $("btn-sound").addEventListener("click", toggleSound);
   $("btn-shake").addEventListener("click", toggleShake);
   $("outcome-yes").addEventListener("click", () => submitOutcome(1));

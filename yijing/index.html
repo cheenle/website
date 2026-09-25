@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易占 · 易经占卜</title>
 <meta name="description" content="据《周易》古法起卦断卦：铜钱摇卦，排本卦之卦互卦，卦辞爻辞彖象原文与白话今译。">
-<link rel="stylesheet" href="css/yijing.css?v=20260926c">
+<link rel="stylesheet" href="css/yijing.css?v=20260926d">
 </head>
 <body>
 <header class="site-header">
@@ -27,6 +27,18 @@
       <label><input type="radio" name="category" value="健康">健康</label>
       <label><input type="radio" name="category" value="出行">出行</label>
     </fieldset>
+    <fieldset class="categories">
+      <legend>起卦方式</legend>
+      <label><input type="radio" name="method" value="tongqian" checked>传统铜钱六爻</label>
+      <label><input type="radio" name="method" value="meihua-time">梅花·当前时间</label>
+      <label><input type="radio" name="method" value="meihua-num">梅花·输入数字</label>
+      <label><input type="radio" name="method" value="random">电脑随机</label>
+    </fieldset>
+    <div id="num-row" class="track-row hidden">
+      <label for="num1">上卦数</label><input id="num1" type="number" min="1" max="999" value="5">
+      <label for="num2">下卦数</label><input id="num2" type="number" min="1" max="999" value="3">
+      <span class="hint">梅花以先天数除 8 取卦、除 6 取动爻</span>
+    </div>
     <button id="btn-start" class="primary">净手摇卦</button>
     <button id="btn-history" class="link">查看占例记录</button>
   </section>
@@ -113,10 +125,11 @@
   <p><a href="/">返回 vlsc.net 首页</a></p>
 </footer>
 
-<script src="js/data/trigrams.js?v=20260926c"></script>
-<script src="js/data/hexagrams.js?v=20260926c"></script>
-<script src="js/cast.js?v=20260926c"></script>
-<script src="js/gua.js?v=20260926c"></script>
-<script src="js/app.js?v=20260926c"></script>
+<script src="js/data/trigrams.js?v=20260926d"></script>
+<script src="js/data/hexagrams.js?v=20260926d"></script>
+<script src="js/cast.js?v=20260926d"></script>
+<script src="js/gua.js?v=20260926d"></script>
+<script src="js/meihua.js?v=20260926d"></script>
+<script src="js/app.js?v=20260926d"></script>
 </body>
 </html>

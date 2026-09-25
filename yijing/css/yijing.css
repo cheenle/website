@@ -17,7 +17,7 @@ body {
   line-height: 1.8;
 }
 
-.hidden { display: none; }
+.hidden { display: none !important; }  /* 须压过 .modal 等 display 规则 */
 
 .site-header {
   text-align: center;

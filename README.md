@@ -13,7 +13,7 @@ bundler, no `npm install`, no build step. You edit files and deploy them.
 |---|---|
 | `portal/` | The DocumentRoot site — landing page, `/agentic.html` (thesis), `/engineering.html` (mechanism), `blog/`, `zh/` mirrors, `deploy.sh` |
 | `efhw/` | The EFHW Fuchs ATU V3.0 product site and antenna knowledge pages |
-| `yijing/` | 易占 — I Ching divination app: coin casting, hexagram layout (本卦/之卦/互卦), judgment per Zhu Xi's method, with the received text of 《周易》 plus vernacular readings |
+| `yijing/` | 易占 — I Ching divination app: coin casting, hexagram layout (本卦/之卦/互卦), judgment per Zhu Xi's method, the received text of 《周易》 plus vernacular readings, and an optional LLM reading via a localhost-only proxy (`server/llm_proxy.py`) |
 | `nginx/vlsc.net.conf` | Reference copy of the server block deployed at `/etc/nginx/sites-enabled/vlsc.net` |
 | `feedback/` | Feedback intake service on the Python standard library only — `http.server.ThreadingHTTPServer`, no web framework and no third-party dependencies: `service.py`, `db.py` (SQLite), `callsign.py`, systemd units, tests |
 | `manage/` | Terraform for the host (`main.tf`, `variables.tf`, `terraform.tfvars.example`) |

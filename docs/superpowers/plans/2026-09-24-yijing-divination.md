@@ -1599,3 +1599,14 @@ git commit -m "test(yijing): 集成验证收尾"
 验证证据：`node --test` 25/25；`check_hexagrams.py` strict OK；DOM 桩端到端冒烟
 （摇卦→排卦→断卦→存档→清空）通过；部署 tar 包仅含 7 个站点文件；Chrome 无头截图
 目视确认摇卦屏与卦成屏（卦画实线/断口、○/× 朱砂标记、铜钱背/字、断法主参次序）。
+
+### 追加功能（2026-09-25）：AI 进一步解读
+
+- `yijing/server/llm_proxy.py`：标准库代理，仅监听 127.0.0.1:8100，`POST /interpret` →
+  Anthropic 兼容端点（DashScope，模型 qwen3.8-max-0902）。密钥经
+  `/etc/yijing/llm.env`（systemd EnvironmentFile，chmod 600）注入，仓库只有 `llm.env.example`。
+- systemd：`yijing/server/yijing-llm.service`；nginx：`location ^~ /yijing/api/` → 代理。
+- 前端：卦成屏「AI 进一步解读」按钮 → `fetch('/yijing/api/interpret')` → `#llm-panel`
+  渲染，失败时优雅降级为「古典断辞如上」。
+- 测试：`/usr/bin/python3 -m pytest yijing/tests/test_llm_proxy.py`（4 个）；
+  本地与线上均实测 POST 返回 ok:true 的三段式解读。

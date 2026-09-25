@@ -1,0 +1,18 @@
+[Unit]
+Description=易占 LLM 解读代理 (127.0.0.1 only)
+After=network.target
+
+[Service]
+Type=simple
+User=cheenle
+WorkingDirectory=/var/www/vlsc.net/yijing/server
+EnvironmentFile=/etc/yijing/llm.env
+ExecStart=/usr/bin/python3 /var/www/vlsc.net/yijing/server/llm_proxy.py
+Restart=on-failure
+RestartSec=3
+# 仅本机可达；密钥不进进程参数
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

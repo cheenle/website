@@ -177,3 +177,12 @@ button { font: inherit; cursor: pointer; }
   .guas { grid-template-columns: 1fr; }
   .coin { width: 52px; height: 52px; }
 }
+
+/* AI 进一步解读 */
+.llm { margin-top: 1.2rem; border: 1px solid var(--rule); border-left: 4px solid var(--cinnabar); border-radius: 4px; background: #fffdf8; padding: 0.9rem 1.1rem; }
+.llm h3 { margin: 0 0 0.5rem; color: var(--cinnabar); font-size: 1.05rem; letter-spacing: 0.15em; }
+.llm p { margin: 0.4rem 0; }
+.llm-status { color: var(--faint); }
+.llm-error { color: var(--cinnabar); }
+.llm-note { color: var(--faint); font-size: 0.82rem; border-top: 1px dashed var(--rule); padding-top: 0.5rem; }
+#btn-llm:disabled { opacity: 0.55; cursor: wait; }

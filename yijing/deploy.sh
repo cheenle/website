@@ -24,7 +24,7 @@ echo "[..] Running check_hexagrams.py (strict)..."
 env -u ALLOW_PARTIAL /usr/bin/python3 "${LOCAL_WEBSITE_DIR}/check_hexagrams.py"
 
 # Check required files
-for f in "index.html" "css/yijing.css" "js/app.js" "js/cast.js" "js/gua.js" "js/data/trigrams.js" "js/data/hexagrams.js"; do
+for f in "index.html" "css/yijing.css" "js/app.js" "js/cast.js" "js/gua.js" "js/data/trigrams.js" "js/data/hexagrams.js" "server/llm_proxy.py"; do
     if [ ! -f "${LOCAL_WEBSITE_DIR}/${f}" ]; then
         echo "ERROR: Required file not found: ${LOCAL_WEBSITE_DIR}/${f}"
         exit 1
@@ -39,6 +39,7 @@ tar czf "${TARBALL}" \
     --exclude='yijing/check_hexagrams.py' \
     --exclude='yijing/deploy.sh' \
     --exclude='yijing/tests' \
+    --exclude='yijing/server/llm.env.example' \
     --exclude='yijing/.DS_Store' \
     yijing/
 echo "[OK] Tarball created: ${TARBALL}"

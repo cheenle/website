@@ -89,6 +89,10 @@ function buildYao(bit, moving) {
 
 function renderResult() {
   const r = duanCi(state.lines, HEXAGRAMS);
+  state.lastResult = r;
+  $("llm-panel").classList.add("hidden");
+  $("llm-panel").innerHTML = "";
+  $("btn-llm").disabled = false;
   const hu = huBits(r.bits);
   const huHex = findHexagram(hu.lower.concat(hu.upper), HEXAGRAMS);
 
@@ -250,10 +254,66 @@ function clearHistory() {
   renderHistory();
 }
 
+// —— AI 进一步解读：经 nginx → 本机代理 → LLM，浏览器不持密钥 ——
+function llmPayload(r) {
+  return {
+    question: state.question,
+    category: state.category,
+    ben: r.ben ? { fullName: r.ben.fullName } : null,
+    zhi: r.zhi ? { fullName: r.zhi.fullName } : null,
+    movingTitles: r.moving.map((i) => (r.ben.yaos[i] ? r.ben.yaos[i].title : `第${i + 1}爻`)),
+    rule: r.rule,
+    duanci: r.entries.map((e) => ({ source: e.source, ci: e.ci, baihua: e.baihua })),
+  };
+}
+
+function requestInterpret() {
+  const r = state.lastResult;
+  if (!r) return;
+  const panel = $("llm-panel");
+  const btn = $("btn-llm");
+  btn.disabled = true;
+  panel.classList.remove("hidden");
+  panel.innerHTML = "<p class=\"llm-status\">正在请 AI 结合卦象与断辞进一步解读……</p>";
+  fetch("/yijing/api/interpret", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(llmPayload(r)),
+  })
+    .then((rp) => rp.json())
+    .then((data) => {
+      if (!data || !data.ok) throw new Error((data && data.error) || "bad response");
+      renderLlm(data.text);
+    })
+    .catch((e) => {
+      panel.innerHTML = `<p class="llm-error">AI 解读暂不可用（${escapeHtml(e.message)}）。古典断辞如上，仍可依经而断。</p>`;
+    })
+    .finally(() => { btn.disabled = false; });
+}
+
+function renderLlm(text) {
+  const panel = $("llm-panel");
+  panel.innerHTML = "";
+  const head = document.createElement("h3");
+  head.textContent = "AI 进一步解读";
+  panel.appendChild(head);
+  for (const para of String(text).split(/\n+/)) {
+    if (!para.trim()) continue;
+    const p = document.createElement("p");
+    p.textContent = para;
+    panel.appendChild(p);
+  }
+  const note = document.createElement("p");
+  note.className = "llm-note";
+  note.textContent = "以上由大模型生成，非经文原意；占断仅供参考，事在人为。";
+  panel.appendChild(note);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   $("btn-start").addEventListener("click", startCast);
   $("btn-again").addEventListener("click", startCast);
   $("btn-back").addEventListener("click", () => showScreen("ask"));
+  $("btn-llm").addEventListener("click", requestInterpret);
   $("btn-history").addEventListener("click", () => { renderHistory(); $("history-panel").classList.remove("hidden"); });
   $("btn-close-history").addEventListener("click", () => $("history-panel").classList.add("hidden"));
   $("btn-clear-history").addEventListener("click", clearHistory);

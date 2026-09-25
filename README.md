@@ -13,6 +13,7 @@ bundler, no `npm install`, no build step. You edit files and deploy them.
 |---|---|
 | `portal/` | The DocumentRoot site — landing page, `/agentic.html` (thesis), `/engineering.html` (mechanism), `blog/`, `zh/` mirrors, `deploy.sh` |
 | `efhw/` | The EFHW Fuchs ATU V3.0 product site and antenna knowledge pages |
+| `yijing/` | 易占 — I Ching divination app: coin casting, hexagram layout (本卦/之卦/互卦), judgment per Zhu Xi's method, with the received text of 《周易》 plus vernacular readings |
 | `nginx/vlsc.net.conf` | Reference copy of the server block deployed at `/etc/nginx/sites-enabled/vlsc.net` |
 | `feedback/` | Feedback intake service on the Python standard library only — `http.server.ThreadingHTTPServer`, no web framework and no third-party dependencies: `service.py`, `db.py` (SQLite), `callsign.py`, systemd units, tests |
 | `manage/` | Terraform for the host (`main.tf`, `variables.tf`, `terraform.tfvars.example`) |
@@ -76,6 +77,7 @@ Each site deploys itself; there is no CI.
 ```bash
 cd portal && ./deploy.sh     # landing page, blog, agentic, engineering → DocumentRoot
 cd efhw   && ./deploy.sh     # EFHW product site → /efhw/
+cd yijing && ./deploy.sh     # 易占 I Ching divination app → /yijing/
 ```
 
 The scripts validate required files, tar the site, back up the live copy over SSH, copy,

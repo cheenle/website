@@ -15,6 +15,7 @@ This is a workspace grouping HAM radio project websites. All are pure static HTM
 - **SunMRRC** (`sunmrrc/` → `/Users/cheenle/HAM/sunsdr/sunmrrc/website/`) — Website for the SunMRRC (SunSDR2 DX Mobile Radio Control) project. Deployed to `https://www.vlsc.net/sunmrrc/`.
 - **SunsdrMobile** (`SunsdrMobile/` → `/Users/cheenle/HAM/sunsdr/SunsdrMobile/website/`) — **已合并入 SunMRRC 2026-09-12。** 它不是独立产品，而是 SunMRRC 服务的**原生 iOS 客户端**（打开浏览器所用的同四条 WebSocket 连接）。网站 `/sunsdrmobile/` 已 301 到 `/sunmrrc/ios/`，仓库只读（GitHub archived），其 9 个提交已用 `git subtree` 导入 `sunsdr` 仓。以下描述为合并前状态：Promotional website for the SunsdrMobile native iOS app for SunSDR2 DX.
 - **EFHW** (`efhw/`) — Product website for the EFHW Fuchs ATU V3.0 and EFHW antenna knowledge ecosystem. Deployed to `https://www.vlsc.net/efhw/`. Uses octen.css with emerald green (`#10b981`) brand overrides in `css/efhw.css`.
+- **易占** (`yijing/`) — I Ching divination app（易经占卜）. Deployed to `https://www.vlsc.net/yijing/`. Pure static HTML/CSS/JS, Chinese-only UI, 水墨宣纸 theme in `css/yijing.css` (cinnabar `#9e2b25` accent). Data lives in `js/data/hexagrams.js` (64 hexagrams: received text of 卦辞/彖/象/爻辞/小象 + vernacular readings + per-topic advice) and `js/data/trigrams.js`; `check_hexagrams.py` is the pre-deploy data gate (run `ALLOW_PARTIAL=1` while authoring batches). Logic: `cast.js` (three-coin casting), `gua.js` (本卦/之卦/互卦 + Zhu Xi 断法 in `duanCi`), `app.js` (DOM/state). Node tests in `yijing/tests/` (`cd yijing && node --test`), excluded from the deploy tarball along with `check_hexagrams.py` and `deploy.sh`.
 
 **Infrastructure:**
 - **nginx/** — nginx server block config (`vlsc.net.conf`) replacing the old Apache vhost.
@@ -45,7 +46,7 @@ promotes it. Repositories without `.agents/skills/sdd-guardian/` must not descri
 
 Sub-site directories under `website/` are symlinks into other git repositories
 (`mrrc/`, `mrrc_modern/`, `mrrc_ft710/`, `sunmrrc/`, `SunsdrMobile/`, `mrrc_ft8/`, `ft8/`);
-`portal/`, `efhw/` and `nginx/` are real directories.
+`portal/`, `efhw/`, `yijing/` and `nginx/` are real directories.
 
 **Site-wide greps must list the site directories explicitly — as a shell ARRAY, never as a
 string variable.** Two independent traps here, both verified 2026-09-05 against this
@@ -406,4 +407,4 @@ Two rules when editing any `deploy.sh`:
   `sudo rsync -a $B/ $REMOTE_WEBROOT/<site>/` (merge, so `downloads/` survives).
 ## nginx server
 
-All sites are served by nginx on `www.vlsc.net` (HTTPS via Let's Encrypt). The server block config is at `nginx/vlsc.net.conf`. The landing page is served from the DocumentRoot (`/var/www/vlsc.net/`). Sub-sites use `alias` directives: `/mrrc/` → `/var/www/vlsc.net/mrrc/`, `/mrrc_ft710/` → `/var/www/vlsc.net/mrrc_ft710/`, `/sunmrrc/` → `/var/www/vlsc.net/sunmrrc/`, `/sunsdrmobile/` → `/var/www/vlsc.net/sunsdrmobile/`, `/efhw/` → `/var/www/vlsc.net/efhw/`. SSL certs at `/etc/letsencrypt/live/www.vlsc.net/`.
+All sites are served by nginx on `www.vlsc.net` (HTTPS via Let's Encrypt). The server block config is at `nginx/vlsc.net.conf`. The landing page is served from the DocumentRoot (`/var/www/vlsc.net/`). Sub-sites use `alias` directives: `/mrrc/` → `/var/www/vlsc.net/mrrc/`, `/mrrc_ft710/` → `/var/www/vlsc.net/mrrc_ft710/`, `/sunmrrc/` → `/var/www/vlsc.net/sunmrrc/`, `/sunsdrmobile/` → `/var/www/vlsc.net/sunsdrmobile/`, `/efhw/` → `/var/www/vlsc.net/efhw/`, `/yijing/` → `/var/www/vlsc.net/yijing/`. SSL certs at `/etc/letsencrypt/live/www.vlsc.net/`.

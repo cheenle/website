@@ -116,3 +116,18 @@ class ChatPayloadTest(unittest.TestCase):
     def test_empty_messages_still_valid(self):
         p = llm_proxy.build_chat_payload({"context": {"ben": "乾为天"}, "messages": []})
         self.assertEqual(len(p["messages"]), 1)
+
+
+class ValidateFeedbackTest(unittest.TestCase):
+    def test_rating_kind(self):
+        self.assertEqual(llm_proxy.validate_feedback({"rating": 1}), "rating")
+        self.assertEqual(llm_proxy.validate_feedback({"rating": -1, "id": "x"}), "rating")
+        self.assertIsNone(llm_proxy.validate_feedback({"rating": 0}))
+
+    def test_outcome_kind(self):
+        ok = {"kind": "outcome", "rating": 0, "record": {"lines": [7, 7, 7, 7, 7, 7]}, "outcome": "成了"}
+        self.assertEqual(llm_proxy.validate_feedback(ok), "outcome")
+        bad = dict(ok, rating=2)
+        self.assertIsNone(llm_proxy.validate_feedback(bad))
+        self.assertIsNone(llm_proxy.validate_feedback({"kind": "outcome", "rating": 1}))
+        self.assertIsNone(llm_proxy.validate_feedback({"kind": "nope", "rating": 1}))

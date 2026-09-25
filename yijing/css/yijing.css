@@ -203,3 +203,12 @@ button { font: inherit; cursor: pointer; }
 .chat-input input { flex: 1; padding: 0.55rem 0.7rem; font: inherit; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
 .chat-input .primary { width: auto; padding: 0.55rem 1.2rem; font-size: 0.95rem; letter-spacing: 0.1em; }
 #btn-llm:disabled { opacity: 0.55; cursor: wait; }
+
+/* 应验跟踪 */
+.track-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 1rem; }
+.track-row select { font: inherit; padding: 0.3rem 0.5rem; border: 1px solid var(--rule); border-radius: 4px; background: #fffdf8; }
+.outcome-card { width: min(560px, 92vw); background: var(--paper); border-radius: 6px; padding: 1.2rem 1.4rem; }
+.outcome-card p { margin: 0 0 0.8rem; font-size: 1.05rem; }
+.outcome-btns { display: flex; gap: 0.8rem; align-items: center; margin-bottom: 0.8rem; }
+.outcome-btns .primary { width: auto; padding: 0.5rem 1.4rem; font-size: 1rem; }
+.outcome-card textarea { width: 100%; }

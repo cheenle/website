@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易占 · 易经占卜</title>
 <meta name="description" content="据《周易》古法起卦断卦：铜钱摇卦，排本卦之卦互卦，卦辞爻辞彖象原文与白话今译。">
-<link rel="stylesheet" href="css/yijing.css?v=20260926b">
+<link rel="stylesheet" href="css/yijing.css?v=20260926c">
 </head>
 <body>
 <header class="site-header">
@@ -55,6 +55,15 @@
       <button id="btn-back" class="link">返回问卦</button>
     </div>
     <div id="llm-panel" class="llm hidden"></div>
+    <div class="track-row">
+      <label for="track-period">应验跟踪：</label>
+      <select id="track-period">
+        <option value="0">不跟踪</option>
+        <option value="7">一周后回访</option>
+        <option value="30">一月后回访</option>
+      </select>
+      <span class="hint">到期后再访问，会请你回填结果</span>
+    </div>
     <div id="chat-box" class="chat hidden">
       <h3>继续追问</h3>
       <p class="hint">AI 会记住本卦上下文，可接着问。</p>
@@ -65,6 +74,20 @@
       </div>
     </div>
   </section>
+
+  <div id="outcome-modal" class="modal hidden">
+    <div class="modal-head"><h2>占例回访</h2></div>
+    <div class="outcome-card">
+      <p id="outcome-question"></p>
+      <div class="outcome-btns">
+        <button id="outcome-yes" class="primary">非常准</button>
+        <button id="outcome-part" class="link">部分准</button>
+        <button id="outcome-no" class="link">不准</button>
+      </div>
+      <textarea id="outcome-text" rows="3" placeholder="实际发生了什么？（选填，将作为模型训练素材）"></textarea>
+      <button id="outcome-later" class="link">稍后再说</button>
+    </div>
+  </div>
 
   <div id="poster-modal" class="modal hidden">
     <div class="modal-head">
@@ -90,10 +113,10 @@
   <p><a href="/">返回 vlsc.net 首页</a></p>
 </footer>
 
-<script src="js/data/trigrams.js?v=20260926b"></script>
-<script src="js/data/hexagrams.js?v=20260926b"></script>
-<script src="js/cast.js?v=20260926b"></script>
-<script src="js/gua.js?v=20260926b"></script>
-<script src="js/app.js?v=20260926b"></script>
+<script src="js/data/trigrams.js?v=20260926c"></script>
+<script src="js/data/hexagrams.js?v=20260926c"></script>
+<script src="js/cast.js?v=20260926c"></script>
+<script src="js/gua.js?v=20260926c"></script>
+<script src="js/app.js?v=20260926c"></script>
 </body>
 </html>

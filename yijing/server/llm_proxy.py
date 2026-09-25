@@ -160,6 +160,24 @@ def call_upstream(payload):
         return json.loads(rp.read().decode("utf-8"))
 
 
+def validate_feedback(body):
+    """反馈体校验（纯函数）：rating 点赞/点踩，或 outcome 应验回填（1/0/-1）。"""
+    if not isinstance(body, dict):
+        return None
+    kind = body.get("kind", "rating")
+    if kind == "rating":
+        if body.get("rating") not in (1, -1):
+            return None
+    elif kind == "outcome":
+        if body.get("rating") not in (1, 0, -1):
+            return None
+        if not isinstance(body.get("record"), dict):
+            return None
+    else:
+        return None
+    return kind
+
+
 def log_event(kind, obj):
     d = os.environ.get("LLM_LOG_DIR", DEFAULT_LOG_DIR)
     try:
@@ -284,15 +302,21 @@ class Handler(BaseHTTPRequestHandler):
 
     def _feedback(self):
         body = self._read_json()
-        if not isinstance(body, dict) or body.get("rating") not in (1, -1):
-            self._send(400, {"ok": False, "error": "rating must be 1 or -1"})
+        kind = validate_feedback(body)
+        if kind is None:
+            self._send(400, {"ok": False, "error": "invalid feedback payload"})
             return
-        log_event("feedback", {
+        rec = {
+            "kind": kind,
             "id": body.get("id"),
             "rating": body["rating"],
             "question": body.get("question", ""),
             "category": body.get("category", ""),
-        })
+        }
+        if kind == "outcome":
+            rec["outcome"] = str(body.get("outcome", ""))[:2000]
+            rec["record"] = body["record"]
+        log_event("feedback", rec)
         self._send(200, {"ok": True})
 
     def do_GET(self):

@@ -219,9 +219,13 @@ function loadHistory() {
   } catch (e) { return []; }
 }
 
+const TRACK_DAYS = { "7": 7, "30": 30 };
+
 function saveRecord(r) {
   try {
     const list = loadHistory();
+    const period = $("track-period") ? $("track-period").value : "0";
+    const days = TRACK_DAYS[period];
     list.unshift({
       time: new Date().toISOString(),
       question: state.question,
@@ -232,6 +236,10 @@ function saveRecord(r) {
       zhiId: r.zhi ? r.zhi.id : null,
       zhiName: r.zhi ? r.zhi.fullName : null,
       moving: r.moving,
+      llmId: state.lastLlmId || null,
+      reading: String(state.lastReading || "").slice(0, 300),
+      trackUntil: days ? Date.now() + days * 86400000 : null,
+      outcome: null,
     });
     localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, HISTORY_MAX)));
   } catch (e) { /* 隐私模式等场景静默跳过 */ }
@@ -253,10 +261,67 @@ function renderHistory() {
     const movingText = rec.moving.length
       ? rec.moving.map((i) => ["初","二","三","四","五","上"][i]).join("、") + "爻动"
       : "六爻安静";
+    const outcomeText = rec.outcome == null
+      ? (rec.trackUntil ? " · 待回访" : "")
+      : ` · 已回填：${["不准", "部分准", "非常准"][rec.outcome + 1] || rec.outcome}`;
     li.innerHTML = `<div>${escapeHtml(rec.benName || "?")}${rec.zhiName ? " 之 " + escapeHtml(rec.zhiName) : ""} · ${movingText}</div>` +
-      `<div class="meta">${t.toLocaleString("zh-CN")} · ${escapeHtml(rec.category)} · ${escapeHtml(rec.question || "心中默念")}</div>`;
+      `<div class="meta">${t.toLocaleString("zh-CN")} · ${escapeHtml(rec.category)} · ${escapeHtml(rec.question || "心中默念")}${outcomeText}</div>`;
     ul.appendChild(li);
   }
+}
+
+// —— 应验跟踪：到期回访弹窗 + outcome 回传（与原始卦象/AI 回复绑定落盘）——
+let pendingOutcomeIdx = -1;
+
+function findPendingOutcome() {
+  const list = loadHistory();
+  const now = Date.now();
+  for (let i = 0; i < list.length; i++) {
+    const rec = list[i];
+    if (rec && rec.trackUntil && rec.outcome == null && rec.trackUntil <= now) return i;
+  }
+  return -1;
+}
+
+function checkOutcomeOnLoad() {
+  pendingOutcomeIdx = findPendingOutcome();
+  if (pendingOutcomeIdx < 0) return;
+  const rec = loadHistory()[pendingOutcomeIdx];
+  $("outcome-question").textContent =
+    `您之前问的关于【${rec.question || "心中默念"}】（${rec.category}·${rec.benName || "?"}）有结果了吗？`;
+  $("outcome-modal").classList.remove("hidden");
+}
+
+function submitOutcome(rating) {
+  if (pendingOutcomeIdx < 0) return;
+  const list = loadHistory();
+  const rec = list[pendingOutcomeIdx];
+  if (!rec) { pendingOutcomeIdx = -1; return; }
+  const outcomeText = $("outcome-text").value.trim();
+  rec.outcome = rating;
+  rec.outcomeAt = new Date().toISOString();
+  list[pendingOutcomeIdx] = rec;
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, HISTORY_MAX))); } catch (e) { /* 忽略 */ }
+  fetch("/yijing/api/feedback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      kind: "outcome",
+      id: rec.llmId || null,
+      rating,
+      outcome: outcomeText,
+      question: rec.question,
+      category: rec.category,
+      record: {
+        time: rec.time, lines: rec.lines, benId: rec.benId, benName: rec.benName,
+        zhiId: rec.zhiId, zhiName: rec.zhiName, moving: rec.moving, reading: rec.reading,
+      },
+    }),
+  }).catch(() => {}).finally(() => {
+    pendingOutcomeIdx = -1;
+    $("outcome-modal").classList.add("hidden");
+    $("outcome-text").value = "";
+  });
 }
 
 function clearHistory() {
@@ -582,7 +647,15 @@ document.addEventListener("DOMContentLoaded", () => {
   $("btn-poster-close").addEventListener("click", () => $("poster-modal").classList.add("hidden"));
   $("btn-sound").addEventListener("click", toggleSound);
   $("btn-shake").addEventListener("click", toggleShake);
+  $("outcome-yes").addEventListener("click", () => submitOutcome(1));
+  $("outcome-part").addEventListener("click", () => submitOutcome(0));
+  $("outcome-no").addEventListener("click", () => submitOutcome(-1));
+  $("outcome-later").addEventListener("click", () => {
+    pendingOutcomeIdx = -1;
+    $("outcome-modal").classList.add("hidden");
+  });
   refreshSoundBtn();
+  checkOutcomeOnLoad();
   $("chat-text").addEventListener("keydown", (e) => { if (e.key === "Enter") sendChat(); });
   $("btn-history").addEventListener("click", () => { renderHistory(); $("history-panel").classList.remove("hidden"); });
   $("btn-close-history").addEventListener("click", () => $("history-panel").classList.add("hidden"));

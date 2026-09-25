@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="精读 Noy 与 McGuinness《Ontology Development 101》（斯坦福，2001）：七个步骤、类层级陷阱、槽面（facet）、定义域与值域规则、命名约定——每条规则先提炼，再逐条映射到一个活体远程电台领域本体上；这个本体由智能体在动手改代码之前加载，是智能体工程的语义地基。"
+      content="精读 Noy 与 McGuinness《Ontology Development 101》（斯坦福，2001）：本体为何而作，类、槽、槽面、实例各是什么，动手前先要认下的三条规则，七步方法，类层级的 20 个陷阱，命名约定，最后压成 24 条检查清单。每条规则都拿去问一个活着的远程电台领域本体，那个本体正是智能体改代码之前先加载的。"
     />
     <meta
       name="keywords"
@@ -85,19 +85,19 @@
       <div class="ag-hero-inner">
         <div class="hero-badge">
           <i class="fas fa-book-open"></i
-          ><span>Methodology · 方法论精读</span>
+          ><span>方法论精读 · Methodology</span>
         </div>
         <h1>
-          Ontology Development 101，<br /><span class="gradient"
-            >提炼出来，再拿去用</span
-          >
+          本体开发 101：<br /><span class="gradient">先提炼，再拿去用</span>
         </h1>
         <p>
-          Noy 与 McGuinness（斯坦福，2001）用 25 页讲清了这些事：本体为什么存在、里面装的是什么、先于一切步骤的三条规则、七个步骤的方法、类层级里的陷阱、一个槽的槽面，以及命名约定。本页以提炼的形式承载了论文的整条论证——然后做那件论文自己做不到的事：把每条规则拿到一个活体领域本体上跑一遍，而这个本体正是智能体在动手编辑之前要加载的。
+          Noy 与 McGuinness 这份指南只有 25 页（斯坦福，2001
+          年）。它讲清了本体为何而作、本体里装的是什么、动手之前先要认下的三条规则、七步方法、类层级里的陷阱、槽面的约束，以及命名约定。本页把整条论证提炼出来，再做一件论文自己做不到的事：拿每条规则去问一个活着的本体。那个本体就在本站，智能体改代码之前先加载它。
         </p>
         <p>
-          全篇使用两种标记。<code>101 §x.y</code> 是对论文的引用——那是论文的主张，不是我们的。<strong>VLSC</strong>
-          标记本站自身实践回应这条规则的地方，并且点名对应工件，让这层映射可被核查，而不是只能被相信。
+          全页只用两种标记。<code>101 §x.y</code>
+          引论文原文，那是论文的主张，不是本站的主张。<strong>VLSC</strong>
+          标出本站如何回应这条规则，并点名对应工件，好让这层映射可查，而不只是可信。
         </p>
         <div class="ag-hero-stats" aria-label="本页覆盖内容">
           <span class="ag-pill"><i class="fas fa-list-ol"></i> 7 个步骤</span
@@ -116,10 +116,9 @@
         <nav class="ag-anchor-nav" aria-label="页面章节">
           <a href="#source">出处</a><a href="#anatomy">构件</a
           ><a href="#rules">三条规则</a><a href="#steps">七个步骤</a
-          ><a href="#hierarchy">层级陷阱</a
-          ><a href="#properties">属性</a><a href="#naming">命名</a
-          ><a href="#checklist">检查清单</a><a href="#mapping">VLSC 映射</a
-          ><a href="#limits">101 的边界</a>
+          ><a href="#hierarchy">层级陷阱</a><a href="#properties">属性</a
+          ><a href="#naming">命名</a><a href="#checklist">检查清单</a
+          ><a href="#mapping">本站审计</a><a href="#limits">101 的边界</a>
         </nav>
       </div>
     </div>
@@ -130,22 +129,19 @@
           <header class="ag-section-header">
             <span class="ag-section-label">01 · 出处</span>
             <h2 class="ag-section-title">
-              一份 2001 年的指南，早已预见了智能体
+              一份 2001 年的指南，早写进了智能体
             </h2>
             <p class="ag-section-subtitle">
-              它是写给领域专家的，不是写给 AI 实验室的；成文于 Protégé-2000
-              与框架系统（frame system）的年代。它列出的第一个构建理由是「在人与<em
-                >软件智能体</em
-              >之间共享对信息结构的共同理解」（to share common understanding of
-              the structure of information among people or software
-              agents）——这句话在 2001 年读来像套话，如今却是全篇的要点。
+              它写给领域专家，不写给 AI 实验室，成书于 Protégé-2000
+              与框架系统的年代。论文列出的第一条建本体的理由，是让人和软件智能体对信息结构有一致的理解。这句话在
+              2001 年读来像套话，如今却是全部要害。
             </p>
           </header>
           <div class="ag-table-wrap">
             <table class="ag-table">
               <thead>
                 <tr>
-                  <th>字段</th>
+                  <th>项</th>
                   <th>内容</th>
                 </tr>
               </thead>
@@ -159,7 +155,7 @@
                 </tr>
                 <tr>
                   <td>作者</td>
-                  <td>Natalya F. Noy、Deborah L. McGuinness —— 斯坦福</td>
+                  <td>Natalya F. Noy、Deborah L. McGuinness，斯坦福大学</td>
                 </tr>
                 <tr>
                   <td>篇幅</td>
@@ -168,26 +164,27 @@
                 <tr>
                   <td>工具年代</td>
                   <td>
-                    Protégé-2000（示例）、Ontolingua（本体库）、Chimaera（诊断工具）；RDF
-                    与 DAML 被点名为 W3C/DARPA 正在成形的工作
+                    示例用 Protégé-2000，本体库用 Ontolingua，诊断工具用
+                    Chimaera；RDF 与 DAML 在文中还只是 W3C 和 DARPA
+                    正在推进的新东西
                   </td>
                 </tr>
                 <tr>
                   <td>贯穿示例</td>
                   <td>
-                    葡萄酒与食物搭配，源自 CLASSIC 教程知识库（Brachman 等，1991）
+                    葡萄酒与餐食搭配，源自 CLASSIC 教学知识库（Brachman 等，1991）
                   </td>
                 </tr>
                 <tr>
-                  <td>思想谱系</td>
+                  <td>思想血缘</td>
                   <td>
-                    Gruber 1993（定义）、Gruninger 与 Fox 1995（能力问题）、Uschold
-                    与 Gruninger 1996 及 Gómez-Pérez 1998（其他方法论）、Rosch
-                    1978（概括层级）
+                    Gruber 1993 给定义，Gruninger 与 Fox 1995
+                    提出能力问题，Uschold 与 Gruninger 1996、Gómez-Pérez 1998
+                    是论文指出的另几家方法论，Rosch 1978 讲概括层级
                   </td>
                 </tr>
                 <tr>
-                  <td>来源</td>
+                  <td>原文</td>
                   <td>
                     <a
                       href="https://protege.stanford.edu/publications/ontology_development/ontology101.pdf"
@@ -201,37 +198,37 @@
             </table>
           </div>
 
-          <h3 style="margin-top: 2.5rem">构建本体的五个理由（§1）</h3>
+          <h3 style="margin-top: 2.5rem">为什么要建本体：论文给的五条（§1）</h3>
           <div class="ag-term-grid">
             <article class="ag-card">
-              <h3><i class="fas fa-handshake"></i> 共享理解</h3>
+              <h3><i class="fas fa-handshake"></i> 取得一致理解</h3>
               <p>
-                在人与<em>软件智能体</em>之间共享。如果各站点发布的是同一套底层本体，智能体就能跨站点抽取并汇总信息。
+                让人和软件智能体对信息结构的理解一致。多个网站若公布同一套底层本体，智能体就能跨站抽取、汇总，再拿去回答查询，或喂给别的应用。
               </p>
             </article>
             <article class="ag-card">
               <h3><i class="fas fa-recycle"></i> 复用领域知识</h3>
               <p>
-                时间、单位、设备：建模一次，处处复用；或者把若干已有本体整合进一个更大的本体。
+                时间、单位、设备这类概念，一处建好，处处可用。要建大本体，也可以把几份现成的拼起来，或者拿通用本体来扩展。
               </p>
             </article>
             <article class="ag-card">
-              <h3><i class="fas fa-eye"></i> 假设显式化</h3>
+              <h3><i class="fas fa-eye"></i> 让假设显式</h3>
               <p>
-                硬编码的假设难以找到、难以理解、难以修改——对没有编程背景的人尤其如此。
+                假设一旦硬编码进程序，就难找、难懂、难改，对不会编程的人尤其如此。写明白了，新读者也才学得会术语。
               </p>
             </article>
             <article class="ag-card">
-              <h3><i class="fas fa-layer-group"></i> 领域 ≠ 操作实现</h3>
+              <h3><i class="fas fa-layer-group"></i> 领域知识独立于操作知识</h3>
               <p>
-                把任务领域与求解它的程序分开描述：同一个配置算法，喂进各自的本体，既能驱动
-                PC，也能驱动电梯。
+                把任务所属的领域单独描述，解题程序就能独立于领域。同一套配置算法，喂进
+                PC 零件本体就配 PC，喂进电梯零件本体就配电梯。
               </p>
             </article>
             <article class="ag-card">
-              <h3><i class="fas fa-magnifying-glass-chart"></i> 形式化分析</h3>
+              <h3><i class="fas fa-magnifying-glass-chart"></i> 便于分析</h3>
               <p>
-                术语一旦被声明，就可以被形式化地分析——这在复用或扩展别人的本体时最要紧。
+                术语一旦声明出来，就能形式化地分析。要复用或扩展别人的本体时，这一点最要紧。
               </p>
             </article>
           </div>
@@ -248,25 +245,24 @@
               for other programs to use.
             </p>
             <p class="ba-quote-trans" lang="zh">
-              <span class="ba-quote-by">101 §1</span> —
-              「领域的本体往往本身并不是目的。开发一个本体，类似于定义一组数据及其结构，供其他程序使用。」正是这句话让本体作为智能体上下文变得名正言顺：它是给消费者用的数据，不是一座纪念碑。
+              本体本身往往不是目的。做本体，近似于为别的程序定义一批数据和它们的结构。<span
+                class="ba-quote-by"
+                >101 §1</span
+              >
+              正是这句话，让本体有资格充当智能体的上下文：它是给消费者用的数据，不是立给自己看的纪念碑。
             </p>
             <span class="ba-quote-cite">Noy &amp; McGuinness 2001, §1</span>
           </blockquote>
 
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>VLSC。</strong>这里的消费者就是智能体。同样八个顶层概念、同样的关系、同样的不变量，被三种方式读取：作为编辑之前的智能体上下文，作为可以拒绝这次编辑的编辑前门禁，作为人工审查所用的词汇表。一套语义，三方消费——见<a
-              href="agentic.html#ontology"
-              >Agentic · 领域本体</a
-            >。
+            <strong>VLSC。</strong>本站的消费者就是智能体。同一套八个顶层概念、同一批关系、同一批不变量，有三种读法：智能体动手前读它当上下文，编辑前门禁读它来拒绝违规，人审查时读它当词汇。一套语义，三方消费。详见
+            <a href="agentic.html#ontology">Agentic · 领域本体</a>。
           </div>
 
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
             <strong>这不是面向对象设计（§ About this guide）。</strong>OO
-            设计按一个类的<em>操作性</em>属性来决断——它带哪些方法。本体设计按<em
-              >结构性</em
-            >属性来决断——它是什么、它有什么、它与什么相关。论文说得很明确：由此得到的类结构，与在
-            OO 程序里建模同一领域所得到的结构并不相同。
+            看类的操作属性，也就是它带哪些方法，据此做设计决断；本体看类的结构属性，也就是它是什么、有什么、与什么相关。论文说得很直接：同一个领域，按
+            OO 建出的类结构和关系，跟按本体建出的，并不一样。
           </div>
         </div>
       </section>
@@ -276,10 +272,10 @@
           <header class="ag-section-header">
             <span class="ag-section-label">02 · 构件</span>
             <h2 class="ag-section-title">
-              类、槽、槽面、实例——以及知识库
+              类、槽、槽面、实例，合起来叫知识库
             </h2>
             <p class="ag-section-subtitle">
-              这是论文自己的工作定义，因为 AI 文献里的定义很多，而且彼此矛盾（§2）。
+              论文先给出自己的定义，因为 AI 文献里的定义太多，而且彼此矛盾（§2）。
             </p>
           </header>
           <div class="ag-table-wrap">
@@ -288,16 +284,16 @@
                 <tr>
                   <th>术语</th>
                   <th>又称</th>
-                  <th>它是什么（101 §2）</th>
+                  <th>论文的定义（101 §2）</th>
                   <th>葡萄酒示例</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>类（class）</strong></td>
-                  <td>概念（concept）</td>
+                  <td><strong>类 class</strong></td>
+                  <td>概念 concept</td>
                   <td>
-                    论述领域中的一个概念；多数本体的焦点所在。
+                    论域中的一个概念。多数本体以类为主。
                   </td>
                   <td>
                     <code>Wine</code>、<code>Red Wine</code>、
@@ -305,10 +301,10 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>槽（slot）</strong></td>
-                  <td>角色（role）、属性（property）</td>
+                  <td><strong>槽 slot</strong></td>
+                  <td>角色 role、属性 property</td>
                   <td>
-                    类或实例的一项属性，用来描述它的某个特征或性质。
+                    类或实例的属性，描述它的某项特征。
                   </td>
                   <td>
                     <code>body</code>、<code>maker</code>、<code>color</code>、
@@ -316,21 +312,23 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>槽面（facet）</strong></td>
-                  <td>角色限制（role restriction）</td>
+                  <td><strong>槽面 facet</strong></td>
+                  <td>角色限制 role restriction</td>
                   <td>
-                    对槽的限制：值类型、允许值、基数、默认值。
+                    加在槽上的限制：值类型、允许值、基数、默认值。
                   </td>
                   <td>
-                    <code>body</code>：枚举 {light, medium, full}；
-                    <code>produces</code>：多值，实例类型 <code>Wine</code>
+                    <code>body</code> 取值限于 {light, medium, full}；<code
+                      >produces</code
+                    >
+                    可多值，值必须是 <code>Wine</code> 的实例
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>实例（instance）</strong></td>
-                  <td>个体（individual）</td>
+                  <td><strong>实例 instance</strong></td>
+                  <td>个体 individual</td>
                   <td>
-                    类的某个具体成员。本体加上实例，构成一个知识库。
+                    类的具体成员。本体加上一批实例，就构成知识库。
                   </td>
                   <td>
                     <code>Chateau-Morgon-Beaujolais</code>、某家酒庄、某个年份
@@ -351,45 +349,36 @@
               where the ontology ends and the knowledge base begins.
             </p>
             <p class="ba-quote-trans" lang="zh">
-              <span class="ba-quote-by">101 §2</span> —
-              「一个本体，加上各类的一组个体实例，就构成了一个知识库。现实中，本体在哪里结束、知识库从哪里开始，其间只有一条极细的界线。」
+              本体加上一批类的个体实例，就构成知识库。可在实际上，本体止于何处、知识库始于何处，那条线细得很。<span
+                class="ba-quote-by"
+                >101 §2</span
+              >
             </p>
             <span class="ba-quote-cite">Noy &amp; McGuinness 2001, §2</span>
           </blockquote>
 
           <h3 style="margin-top: 2.5rem">
-            落到实操，开发一个本体就是四件事（§2）
+            落到手上，做本体就是四件事（§2）
           </h3>
           <div class="ag-diagram">
             <div class="ag-flow" aria-label="四项实践活动">
               <span class="ag-flow-step">定义类</span
               ><span class="ag-flow-arrow">→</span
-              ><span class="ag-flow-step"
-                >把它们排成<br />分类层级</span
+              ><span class="ag-flow-step">把类排成<br />分类层级</span
               ><span class="ag-flow-arrow">→</span
-              ><span class="ag-flow-step"
-                >定义槽及其<br />允许值</span
+              ><span class="ag-flow-step">定义槽<br />与允许值</span
               ><span class="ag-flow-arrow">→</span
-              ><span class="ag-flow-step"
-                >为实例<br />填充槽值</span
+              ><span class="ag-flow-step">为实例<br />填槽值</span
               >
             </div>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>VLSC。</strong>同样这四项活动，一一对应：八个顶层类（主体
-            Agent、物理实体 Physical Entity、软件系统 Software System、活动
-            Activity、信息对象 Information Object、能力 Capability、策略/约束
-            Policy/Constraint、证据 Evidence）；把它们排布起来的关系（<code
-              >requests</code
-            >、<code>changes</code>、<code>yields</code>、
-            <code>sampled-as</code>、<code>framed-as</code>，外加产品族之间的
-            <code>inherits</code> / <code>consumes</code> /
-            <code>implements</code> / <code>inspired-by</code>）；52
-            条机器可读约束所携带的槽面（severity、<code>sdd_ref</code>、<code
-              >scope</code
-            >
-            glob、<code>patterns</code>）；以及实例——电台
-            Profile、具体台站、带日期的证据记录。普查 2026-09-12。
+            <strong>VLSC。</strong>这四件事在本站一一对得上。类：八个顶层概念，即主体
+            Agent、物理实体、软件系统、活动、信息对象、能力、策略与约束、证据。关系：把类连起来的那些槽，<code>requests</code>、<code>changes</code>、<code>yields</code>、<code>sampled-as</code>、<code>framed-as</code>，再加上产品族之间的
+            <code>inherits</code>、<code>consumes</code>、<code>implements</code>、<code>inspired-by</code>。槽面：52
+            条机器可读约束各自带的 severity、<code>sdd_ref</code>、<code>scope</code>
+            通配与 <code>patterns</code>。实例：电台 Profile、具体台站、带日期的证据记录。普查日期
+            2026-09-12。
           </div>
         </div>
       </section>
@@ -399,49 +388,40 @@
           <header class="ag-section-header">
             <span class="ag-section-label">03 · 三条规则</span>
             <h2 class="ag-section-title">
-              论文在一切步骤之前先立下的规则
+              动手之前先要认下的三条
             </h2>
             <p class="ag-section-subtitle">
-              「这些规则可能显得相当教条。但在很多情形下，它们能帮你做出设计决定」（§3）。指南后面的一切，都是这三条规则的应用。
+              论文自己说：这几条听来近乎教条，但多数设计决断都得靠它们（§3）。后面每一步，都是这三条的应用。
             </p>
           </header>
           <div class="ag-term-grid">
             <article class="ag-card">
               <h3><i class="fas fa-code-branch"></i> 没有唯一正确的模型</h3>
               <p>
-                「为一个领域建模，不存在唯一正确的方式——永远有可行的替代方案。最佳解几乎总是取决于你心里想着的那个应用，以及你预期会有的那些扩展。」<code
-                  >101 §3</code
-                >
+                「领域可以有多种建法，条条都成立。哪种最好，几乎总是取决于你打算拿它做什么，以及你预期它往哪儿扩展。」<code>101 §3</code>
               </p>
             </article>
             <article class="ag-card">
-              <h3><i class="fas fa-rotate"></i> 必然是迭代过程</h3>
+              <h3><i class="fas fa-rotate"></i> 必然要迭代</h3>
               <p>
-                「本体开发必然是一个迭代过程。」先做粗糙版本，再细化，再补足细节——并且预期第一版一旦碰上真实应用或真实专家，就要被改写。<code
-                  >101 §3</code
-                >
+                「本体开发必然是迭代过程。」先粗略搭一版，再改，再补细节。初版一旦拿去用，或者拿给领域专家看，几乎必定要改。<code>101 §3</code>
               </p>
             </article>
             <article class="ag-card">
-              <h3><i class="fas fa-cube"></i> 贴近领域</h3>
+              <h3><i class="fas fa-cube"></i> 概念要贴近领域</h3>
               <p>
-                「本体中的概念应当贴近你所关心领域里的对象（物理的或逻辑的）与关系」——最可能对应的，就是描述这个领域的那些句子里的名词和动词。<code
-                  >101 §3</code
-                >
+                「本体里的概念，应当贴近你所关心领域中的对象（物理的或逻辑的）和关系。」它们多半就是描述该领域时用到的那些名词和动词。<code>101 §3</code>
               </p>
             </article>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
-            <strong>论文自己的谦辞，逐字保留。</strong>「不存在唯一正确的本体设计方法论，我们也没有试图去定义一个」（§
-            About this guide）；到了结论部分则是：「任何领域都不存在唯一正确的本体。本体设计是一种创造性过程，不同的人设计出的两个本体不会相同……<em
-              >布丁好不好，吃了才知道</em
-            >（The proof is in the pudding）——我们只有在把本体用于当初为它设计的那些应用时，才能评估它的质量」（§8）。一个最后把手指向「使用」的方法，就是一个必须配上证据的方法——而这恰好是下一节的起点。
+            <strong>论文的自谦，原文照录。</strong>「世上没有唯一正确的本体开发方法论，我们也无意定义一种」（§
+            About this guide）。结论里又说：「任何领域都不存在唯一正确的本体。本体设计是创造性的工作，两个人设计出的本体不会相同……布丁好不好，吃了才知道：本体质量只能靠拿它去用，用到当初为它设计的那些应用里去，才评得出来」（§8）。一套以「用」收尾的方法，必须配上证据。下一节就从这里讲起。
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>VLSC。</strong>规则二与规则三决定了本站本体的形状：重复的概念与约束，<em
-              >只有在</em
-            >证据跨产品边界反复出现之后才被合并——从来没有先在白板上设计好。那些名词和动词来自事故报告与
-            SDD 裁决，而不是来自某人觉得优雅的 taxonomy。
+            <strong>VLSC。</strong>本站本体的形状，是第 2、3
+            条规则定的。概念和约束要跨产品反复出现、并且有证据，才收进来；从不先在白板上设计一套。那些名词和动词来自事故报告和
+            SDD 裁决，不来自谁觉得好看的分类法。
           </div>
         </div>
       </section>
@@ -450,10 +430,11 @@
         <div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">04 · 方法</span>
-            <h2 class="ag-section-title">七个步骤，按序而行</h2>
+            <h2 class="ag-section-title">七个步骤，依次是</h2>
             <p class="ag-section-subtitle">
-              这是整份指南的脊柱（§3）。第 4 步与第 5 步「紧密交织……也是本体设计过程中最重要的两步」——所以论文的
-              §4 与 §5 又回过头把它们细讲一遍，下面的 05、06 两节也一样。
+              这是指南的主干（§3）。第 4、5
+              两步紧密交织，论文说它们是本体设计中最要紧的两步；所以论文用
+              §4、§5 两节回头细讲，本页也一样，见下面第 05、06 节。
             </p>
           </header>
           <div class="ag-table-wrap">
@@ -461,42 +442,42 @@
               <thead>
                 <tr>
                   <th>步骤</th>
-                  <th>101 要你回答什么</th>
-                  <th>决定它的规则</th>
-                  <th>VLSC 工件</th>
+                  <th>论文问什么</th>
+                  <th>决定性的规则</th>
+                  <th>本站工件</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>1</strong> 领域与范围</td>
+                  <td><strong>1</strong> 定领域与范围</td>
                   <td>
-                    哪个领域？做什么用？它必须回答哪些问题？谁使用、谁维护？
+                    哪个领域？拿来做什么？要回答哪些问题？谁用、谁维护？
                   </td>
                   <td>
-                    范围由任务塑形：同一个领域，面向不同消费者会得到不同的本体。
+                    范围由任务塑形。同一个领域，消费者不同，本体就不同。
                   </td>
-                  <td>12 个能力问题，五份产品族 Profile</td>
+                  <td>12 个能力问题，5 份产品族 Profile</td>
                 </tr>
                 <tr>
-                  <td><strong>2</strong> 复用</td>
+                  <td><strong>2</strong> 找现成的来用</td>
                   <td>
-                    已经存在哪些可以被细化或扩展的东西？
+                    已经有什么可以拿来细化、扩展？
                   </td>
                   <td>
-                    一旦其他系统已经承诺了某套词汇，复用就可能是一项要求，而不是一种偏好。
+                    一旦别的系统已经认定了某套词汇，复用就从偏好变成了前提。
                   </td>
                   <td>
                     W3C SSN/SOSA、PROV-O、OWL-Time、SKOS、SAREF/QUDT
-                    ——作为概念参照；Hamlib 词汇——作为事实上的强制复用
+                    作为概念参照；Hamlib 词汇则是不得不认的复用
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>3</strong> 列举术语</td>
+                  <td><strong>3</strong> 列出术语</td>
                   <td>
-                    我们想就哪些术语作出陈述，或者向用户解释哪些术语？
+                    哪些术语是我们要陈述、要向用户解释的？
                   </td>
                   <td>
-                    先把清单做全；此时先不用操心概念重叠、术语间关系，也不用操心某个概念该做类还是该做槽。
+                    先把清单列全，暂且不管概念重叠、术语之间的关系，也不管它是类还是槽。
                   </td>
                   <td>
                     双语术语表：CommandIntent、Actuation、Observation、StateReport、DeviceAdapter、Protocol
@@ -504,54 +485,55 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>4</strong> 类与层级</td>
+                  <td><strong>4</strong> 定类与层级</td>
                   <td>
-                    哪些术语指称具有独立存在性的对象？它们如何逐级概括？
+                    哪些术语指称独立存在的对象？它们怎么概括？
                   </td>
                   <td>
-                    is-a 检验：B 的每一个实例，必然也是 A 的实例。
+                    is-a 检验：子类的每个实例，必然也是父类的实例。
                   </td>
                   <td>
-                    八个顶层类；产品族互为兄弟；不造人为的中间类
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>5</strong> 槽</td>
-                  <td>
-                    哪些属性描述每个类？剩下的每个术语属于哪个类？
-                  </td>
-                  <td>
-                    把槽挂在能够拥有该属性的最概括的那个类上。
-                  </td>
-                  <td>
-                    关系 <code>requests</code> / <code>changes</code> /
-                    <code>yields</code>；能力槽与协议绑定槽
+                    八个顶层类；五个产品族互为兄弟；不设人造的中间层
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>6</strong> 槽面</td>
+                  <td><strong>5</strong> 定槽</td>
                   <td>
-                    值类型、允许值、基数、定义域、值域、默认值？
+                    每个类有哪些属性？剩下那些术语各自属于哪个类？
                   </td>
                   <td>
-                    取最概括、但又不过度概括的定义域与值域——永远不要写成
+                    槽要挂在能有该属性的最概括的那个类上。
+                  </td>
+                  <td>
+                    <code>requests</code>、<code>changes</code>、<code>yields</code>
+                    等关系；能力槽与协议绑定槽
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>6</strong> 定槽面</td>
+                  <td>
+                    值类型、允许值、基数、定义域、值域、默认值各是什么？
+                  </td>
+                  <td>
+                    定义域和值域取最概括的，但不能概括过头，绝不能是
                     <code>THING</code>。
                   </td>
                   <td>
-                    约束的 severity / <code>sdd_ref</code> /
-                    <code>scope</code> / <code>patterns</code>；单一所有者的基数不变量
+                    约束的 severity、<code>sdd_ref</code>、<code>scope</code>、<code
+                      >patterns</code
+                    >；基数则表现为「权威状态所有者唯一」
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>7</strong> 实例</td>
+                  <td><strong>7</strong> 建实例</td>
                   <td>
-                    哪些个体？取什么粒度？带哪些槽值？
+                    建哪些个体？粒度多细？槽值填什么？
                   </td>
                   <td>
-                    个体实例是应用需要表示的最具体的概念。
+                    个体实例就是应用需要表示的最具体的那些概念。
                   </td>
                   <td>
-                    电台 Profile（FT-710、IC-7300、IC-7300MK2）、带日期的证据记录、公开看板上的
+                    电台 Profile（FT-710、IC-7300、IC-7300MK2）、带日期的证据记录、公开看板上分了类的
                     🐞 上报
                   </td>
                 </tr>
@@ -559,257 +541,241 @@
             </table>
           </div>
 
-          <h3 style="margin-top: 2.5rem">第 1 步 —— 领域与范围（§3, Step 1）</h3>
+          <h3 style="margin-top: 2.5rem">第 1 步：定领域与范围（§3, Step 1）</h3>
           <div class="ag-term-grid">
             <article class="ag-card">
               <h3>四个问题</h3>
               <p>
-                本体要覆盖的领域是什么？我们打算拿它做什么用？它应当回答哪些类型的问题？谁会使用并维护它？这些答案在设计过程中可能变化，「但在任一给定时刻，它们都有助于限定模型的范围」。
+                本体覆盖哪个领域？拿来做什么？要能回答哪类问题？谁用、谁维护？设计过程中答案会变，论文说，但在任一时点上，它们都能替你圈住模型的范围。
               </p>
             </article>
             <article class="ag-card">
               <h3>范围由任务塑形</h3>
               <p>
-                论文自己的演示：同一个葡萄酒领域，做自然语言处理需要同义词与词性数据，顾客挑一瓶酒需要零售价，采购为酒窖备货需要批发价与库存可得性。三个任务，三个本体。
+                论文自己举的例子最清楚：同样是葡萄酒领域，要支持自然语言处理，就得收同义词和词性；要让顾客点酒，就得有零售价；要让采购给酒窖备货，就得有批发价和货况。三个任务，三套本体。
               </p>
             </article>
             <article class="ag-card">
-              <h3>维护者的语言 ≠ 用户的语言</h3>
+              <h3>维护者与使用者不同语言</h3>
               <p>
-                「如果将要维护本体的人描述该领域所用的语言，与本体使用者所用的语言不同，我们可能就需要提供两种语言之间的映射。」<code
-                  >101 §3</code
-                >
+                「如果维护本体的人描述领域时用的语言，跟本体使用者的语言不同，那就可能要在两种语言之间给出映射。」<code>101 §3</code>
               </p>
             </article>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>能力问题（competency questions，§3, Step 1）。</strong>先勾画出「建立在这个本体之上的知识库必须能够回答哪些问题」；它们会成为「事后的试金石」，用来检验本体是否装下了足够信息、并且细到恰当的程度。它们只是一份草稿，不必穷尽。葡萄酒那组能力问题，从「Bordeaux
-            是红葡萄酒还是白葡萄酒？」一直排到「Napa Zinfandel 哪些年份是好年份？」——读完它们，在还没画出任何一个类之前，你就已经知道年份与食物分类属于范围之内，而酒庄库存与餐厅员工不属于。<strong
-              >VLSC：</strong
-            >十二个能力问题发布在<a href="agentic.html#evidence"
-              >证据纪律</a
-            >的附录里——从「哪一个软件系统拥有某台电台的权威状态」到「哪一条安全性主张背后有真实的传感器或观测路径」。
+            <strong>能力问题 competency questions（§3, Step 1）。</strong>先把一批问题写下来：建立在这个本体之上的知识库，应当能回答它们。论文说，这批问题日后就是试金石，用来检验本体是否装够了信息、细节层次是否对路。它只是草稿，不必穷尽。葡萄酒那批问题，从「Bordeaux
+            是红酒还是白酒」一直到「Napa Zinfandel
+            哪些年份好」；读完就知道，年份和餐食分类要进范围，酒庄库存和餐厅员工不进。本站对应的是
+            12 个能力问题，发布在<a href="agentic.html#evidence">证据纪律</a>一节末的附录里，从「哪个软件系统持有某台电台的权威状态」到「哪项安全主张背后有真实的传感器或观测路径」。
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>VLSC 对语言规则的落实。</strong>本站刻意用两种语言维护每一个本体术语——<code
-              >CommandIntent</code
-            >
-            对应控制意图，<em>Field verified</em> 对应现场验证——因为维护者用一种语言思考，而一部分读者用另一种语言阅读。这层映射是公开写出来的，不是靠暗示。
+            <strong>VLSC 与语言映射那条规则。</strong>本站每个本体术语都双语维护，是有意为之：<code>CommandIntent</code>
+            写作控制意图，<em>Field verified</em>
+            写作现场验证。原因是维护者用一种语言思考，读者中另有一部分人读另一种语言。映射公开写出来，不靠意会。
           </div>
 
-          <h3 style="margin-top: 2.5rem">第 2 步 —— 复用（§3, Step 2）</h3>
+          <h3 style="margin-top: 2.5rem">第 2 步：找现成的来用（§3, Step 2）</h3>
           <div class="ag-term-grid">
             <article class="ag-card">
               <h3>几乎总值得先查一遍</h3>
               <p>
-                「考虑别人已经做过什么、检查我们能否针对自己的特定领域与任务去细化和扩展现有来源，这几乎总是值得的。」
+                「别人做过什么，几乎总值得先看一眼，再判断能否拿过来为本领域、本任务细化和扩展。」
               </p>
             </article>
             <article class="ag-card">
-              <h3>有时是一项要求</h3>
+              <h3>有时是前提，不是偏好</h3>
               <p>
-                当「我们的系统需要与那些已经承诺了特定本体或受控词汇的其他应用交互」时，复用就不再是可选的。
+                如果你的系统要跟别的应用打交道，而那些应用已经认定了某套本体或受控词汇，复用就不再可选。
               </p>
             </article>
             <article class="ag-card">
-              <h3>形式化语言通常不重要</h3>
+              <h3>形式体系多半不要紧</h3>
               <p>
-                多数知识表示系统都能导入导出；即便不能，在不同形式化语言之间翻译一个本体「通常也不是一件困难的事」。
+                多数知识表示系统都能导入导出；万一不能，把本体从一种形式体系转成另一种，论文说，通常也不算难。
               </p>
             </article>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
-            <strong>VLSC —— 复用的是概念，不是运行时。</strong>W3C SOSA/SSN
-            提供了观测—传感器—执行的三分，PROV-O 提供了溯源字段，OWL-Time
-            提供了时间区间词汇，SKOS 提供了双语概念模式，SAREF/QUDT
-            提供了设备—功能—物理量的拆分，WoT Thing Description
-            提供了能力即可供性（affordance）的思路。这些都不意味着要引入 RDF
-            存储、三元组数据库或者推理机：本体仍然是一份轻量的双语契约，由产品证据兜底。另外，<strong
-              >Hamlib 自己的词汇</strong
-            >才是这条规则严格意义上的受控本体复用——本站的 MRRC
-            产品族别无选择，只能承诺它，因为 rigctld 早就承诺了。
+            <strong>VLSC：复用的是概念，不是运行时。</strong>W3C SOSA/SSN
+            给出观测、传感器、执行活动这组区分；PROV-O 给出溯源字段；OWL-Time
+            给出时间区间词汇；SKOS 给出双语概念的写法；SAREF 与 QUDT
+            给出设备、功能、量三者的分法；WoT Thing Description
+            给出能力与可供性（affordance）的思路。但这不等于跑一个 RDF
+            库、图数据库或推理机：本站的本体始终是一份由产品证据支撑的轻量双语契约。另有一处复用是严格意义上的：<strong>Hamlib
+            自己的词汇</strong>。MRRC 这一族别无选择，只能认它，因为 rigctld
+            早就认了。
           </div>
 
-          <h3 style="margin-top: 2.5rem">第 3 步 —— 列举术语（§3, Step 3）</h3>
+          <h3 style="margin-top: 2.5rem">第 3 步：列出术语（§3, Step 3）</h3>
           <div class="ag-note">
-            把你想就其作出陈述、或想向用户解释的每一个术语都写下来，连同它的属性以及你想说的内容。先把清单做全：「先不必操心它们所表示的概念之间是否重叠、术语之间有何关系、概念可能有哪些属性，也不必操心这些概念究竟是类还是槽」。分拣发生在第
-            4 到第 6 步；论文说得很清楚，第 4 步与第 5
-            步是交织的——先定义几个类，再定它们的属性，再回头定义更多的类。
+            把要陈述、要向用户解释的术语统统写下来，连同它们的属性，以及你想就它们说些什么。这一步只求全：论文说，暂时不必管概念之间是否重叠、术语之间有什么关系、也不必管它算类还是算槽。分拣留给第
+            4 到 6 步。论文还提醒，第 4 步与第 5 步交织进行：先定义几个类，接着描述它们的属性，再回头补类。
           </div>
 
           <h3 style="margin-top: 2.5rem">
-            第 4 步 —— 类与类层级（§3, Step 4）
+            第 4 步：定类与类层级（§3, Step 4）
           </h3>
           <div class="ag-term-grid">
             <article class="ag-card">
               <h3>自顶向下</h3>
               <p>
-                从最概括的概念开始，逐级特化：<code>Wine</code> → 红 / 白 / 桃红
-                → Syrah、Red Burgundy、Cabernet Sauvignon。
+                先立最概括的概念，再逐级特化：<code>Wine</code> 分红、白、桃红；<code
+                  >Red Wine</code
+                >
+                再分 Syrah、Red Burgundy、Cabernet Sauvignon。
               </p>
             </article>
             <article class="ag-card">
               <h3>自底向上</h3>
               <p>
-                从叶子开始，向上归组：<code>Pauillac</code> 与
-                <code>Margaux</code> → <code>Medoc</code> →
-                <code>Bordeaux</code>。
+                先立最具体的叶子，再向上归并：<code>Pauillac</code> 与
+                <code>Margaux</code> 归入 <code>Medoc</code>，<code>Medoc</code>
+                再归入 <code>Bordeaux</code>。
               </p>
             </article>
             <article class="ag-card">
-              <h3>组合法</h3>
+              <h3>混合</h3>
               <p>
-                先定义那些最显要的概念，再向上概括、向下特化。「对许多本体开发者来说这往往最省事，因为『中间层』的概念通常是领域里最具描述性的那些概念」（Rosch
+                先立最显眼的几个概念，再向上概括、向下特化。论文说这对多数开发者最省事，因为中间那一层的概念往往最能描述领域（Rosch
                 1978）。
               </p>
             </article>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>三者本身并无高下。</strong>选择「强烈依赖于个人对领域的看法」。从第
-            3 步的清单里，挑出那些描述<em>具有独立存在性</em
-            >的对象的术语——而不是描述这些对象的术语——它们就成为层级的锚点。然后用一条检验来排布它们：<em
-              >若类 A 是类 B 的父类，则 B 的每一个实例也必然是 A 的实例</em
-            >；换句话说，B 是 A 的「一种」（kind of）。每一支 Pinot Noir
-            都必然是红葡萄酒，所以 <code>Pinot Noir</code> 是
+            <strong>三种都没有天生更好。</strong>选哪种，「很大程度上取决于你对领域的个人看法」。具体做法是：从第
+            3 步的清单里挑出指称<em>独立存在</em>的对象的术语，而不是描述这些对象的术语，用它们当层级的锚点。然后靠一条检验来排列：<em>若
+            A 是 B 的父类，则 B 的每个实例必然也是 A 的实例</em>；换句话说，B 是 A
+            的一种。每瓶 Pinot Noir 必然是红酒，所以 <code>Pinot Noir</code> 是
             <code>Red Wine</code> 的子类。<code>101 §3–§4.1</code>
           </div>
 
-          <h3 style="margin-top: 2.5rem">第 5 步 —— 槽（§3, Step 5）</h3>
+          <h3 style="margin-top: 2.5rem">第 5 步：定槽（§3, Step 5）</h3>
           <div class="ag-term-grid">
             <article class="ag-card">
-              <h3>只有类是不够的</h3>
+              <h3>光有类不够</h3>
               <p>
-                「仅有这些类，不足以回答第 1 步提出的能力问题。」第 3
-                步清单里剩下的术语，大多会变成类的属性。
+                「仅有类，不足以回答第 1 步列出的能力问题。」第 3
+                步清单里剩下的术语，多半就成了类的属性。
               </p>
             </article>
             <article class="ag-card">
-              <h3>四种属性</h3>
+              <h3>属性有四类</h3>
               <p>
-                <strong>内在属性</strong>（一支酒的风味）、<strong
-                  >外在属性</strong
-                >（它的名字、它的产区）、<strong>组成部分</strong>——物理的或抽象的（一顿饭的几道菜）——以及<strong
-                  >与其他个体的关系</strong
-                >（<code>maker</code>，把一支酒连到一家酒庄）。
+                <strong>内在属性</strong>，如酒的风味；<strong>外在属性</strong>，如酒名、产区；<strong>部件</strong>，物理的或抽象的都算，如一餐的各道菜；<strong>与其他个体的关系</strong>，如
+                <code>maker</code> 把一款酒连到一家酒庄。
               </p>
             </article>
             <article class="ag-card">
-              <h3>挂得越高，继承越广</h3>
+              <h3>挂高一点，向下继承</h3>
               <p>
-                「槽应当挂在能够拥有该属性的最概括的那个类上。」<code>body</code>
-                与 <code>color</code> 挂在 <code>Wine</code>
-                上；<code>tannin level</code> 挂在 <code>Red Wine</code>
-                上，因为白葡萄酒不用它来描述。所有子类都继承下来。
+                「槽应当挂在能有该属性的最概括的那个类上。」<code>body</code> 与
+                <code>color</code> 挂在 <code>Wine</code>；<code>tannin level</code>
+                挂在 <code>Red Wine</code>，因为白酒不用它来描述。子类一律继承。
               </p>
             </article>
           </div>
 
-          <h3 style="margin-top: 2.5rem">第 6 步 —— 槽的槽面（§3, Step 6）</h3>
+          <h3 style="margin-top: 2.5rem">第 6 步：定槽面（§3, Step 6）</h3>
           <div class="ag-table-wrap">
             <table class="ag-table">
               <thead>
                 <tr>
                   <th>槽面</th>
-                  <th>它约束什么</th>
+                  <th>约束什么</th>
                   <th>论文的例子</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>基数（cardinality）</td>
+                  <td>基数 cardinality</td>
                   <td>
-                    一个槽可以有多少个值：单值还是多值，或者显式给出最小值与最大值。最大值取
-                    0 是合法的——它表示某个子类根本不可以填这个槽。
+                    一个槽能有几个值：单值还是多值，或者写明下限与上限。上限为 0
+                    也合法，意思是某个子类根本不许填这个槽。
                   </td>
                   <td>
-                    <code>body</code> 单值；<code>produces</code> 多值；单一品种酒的
-                    <code>grape</code> 最小 1、最大 1
-                  </td>
-                </tr>
-                <tr>
-                  <td>值类型（value type）</td>
-                  <td>
-                    什么样的值可以填进这个槽：String、Number（Float/Integer）、Boolean、Enumerated（在
-                    Protégé-2000 里叫 Symbol），或者 Instance
-                    并附一份允许的类的清单。
-                  </td>
-                  <td>
-                    <code>name</code> 是 String；<code>flavor</code> 是枚举
-                    {strong, moderate, delicate}；<code>produces</code> 是
-                    <code>Wine</code> 的 Instance
+                    <code>body</code> 单值；<code>produces</code> 多值；<code
+                      >grape</code
+                    >
+                    下限 1，单一品种酒的上限也是 1
                   </td>
                 </tr>
                 <tr>
-                  <td>定义域（domain）</td>
+                  <td>值类型 value type</td>
                   <td>
-                    这个槽挂在哪些类上——也就是它所描述的是哪些类的属性。
+                    填进来的是什么值：String、Number（或更细的
+                    Float、Integer）、Boolean、枚举（Protégé-2000 里叫
+                    Symbol），或者 Instance 并列出允许的类。
                   </td>
-                  <td><code>Winery</code> 是 <code>produces</code> 的定义域</td>
+                  <td>
+                    <code>name</code> 是 String；<code>flavor</code> 取值限于
+                    {strong, moderate, delicate}；<code>produces</code>
+                    的值是 <code>Wine</code> 的实例
+                  </td>
                 </tr>
                 <tr>
-                  <td>值域（range）</td>
+                  <td>定义域 domain</td>
                   <td>
-                    对实例类型的槽而言，它的值允许是哪些类。
+                    槽挂在哪些类上，也就是它描述谁的属性。
                   </td>
-                  <td><code>Wine</code> 是 <code>produces</code> 的值域</td>
+                  <td>
+                    <code>Winery</code> 是 <code>produces</code> 的定义域
+                  </td>
                 </tr>
                 <tr>
-                  <td>默认值（default value）</td>
+                  <td>值域 range</td>
                   <td>
-                    一种便利：为新实例自动填好的值，并且与槽<em>值</em>不同，它是可以被改的。见下面第
+                    实例型槽的值允许来自哪些类。
+                  </td>
+                  <td>
+                    <code>Wine</code> 是 <code>produces</code> 的值域
+                  </td>
+                </tr>
+                <tr>
+                  <td>默认值 default</td>
+                  <td>
+                    新建实例时自动填上的便利值。它跟槽<em>值</em>不同，可以改。详见下面第
                     06 节。
                   </td>
                   <td>
-                    当范围内多数酒都是醇厚型时，把 <code>body</code>
-                    的默认值设为 "full"
+                    若范围内多数酒都是饱满酒体，就把 <code>body</code> 的默认值设为
+                    "full"
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>定义域与值域的四步心法（§3, Step 6）。</strong>（1）找出能够充当定义域或值域的最概括的类。（2）但不可过度概括：定义域里的每一个类都必须真的能被这个槽描述，值域里的每一个类都必须是潜在的填充者——「没有人会把值域设成
-            <code>THING</code>」。（3）如果清单里同时有一个类和它的子类，删掉子类——它不带来任何信息。（4）如果清单里有
-            A 的全部子类却没有 A，那就只用 A；如果清单里有 A
-            的绝大多数子类只差几个，就该重新考虑 A 是不是更好的答案。槽挂在哪里也遵循同一套规则，因为挂槽就等于声明定义域：<code
-              >tannin level</code
-            >
-            属于 <code>Red Wine</code>，不属于每一个红葡萄品种，也不属于
-            <code>Wine</code>。
+            <strong>定义域与值域的四步收敛（§3, Step 6）。</strong>一，找出能当定义域或值域的最概括的类。二，别概括过头：定义域里的每个类，这个槽都得真能描述；值域里的每个类，都得是潜在填料。论文说，「没人会把值域定成
+            <code>THING</code>」。三，清单里若同时有某个类和它的子类，删掉子类，它不提供任何新信息。四，若清单列全了
+            A 的所有子类却没有 A，那就只写 A；若列了 A
+            的绝大多数子类，也该想想是不是直接写 A 更合适。挂槽同理，因为在把槽挂到类上就等于声明定义域的系统里，两者是一回事：<code>tannin
+            level</code> 挂在 <code>Red Wine</code>
+            上，不必逐个红葡萄品种去挂，也不能上提到 <code>Wine</code>。
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
-            <strong>VLSC。</strong>第（2）步正是本站把
-            <code>Protocol Binding ≠ Capability</code>
-            当作公理而非偏好的原因：一个声明在过度概括值域（「任意后端」）上的能力，是一条没有任何测试能否证的主张。具体锚点是
+            <strong>VLSC。</strong>第二步正是本站把 <code>Protocol Binding ≠
+            Capability</code> 立为公理、而不只是当成偏好的原因：能力若声明在一个过泛的值域上（「任何后端都行」），就没有任何测试能证伪它。具体锚点是
             <code>audio-pyaudio-rate</code>
-            这条约束——音频采样率来自后端上报的能力，不来自调用点硬编码的机型名
-            [AD-011，经 V2.9/V2.14 修订]。基数在这里表现为一条不变量，而不是一个槽面取值：<em
-              >一个</em
-            >权威状态所有者，<em>一个</em>串口所有者（ft8
-            <code>no-direct-serial</code> [AD-008]；ft710 / modern
+            这条约束，音频采样率来自后端能力，而不是写死在调用处的机型名
+            [AD-011，经 V2.9 与 V2.14 修订]。基数在本站不以槽面形式出现，而是以不变量出现：权威状态所有者<em>唯一</em>，串口所有者<em>唯一</em>（ft8
+            <code>no-direct-serial</code> [AD-008]；ft710 与 modern
             <code>cat-direct-serial-io</code> [AD-002]）。
           </div>
 
-          <h3 style="margin-top: 2.5rem">第 7 步 —— 实例（§3, Step 7）</h3>
+          <h3 style="margin-top: 2.5rem">第 7 步：建实例（§3, Step 7）</h3>
           <div class="ag-note">
-            三个动作：选一个类，创建该类的一个个体，填入它的槽值。论文亲手做的那个实例
-            <code>Chateau-Morgon-Beaujolais</code> 带了八个值——body 为
-            light、color 为 red、flavor 为 delicate、tannin level 为
-            low、grape 为 <code>Gamay</code>（<code>Wine Grape</code>
-            的一个实例）、maker 为 <code>Chateau-Morgon</code>（<code
-              >Winery</code
+            三个动作：选定类，建一个该类的个体，填上槽值。论文给的样例个体是
+            <code>Chateau-Morgon-Beaujolais</code>，八个槽值：body 轻，color
+            红，flavor 细致，tannin level 低，grape 是 <code>Gamay</code>（<code
+              >Wine Grape</code
             >
-            的一个实例）、region 为 <code>Beaujolais</code>（<code
-              >Wine-Region</code
-            >
-            的一个实例）、sugar 为 dry。留意这个实例示范了什么：八个值里有三个本身就是别的类的实例——知识库正是靠这一点保持可查询，而不是退化成一堆字符串。
+            的实例），maker 是 <code>Chateau-Morgon</code>（<code>Winery</code>
+            的实例），region 是 <code>Beaujolais</code>（<code>Wine-Region</code>
+            的实例），sugar 干。这个样例值得留意的一点是：八个值里有三个本身又是别的类的实例。知识库能查，靠的正是这一点，否则就只是一堆字符串。
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>VLSC。</strong>实例是证据存放的地方。一个电台
-            Profile（FT-710、IC-7300、IC-7300MK2）是携带能力值的实例；一条带日期的证据记录是携带来源、版本、环境、方法、结果与限制的实例；公开看板上的一条
-            🐞 上报是携带分类结论的实例。论文的粒度规则——「个体实例是知识库中所表示的最具体的概念」——正是本站把<em
-              >一次发布</em
-            >当作实例、而把<em>一个电台型号</em>当作类的原因：发布是被清点的，型号是被描述的。
+            <strong>VLSC。</strong>证据都落在实例上。电台 Profile（FT-710、IC-7300、IC-7300MK2）是实例，带能力值；带日期的证据记录是实例，带来源、版本、环境、方法、结果与局限；公开看板上分了类的
+            🐞 上报也是实例。论文的粒度规则说，个体实例就是知识库中所表示的最具体的概念，本站据此把<em>发布</em>当实例、把<em>电台机型</em>当类：发布要数，机型要描述。
           </div>
         </div>
       </section>
@@ -819,10 +785,10 @@
           <header class="ag-section-header">
             <span class="ag-section-label">05 · 层级陷阱</span>
             <h2 class="ag-section-title">
-              类层级出错的二十种方式
+              类层级出错的二十种走法
             </h2>
             <p class="ag-section-subtitle">
-              论文第 4 节是一份缺陷目录，不是一份教程：「在定义了相当数量的新类之后，退后一步、检查正在成形的层级是否符合这些准则，是有帮助的」。把它当审查清单来读——这也正是智能体能用它的用法。
+              论文 §4 是一份缺陷目录，不是教程：「定义了不少新类之后，退后一步，看看长出来的层级是否合这些规矩，很有帮助。」把它当审查清单来读，人能用，智能体也能用。
             </p>
           </header>
           <div class="ag-table-wrap">
@@ -832,284 +798,271 @@
                   <th>#</th>
                   <th>陷阱</th>
                   <th>规则（101 §4）</th>
-                  <th>为什么会崩</th>
+                  <th>为什么会坏</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>1</td>
-                  <td>把 is-a 读成「与……相关」</td>
+                  <td>把 is-a 读成「跟……有关」</td>
                   <td>
-                    只有当 B 的每一个实例都必然是 A 的实例时，A 才是 B
-                    的父类——这是「一种」（kind of）关系。§4.1
+                    A 是 B 的父类，当且仅当 B 的每个实例必然也是 A
+                    的实例，是「一种」关系。§4.1
                   </td>
                   <td>
-                    任何沾点边的东西都变成子类，继承于是开始携带子类根本不具有的属性。
+                    沾边就成了子类，继承会把子类没有的属性硬塞给它。
                   </td>
                 </tr>
                 <tr>
                   <td>2</td>
-                  <td>单数挂在复数之下</td>
+                  <td>单数挂在复数下</td>
                   <td>
-                    绝不要先定义 <code>Wines</code>、再把 <code>Wine</code>
-                    定义成它的子类；选定一种数，全篇保持一致。§4.1、§6.2
+                    不要先立 <code>Wines</code>，再把 <code>Wine</code>
+                    当它的子类。单复数选定一种，全篇一致。§4.1、§6.2
                   </td>
                   <td>
-                    「一支酒并不是『诸酒』的一种」——层级于是对领域说了一句假话。
+                    「一款酒不是一种葡萄酒们」。层级就此对领域说了假话。
                   </td>
                 </tr>
                 <tr>
                   <td>3</td>
                   <td>忘了传递性</td>
                   <td>
-                    若 B ⊂ A 且 C ⊂ B，则 C ⊂ A。§4.1
+                    B ⊂ A、C ⊂ B，则 C ⊂ A。§4.1
                   </td>
                   <td>
-                    挂在高处的约束会悄悄作用到三层之下，而那里没人预料到它。
+                    挂在高层的约束会悄悄作用到三层以下，那里没人料到有它。
                   </td>
                 </tr>
                 <tr>
                   <td>4</td>
-                  <td>混淆直接子类与间接子类</td>
+                  <td>直接子类与间接子类不分</td>
                   <td>
-                    直接子类与父类之间不隔任何类；<code>Chardonnay</code> 是
+                    直接子类与父类之间不隔别的类：<code>Chardonnay</code> 是
                     <code>White Wine</code> 的直接子类，不是 <code>Wine</code>
                     的。§4.1
                   </td>
                   <td>
-                    兄弟类分析、「把槽挂在最概括的类上」这两件事，需要的都是直接关系，不是传递闭包。
+                    兄弟分析、「槽挂最概括的类」这两件事都要用直接关系，不能用传递闭包。
                   </td>
                 </tr>
                 <tr>
                   <td>5</td>
-                  <td>领域在演化，层级却冻结了</td>
+                  <td>领域变了，层级没变</td>
                   <td>
-                    当白 Zinfandel 出现时，<code>Zinfandel</code>
-                    不得不拆成红、白两个子类，分别挂到不同的父类之下。§4.1
+                    白 Zinfandel 出现之后，<code>Zinfandel</code>
+                    必须拆成红、白两个子类，分别挂到不同父类下。§4.1
                   </td>
                   <td>
-                    领域动了；本体于是断言了一种颜色，而它自己的部分实例并不具备这种颜色。
+                    领域已经动了，本体还在断言某些实例并不具备的颜色。
                   </td>
                 </tr>
                 <tr>
                   <td>6</td>
                   <td>把类和它的名字混为一谈</td>
                   <td>
-                    「类表示的是领域中的概念，而不是指称这些概念的那些词。」把
-                    <code>Shrimps</code> 改名成 <code>Prawns</code>，别的东西一样也没变。§4.1
+                    「类表示领域中的概念，不表示指称这些概念的词。」把
+                    <code>Shrimps</code> 改名 <code>Prawns</code>，其余什么都不必动。§4.1
                   </td>
                   <td>
-                    一次术语变更被误当成一次建模变更，下游的一切都被重建一遍。
+                    把换术语当成改模型，下游就跟着重建一遍。
                   </td>
                 </tr>
                 <tr>
                   <td>7</td>
-                  <td>把同义词做成不同的类</td>
+                  <td>同义词当成不同的类</td>
                   <td>
-                    一个概念，一个类；同义词、译名与展示名要么挂成一份清单，要么写进文档。§4.1
+                    一个概念一个类。同义词、译名、展示名挂成列表，系统不支持就写进文档。§4.1
                   </td>
                   <td>
-                    把 <code>Shrimp</code>、<code>Prawn</code> 和
-                    <code>Crevette</code> 做成三个类，意味着同一个事实要在三个地方维护。
+                    <code>Shrimp</code>、<code>Prawn</code>、<code>Crevette</code>
+                    三个类，等于一件事实在三处维护。
                   </td>
                 </tr>
                 <tr>
                   <td>8</td>
-                  <td>成环</td>
+                  <td>环</td>
                   <td>
-                    A ⊂ B 与 B ⊂ A 同时成立，等于宣布 A 与 B 等价。§4.1
+                    A ⊂ B 且 B ⊂ A，等于宣告 A 与 B 等价。§4.1
                   </td>
                   <td>
-                    层级不再是层级；遍历可能不终止。
+                    层级不再是层级，遍历可能不终止。
                   </td>
                 </tr>
                 <tr>
                   <td>9</td>
-                  <td>兄弟类处在不同的概括层级</td>
+                  <td>兄弟不在同一概括层级</td>
                   <td>
-                    除根层的类之外，所有兄弟类都必须处在同一概括层级上——<code
-                      >White Wine</code
-                    >
-                    与 <code>Chardonnay</code> 不是兄弟。根层的类是大的分野，可以豁免。§4.2
+                    除根以外，所有兄弟必须处于同一概括层级：<code>White Wine</code>
+                    与 <code>Chardonnay</code> 不是兄弟。根上的类是领域的大分野，不受此限。§4.2
                   </td>
                   <td>
-                    这棵树读起来像一份书稿目录：一章和一个三级小节并排站着。
+                    这棵树读起来像一份目录，章和三级节并排。
                   </td>
                 </tr>
                 <tr>
                   <td>10</td>
                   <td>只有一个子类</td>
                   <td>
-                    「如果一个类只有一个直接子类，那可能是建模出了问题，也可能是本体还不完整。」就像一份只有一条的项目符号清单。§4.2
+                    「一个类若只有一个直接子类，多半是模型有问题，或者本体还不完整。」如同只有一条的项目符号列表。§4.2
                   </td>
                   <td>
-                    要么这两个类等价（删掉一个），要么那些缺失的兄弟类还没被找出来。
+                    要么两类等价，删掉一个；要么缺席的兄弟还没找到。
                   </td>
                 </tr>
                 <tr>
                   <td>11</td>
-                  <td>子类多过一打</td>
+                  <td>子类超过一打</td>
                   <td>
-                    结构良好的本体，直接子类数在两个到一打之间；超出这个范围，多半就需要中间范畴了。§4.2
+                    结构良好的本体，直接子类在两个到一打之间；再往上就该考虑中间层。§4.2
                   </td>
                   <td>
-                    把所有葡萄酒类型都平铺在 <code>Wine</code> 之下，就把领域本身已经有的
-                    Medoc / Bordeaux 与 Côtes d'Or / Burgundy 结构藏了起来。
+                    所有酒型平铺在 <code>Wine</code> 下，就埋掉了领域本来就有的
+                    Medoc／Bordeaux、Côtes d'Or／Burgundy 结构。
                   </td>
                 </tr>
                 <tr>
                   <td>12</td>
-                  <td>凭空造出归组用的类</td>
+                  <td>硬造分组类</td>
                   <td>
-                    如果没有自然的类可以归拢一长串兄弟，就让它平铺——「本体是对真实世界的反映」。§4.2
+                    一长串兄弟若找不到自然的类来归并，就让它平铺：「本体是对真实世界的反映」。§4.2
                   </td>
                   <td>
-                    人为的中间类是一个领域里没人认得的范畴，而将来每一个实例都必须被硬塞进去。
+                    人造的中间层，领域里没人认得，往后每个实例都得硬塞进去。
                   </td>
                 </tr>
                 <tr>
                   <td>13</td>
-                  <td>害怕多重继承</td>
+                  <td>不敢用多重继承</td>
                   <td>
                     多重继承是合法的：<code>Port</code> 既是 <code>Red Wine</code>
                     又是 <code>Dessert Wine</code>，从一个父类继承
-                    <code>sugar = SWEET</code>，从另一个父类继承
-                    <code>tannin level</code>。§4.3
+                    <code>sugar = SWEET</code>，从另一个继承
+                    <code>tannin level</code> 与颜色。§4.3
                   </td>
                   <td>
-                    拒绝它，就会造出平行的重复层级，只能靠人手保持同步。
+                    拒绝它，就会长出两棵必须手工同步的平行层级。
                   </td>
                 </tr>
                 <tr>
                   <td>14</td>
-                  <td>新类无新话可说</td>
+                  <td>新类无话可说</td>
                   <td>
-                    当一个子类带来额外属性、不同限制或不同关系时，才引入它；落到实操，它应当增加槽、增加槽值，或者覆盖继承来的槽面。§4.4
+                    子类要有额外属性、不同限制，或参与不同关系，才立得起来；落到实处，它应当新增槽、新增槽值，或覆盖继承来的槽面。§4.4
                   </td>
                   <td>
-                    一个除了父类之外无话可说的类，是一个名字，不是一个概念。
+                    除了名字之外对父类毫无补充的类，是名字，不是概念。
                   </td>
                 </tr>
                 <tr>
                   <td>15</td>
-                  <td>为每个限制各开一个子类</td>
+                  <td>为每个限制立一个子类</td>
                   <td>
-                    不要为某个槽的每一个取值都造出 <code>Delicate Wine</code>、
-                    <code>Moderate Wine</code>……这类区分属于槽值。§4.4–§4.5
+                    不要为槽的每个取值立类，比如 <code>Delicate Wine</code>、<code
+                      >Moderate Wine</code
+                    >；这种区分属于槽值。§4.4–§4.5
                   </td>
                   <td>
-                    类爆炸，并且一个取值的每一个侧面都变成树上的一个节点。
+                    类爆炸，取值的每个侧面都变成树上的一个节点。
                   </td>
                 </tr>
                 <tr>
                   <td>16</td>
-                  <td>否认术语性层级的价值</td>
+                  <td>不承认术语型层级</td>
                   <td>
-                    参考层级（比如一套疾病分类）可能一个新属性都不增加，却仍然值得拥有：它们支撑导航，让用户自己挑一个概括层级。§4.4
+                    参考型层级（如疾病分类）可以完全不带属性，仍然值得有：它便于浏览，也让人自己挑概括层级。§4.4
                   </td>
                   <td>
-                    坚持每个类都要挣来新槽，会把那些本职工作就是组织术语的词汇表压平。
+                    非要每个类都挣来新槽，就会把那些本职工作是组织术语的词汇表压平。
                   </td>
                 </tr>
                 <tr>
                   <td>17</td>
-                  <td>实例在类之间来回迁移</td>
+                  <td>实例会迁进迁出的类</td>
                   <td>
-                    「一个个体实例所属的类，不应当经常变化。」<code>Chilled Wine</code>
-                    是一项属性，不是一个类。§4.5
+                    「一个个体所属的类，不应当经常变。」<code>Chilled Wine</code>
+                    是属性，不是类。§4.5
                   </td>
                   <td>
-                    把外在属性当成划类标准，会让实例在有生之年换类——并且把继承来的槽面一起带走。
+                    拿外在属性当分类标准，实例就会在有生之年换类，连带把继承来的槽面一起带走。
                   </td>
                 </tr>
                 <tr>
                   <td>18</td>
-                  <td>明明有层级，却做成实例</td>
+                  <td>明明有层级，却建成实例</td>
                   <td>
-                    如果一组概念构成自然的层级，就把它们做成类——所有葡萄酒产区都是类，没有直接实例的那些标为抽象类。不存在「子实例」这种东西。§4.6
+                    概念若构成自然层级，就建成类：所有葡萄酒产区都是类，没有直接实例的标为抽象类。世上没有「子实例」这种东西。§4.6
                   </td>
                   <td>
-                    把 <code>Bourgogne</code> 做成实例，就没法把 <code>Côtes d'Or</code>
-                    挂在它下面，自然结构于是丢失。
+                    <code>Bourgogne</code> 若只是实例，就挂不上
+                    <code>Côtes d'Or</code>，自然结构丢了。
                   </td>
                 </tr>
                 <tr>
                   <td>19</td>
                   <td>范围过宽或过窄</td>
                   <td>
-                    不要特化或概括得超出应用所需——「两个方向各多一层，到此为止」；也不要把每一个属性、每一种想得到的关系都收进来。§4.7
+                    不要比应用所需更特化或更概括，「两个方向各多一层也就到头了」；也不必收尽所有属性、所有可想到的关系。§4.7
                   </td>
                   <td>
-                    标签纸和虾仁菜谱混进了一个葡萄酒配餐本体；维护成本上升，能力问题却没有增加。
+                    酒标用纸和虾的做法挤进了餐酒搭配本体。维护成本涨了，能力问题一个没多。
                   </td>
                 </tr>
                 <tr>
                   <td>20</td>
-                  <td>不声明不相交</td>
+                  <td>不相交没有声明</td>
                   <td>
-                    当两个类不可能共享实例时，就声明它们不相交（disjoint）——<code
-                      >Red Wine</code
-                    >
-                    与 <code>White Wine</code> 是，<code>Dessert Wine</code> 与
-                    <code>White Wine</code> 不是。§4.8
+                    不可能共享实例的类，要声明不相交：<code>Red Wine</code> 与
+                    <code>White Wine</code> 不相交，<code>Dessert Wine</code> 与
+                    <code>White Wine</code> 则相交。§4.8
                   </td>
                   <td>
-                    缺了这条声明，系统就没法把一个同时挂在 <code>Riesling</code> 和
-                    <code>Port</code> 之下的类标记为它本该是的建模错误。
+                    不声明，系统就没法指出「同时继承 <code>Riesling</code> 与
+                    <code>Port</code> 的类」是模型错误。
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <h3 style="margin-top: 2.5rem">三个艰难决定，细说</h3>
+          <h3 style="margin-top: 2.5rem">三个最难的决断</h3>
           <div class="ag-term-grid">
             <article class="ag-card">
-              <h3>做成新类，还是做成属性值？（§4.5）</h3>
+              <h3>立新类，还是取槽值？（§4.5）</h3>
               <p>
-                当<strong>（a）</strong>取值不同的那些概念会变成对其他类的槽的限制，或者<strong
-                  >（b）</strong
-                >这个区分在领域里确实要紧、你把两者想成不同种类的对象时，才为这个区分建一个类。否则就把它留在槽值里。葡萄酒的颜色是论文给出的那个「反例反而证明规则」的例外：颜色通常只是取值，但红葡萄酒与白葡萄酒配的食物不同，所以
+                两种情形该立类：一，取值不同的那些概念会成为别的类的槽上的限制；二，这个区分在领域里要紧，你把两边看成不同种类的对象。其余情况留在槽值里。酒的颜色是论文用来印证规则的反例：颜色通常只是槽值，可红酒与白酒配的菜不同、属性也不同，于是
                 <code>Red Merlot</code> 与 <code>White Merlot</code> 是两个类。
               </p>
             </article>
             <article class="ag-card">
-              <h3>做成类，还是做成实例？（§4.6）</h3>
+              <h3>是类，还是实例？（§4.6）</h3>
               <p>
-                先定下应用所需的最低粒度——「那些将构成[能力问题]之答案的最具体概念，是个体的极佳候选」。葡萄酒配餐到
-                <code>Sterling Vineyards Merlot</code> 就停；加上餐厅库存，就把每一瓶酒压到实例；要记录逐年份的属性，就让年份成为实例、让酒成为类。
+                先定应用需要的最细粒度。论文说，能力问题的答案里最具体的那些概念，最适合当个体。只谈餐酒搭配，到
+                <code>Sterling Vineyards Merlot</code>
+                就到底了；再加餐厅库存，一瓶瓶酒就成了个体；再要按年份记属性，年份成了实例，那款酒反倒升为类。
               </p>
             </article>
             <article class="ag-card">
-              <h3>限定范围（§4.7）</h3>
+              <h3>收住范围（§4.7）</h3>
               <p>
-                真的陈述也可能是范围之外的。一位实验者<em>确实</em
-                >是一个生物体，但对一个生物学实验本体来说，那个子类会给每一位实验者都挂上体重、年龄、物种槽——无关数据，也是给复用者埋的坑。论文那条指令才是重要的一半：<strong
-                  >把这类设计决定写进文档</strong
-                >，这样别人把本体复用到另一种应用上时才会知道，这条事实是被刻意排除的。
+                真命题也可能超出范围。做实验的人当然是生物体，可在实验本体里让
+                <code>Experimenter</code> 当 <code>Biological Organism</code>
+                的子类，就会给每个实验者挂上体重、年龄、物种这些槽：全是无关数据，还会坑到复用者。论文更要紧的是后半句：这类决断要写进文档，让拿本体去做别的应用的人知道，这条事实是故意不收的。
               </p>
             </article>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
-            <strong>VLSC —— 陷阱 20 在本站是一条活的不变量。</strong
-            >声明不相交，是一个模型变得可检验的方式；本站声明了若干条：发射态与接收态不相交，一个台站必须恰好处在其中之一；权威状态所有者与客户端投影不相交——这正是「客户端可以投影或请求状态，但不得悄悄变成台站权威」的形式化内容。同一手也守着证据阶梯：<em
-              >过程</em
-            >徽章（B1–B4，工程是否被约束？）与<em>产品</em
-            >徽章（设计目标 → 现场验证，行为是否为真？）被刻意声明为不相交，于是再多绿色的约束条数，也不可能被读成一次台架结果。见<a
+            <strong>VLSC：第 20 条在本站是活的不变量。</strong>声明不相交，模型才可查。本站声明了好几处：发射态与接收态不相交，台站必居其一；权威状态所有者与客户端投影不相交，这才是「客户端可以投影或请求状态，但不能悄悄变成台站权威」的形式内容。同一手也用在证据阶梯上：过程证据（B1–B4，问工程有没有约束）与产品证据（设计目标到现场验证，问行为是否为真）故意声明为不相交，于是再多绿约束也读不出一台架结果。见<a
               href="agentic.html#evidence"
               >证据纪律</a
             >。
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>VLSC —— 陷阱 10 到 12，由证据来裁决。</strong
-            >五个产品族在同一个工程体系之下互为兄弟，没有为了让树好看而凭空造出第六个归组类；而在确实存在自然中间概念的地方，就用上了——<code
-              >RadioBackend</code
-            >
+            <strong>VLSC：第 10 到 12 条由证据裁定。</strong>五个产品族在同一工程体系下互为兄弟，本站没有为了让树好看而硬造第六个分组类。确有自然的中间概念时才收：<code>RadioBackend</code>
             与 <code>RadioCapabilities</code> 把 FT-710
-            那条纵向切片概括进了 Modern 平台，这正是陷阱 11
-            被一个领域真在使用的中间范畴修好的样子。反面情形也记录在案：SunsdrMobile
-            是 SunMRRC 的<em>客户端</em
-            >，不是一个产品族；把这句话说清楚，才阻止了它旁边长出一条只有一个类的分支。
+            的垂直切片概括成 Modern 平台，这正是第 11
+            条的解法，中间层来自领域真在用的概念。反向的例子也写明：SunsdrMobile 是
+            SunMRRC 的客户端，不是产品族。把这一点说清楚，才不至于在它旁边长出一个只有一个子类的分支。
           </div>
         </div>
       </section>
@@ -1119,55 +1072,49 @@
           <header class="ag-section-header">
             <span class="ag-section-label">06 · 属性</span>
             <h2 class="ag-section-title">
-              互逆槽，以及默认值与槽值之分
+              反向槽，以及默认值与槽值之别
             </h2>
             <p class="ag-section-subtitle">
-              论文第 5 节很短，很容易被跳过。它的两个主题都关乎冗余与强制——而这两件事恰恰决定一个模型能否被机器信任。
+              论文 §5 很短，容易被跳过。它的两个主题都关乎冗余与强制，而模型能否被机器信任，正取决于这两件事。
             </p>
           </header>
           <div class="ag-loop-grid">
             <article class="ag-card" data-track="control">
-              <h3>互逆槽（§5.1）</h3>
+              <h3>反向槽（§5.1）</h3>
               <p>
                 <code>Wine</code> 上的 <code>maker</code> 与 <code>Winery</code>
-                上的 <code>produces</code>，是同一个事实说了两遍。两个方向都存是冗余的：应用总能从一个推出另一个。但从知识获取的角度看，两者都方便，因为用户可能这一次知道的是酒、另一次知道的是酒庄——于是系统自动填充互逆方向，并保持基座一致。
+                上的 <code>produces</code>，是同一件事说了两遍。两个方向都存，是冗余：应用总能从一个推出另一个。但从知识获取的角度看，两边都留着方便，因为用户这一回手里是酒，下一回手里是酒庄。于是系统自动填反向槽，让知识库保持一致。
               </p>
               <p>
-                值得留下的规则是：<strong
-                  >声明这一对，只存一次，让系统去维护那面镜子。</strong
-                >
+                值得留下的一条：<strong>成对声明，只存一侧，镜像交给系统维护。</strong>
               </p>
             </article>
             <article class="ag-card" data-track="sdr">
-              <h3>默认值 vs 槽值（§5.2）</h3>
+              <h3>默认值与槽值（§5.2）</h3>
               <p>
-                <strong>默认值</strong>是便利：当多数实例共享同一个取值时，新实例被预填，之后仍可修改。它「不会给模型强加任何新限制，也不会以任何方式改变模型」。
+                默认值是便利：多数实例共享某值时，新建实例先填上它，之后可以改。论文说，它不给模型添任何新限制，也不改变模型。
               </p>
               <p>
-                槽<strong>值</strong>是另一回事：如果 <code>sugar = SWEET</code>
-                是 <code>Dessert Wine</code> 上的一个值，那么它的每一个子类和每一个实例都带着它，而且改不了。一个是起点，另一个是约束。
+                槽值是另一回事。若 <code>Dessert Wine</code> 上
+                <code>sugar = SWEET</code> 是值，那么它的每个子类和实例都带这个值，改不得。一个是起点，一个是约束。
               </p>
             </article>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
-            <strong>VLSC —— 这个区分赔进去过一次真实事故。</strong>FT-710
-            链路上的音频采样率，曾被当成一个固定值（44.1 kHz，挂在机型上），而它其实是后端上报的一项能力。修正被记录为
-            AD-011，经 V2.9 与 V2.14 修订，并由
-            <code>audio-pyaudio-rate</code>
-            这条约束钉住：采样率来自后端能力。用论文的话来读，就是在本该放默认值——或者更好，放一次查询——的地方，声明了一个值，于是模型断言了一件硬件完全可以反驳的事。
+            <strong>VLSC：这条区分在本站花过一次事故的钱。</strong>FT-710
+            的音频采样率，本站曾当成固定值：44.1 kHz，挂在机型上。它其实是后端报告的能力。修正记录为
+            AD-011，经 V2.9 与 V2.14 两次修订，并由
+            <code>audio-pyaudio-rate</code> 这条约束钉住：采样率来自后端能力。用论文的话说，本该放默认值、或者更好放一次查询的地方，却写成了值，于是模型断言了一件硬件随时可以推翻的事。
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>VLSC —— 互逆对，以及哪一侧是权威。</strong
-            >本站有若干关系是真正互逆的：一个台站的控制租约持有者，与持有者名下的租约台站；一个
-            <code>CommandIntent</code>，与回答它的那份 <code>StateReport</code>；一条
-            🐞 上报，与把它关闭的那个答复页。那面镜子由服务端维护，从不由客户端维护——而这种不对称是一条安全不变量，不是一种便利：投影方可以显示镜像值，但只有权威方可以写它。<code
-              >CommandIntent ≠ Actuation</code
-            >
-            与 <code>Observation → StateReport</code>
-            是本体把同一句话说两遍：一条指令不是被确认的状态，只有一次观测才能闭环。ft710
-            的 <code>ptt-release-no-verify</code>
-            约束则是那个诚实的例外，并且被声明为例外——TX0
-            是发完即忘，因此既没有镜子要维护，也没有确认可以推断 [AD-007；Ch15；V1.2]。
+            <strong>VLSC：本站的反向槽，以及哪一侧才有权威。</strong>这里确有几对反向关系：台站控制租约的持有者，与持有者名下的台站；<code>CommandIntent</code>
+            与回应它的 <code>StateReport</code>；🐞
+            上报，与结案它的那张答复页。镜像一律由服务端维护，客户端不许维护。这条不对称是安全不变量，不是便利：投影可以显示镜像值，但只有权威侧能写。<code>CommandIntent
+            ≠ Actuation</code> 与 <code>Observation → StateReport</code>
+            说的其实是同一件事：命令不等于确认状态，只有观测才闭合回路。ft710 的
+            <code>ptt-release-no-verify</code>
+            是老实写明的例外：TX0 发出去就不回头，因此没有镜像可维护，也没有确认可推断
+            [AD-007; Ch15; V1.2]。
           </div>
         </div>
       </section>
@@ -1177,137 +1124,129 @@
           <header class="ag-section-header">
             <span class="ag-section-label">07 · 命名</span>
             <h2 class="ag-section-title">
-              「为类和槽定义一套命名约定，并且遵守它」
+              「为类和槽定下命名约定，然后守住它」
             </h2>
             <p class="ag-section-subtitle">
-              论文第 6 节。命名被当作一种建模安全装置来讲，不是化妆术：一致性才是防止「单数/复数类」错误的那道保险，而一套写明的约定，才让一个术语一眼就能被认出是类还是槽。
+              论文 §6。命名在这里是建模的安全装置，不是修饰：一致性正是防止单复数那类错误的手段，而写明的约定能让人一眼认出某个术语是类还是槽。
             </p>
           </header>
           <div class="ag-table-wrap">
             <table class="ag-table">
               <thead>
                 <tr>
-                  <th>决定项（101 §6）</th>
+                  <th>决断（101 §6）</th>
                   <th>论文怎么说</th>
-                  <th>VLSC 约定</th>
+                  <th>本站约定</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>先看系统约束</td>
+                  <td>先看系统的限制</td>
                   <td>
-                    围绕你的知识表示系统来选约定：类、槽、实例是共用一个命名空间还是各用各的；是否大小写敏感；哪些分隔符合法。Protégé-2000
-                    大小写敏感且只有一个命名空间，所以类 <code>Winery</code> 与槽
-                    <code>winery</code> 可以共存，但两个 <code>winery</code> 不行。
+                    约定要绕着知识表示系统来定：类、槽、实例是共用一个名字空间还是分开；是否区分大小写；哪些分隔符合法。Protégé-2000
+                    区分大小写、共用一个名字空间，所以类 <code>Winery</code>
+                    与槽 <code>winery</code> 可以并存，两个 <code>winery</code>
+                    就不行。
                   </td>
                   <td>
-                    这里的「系统」是一个仓库加一个智能体运行时：名字必须能作为标识符在代码里活下来、作为键在
+                    本站的「系统」是仓库加智能体运行时。名字要同时活得下去：在代码里当标识符，在
                     <code>harness/index.json</code>
-                    里活下来、作为检索词在约束注册表里活下来——所以用 ASCII、不留空格、大小写有意义。
+                    里当键，在约束注册表里当检索词。所以用 ASCII，不用空格，区分大小写。
                   </td>
                 </tr>
                 <tr>
                   <td>大小写</td>
                   <td>
-                    在系统大小写敏感的前提下，类名首字母大写，槽名全小写。
+                    系统区分大小写时，类名首字母大写，槽名小写。
                   </td>
                   <td>
                     类与本体术语用 PascalCase：<code>CommandIntent</code>、<code
                       >StateReport</code
                     >、<code>DeviceAdapter</code>、<code>ControlLease</code>。关系用小写：<code
                       >requests</code
-                    >、<code>changes</code>、<code>yields</code>、
-                    <code>inherits</code>、<code>consumes</code>、
-                    <code>implements</code>、<code>inspired-by</code>。
+                    >、<code>changes</code>、<code>yields</code>、<code
+                      >inherits</code
+                    >、<code>consumes</code>、<code>implements</code>、<code
+                      >inspired-by</code
+                    >。
                   </td>
                 </tr>
                 <tr>
                   <td>分隔符</td>
                   <td>
-                    空格、CamelCase，或者下划线 / 连字符——而且一旦用了分隔符，还要决定每个词是否大写。空格直观，但未必能在你要互操作的那些系统里活下来。
+                    空格、驼峰、下划线或连字符都行；用了分隔符，还得决定每个词是否大写。空格最直观，但未必经得起与其他系统打交道。
                   </td>
                   <td>
-                    约束 ID 用 kebab-case，并且读起来像一条规则而不像一个东西：<code
+                    约束 ID 用 kebab-case，读起来像一条规矩，而不像一个东西：<code
                       >cat-no-dn</code
-                    >、<code>no-direct-serial</code>、
-                    <code>poll-stale-guard</code>、<code>vendor-readonly</code>、
-                    <code>ptt-authority</code>。多词的本体关系也出于同样理由用连字符。
+                    >、<code>no-direct-serial</code>、<code>poll-stale-guard</code>、<code
+                      >vendor-readonly</code
+                    >、<code>ptt-authority</code>。多词的本体关系用连字符，同理。
                   </td>
                 </tr>
                 <tr>
                   <td>单数还是复数</td>
                   <td>
-                    两者没有谁更好；实践中单数更常见。选定一种，全篇保持——有些系统要求你事先声明这个选择。一致性也正是防止
-                    <code>Wine</code> 挂在 <code>Wines</code> 之下的那道保险。
+                    两者都不更好，实践中单数更常见。选定一种，全篇一致；有些系统还要求你事先声明，不许中途改。一致也正是防止
+                    <code>Wines</code> 底下挂 <code>Wine</code> 的办法。
                   </td>
                   <td>
-                    每个类和每个术语一律单数：<em>Product Family</em>、<em
-                      >Physical Entity</em
-                    >、<em>Information Object</em>。复数只出现在行文里，绝不出现在术语里。
+                    所有类与术语一律单数：产品族、物理实体、信息对象。复数只出现在散文里，绝不进术语。
                   </td>
                 </tr>
                 <tr>
-                  <td>前缀 / 后缀</td>
+                  <td>前后缀</td>
                   <td>
-                    在槽名上加 <code>has-</code> 或 <code>-of</code>，能让一个术语自我标明它是槽，代价是名字更长。
+                    给槽名加 <code>has-</code> 或 <code>-of</code>，术语自己就表明身份，代价是名字变长。
                   </td>
                   <td>
-                    不用：动词形式的关系（<code>requests</code>、<code>yields</code
-                    >）对着 PascalCase 的类名已经毫无歧义，再加前缀就是噪声。
+                    不用。动词形式的关系（<code>requests</code>、<code
+                      >yields</code
+                    >）对上 PascalCase
+                    的类，本来就不会认错，再加前缀只是噪音。
                   </td>
                 </tr>
                 <tr>
                   <td>不要把种类写进名字</td>
                   <td>
-                    绝不要在概念名上加「class」「property」或「slot」——上下文和约定已经说明了它是什么。
+                    概念名里不要加「class」「property」「slot」这类字。上下文和约定已经说明了它是什么。
                   </td>
                   <td>
-                    照办。唯一一处刻意的例外是证据阶梯：徽章文字自带种类（<em
-                      >Field verified</em
-                    >、<em>Bench pending</em
-                    >），因为徽章是脱离上下文被读的，出现在表格和发布说明里。
+                    照办。唯一有意破例的是证据阶梯：徽章文字自带种类（现场验证、台架待验证），因为徽章会脱离上下文出现在表格和发布说明里。
                   </td>
                 </tr>
                 <tr>
                   <td>避免缩写</td>
                   <td>
-                    「用 <code>Cabernet Sauvignon</code>，而不是
+                    「用 <code>Cabernet Sauvignon</code>，不用
                     <code>Cab</code>。」
                   </td>
                   <td>
-                    照办，但有一句诚实的但书：电台领域的受控词汇<em
-                      >本身就是</em
-                    >缩写——PTT、CAT、SWR、IQ、EFHW、QSO、VFO、DNR。这些是术语，不是偷懒的简写，双语术语表里带着它们的展开形式。真正适用的那条规则是：<strong
-                      >不许自造缩写</strong
-                    >。
+                    照办，但有一处要老实交代：无线电领域的受控词汇本身就是缩写，PTT、CAT、SWR、IQ、EFHW、QSO、VFO、DNR。这些是术语，不是简写，双语术语表里给出全称。真正适用的规则是：<strong>不许自造缩写</strong>。
                   </td>
                 </tr>
                 <tr>
-                  <td>子类命名</td>
+                  <td>子类怎么命名</td>
                   <td>
-                    一组直接子类，要么全都带上父类名，要么全都不带：<code>Red Wine</code>
+                    直接子类要么都带父类的名字，要么都不带：<code>Red Wine</code>
                     与 <code>White Wine</code>，或者 <code>Red</code> 与
-                    <code>White</code>——绝不能一个带一个不带。
+                    <code>White</code>，不能一边带一边不带。
                   </td>
                   <td>
-                    产品名跟着自己的产品族走：<em>MRRC Universal</em>、<em
-                      >MRRC FT-710</em
-                    >、<em>MRRC Modern</em>、<em>MRRC-FT8</em
-                    >——族名标记在每一个产品名里都在场；而 <em>SunMRRC</em>
-                    保留自己的词根，因为它是一条不同的轨道，不是一个子类。
+                    产品名跟着族走：MRRC Universal、MRRC FT-710、MRRC Modern、MRRC-FT8，族标记都在。SunMRRC
+                    保留自己的词根，因为它是另一条轨道上的东西，不是子类。
                   </td>
                 </tr>
                 <tr>
                   <td>同义词与译名</td>
                   <td>
-                    许多系统允许给一个类挂上一份同义词、译名或展示名清单；不支持的系统，就把它们写进类的文档里。§4.1、§6
+                    许多系统允许给一个类挂一串同义词、译名或展示名；系统不支持，就写进类的文档。§4.1、§6
                   </td>
                   <td>
-                    双语术语表就是这份清单，而且是公开的那份：控制意图 /
-                    <code>CommandIntent</code>、执行活动 /
-                    <code>Actuation</code>、观测活动 /
-                    <code>Observation</code>、现场验证 / <em>Field verified</em
-                    >。两个名字，一个概念——绝不是两个概念。
+                    双语术语表就是这份清单，而且是公开的：控制意图
+                    <code>CommandIntent</code>，执行活动 <code>Actuation</code>，观测活动
+                    <code>Observation</code>，现场验证 <em>Field
+                    verified</em>。两个名字，一个概念；绝不做成两个概念。
                   </td>
                 </tr>
               </tbody>
@@ -1321,10 +1260,10 @@
           <header class="ag-section-header">
             <span class="ag-section-label">08 · 检查清单</span>
             <h2 class="ag-section-title">
-              整份指南，压成 24 条检查
+              整份指南压成 24 条
             </h2>
             <p class="ag-section-subtitle">
-              写下来的目的，是让审查模型的人能照着逐条跑一遍，也能把它当作一次本体变更的验收清单交给智能体。每一条都能追到论文的某一节。
+              写成人能拿它审模型、智能体能拿它当本体变更验收单的样子。每一条都注了论文出处。
             </p>
           </header>
           <div class="ag-plane-grid">
@@ -1333,77 +1272,57 @@
               <ol start="1">
                 <li>
                   <span
-                    ><strong>把四个范围问题写下来。</strong><br />领域、预期用途、要回答的问题、谁来维护——并且注上日期，因为它们会变。<code
-                      >§3 Step 1</code
-                    ></span
+                    ><strong>把四个范围问题写下来。</strong><br />领域、用途、要回答的问题、谁维护，并标上日期，因为答案会变。<code>§3 Step 1</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>勾画能力问题。</strong><br />它们是后面一切产出的试金石，而且不必穷尽。<code
-                      >§3 Step 1</code
-                    ></span
+                    ><strong>起草能力问题。</strong><br />它是后面一切的试金石，不必穷尽。<code>§3 Step 1</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>先去找已经存在的东西。</strong><br />记下你采纳了什么、只参考了什么、以及被迫承诺了什么。<code
-                      >§3 Step 2</code
-                    ></span
+                    ><strong>先查一遍现成的。</strong><br />记下你采纳了什么、只参考了什么、又被迫认定了什么。<code>§3 Step 2</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>先列举术语，再分拣。</strong><br />清单先求全；类还是槽，留到后面再定。<code
-                      >§3 Step 3</code
-                    ></span
+                    ><strong>先列全术语，再分拣。</strong><br />算类还是算槽，留到后面定。<code>§3 Step 3</code></span
                   >
                 </li>
               </ol>
             </article>
             <article class="ag-card">
-              <h3>B · 搭建层级</h3>
+              <h3>B · 搭层级</h3>
               <ol start="5">
                 <li>
                   <span
-                    ><strong>刻意选定一条路线。</strong><br />自顶向下、自底向上，或者组合——最后一种通常最省事，因为中间层概念最具描述性。<code
-                      >§3 Step 4</code
-                    ></span
+                    ><strong>明确选定一种建树方向。</strong><br />自顶向下、自底向上，或混合。混合通常最省事，因为中间层的概念最能描述领域。<code>§3 Step 4</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>以「独立存在性」为锚。</strong><br />要那些指称对象的术语，不要那些描述对象的术语。<code
-                      >§3 Step 4</code
-                    ></span
+                    ><strong>用独立存在的对象当锚点。</strong><br />要指称对象的术语，不要描述对象的术语。<code>§3 Step 4</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>对每一对类都跑一遍 is-a 检验。</strong><br />子类的每一个实例，必然也是父类的实例。<code
-                      >§4.1</code
-                    ></span
+                    ><strong>每对父子都过一遍 is-a 检验。</strong><br />子类的每个实例，必然也是父类的实例。<code>§4.1</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>让兄弟类处在同一概括层级。</strong><br />根层的类豁免：它们是大的分野。<code
-                      >§4.2</code
-                    ></span
+                    ><strong>兄弟保持在同一概括层级。</strong><br />根上的类除外，它们是领域的大分野。<code>§4.2</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>子类数在两个到一打之间。</strong><br />只有一个是一种坏味道；超过一打就该要一个中间范畴——但绝不能是凭空造出来的那种。<code
-                      >§4.2</code
-                    ></span
+                    ><strong>子类两个到一打。</strong><br />只有一个说明有问题，超过一打就该找中间层，但绝不硬造。<code>§4.2</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>不许成环，不许把同义词做成类。</strong><br />环等于宣布等价；同义词只是同一概念的另一个名字。<code
-                      >§4.1</code
-                    ></span
+                    ><strong>不许有环，不许把同义词建成类。</strong><br />环等于宣告两类等价；同义词只是同一概念的另一个名字。<code>§4.1</code></span
                   >
                 </li>
               </ol>
@@ -1413,40 +1332,28 @@
               <ol start="11">
                 <li>
                   <span
-                    ><strong>把每个槽挂到它站得住的最高处。</strong><br />也就是能够拥有该属性的最概括的类。<code
-                      >§3 Step 5</code
-                    ></span
+                    ><strong>槽尽量挂高，但要说得过去。</strong><br />挂在能有该属性的最概括的那个类上。<code>§3 Step 5</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>给每一项属性归类。</strong><br />内在属性、外在属性、组成部分，还是与另一个个体的关系。<code
-                      >§3 Step 5</code
-                    ></span
+                    ><strong>给每个属性归类。</strong><br />内在、外在、部件，还是与其他个体的关系。<code>§3 Step 5</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>声明基数与值类型。</strong><br />包括最小值、最大值，以及那个合法的最大值 0。<code
-                      >§3 Step 6</code
-                    ></span
+                    ><strong>声明基数与值类型。</strong><br />下限、上限都写；上限为 0 也是合法声明。<code>§3 Step 6</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong
-                      >定义域与值域要取得概括——但不要
-                      <code>THING</code>。</strong
-                    ><br />定义域里的每个类都必须能被这个槽描述；值域里的每个类都必须是潜在的填充者。<code
-                      >§3 Step 6</code
-                    ></span
+                    ><strong>定义域和值域取概括的，但别到
+                    <code>THING</code>。</strong><br />定义域里的每个类，这个槽都真能描述；值域里的每个类都是潜在填料。<code>§3 Step 6</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>修剪定义域与值域清单。</strong><br />父类已在清单里时删掉子类；枚举完整时收拢成父类；只差几个子类没列全时，重新考虑父类。<code
-                      >§3 Step 6</code
-                    ></span
+                    ><strong>修剪定义域与值域清单。</strong><br />父子同现删子；子类列全了就换成父类；只差几个子类时，也想想父类是不是更合适。<code>§3 Step 6</code></span
                   >
                 </li>
               </ol>
@@ -1456,30 +1363,22 @@
               <ol start="16">
                 <li>
                   <span
-                    ><strong>只有当新类有新话可说时才引入它。</strong><br />新属性、不同限制，或者不同关系。<code
-                      >§4.4</code
-                    ></span
+                    ><strong>无话可说就不立新类。</strong><br />要有新属性、新限制，或者新的关系。<code>§4.4</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>默认把区分留在槽值里。</strong><br />当这些取值在别处变成限制，或者领域把它们当作不同种类的东西时，才升格为类。<code
-                      >§4.5</code
-                    ></span
+                    ><strong>区分默认留在槽值里。</strong><br />除非这些取值会成为别处的限制，或者领域把它们看成不同种类的对象。<code>§4.5</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>不要做那种实例会来回迁移的类。</strong><br />冰镇过的酒是一项属性，不是一个分类单元。<code
-                      >§4.5</code
-                    ></span
+                    ><strong>实例会迁进迁出的，不要建成类。</strong><br />冰镇过的酒是属性，不是分类。<code>§4.5</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>粒度由能力问题来定。</strong><br />并且把自然层级升格为类——没有直接实例的那些标为抽象类。<code
-                      >§4.6</code
-                    ></span
+                    ><strong>粒度由能力问题定。</strong><br />构成自然层级的概念升为类；没有直接实例的，标成抽象类。<code>§4.6</code></span
                   >
                 </li>
               </ol>
@@ -1489,23 +1388,17 @@
               <ol start="20">
                 <li>
                   <span
-                    ><strong>把约定写下来，然后照着做。</strong><br />大小写、分隔符、单数还是复数——围绕你真正身处其中的那个系统来选。<code
-                      >§6</code
-                    ></span
+                    ><strong>约定写下来，然后守住。</strong><br />大小写、分隔符、单复数，都要绕着你实际所在的系统来定。<code>§6</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>不许自造缩写，不许把种类写进名字。</strong><br />并且子类名要么全带父类名，要么全都不带。<code
-                      >§6.2–§6.4</code
-                    ></span
+                    ><strong>不自造缩写，不把种类写进名字。</strong><br />子类命名要么都带父类名，要么都不带。<code>§6.2–§6.4</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>一个概念，多个名字。</strong><br />同义词与译名挂在类上；它们绝不变成兄弟类。<code
-                      >§4.1, §6</code
-                    ></span
+                    ><strong>一个概念，多个名字。</strong><br />同义词和译名挂到类上，绝不升格为兄弟类。<code>§4.1、§6</code></span
                   >
                 </li>
               </ol>
@@ -1515,16 +1408,12 @@
               <ol start="23">
                 <li>
                   <span
-                    ><strong>记下你排除了什么，以及为什么。</strong><br />实验者是一个生物体；这个本体偏说不是——是刻意的，那么文档就必须写明，否则复用者会被误导。<code
-                      >§4.7</code
-                    ></span
+                    ><strong>排除了什么、为什么，写进文档。</strong><br />做实验的人当然是生物体，可这个本体故意不这么建。不写下来，复用者就会被误导。<code>§4.7</code></span
                   >
                 </li>
                 <li>
                   <span
-                    ><strong>声明不相交，然后去用这个模型。</strong><br />凡是两个类不可能共享实例，就把它说出来——这才是让工具抓得住错误的前提。然后用论文允许的唯一方式评估质量：拿它去用。<code
-                      >§4.8, §8</code
-                    ></span
+                    ><strong>声明不相交，然后拿去用。</strong><br />不可能共享实例的类要说清楚，工具才拦得住错误。剩下的评法只有一条：用。<code>§4.8、§8</code></span
                   >
                 </li>
               </ol>
@@ -1536,13 +1425,13 @@
       <section class="ag-section" id="mapping">
         <div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">09 · 审计</span>
+            <span class="ag-section-label">09 · 本站审计</span>
             <h2 class="ag-section-title">
-              七个步骤，对着一个活体本体审计
+              七个步骤，逐条对着活体本体审
             </h2>
             <p class="ag-section-subtitle">
-              论文要什么、本站有什么，以及——因为一份只列成绩的审计就是广告——缺什么。普查
-              2026-09-12；每一行都点名工件，好让它可被核查。
+              论文要什么，本站有什么，以及本站缺什么。只列成功项的审计等于广告，所以缺口一栏照写。普查日期
+              2026-09-12；工件都点了名，每一行都可查。
             </p>
           </header>
           <div class="ag-table-wrap">
@@ -1550,9 +1439,9 @@
               <thead>
                 <tr>
                   <th>步骤</th>
-                  <th>是否具备</th>
+                  <th>有没有</th>
                   <th>锚点</th>
-                  <th>缺口 / 局限</th>
+                  <th>缺口与局限</th>
                 </tr>
               </thead>
               <tbody>
@@ -1560,134 +1449,128 @@
                   <td><strong>1</strong> 范围与能力问题</td>
                   <td>有</td>
                   <td>
-                    12 个已发布的能力问题；五份产品族 Profile；范围按族陈述在<a
+                    12 个能力问题已公开；5 份产品族 Profile；范围逐族写明，见<a
                       href="agentic.html#families"
                       >产品族</a
-                    >一节
+                    >
                   </td>
                   <td>
-                    这些问题是散文，不是可执行的：其中某一条变得无法回答时，不会有任何构建因此失败。
+                    这些问题是散文，不可执行：某个问题变得答不上来时，没有任何构建会失败。
                   </td>
                 </tr>
                 <tr>
                   <td><strong>2</strong> 复用</td>
-                  <td>有，概念层面</td>
+                  <td>有，但只在概念层</td>
                   <td>
                     W3C SOSA/SSN、PROV-O、OWL-Time、SKOS、WoT TD；ETSI SAREF 与
-                    QUDT；Hamlib 词汇——一次被迫的承诺
+                    QUDT；Hamlib 词汇属于被迫认定
                   </td>
                   <td>
-                    没有形式化导入：运行时不从那些命名空间加载任何东西，所以这层对齐是一份靠人手维护的主张。
+                    没有形式化导入：运行时不从这些名字空间加载任何东西，所以这层对齐全靠人工维护。
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>3</strong> 术语列举</td>
+                  <td><strong>3</strong> 术语枚举</td>
                   <td>有</td>
-                  <td>双语核心术语表，12 对术语，发布在附录里</td>
+                  <td>双语核心术语表，12 组对照，公开在附录</td>
                   <td>
-                    除英中这一对之外没有同义词清单；电台领域的别名（CAT
-                    与 rig control、PTT 与 transmit
-                    trigger）没有被作为已声明的同义词承载。
+                    除中英对照外没有同义词表。无线电领域的别名，比如 CAT 与 rig
+                    control、PTT 与发射触发，没有作为同义词声明。
                   </td>
                 </tr>
                 <tr>
                   <td><strong>4</strong> 类与层级</td>
-                  <td>有，刻意做浅</td>
+                  <td>有，而且刻意浅</td>
                   <td>
-                    八个顶层类；产品族互为兄弟；<code>RadioBackend</code> /
-                    <code>RadioCapabilities</code> 是唯一挣来的那一层中间层
+                    八个顶层类；五个产品族互为兄弟；唯一挣来的中间层是
+                    <code>RadioBackend</code> 与 <code>RadioCapabilities</code>
                   </td>
                   <td>
-                    深度最多到顶层之下两级。这是一个范围决定，不是意外——但它意味着
-                    is-a 检验很少受到真正的压力检验。
+                    顶层往下最多两级。这是范围决断，不是疏忽，但也就意味着 is-a
+                    检验很少受到压力。
                   </td>
                 </tr>
                 <tr>
                   <td><strong>5</strong> 槽</td>
                   <td>有</td>
                   <td>
-                    <code>requests</code>、<code>changes</code>、
-                    <code>yields</code>、<code>sampled-as</code>、
-                    <code>framed-as</code>；族间关系
-                    <code>inherits</code> / <code>consumes</code> /
-                    <code>implements</code> / <code>inspired-by</code>
+                    <code>requests</code>、<code>changes</code>、<code
+                      >yields</code
+                    >、<code>sampled-as</code>、<code>framed-as</code>；族间关系
+                    <code>inherits</code>、<code>consumes</code>、<code
+                      >implements</code
+                    >、<code>inspired-by</code>
                   </td>
                   <td>
-                    关系被记录在散文和 SVG
-                    图里，而不是在一个工具可以遍历的 schema 里。
+                    关系写在散文和 SVG 图里，没有工具能遍历的 schema。
                   </td>
                 </tr>
                 <tr>
                   <td><strong>6</strong> 槽面</td>
-                  <td>部分具备——而且在要紧的地方比散文更强</td>
+                  <td>部分有，而在要紧处比散文更强</td>
                   <td>
-                    三个仓库共 52 条机器可读约束，每条都带 severity（<code
-                      >block</code
-                    >
-                    / <code>warn</code> / <code>info</code>）、<code>sdd_ref</code>、<code
+                    三个仓库共 52 条机器可读约束，各带 severity（<code>block</code>
+                    ／<code>warn</code>／<code>info</code>）、<code>sdd_ref</code>、<code
                       >scope</code
                     >
-                    glob 与 <code>patterns</code>；基数以不变量的形式存在（一个权威状态所有者、一个串口所有者）
+                    通配与 <code>patterns</code>；基数以不变量形式出现：权威状态所有者唯一，串口所有者唯一
                   </td>
                   <td>
-                    这些是施加在<em>代码</em>上的强制槽面，不是声明在本体槽上的槽面。关系的定义域与值域从未被形式化陈述过。
+                    这些是加在<em>代码</em>上的强制槽面，不是声明在本体槽上的槽面。关系的定义域与值域从未形式化写过。
                   </td>
                 </tr>
                 <tr>
                   <td><strong>7</strong> 实例</td>
                   <td>有</td>
                   <td>
-                    电台 Profile（FT-710、IC-7300、IC-7300MK2）；带日期的证据记录；在公开看板上被分类的
+                    电台 Profile（FT-710、IC-7300、IC-7300MK2）；带日期的证据记录；公开看板上分了类的
                     🐞 上报
                   </td>
                   <td>
-                    实例分散在三个地方（代码里的 Profile、发布说明、看板），彼此之间没有共享的身份方案。
+                    实例散在三处：代码里的 Profile、发布说明、看板。没有共用的标识方案。
                   </td>
                 </tr>
                 <tr>
                   <td><strong>§4.8</strong> 不相交</td>
-                  <td>只在散文里</td>
+                  <td>写在散文里</td>
                   <td>
-                    发射态与接收态；权威所有者与客户端投影；过程证据（B1–B4）与产品证据（设计目标
-                    → 现场验证）
+                    发射态与接收态；权威所有者与客户端投影；过程证据 B1–B4
+                    与产品证据（设计目标到现场验证）
                   </td>
                   <td>
-                    没有机器可读的声明，因此没有工具能标出违规——这项检查是人去读那些不变量。
+                    没有机器可读的声明，工具拦不住违规，检查靠人读不变量。
                   </td>
                 </tr>
                 <tr>
                   <td><strong>§6</strong> 命名</td>
                   <td>有</td>
                   <td>
-                    术语 PascalCase、关系小写、约束 ID kebab-case、类名单数、双语对照已发布
+                    术语 PascalCase，关系小写，约束 ID kebab-case，类名单数，双语对照公开
                   </td>
                   <td>
-                    这套约定可被观察，但没有成文：它活在工件里，不在一份智能体能加载的风格文档里。
+                    约定看得见，却没写下来：它活在工件里，不在智能体能加载的风格文档里。
                   </td>
                 </tr>
                 <tr>
-                  <td><strong>§8</strong> 以使用来评估</td>
-                  <td>有——比论文更强</td>
+                  <td><strong>§8</strong> 以用评优</td>
+                  <td>有，而且比论文更强</td>
                   <td>
-                    一套语义，三方消费：智能体上下文、<code
+                    一套语义三方消费：智能体上下文、<code
                       >PreToolUse(Edit|Write)</code
                     >
-                    门禁、人工审查；一条可复现的阻断轨迹（<code
-                      >sdd_context.py check</code
-                    >
-                    → exit 2）
+                    门禁、人工审查；阻断可复现（<code>sdd_context.py check</code>
+                    退出码 2）
                   </td>
                   <td>
-                    使用的度量是被阻断的编辑数，不是被回答的能力问题数。第 1
-                    步的那块试金石，仍然是手动的。
+                    统计的是被拦下的编辑，不是被回答的能力问题。第 1
+                    步那块试金石，至今靠人。
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
-            <strong>诚实的总结。</strong
-            >这个本体恰好强在论文沉默的地方——运行时消费、强制执行、溯源——也恰好弱在论文强的地方：形式化的定义域与值域、已声明的不相交、成文的命名约定、可执行的能力问题。两半谁也抵不掉谁。一个智能体要加载、却无法被推理的本体，和一个推理得很漂亮却没人消费的本体，是两种不同的失败。
+            <strong>老实的结论。</strong>本站本体强在论文沉默之处：运行时消费、强制、溯源；弱在论文着力之处：形式的定义域与值域、声明出来的不相交、写成文的命名约定、可执行的能力问题。两半互不抵消。智能体能加载、却推理不动的本体，是一种失败；推理得很漂亮、却没人消费的本体，是另一种失败。
           </div>
         </div>
       </section>
@@ -1696,101 +1579,98 @@
         <div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">10 · 边界</span>
-            <h2 class="ag-section-title">101 止步之处——以及智能体补上了什么</h2>
+            <h2 class="ag-section-title">101 止步之处，以及智能体补上了什么</h2>
             <p class="ag-section-subtitle">
-              在 2026 年读一份 2001
-              年的指南，需要先把它的取景框说出来。这些都不是批评；论文自己说它是一个「起点」，而它至今仍是最清楚的那个起点。
+              2026 年读一份 2001
+              年的指南，得先说清它是站在什么位置写的。以下都不是批评。论文自称是「起点」，而它至今仍是最清楚的那个起点。
             </p>
           </header>
           <div class="ag-term-grid">
             <article class="ag-card">
-              <h3>除了「用」之外没有度量</h3>
+              <h3>除了「用」，没有度量</h3>
               <p>
-                质量的评估方式，是把本体用到当初为它设计的那个应用里——「布丁好不好，吃了才知道」（§8）。被点名的工具只有
-                Chimaera，用来查逻辑正确性与常见设计错误。没有成本模型，没有覆盖度指标，没有回归这个概念。
+                本体好不好，论文只给一个评法：拿它去用，用到当初为它设计的那些应用里（§8）。点名的工具只有
+                Chimaera，用来查逻辑正确性和常见设计错误。没有成本模型，没有覆盖度指标，也没有回归这个概念。
               </p>
             </article>
             <article class="ag-card">
-              <h3>没有时间维度上的治理</h3>
+              <h3>时间维度上没有治理</h3>
               <p>
-                演化只出现过一次，还是作为白 Zinfandel
-                的一则轶事（§4.1）。没有版本管理，没有所有权，没有裁决流程，也没有交代谁可以改一个类、凭什么证据改。
+                演化只出现过一次，还是白 Zinfandel
+                的那则轶事（§4.1）。没有版本管理，没有所有权，没有裁决流程，也没交代谁可以改一个类、凭什么证据改。
               </p>
             </article>
             <article class="ag-card">
-              <h3>没有对抗性的消费者</h3>
+              <h3>没有会反抗的消费者</h3>
               <p>
-                它设想的消费者，是那些读取模型的应用与基于知识的系统。论文从未考虑一种能<em
-                  >编辑代码库</em
-                >的消费者——而正是这种消费者，把一个本体从文档变成了一道门禁。
+                论文设想的消费者是应用和基于知识的系统，它们读模型。它从未设想一种能<em>改代码库</em>的消费者。而恰恰是这种消费者，把本体从文档变成了门禁。
               </p>
             </article>
             <article class="ag-card">
               <h3>框架系统，不是语义网</h3>
               <p>
-                槽挂在类上；默认值存在；RDF 与 DAML 被点名为正在成形的工作。换成 OWL 2
-                来读，差别是种类上的：属性是全局的、带已声明的定义域与值域，开放世界假设成立，而且根本没有默认值这回事。
+                槽挂在类上，默认值存在，RDF 与 DAML
+                在文中还只是正在成形的工作。换成 OWL 2
+                来读，差别是种类上的：属性是全局的，带已声明的定义域与值域，开放世界假设成立，而且根本没有默认值这回事。
               </p>
             </article>
             <article class="ag-card">
               <h3>没有责任</h3>
               <p>
-                整份指南没有一处问：模型错了谁来负责，谁有权批准依据它采取的行动，一个决定又怎样被追回到做出它的那个人。
+                整份指南没有一处问：模型错了谁负责，谁有权批准依据它采取的行动，一个决定怎样追回做出它的那个人。
               </p>
             </article>
             <article class="ag-card">
               <h3>谈节点，不谈边</h3>
               <p>
-                101 是一门让<em>节点</em
-                >有意义的纪律。它没有处理节点之间那些链接的质量——而恰恰是这个变量，决定了一张由模型、工具与人组成的网络是在复利累积，还是只在放大噪声。
+                101 管的是把节点做出含义。它不涉及节点之间那些链接的质量，而恰恰是链接质量决定了一网模型、工具和人会复利，还是只会放大噪音。
               </p>
             </article>
           </div>
 
-          <h3 style="margin-top: 2.5rem">智能体场景补上了什么</h3>
+          <h3 style="margin-top: 2.5rem">智能体的设定补上了什么</h3>
           <div class="ag-plane-grid">
             <article class="ag-card">
-              <h3>本体变成运行时上下文</h3>
+              <h3>本体成为运行时上下文</h3>
               <p>
-                在第一次编辑之前就被加载，而不是等问题冒出来之后才被翻查——<code
+                智能体动手之前就加载它，而不是等出了问题再去查。<code
                   >AGENTS.md</code
-                >、活体 SDD，以及一份不装内容、只装路由的索引，好让引用永远不会过期。
+                >、活体 SDD，加上一份不存内容的路由索引；索引不存内容，引用因此永不过时。
               </p>
             </article>
             <article class="ag-card">
-              <h3>槽面变成可强制的</h3>
+              <h3>槽面变得可强制</h3>
               <p>
                 severity、<code>sdd_ref</code>、<code>scope</code> 与
-                <code>patterns</code>
-                把一条建模规则变成一个 <code>PreToolUse</code>
-                钩子，能在编辑落地之前拒绝它，并以一个非零退出码作为回执。
+                <code>patterns</code>，把一条建模规矩变成
+                <code>PreToolUse</code>
+                钩子，在编辑落盘之前就能拒绝它，退出码非零就是回执。
               </p>
             </article>
             <article class="ag-card">
-              <h3>溯源变成必填项</h3>
+              <h3>溯源成为硬要求</h3>
               <p>
-                每一条主张都带来源、版本、环境、方法、结果、日期与限制——而且证据是被快照的，不是被累积的，因为一个没有截止时间的数字，只是一条带小数点的谣言。
+                每项主张都带来源、版本、环境、方法、结果、日期与局限。证据只能快照，不能累积：没有截止时间的数字不是测量，是带小数点的传闻。
               </p>
             </article>
             <article class="ag-card">
-              <h3>事故变成公理</h3>
+              <h3>事故升格为公理</h3>
               <p>
-                论文那个迭代循环有了一个具体的驱动力：一次现场事故变成一条 SDD
-                裁决，裁决变成一条机器可读约束，约束阻止它被重新引入。事故只有变成护栏才算修好。
+                论文的迭代回路在这里有了具体动力：现场事故变成 SDD
+                裁决，裁决变成机器可读约束，约束拦住事故重来。事故只有变成护栏才算修好。
               </p>
             </article>
             <article class="ag-card">
-              <h3>能力图旁边多了一张责任图</h3>
+              <h3>能力图旁边放一张责任图</h3>
               <p>
-                对每一条让某个东西得以行动的链接：谁供的数据、谁选的目标、谁授权了行动、谁观察了后果、谁能把它停下来。只有当能力链接与责任链接一起生长时，递归式改进才是可持续的。
+                每条让某物得以行动的链接，五个问题都要有具名答案：谁供的数据，谁选的目标，谁授权了行动，谁观察了后果，谁能把它停下来。能力链接与责任链接同步增长，递归式改进才可持续。
               </p>
             </article>
             <article class="ag-card">
-              <h3>边的质量是一门姊妹纪律</h3>
+              <h3>边质量是姊妹学科</h3>
               <p>
-                六个属性——语义清晰、溯源可追、反馈闭环、权限有界、故障隔离、目标可审查——正是
-                101 的节点纪律需要在节点之间的链接上补齐的东西。见<a
-                  href="agentic.html#connections"
+                六个属性：语义清晰、来源可追、反馈闭环、权限有界、故障隔离、目标可审查。这是
+                101 的节点纪律在链接上的对应物。见<a href="agentic.html#connections"
                   >连接质量</a
                 >。
               </p>
@@ -1810,10 +1690,12 @@
               for which we designed it.
             </p>
             <p class="ba-quote-trans" lang="zh">
-              <span class="ba-quote-by">101 §8</span> —
-              「任何领域都不存在唯一正确的本体。本体设计是一种创造性过程，不同的人设计出的两个本体不会相同。『布丁好不好，吃了才知道』——我们只有在把本体用于当初为它设计的那些应用时，才能评估它的质量。」而在
-              2026
-              年，这个「应用」里包含一种会读模型、会改代码、并且可能被模型拒绝的消费者。
+              任何领域都不存在唯一正确的本体。本体设计是创造性的工作，两个人设计出的本体不会相同。布丁好不好，吃了才知道：本体质量只能靠拿它去用，用到当初为它设计的那些应用里去，才评得出来。<span
+                class="ba-quote-by"
+                >101 §8</span
+              >
+              而在 2026
+              年，那个应用里多了一个消费者：它读模型，改代码，而且可能被模型拒绝。
             </p>
             <span class="ba-quote-cite">Noy &amp; McGuinness 2001, §8</span>
           </blockquote>
@@ -1824,119 +1706,99 @@
         <div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">11 · 参考</span>
-            <h2 class="ag-section-title">出处，以及下一步读什么</h2>
+            <h2 class="ag-section-title">出处，以及往下读什么</h2>
           </header>
           <div class="ag-loop-grid">
             <article class="ag-card">
-              <h3>论文及其谱系</h3>
+              <h3>论文及其血缘</h3>
               <ul>
                 <li>
                   <a
                     href="https://protege.stanford.edu/publications/ontology_development/ontology101.pdf"
                     target="_blank"
                     rel="noopener"
-                    >Noy 与 McGuinness，<em>Ontology Development 101</em>
-                    （2001）</a
-                  >
-                  —— 本页每一处 <code>101 §x</code> 引用的出处。
+                    >Noy 与 McGuinness《Ontology Development 101》（2001）</a
+                  >——本页所有 <code>101 §x</code> 引用的出处。
                 </li>
-                <li>Gruber（1993）—— 把本体定义为一份显式规约。</li>
+                <li>Gruber（1993）：本体是显式的规格说明，这个定义由此而来。</li>
                 <li>
-                  Gruninger 与 Fox（1995）—— 能力问题既是划定范围的手段，也是试金石。
+                  Gruninger 与 Fox（1995）：能力问题，既用来圈范围，也用来当试金石。
                 </li>
                 <li>
-                  Uschold 与 Gruninger（1996）；Gómez-Pérez（1998）——
-                  论文指向的其他方法论。
+                  Uschold 与 Gruninger（1996）、Gómez-Pérez（1998）：论文指出的另几家方法论。
                 </li>
                 <li>
-                  McGuinness 等（2000），<em>Chimaera</em> ——
-                  针对逻辑正确性与常见设计错误的诊断工具。
+                  McGuinness 等（2000），Chimaera：查逻辑正确性与常见设计错误的诊断工具。
                 </li>
                 <li>
-                  Brachman 等（1991），CLASSIC ——
-                  葡萄酒与食物那个示例的来源；Rosch（1978）—— 概括层级。
+                  Brachman 等（1991），CLASSIC：葡萄酒与餐食这个示例的来处；Rosch（1978）：概括层级。
                 </li>
                 <li>
-                  Duineveld 等（2000），<em>WonderTools?</em> ——
-                  一项本体工程工具的对比研究。
+                  Duineveld 等（2000），WonderTools?：本体工程工具的比较研究。
                 </li>
               </ul>
             </article>
             <article class="ag-card">
-              <h3>参考过的标准（概念层面的复用）</h3>
+              <h3>参照过的标准（只在概念层复用）</h3>
               <ul>
                 <li>
                   <a href="https://www.w3.org/TR/vocab-ssn/" target="_blank" rel="noopener"
                     >W3C SOSA/SSN</a
-                  >
-                  —— 观测、传感器、执行。
+                  >——观测、传感器、执行活动。
                 </li>
                 <li>
                   <a href="https://www.w3.org/TR/prov-o/" target="_blank" rel="noopener"
                     >W3C PROV-O</a
-                  >
-                  —— 证据记录的溯源字段。
+                  >——证据记录的溯源字段。
                 </li>
                 <li>
                   <a href="https://www.w3.org/TR/owl-time/" target="_blank" rel="noopener"
                     >W3C Time Ontology</a
-                  >
-                  —— 时刻、时间区间、带时间的工作流。
+                  >——时刻、区间、定时工作流。
                 </li>
                 <li>
                   <a href="https://www.w3.org/TR/skos-reference/" target="_blank" rel="noopener"
                     >W3C SKOS</a
-                  >
-                  —— 双语概念模式。
+                  >——双语概念的写法。
                 </li>
                 <li>
                   <a href="https://www.w3.org/TR/owl2-overview/" target="_blank" rel="noopener"
                     >W3C OWL 2 Overview</a
-                  >
-                  —— 以属性为中心的另一套取景框；在本站不是运行时要求。
+                  >——以属性为中心的另一种取景，本站不把它当运行时要求。
                 </li>
                 <li>
                   <a href="https://www.w3.org/TR/wot-thing-description11/" target="_blank" rel="noopener"
                     >W3C Web of Things Thing Description</a
-                  >、
-                  <a href="https://saref.etsi.org/" target="_blank" rel="noopener"
+                  >、<a href="https://saref.etsi.org/" target="_blank" rel="noopener"
                     >ETSI SAREF</a
-                  >、
-                  <a href="https://www.qudt.org/" target="_blank" rel="noopener"
+                  >、<a href="https://www.qudt.org/" target="_blank" rel="noopener"
                     >QUDT</a
-                  >
-                  —— 设备、功能、物理量与单位。
+                  >——设备、功能、量与单位。
                 </li>
               </ul>
             </article>
             <article class="ag-card">
-              <h3>本站相关</h3>
+              <h3>本站相关页面</h3>
               <ul>
                 <li>
-                  <a href="agentic.html#ontology">Agentic · 领域本体</a> ——
-                  本页审计的那个活体模型。
+                  <a href="agentic.html#ontology">Agentic · 领域本体</a>——本页审计的那个活体模型。
                 </li>
                 <li>
-                  <a href="agentic.html#connections">Agentic · 连接质量</a>
-                  —— 边上的那门姊妹纪律。
+                  <a href="agentic.html#connections">Agentic · 连接质量</a>——边上的姊妹学科。
                 </li>
                 <li>
-                  <a href="agentic.html#evidence">Agentic · 证据纪律</a>
-                  —— 能力问题、两条阶梯、那本台账。
+                  <a href="agentic.html#evidence">Agentic · 证据纪律</a>——能力问题、两条阶梯、账本。
                 </li>
                 <li>
-                  <a href="engineering.html">工程机制</a> —— harness、循环、活体
-                  SDD。
+                  <a href="engineering.html">工程机制</a>——Harness、循环、活体 SDD。
                 </li>
                 <li>
-                  <a href="/blog/three-axes/zh/">《三板斧》</a> ——
-                  七个步骤在一条真实产品线上走一遍，带数字。
+                  <a href="/blog/three-axes/zh/">《三板斧》</a>——七个步骤在一条真实产品线上走一遍，带数字。
                 </li>
                 <li>
                   <a href="/blog/connections-recursive-intelligence/zh/"
                     >《链接为王》</a
-                  >
-                  —— 为什么稀缺资源是链接质量，不是链接数量。
+                  >——为什么稀缺的是链接质量，不是链接数量。
                 </li>
               </ul>
             </article>
@@ -1947,8 +1809,8 @@
 
     <section class="ag-cta">
       <div class="container">
-        <span class="ag-section-label">读模型，不只读方法</span>
-        <h2>一套方法论的价值，恰好等于它在实际使用中活下来的那部分</h2>
+        <span class="ag-section-label">别只读方法，去读那个模型</span>
+        <h2>一套方法论值多少，看它在用的时候还剩多少</h2>
         <p
           style="
             color: var(--text-secondary);
@@ -1956,23 +1818,21 @@
             margin: 0.75rem auto 1.5rem;
           "
         >
-          那七个步骤是 25
-          页的常识。有意思的问题是：当本体的消费者同时也能改代码、并且可能被这套本体拒绝时，这些步骤会变成什么。那就是<a
+          七个步骤，25 页，都是好见识。有意思的问题是：当本体的消费者还能改代码、还可能被本体拒绝时，这些见识会变成什么。那是<a
             href="agentic.html"
-            >总纲页</a
-          >。
+            >主张页</a
+          >要回答的。
         </p>
         <div class="ag-client-list" style="justify-content: center">
           <a class="btn btn-primary" href="agentic.html">智能体工程</a
-          ><a class="btn btn-secondary" href="engineering.html"
-            >工程机制</a
+          ><a class="btn btn-secondary" href="engineering.html">工程机制</a
           ><a class="btn btn-secondary" href="/blog/">博客</a
           ><a
             class="btn btn-secondary"
             href="https://protege.stanford.edu/publications/ontology_development/ontology101.pdf"
             target="_blank"
             rel="noopener"
-            >论文原版 PDF</a
+            >论文原文 PDF</a
           >
         </div>
       </div>
@@ -1996,9 +1856,7 @@
         </div>
         <div class="footer-bottom">
           <span>© 2026 BG1SB</span
-          ><span
-            >提炼自 Noy 与 McGuinness（2001）；解读之误由我们承担。</span
-          >
+          ><span>提炼自 Noy 与 McGuinness（2001）；解读有误，责任在我们。</span>
         </div>
       </div>
     </footer>

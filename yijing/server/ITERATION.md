@@ -27,8 +27,11 @@ python3 yijing/server/eval_run.py            # 需 LLM_AUTH_TOKEN 环境
 输出每用例硬校验（四段结构、引文标记、忌、免责、字数 ≤400、must 子串）与评审模型四维均分
 （象数/经文/事理/行动）。与 `eval_runs/` 中上一版 json 对比：**硬校验全过且均分不降**才发布。
 
-主机已配周度 cron（每周一 03:17）自动跑评测留档，人工只需看结果：
-`crontab -l | grep eval_run`。
+主机已配 systemd timer（`yijing-llm-eval.timer`，每周一 03:17 + 随机延迟，Persistent）自动跑评测留档：
+`systemctl list-timers | grep yijing`；手动跑：`sudo systemctl start yijing-llm-eval.service`。
+
+基线记录：v2（结构化四段）硬校验 0/6 → v3（点名本卦/忌不省略）2/6 → v4（450 字上限+评审 thinking 预算）4/6，
+均分 象数3/经文4/事理3/行动3 → v5（每段≤三句、只析动爻）。上游内容审查误拦的用例记 skip，不计分母。
 
 ## 4. 发布
 

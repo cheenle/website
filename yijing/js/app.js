@@ -279,6 +279,7 @@ function requestInterpret() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(llmPayload(r)),
+    signal: AbortSignal.timeout(100000),
   })
     .then((rp) => rp.json())
     .then((data) => {

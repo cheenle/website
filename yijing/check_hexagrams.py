@@ -14,6 +14,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 CATEGORIES = ["综合", "事业", "财运", "感情", "健康", "出行"]
 
+# 通行本（文王）卦序：id 1–64 的卦名。duanCi 按 id 分支（乾坤用九用六），
+# 故 id↔卦名的绑定必须由本脚本保证，不能只靠 lines 唯一性。
+KING_WEN = (
+    "乾 坤 屯 蒙 需 讼 师 比 小畜 履 泰 否 同人 大有 谦 豫 "
+    "随 蛊 临 观 噬嗑 贲 剥 复 无妄 大畜 颐 大过 坎 离 咸 恒 "
+    "遁 大壮 晋 明夷 家人 睽 蹇 解 损 益 夬 姤 萃 升 困 井 "
+    "革 鼎 震 艮 渐 归妹 丰 旅 巽 兑 涣 节 中孚 小过 既济 未济"
+).split()
+
 
 def extract_const(path, name):
     """从 JS 文件中提取 JSON 严格字面量常量（配对括号扫描，跳过字符串）。"""
@@ -83,6 +92,10 @@ def main():
         if lines in seen_lines:
             errors.append(f"#{hid} {hname}: lines 重复 {lines}")
         seen_lines.add(lines)
+        if not str(h.get("name", "")).strip() or not str(h.get("fullName", "")).strip():
+            errors.append(f"#{hid}: name/fullName 为空")
+        if isinstance(hid, int) and 1 <= hid <= 64 and KING_WEN[hid - 1] != h.get("name"):
+            errors.append(f"#{hid}: 卦名 {h.get('name')!r} 应为通行本卦序 {KING_WEN[hid - 1]!r}")
         if h["lower"] not in trigrams or h["upper"] not in trigrams:
             errors.append(f"#{hid} {hname}: 上下卦名非法")
         else:

@@ -1567,8 +1567,35 @@ git commit -m "test(yijing): 集成验证收尾"
 
 ## 完成定义（Definition of Done）
 
-1. `cd yijing && node --test` 22 个测试全绿；
+1. `cd yijing && node --test` 25 个测试全绿；
 2. `python3 yijing/check_hexagrams.py` 严格模式 OK（64 卦、386 条爻辞级断言全过）；
 3. 浏览器手动清单全部通过；
 4. `git log --oneline` 可见按任务的中文 commit 序列；
 5. 部署本身不在本计划内执行（`yijing/deploy.sh` 由用户择机运行）。
+
+---
+
+## 执行记录（2026-09-25，feat/yijing-app 分支）
+
+计划 13 个任务全部执行完毕，另加以下收尾修订（均来自终审审查）：
+
+- **C1 卦画 CSS**：`.yao` 去掉 `gap`，阳爻三段拼实线；阴爻断口由中段 spacer 提供；
+  `:last-child` 改 `:nth-child(3)`，动爻 ○/× 不再吞掉右半段。
+- **I2 动画重放**：`tossStep` 回调内 `void coins.offsetWidth` 强制重排，六爻各播一次翻转。
+- **I3 铜钱标签**：文字行改 `f ? "背" : "字"`，与 CSS 的 head=阳面(背) 一致；补阴面「字」图样。
+- **I1 校验门**：`check_hexagrams.py` 内置通行本卦序常量 KING_WEN，断言 id↔卦名绑定；补 name/fullName 非空。
+- **M1 空值防护**：`duanCi` 的 `guaciEntry/yaoEntry` 与乾坤 yong 分支均先判空，缺失走「经文数据缺失」占位。
+- **M2 历史面板**：`loadHistory` 过滤非数组/坏记录，防篡改 localStorage 抛未捕获异常。
+- **M3 部署门**：`deploy.sh` 用 `env -u ALLOW_PARTIAL` 调校验脚本。
+- **M4 爻名折行**：`.cast-row .name` 加 `margin-left/white-space: nowrap`，○/× 不再压爻名首字。
+- **M6 数据利用**：卦卡经卦行补五行·方位；`/* global */` 注释清理未用名。
+- **M8 体例**：`yong.ci` 同步剥离「用九：/用六：」前缀。
+- 规范同步：§3 标题与 §4 文件注释改为「三屏 + 历史面板（排卦与断卦同处卦成屏）」；advice 措辞改为卦义取象简述。
+
+偏离计划之处（已随提交记录）：数据四批次合并一次提交；爻辞体例统一剥离爻题前缀；
+测试命令 `node --test tests/` → `cd yijing && node --test`（Node v22 不支持目录参数）；
+新增 `tests/exhaustive.test.js`（穷举 4096 种起卦）。
+
+验证证据：`node --test` 25/25；`check_hexagrams.py` strict OK；DOM 桩端到端冒烟
+（摇卦→排卦→断卦→存档→清空）通过；部署 tar 包仅含 7 个站点文件；Chrome 无头截图
+目视确认摇卦屏与卦成屏（卦画实线/断口、○/× 朱砂标记、铜钱背/字、断法主参次序）。

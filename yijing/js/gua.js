@@ -41,6 +41,11 @@ function findHexagram(bits6, hexagrams) {
   return hexagrams.find((h) => h.lines === s) || null;
 }
 
+// 数据缺失时的占位条目：让 UI 走「经文数据缺失」分支而不抛错（规范 §8）。
+function missingEntry(h, label, primary) {
+  return { kind: "missing", source: h ? `${h.fullName}·${label}` : label, ci: "", baihua: "", primary };
+}
+
 // 朱熹《易学启蒙》断法：依动爻数取断辞。
 function duanCi(lines, hexagrams) {
   const bits = toBits(lines);
@@ -49,7 +54,7 @@ function duanCi(lines, hexagrams) {
   const zbits = zhiBits(lines);
   const zhi = moving.length ? findHexagram(zbits, hexagrams) : null;
 
-  const guaciEntry = (h, primary, tag) => ({
+  const guaciEntry = (h, primary, tag) => (h ? {
     kind: "guaci",
     source: `${tag}${h.fullName}·卦辞`,
     ci: h.guaci,
@@ -57,15 +62,19 @@ function duanCi(lines, hexagrams) {
     xiang: h.xiang,
     baihua: h.guaciBaihua,
     primary,
-  });
-  const yaoEntry = (h, i, primary, tag) => ({
-    kind: "yao",
-    source: `${tag}${h.fullName}·${h.yaos[i].title}`,
-    ci: h.yaos[i].ci,
-    xiang: h.yaos[i].xiang,
-    baihua: h.yaos[i].baihua,
-    primary,
-  });
+  } : missingEntry(h, `${tag}卦辞`, primary));
+  const yaoEntry = (h, i, primary, tag) => {
+    const y = h && h.yaos ? h.yaos[i] : null;
+    if (!y) return missingEntry(h, `${tag}第${i + 1}爻`, primary);
+    return {
+      kind: "yao",
+      source: `${tag}${h.fullName}·${y.title}`,
+      ci: y.ci,
+      xiang: y.xiang,
+      baihua: y.baihua,
+      primary,
+    };
+  };
 
   let rule, entries;
   const still = [0, 1, 2, 3, 4, 5].filter((i) => !moving.includes(i));
@@ -101,7 +110,7 @@ function duanCi(lines, hexagrams) {
       entries = [yaoEntry(zhi, still[0], true, "之卦")];
       break;
     default:
-      if (ben.id === 1 || ben.id === 2) {
+      if (ben && ben.yong && (ben.id === 1 || ben.id === 2)) {
         rule = ben.id === 1 ? "乾六爻皆动，取用九" : "坤六爻皆动，取用六";
         entries = [{
           kind: "yong",

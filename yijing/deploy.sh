@@ -18,9 +18,10 @@ echo "  Target: ${REMOTE_HOST}:${REMOTE_WEBROOT}"
 echo "=========================================="
 echo ""
 
-# Data validation gate — 64 卦数据不全不准上线
+# Data validation gate — 64 卦数据不全不准上线。
+# env -u：批次撰写期若 shell 里导出过 ALLOW_PARTIAL，不得渗进部署门。
 echo "[..] Running check_hexagrams.py (strict)..."
-/usr/bin/python3 "${LOCAL_WEBSITE_DIR}/check_hexagrams.py"
+env -u ALLOW_PARTIAL /usr/bin/python3 "${LOCAL_WEBSITE_DIR}/check_hexagrams.py"
 
 # Check required files
 for f in "index.html" "css/yijing.css" "js/app.js" "js/cast.js" "js/gua.js" "js/data/trigrams.js" "js/data/hexagrams.js"; do

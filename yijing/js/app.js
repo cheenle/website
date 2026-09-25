@@ -1,4 +1,4 @@
-/* global TRIGRAMS, HEXAGRAMS, castLine, castGua, toBits, movingLines, zhiBits, huBits, trigramName, findHexagram, duanCi */
+/* global TRIGRAMS, HEXAGRAMS, castLine, huBits, trigramName, findHexagram, duanCi */
 
 const HISTORY_KEY = "yijing-history";
 const HISTORY_MAX = 50;
@@ -47,6 +47,7 @@ function tossStep(i) {
   coins.classList.add("tossing");
   setTimeout(() => {
     coins.classList.remove("tossing");
+    void coins.offsetWidth; // 强制重排，令下一爻的翻转动画能重新播放
     const value = castLine(Math.random);
     state.lines.push(value);
     const faces = coinFaces(value);
@@ -63,12 +64,11 @@ function appendCastRow(i, value, faces) {
   row.className = "cast-row";
   const face = document.createElement("span");
   face.className = "face";
-  face.textContent = faces.map((f) => (f ? "字" : "背")).join("");
+  face.textContent = faces.map((f) => (f ? "背" : "字")).join("");
   const yao = document.createElement("div");
   yao.appendChild(buildYao(value === 7 || value === 9 ? 1 : 0, value === 6 || value === 9));
   const name = document.createElement("span");
-  name.className = "face";
-  name.style.textAlign = "left";
+  name.className = "face name";
   name.textContent = LINE_NAMES[value];
   row.append(face, yao, name);
   $("cast-lines").appendChild(row); // column-reverse：后追加的显示在上方
@@ -159,7 +159,10 @@ function guaCard(role, hex, moving) {
   const upperName = hex.lines.slice(3).split("").map(Number);
   const lowerT = trigramName(lowerName);
   const upperT = trigramName(upperName);
-  tri.textContent = `${lowerT}${TRIGRAMS[lowerT].nature}下 · ${upperT}${TRIGRAMS[upperT].nature}上`;
+  const lowerInfo = TRIGRAMS[lowerT];
+  const upperInfo = TRIGRAMS[upperT];
+  tri.textContent = `${lowerT}${lowerInfo.nature}（${lowerInfo.wuxing}·${lowerInfo.fangwei}）下 · ` +
+    `${upperT}${upperInfo.nature}（${upperInfo.wuxing}·${upperInfo.fangwei}）上`;
   card.appendChild(tri);
   return card;
 }
@@ -196,7 +199,9 @@ function escapeHtml(s) {
 // —— 占例记录（localStorage，静默降级）——
 function loadHistory() {
   try {
-    return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+    const list = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+    if (!Array.isArray(list)) return [];
+    return list.filter((r) => r && typeof r === "object" && Array.isArray(r.moving));
   } catch (e) { return []; }
 }
 

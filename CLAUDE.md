@@ -42,6 +42,23 @@ Never claim a product family was built by AI or agents. Process evidence (constr
 spec trail, hooks, verified blocks) is graded separately from product maturity and never
 promotes it. Repositories without `.agents/skills/sdd-guardian/` must not describe a pre-edit gate.
 
+### Chinese prose (中文写作规则)
+
+Applies to all new or edited Chinese copy on every site. Origin: a structure-translation of
+the EN agentic page once shipped as the zh page and read like machine output (removed
+2026-09-25). Basis: 余光中《怎样改进英式中文》 + 阮一峰《中文技术文档的写作规范》.
+
+1. **动词为主**：名词化还原为动词；禁用「……的方式是」「……的方法是」这类判断句。
+2. **删假冠词**：不数「一个 / 一种 / 一条」，除非真的在计数。
+3. **少用破折号**：`——` 改句号或冒号，只留给真正的补充说明，一页以个位数为限。
+4. **主动语态**：主语落到人或具名工件；「被」只留中文本来就有的被动（被迫、被误导）。
+5. **中文语序**：条件在前、结论在后，话题居首；不照搬英文 and-连词与介词链。
+6. **术语纪律**：首现给中英对照，之后一致；中英文之间留半角空格；陈述语气，不用感叹号。
+
+Measurable red lines for new Chinese copy: 逗号分隔的子句 ≤20 字为佳，>40 字不可接受；
+词频体检对照同站其他中文页（的/被/——/一[个种条次]）。目标腔调参照 `portal/blog/*/zh/`
+既有文章（主动、具体、有锋芒），不要「正确但平淡」的公文腔。
+
 ### Cross-site checks
 
 Sub-site directories under `website/` are symlinks into other git repositories

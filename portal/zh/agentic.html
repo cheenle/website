@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="智能体工程在 VLSC 的实践：五个产品族如何将现场问题转化为可复用的远程电台架构、安全不变量与共享领域本体；为什么稀缺的是连接质量而非连接数量、为什么每条能力链接都要配一条责任链接；工程内循环如何委托给智能体执行，而意图、边界与裁决仍属于人。"
+      content="智能体工程在 VLSC 的实战：五个产品族把现场问题炼成可复用的远程电台架构、安全不变量和共享领域本体。稀缺的不是连接数量，是连接质量；每条能力链接都要配一条责任链接。工程内循环交给智能体跑，意图、边界、裁决留在人手里。"
     />
     <meta
       name="keywords"
@@ -77,11 +77,11 @@
           >
         </h1>
         <p>
-          智能体工程的纪律，是构建一个「智能体可被信任去执行、而人保留唯一裁决权」的工程环境。VLSC
-          是从现场工程走到这里的，而不是相反。
+          智能体工程这门手艺，是搭这样一个环境：智能体值得托付，交给它执行；裁决权始终在人手里。VLSC
+          不是先悟出道理再找例子，是从现场一路走到这里的。
         </p>
         <p>
-          两条现场教训让这个命题更锋利。其一：稀缺资源不是连接数量，而是<strong>连接质量</strong>——人与智能体、工具、现场之间的每条链接，都要带上语义、溯源、闭环反馈、有界权限、故障隔离与可审查目标。其二：自动化的度量不是它在你看着时做了多少，而是<a href="/blog/moon-loop/zh/">那个夜晚依然存在</a>。
+          两条现场教训把这句话磨得更锋利。其一，稀缺的不是连接数量，是<strong>连接质量</strong>：人与智能体、工具、现场之间的每条链接，都得带语义、带溯源、带闭环反馈、带有界权限、带故障隔离、带可审查的目标。其二，自动化的成色，不看它在你盯着时做了多少，看<a href="/blog/moon-loop/zh/">那个夜晚还在不在</a>。
         </p>
         <div class="ag-hero-stats" aria-label="命题概览">
           <span class="ag-pill"><i class="fas fa-bullseye"></i> 意图归人</span
@@ -118,7 +118,7 @@
               执行可以委托，<span class="gradient">判断不行</span>
             </h2>
             <p class="ag-section-subtitle">
-              撑起本页的是三个主张，每一个都对照工件校验，而非观点。
+              撑起本页的是三个主张，每一个都拿工件对账，不拿观点对账。
             <p>四百五十年前，王阳明把这条分界写成了两句话：</p>
             <blockquote class="ba-quote" data-quote-id="wang-yangming-zhi-xing" data-quote-kind="classic" data-quote-cite="王阳明《传习录》">
               <p class="ba-quote-orig" lang="zh">知是行之始，行是知之成。</p>
@@ -133,26 +133,26 @@
               <h3><i class="fas fa-arrows-spin"></i> 角色变了</h3>
               <p>
                 工程内循环，规格、实现、测试、审查、观测、回写
-                SDD——由智能体携带真实工具、在真实仓库与真实门禁下执行。
+                SDD，整条交给智能体跑。它用的是真工具，动的是真仓库，过的是真门禁。
               </p>
             </article>
             <article class="ag-card">
               <h3><i class="fas fa-database"></i> 为什么是现在</h3>
               <p>
-                因为智能体在行动前真的会加载契约。<code>AGENTS.md</code>、活体
-                SDD 与领域本体，从文档变成了运行时上下文。
+                因为智能体动手之前，真的会把契约读进来。<code>AGENTS.md</code>、活体
+                SDD、领域本体，不再是摆着看的文档，是运行时上下文。
               </p>
             </article>
             <article class="ag-card">
               <h3><i class="fas fa-route"></i> FDE 仍然是门禁</h3>
               <p>
-                现场纪律产出了值得复用的契约；它也保留了智能体永远不能代为签字的部分：PCB、台架、RF
+                现场纪律炼出了值得复用的契约，也留下了智能体永远不能代签的部分：PCB、台架、RF
                 安全、真实台站。
               </p>
             </article>
           </div>
           <div class="ag-diagram" style="margin-top: 1.25rem">
-            <h3 style="text-align: center">四环链条——只有前两环变便宜了</h3>
+            <h3 style="text-align: center">四环链条：只有前两环变便宜了</h3>
             <div class="ag-flow" aria-label="想象、尝试、验证、裁决">
               <span class="ag-flow-step"
                 ><strong>想象</strong><br /><small>想法 → 意图</small></span
@@ -168,12 +168,12 @@
               >
             </div>
             <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem">
-              想法从来不是死于糟糕，而是死于等待。想到与做到之间的鸿沟塌缩了——尝试如今又多又便宜；但知道一次尝试是否<em>成立</em>，依然昂贵；决定它是否<em>算数</em>，依然归人。智库被打开了，治库还没有——这一半靠手建，也是本页的大部分内容。故事见<a href="/blog/only-imagination/zh/">《思接千载，行在须臾》</a>。
+              想法从来不是死于糟糕，是死于等待。想到与做到之间的那条沟，如今塌了：尝试又多又便宜。可一次尝试算不算<em>成立</em>，查起来依然贵；算不算<em>数</em>，裁起来依然归人。智库开了，治库没开，这一半得靠手建，本页大半篇幅都在讲它。故事见<a href="/blog/only-imagination/zh/">《思接千载，行在须臾》</a>。
             </p>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>可证伪形式：</strong>一次现场事故变成一条 SDD
-            裁决，裁决变成一条机器可读约束，约束阻止智能体重新引入该事故——<em>事故只有变成护栏才算修好。</em>由此得出运行规则：<strong>只有当仓库能拒绝，你才能把仓库交给智能体。</strong>本页任何无法沿这条链回溯的主张，都不写，这条链在<a href="/blog/three-axes/zh/">《三板斧》</a>里被完整走了一遍。
+            <strong>可证伪形式：</strong>现场事故落成 SDD
+            裁决，裁决落成机器可读约束，约束拦住智能体重蹈覆辙。<em>事故只有变成护栏才算修好。</em>于是有了那条运行规则：<strong>仓库不能拒绝，就别交给智能体。</strong>本页的主张都得沿这条链查得到头，查不到的不写；这条链在<a href="/blog/three-axes/zh/">《三板斧》</a>里完整走过一遍。
           </div>
         </div>
       </section>
@@ -185,7 +185,7 @@
               智能体跑循环，<span class="gradient">人握住三样东西</span>
             </h2>
             <p class="ag-section-subtitle">
-              这条分界线不按任务大小或技能划分，而按「结果出错时谁负责」划分。
+              这条分界线不按任务大小画，不按技能高低画，按「结果错了谁负责」画。
             </p>
           </header>
           <div class="ag-loop-grid">
@@ -205,7 +205,7 @@
                 ><span class="ag-flow-step">回写&nbsp;SDD</span>
               </div>
               <p>
-                智能体在动手前先读取约束注册表，按每条主张的性质选择对应的验证手段，并把结论写回它出发时所用的同一份契约。
+                智能体动手之前先读约束注册表；每条主张该用什么办法验，就验什么办法；验完把结论写回它出发时那份契约。
               </p>
             </article>
             <article class="ag-card" data-track="sdr">
@@ -213,44 +213,44 @@
               <div class="ag-term-grid" style="grid-template-columns: 1fr">
                 <div>
                   <strong>意图</strong
-                  >，这件事为何存在、什么算成功、什么刻意不做。
+                  >：这件事为何存在，什么算成功，什么刻意不做。
                 </div>
                 <div>
                   <strong>边界</strong
-                  >——架构裁决、安全不变量，以及智能体不得为了跑绿而交易掉的约束。
+                  >：架构裁决、安全不变量，以及不许智能体为了跑绿就拿去换掉的约束。
                 </div>
                 <div>
-                  <strong>裁决</strong>——现有证据是否足以说一句「完成 / 已发布 /
+                  <strong>裁决</strong>：现有证据够不够说一句「完成 / 已发布 /
                   安全」。
                 </div>
               </div>
             </article>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
-            <strong>智能体承担执行，不承担问责。</strong
-            >一次发射、一次发布、一句安全主张的责任，始终属于签署证据的那个具名的人。任何委托都不改变这一点，若想看只有一个具名负责人、没有团队时的版本，见<a href="/blog/solo-loop/zh/">《孤路我独行》</a>。
+            <strong>智能体扛执行，不扛问责。</strong
+            >一次发射、一次发布、一句安全主张，责任始终在签字留证的那个具名的人。委托再深也不改这条。想看只有一个具名负责人、没有团队时的样子，见<a href="/blog/solo-loop/zh/">《孤路我独行》</a>。
           </div>
           <h3 style="margin-top: 2.5rem">为什么裁决不可委托</h3>
           <div class="ag-term-grid">
             <article class="ag-card">
               <h3><i class="fas fa-fingerprint"></i> 判断是一部履历</h3>
               <p>
-                「智力」是六种能力穿在同一件外套里。智力如今可以按百万
-                token 出租；智慧与直觉不行——它们不是能力，而是履历。<em>你无法
-                prompt 智慧，正如你无法 prompt 一道疤。</em>逐项重新定价，见<a
+                「智力」是六种能力穿在同一件外套里。智力如今按百万
+                token 出租；智慧和直觉租不到，它们不是能力，是履历。<em>智慧没法
+                prompt，正如疤没法 prompt。</em>逐项重新定价，见<a
                 href="/blog/faculties/zh/">《斫轮》</a>。
               </p>
             </article>
             <article class="ag-card">
               <h3><i class="fas fa-link"></i> 问责不能沿链路蒸发</h3>
               <p>
-                当一个决定流过 模型 → 检索 → 工具 → 智能体 → 平台，问责不能在链条里蒸发。本页每条能力链接都配一条责任链接：谁供的数据、谁选的目标、谁授权了行动、谁观察了后果、谁能把它停下来。文明尺度的论证，见<a href="/blog/connections-recursive-intelligence/zh/">《链接为王》</a>。
+                一个决定流过模型、检索、工具、智能体、平台，问责不能在这条链上蒸发。本页每条能力链接都配一条责任链接：谁供的数据，谁选的目标，谁授权了行动，谁观察了后果，谁能喊停。文明尺度的论证，见<a href="/blog/connections-recursive-intelligence/zh/">《链接为王》</a>。
               </p>
             </article>
             <article class="ag-card">
               <h3><i class="fas fa-code-branch"></i> 只剩两个动词</h3>
               <p>
-                仪器上了 cron，维护者的一周就压缩为两个动词：<strong>决定</strong>与<strong>合入</strong>。人工合入不是瓶颈，它是信任锚点——对一个具名的人作出承诺的那一步，必须由一个具名的人来走。
+                仪器上了 cron，维护者一周就只剩两个动词：<strong>决定</strong>，<strong>合入</strong>。人工合入不是瓶颈，是信任锚点：对一个具名的人许下承诺的那一步，得由一个具名的人来走。
               </p>
             </article>
           </div>
@@ -264,8 +264,8 @@
               契约从<span class="gradient">前沿部署工程</span>里来
             </h2>
             <p class="ag-section-subtitle">
-              本体不是 FDE 的第四个阶段，智能体工程也不使 FDE
-              退役。两个循环耦合，且各自握有否决权。
+              本体不是 FDE 的第四阶段，智能体工程也没让 FDE
+              退役。两个循环咬合在一起，各自都握着否决权。
             </p>
           </header>
           <div class="ag-loop-grid">
@@ -283,9 +283,8 @@
                 >
               </div>
               <p>
-                Echo 观察真实台站与操作者；Delta
-                用可运行的垂直切片验证风险最高的假设；Product
-                把结果固化为可运维的边界、契约或可复用组件，而这就是日后能交给智能体的东西。
+                Echo 看真实台站和操作者。Delta 用可运行的垂直切片，去证风险最高的那条假设。Product
+                把结果固化成能运维的边界、契约、可复用组件，这才是日后交得给智能体的东西。
               </p>
             </article>
             <article class="ag-card" data-track="sdr">
@@ -302,7 +301,7 @@
                 ><span class="ag-flow-step">验证</span>
               </div>
               <p>
-                产品证据稳定词汇、暴露不变量；模型再为下一轮工作，无论人做还是智能体做，提供更干净的问题、更明确的边界，以及更少的偶然协议假设。
+                产品证据让词汇稳定下来，把不变量逼出水面。下一轮工作，不管人做还是智能体做，都能拿到更干净的问题、更清楚的边界、更少的偶然协议假设。
               </p>
             </article>
             <article class="ag-card">
@@ -321,34 +320,34 @@
                 ><span class="ag-flow-step">合入</span>
               </div>
               <p>
-                支持链对自己迭代。迭代的单元不是 commit，而是未被解答的用户症状。每条 🐞
+                支持链拿自己当迭代对象。迭代的单元不是 commit，是没人解答的用户症状。每条 🐞
                 上报都带着分类（bug / feature / noise）落进
                 <a href="https://www.vlsc.net/mrrc_modern/board/"
                   >公开看板</a
-                >；分类即决策——noise 闭环、bug 自动排期、feature
-                等操作员，无人值守实施者产出受护栏保护的 unified diff
-                补丁，只落在隔离的 <code>fde/&lt;id&gt;</code>
-                分支，全套测试绿才提交。<code>main</code>
-                永不被触碰；合入仍是人的动作。回路的边界已从一条已答复工单移动到了一处已审查分支。
+                >。分类就是决策：noise 关掉，bug 自动排期，feature
+                留给操作员。无人值守的实施者只产出带护栏的 unified diff
+                补丁，落在隔离的 <code>fde/&lt;id&gt;</code>
+                分支上，全套测试绿了才提交。<code>main</code>
+                机器不许碰，合入是人的动作。回路的终点，从一条已答复工单，挪到了一处已审查分支。
               </p>
             </article>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
             <strong>实践 4 延续这条前史：</strong
-            >上面的 FDE
-            回路产出了智能体今天加载的契约；现场支持回路是同一套「判断 /
-            执行 / 证据」分工在用户所在之处的应用，完整机制见机制分册的<a
+            >上面那些 FDE
+            回路，炼出了智能体今天加载的契约；现场支持回路，是同一套「判断 /
+            执行 / 证据」分工搬到用户跟前再用一遍。完整机制见机制分册的<a
               href="engineering.html#field-loop"
               >现场回路</a
-            >一节。
+            >。
           </div>
           <h3 style="margin-top: 2.5rem">智能体不能压缩的部分</h3>
           <div class="ag-plane-grid">
             <article class="ag-card">
               <h3>硬件</h3>
               <p>
-                PCB 制板与台架 bring-up。EFHW V3.0
-                设计与固件已完成；在实物板子存在之前，它的主张停留在设计目标。
+                PCB 制板，台架 bring-up。EFHW V3.0
+                的设计和固件都已写完；实物板子出来之前，它的主张只能算设计目标。
               </p>
             </article>
             <article class="ag-card">
@@ -365,13 +364,13 @@
             <article class="ag-card">
               <h3>发布</h3>
               <p>
-                发布决策，以及什么可以被标注为「已发布」，因为这个标签是对一个人的承诺。
+                发布决策，以及什么能标成「已发布」。这个标签是对一个具体的人的承诺。
               </p>
             </article>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
             <strong>双向反馈：</strong
-            >产品为模型修订提供证据；模型为下一轮现场循环提供语言、边界与能力问题，而现在这份上下文是由智能体在编辑前加载的。
+            >产品给模型修订供证据，模型给下一轮现场循环供语言、边界和能力问题。如今这份上下文，智能体在编辑之前就先加载了。
           </div>
         </div>
       </section>
@@ -383,43 +382,42 @@
             <h2 class="ag-section-title">Harness × Loop × Living SDD</h2>
             <p class="ag-section-subtitle">
               Engineering
-              是把现场意图转化为可重复执行、可审查增量、可追溯证据和可复用资产的完整体系。
+              是一整套体系：现场意图进去，出来的是可重复的执行、可审查的增量、可追溯的证据、可复用的资产。
             </p>
           </header>
           <div class="ag-engineering-summary">
             <article class="ag-card">
               <h3>Harness</h3>
               <p>
-                业务、技术和产品约束包围着由
-                Agent、工具、测试、部署与现场遥测组成的工程护栏与执行环境。
+                业务、技术、产品三层约束，围出一个执行环境：Agent、工具、测试、部署、现场遥测都在里面。
               </p>
             </article>
             <article class="ag-card">
               <h3>Loop</h3>
               <p>
-                外层 Echo → Delta → Product 包含内层 Specify → Implement → Test
+                外层 Echo → Delta → Product 包着内层 Specify → Implement → Test
                 → Review → Observe → Update SDD 工程闭环。
               </p>
             </article>
             <article class="ag-card">
               <h3>Living SDD</h3>
               <p>
-                设计意图流向实现；代码、测试、部署和现场证据反向校准活的双向契约。
+                设计意图顺流进实现，代码、测试、部署、现场证据逆流回来，校准这份活的双向契约。
               </p>
             </article>
           </div>
           <div class="eng-note" style="margin-top: 1.25rem">
             <strong>跨五个产品族：</strong
-            >同一工程体系适配不同电台、协议、客户端、工作流、硬件门禁与证据边界。
+            >同一套工程体系，适配不同电台、协议、客户端、工作流、硬件门禁与证据边界。
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
             <strong>循环的验收标准是安静的。</strong
-            >一个不能在节日夜里无人值守运行的循环，不是循环，而是一条带着
-            cron 表达式的杂务。自动化的度量不是它在你看着时做了多少，而是那个夜晚依然成立：两端是仪器，裁决归人，操作员坐在饭桌前而不是控制台前。演示见<a href="/blog/moon-loop/zh/">《月闭环》</a>。
+            >节日夜里不敢无人值守的循环，不是循环，是带 cron
+            表达式的杂务。自动化的成色，不看它在你盯着时做了多少，看那个夜晚还在不在：两端是仪器，裁决归人，操作员坐在饭桌前，不坐在控制台前。演示见<a href="/blog/moon-loop/zh/">《月闭环》</a>。
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
             <strong>方法才是收成。</strong
-            >七十亿 token 的账本最后只留下一条不对称：模型能力决定天花板，方法决定你从天花板下收割多少——而这两个变量里，只有一个在你手里。模型每季度换代，契约每天变厚；前者是天气，后者是气候。账本见<a href="/blog/seven-billion-tokens/zh/">《七十亿 token 的全程拆解》</a>。
+            >七十亿 token 的账本，最后只留下一条不对称：模型能力定天花板，方法定你从天花板底下收上来多少；两个变量里，只有一个在你手里。模型每季度换代，契约每天变厚。前者是天气，后者是气候。账本见<a href="/blog/seven-billion-tokens/zh/">《七十亿 token 的全程拆解》</a>。
           </div>
           <div style="text-align: center; margin-top: 2rem">
             <a class="btn btn-primary" href="engineering.html"
@@ -435,7 +433,7 @@
             <span class="ag-section-label">05 · 生态地图</span>
             <h2 class="ag-section-title">三条轨道，而不是一条人为流水线</h2>
             <p class="ag-section-subtitle">
-              硬件与运行目标不同，架构也不同；共享基础是控制权、媒体流、安全、可观测性与证据。
+              硬件与运行目标不同，架构也不同；共享的基础是控制权、媒体流、安全、可观测性与证据。
             </p>
           </header>
           <div class="ag-track-grid">
@@ -590,7 +588,7 @@
             <span class="ag-section-label">06 · 产品族</span>
             <h2 class="ag-section-title">由现场约束塑造的五个边界</h2>
             <p class="ag-section-subtitle">
-              每个产品族都沿相同证据路径分析。客户端归属于持有权威状态和安全契约的系统。
+              每个产品族都沿同一条证据路径来讲。客户端归在持有权威状态和安全契约的那个系统名下。
             </p>
           </header>
           <div class="ag-family-grid">
@@ -663,7 +661,7 @@
                   <dd>
                     真实台站上的 PTT 与 RF 安全；发布标注。·
                     <strong>沉淀契约</strong>：
-                    被后续各族复用的运行与验证入口契约。
+                    后续各族都复用的运行与验证入口契约。
                   </dd>
                 </div>
               </dl>
@@ -764,9 +762,9 @@
                 >
               </div>
               <p class="ag-note ag-note--warning">
-                <strong>客户端成熟度并不相同。</strong>FT710Mobile 存在未解决的
+                <strong>客户端成熟度并不一样。</strong>FT710Mobile 有一个未解决的
                 P0 PTT
-                安全问题；不能因服务端或另一客户端通过测试就标记为“安全完成”。
+                安全问题；服务端或别的客户端过了测试，都不等于它能标“安全完成”。
               </p>
               <span data-family-end="mrrc-direct-usb"></span>
             </article>
@@ -834,7 +832,7 @@
                   <dd>
                     所有靠观察而非数据手册得出的协议推断；非自家设计硬件上的
                     PTT。· <strong>沉淀契约</strong>：
-                    <code>PROTOCOL.md</code> 与被后续各族当作边界来源引用的 SDD
+                    <code>PROTOCOL.md</code>，以及后续各族当作边界来源引用的 SDD
                     章节。
                   </dd>
                 </div>
@@ -926,8 +924,8 @@
                 <div class="ag-field">
                   <dt>现场问题</dt>
                   <dd>
-                    便携 EFHW 台站需要可重复匹配，同时避免机械动作或 RF
-                    应力被藏在远程按钮之后。
+                    便携 EFHW 台站需要可重复匹配，同时不让机械动作或 RF
+                    应力藏在远程按钮背后。
                   </dd>
                 </div>
                 <div class="ag-field">
@@ -973,8 +971,8 @@
                 <div class="ag-field">
                   <dt>智能体承担环节</dt>
                   <dd>
-                    站点与知识库工作在工作区
-                    <code>CLAUDE.md</code> 下进行；<code>efhw-knowledge/</code>
+                    站点与知识库工作按工作区
+                    <code>CLAUDE.md</code> 走；<code>efhw-knowledge/</code>
                     是共享本体来源。无固件约束注册表。普查 2026-09-12。
                   </dd>
                 </div>
@@ -999,7 +997,7 @@
             <span class="ag-section-label">07 · 工程杠杆</span>
             <h2 class="ag-section-title">复用平面，而不是复用偶然实现</h2>
             <p class="ag-section-subtitle">
-              复用发生在显式架构平面，不意味着不同协议、设备或成熟度可以互换。
+              复用发生在显式架构平面上，不等于协议不同、设备不同、成熟度不同也能互换。
             </p>
           </header>
           <div class="ag-plane-grid">
@@ -1076,60 +1074,60 @@
             <span class="ag-section-label">08 · 连接质量</span>
             <h2 class="ag-section-title">稀缺的是链接，不是节点</h2>
             <p class="ag-section-subtitle">
-              把一百万个部件随机连线，得不到一颗大脑；让一百个智能体互相对话，也不保证集体理性。网络的价值不能由节点数或边数推断——一套只能解释成功网络、解释不了噪声、失败、偏见与治理的连接理论，是不完整的。区分复利式网络与噪声放大器的，是六个工程属性；本页的全部机制，正是为了给每条链接配齐这六个属性。完整论证见<a href="/blog/connections-recursive-intelligence/zh/">《链接为王》</a>。
+              一百万个部件随机连线，连不出一颗大脑；一百个智能体互相对话，也谈不出集体理性。网络值多少，数节点数边数不出来：一套只能解释成功网络、解释不了噪声、失败、偏见和治理的连接理论，是不完整的。把复利式网络和噪声放大器分开的，是六个工程属性。本页的全部机制，就是给每条链接配齐这六个属性。完整论证见<a href="/blog/connections-recursive-intelligence/zh/">《链接为王》</a>。
             </p>
           </header>
           <div class="ag-plane-grid">
             <article class="ag-card">
               <h3>清晰语义</h3>
               <p>
-                收发双方对含义有共同契约。本站的实现：双语本体与活体
-                SDD——<code>CommandIntent</code>
-                对智能体、约束注册表和人工审查而言是同一个意思。
+                收发双方对含义有契约。本站的做法：双语本体加活体
+                SDD。<code>CommandIntent</code>
+                对智能体、约束注册表、人工审查，说的是同一句话。
               </p>
             </article>
             <article class="ag-card">
               <h3>可追溯来源</h3>
               <p>
-                结论能回溯到数据、模型版本与运行上下文。本站的实现：每项主张都携带版本、环境、方法与日期；<code>harness/index.json</code>
+                结论能顺藤摸瓜回到数据、模型版本、运行上下文。本站的做法：每项主张都带版本、环境、方法、日期；<code>harness/index.json</code>
                 不存内容，引用因此永不过时。
               </p>
             </article>
             <article class="ag-card">
               <h3>闭环反馈</h3>
               <p>
-                系统观察动作是否生效，而不是把命令当作既成状态。本站的实现：<code>CommandIntent ≠ StateReport</code>、<code>poll-stale-guard</code>
-                约束，以及一条被如实记录为「发了就不回头」的发射路径。
+                系统要看动作生效没有，不把命令当成既成事实。本站的做法：<code>CommandIntent ≠ StateReport</code>，<code>poll-stale-guard</code>
+                这条约束，外加一条老老实实标成「发了就不回头」的发射路径。
               </p>
             </article>
             <article class="ag-card">
               <h3>有界权限</h3>
               <p>
-                读、写、行动的权限显式有界。本站的实现：控制租约、唯一串口所有者、PTT
-                权限、<code>vendor-readonly</code>——以及一个在落盘前就拦截编辑的
+                读、写、动作的权限都写明边界。本站的做法：控制租约、唯一串口所有者、PTT
+                权限、<code>vendor-readonly</code>，再加一个在落盘前就拦下编辑的
                 pre-edit hook。
               </p>
             </article>
             <article class="ag-card">
               <h3>故障隔离</h3>
               <p>
-                单点失效不会自动拖垮全网。本站的实现：超时回 RX、失效安全行程限位、隔离的
-                <code>fde/&lt;id&gt;</code> 分支——<code>main</code>
-                永不由机器触碰。
+                一个点坏了，不能自动拖垮全网。本站的做法：超时回 RX、失效安全的行程限位、隔离的
+                <code>fde/&lt;id&gt;</code> 分支。<code>main</code>
+                机器不许碰。
               </p>
             </article>
             <article class="ag-card">
               <h3>可审查目标</h3>
               <p>
-                人能理解、质疑、修订「系统在优化什么」。本站的实现：分类结果公开在
-                FDE 看板上，每条约束都带一个可被辩论的
-                <code>sdd_ref</code>，而合入始终归人。
+                「系统在优化什么」，人得能看懂、能质疑、能改。本站的做法：分类结果公开在
+                FDE 看板上，每条约束都带一个能拿来辩论的
+                <code>sdd_ref</code>，合入始终归人。
               </p>
             </article>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
             <strong>能力图旁边必须放一张责任图。</strong
-            >对每一条让某物得以行动的链接，五个问题都必须有具名答案：谁供的数据、谁选的目标、谁授权了行动、谁观察了后果、谁能把它停下来。递归式改进只有在能力链接的增长与责任链接的增长相匹配时才可持续——这也是本页追问的从来不是「最聪明的节点」，而是「最可靠的网络」。
+            >凡让某物得以行动的链接，五个问题都得有具名答案：谁供的数据，谁选的目标，谁授权了行动，谁观察了后果，谁能喊停。能力链接与责任链接同步增长，递归式改进才可持续。所以本页追问的从来不是「最聪明的节点」，是「最可靠的网络」。
           </div>
         </div>
       </section>
@@ -1138,10 +1136,10 @@
         <div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">09 · 领域本体</span>
-            <h2 class="ag-section-title">本体在智能体动手之前被加载</h2>
+            <h2 class="ag-section-title">智能体动手之前，本体先加载</h2>
             <p class="ag-section-subtitle">
-              不是文档习惯：同一套术语、边界与公理，被智能体上下文、编辑前门禁与人工审查三方消费。它仍然是一份由产品证据支撑的轻量双语契约，不是
-              RDF/OWL 部署、知识图数据库，也不是新增的运行框架。
+              这不是文档习惯。同一套术语、边界、公理，三个地方都在用：智能体拿它当上下文，编辑前门禁拿它拦违规，人拿它做审查。它仍是一份靠产品证据撑着的轻量双语契约，不是
+              RDF/OWL 部署，不是知识图谱库，也不是新加的运行框架。
             </p>
           </header>
           <div class="ag-table-wrap">
@@ -1219,17 +1217,17 @@
             </table>
           </div>
           <div class="ag-note" style="margin-top: 1.25rem">
-            <strong>三个仓库共 52 条机器可读约束</strong>——mrrc_ft710 17
-            条、mrrc_modern 21 条、mrrc_ft8 14 条（普查日期 2026-09-12）。
-            每条规则带严重级别（<code>block</code> / <code>warn</code> /
-            <code>info</code>）、指回某条架构裁决或真实事故的
-            <code>sdd_ref</code>、<code>scope</code> glob 与
-            <code>patterns</code>。 <code>harness/sdd_context.py</code> 提供
+            <strong>三个仓库共 52 条机器可读约束</strong>：mrrc_ft710
+            十七条，mrrc_modern 二十一条，mrrc_ft8 十四条（普查日期
+            2026-09-12）。每条规则带严重级别（<code>block</code> /
+            <code>warn</code> / <code>info</code>），带指回架构裁决或真实事故的
+            <code>sdd_ref</code>，带 <code>scope</code> 通配与
+            <code>patterns</code>。<code>harness/sdd_context.py</code> 提供
             <code>prime</code> / <code>check</code> / <code>hook</code>；
             <code>install_hooks.py</code> 注册
             <code>SessionStart → prime</code> 与
             <code>PreToolUse(Edit|Write) → hook</code>。
-            同一套语义，三方消费：智能体上下文、运行时阻断、人工审查。本节所循的方法——七个步骤、层级陷阱、槽面规则——在<a href="/zh/ontology-101.html">《本体开发方法论精读》</a>里被逐条提炼，并拿这些工件做了一次审计。
+            一套语义，三方消费：智能体上下文、运行时阻断、人工审查。本节循的那套方法，七个步骤、层级陷阱、槽面规则，<a href="/zh/ontology-101.html">《本体开发方法论精读》</a>逐条提炼过，也拿这些工件审了一遍。
           </div>
           <div class="ag-term-grid">
             <article class="ag-card">
@@ -1379,7 +1377,7 @@
             <span class="ag-section-label">10 · 能力矩阵</span>
             <h2 class="ag-section-title">维度可比较，实现各不同</h2>
             <p class="ag-section-subtitle">
-              能力描述产品族能做什么；证据成熟度描述主张被证明到什么程度。二者不能混为一谈。
+              能力说的是产品族能做什么；证据成熟度说的是主张证到了哪一步。两件事不能混为一谈。
             </p>
           </header>
           <div class="ag-table-wrap">
@@ -1476,9 +1474,9 @@
         <div class="container">
           <header class="ag-section-header">
             <span class="ag-section-label">11 · 证据纪律</span>
-            <h2 class="ag-section-title">每项主张都携带来源与边界</h2>
+            <h2 class="ag-section-title">每项主张都带来源和边界</h2>
             <p class="ag-section-subtitle">
-              功能标签不是成熟度主张。每项结果必须标记方法、环境、版本和剩余不确定性。
+              功能标签不等于成熟度主张。每项结果都要标出方法、环境、版本，以及还剩多少不确定性。
             </p>
           </header>
           <div class="ag-legend" aria-label="证据成熟度">
@@ -1502,15 +1500,15 @@
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1rem">
             <strong>两条阶梯不互推。</strong
-            >下面这一行衡量工程过程是否被约束，上面那一行衡量产品行为是否为真。B4
-            徽章不提升任何 A
-            级主张；约束条数再多，也不能减少一次台架验证的必要性。
+            >下面一行，量的是工程过程有没有约束；上面一行，量的是产品行为是不是真。B4
+            徽章不给任何 A
+            级主张抬级；约束再多，也省不掉一次台架验证。
           </div>
           <div class="ag-note" style="margin-top: 1rem">
             <strong>证据只能快照，不能累积。</strong
-            >没有截止时间的数字不是测量，而是带小数点的传闻。所以本页每次普查都带日期；所以
-            token 账本诚实重跑的结果（7,404,583,808，快照于
-            2026-09-12T02:40:59Z）替换了那个同时在三个方向上出错的已发布数字。两本账互不为对方背书——完整解剖见<a href="/blog/seven-billion-tokens/zh/">《七十亿 token 的全程拆解》</a>。
+            >没有截止时间的数字不是测量，是带小数点的传闻。所以本页每次普查都带日期；所以
+            token 账本诚实重跑之后，7,404,583,808（快照于
+            2026-09-12T02:40:59Z）换掉了那个同时在三个方向上出错的旧数字。两本账，互不为对方背书。完整解剖见<a href="/blog/seven-billion-tokens/zh/">《七十亿 token 的全程拆解》</a>。
           </div>
           <details class="ag-details" style="margin-top: 1.25rem">
             <summary>这条链的端到端复现（2026-09-12）</summary>
@@ -1524,8 +1522,8 @@ SDD-GUARDIAN: blocking violations found:
 $ echo $?
 2</code></pre>
               <p>
-                一次现场事故变成一条 SDD
-                裁决，裁决变成一条机器可读约束，而这条约束挡住了智能体把事故重新引入。这就是本页所做的主张，而且它可以被当场复现。
+                现场事故落成 SDD
+                裁决，裁决落成机器可读约束，这条约束挡住了智能体把事故重新引进来。这就是本页的主张，而且当场可复现。
               </p>
             </div>
           </details>
@@ -1581,8 +1579,8 @@ $ echo $?
             </article>
           </div>
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
-            <strong>已知安全问题：</strong>FT710Mobile 存在未解决的 P0 PTT
-            安全问题。服务端自动化测试或其他客户端结果都不能关闭该问题，也不能证明原生客户端已安全完成。
+            <strong>已知安全问题：</strong>FT710Mobile 有一个未解决的 P0 PTT
+            安全问题。服务端自动化测试、其他客户端的结果，都关不掉它，也证不出原生客户端已安全完成。
           </div>
 
           <h3 style="margin-top: 3rem">证据与知识附录</h3>
@@ -1695,7 +1693,7 @@ $ echo $?
                 </li>
                 <li>
                   <strong>Modern 平台：</strong>FT-710
-                  假设被提炼为后端与能力抽象，并扩展到 IC Profile。
+                  的假设提炼成后端与能力抽象，再扩展到 IC Profile。
                 </li>
                 <li>
                   <strong>Direct-IQ 轨道：</strong>SunMRRC
@@ -1707,7 +1705,7 @@ $ echo $?
                 </li>
                 <li>
                   <strong>领域本体：</strong
-                  >只有当概念和约束跨产品出现证据后，才进行归纳。
+                  >概念和约束跨产品都有了证据，才归纳。
                 </li>
               </ul>
             </div>
@@ -1722,7 +1720,7 @@ $ echo $?
                     target="_blank"
                     rel="noopener"
                     >Stanford — Ontology Development 101</a
-                  >——本站把它逐节读完、提炼成清单，并拿自己的模型做了一次审计：<a href="/zh/ontology-101.html">《本体开发方法论精读》</a>。
+                  >。本站把它逐节读完、提炼成清单，并拿自己的模型做了一次审计：<a href="/zh/ontology-101.html">《本体开发方法论精读》</a>。
                 </li>
                 <li>
                   <a
@@ -1802,10 +1800,10 @@ $ echo $?
             margin: 0.75rem auto 1.5rem;
           "
         >
-          只有持续追溯到产品、硬件、测试、已知问题和现场运行，领域本体才真正有用。
+          领域本体得一路追回到产品、硬件、测试、已知问题、现场运行，才算真有用。
         </p>
         <p style="color: var(--text-secondary); max-width: 720px; margin: 0 auto 1rem;">
-          这些主张背后的实践日志——方法与它的收据：
+          这些主张背后的实践日志，方法与它的收据：
           <a href="/blog/three-axes/zh/">三板斧</a> ·
           <a href="/blog/support-loop/zh/">闻过则喜</a> ·
           <a href="/blog/solo-loop/zh/">孤路我独行</a> ·
@@ -1813,7 +1811,7 @@ $ echo $?
           <a href="/blog/moon-loop/zh/">月闭环</a>。
         </p>
         <p style="color: var(--text-secondary); max-width: 720px; margin: 0 auto 1.5rem;">
-          以及方法所服务的追问——智能、意图，与始终在场的那个人：
+          以及方法所服务的追问，智能、意图，与始终在场的那个人：
           <a href="/blog/connections-recursive-intelligence/zh/">链接为王</a> ·
           <a href="/blog/only-imagination/zh/">思接千载，行在须臾</a> ·
           <a href="/blog/faculties/zh/">斫轮</a> ·

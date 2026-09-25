@@ -1447,6 +1447,7 @@ function entryBlock(e) {
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
+```
 
 历史记录与事件绑定（接上文，同一文件末尾）：
 

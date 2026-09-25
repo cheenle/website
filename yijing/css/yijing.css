@@ -1,0 +1,175 @@
+:root {
+  --paper: #f5f0e6;
+  --ink: #2b2622;
+  --cinnabar: #9e2b25;
+  --faint: #8a8175;
+  --rule: #d8d0c0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Songti SC", "STSong", "SimSun", serif;
+  line-height: 1.8;
+}
+
+.hidden { display: none; }
+
+.site-header {
+  text-align: center;
+  padding: 2.5rem 1rem 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.seal {
+  display: inline-block;
+  margin: 0;
+  padding: 0.35rem 0.9rem;
+  font-size: 2.2rem;
+  letter-spacing: 0.35em;
+  color: #fff;
+  background: var(--cinnabar);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.subtitle { margin: 0.6rem 0 0; color: var(--faint); font-size: 0.95rem; letter-spacing: 0.1em; }
+
+main { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+.screen h2 {
+  font-size: 1.4rem;
+  letter-spacing: 0.2em;
+  border-left: 4px solid var(--cinnabar);
+  padding-left: 0.6rem;
+  margin: 1.5rem 0 0.8rem;
+}
+
+.hint { color: var(--faint); font-size: 0.9rem; }
+
+textarea {
+  width: 100%;
+  padding: 0.7rem;
+  font: inherit;
+  color: var(--ink);
+  background: #fffdf8;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.categories { border: 1px solid var(--rule); border-radius: 4px; margin: 1rem 0; padding: 0.6rem 1rem; }
+.categories legend { color: var(--faint); font-size: 0.85rem; padding: 0 0.4rem; }
+.categories label { margin-right: 1.1rem; white-space: nowrap; }
+
+button { font: inherit; cursor: pointer; }
+
+.primary {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
+  color: #fff;
+  background: var(--cinnabar);
+  border: none;
+  border-radius: 4px;
+}
+.primary:hover { filter: brightness(1.1); }
+
+.link {
+  background: none;
+  border: none;
+  color: var(--cinnabar);
+  text-decoration: underline;
+  padding: 0.4rem;
+}
+
+.actions { display: flex; gap: 1rem; align-items: center; margin-top: 1.5rem; }
+.actions .primary { flex: 1; }
+
+/* 摇卦：铜钱 */
+.coins { display: flex; justify-content: center; gap: 1rem; margin: 1.2rem 0; perspective: 600px; }
+
+.coin {
+  position: relative;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #d9b45c, #a87f2a);
+  border: 2px solid #7c5c1c;
+}
+.coin::after {
+  content: "";
+  position: absolute; top: 50%; left: 50%;
+  width: 18px; height: 18px;
+  transform: translate(-50%, -50%);
+  background: var(--paper);
+  border: 1px solid #7c5c1c;
+}
+.coin.head::before {
+  content: "背";  /* head = 阳面（无字之背） */
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) translateY(-22px);
+  font-size: 0.8rem; color: #5c430f;
+}
+.coins.tossing .coin { animation: toss 0.9s ease-in-out; }
+@keyframes toss {
+  0% { transform: rotateX(0deg) translateY(0); }
+  50% { transform: rotateX(540deg) translateY(-40px); }
+  100% { transform: rotateX(1080deg) translateY(0); }
+}
+
+/* 摇卦逐爻与卦画 */
+.cast-lines, .gua-lines { display: flex; flex-direction: column-reverse; align-items: center; gap: 0.45rem; margin: 1rem 0; }
+.cast-lines .cast-row { display: flex; align-items: center; gap: 0.8rem; }
+.cast-row .face { width: 3rem; color: var(--faint); font-size: 0.85rem; text-align: right; }
+
+.yao { position: relative; display: flex; gap: 1.6rem; width: 150px; height: 13px; }
+.yao span { flex: 1; }
+.yao.yang span { background: var(--ink); }
+.yao.yin span:first-child, .yao.yin span:last-child { background: var(--ink); }
+.yao.yin span:nth-child(2) { flex: 0 0 1.6rem; background: transparent; }
+.yao .mark {
+  position: absolute; right: -1.6rem; top: -0.25rem;
+  color: var(--cinnabar); font-size: 0.95rem;
+}
+
+/* 结果区 */
+#result-summary { background: #fffdf8; border: 1px solid var(--rule); border-radius: 4px; padding: 0.8rem 1rem; }
+#result-summary .rule { color: var(--cinnabar); }
+
+.guas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.2rem 0; }
+.gua-card { text-align: center; border: 1px solid var(--rule); border-radius: 4px; padding: 0.8rem 0.4rem; background: #fffdf8; }
+.gua-card h3 { margin: 0.2rem 0; font-size: 1.05rem; }
+.gua-card .role { color: var(--faint); font-size: 0.8rem; letter-spacing: 0.2em; }
+.gua-card .trigrams { color: var(--faint); font-size: 0.8rem; }
+
+.duan-entry { border-bottom: 1px dashed var(--rule); padding: 0.9rem 0; }
+.duan-entry .source { font-weight: bold; color: var(--cinnabar); }
+.duan-entry .ci { font-size: 1.1rem; margin: 0.3rem 0; }
+.duan-entry .ref { color: var(--faint); font-size: 0.9rem; border-left: 3px solid var(--rule); padding-left: 0.6rem; margin: 0.3rem 0; }
+.duan-entry .baihua { margin: 0.3rem 0; }
+.duan-entry.secondary { opacity: 0.75; }
+
+.advice { background: #fffdf8; border: 1px solid var(--rule); border-radius: 4px; padding: 0.8rem 1rem; margin-top: 1rem; }
+.advice h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--cinnabar); }
+
+/* 历史面板 */
+#history-panel { position: fixed; inset: 0; z-index: 10; background: rgba(43, 38, 34, 0.45); padding: 2rem 1rem; overflow-y: auto; }
+.panel-head { display: flex; align-items: center; gap: 0.8rem; max-width: 640px; margin: 0 auto 0.8rem; }
+.panel-head h2 { flex: 1; margin: 0; color: var(--paper); }
+#history-list { max-width: 640px; margin: 0 auto; padding: 0; list-style: none; }
+#history-list li { background: var(--paper); border-radius: 4px; padding: 0.7rem 1rem; margin-bottom: 0.6rem; font-size: 0.9rem; }
+#history-list .meta { color: var(--faint); font-size: 0.8rem; }
+
+.site-footer { text-align: center; color: var(--faint); font-size: 0.85rem; padding: 1.5rem 1rem 2.5rem; border-top: 1px solid var(--rule); }
+.site-footer a { color: var(--cinnabar); }
+
+@media (max-width: 600px) {
+  .guas { grid-template-columns: 1fr; }
+  .coin { width: 52px; height: 52px; }
+}

@@ -21,7 +21,7 @@
 - 八卦卦符 `symbol`：三位字符串，自下而上。乾111 兑110 离101 震100 巽011 坎010 艮001 坤000。
 - 经文原文用通行本《周易》（公版）；白话今译与 `advice` 为新撰，语体仿任务 5 中乾、坤两卦示例。
 - 每完成一个任务即 commit（commit message 用中文，格式 `feat(yijing): …` / `test(yijing): …`）。
-- 运行 Node 测试的命令统一为：`cd yijing && node --test tests/`
+- 运行 Node 测试的命令统一为：`cd yijing && node --test`
 
 ---
 
@@ -193,7 +193,7 @@ test("每卦有五行、方位、自然取象、家庭取象", () => {
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: FAIL — `Cannot find module '../js/data/trigrams.js'`
 
 - [ ] **Step 3: 实现 trigrams.js**
@@ -217,7 +217,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = TRIGRAMS;
 
 - [ ] **Step 4: 运行确认通过**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: PASS（3 个测试全绿）
 
 - [ ] **Step 5: Commit**
@@ -277,7 +277,7 @@ test("概率分布合古法：老阴老阳各约 1/8，少阴少阳各约 3/8", 
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: FAIL — `Cannot find module '../js/cast.js'`
 
 - [ ] **Step 3: 实现 cast.js**
@@ -305,7 +305,7 @@ if (typeof module !== "undefined" && module.exports) {
 
 - [ ] **Step 4: 运行确认通过**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: PASS（含任务 2 的测试共 7 个全绿）
 
 - [ ] **Step 5: Commit**
@@ -364,7 +364,7 @@ test("trigramName: 三爻卦符查经卦名", () => {
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: FAIL — `Cannot find module '../js/gua.js'`
 
 - [ ] **Step 3: 实现 gua.js 几何部分**
@@ -416,7 +416,7 @@ if (typeof module !== "undefined" && module.exports) {
 
 - [ ] **Step 4: 运行确认通过**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: PASS（累计 12 个测试全绿）
 
 - [ ] **Step 5: Commit**
@@ -853,7 +853,7 @@ test("断法：他卦六爻皆动取之卦卦辞", () => {
 
 - [ ] **Step 2: 运行确认失败**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: FAIL — `gua.findHexagram is not a function`
 
 - [ ] **Step 3: 实现（在 gua.js 的 `trigramName` 之后、导出之前插入）**
@@ -954,7 +954,7 @@ if (typeof module !== "undefined" && module.exports) {
 
 - [ ] **Step 4: 运行确认通过**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: PASS（累计 22 个测试全绿）
 
 - [ ] **Step 5: Commit**
@@ -1526,7 +1526,7 @@ git commit -m "feat(yijing): 应用逻辑——摇卦动画、排卦断卦渲染
 
 - [ ] **Step 1: Node 测试全绿**
 
-Run: `cd yijing && node --test tests/`
+Run: `cd yijing && node --test`
 Expected: 全部 PASS（trigrams 3 + cast 4 + gua 5 + gua-duan 10 = 22 个）
 
 - [ ] **Step 2: 数据校验门严格模式通过**
@@ -1564,7 +1564,7 @@ git commit -m "test(yijing): 集成验证收尾"
 
 ## 完成定义（Definition of Done）
 
-1. `cd yijing && node --test tests/` 22 个测试全绿；
+1. `cd yijing && node --test` 22 个测试全绿；
 2. `python3 yijing/check_hexagrams.py` 严格模式 OK（64 卦、386 条爻辞级断言全过）；
 3. 浏览器手动清单全部通过；
 4. `git log --oneline` 可见按任务的中文 commit 序列；

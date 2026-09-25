@@ -251,10 +251,11 @@ test("三正面得老阳 9，三反面得老阴 6", () => {
   assert.equal(castLine(() => 0.9), 6);
 });
 
-test("两正一反得少阳 7，两反一正得少阴 8", () => {
-  const a = [0.1, 0.1, 0.9]; let i = 0;
+test("一阳面二阴面得少阳 7，二阳面一阴面得少阴 8", () => {
+  // random() < 0.5 记阳面（值 3），否则阴面（值 2）；和 = 6 + 阳面数
+  const a = [0.1, 0.9, 0.9]; let i = 0;
   assert.equal(castLine(() => a[i++]), 7);
-  const b = [0.9, 0.9, 0.1]; let j = 0;
+  const b = [0.1, 0.1, 0.9]; let j = 0;
   assert.equal(castLine(() => b[j++]), 8);
 });
 
@@ -1170,7 +1171,7 @@ button { font: inherit; cursor: pointer; }
   border: 1px solid #7c5c1c;
 }
 .coin.head::before {
-  content: "字";
+  content: "背";  /* head = 阳面（无字之背） */
   position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%) translateY(-22px);
   font-size: 0.8rem; color: #5c430f;
@@ -1280,9 +1281,10 @@ function startCast() {
   tossStep(0);
 }
 
-// 三枚铜钱的正反面：字（3）/背（2），按爻值反推组合并洗牌供展示
+// 三枚铜钱的正反面：阳面（值 3）/阴面（值 2），和 = 6 + 阳面数。
+// 按爻值反推阳面枚数并洗牌供展示；传统以无字之背为阳、有字之面为阴。
 function coinFaces(value) {
-  const heads = { 6: 0, 7: 2, 8: 1, 9: 3 }[value];
+  const heads = value - 6;
   const faces = [];
   for (let i = 0; i < 3; i++) faces.push(i < heads);
   for (let i = faces.length - 1; i > 0; i--) {
@@ -1303,7 +1305,7 @@ function tossStep(i) {
     state.lines.push(value);
     const faces = coinFaces(value);
     for (let c = 0; c < 3; c++) {
-      coins.children[c].classList.toggle("head", faces[c]);
+      coins.children[c].classList.toggle("head", faces[c]); // head = 阳面（背）
     }
     appendCastRow(i, value, faces);
     tossStep(i + 1);

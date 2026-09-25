@@ -7,10 +7,11 @@ test("三正面得老阳 9，三反面得老阴 6", () => {
   assert.equal(castLine(() => 0.9), 6);
 });
 
-test("两正一反得少阳 7，两反一正得少阴 8", () => {
-  const a = [0.1, 0.1, 0.9]; let i = 0;
+test("一阳面二阴面得少阳 7，二阳面一阴面得少阴 8", () => {
+  // random() < 0.5 记阳面（值 3），否则阴面（值 2）；和 = 6 + 阳面数
+  const a = [0.1, 0.9, 0.9]; let i = 0;
   assert.equal(castLine(() => a[i++]), 7);
-  const b = [0.9, 0.9, 0.1]; let j = 0;
+  const b = [0.1, 0.1, 0.9]; let j = 0;
   assert.equal(castLine(() => b[j++]), 8);
 });
 

@@ -30,7 +30,7 @@ DEFAULT_MODEL = "qwen3.8-max-0902"
 DEFAULT_LOG_DIR = "/home/cheenle/yijing-llm-logs"
 MAX_BODY = 64 * 1024
 UPSTREAM_TIMEOUT = 90
-PROMPT_VERSION = "2026-09-26.v10"
+PROMPT_VERSION = "2026-09-26.v11"
 
 SYSTEM_PROMPT = (
     "你是兼通象数与义理的易学解读者，熟稔《周易》经传与朱熹《易学启蒙》断法。"
@@ -83,7 +83,72 @@ NEIJING_PASSAGES = [
     ("素问·举痛论", "百病生于气也。怒则气上，喜则气缓，悲则气消，恐则气下，思则气结。"),
     ("素问·痹论", "饮食自倍，肠胃乃伤。"),
     ("灵枢·本神", "智者之养生也，必顺四时而适寒暑，和喜怒而安居处，节阴阳而调刚柔。"),
+    ("素问·阴阳应象大论", "天有四时五行，以生长收藏，以生寒暑燥湿风；人有五脏化五气，以生喜怒悲忧恐。"),
+    ("素问·金匮真言论", "东方青色，入通于肝；南方赤色，入通于心；中央黄色，入通于脾；西方白色，入通于肺；北方黑色，入通于肾。"),
 ]
+
+TRIGRAM_WUXING = {"乾": "金", "兑": "金", "离": "火", "震": "木", "巽": "木", "坎": "水", "艮": "土", "坤": "土"}
+
+# 易传/后天配属表：八卦→身体部位（《说卦传》）与五行→脏（后天配脏）
+GUA_BODY = {"乾": "首", "坤": "腹", "震": "足", "巽": "股", "坎": "耳", "离": "目", "艮": "手", "兑": "口"}
+WUXING_ZANG = {"木": "肝（胆）", "火": "心（小肠）", "土": "脾（胃）", "金": "肺（大肠）", "水": "肾（膀胱）"}
+# 爻位配人身（依咸卦爻辞拇→腓→股→心→辅颊之序列，后世通行配属）
+YAO_BODY = ["足", "腓（小腿）", "股腰", "胸心", "喉面", "首顶"]
+# 公历月→四时与当令之脏（节气月近似；每季末月兼脾土）
+SEASON_ZANG = {
+    "春": ("肝（胆）", "夜卧早起，广步于庭，以使志生"),
+    "夏": ("心（小肠）", "夜卧早起，无厌于日，使志无怒"),
+    "秋": ("肺（大肠）", "早卧早起，与鸡俱兴，使志安宁"),
+    "冬": ("肾（膀胱）", "早卧晚起，必待日光，使志若伏若匿"),
+}
+MONTH_SEASON = {2: "春", 3: "春", 4: "春", 5: "夏", 6: "夏", 7: "夏",
+                8: "秋", 9: "秋", 10: "秋", 11: "冬", 12: "冬", 1: "冬"}
+SHENG = {"木": "火", "火": "土", "土": "金", "金": "水", "水": "木"}
+KE = {"木": "土", "土": "水", "水": "火", "火": "金", "金": "木"}
+
+
+def season_of(month1to12, now_day=15):
+    season = MONTH_SEASON[month1to12]
+    tail = month1to12 in (4, 7, 10, 1)  # 每季末月，脾土当令兼主
+    return season, tail
+
+
+def health_context_lines(req, now=None):
+    """易卦×内经互证事实层（纯函数）：卦配脏腑、爻位配身、当令季节、生克推演。"""
+    import datetime
+    now = now or datetime.datetime.now()
+    gua = req.get("gua") or {}
+    out = ["易卦×内经互证事实："]
+    season, tail = season_of(now.month)
+    zang, yangsheng = SEASON_ZANG[season]
+    out.append("- 当前四时：%s（公历%d月，节气近似）；当令之脏：%s；四气调神要点：%s%s" % (
+        season, now.month, zang, yangsheng, "；季末之月兼脾土当令，顾护中州" if tail else ""))
+    wx_zang = None
+    for pos, name in (("上卦", gua.get("upper")), ("下卦", gua.get("lower"))):
+        if not name:
+            continue
+        wx = TRIGRAM_WUXING.get(name, "?")
+        out.append("- %s%s：《说卦传》配%s；五行属%s，后天配脏%s" % (pos, name, GUA_BODY.get(name, "?"), wx, WUXING_ZANG.get(wx, "?")))
+        if pos == "上卦":
+            wx_zang = wx
+    for idx in gua.get("movingIdx") or []:
+        if 0 <= idx <= 5:
+            out.append("- 动爻第%s爻：爻位配人身%s（依咸卦爻辞身部序列），病位可于此参看" % (
+                ["初", "二", "三", "四", "五", "上"][idx], YAO_BODY[idx]))
+    if wx_zang and wx_zang != "?":
+        season_wx = {"春": "木", "夏": "火", "秋": "金", "冬": "水"}[season]
+        if KE.get(season_wx) == wx_zang:
+            out.append("- 生克推演：当令%s气克卦中%s气，当令之脏受制，宜扶该脏而泄其克者" % (season_wx, wx_zang))
+        elif KE.get(wx_zang) == season_wx:
+            out.append("- 生克推演：卦中%s气克当令%s气，卦势逆时，宜抑其过而顺时养脏" % (wx_zang, season_wx))
+        elif SHENG.get(season_wx) == wx_zang:
+            out.append("- 生克推演：当令%s气生卦中%s气，得天时之助，宜顺势调养" % (season_wx, wx_zang))
+        elif SHENG.get(wx_zang) == season_wx:
+            out.append("- 生克推演：卦中%s气生当令%s气，我泄于时，宜补母固本" % (wx_zang, season_wx))
+        else:
+            out.append("- 生克推演：卦中%s气与当令%s气比和，气机平顺，宜守常" % (wx_zang, season_wx))
+    return out
+
 
 
 def health_block():
@@ -111,8 +176,13 @@ def system_prompt(category, mode="reading"):
     out = base + "\n\n所问类别专项要求：" + CATEGORY_FOCUS.get(category, CATEGORY_FOCUS["综合"])
     if category == "健康":
         out += ("\n\n黄帝内经理法：" + health_block() +
-                "\n健康类解读与追问须以内经理法为纲：先辨四时起居、情志、饮食劳逸之偏，再论调养；"
-                "引用内经只可用上文池内条文并注明篇名；始终提醒用户具体病情以医嘱为准。")
+                "\n健康类解读与追问须以「易卦×内经互证」为纲，结构固定五段："
+                "【卦象定脏】（上下经卦配脏腑、动爻爻位配身部，注明《说卦传》与咸卦爻辞依据）、"
+                "【内经印证】（引池内条文并注明篇名，结合当令四时）、"
+                "【病机推演】（以阴阳偏颇与五行生克互证，卦象语言与内经语言各至少一次）、"
+                "【调养建议】（起居/情志/饮食各至少一条，末条以「忌：」开头）、"
+                "【医嘱】（一句：具体病情以医嘱为准）。"
+                "引用内经只可用池内条文且不得改字；不得作诊断、不荐药方。")
     return out + MEMORY_RULE
 
 
@@ -159,6 +229,8 @@ def build_payload(req):
     else:
         lines.append("动爻：无")
     lines.append("断法：%s" % req.get("rule", "?"))
+    if req.get("category") == "健康":
+        lines.extend(health_context_lines(req))
     lines.extend(memory_lines(req))
     lines.append("断辞：")
     for e in duanci:
@@ -183,6 +255,8 @@ def build_chat_payload(req):
     head.append("断法：%s" % (ctx.get("rule") or "?"))
     if ctx.get("reading"):
         head.append("此前 AI 解读：%s" % str(ctx["reading"])[:600])
+    if req.get("category") == "健康":
+        head.extend(health_context_lines(req))
     head.extend(memory_lines({"memory": ctx.get("memory")}))
     msgs = [{"role": "user", "content": "\n".join(head)}]
     for m in (req.get("messages") or [])[-10:]:
@@ -211,6 +285,8 @@ def _build_meihua_payload(req):
         lines.append("本卦彖传：%s" % ben["tuan"])
     if ben.get("xiang"):
         lines.append("本卦大象：%s" % ben["xiang"])
+    if req.get("category") == "健康":
+        lines.extend(health_context_lines(req))
     lines.extend(memory_lines(req))
     lines.append("辅证卦辞：")
     for e in req.get("duanci") or []:

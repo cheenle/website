@@ -385,6 +385,7 @@ function llmPayload(r) {
       question: state.question,
       category: state.category,
       memory: buildMemory(),
+      gua: { upper: m.upper, lower: m.lower, movingIdx: [m.moving] },
       meihua: {
         methodNote: m.methodNote, ben: m.benName, zhi: m.zhiName, hu: m.huName,
         ti: `${m.ti}（${m.tiWuxing}）`, yong: `${m.yong}（${m.yongWuxing}）`,
@@ -403,6 +404,7 @@ function llmPayload(r) {
     question: state.question,
     category: state.category,
     memory: buildMemory(),
+    gua: { upper: r.ben.upper, lower: r.ben.lower, movingIdx: r.moving },
     ben: r.ben ? { fullName: r.ben.fullName, tuan: r.ben.tuan, xiang: r.ben.xiang } : null,
     zhi: r.zhi ? { fullName: r.zhi.fullName } : null,
     hu: huHex ? huHex.fullName : null,
@@ -601,6 +603,7 @@ function chatContext(r) {
     rule: r.rule,
     reading: state.lastReading,
     memory: buildMemory(),
+    gua: r.ben ? { upper: r.ben.upper, lower: r.ben.lower, movingIdx: r.moving } : null,
   };
 }
 

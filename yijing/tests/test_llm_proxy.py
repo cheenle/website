@@ -196,7 +196,43 @@ class HealthNeijingTest(unittest.TestCase):
         self.assertNotIn("黄帝内经", llm_proxy.system_prompt("事业", "chat"))
 
     def test_pool_integrity(self):
-        self.assertEqual(len(llm_proxy.NEIJING_PASSAGES), 11)
+        self.assertEqual(len(llm_proxy.NEIJING_PASSAGES), 13)
         for src, txt in llm_proxy.NEIJING_PASSAGES:
             self.assertTrue(src.startswith(("素问", "灵枢")))
             self.assertTrue(txt.strip())
+
+
+class HealthCrossRefTest(unittest.TestCase):
+    REQ = {"category": "健康",
+           "gua": {"upper": "离", "lower": "坤", "movingIdx": [1, 4]}}
+
+    def test_context_lines_cover_gua_yao_season(self):
+        import datetime
+        lines = "\n".join(llm_proxy.health_context_lines(self.REQ, now=datetime.datetime(2026, 9, 26)))
+        self.assertIn("秋", lines)
+        self.assertIn("肺（大肠）", lines)
+        self.assertIn("《说卦传》配目", lines)      # 离为目
+        self.assertIn("《说卦传》配腹", lines)      # 坤为腹
+        self.assertIn("腓（小腿）", lines)          # 二爻
+        self.assertIn("喉面", lines)                # 五爻
+        self.assertIn("生克推演", lines)            # 离火克秋金
+
+    def test_winter_season(self):
+        import datetime
+        lines = "\n".join(llm_proxy.health_context_lines(self.REQ, now=datetime.datetime(2026, 12, 5)))
+        self.assertIn("冬", lines)
+        self.assertIn("肾（膀胱）", lines)
+
+    def test_health_system_has_five_sections(self):
+        s = llm_proxy.system_prompt("健康", "chat")
+        for frag in ["【卦象定脏】", "【内经印证】", "【病机推演】", "【调养建议】", "【医嘱】",
+                     "说卦传", "金匮真言论"]:
+            self.assertIn(frag, s)
+
+    def test_payload_carries_crossref(self):
+        req = dict(SAMPLE)
+        req["category"] = "健康"
+        req["gua"] = {"upper": "坎", "lower": "离", "movingIdx": [0]}
+        content = llm_proxy.build_payload(req)["messages"][0]["content"]
+        self.assertIn("易卦×内经互证事实", content)
+        self.assertIn("《说卦传》配耳", content)

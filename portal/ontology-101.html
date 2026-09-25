@@ -1,0 +1,2257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A close reading of Noy and McGuinness, Ontology Development 101 (Stanford, 2001): the seven-step method, the class-hierarchy traps, slot facets, domain-and-range rules and naming conventions - each rule distilled and then mapped onto a live remote-radio domain ontology that agents load before they edit."
+    />
+    <meta
+      name="keywords"
+      content="ontology development, ontology 101, Noy McGuinness, competency questions, class hierarchy, slots and facets, domain and range, naming conventions, knowledge engineering, Protege, domain ontology, agentic engineering, VLSC"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta name="theme-color" content="#000000" />
+    <title>Ontology Development 101, Distilled — VLSC Methodology</title>
+    <link rel="canonical" href="https://www.vlsc.net/ontology-101.html" />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://www.vlsc.net/ontology-101.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="zh-CN"
+      href="https://www.vlsc.net/zh/ontology-101.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://www.vlsc.net/ontology-101.html"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/octen.css?v=6" />
+    <link rel="stylesheet" href="css/sunsdrmobile.css?v=1" />
+    <link rel="stylesheet" href="css/agentic.css?v=2" />
+    <link rel="stylesheet" href="css/engineering.css?v=1" />
+    <link rel="stylesheet" href="css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7442510147240155"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body data-site="portal">
+    <nav class="navbar">
+      <div class="container navbar-content">
+        <a href="index.html" class="logo"
+          ><span class="logo-icon"><i class="fas fa-satellite-dish"></i></span
+          ><span
+            >VLSC<span style="color: var(--accent)">·</span>Projects</span
+          ></a
+        >
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#projects">Projects</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="agentic.html">Agentic</a></li>
+          <li><a href="engineering.html">Engineering</a></li>
+          <li><a href="ontology-101.html">Ontology 101</a></li>
+          <li>
+            <a href="https://github.com/cheenle" target="_blank" rel="noopener"
+              ><i class="fab fa-github"></i> GitHub</a
+            >
+          </li>
+        </ul>
+        <div class="nav-actions">
+          <a href="zh/ontology-101.html" class="lang-btn">中文</a
+          ><button class="mobile-menu-toggle" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <header class="ag-hero">
+      <div class="ag-hero-inner">
+        <div class="hero-badge">
+          <i class="fas fa-book-open"></i
+          ><span>Methodology · 方法论精读</span>
+        </div>
+        <h1>
+          Ontology Development 101,<br /><span class="gradient"
+            >Distilled — and Put to Work</span
+          >
+        </h1>
+        <p>
+          Noy &amp; McGuinness (Stanford, 2001) in 25 pages: why an ontology
+          exists, what is in one, three rules that precede every step, the
+          seven-step method, the traps in a class hierarchy, the facets of a
+          slot, and the naming conventions. This page carries the whole argument
+          in distilled form — then does the one thing the paper could not: it
+          runs every rule against a live domain ontology that an agent loads
+          before it edits.
+        </p>
+        <p>
+          Two markers are used throughout. <code>101 §x.y</code> cites the paper
+          — that is its claim, not ours. <strong>VLSC</strong> marks where this
+          site's own practice answers the rule, with the artifact named so the
+          mapping can be checked rather than believed.
+        </p>
+        <div class="ag-hero-stats" aria-label="What this page covers">
+          <span class="ag-pill"><i class="fas fa-list-ol"></i> 7 steps</span
+          ><span class="ag-pill"
+            ><i class="fas fa-triangle-exclamation"></i> 20 hierarchy traps</span
+          ><span class="ag-pill"><i class="fas fa-sliders"></i> 5 facet kinds</span
+          ><span class="ag-pill"
+            ><i class="fas fa-circle-check"></i> 24-item checklist</span
+          >
+        </div>
+      </div>
+    </header>
+
+    <div class="ag-anchor-shell">
+      <div class="container">
+        <nav class="ag-anchor-nav" aria-label="Page sections">
+          <a href="#source">Source</a><a href="#anatomy">Anatomy</a
+          ><a href="#rules">Three Rules</a><a href="#steps">Seven Steps</a
+          ><a href="#hierarchy">Hierarchy Traps</a
+          ><a href="#properties">Properties</a><a href="#naming">Naming</a
+          ><a href="#checklist">Checklist</a><a href="#mapping">VLSC Mapping</a
+          ><a href="#limits">Where 101 Stops</a>
+        </nav>
+      </div>
+    </div>
+
+    <main>
+      <section class="ag-section" id="source">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · The Source</span>
+            <h2 class="ag-section-title">
+              A 2001 guide that already anticipated the agent
+            </h2>
+            <p class="ag-section-subtitle">
+              Written for domain experts rather than AI laboratories, in the era
+              of Protégé-2000 and frame systems. Its first stated reason for
+              building an ontology is "to share common understanding of the
+              structure of information among people <em>or software agents</em>"
+              — a phrase that read as boilerplate in 2001 and is now the whole
+              point.
+            </p>
+          </header>
+          <div class="ag-table-wrap">
+            <table class="ag-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Title</td>
+                  <td>
+                    Ontology Development 101: A Guide to Creating Your First
+                    Ontology
+                  </td>
+                </tr>
+                <tr>
+                  <td>Authors</td>
+                  <td>Natalya F. Noy, Deborah L. McGuinness — Stanford</td>
+                </tr>
+                <tr>
+                  <td>Length</td>
+                  <td>25 pages, 8 sections, 9 figures</td>
+                </tr>
+                <tr>
+                  <td>Tooling era</td>
+                  <td>
+                    Protégé-2000 (examples), Ontolingua (library), Chimaera
+                    (diagnostics); RDF and DAML named as emerging W3C/DARPA work
+                  </td>
+                </tr>
+                <tr>
+                  <td>Running example</td>
+                  <td>
+                    Wine &amp; food pairing, descended from the CLASSIC tutorial
+                    knowledge base (Brachman et al. 1991)
+                  </td>
+                </tr>
+                <tr>
+                  <td>Intellectual lineage</td>
+                  <td>
+                    Gruber 1993 (definition), Gruninger &amp; Fox 1995
+                    (competency questions), Uschold &amp; Gruninger 1996 and
+                    Gómez-Pérez 1998 (alternative methodologies), Rosch 1978
+                    (levels of generality)
+                  </td>
+                </tr>
+                <tr>
+                  <td>Source</td>
+                  <td>
+                    <a
+                      href="https://protege.stanford.edu/publications/ontology_development/ontology101.pdf"
+                      target="_blank"
+                      rel="noopener"
+                      >protege.stanford.edu — ontology101.pdf</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style="margin-top: 2.5rem">Five reasons to build one (§1)</h3>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3><i class="fas fa-handshake"></i> Shared understanding</h3>
+              <p>
+                Among people <em>or software agents</em>. If sites publish the
+                same underlying ontology, agents can extract and aggregate
+                across them.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-recycle"></i> Reuse of domain knowledge</h3>
+              <p>
+                Time, units, devices: model once, reuse everywhere; or integrate
+                several existing ontologies into a larger one.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-eye"></i> Explicit assumptions</h3>
+              <p>
+                Hard-coded assumptions are hard to find, understand and change —
+                especially for someone without programming expertise.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-layer-group"></i> Domain ≠ operational</h3>
+              <p>
+                Describe the task's domain separately from the program that
+                solves it: the same configuration algorithm drives PCs and
+                elevators when each is fed its own ontology.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-magnifying-glass-chart"></i> Analysis</h3>
+              <p>
+                Once terms are declared, they can be analyzed formally — which
+                matters most when reusing or extending someone else's ontology.
+              </p>
+            </article>
+          </div>
+
+          <blockquote
+            class="ba-quote"
+            data-quote-id="ontology101-not-a-goal"
+            data-quote-kind="paper"
+            data-quote-cite="Noy & McGuinness 2001, §1"
+          >
+            <p class="ba-quote-orig" lang="en">
+              Often an ontology of the domain is not a goal in itself. Developing
+              an ontology is akin to defining a set of data and their structure
+              for other programs to use.
+            </p>
+            <p class="ba-quote-trans" lang="en">
+              <span class="ba-quote-by">101 §1</span> — the sentence that makes
+              an ontology legitimate as agent context: it is data for a consumer,
+              not a monument.
+            </p>
+            <span class="ba-quote-cite">Noy &amp; McGuinness 2001, §1</span>
+          </blockquote>
+
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>VLSC.</strong> The consumer here is an agent. The same eight
+            top-level concepts, the same relations and the same invariants are
+            read three ways: as agent context before an edit, as a pre-edit gate
+            that can refuse the edit, and as the vocabulary of human review. One
+            semantic, three consumers — see
+            <a href="agentic.html#ontology">Agentic · Domain Ontology</a>.
+          </div>
+
+          <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
+            <strong>Not object-oriented design (§ About this guide).</strong>
+            OO design decides by the <em>operational</em> properties of a class —
+            what methods it carries. Ontology design decides by the
+            <em>structural</em> properties — what it is, what it has, what it
+            relates to. The paper is explicit that the resulting class structure
+            differs from a similar domain modelled in an OO program.
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="anatomy">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · Anatomy</span>
+            <h2 class="ag-section-title">
+              Classes, slots, facets, instances — and a knowledge base
+            </h2>
+            <p class="ag-section-subtitle">
+              The paper's working definition, because the AI literature contains
+              many and they contradict one another (§2).
+            </p>
+          </header>
+          <div class="ag-table-wrap">
+            <table class="ag-table">
+              <thead>
+                <tr>
+                  <th>Term</th>
+                  <th>Also called</th>
+                  <th>What it is (101 §2)</th>
+                  <th>Wine example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Class</strong></td>
+                  <td>concept</td>
+                  <td>
+                    A concept in the domain of discourse; the focus of most
+                    ontologies.
+                  </td>
+                  <td>
+                    <code>Wine</code>, <code>Red Wine</code>,
+                    <code>Pauillac</code>, <code>Winery</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Slot</strong></td>
+                  <td>role, property</td>
+                  <td>
+                    A property of a class or instance, describing a feature or
+                    attribute.
+                  </td>
+                  <td>
+                    <code>body</code>, <code>maker</code>, <code>color</code>,
+                    <code>produces</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Facet</strong></td>
+                  <td>role restriction</td>
+                  <td>
+                    A restriction on a slot: value type, allowed values,
+                    cardinality, defaults.
+                  </td>
+                  <td>
+                    <code>body</code>: enumerated {light, medium, full};
+                    <code>produces</code>: multiple, instance-type
+                    <code>Wine</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Instance</strong></td>
+                  <td>individual</td>
+                  <td>
+                    A specific member of a class. Ontology plus instances
+                    constitutes a knowledge base.
+                  </td>
+                  <td>
+                    <code>Chateau-Morgon-Beaujolais</code>, a winery, a vintage
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <blockquote
+            class="ba-quote"
+            data-quote-id="ontology101-fine-line"
+            data-quote-kind="paper"
+            data-quote-cite="Noy & McGuinness 2001, §2"
+          >
+            <p class="ba-quote-orig" lang="en">
+              An ontology together with a set of individual instances of classes
+              constitutes a knowledge base. In reality, there is a fine line
+              where the ontology ends and the knowledge base begins.
+            </p>
+            <p class="ba-quote-trans" lang="en">
+              <span class="ba-quote-by">101 §2</span>
+            </p>
+            <span class="ba-quote-cite">Noy &amp; McGuinness 2001, §2</span>
+          </blockquote>
+
+          <h3 style="margin-top: 2.5rem">
+            Developing an ontology, in practical terms (§2)
+          </h3>
+          <div class="ag-diagram">
+            <div class="ag-flow" aria-label="Four practical activities">
+              <span class="ag-flow-step">Define classes</span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                >Arrange them in a<br />taxonomic hierarchy</span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                >Define slots and their<br />allowed values</span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                >Fill slot values<br />for instances</span
+              >
+            </div>
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>VLSC.</strong> The same four activities, one for one: the
+            eight top-level classes (Agent, Physical Entity, Software System,
+            Activity, Information Object, Capability, Policy/Constraint,
+            Evidence); the relations that arrange them
+            (<code>requests</code>, <code>changes</code>, <code>yields</code>,
+            <code>sampled-as</code>, <code>framed-as</code>, plus
+            <code>inherits</code> / <code>consumes</code> /
+            <code>implements</code> / <code>inspired-by</code> between product
+            families); the facets carried by the 52 machine-readable constraints
+            (severity, <code>sdd_ref</code>, <code>scope</code> glob,
+            <code>patterns</code>); and the instances — radio profiles, specific
+            stations, dated evidence records. Census 2026-09-12.
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="rules">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Three Rules</span>
+            <h2 class="ag-section-title">
+              The rules the paper states before any step
+            </h2>
+            <p class="ag-section-subtitle">
+              "These rules may seem rather dogmatic. They can help, however, to
+              make design decisions in many cases" (§3). Everything later in the
+              guide is an application of these three.
+            </p>
+          </header>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3><i class="fas fa-code-branch"></i> No single correct model</h3>
+              <p>
+                "There is no one correct way to model a domain — there are
+                always viable alternatives. The best solution almost always
+                depends on the application that you have in mind and the
+                extensions that you anticipate." <code>101 §3</code>
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-rotate"></i> Necessarily iterative</h3>
+              <p>
+                "Ontology development is necessarily an iterative process."
+                Start rough, refine, fill in detail — and expect the first
+                version to be revised once it meets an application or an expert.
+                <code>101 §3</code>
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-cube"></i> Close to the domain</h3>
+              <p>
+                "Concepts in the ontology should be close to objects (physical or
+                logical) and relationships in your domain of interest" — most
+                likely the nouns and verbs of the sentences that describe it.
+                <code>101 §3</code>
+              </p>
+            </article>
+          </div>
+          <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
+            <strong>The paper's own humility, kept verbatim.</strong> "There is
+            no single correct ontology-design methodology and we did not attempt
+            to define one" (§ About this guide) and, in the conclusion, "there is
+            no single correct ontology for any domain. Ontology design is a
+            creative process and no two ontologies designed by different people
+            would be the same… <em>The proof is in the pudding</em> — we can
+            assess the quality of our ontology only by using it in applications
+            for which we designed it" (§8). A method that ends by pointing at use
+            is a method that must be paired with evidence — which is exactly
+            where the next section starts.
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>VLSC.</strong> Rule 2 and rule 3 decided the shape of this
+            site's ontology: repeated concepts and constraints were consolidated
+            <em>only after</em> evidence appeared across product boundaries —
+            never designed up front from a whiteboard. The nouns and verbs came
+            from incident reports and SDD rulings, not from a taxonomy someone
+            found elegant.
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="steps">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · The Method</span>
+            <h2 class="ag-section-title">Seven steps, in order</h2>
+            <p class="ag-section-subtitle">
+              The spine of the guide (§3). Steps 4 and 5 are "closely
+              intertwined… also the most important steps in the ontology-design
+              process" — which is why §4 and §5 of the paper go back over them in
+              detail, and why sections 05 and 06 below do the same.
+            </p>
+          </header>
+          <div class="ag-table-wrap">
+            <table class="ag-table">
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th>What 101 asks</th>
+                  <th>The rule that decides</th>
+                  <th>VLSC artifact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1</strong> Domain &amp; scope</td>
+                  <td>
+                    What domain? For what use? Which questions must it answer?
+                    Who uses and maintains it?
+                  </td>
+                  <td>
+                    Scope is task-shaped: the same domain yields different
+                    ontologies for different consumers.
+                  </td>
+                  <td>12 competency questions, five product-family profiles</td>
+                </tr>
+                <tr>
+                  <td><strong>2</strong> Reuse</td>
+                  <td>
+                    What already exists that can be refined or extended?
+                  </td>
+                  <td>
+                    Reuse may be a requirement, not a preference, once other
+                    systems have committed to a vocabulary.
+                  </td>
+                  <td>
+                    W3C SSN/SOSA, PROV-O, OWL-Time, SKOS, SAREF/QUDT — as
+                    conceptual reference; Hamlib vocabulary as a de-facto reuse
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>3</strong> Enumerate terms</td>
+                  <td>
+                    Which terms do we want to make statements about, or explain?
+                  </td>
+                  <td>
+                    Get the list comprehensive first; do not yet worry about
+                    overlap, relations, or class-vs-slot.
+                  </td>
+                  <td>
+                    Bilingual glossary: CommandIntent, Actuation, Observation,
+                    StateReport, DeviceAdapter, Protocol Binding, Control Lease…
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>4</strong> Classes &amp; hierarchy</td>
+                  <td>
+                    Which terms denote objects with independent existence, and
+                    how do they generalize?
+                  </td>
+                  <td>
+                    The is-a test: every instance of B is also an instance of A.
+                  </td>
+                  <td>
+                    Eight top-level classes; product families as siblings; no
+                    artificial intermediate classes
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>5</strong> Slots</td>
+                  <td>
+                    What properties describe each class? Which class does each
+                    remaining term belong to?
+                  </td>
+                  <td>
+                    Attach a slot at the most general class that can have the
+                    property.
+                  </td>
+                  <td>
+                    Relations <code>requests</code> / <code>changes</code> /
+                    <code>yields</code>; capability and protocol-binding slots
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>6</strong> Facets</td>
+                  <td>
+                    Value type, allowed values, cardinality, domain, range,
+                    defaults?
+                  </td>
+                  <td>
+                    Most general domain and range that is not overly general —
+                    never <code>THING</code>.
+                  </td>
+                  <td>
+                    Constraint severity / <code>sdd_ref</code> /
+                    <code>scope</code> / <code>patterns</code>; single-owner
+                    cardinality
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>7</strong> Instances</td>
+                  <td>
+                    Which individuals, at what granularity, with which slot
+                    values?
+                  </td>
+                  <td>
+                    Individual instances are the most specific concepts the
+                    application needs to represent.
+                  </td>
+                  <td>
+                    Radio profiles (FT-710, IC-7300, IC-7300MK2), dated evidence
+                    records, 🐞 reports on the public board
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style="margin-top: 2.5rem">Step 1 — Domain and scope (§3, Step 1)</h3>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3>The four questions</h3>
+              <p>
+                What is the domain the ontology will cover? For what are we going
+                to use it? For what types of questions should it provide answers?
+                Who will use and maintain it? The answers may change during
+                design, "but at any given time they help limit the scope of the
+                model".
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Scope is task-shaped</h3>
+              <p>
+                The paper's own demonstration: the same wine domain needs
+                synonyms and part-of-speech data for natural-language processing,
+                retail pricing for a customer choosing a bottle, wholesale
+                pricing and availability for a buyer stocking a cellar. Three
+                tasks, three ontologies.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Maintainer ≠ user language</h3>
+              <p>
+                "If the people who will maintain the ontology describe the domain
+                in a language that is different from the language of the ontology
+                users, we may need to provide the mapping between the languages."
+                <code>101 §3</code>
+              </p>
+            </article>
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>Competency questions (§3, Step 1).</strong> Sketch the
+            questions a knowledge base built on the ontology must be able to
+            answer; they become "the litmus test later" for whether the ontology
+            holds enough information, at the right level of detail. They are a
+            sketch and need not be exhaustive. The wine set runs from "Is
+            Bordeaux a red or white wine?" to "What were good vintages for Napa
+            Zinfandel?" — and reading them tells you, before any class is drawn,
+            that vintages and food classifications belong in scope while winery
+            inventory and restaurant staff do not.
+            <strong>VLSC:</strong> twelve competency questions are published in
+            the appendix of
+            <a href="agentic.html#evidence">Evidence Discipline</a> — from "which
+            software system owns the authoritative state of a given radio?" to
+            "which safety claim has a real sensor or observation path?".
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>VLSC on the language rule.</strong> This site maintains every
+            ontology term in two languages on purpose — 控制意图 for
+            <code>CommandIntent</code>, 现场验证 for <em>Field verified</em> —
+            because the maintainer thinks in one language and part of the
+            audience reads the other. The mapping is published, not implied.
+          </div>
+
+          <h3 style="margin-top: 2.5rem">Step 2 — Reuse (§3, Step 2)</h3>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3>Almost always worth checking</h3>
+              <p>
+                "It is almost always worth considering what someone else has done
+                and checking if we can refine and extend existing sources for our
+                particular domain and task."
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Sometimes a requirement</h3>
+              <p>
+                Reuse stops being optional "if our system needs to interact with
+                other applications that have already committed to particular
+                ontologies or controlled vocabularies".
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Formalism usually doesn't matter</h3>
+              <p>
+                Most knowledge-representation systems import and export; where
+                they cannot, translating an ontology between formalisms "is
+                usually not a difficult one".
+              </p>
+            </article>
+          </div>
+          <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
+            <strong>VLSC — reuse of concepts, not of runtime.</strong> W3C
+            SOSA/SSN supplies the observation–sensor–actuation distinction,
+            PROV-O the provenance fields, OWL-Time the interval vocabulary, SKOS
+            the bilingual concept pattern, SAREF/QUDT the device–function–quantity
+            split, WoT Thing Description the capability-affordance idea. None of
+            this means an RDF store, a triple database, or a reasoner in the
+            loop: the ontology stays a lightweight bilingual contract grounded in
+            product evidence. Separately, <strong>Hamlib's own vocabulary</strong>
+            is a reused controlled ontology in the strict sense of the rule —
+            this site's MRRC family had no choice but to commit to it, because
+            rigctld already had.
+          </div>
+
+          <h3 style="margin-top: 2.5rem">Step 3 — Enumerate terms (§3, Step 3)</h3>
+          <div class="ag-note">
+            Write down every term you want to make statements about or explain to
+            a user, with its properties and what you want to say about it. Get the
+            list comprehensive first: "without worrying about overlap between
+            concepts they represent, relations among the terms, or any properties
+            that the concepts may have, or whether the concepts are classes or
+            slots". The sorting happens in steps 4–6, and the paper is explicit
+            that steps 4 and 5 are intertwined — a few class definitions, then
+            their properties, then more classes.
+          </div>
+
+          <h3 style="margin-top: 2.5rem">
+            Step 4 — Classes and the class hierarchy (§3, Step 4)
+          </h3>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3>Top-down</h3>
+              <p>
+                Start with the most general concepts and specialize:
+                <code>Wine</code> → red / white / rosé → Syrah, Red Burgundy,
+                Cabernet Sauvignon.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Bottom-up</h3>
+              <p>
+                Start with the leaves and group upward: <code>Pauillac</code> and
+                <code>Margaux</code> → <code>Medoc</code> →
+                <code>Bordeaux</code>.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Combination</h3>
+              <p>
+                Define the salient concepts first, then generalize and specialize.
+                "Often the easiest for many ontology developers, since the
+                concepts 'in the middle' tend to be the more descriptive concepts
+                in the domain" (Rosch 1978).
+              </p>
+            </article>
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>None is inherently better.</strong> The choice "depends
+            strongly on the personal view of the domain". From the Step-3 list,
+            pick the terms that describe objects with <em>independent
+            existence</em> — not terms that describe those objects — and those
+            become the anchors of the hierarchy. Then arrange them with one test:
+            <em>if a class A is a superclass of class B, then every instance of B
+            is also an instance of A</em>; equivalently, B is a "kind of" A.
+            Every Pinot Noir is necessarily a red wine, so
+            <code>Pinot Noir</code> is a subclass of <code>Red Wine</code>.
+            <code>101 §3–§4.1</code>
+          </div>
+
+          <h3 style="margin-top: 2.5rem">Step 5 — Slots (§3, Step 5)</h3>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3>Classes alone are not enough</h3>
+              <p>
+                "The classes alone will not provide enough information to answer
+                the competency questions from Step 1." Most of the leftover
+                Step-3 terms become properties of the classes.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Four kinds of property</h3>
+              <p>
+                <strong>Intrinsic</strong> (a wine's flavor),
+                <strong>extrinsic</strong> (its name, its area),
+                <strong>parts</strong> — physical or abstract (the courses of a
+                meal) — and <strong>relationships to other individuals</strong>
+                (<code>maker</code>, linking a wine to a winery).
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Attach high, inherit down</h3>
+              <p>
+                "A slot should be attached at the most general class that can
+                have that property." <code>body</code> and <code>color</code> sit
+                on <code>Wine</code>; <code>tannin level</code> sits on
+                <code>Red Wine</code>, because white wines are not described by
+                it. All subclasses inherit.
+              </p>
+            </article>
+          </div>
+
+          <h3 style="margin-top: 2.5rem">Step 6 — Facets of the slots (§3, Step 6)</h3>
+          <div class="ag-table-wrap">
+            <table class="ag-table">
+              <thead>
+                <tr>
+                  <th>Facet</th>
+                  <th>What it constrains</th>
+                  <th>Paper's example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Cardinality</td>
+                  <td>
+                    How many values a slot may have: single vs multiple, or an
+                    explicit minimum and maximum. Maximum 0 is legal — it says a
+                    subclass may not fill the slot at all.
+                  </td>
+                  <td>
+                    <code>body</code> single; <code>produces</code> multiple;
+                    <code>grape</code> min 1, max 1 for single-varietal wines
+                  </td>
+                </tr>
+                <tr>
+                  <td>Value type</td>
+                  <td>
+                    What kind of value fills the slot: String, Number
+                    (Float/Integer), Boolean, Enumerated (Symbol in
+                    Protégé-2000), or Instance with a list of allowed classes.
+                  </td>
+                  <td>
+                    <code>name</code> String; <code>flavor</code> enumerated
+                    {strong, moderate, delicate}; <code>produces</code> Instance
+                    of <code>Wine</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Domain</td>
+                  <td>
+                    The classes a slot is attached to — the classes whose
+                    property it describes.
+                  </td>
+                  <td><code>Winery</code> is the domain of <code>produces</code></td>
+                </tr>
+                <tr>
+                  <td>Range</td>
+                  <td>
+                    The allowed classes for an instance-typed slot's values.
+                  </td>
+                  <td><code>Wine</code> is the range of <code>produces</code></td>
+                </tr>
+                <tr>
+                  <td>Default value</td>
+                  <td>
+                    A convenience filled in automatically for new instances —
+                    which, unlike a slot <em>value</em>, may be changed. See
+                    section 06 below.
+                  </td>
+                  <td>
+                    "full" as the default <code>body</code> when most wines in
+                    scope are full-bodied
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>The domain-and-range doctrine, in four moves (§3, Step 6).</strong>
+            (1) Find the most general class that can be the domain or range.
+            (2) But not overly general: every class in the domain must really be
+            described by the slot, and every class in the range must be a
+            potential filler — "one would not want to make the range
+            <code>THING</code>". (3) If the list contains a class and its
+            subclass, delete the subclass — it adds no information. (4) If it
+            contains all subclasses of A but not A, use A alone; and if it
+            contains all but a few subclasses of A, consider whether A is the
+            better answer. Slot attachment obeys the same rules where attaching
+            equals declaring the domain: <code>tannin level</code> belongs on
+            <code>Red Wine</code>, not on each red variety, and not on
+            <code>Wine</code>.
+          </div>
+          <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
+            <strong>VLSC.</strong> Move (2) is the reason
+            <code>Protocol Binding ≠ Capability</code> is an axiom here rather
+            than a preference: a capability declared over an overly general range
+            ("any backend") is a claim no test can falsify. The concrete anchor is
+            the <code>audio-pyaudio-rate</code> constraint — audio rate comes
+            from backend capabilities, not from a model name hard-coded at the
+            call site [AD-011, amended V2.9/V2.14]. Cardinality shows up as an
+            invariant rather than a facet value: <em>one</em> authoritative state
+            owner, <em>one</em> serial-port owner (ft8
+            <code>no-direct-serial</code> [AD-008]; ft710 / modern
+            <code>cat-direct-serial-io</code> [AD-002]).
+          </div>
+
+          <h3 style="margin-top: 2.5rem">Step 7 — Instances (§3, Step 7)</h3>
+          <div class="ag-note">
+            Three moves: choose a class, create an individual of that class, fill
+            in its slot values. The paper's worked instance,
+            <code>Chateau-Morgon-Beaujolais</code>, carries eight values — body
+            light, color red, flavor delicate, tannin level low, grape
+            <code>Gamay</code> (an instance of <code>Wine Grape</code>), maker
+            <code>Chateau-Morgon</code> (an instance of <code>Winery</code>),
+            region <code>Beaujolais</code> (an instance of
+            <code>Wine-Region</code>), sugar dry. Note what the instance
+            demonstrates: three of its eight values are themselves instances of
+            other classes, which is how a knowledge base stays queryable instead
+            of becoming a pile of strings.
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>VLSC.</strong> Instances are where the evidence lives. A radio
+            profile (FT-710, IC-7300, IC-7300MK2) is an instance carrying
+            capability values; a dated evidence record is an instance carrying
+            source, version, environment, method, result and limitation; a 🐞
+            report on the public board is an instance carrying a classification.
+            The paper's granularity rule — "individual instances are the most
+            specific concepts represented in a knowledge base" — is why a
+            <em>release</em> is an instance here but a <em>radio model</em> is a
+            class: releases are counted, models are described.
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="hierarchy">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · Hierarchy Traps</span>
+            <h2 class="ag-section-title">
+              Twenty ways a class hierarchy goes wrong
+            </h2>
+            <p class="ag-section-subtitle">
+              Section 4 of the paper is a defect catalogue, not a tutorial:
+              "after defining a considerable number of new classes, it is helpful
+              to stand back and check if the emerging hierarchy conforms to these
+              guidelines." Read it as a review checklist — which is how an agent
+              can use it too.
+            </p>
+          </header>
+          <div class="ag-table-wrap">
+            <table class="ag-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Trap</th>
+                  <th>The rule (101 §4)</th>
+                  <th>Why it breaks</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>is-a read as "related to"</td>
+                  <td>
+                    A is a superclass of B only if every instance of B is
+                    necessarily an instance of A — a "kind of" relation. §4.1
+                  </td>
+                  <td>
+                    Anything vaguely associated becomes a subclass, and
+                    inheritance starts carrying properties the child does not
+                    have.
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Singular under plural</td>
+                  <td>
+                    Never define <code>Wines</code> and then <code>Wine</code> as
+                    its subclass; pick one number and keep it everywhere. §4.1,
+                    §6.2
+                  </td>
+                  <td>
+                    "A single wine is not a kind of wines" — the hierarchy says
+                    something false about the domain.
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Forgetting transitivity</td>
+                  <td>
+                    If B ⊂ A and C ⊂ B then C ⊂ A. §4.1
+                  </td>
+                  <td>
+                    Constraints attached high up silently apply three levels down,
+                    where nobody expected them.
+                  </td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Direct vs indirect confusion</td>
+                  <td>
+                    A direct subclass has no class between it and its parent;
+                    <code>Chardonnay</code> is a direct subclass of
+                    <code>White Wine</code>, not of <code>Wine</code>. §4.1
+                  </td>
+                  <td>
+                    Sibling analysis and "attach the slot at the most general
+                    class" both need the direct relation, not the transitive
+                    closure.
+                  </td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Frozen hierarchy in an evolving domain</td>
+                  <td>
+                    When white Zinfandel appeared, <code>Zinfandel</code> had to
+                    split into red and white subclasses under different parents.
+                    §4.1
+                  </td>
+                  <td>
+                    The domain moved; the ontology now asserts a color that some
+                    of its own instances do not have.
+                  </td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Confusing a class with its name</td>
+                  <td>
+                    "Classes represent concepts in the domain and not the words
+                    that denote these concepts." Renaming <code>Shrimps</code> to
+                    <code>Prawns</code> changes nothing else. §4.1
+                  </td>
+                  <td>
+                    A terminology change is mistaken for a modelling change, and
+                    everything downstream gets rebuilt.
+                  </td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Synonyms as separate classes</td>
+                  <td>
+                    One concept, one class; carry synonyms, translations and
+                    presentation names as a list, or in documentation. §4.1
+                  </td>
+                  <td>
+                    <code>Shrimp</code>, <code>Prawn</code> and
+                    <code>Crevette</code> as three classes means three places to
+                    maintain one fact.
+                  </td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Cycles</td>
+                  <td>
+                    A ⊂ B and B ⊂ A at once is a declaration that A and B are
+                    equivalent. §4.1
+                  </td>
+                  <td>
+                    The hierarchy stops being a hierarchy; traversal may not
+                    terminate.
+                  </td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Siblings at different levels of generality</td>
+                  <td>
+                    All siblings except those at the root must sit at the same
+                    level of generality — <code>White Wine</code> and
+                    <code>Chardonnay</code> are not siblings. Root-level classes
+                    are major divisions and are exempt. §4.2
+                  </td>
+                  <td>
+                    The tree reads like a book outline with a chapter and a
+                    sub-sub-section side by side.
+                  </td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Exactly one subclass</td>
+                  <td>
+                    "If a class has only one direct subclass there may be a
+                    modeling problem or the ontology is not complete." Like a
+                    bulleted list with one bullet. §4.2
+                  </td>
+                  <td>
+                    Either the two classes are equivalent (delete one) or the
+                    missing siblings have not been found yet.
+                  </td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>More than a dozen subclasses</td>
+                  <td>
+                    Well-structured ontologies have between two and a dozen
+                    direct subclasses; beyond that, intermediate categories are
+                    probably needed. §4.2
+                  </td>
+                  <td>
+                    Every wine type flat under <code>Wine</code> hides the Medoc /
+                    Bordeaux and Côtes d'Or / Burgundy structure the domain
+                    already has.
+                  </td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>Invented grouping classes</td>
+                  <td>
+                    If no natural class exists to group a long sibling list,
+                    leave it flat — "the ontology is a reflection of the real
+                    world". §4.2
+                  </td>
+                  <td>
+                    An artificial intermediate class is a category nobody in the
+                    domain will recognise, and every future instance must be
+                    forced into it.
+                  </td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>Fearing multiple inheritance</td>
+                  <td>
+                    It is legitimate: <code>Port</code> is both
+                    <code>Red Wine</code> and <code>Dessert Wine</code>, and
+                    inherits <code>sugar = SWEET</code> from one parent and
+                    <code>tannin level</code> from the other. §4.3
+                  </td>
+                  <td>
+                    Refusing it produces duplicate parallel hierarchies that must
+                    be kept in sync by hand.
+                  </td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>New class with nothing new to say</td>
+                  <td>
+                    Introduce a subclass when it has additional properties,
+                    different restrictions, or different relationships; in
+                    practice it should add slots, add slot values, or override
+                    inherited facets. §4.4
+                  </td>
+                  <td>
+                    A class that says nothing beyond its parent is a name, not a
+                    concept.
+                  </td>
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>A subclass per restriction</td>
+                  <td>
+                    Do not create <code>Delicate Wine</code>,
+                    <code>Moderate Wine</code>… for each value of a slot; the
+                    distinction belongs in the slot value. §4.4–§4.5
+                  </td>
+                  <td>
+                    Class explosion, and every facet of a value becomes a node in
+                    the tree.
+                  </td>
+                </tr>
+                <tr>
+                  <td>16</td>
+                  <td>Denying terminological hierarchies</td>
+                  <td>
+                    Reference hierarchies (a classification of diseases) may add
+                    no properties at all and are still worth having: they support
+                    navigation and let the user pick a level of generality. §4.4
+                  </td>
+                  <td>
+                    Insisting every class earn new slots flattens vocabularies
+                    whose whole job is to organise terms.
+                  </td>
+                </tr>
+                <tr>
+                  <td>17</td>
+                  <td>Classes that instances migrate between</td>
+                  <td>
+                    "A class to which an individual instance belongs should not
+                    change often." <code>Chilled Wine</code> is an attribute, not
+                    a class. §4.5
+                  </td>
+                  <td>
+                    Extrinsic properties used as class criteria make instances
+                    change class during their lifetime — and take their inherited
+                    facets with them.
+                  </td>
+                </tr>
+                <tr>
+                  <td>18</td>
+                  <td>Instances where a hierarchy exists</td>
+                  <td>
+                    If concepts form a natural hierarchy, make them classes —
+                    all wine regions are classes, marked abstract where they have
+                    no direct instances. There is no such thing as a sub-instance.
+                    §4.6
+                  </td>
+                  <td>
+                    <code>Bourgogne</code> as an instance cannot have
+                    <code>Côtes d'Or</code> under it, so the natural structure is
+                    lost.
+                  </td>
+                </tr>
+                <tr>
+                  <td>19</td>
+                  <td>Over- and under-scoping</td>
+                  <td>
+                    Do not specialise or generalise more than the application
+                    needs — "at most one extra level each way"; do not include
+                    every property or every conceivable relation. §4.7
+                  </td>
+                  <td>
+                    Label paper and shrimp recipes enter a wine-pairing ontology;
+                    maintenance cost rises and the competency questions do not.
+                  </td>
+                </tr>
+                <tr>
+                  <td>20</td>
+                  <td>Undeclared disjointness</td>
+                  <td>
+                    Declare classes disjoint when they cannot share instances —
+                    <code>Red Wine</code> and <code>White Wine</code> are,
+                    <code>Dessert Wine</code> and <code>White Wine</code> are not.
+                    §4.8
+                  </td>
+                  <td>
+                    Without the declaration the system cannot flag a class
+                    subclassed from both <code>Riesling</code> and
+                    <code>Port</code> as the modelling error it is.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style="margin-top: 2.5rem">The three hard decisions, in detail</h3>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3>A new class, or a property value? (§4.5)</h3>
+              <p>
+                Create a class for the distinction when
+                <strong>(a)</strong> the concepts with different values become
+                restrictions on slots of other classes, or
+                <strong>(b)</strong> the distinction matters in the domain and
+                you think of the two as different kinds of object. Otherwise keep
+                it in the slot value. Wine colour is the paper's exception that
+                proves the rule: colours are normally values, but a red wine and
+                a white wine pair with different foods, so
+                <code>Red Merlot</code> and <code>White Merlot</code> are two
+                classes.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>A class, or an instance? (§4.6)</h3>
+              <p>
+                Decide the lowest granularity the application needs — "the most
+                specific concepts that will constitute answers to [the competency
+                questions] are very good candidates for individuals". Pairing wine
+                with food stops at <code>Sterling Vineyards Merlot</code>; adding
+                a restaurant inventory pushes individual bottles down to
+                instances; recording per-vintage properties makes the vintage the
+                instance and the wine the class.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Limiting the scope (§4.7)</h3>
+              <p>
+                True statements may still be out of scope. An experimenter
+                <em>is</em> a biological organism, but for an ontology of biology
+                experiments that subclass would attach weight, age and species
+                slots to every experimenter — irrelevant data, and a trap for
+                reusers. The paper's instruction is the important half:
+                <strong>record such design decisions in the documentation</strong>,
+                so someone reusing the ontology for another application knows the
+                fact was excluded deliberately.
+              </p>
+            </article>
+          </div>
+          <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
+            <strong>VLSC — trap 20 is a live invariant here.</strong> Declaring
+            disjointness is how a model becomes checkable, and this site declares
+            several: transmit and receive states are disjoint and a station must
+            be in exactly one; an authoritative state owner and a client
+            projection are disjoint, which is the formal content of "clients may
+            project or request state; they do not silently become the station
+            authority". The same move guards the evidence ladders: a
+            <em>process</em> badge (B1–B4, was the engineering constrained?) and a
+            <em>product</em> badge (design target → field verified, is the
+            behaviour true?) are declared disjoint on purpose, so that no number
+            of green constraints can be read as a bench result. See
+            <a href="agentic.html#evidence">Evidence Discipline</a>.
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>VLSC — traps 10 to 12, decided by evidence.</strong> The five
+            product families are siblings under one engineering system, and no
+            sixth grouping class was invented to make the tree prettier; where a
+            natural middle concept did exist, it was taken —
+            <code>RadioBackend</code> and <code>RadioCapabilities</code> generalise
+            the FT-710 vertical slice into the Modern platform, which is trap 11
+            fixed by an intermediate category the domain actually uses. The
+            reverse case is documented too: SunsdrMobile is a <em>client</em> of
+            SunMRRC, not a product family, and saying so is what stops a
+            single-subclass branch appearing next to it.
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="properties">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · Properties</span>
+            <h2 class="ag-section-title">
+              Inverse slots and the default/value distinction
+            </h2>
+            <p class="ag-section-subtitle">
+              Section 5 of the paper is short and easily skipped. Both of its
+              topics are about redundancy and enforcement — the two things that
+              decide whether a model can be trusted by a machine.
+            </p>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card" data-track="control">
+              <h3>Inverse slots (§5.1)</h3>
+              <p>
+                <code>maker</code> on <code>Wine</code> and
+                <code>produces</code> on <code>Winery</code> are the same fact
+                stated twice. Storing both directions is redundant: an application
+                can always infer one from the other. But from a
+                knowledge-acquisition standpoint both are convenient, because a
+                user may know the wine in one session and the winery in another —
+                so the system fills the inverse automatically and keeps the base
+                consistent.
+              </p>
+              <p>
+                The rule worth keeping: <strong>declare the pair, store it once,
+                let the system maintain the mirror.</strong>
+              </p>
+            </article>
+            <article class="ag-card" data-track="sdr">
+              <h3>Default values vs slot values (§5.2)</h3>
+              <p>
+                A <strong>default</strong> is convenience: when most instances
+                share a value, new instances are pre-filled and may then be
+                changed. It "does not enforce any new restrictions on the model
+                or change the model in any way".
+              </p>
+              <p>
+                A slot <strong>value</strong> is different: if
+                <code>sugar = SWEET</code> is a value on
+                <code>Dessert Wine</code>, then every subclass and instance
+                carries it and it cannot be changed. One is a starting point; the
+                other is a constraint.
+              </p>
+            </article>
+          </div>
+          <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
+            <strong>VLSC — the distinction cost a real incident.</strong> Audio
+            sample rate on the FT-710 path was treated as a fixed value
+            (44.1 kHz, attached to the model) when it was in fact a capability
+            the backend reports. The correction is recorded as AD-011, amended in
+            V2.9 and V2.14, and pinned by the
+            <code>audio-pyaudio-rate</code> constraint: rate comes from backend
+            capabilities. Read in the paper's terms, a value was declared where a
+            default — or better, a lookup — belonged, and the model asserted
+            something the hardware was free to contradict.
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>VLSC — inverse pairs, and which side is authoritative.</strong>
+            Several relations here are genuinely inverse: a station's control
+            lease holder and the holder's leased stations; a
+            <code>CommandIntent</code> and the <code>StateReport</code> that
+            answers it; a 🐞 report and the answer page that closes it. The
+            mirror is maintained by the server, never by the client — and that
+            asymmetry is a safety invariant, not a convenience: a projection may
+            display the mirrored value, but only the authoritative side may write
+            it. <code>CommandIntent ≠ Actuation</code> and
+            <code>Observation → StateReport</code> are the ontology saying the
+            same thing twice: a command is not confirmed state, and only an
+            observation closes the loop. The ft710
+            <code>ptt-release-no-verify</code> constraint is the honest exception,
+            declared as such — TX0 is fire-and-forget, so there is no mirror to
+            maintain and no confirmation to infer [AD-007; Ch15; V1.2].
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="naming">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · Naming</span>
+            <h2 class="ag-section-title">
+              "Define a naming convention for classes and slots and adhere to it"
+            </h2>
+            <p class="ag-section-subtitle">
+              Section 6 of the paper. Naming is presented as a modelling safety
+              device, not cosmetics: consistency is what prevents the singular /
+              plural class error, and an explicit convention is what makes a term
+              recognisable as a class or a slot at a glance.
+            </p>
+          </header>
+          <div class="ag-table-wrap">
+            <table class="ag-table">
+              <thead>
+                <tr>
+                  <th>Decision (101 §6)</th>
+                  <th>What the paper says</th>
+                  <th>VLSC convention</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>System constraints first</td>
+                  <td>
+                    Choose the convention around the knowledge-representation
+                    system: one namespace or separate ones for classes, slots and
+                    instances; case sensitivity; which delimiters are legal.
+                    Protégé-2000 is case-sensitive with a single namespace, so a
+                    class <code>Winery</code> and a slot <code>winery</code>
+                    coexist but two <code>winery</code>s do not.
+                  </td>
+                  <td>
+                    The "system" is a repository plus an agent runtime: names must
+                    survive as identifiers in code, as keys in
+                    <code>harness/index.json</code>, and as search terms in a
+                    constraint registry — so ASCII, no spaces, case-significant.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Capitalisation</td>
+                  <td>
+                    Capitalise class names, lower-case slot names, assuming the
+                    system is case-sensitive.
+                  </td>
+                  <td>
+                    Classes and ontology terms PascalCase:
+                    <code>CommandIntent</code>, <code>StateReport</code>,
+                    <code>DeviceAdapter</code>, <code>ControlLease</code>.
+                    Relations lower-case: <code>requests</code>,
+                    <code>changes</code>, <code>yields</code>,
+                    <code>inherits</code>, <code>consumes</code>,
+                    <code>implements</code>, <code>inspired-by</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Delimiters</td>
+                  <td>
+                    Space, CamelCase, or an underscore / dash — and if you use
+                    delimiters, also decide whether each word is capitalised.
+                    Spaces are intuitive but may not survive the systems you
+                    interoperate with.
+                  </td>
+                  <td>
+                    Constraint IDs are kebab-case and read as a rule, not a thing:
+                    <code>cat-no-dn</code>, <code>no-direct-serial</code>,
+                    <code>poll-stale-guard</code>, <code>vendor-readonly</code>,
+                    <code>ptt-authority</code>. Multi-word ontology relations use
+                    a hyphen for the same reason.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Singular or plural</td>
+                  <td>
+                    Neither is better; singular is more common in practice. Pick
+                    one, keep it throughout — some systems make you declare the
+                    choice in advance. Consistency is also what prevents
+                    <code>Wine</code> under <code>Wines</code>.
+                  </td>
+                  <td>
+                    Singular for every class and term: <em>Product Family</em>,
+                    <em>Physical Entity</em>, <em>Information Object</em>. Plural
+                    appears only in prose, never in a term.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Prefix / suffix</td>
+                  <td>
+                    <code>has-</code> or <code>-of</code> on slot names makes a
+                    term self-identifying as a slot, at the cost of longer names.
+                  </td>
+                  <td>
+                    Not used: verb-form relations (<code>requests</code>,
+                    <code>yields</code>) are already unambiguous against
+                    PascalCase classes, so the prefix would be noise.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Do not annotate the kind</td>
+                  <td>
+                    Never add "class", "property" or "slot" to a concept name —
+                    the context and the convention already say what it is.
+                  </td>
+                  <td>
+                    Followed. The one deliberate exception is the evidence ladder,
+                    where the badge text names its own kind (<em>Field
+                    verified</em>, <em>Bench pending</em>) because the badge is
+                    read out of context, in tables and release notes.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Avoid abbreviations</td>
+                  <td>
+                    "Use <code>Cabernet Sauvignon</code> rather than
+                    <code>Cab</code>."
+                  </td>
+                  <td>
+                    Followed with one honest caveat: the radio domain's controlled
+                    vocabulary <em>is</em> abbreviations — PTT, CAT, SWR, IQ, EFHW,
+                    QSO, VFO, DNR. These are terms, not shorthand, and the
+                    bilingual glossary carries the expansion. The rule that
+                    actually applies is: <strong>no invented abbreviations</strong>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Subclass naming</td>
+                  <td>
+                    Direct subclasses either all include the superclass name or
+                    all omit it: <code>Red Wine</code> and <code>White Wine</code>,
+                    or <code>Red</code> and <code>White</code> — never one of each.
+                  </td>
+                  <td>
+                    Product names follow their family: <em>MRRC Universal</em>,
+                    <em>MRRC FT-710</em>, <em>MRRC Modern</em>,
+                    <em>MRRC-FT8</em> — the family token is present in all of
+                    them, and <em>SunMRRC</em> keeps its own root because it is a
+                    different track, not a subclass.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Synonyms and translations</td>
+                  <td>
+                    Many systems attach a list of synonyms, translations or
+                    presentation names to a class; where they cannot, list them in
+                    the class documentation. §4.1, §6
+                  </td>
+                  <td>
+                    The bilingual glossary is exactly this list, published:
+                    控制意图 / <code>CommandIntent</code>, 执行活动 /
+                    <code>Actuation</code>, 观测活动 / <code>Observation</code>,
+                    现场验证 / <em>Field verified</em>. Two names, one concept —
+                    never two concepts.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="checklist">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · Checklist</span>
+            <h2 class="ag-section-title">
+              The whole guide as 24 checks
+            </h2>
+            <p class="ag-section-subtitle">
+              Written so that it can be run by a person reviewing a model, or
+              handed to an agent as the acceptance list for an ontology change.
+              Every item traces to a section of the paper.
+            </p>
+          </header>
+          <div class="ag-plane-grid">
+            <article class="ag-card">
+              <h3>A · Before you model</h3>
+              <ol start="1">
+                <li>
+                  <span
+                    ><strong>Write the four scope questions down.</strong><br />Domain,
+                    intended use, questions to answer, who maintains it — dated,
+                    because they will change. <code>§3 Step 1</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Sketch the competency questions.</strong><br />They
+                    are the litmus test for everything built later, and they need
+                    not be exhaustive. <code>§3 Step 1</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Search for what already exists.</strong><br />Record
+                    what you adopted, what you only consulted, and what you were
+                    forced to commit to. <code>§3 Step 2</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Enumerate terms before sorting them.</strong><br />Comprehensive
+                    list first; class-vs-slot decided later.
+                    <code>§3 Step 3</code></span
+                  >
+                </li>
+              </ol>
+            </article>
+            <article class="ag-card">
+              <h3>B · Building the hierarchy</h3>
+              <ol start="5">
+                <li>
+                  <span
+                    ><strong>Pick an approach deliberately.</strong><br />Top-down,
+                    bottom-up, or combination — the last is usually easiest,
+                    because middle-level concepts are the most descriptive.
+                    <code>§3 Step 4</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Anchor on independent existence.</strong><br />Terms
+                    that denote objects, not terms that describe them.
+                    <code>§3 Step 4</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Apply the is-a test to every pair.</strong><br />Every
+                    instance of the child is necessarily an instance of the
+                    parent. <code>§4.1</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Keep siblings at one level of generality.</strong><br />Root
+                    classes are exempt: they are major divisions.
+                    <code>§4.2</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Two to a dozen subclasses.</strong><br />One is a
+                    smell; more than a dozen asks for an intermediate category —
+                    but never an invented one. <code>§4.2</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>No cycles, no synonym classes.</strong><br />A cycle
+                    declares equivalence; a synonym is another name for the same
+                    concept. <code>§4.1</code></span
+                  >
+                </li>
+              </ol>
+            </article>
+            <article class="ag-card">
+              <h3>C · Slots and facets</h3>
+              <ol start="11">
+                <li>
+                  <span
+                    ><strong>Attach each slot as high as it truthfully goes.</strong><br />The
+                    most general class that can have the property.
+                    <code>§3 Step 5</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Classify every property.</strong><br />Intrinsic,
+                    extrinsic, part, or relation to another individual.
+                    <code>§3 Step 5</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Declare cardinality and value type.</strong><br />Including
+                    minimum, maximum, and the legitimate maximum of 0.
+                    <code>§3 Step 6</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Set domain and range general — but not
+                    <code>THING</code>.</strong><br />Every class in the domain
+                    must be described by the slot; every class in the range must
+                    be a potential filler. <code>§3 Step 6</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Prune the domain and range lists.</strong><br />Drop a
+                    subclass when its superclass is present; collapse a complete
+                    enumeration into the parent; reconsider the parent when all
+                    but a few subclasses are listed. <code>§3 Step 6</code></span
+                  >
+                </li>
+              </ol>
+            </article>
+            <article class="ag-card">
+              <h3>D · Class, value, or instance</h3>
+              <ol start="16">
+                <li>
+                  <span
+                    ><strong>Introduce a class only when it has something new to
+                    say.</strong><br />New properties, different restrictions, or
+                    different relationships. <code>§4.4</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Keep distinctions in slot values by default.</strong><br />Promote
+                    to a class when the values become restrictions elsewhere, or
+                    the domain treats them as different kinds of thing.
+                    <code>§4.5</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>No classes that instances migrate between.</strong><br />Chilled
+                    wine is an attribute, not a taxon. <code>§4.5</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Fix granularity from the competency
+                    questions.</strong><br />And promote natural hierarchies to
+                    classes — abstract ones where they have no direct instances.
+                    <code>§4.6</code></span
+                  >
+                </li>
+              </ol>
+            </article>
+            <article class="ag-card">
+              <h3>E · Names</h3>
+              <ol start="20">
+                <li>
+                  <span
+                    ><strong>Write the convention down and follow it.</strong><br />Capitalisation,
+                    delimiters, singular vs plural — chosen around the system you
+                    are actually in. <code>§6</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>No invented abbreviations, no kind annotations.</strong><br />And
+                    subclass names either all carry the parent's name or none do.
+                    <code>§6.2–§6.4</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>One concept, many names.</strong><br />Synonyms and
+                    translations attach to a class; they never become sibling
+                    classes. <code>§4.1, §6</code></span
+                  >
+                </li>
+              </ol>
+            </article>
+            <article class="ag-card">
+              <h3>F · Governance</h3>
+              <ol start="23">
+                <li>
+                  <span
+                    ><strong>Document what you excluded and why.</strong><br />An
+                    experimenter is a biological organism; this ontology says
+                    otherwise, on purpose — and the documentation must say so, or
+                    a reuser will be misled. <code>§4.7</code></span
+                  >
+                </li>
+                <li>
+                  <span
+                    ><strong>Declare disjointness, then use the model.</strong><br />Where
+                    classes cannot share instances, say so — it is what lets a
+                    tool catch the error. Then assess quality the only way the
+                    paper allows: by using it. <code>§4.8, §8</code></span
+                  >
+                </li>
+              </ol>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="mapping">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">09 · Audit</span>
+            <h2 class="ag-section-title">
+              The seven steps, audited against a live ontology
+            </h2>
+            <p class="ag-section-subtitle">
+              What the paper asks for, what exists here, and — because an audit
+              that only lists successes is advertising — what is missing. Census
+              2026-09-12; artifacts named so each row can be checked.
+            </p>
+          </header>
+          <div class="ag-table-wrap">
+            <table class="ag-table">
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th>Present</th>
+                  <th>Anchor</th>
+                  <th>Gap / limitation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1</strong> Scope &amp; competency questions</td>
+                  <td>Yes</td>
+                  <td>
+                    12 published competency questions; five product-family
+                    profiles; scope stated per family in
+                    <a href="agentic.html#families">Product Families</a>
+                  </td>
+                  <td>
+                    The questions are prose, not executable: nothing fails a build
+                    when one of them stops being answerable.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>2</strong> Reuse</td>
+                  <td>Yes, conceptual</td>
+                  <td>
+                    W3C SOSA/SSN, PROV-O, OWL-Time, SKOS, WoT TD; ETSI SAREF and
+                    QUDT; Hamlib's vocabulary as a forced commitment
+                  </td>
+                  <td>
+                    No formal import: nothing is loaded from those namespaces at
+                    runtime, so the alignment is a claim maintained by hand.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>3</strong> Term enumeration</td>
+                  <td>Yes</td>
+                  <td>Bilingual core glossary, 12 term pairs, published in the appendix</td>
+                  <td>
+                    No synonym list beyond the EN/ZH pair; radio-domain aliases
+                    (CAT vs rig control, PTT vs transmit trigger) are not carried
+                    as declared synonyms.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>4</strong> Classes &amp; hierarchy</td>
+                  <td>Yes, deliberately shallow</td>
+                  <td>
+                    Eight top-level classes; product families as siblings;
+                    <code>RadioBackend</code> / <code>RadioCapabilities</code> as
+                    the one earned intermediate level
+                  </td>
+                  <td>
+                    Depth is at most two below the top level. That is a scope
+                    decision, not an accident — but it means the is-a test is
+                    rarely stressed.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>5</strong> Slots</td>
+                  <td>Yes</td>
+                  <td>
+                    <code>requests</code>, <code>changes</code>,
+                    <code>yields</code>, <code>sampled-as</code>,
+                    <code>framed-as</code>; family relations
+                    <code>inherits</code> / <code>consumes</code> /
+                    <code>implements</code> / <code>inspired-by</code>
+                  </td>
+                  <td>
+                    Relations are documented in prose and SVG diagrams, not in a
+                    schema a tool can traverse.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>6</strong> Facets</td>
+                  <td>Partly — and better than prose where it counts</td>
+                  <td>
+                    52 machine-readable constraints across three repositories,
+                    each with severity (<code>block</code> / <code>warn</code> /
+                    <code>info</code>), <code>sdd_ref</code>, <code>scope</code>
+                    glob and <code>patterns</code>; cardinality as an invariant
+                    (one authoritative state owner, one serial owner)
+                  </td>
+                  <td>
+                    These are enforcement facets on <em>code</em>, not declared
+                    facets on ontology slots. Domain and range of the relations
+                    are never stated formally.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>7</strong> Instances</td>
+                  <td>Yes</td>
+                  <td>
+                    Radio profiles (FT-710, IC-7300, IC-7300MK2); dated evidence
+                    records; 🐞 reports classified on a public board
+                  </td>
+                  <td>
+                    Instances live in three places (code profiles, release notes,
+                    the board) with no shared identity scheme.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>§4.8</strong> Disjointness</td>
+                  <td>In prose</td>
+                  <td>
+                    TX vs RX state; authoritative owner vs client projection;
+                    process evidence (B1–B4) vs product evidence (design target →
+                    field verified)
+                  </td>
+                  <td>
+                    Not machine-declared, so no tool can flag a violation — the
+                    check is a human reading the invariants.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>§6</strong> Naming</td>
+                  <td>Yes</td>
+                  <td>
+                    PascalCase terms, lower-case relations, kebab-case constraint
+                    IDs, singular class names, published bilingual pairs
+                  </td>
+                  <td>
+                    The convention is observable but unwritten: it lives in the
+                    artifacts, not in a style document an agent can load.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>§8</strong> Assessment by use</td>
+                  <td>Yes — stronger than the paper</td>
+                  <td>
+                    Three consumers of one semantic: agent context,
+                    <code>PreToolUse(Edit|Write)</code> gate, human review; a
+                    reproducible block trace
+                    (<code>sdd_context.py check</code> → exit 2)
+                  </td>
+                  <td>
+                    Use is measured as blocked edits, not as answered competency
+                    questions. The litmus test of Step 1 is still manual.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
+            <strong>The honest summary.</strong> This ontology is strong exactly
+            where the paper is silent — runtime consumption, enforcement,
+            provenance — and weak exactly where the paper is strong: formal
+            domain and range, declared disjointness, a written naming convention,
+            executable competency questions. Neither half cancels the other. An
+            ontology that agents load but cannot be reasoned over, and an ontology
+            that reasons beautifully but nobody consumes, are two different
+            failures.
+          </div>
+        </div>
+      </section>
+
+      <section class="ag-section" id="limits">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">10 · Boundaries</span>
+            <h2 class="ag-section-title">Where 101 stops — and what an agent adds</h2>
+            <p class="ag-section-subtitle">
+              Reading a 2001 guide in 2026 requires naming its frame. None of
+              this is criticism; the paper says of itself that it is "a starting
+              point", and it is still the clearest one.
+            </p>
+          </header>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3>No metric beyond use</h3>
+              <p>
+                Quality is assessed by using the ontology in the application it
+                was designed for — "the proof is in the pudding" (§8). The only
+                tooling named is Chimaera, for logical correctness and common
+                design errors. There is no cost model, no coverage measure, no
+                notion of a regression.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>No governance over time</h3>
+              <p>
+                Evolution appears once, as an anecdote about white Zinfandel
+                (§4.1). There is no versioning, no ownership, no ruling process,
+                no account of who may change a class and on what evidence.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>No adversarial consumer</h3>
+              <p>
+                The consumers imagined are applications and knowledge-based
+                systems that read the model. The paper never considers a consumer
+                that can <em>edit the codebase</em> — which is the consumer that
+                turns an ontology from documentation into a gate.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Frames, not the semantic web</h3>
+              <p>
+                Slots attach to classes; defaults exist; RDF and DAML are named
+                as emerging work. An OWL 2 reading differs in kind: properties are
+                global with declared domain and range, the open-world assumption
+                applies, and there are no default values at all.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>No responsibility</h3>
+              <p>
+                Nothing in the guide asks who is accountable when a model is
+                wrong, who may authorize an action taken on the strength of it, or
+                how a decision is traced back to the person who made it.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Nodes, not edges</h3>
+              <p>
+                101 is a discipline for making <em>nodes</em> meaningful. It does
+                not address the quality of the links between them — which is the
+                variable that decides whether a network of models, tools and
+                people compounds or merely amplifies noise.
+              </p>
+            </article>
+          </div>
+
+          <h3 style="margin-top: 2.5rem">What an agentic setting adds</h3>
+          <div class="ag-plane-grid">
+            <article class="ag-card">
+              <h3>The ontology becomes runtime context</h3>
+              <p>
+                Loaded before the first edit rather than consulted after a
+                question arises — <code>AGENTS.md</code>, the living SDD, and a
+                routing index that holds no content so references never go stale.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Facets become enforceable</h3>
+              <p>
+                Severity, <code>sdd_ref</code>, <code>scope</code> and
+                <code>patterns</code> turn a modelling rule into a
+                <code>PreToolUse</code> hook that can refuse an edit before it
+                lands, with a non-zero exit code as the receipt.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Provenance becomes mandatory</h3>
+              <p>
+                Every claim carries source, version, environment, method, result,
+                date and limitation — and evidence is snapshotted rather than
+                accumulated, because a number without a cutoff time is a rumour
+                with decimal places.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Incidents become axioms</h3>
+              <p>
+                The paper's iterative loop gets a concrete driver: a field
+                incident becomes an SDD ruling, the ruling becomes a
+                machine-readable constraint, the constraint blocks the
+                re-introduction. An incident is only fixed when it becomes a
+                guard.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>A responsibility graph beside the capability graph</h3>
+              <p>
+                For every link that lets something act: who supplied the data, who
+                chose the objective, who authorized the action, who observed the
+                consequence, who can stop it. Recursive improvement is sustainable
+                only when capability links and responsibility links grow together.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Edge quality as a sibling discipline</h3>
+              <p>
+                Six properties — clear semantics, traceable provenance, closed
+                feedback, bounded authority, fault isolation, reviewable
+                objectives — are what 101's node discipline needs on the links
+                between nodes. See
+                <a href="agentic.html#connections">Connection Quality</a>.
+              </p>
+            </article>
+          </div>
+          <blockquote
+            class="ba-quote"
+            data-quote-id="ontology101-proof-pudding"
+            data-quote-kind="paper"
+            data-quote-cite="Noy & McGuinness 2001, §8"
+          >
+            <p class="ba-quote-orig" lang="en">
+              There is no single correct ontology for any domain. Ontology design
+              is a creative process and no two ontologies designed by different
+              people would be the same. "The proof is in the pudding" — we can
+              assess the quality of our ontology only by using it in applications
+              for which we designed it.
+            </p>
+            <p class="ba-quote-trans" lang="en">
+              <span class="ba-quote-by">101 §8</span> — and in 2026 the
+              application includes a consumer that reads the model, edits the
+              code, and can be refused by it.
+            </p>
+            <span class="ba-quote-cite">Noy &amp; McGuinness 2001, §8</span>
+          </blockquote>
+        </div>
+      </section>
+
+      <section class="ag-section" id="references">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">11 · References</span>
+            <h2 class="ag-section-title">Sources, and where to go next</h2>
+          </header>
+          <div class="ag-loop-grid">
+            <article class="ag-card">
+              <h3>The paper and its lineage</h3>
+              <ul>
+                <li>
+                  <a
+                    href="https://protege.stanford.edu/publications/ontology_development/ontology101.pdf"
+                    target="_blank"
+                    rel="noopener"
+                    >Noy &amp; McGuinness, <em>Ontology Development 101</em>
+                    (2001)</a
+                  >
+                  — the source of every <code>101 §x</code> citation on this page.
+                </li>
+                <li>Gruber (1993) — the definition of an ontology as an explicit specification.</li>
+                <li>
+                  Gruninger &amp; Fox (1995) — competency questions as the scope
+                  device and the litmus test.
+                </li>
+                <li>
+                  Uschold &amp; Gruninger (1996); Gómez-Pérez (1998) — the
+                  alternative methodologies the paper points to.
+                </li>
+                <li>
+                  McGuinness et al. (2000), <em>Chimaera</em> — diagnostics for
+                  logical correctness and common design errors.
+                </li>
+                <li>
+                  Brachman et al. (1991), CLASSIC — where the wine-and-food
+                  example comes from; Rosch (1978) — levels of generality.
+                </li>
+                <li>
+                  Duineveld et al. (2000), <em>WonderTools?</em> — a comparative
+                  study of ontology engineering tools.
+                </li>
+              </ul>
+            </article>
+            <article class="ag-card">
+              <h3>Standards consulted (conceptual reuse)</h3>
+              <ul>
+                <li>
+                  <a href="https://www.w3.org/TR/vocab-ssn/" target="_blank" rel="noopener"
+                    >W3C SOSA/SSN</a
+                  >
+                  — observation, sensor, actuation.
+                </li>
+                <li>
+                  <a href="https://www.w3.org/TR/prov-o/" target="_blank" rel="noopener"
+                    >W3C PROV-O</a
+                  >
+                  — provenance fields for evidence records.
+                </li>
+                <li>
+                  <a href="https://www.w3.org/TR/owl-time/" target="_blank" rel="noopener"
+                    >W3C Time Ontology</a
+                  >
+                  — instants, intervals, timed workflows.
+                </li>
+                <li>
+                  <a href="https://www.w3.org/TR/skos-reference/" target="_blank" rel="noopener"
+                    >W3C SKOS</a
+                  >
+                  — the bilingual concept pattern.
+                </li>
+                <li>
+                  <a href="https://www.w3.org/TR/owl2-overview/" target="_blank" rel="noopener"
+                    >W3C OWL 2 Overview</a
+                  >
+                  — the property-centric alternative frame; not a runtime
+                  requirement here.
+                </li>
+                <li>
+                  <a href="https://www.w3.org/TR/wot-thing-description11/" target="_blank" rel="noopener"
+                    >W3C Web of Things Thing Description</a
+                  >,
+                  <a href="https://saref.etsi.org/" target="_blank" rel="noopener"
+                    >ETSI SAREF</a
+                  >,
+                  <a href="https://www.qudt.org/" target="_blank" rel="noopener"
+                    >QUDT</a
+                  >
+                  — devices, functions, quantities and units.
+                </li>
+              </ul>
+            </article>
+            <article class="ag-card">
+              <h3>On this site</h3>
+              <ul>
+                <li>
+                  <a href="agentic.html#ontology">Agentic · Domain Ontology</a> —
+                  the live model this page audits.
+                </li>
+                <li>
+                  <a href="agentic.html#connections">Agentic · Connection Quality</a>
+                  — the edge-side companion discipline.
+                </li>
+                <li>
+                  <a href="agentic.html#evidence">Agentic · Evidence Discipline</a>
+                  — competency questions, the two ladders, the ledger.
+                </li>
+                <li>
+                  <a href="engineering.html">Engineering Mechanism</a> — harness,
+                  loops, living SDD.
+                </li>
+                <li>
+                  <a href="/blog/three-axes/">The Three Axes</a> — the seven steps
+                  walked on a real product line, with numbers.
+                </li>
+                <li>
+                  <a href="/blog/connections-recursive-intelligence/"
+                    >Connections Rule</a
+                  >
+                  — why link quality, not link count, is the scarce resource.
+                </li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section class="ag-cta">
+      <div class="container">
+        <span class="ag-section-label">Read the model, not just the method</span>
+        <h2>A methodology is worth exactly what it survives in use</h2>
+        <p
+          style="
+            color: var(--text-secondary);
+            max-width: 720px;
+            margin: 0.75rem auto 1.5rem;
+          "
+        >
+          The seven steps are 25 pages of good sense. The interesting question is
+          what happens to them when the consumer of the ontology can also edit the
+          code — and can be refused by it. That is
+          <a href="agentic.html">the thesis page</a>.
+        </p>
+        <div class="ag-client-list" style="justify-content: center">
+          <a class="btn btn-primary" href="agentic.html">Agentic Engineering</a
+          ><a class="btn btn-secondary" href="engineering.html"
+            >Engineering Mechanism</a
+          ><a class="btn btn-secondary" href="/blog/">Blog</a
+          ><a
+            class="btn btn-secondary"
+            href="https://protege.stanford.edu/publications/ontology_development/ontology101.pdf"
+            target="_blank"
+            rel="noopener"
+            >The original PDF</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div>
+            <strong>VLSC Projects</strong>
+            <p>Open engineering for remote amateur radio.</p>
+          </div>
+          <div class="footer-links">
+            <a href="index.html">Home</a
+            ><a href="agentic.html">Agentic</a
+            ><a href="zh/ontology-101.html">中文</a
+            ><a href="https://github.com/cheenle" target="_blank" rel="noopener"
+              >GitHub</a
+            >
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 BG1SB</span
+          ><span
+            >Distilled from Noy &amp; McGuinness (2001); errors of interpretation
+            are ours.</span
+          >
+        </div>
+      </div>
+    </footer>
+    <script src="js/global-nav.js?v=7" defer data-gn="1"></script>
+  </body>
+</html>

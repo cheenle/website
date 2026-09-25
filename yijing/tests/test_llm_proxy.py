@@ -53,7 +53,7 @@ class PromptContractTest(unittest.TestCase):
 
     def test_structure_and_disclaimer(self):
         for frag in ["【卦象大势】", "【爻位细析】", "【事理推断】", "【行动建议】",
-                     "忌：", "占断仅供参考，事在人为", "不得编造", "首句须点明本卦全称", "四百五十"]:
+                     "忌：", "占断仅供参考，事在人为", "不得编造", "首句须点明本卦全称", "五百字"]:
             self.assertIn(frag, llm_proxy.SYSTEM_PROMPT)
 
     def test_version_format(self):

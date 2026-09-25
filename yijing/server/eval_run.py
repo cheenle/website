@@ -23,7 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import llm_proxy  # noqa: E402
 
-MAX_CHARS = 480
+MAX_CHARS = 520
 JUDGE_PROMPT = (
     "你是易学文本评审。下面是一条 AI 易经解读及其输入事实。按四个维度各打 1–5 分："
     "xiangshu（是否真用了爻位/互错综等象数事实而非泛谈）、jingwen（引经是否准确且服务于论证）、"

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易占 · 易经占卜</title>
 <meta name="description" content="据《周易》古法起卦断卦：铜钱摇卦，排本卦之卦互卦，卦辞爻辞彖象原文与白话今译。">
-<link rel="stylesheet" href="css/yijing.css?v=20260925d">
+<link rel="stylesheet" href="css/yijing.css?v=20260926a">
 </head>
 <body>
 <header class="site-header">
@@ -53,6 +53,15 @@
       <button id="btn-back" class="link">返回问卦</button>
     </div>
     <div id="llm-panel" class="llm hidden"></div>
+    <div id="chat-box" class="chat hidden">
+      <h3>继续追问</h3>
+      <p class="hint">AI 会记住本卦上下文，可接着问。</p>
+      <div id="chat-log" class="chat-log"></div>
+      <div class="chat-input">
+        <input id="chat-text" maxlength="200" placeholder="基于此卦继续问……">
+        <button id="chat-send" class="primary">发送</button>
+      </div>
+    </div>
   </section>
 
   <aside id="history-panel" class="hidden">
@@ -70,10 +79,10 @@
   <p><a href="/">返回 vlsc.net 首页</a></p>
 </footer>
 
-<script src="js/data/trigrams.js?v=20260925d"></script>
-<script src="js/data/hexagrams.js?v=20260925d"></script>
-<script src="js/cast.js?v=20260925d"></script>
-<script src="js/gua.js?v=20260925d"></script>
-<script src="js/app.js?v=20260925d"></script>
+<script src="js/data/trigrams.js?v=20260926a"></script>
+<script src="js/data/hexagrams.js?v=20260926a"></script>
+<script src="js/cast.js?v=20260926a"></script>
+<script src="js/gua.js?v=20260926a"></script>
+<script src="js/app.js?v=20260926a"></script>
 </body>
 </html>

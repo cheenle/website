@@ -187,4 +187,15 @@ button { font: inherit; cursor: pointer; }
 .llm-note { color: var(--faint); font-size: 0.82rem; border-top: 1px dashed var(--rule); padding-top: 0.5rem; }
 .llm-feedback { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem; color: var(--faint); font-size: 0.85rem; }
 #result-summary .facts { color: var(--faint); font-size: 0.88rem; }
+
+/* 多轮追问 */
+.chat { margin-top: 1.2rem; border: 1px solid var(--rule); border-radius: 4px; background: #fffdf8; padding: 0.9rem 1.1rem; }
+.chat h3 { margin: 0 0 0.2rem; color: var(--cinnabar); font-size: 1.05rem; letter-spacing: 0.15em; }
+.chat-log { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; margin: 0.6rem 0; }
+.bubble { max-width: 85%; padding: 0.5rem 0.8rem; border-radius: 10px; font-size: 0.92rem; white-space: pre-wrap; }
+.bubble.user { align-self: flex-end; background: var(--cinnabar); color: #fff; border-bottom-right-radius: 2px; }
+.bubble.assistant { align-self: flex-start; background: #efe9dc; color: var(--ink); border-bottom-left-radius: 2px; }
+.chat-input { display: flex; gap: 0.6rem; }
+.chat-input input { flex: 1; padding: 0.55rem 0.7rem; font: inherit; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
+.chat-input .primary { width: auto; padding: 0.55rem 1.2rem; font-size: 0.95rem; letter-spacing: 0.1em; }
 #btn-llm:disabled { opacity: 0.55; cursor: wait; }

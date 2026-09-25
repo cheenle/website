@@ -75,3 +75,44 @@ class ExtractTextTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CategoryPromptTest(unittest.TestCase):
+    def test_reading_prompt_carries_category_focus(self):
+        s = llm_proxy.system_prompt("健康", "reading")
+        self.assertIn("【卦象大势】", s)
+        self.assertIn("以医嘱为准", s)
+
+    def test_chat_prompt_rules_and_focus(self):
+        s = llm_proxy.system_prompt("财运", "chat")
+        self.assertIn("一百八十字", s)
+        self.assertIn("盈亏风险自担", s)
+        self.assertIn("正财与投机", s)
+        self.assertNotIn("【卦象大势】", s)
+
+    def test_unknown_category_falls_back(self):
+        self.assertIn("主视角", llm_proxy.system_prompt("???"))
+
+
+class ChatPayloadTest(unittest.TestCase):
+    def test_context_first_then_capped_history(self):
+        hist = [{"role": "user", "content": "q%d" % i} for i in range(12)]
+        hist.append({"role": "assistant", "content": "last"})
+        hist.append({"role": "system", "content": "should be dropped"})
+        p = llm_proxy.build_chat_payload({
+            "category": "感情",
+            "context": {"ben": "水火既济", "zhi": "山风蛊", "hu": "火水未济",
+                        "moving": ["初九：初位阳爻，当位"], "rule": "四爻动…", "reading": "【卦象大势】…"},
+            "messages": hist,
+        })
+        msgs = p["messages"]
+        self.assertIn("水火既济", msgs[0]["content"])
+        self.assertIn("此前 AI 解读", msgs[0]["content"])
+        self.assertEqual(msgs[1]["content"], "q4")   # 只保留最近 10 条（再过滤非法 role）
+        self.assertEqual(msgs[-1]["content"], "last")
+        self.assertNotIn("system", [m["role"] for m in msgs])
+        self.assertIn("沟通、界限与等待", p["system"])
+
+    def test_empty_messages_still_valid(self):
+        p = llm_proxy.build_chat_payload({"context": {"ben": "乾为天"}, "messages": []})
+        self.assertEqual(len(p["messages"]), 1)

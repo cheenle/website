@@ -7,7 +7,7 @@ const TOSS_MS = 900;
 const LINE_NAMES = { 6: "老阴（动）", 7: "少阳", 8: "少阴", 9: "老阳（动）" };
 const YAO_MARK = { 6: "×", 9: "○" };
 
-const state = { question: "", category: "综合", lines: [] };
+const state = { question: "", category: "综合", lines: [], chat: [], lastReading: "", lastLlmId: null };
 
 function $(id) { return document.getElementById(id); }
 
@@ -90,8 +90,12 @@ function buildYao(bit, moving) {
 function renderResult() {
   const r = duanCi(state.lines, HEXAGRAMS);
   state.lastResult = r;
+  state.chat = [];
+  state.lastReading = "";
   $("llm-panel").classList.add("hidden");
   $("llm-panel").innerHTML = "";
+  $("chat-box").classList.add("hidden");
+  $("chat-log").innerHTML = "";
   $("btn-llm").disabled = false;
   const hu = huBits(r.bits);
   const huHex = findHexagram(hu.lower.concat(hu.upper), HEXAGRAMS);
@@ -313,6 +317,9 @@ function requestInterpret() {
 }
 
 function renderLlm(text, id) {
+  state.lastReading = text;
+  state.lastLlmId = id || null;
+  $("chat-box").classList.remove("hidden");
   const panel = $("llm-panel");
   panel.innerHTML = "";
   const head = document.createElement("h3");
@@ -352,11 +359,68 @@ function renderLlm(text, id) {
   panel.appendChild(note);
 }
 
+
+// —— 多轮追问：/yijing/api/chat，上下文 = 卦象事实 + 首轮解读 ——
+function chatContext(r) {
+  return {
+    ben: r.ben ? r.ben.fullName : null,
+    zhi: r.zhi ? r.zhi.fullName : null,
+    hu: (findHexagram(huBits(r.bits).lower.concat(huBits(r.bits).upper), HEXAGRAMS) || {}).fullName || null,
+    moving: r.moving.map((i) => (r.ben.yaos[i] ? r.ben.yaos[i].title : `第${i + 1}爻`)),
+    rule: r.rule,
+    reading: state.lastReading,
+  };
+}
+
+function chatBubble(role, text) {
+  const log = $("chat-log");
+  const div = document.createElement("div");
+  div.className = "bubble " + role;
+  div.textContent = text;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+  return div;
+}
+
+function sendChat() {
+  const input = $("chat-text");
+  const text = input.value.trim();
+  const r = state.lastResult;
+  if (!text || !r) return;
+  input.value = "";
+  state.chat.push({ role: "user", content: text });
+  chatBubble("user", text);
+  const pending = chatBubble("assistant", "……");
+  $("chat-send").disabled = true;
+  fetch("/yijing/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ category: state.category, context: chatContext(r), messages: state.chat }),
+    signal: AbortSignal.timeout(100000),
+  })
+    .then((rp) => rp.json())
+    .then((data) => {
+      if (!data || !data.ok) throw new Error((data && data.error) || "bad response");
+      pending.textContent = data.text;
+      state.chat.push({ role: "assistant", content: data.text });
+    })
+    .catch((e) => {
+      pending.textContent = "追问暂不可用（" + e.message + "）。";
+      state.chat.pop(); // 失败不留下悬空的用户轮
+    })
+    .finally(() => {
+      $("chat-send").disabled = false;
+      $("chat-log").scrollTop = $("chat-log").scrollHeight;
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   $("btn-start").addEventListener("click", startCast);
   $("btn-again").addEventListener("click", startCast);
   $("btn-back").addEventListener("click", () => showScreen("ask"));
   $("btn-llm").addEventListener("click", requestInterpret);
+  $("chat-send").addEventListener("click", sendChat);
+  $("chat-text").addEventListener("keydown", (e) => { if (e.key === "Enter") sendChat(); });
   $("btn-history").addEventListener("click", () => { renderHistory(); $("history-panel").classList.remove("hidden"); });
   $("btn-close-history").addEventListener("click", () => $("history-panel").classList.add("hidden"));
   $("btn-clear-history").addEventListener("click", clearHistory);

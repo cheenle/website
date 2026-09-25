@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Agentic Engineering at VLSC: how five product families turn field problems into reusable remote-radio architecture, safety invariants and a shared domain ontology - and how the inner engineering loop is delegated to agents while intent, boundaries and judgment stay human."
+      content="Agentic Engineering at VLSC: how five product families turn field problems into reusable remote-radio architecture, safety invariants and a shared domain ontology - why the scarce resource is connection quality rather than connection count, why a responsibility graph must grow alongside every capability graph, and how the inner engineering loop is delegated to agents while intent, boundaries and judgment stay human."
     />
     <meta
       name="keywords"
-      content="agentic engineering, AI agent software development, forward deployed engineering, amateur radio, remote control, domain ontology, MRRC, SunMRRC, MRRC Modern, FT8, EFHW"
+      content="agentic engineering, AI agent software development, forward deployed engineering, connection quality, responsibility graph, amateur radio, remote control, domain ontology, MRRC, SunMRRC, MRRC Modern, FT8, EFHW"
     />
     <meta name="author" content="BG1SB" />
     <meta name="theme-color" content="#000000" />
@@ -81,6 +81,15 @@
           one who can decide. VLSC reached it through field engineering, not the
           other way round.
         </p>
+        <p>
+          Two field lessons sharpened the thesis. First: the scarce resource is
+          not connection count but <strong>connection quality</strong> — every
+          link between human, agent, tool and field must carry semantics,
+          provenance, feedback, bounded authority, fault isolation and a
+          reviewable objective. Second: the measure of the automation is not how
+          much it does while you watch — it is that
+          <a href="/blog/moon-loop/">the evening exists at all</a>.
+        </p>
         <div class="ag-hero-stats" aria-label="Thesis summary">
           <span class="ag-pill"
             ><i class="fas fa-bullseye"></i> Intent stays human</span
@@ -90,6 +99,8 @@
             ><i class="fas fa-shield-halved"></i> Boundaries enforced</span
           ><span class="ag-pill"
             ><i class="fas fa-scale-balanced"></i> Evidence decides</span
+          ><span class="ag-pill"
+            ><i class="fas fa-link"></i> Quality beats count</span
           >
         </div>
       </div>
@@ -101,7 +112,10 @@
           <a href="#thesis">Thesis</a><a href="#roles">Division</a
           ><a href="#lineage">Lineage</a><a href="#harness">Harness</a
           ><a href="#tracks">Tracks</a><a href="#families">Families</a
-          ><a href="#ontology">Ontology</a><a href="#evidence">Evidence</a>
+          ><a href="#leverage">Leverage</a
+          ><a href="#connections">Connections</a
+          ><a href="#ontology">Ontology</a><a href="#capabilities">Matrix</a
+          ><a href="#evidence">Evidence</a>
         </nav>
       </div>
     </div>
@@ -152,11 +166,50 @@
               </p>
             </article>
           </div>
+          <div class="ag-diagram" style="margin-top: 1.25rem">
+            <h3 style="text-align: center">The four-link chain — only the first two got cheap</h3>
+            <div class="ag-flow" aria-label="Imagine, attempt, verify, judge">
+              <span class="ag-flow-step"
+                ><strong>Imagine</strong><br /><small>idea → intent</small></span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                ><strong>Attempt</strong><br /><small
+                  >intent → running code</small
+                ></span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                ><strong>Verify</strong><br /><small
+                  >code → field evidence</small
+                ></span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                ><strong>Judge</strong><br /><small
+                  >evidence → verdict</small
+                ></span
+              >
+            </div>
+            <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem">
+              Ideas never died of being bad; they died of waiting. The gap
+              between imagining and trying has collapsed — attempts are now
+              abundant and cheap. But knowing whether one <em>worked</em> is
+              still expensive, and deciding whether it <em>counts</em> is still
+              human. The idea vault is open; the governance vault is not — that
+              half is built by hand, and it is most of this page.
+              <a href="/blog/only-imagination/">Only Imagination Left</a> tells
+              the story.
+            </p>
+          </div>
           <div class="ag-note" style="margin-top: 1.25rem">
             <strong>Testable form:</strong> a field incident becomes an SDD
             ruling, the ruling becomes a machine-readable constraint, and the
-            constraint blocks the agent from re-introducing the incident. Any
-            claim on this page that cannot be traced onto that chain is not
+            constraint blocks the agent from re-introducing the incident —
+            <em>an incident is only fixed when it becomes a guard.</em> The
+            operating rule follows:
+            <strong
+              >you can hand a repository to an agent only if the repository can
+              refuse.</strong
+            >
+            Any claim on this page that cannot be traced onto that chain is not
             made — the chain is walked end to end, on a real product line, in
             <a href="/blog/three-axes/">The Three Axes</a>.
           </div>
@@ -225,6 +278,44 @@
             with the named human who signs the evidence. No delegation changes
             that — for what this split looks like with exactly one accountable
             human and no team, see <a href="/blog/solo-loop/">The Solo Loop</a>.
+          </div>
+          <h3 style="margin-top: 2.5rem">Why the verdict cannot be delegated</h3>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3><i class="fas fa-fingerprint"></i> Judgment is a biography</h3>
+              <p>
+                "Intelligence" is six faculties wearing one coat. Intellect can
+                now be rented by the million tokens; wisdom and intuition
+                cannot — they are not capabilities, they are biographies.
+                <em>You cannot prompt wisdom for the same reason you cannot
+                prompt a scar.</em> The repricing, faculty by faculty, is in
+                <a href="/blog/faculties/">The Faculties</a>.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-link"></i> Accountability cannot dissolve</h3>
+              <p>
+                When a decision flows model → retriever → tool → agent →
+                platform, accountability must not dissolve into the chain. Every
+                capability link on this page is paired with a responsibility
+                link — who supplied the data, who chose the objective, who
+                authorized the action, who observed the consequence, who can
+                stop it. The argument is made at civilizational scale in
+                <a href="/blog/connections-recursive-intelligence/"
+                  >Connections Rule</a
+                >.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-code-branch"></i> Two verbs remain</h3>
+              <p>
+                With the instruments on cron, the maintainer's week compresses
+                to two verbs: <strong>decide</strong> and
+                <strong>merge</strong>. The human merge is not a bottleneck; it
+                is the trust anchor — the point where a promise to a person is
+                made by a person.
+              </p>
+            </article>
           </div>
         </div>
       </section>
@@ -308,8 +399,9 @@
                 ><span class="ag-flow-step">Merge</span>
               </div>
               <p>
-                The support chain iterating on itself. Every 🐞 report lands
-                classified (bug / feature / noise) on a
+                The support chain iterating on itself. The unit of iteration is
+                not the commit — it is the unanswered user symptom. Every 🐞
+                report lands classified (bug / feature / noise) on a
                 <a href="https://www.vlsc.net/mrrc_modern/board/"
                   >public board</a
                 >; classification is the decision — noise closes, bugs
@@ -412,6 +504,26 @@
             <strong>Across five product families:</strong> the same engineering
             system adapts to different radios, protocols, clients, workflows,
             hardware gates, and evidence boundaries.
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>The acceptance test of a loop is quiet.</strong> A loop that
+            cannot run unattended on a festival night is not a loop; it is a
+            chore with a cron expression. The measure of the automation is not
+            how much it does while you watch — it is that the evening exists at
+            all: instruments on both ends, verdicts human, and the operator at
+            the table instead of at the console. Demonstrated, with moonlight,
+            in <a href="/blog/moon-loop/">The Moon Loop</a>.
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>Method is the harvest.</strong> Seven billion tokens of
+            receipts produced one asymmetry worth keeping: model capability sets
+            the ceiling; method decides how much of that ceiling you actually
+            capture — and of the two variables, only one is under your control.
+            Models change generation every quarter; the contract thickens every
+            day. The former is weather; the latter is climate. The ledger is in
+            <a href="/blog/seven-billion-tokens/"
+              >Seven Billion Tokens, Dissected</a
+            >.
           </div>
           <div style="text-align: center; margin-top: 2rem">
             <a class="btn btn-primary" href="engineering.html"
@@ -1191,10 +1303,103 @@
         </div>
       </section>
 
+      <section class="ag-section" id="connections">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · Connection Quality</span>
+            <h2 class="ag-section-title">
+              The scarce resource is the link, not the node
+            </h2>
+            <p class="ag-section-subtitle">
+              Randomly wiring a million components does not produce a brain, and
+              letting a hundred agents talk does not guarantee collective
+              reason. Network value cannot be inferred from node or edge count —
+              a theory of connection that explains only successful networks, but
+              not noise, failure, bias and governance, is incomplete. What
+              separates a compounding network from a noise amplifier is six
+              engineering properties, and this site's whole apparatus exists to
+              give every link those properties. Full argument:
+              <a href="/blog/connections-recursive-intelligence/"
+                >Connections Rule</a
+              >.
+            </p>
+          </header>
+          <div class="ag-plane-grid">
+            <article class="ag-card">
+              <h3>Clear semantics</h3>
+              <p>
+                Sender and receiver share a contract for meaning. Here: the
+                bilingual ontology and the living SDD —
+                <code>CommandIntent</code> means the same thing to the agent,
+                the constraint registry, and the human reviewer.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Traceable provenance</h3>
+              <p>
+                A conclusion can be followed to data, model version, and
+                operating context. Here: every claim carries version,
+                environment, method and date;
+                <code>harness/index.json</code> holds no content, so references
+                never go stale.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Closed feedback</h3>
+              <p>
+                The system observes whether an action worked instead of treating
+                a command as state. Here: <code>CommandIntent ≠ StateReport</code
+                >, the <code>poll-stale-guard</code> constraint, and a
+                fire-and-forget TX path documented as exactly that.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Bounded authority</h3>
+              <p>
+                Permissions to read, write, and act are explicit. Here: control
+                leases, a single serial owner, PTT authority,
+                <code>vendor-readonly</code> — and a pre-edit hook that enforces
+                them before the edit lands.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Fault isolation</h3>
+              <p>
+                One failing node cannot automatically collapse the network.
+                Here: timeout-to-RX, fail-safe travel limits, isolated
+                <code>fde/&lt;id&gt;</code> branches — <code>main</code> is
+                never touched by the machine.
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>Reviewable objectives</h3>
+              <p>
+                People can understand, contest, and revise what is optimized.
+                Here: classification is public on the FDE board, every
+                constraint carries an <code>sdd_ref</code> that can be argued
+                with, and the merge stays human.
+              </p>
+            </article>
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong
+              >A capability graph needs a responsibility graph beside it.</strong
+            >
+            For every link that lets something act, five questions must have
+            named answers: who supplied the data, who chose the objective, who
+            authorized the action, who observed the consequence, who can stop
+            it. Recursive improvement is sustainable only when the growth of
+            capability links is matched by the growth of responsibility links —
+            which is why this page keeps asking not for the smartest node, but
+            for the most reliable network.
+          </div>
+        </div>
+      </section>
+
       <section class="ag-section" id="ontology">
         <div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">08 · Domain Ontology</span>
+            <span class="ag-section-label">09 · Domain Ontology</span>
             <h2 class="ag-section-title">
               The ontology is loaded before the agent types
             </h2>
@@ -1507,7 +1712,7 @@
       <section class="ag-section" id="capabilities">
         <div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">09 · Capability Matrix</span>
+            <span class="ag-section-label">10 · Capability Matrix</span>
             <h2 class="ag-section-title">
               Comparable dimensions, different implementations
             </h2>
@@ -1613,7 +1818,7 @@
       <section class="ag-section" id="evidence">
         <div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">10 · Evidence Discipline</span>
+            <span class="ag-section-label">11 · Evidence Discipline</span>
             <h2 class="ag-section-title">Claims carry provenance and limits</h2>
             <p class="ag-section-subtitle">
               A feature label is not a maturity claim. Every result is
@@ -1653,6 +1858,18 @@
             above measures whether a product behaviour is true. A B4 badge never
             promotes an A-level claim, and no count of constraints makes a bench
             result less necessary.
+          </div>
+          <div class="ag-note" style="margin-top: 1rem">
+            <strong>Evidence is snapshotted, never accumulated.</strong> A
+            number without a cutoff time is not a measurement — it is a rumour
+            with decimal places. That is why every census on this page carries a
+            date, and why the token ledger's honest re-run
+            (7,404,583,808, snapshotted 2026-09-12T02:40:59Z) replaced the
+            published figure it corrected in three directions at once. Two
+            ledgers never vouch for each other — the full autopsy is in
+            <a href="/blog/seven-billion-tokens/"
+              >Seven Billion Tokens, Dissected</a
+            >.
           </div>
           <details class="ag-details" style="margin-top: 1.25rem">
             <summary>The chain, reproduced end to end (2026-09-12)</summary>
@@ -2025,16 +2242,25 @@ $ echo $?
           The ontology stays useful only when it remains traceable to products,
           hardware, tests, known issues, and field operation.
         </p>
-        <p style="color: var(--text-secondary); max-width: 720px; margin: 0 auto 1.5rem;">
-          The practice journal behind these claims:
-          <a href="/blog/coda/">The Coda</a> ·
-          <a href="/blog/only-imagination/">Only Imagination Left</a> ·
+        <p style="color: var(--text-secondary); max-width: 720px; margin: 0 auto 1rem;">
+          The practice journal behind these claims — the method and its receipts:
           <a href="/blog/three-axes/">The Three Axes</a> ·
           <a href="/blog/support-loop/">The Support Loop</a> ·
           <a href="/blog/solo-loop/">The Solo Loop</a> ·
           <a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected</a> ·
+          <a href="/blog/moon-loop/">The Moon Loop</a>.
+        </p>
+        <p style="color: var(--text-secondary); max-width: 720px; margin: 0 auto 1.5rem;">
+          And the questions the method is for — intelligence, intent, and the
+          human who stays in the room:
+          <a href="/blog/connections-recursive-intelligence/">Connections Rule</a> ·
+          <a href="/blog/only-imagination/">Only Imagination Left</a> ·
           <a href="/blog/faculties/">The Faculties</a> ·
-          <a href="/blog/ming-li-dao-tian/">Fate · Faculty · Way · Heaven</a>.
+          <a href="/blog/coda/">The Coda</a> ·
+          <a href="/blog/ming-li-dao-tian/">Fate · Faculty · Way · Heaven</a> ·
+          <a href="/blog/juekun/">昆木物语</a>.
+          Every loop is a prayer with a reply; whether the reply flatters you is
+          not yours to decide — being present is.
         </p>
         <div class="ag-client-list" style="justify-content: center">
           <a class="btn btn-primary" href="/mrrc/">MRRC Universal</a

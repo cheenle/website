@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="智能体工程在 VLSC 的实践：五个产品族如何将现场问题转化为可复用的远程电台架构、安全不变量与共享领域本体；工程内循环如何委托给智能体执行，而意图、边界与裁决仍属于人。"
+      content="智能体工程在 VLSC 的实践：五个产品族如何将现场问题转化为可复用的远程电台架构、安全不变量与共享领域本体；为什么稀缺的是连接质量而非连接数量、为什么每条能力链接都要配一条责任链接；工程内循环如何委托给智能体执行，而意图、边界与裁决仍属于人。"
     />
     <meta
       name="keywords"
-      content="智能体工程, Agentic Engineering, AI 智能体开发, 前沿部署工程, 业余无线电, 远程控制, 领域本体, MRRC, SunMRRC, FT8, EFHW"
+      content="智能体工程, Agentic Engineering, AI 智能体开发, 前沿部署工程, 连接质量, 责任图, 业余无线电, 远程控制, 领域本体, MRRC, SunMRRC, FT8, EFHW"
     />
     <meta name="author" content="BG1SB" />
     <meta name="theme-color" content="#000000" />
@@ -79,6 +79,9 @@
           智能体工程的纪律，是构建一个「智能体可被信任去执行、而人保留唯一裁决权」的工程环境。VLSC
           是从现场工程走到这里的，而不是相反。
         </p>
+        <p>
+          两条现场教训让这个命题更锋利。其一：稀缺资源不是连接数量，而是<strong>连接质量</strong>——人与智能体、工具、现场之间的每条链接，都要带上语义、溯源、闭环反馈、有界权限、故障隔离与可审查目标。其二：自动化的度量不是它在你看着时做了多少，而是<a href="/blog/moon-loop/zh/">那个夜晚依然存在</a>。
+        </p>
         <div class="ag-hero-stats" aria-label="命题概览">
           <span class="ag-pill"><i class="fas fa-bullseye"></i> 意图归人</span
           ><span class="ag-pill"><i class="fas fa-gears"></i> 内循环委托</span
@@ -86,6 +89,7 @@
             ><i class="fas fa-shield-halved"></i> 边界强制</span
           ><span class="ag-pill"
             ><i class="fas fa-scale-balanced"></i> 证据裁决</span
+          ><span class="ag-pill"><i class="fas fa-link"></i> 质量胜过数量</span
           >
         </div>
       </div>
@@ -97,7 +101,9 @@
           <a href="#thesis">命题</a><a href="#roles">分工</a
           ><a href="#lineage">前史</a><a href="#harness">机制摘要</a
           ><a href="#tracks">轨道</a><a href="#families">产品族</a
-          ><a href="#ontology">领域本体</a><a href="#evidence">证据纪律</a>
+          ><a href="#leverage">杠杆</a><a href="#connections">连接质量</a
+          ><a href="#ontology">领域本体</a><a href="#capabilities">矩阵</a
+          ><a href="#evidence">证据纪律</a>
         </nav>
       </div>
     </div>
@@ -144,9 +150,29 @@
               </p>
             </article>
           </div>
+          <div class="ag-diagram" style="margin-top: 1.25rem">
+            <h3 style="text-align: center">四环链条——只有前两环变便宜了</h3>
+            <div class="ag-flow" aria-label="想象、尝试、验证、裁决">
+              <span class="ag-flow-step"
+                ><strong>想象</strong><br /><small>想法 → 意图</small></span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                ><strong>尝试</strong><br /><small>意图 → 可运行代码</small></span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                ><strong>验证</strong><br /><small>代码 → 现场证据</small></span
+              ><span class="ag-flow-arrow">→</span
+              ><span class="ag-flow-step"
+                ><strong>裁决</strong><br /><small>证据 → 结论</small></span
+              >
+            </div>
+            <p style="text-align: center; color: var(--text-secondary); margin-top: 1rem">
+              想法从来不是死于糟糕，而是死于等待。想到与做到之间的鸿沟塌缩了——尝试如今又多又便宜；但知道一次尝试是否<em>成立</em>，依然昂贵；决定它是否<em>算数</em>，依然归人。智库被打开了，治库还没有——这一半靠手建，也是本页的大部分内容。故事见<a href="/blog/only-imagination/zh/">《思接千载，行在须臾》</a>。
+            </p>
+          </div>
           <div class="ag-note" style="margin-top: 1.25rem">
             <strong>可证伪形式：</strong>一次现场事故变成一条 SDD
-            裁决，裁决变成一条机器可读约束，约束阻止智能体重新引入该事故。本页任何无法沿这条链回溯的主张，都不写，这条链在<a href="/blog/three-axes/zh/">《三板斧》</a>里被完整走了一遍。
+            裁决，裁决变成一条机器可读约束，约束阻止智能体重新引入该事故——<em>事故只有变成护栏才算修好。</em>由此得出运行规则：<strong>只有当仓库能拒绝，你才能把仓库交给智能体。</strong>本页任何无法沿这条链回溯的主张，都不写，这条链在<a href="/blog/three-axes/zh/">《三板斧》</a>里被完整走了一遍。
           </div>
         </div>
       </section>
@@ -202,6 +228,30 @@
           <div class="ag-note ag-note--warning" style="margin-top: 1.25rem">
             <strong>智能体承担执行，不承担问责。</strong
             >一次发射、一次发布、一句安全主张的责任，始终属于签署证据的那个具名的人。任何委托都不改变这一点，若想看只有一个具名负责人、没有团队时的版本，见<a href="/blog/solo-loop/zh/">《孤路我独行》</a>。
+          </div>
+          <h3 style="margin-top: 2.5rem">为什么裁决不可委托</h3>
+          <div class="ag-term-grid">
+            <article class="ag-card">
+              <h3><i class="fas fa-fingerprint"></i> 判断是一部履历</h3>
+              <p>
+                「智力」是六种能力穿在同一件外套里。智力如今可以按百万
+                token 出租；智慧与直觉不行——它们不是能力，而是履历。<em>你无法
+                prompt 智慧，正如你无法 prompt 一道疤。</em>逐项重新定价，见<a
+                href="/blog/faculties/zh/">《斫轮》</a>。
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-link"></i> 问责不能沿链路蒸发</h3>
+              <p>
+                当一个决定流过 模型 → 检索 → 工具 → 智能体 → 平台，问责不能在链条里蒸发。本页每条能力链接都配一条责任链接：谁供的数据、谁选的目标、谁授权了行动、谁观察了后果、谁能把它停下来。文明尺度的论证，见<a href="/blog/connections-recursive-intelligence/zh/">《链接为王》</a>。
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3><i class="fas fa-code-branch"></i> 只剩两个动词</h3>
+              <p>
+                仪器上了 cron，维护者的一周就压缩为两个动词：<strong>决定</strong>与<strong>合入</strong>。人工合入不是瓶颈，它是信任锚点——对一个具名的人作出承诺的那一步，必须由一个具名的人来走。
+              </p>
+            </article>
           </div>
         </div>
       </section>
@@ -270,7 +320,7 @@
                 ><span class="ag-flow-step">合入</span>
               </div>
               <p>
-                支持链对自己迭代。每条 🐞
+                支持链对自己迭代。迭代的单元不是 commit，而是未被解答的用户症状。每条 🐞
                 上报都带着分类（bug / feature / noise）落进
                 <a href="https://www.vlsc.net/mrrc_modern/board/"
                   >公开看板</a
@@ -360,6 +410,15 @@
           <div class="eng-note" style="margin-top: 1.25rem">
             <strong>跨五个产品族：</strong
             >同一工程体系适配不同电台、协议、客户端、工作流、硬件门禁与证据边界。
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>循环的验收标准是安静的。</strong
+            >一个不能在节日夜里无人值守运行的循环，不是循环，而是一条带着
+            cron 表达式的杂务。自动化的度量不是它在你看着时做了多少，而是那个夜晚依然成立：两端是仪器，裁决归人，操作员坐在饭桌前而不是控制台前。演示见<a href="/blog/moon-loop/zh/">《月闭环》</a>。
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>方法才是收成。</strong
+            >七十亿 token 的账本最后只留下一条不对称：模型能力决定天花板，方法决定你从天花板下收割多少——而这两个变量里，只有一个在你手里。模型每季度换代，契约每天变厚；前者是天气，后者是气候。账本见<a href="/blog/seven-billion-tokens/zh/">《七十亿 token 的全程拆解》</a>。
           </div>
           <div style="text-align: center; margin-top: 2rem">
             <a class="btn btn-primary" href="engineering.html"
@@ -1010,10 +1069,74 @@
         </div>
       </section>
 
+      <section class="ag-section" id="connections">
+        <div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · 连接质量</span>
+            <h2 class="ag-section-title">稀缺的是链接，不是节点</h2>
+            <p class="ag-section-subtitle">
+              把一百万个部件随机连线，得不到一颗大脑；让一百个智能体互相对话，也不保证集体理性。网络的价值不能由节点数或边数推断——一套只能解释成功网络、解释不了噪声、失败、偏见与治理的连接理论，是不完整的。区分复利式网络与噪声放大器的，是六个工程属性；本页的全部机制，正是为了给每条链接配齐这六个属性。完整论证见<a href="/blog/connections-recursive-intelligence/zh/">《链接为王》</a>。
+            </p>
+          </header>
+          <div class="ag-plane-grid">
+            <article class="ag-card">
+              <h3>清晰语义</h3>
+              <p>
+                收发双方对含义有共同契约。本站的实现：双语本体与活体
+                SDD——<code>CommandIntent</code>
+                对智能体、约束注册表和人工审查而言是同一个意思。
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>可追溯来源</h3>
+              <p>
+                结论能回溯到数据、模型版本与运行上下文。本站的实现：每项主张都携带版本、环境、方法与日期；<code>harness/index.json</code>
+                不存内容，引用因此永不过时。
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>闭环反馈</h3>
+              <p>
+                系统观察动作是否生效，而不是把命令当作既成状态。本站的实现：<code>CommandIntent ≠ StateReport</code>、<code>poll-stale-guard</code>
+                约束，以及一条被如实记录为「发了就不回头」的发射路径。
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>有界权限</h3>
+              <p>
+                读、写、行动的权限显式有界。本站的实现：控制租约、唯一串口所有者、PTT
+                权限、<code>vendor-readonly</code>——以及一个在落盘前就拦截编辑的
+                pre-edit hook。
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>故障隔离</h3>
+              <p>
+                单点失效不会自动拖垮全网。本站的实现：超时回 RX、失效安全行程限位、隔离的
+                <code>fde/&lt;id&gt;</code> 分支——<code>main</code>
+                永不由机器触碰。
+              </p>
+            </article>
+            <article class="ag-card">
+              <h3>可审查目标</h3>
+              <p>
+                人能理解、质疑、修订「系统在优化什么」。本站的实现：分类结果公开在
+                FDE 看板上，每条约束都带一个可被辩论的
+                <code>sdd_ref</code>，而合入始终归人。
+              </p>
+            </article>
+          </div>
+          <div class="ag-note" style="margin-top: 1.25rem">
+            <strong>能力图旁边必须放一张责任图。</strong
+            >对每一条让某物得以行动的链接，五个问题都必须有具名答案：谁供的数据、谁选的目标、谁授权了行动、谁观察了后果、谁能把它停下来。递归式改进只有在能力链接的增长与责任链接的增长相匹配时才可持续——这也是本页追问的从来不是「最聪明的节点」，而是「最可靠的网络」。
+          </div>
+        </div>
+      </section>
+
       <section class="ag-section" id="ontology">
         <div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">08 · 领域本体</span>
+            <span class="ag-section-label">09 · 领域本体</span>
             <h2 class="ag-section-title">本体在智能体动手之前被加载</h2>
             <p class="ag-section-subtitle">
               不是文档习惯：同一套术语、边界与公理，被智能体上下文、编辑前门禁与人工审查三方消费。它仍然是一份由产品证据支撑的轻量双语契约，不是
@@ -1252,7 +1375,7 @@
       <section class="ag-section" id="capabilities">
         <div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">09 · 能力矩阵</span>
+            <span class="ag-section-label">10 · 能力矩阵</span>
             <h2 class="ag-section-title">维度可比较，实现各不同</h2>
             <p class="ag-section-subtitle">
               能力描述产品族能做什么；证据成熟度描述主张被证明到什么程度。二者不能混为一谈。
@@ -1351,7 +1474,7 @@
       <section class="ag-section" id="evidence">
         <div class="container">
           <header class="ag-section-header">
-            <span class="ag-section-label">10 · 证据纪律</span>
+            <span class="ag-section-label">11 · 证据纪律</span>
             <h2 class="ag-section-title">每项主张都携带来源与边界</h2>
             <p class="ag-section-subtitle">
               功能标签不是成熟度主张。每项结果必须标记方法、环境、版本和剩余不确定性。
@@ -1381,6 +1504,12 @@
             >下面这一行衡量工程过程是否被约束，上面那一行衡量产品行为是否为真。B4
             徽章不提升任何 A
             级主张；约束条数再多，也不能减少一次台架验证的必要性。
+          </div>
+          <div class="ag-note" style="margin-top: 1rem">
+            <strong>证据只能快照，不能累积。</strong
+            >没有截止时间的数字不是测量，而是带小数点的传闻。所以本页每次普查都带日期；所以
+            token 账本诚实重跑的结果（7,404,583,808，快照于
+            2026-09-12T02:40:59Z）替换了那个同时在三个方向上出错的已发布数字。两本账互不为对方背书——完整解剖见<a href="/blog/seven-billion-tokens/zh/">《七十亿 token 的全程拆解》</a>。
           </div>
           <details class="ag-details" style="margin-top: 1.25rem">
             <summary>这条链的端到端复现（2026-09-12）</summary>
@@ -1674,16 +1803,23 @@ $ echo $?
         >
           只有持续追溯到产品、硬件、测试、已知问题和现场运行，领域本体才真正有用。
         </p>
-        <p style="color: var(--text-secondary); max-width: 720px; margin: 0 auto 1.5rem;">
-          这些主张背后的实践日志：
-          <a href="/blog/coda/zh/">跋</a> ·
-          <a href="/blog/only-imagination/zh/">思接千载，行在须臾</a> ·
+        <p style="color: var(--text-secondary); max-width: 720px; margin: 0 auto 1rem;">
+          这些主张背后的实践日志——方法与它的收据：
           <a href="/blog/three-axes/zh/">三板斧</a> ·
           <a href="/blog/support-loop/zh/">闻过则喜</a> ·
           <a href="/blog/solo-loop/zh/">孤路我独行</a> ·
           <a href="/blog/seven-billion-tokens/zh/">七十亿 token 的全程拆解</a> ·
+          <a href="/blog/moon-loop/zh/">月闭环</a>。
+        </p>
+        <p style="color: var(--text-secondary); max-width: 720px; margin: 0 auto 1.5rem;">
+          以及方法所服务的追问——智能、意图，与始终在场的那个人：
+          <a href="/blog/connections-recursive-intelligence/zh/">链接为王</a> ·
+          <a href="/blog/only-imagination/zh/">思接千载，行在须臾</a> ·
           <a href="/blog/faculties/zh/">斫轮</a> ·
-          <a href="/blog/ming-li-dao-tian/zh/">命 · 力 · 道 · 天</a>。
+          <a href="/blog/coda/zh/">跋</a> ·
+          <a href="/blog/ming-li-dao-tian/zh/">命 · 力 · 道 · 天</a> ·
+          <a href="/blog/juekun/">昆木物语</a>。
+          每一次闭环都是一次有回信的祈祷；回信是否悦耳不由你决定，在不在场由你决定。
         </p>
         <div class="ag-client-list" style="justify-content: center">
           <a class="btn btn-primary" href="/mrrc/">MRRC Universal</a

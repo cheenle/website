@@ -181,3 +181,22 @@ class MemoryInjectionTest(unittest.TestCase):
             "messages": [],
         })
         self.assertIn("用户长期记忆", p["messages"][0]["content"])
+
+
+class HealthNeijingTest(unittest.TestCase):
+    def test_health_reading_and_chat_carry_neijing_pool(self):
+        for mode in ("reading", "chat"):
+            s = llm_proxy.system_prompt("健康", mode)
+            self.assertIn("素问·四气调神大论", s)
+            self.assertIn("春夏养阳，秋冬养阴", s)
+            self.assertIn("以医嘱为准", s)
+            self.assertIn("不得改字", s)
+
+    def test_other_category_has_no_neijing(self):
+        self.assertNotIn("黄帝内经", llm_proxy.system_prompt("事业", "chat"))
+
+    def test_pool_integrity(self):
+        self.assertEqual(len(llm_proxy.NEIJING_PASSAGES), 11)
+        for src, txt in llm_proxy.NEIJING_PASSAGES:
+            self.assertTrue(src.startswith(("素问", "灵枢")))
+            self.assertTrue(txt.strip())

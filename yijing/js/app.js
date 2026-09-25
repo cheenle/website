@@ -466,6 +466,11 @@ function renderLlm(text, id) {
   state.lastReading = text;
   state.lastLlmId = id || null;
   $("chat-box").classList.remove("hidden");
+  const isHealth = state.category === "健康";
+  $("chat-hint").textContent = isHealth
+    ? "健康追问将结合《黄帝内经》养生理法持续对话；具体病情以医嘱为准。"
+    : "AI 会记住本卦上下文，可接着问。";
+  $("chat-text").placeholder = isHealth ? "如：近来失眠多梦，起居该如何调？" : "基于此卦继续问……";
   const panel = $("llm-panel");
   panel.innerHTML = "";
   const head = document.createElement("h3");

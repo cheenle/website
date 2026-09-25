@@ -30,7 +30,7 @@ DEFAULT_MODEL = "qwen3.8-max-0902"
 DEFAULT_LOG_DIR = "/home/cheenle/yijing-llm-logs"
 MAX_BODY = 64 * 1024
 UPSTREAM_TIMEOUT = 90
-PROMPT_VERSION = "2026-09-26.v9"
+PROMPT_VERSION = "2026-09-26.v10"
 
 SYSTEM_PROMPT = (
     "你是兼通象数与义理的易学解读者，熟稔《周易》经传与朱熹《易学启蒙》断法。"
@@ -70,6 +70,28 @@ MEIHUA_SYSTEM = (
     "5. 全文不超过五百字（含标点）；不得编造未提供的经文；结尾另起一行写：占断仅供参考，事在人为。"
 )
 
+# 《黄帝内经》公版条文池（健康类专用 grounding，防模型编造原文）
+NEIJING_PASSAGES = [
+    ("素问·上古天真论", "法于阴阳，和于术数，食饮有节，起居有常，不妄作劳，故能形与神俱，而尽终其天年。"),
+    ("素问·上古天真论", "恬惔虚无，真气从之，精神内守，病安从来。"),
+    ("素问·四气调神大论", "春夏养阳，秋冬养阴，以从其根。"),
+    ("素问·四气调神大论", "圣人不治已病治未病，不治已乱治未乱。"),
+    ("素问·四气调神大论", "春三月……夜卧早起，广步于庭；夏三月……夜卧早起，无厌于日；秋三月……早卧早起，与鸡俱兴；冬三月……早卧晚起，必待日光。"),
+    ("素问·阴阳应象大论", "怒伤肝，喜伤心，思伤脾，忧伤肺，恐伤肾。"),
+    ("素问·阴阳应象大论", "阴平阳秘，精神乃治；阴阳离决，精气乃绝。"),
+    ("素问·藏气法时论", "五谷为养，五果为助，五畜为益，五菜为充，气味合而服之，以补精益气。"),
+    ("素问·举痛论", "百病生于气也。怒则气上，喜则气缓，悲则气消，恐则气下，思则气结。"),
+    ("素问·痹论", "饮食自倍，肠胃乃伤。"),
+    ("灵枢·本神", "智者之养生也，必顺四时而适寒暑，和喜怒而安居处，节阴阳而调刚柔。"),
+]
+
+
+def health_block():
+    lines = ["可引用的《黄帝内经》条文池（仅此池内，引用须注明篇名、原文不得改字）："]
+    for src, txt in NEIJING_PASSAGES:
+        lines.append("- 《%s》：%s" % (src, txt))
+    return "\n".join(lines)
+
 
 def system_prompt(category, mode="reading"):
     """按问事类别与模式动态组装 System Prompt。"""
@@ -86,8 +108,12 @@ def system_prompt(category, mode="reading"):
         )
     else:
         base = SYSTEM_PROMPT
-    return (base + "\n\n所问类别专项要求：" + CATEGORY_FOCUS.get(category, CATEGORY_FOCUS["综合"])
-            + MEMORY_RULE)
+    out = base + "\n\n所问类别专项要求：" + CATEGORY_FOCUS.get(category, CATEGORY_FOCUS["综合"])
+    if category == "健康":
+        out += ("\n\n黄帝内经理法：" + health_block() +
+                "\n健康类解读与追问须以内经理法为纲：先辨四时起居、情志、饮食劳逸之偏，再论调养；"
+                "引用内经只可用上文池内条文并注明篇名；始终提醒用户具体病情以医嘱为准。")
+    return out + MEMORY_RULE
 
 
 MEMORY_RULE = ("\n\n长期记忆纪律：若输入含「用户长期记忆」，只可引用其中明确记录的占例与回访结论，"

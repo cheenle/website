@@ -154,3 +154,30 @@ class MeihuaPromptTest(unittest.TestCase):
         p = llm_proxy.build_payload(SAMPLE)
         self.assertIn("【卦象大势】", p["system"])
         self.assertNotIn("梅花", p["system"])
+
+
+class MemoryInjectionTest(unittest.TestCase):
+    def test_memory_lines_and_discipline(self):
+        req = dict(SAMPLE)
+        req["memory"] = {"count": 3,
+                         "recent": ["2026/9/1 问「换工作」(事业) 得 水火既济之山风蛊，回访：非常准"],
+                         "stats": ["事业类回访 1 准 / 0 部分 / 0 不准"]}
+        p = llm_proxy.build_payload(req)
+        content = p["messages"][0]["content"]
+        self.assertIn("用户长期记忆（本机占例档案，共 3 条）", content)
+        self.assertIn("回访：非常准", content)
+        self.assertIn("回访统计：事业类回访 1 准", content)
+        self.assertIn("长期记忆纪律", p["system"])
+
+    def test_no_memory_no_section(self):
+        p = llm_proxy.build_payload(SAMPLE)
+        self.assertNotIn("用户长期记忆", p["messages"][0]["content"])
+        self.assertIn("长期记忆纪律", p["system"])
+
+    def test_chat_memory_from_context(self):
+        p = llm_proxy.build_chat_payload({
+            "category": "综合",
+            "context": {"ben": "乾为天", "memory": {"count": 1, "recent": ["x"], "stats": []}},
+            "messages": [],
+        })
+        self.assertIn("用户长期记忆", p["messages"][0]["content"])

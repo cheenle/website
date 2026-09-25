@@ -350,6 +350,33 @@ function clearHistory() {
 }
 
 // —— AI 进一步解读：经 nginx → 本机代理 → LLM，浏览器不持密钥 ——
+// —— 长期记忆：本机占例档案摘要（不上传原始记录之外的内容，不跨设备）——
+function buildMemory() {
+  const list = loadHistory();
+  if (!list.length) return null;
+  const stats = {};
+  for (const rec of list) {
+    if (rec.outcome == null) continue;
+    const k = rec.category || "综合";
+    stats[k] = stats[k] || { 1: 0, 0: 0, "-1": 0 };
+    stats[k][rec.outcome] = (stats[k][rec.outcome] || 0) + 1;
+  }
+  const lines = [];
+  const recent = list.slice(0, 5);
+  for (const rec of recent) {
+    const d = new Date(rec.time);
+    const outcome = rec.outcome == null ? "待回访" : ["不准", "部分准", "非常准"][rec.outcome + 1];
+    lines.push(`${d.toLocaleDateString("zh-CN")} 问「${rec.question || "心中默念"}」(${rec.category}) 得 ${rec.benName || "?"}` +
+      (rec.zhiName ? `之${rec.zhiName}` : "") + `，回访：${outcome}`);
+  }
+  const statLines = Object.keys(stats).map((k) => `${k}类回访 ${stats[k][1] || 0} 准 / ${stats[k][0] || 0} 部分 / ${stats[k]["-1"] || 0} 不准`);
+  return {
+    count: list.length,
+    recent: lines,
+    stats: statLines,
+  };
+}
+
 function llmPayload(r) {
   if (state.meihua) {
     const m = state.meihua;
@@ -357,6 +384,7 @@ function llmPayload(r) {
       method: "meihua",
       question: state.question,
       category: state.category,
+      memory: buildMemory(),
       meihua: {
         methodNote: m.methodNote, ben: m.benName, zhi: m.zhiName, hu: m.huName,
         ti: `${m.ti}（${m.tiWuxing}）`, yong: `${m.yong}（${m.yongWuxing}）`,
@@ -374,6 +402,7 @@ function llmPayload(r) {
   return {
     question: state.question,
     category: state.category,
+    memory: buildMemory(),
     ben: r.ben ? { fullName: r.ben.fullName, tuan: r.ben.tuan, xiang: r.ben.xiang } : null,
     zhi: r.zhi ? { fullName: r.zhi.fullName } : null,
     hu: huHex ? huHex.fullName : null,
@@ -566,6 +595,7 @@ function chatContext(r) {
     moving: r.moving.map((i) => (r.ben.yaos[i] ? r.ben.yaos[i].title : `第${i + 1}爻`)),
     rule: r.rule,
     reading: state.lastReading,
+    memory: buildMemory(),
   };
 }
 

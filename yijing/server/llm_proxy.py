@@ -30,7 +30,7 @@ DEFAULT_MODEL = "qwen3.8-max-0902"
 DEFAULT_LOG_DIR = "/home/cheenle/yijing-llm-logs"
 MAX_BODY = 64 * 1024
 UPSTREAM_TIMEOUT = 90
-PROMPT_VERSION = "2026-09-26.v8"
+PROMPT_VERSION = "2026-09-26.v9"
 
 SYSTEM_PROMPT = (
     "你是兼通象数与义理的易学解读者，熟稔《周易》经传与朱熹《易学启蒙》断法。"
@@ -86,7 +86,24 @@ def system_prompt(category, mode="reading"):
         )
     else:
         base = SYSTEM_PROMPT
-    return base + "\n\n所问类别专项要求：" + CATEGORY_FOCUS.get(category, CATEGORY_FOCUS["综合"])
+    return (base + "\n\n所问类别专项要求：" + CATEGORY_FOCUS.get(category, CATEGORY_FOCUS["综合"])
+            + MEMORY_RULE)
+
+
+MEMORY_RULE = ("\n\n长期记忆纪律：若输入含「用户长期记忆」，只可引用其中明确记录的占例与回访结论，"
+               "不得扩写、虚构或把它当作本次卦象的依据；本次解读仍以当前卦象与断辞为主。")
+
+
+def memory_lines(req):
+    mem = req.get("memory")
+    if not isinstance(mem, dict):
+        return []
+    out = ["用户长期记忆（本机占例档案，共 %s 条）：" % mem.get("count", "?")]
+    for line in mem.get("recent") or []:
+        out.append("- %s" % line)
+    for line in mem.get("stats") or []:
+        out.append("- 回访统计：%s" % line)
+    return out
 
 
 def build_payload(req):
@@ -116,6 +133,7 @@ def build_payload(req):
     else:
         lines.append("动爻：无")
     lines.append("断法：%s" % req.get("rule", "?"))
+    lines.extend(memory_lines(req))
     lines.append("断辞：")
     for e in duanci:
         lines.append("- %s：%s（白话：%s）" % (e.get("source", "?"), e.get("ci", ""), e.get("baihua", "")))
@@ -139,6 +157,7 @@ def build_chat_payload(req):
     head.append("断法：%s" % (ctx.get("rule") or "?"))
     if ctx.get("reading"):
         head.append("此前 AI 解读：%s" % str(ctx["reading"])[:600])
+    head.extend(memory_lines({"memory": ctx.get("memory")}))
     msgs = [{"role": "user", "content": "\n".join(head)}]
     for m in (req.get("messages") or [])[-10:]:
         if isinstance(m, dict) and m.get("role") in ("user", "assistant") and isinstance(m.get("content"), str):
@@ -166,6 +185,7 @@ def _build_meihua_payload(req):
         lines.append("本卦彖传：%s" % ben["tuan"])
     if ben.get("xiang"):
         lines.append("本卦大象：%s" % ben["xiang"])
+    lines.extend(memory_lines(req))
     lines.append("辅证卦辞：")
     for e in req.get("duanci") or []:
         lines.append("- %s：%s（白话：%s）" % (e.get("source", "?"), e.get("ci", ""), e.get("baihua", "")))

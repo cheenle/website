@@ -31,7 +31,10 @@ python3 yijing/server/eval_run.py            # 需 LLM_AUTH_TOKEN 环境
 `systemctl list-timers | grep yijing`；手动跑：`sudo systemctl start yijing-llm-eval.service`。
 
 基线记录：v2（结构化四段）硬校验 0/6 → v3（点名本卦/忌不省略）2/6 → v4（450 字上限+评审 thinking 预算）4/6，
-均分 象数3/经文4/事理3/行动3 → v5（每段≤三句、只析动爻）。上游内容审查误拦的用例记 skip，不计分母。
+均分 象数3/经文4/事理3/行动3 → v5（每段≤三句、只析动爻；评审 JSON 解析修复后首次出分）→
+v6（五百字上限、引号纪律）：硬校验 4/6，均分 象数4.5/经文4.25/事理4.0/行动4.25。
+未过项为单轮随机波动（个别用例超字数或改写爻位词），由周度评测持续追踪。
+上游内容审查误拦（DataInspectionFailed）的用例记 skip，不计分母；线上对该错误返回 409 并提示换问法。
 
 ## 4. 发布
 

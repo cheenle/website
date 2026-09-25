@@ -389,16 +389,23 @@ function llmPayload(r) {
   };
 }
 
-function requestInterpret() {
-  let r = state.lastResult;
-  if (!r && state.meihua) {
+function readingResult() {
+  if (state.lastResult) return state.lastResult;
+  if (state.meihua) {
     const m = state.meihua;
     const ben = findHexagram(m.bits, HEXAGRAMS);
     const zhi = findHexagram(m.zbits, HEXAGRAMS);
-    r = { ben, zhi, moving: [m.moving], bits: m.bits, zbits: m.zbits,
+    return {
+      ben, zhi, moving: [m.moving], bits: m.bits, zbits: m.zbits,
       rule: `梅花易数：${m.relation}（${m.relationNote}）`,
-      entries: ben ? [{ kind: "guaci", source: `本卦${ben.fullName}·卦辞`, ci: ben.guaci, tuan: ben.tuan, xiang: ben.xiang, baihua: ben.guaciBaihua, primary: true }] : [] };
+      entries: ben ? [{ kind: "guaci", source: `本卦${ben.fullName}·卦辞`, ci: ben.guaci, tuan: ben.tuan, xiang: ben.xiang, baihua: ben.guaciBaihua, primary: true }] : [],
+    };
   }
+  return null;
+}
+
+function requestInterpret() {
+  const r = readingResult();
   if (!r) return;
   const panel = $("llm-panel");
   const btn = $("btn-llm");
@@ -575,8 +582,12 @@ function chatBubble(role, text) {
 function sendChat() {
   const input = $("chat-text");
   const text = input.value.trim();
-  const r = state.lastResult;
-  if (!text || !r) return;
+  const r = readingResult();
+  if (!text) return;
+  if (!r) {
+    chatBubble("assistant", "当前没有可追问的卦象，请先起卦并完成解读。");
+    return;
+  }
   input.value = "";
   state.chat.push({ role: "user", content: text });
   chatBubble("user", text);

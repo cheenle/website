@@ -93,36 +93,40 @@ button { font: inherit; cursor: pointer; }
 .actions .primary { flex: 1; }
 
 /* 摇卦：铜钱 */
-.coins { display: flex; justify-content: center; gap: 1rem; margin: 1.2rem 0; perspective: 600px; }
+.coins { display: flex; justify-content: center; gap: 1rem; margin: 1.2rem 0; perspective: 800px; }
 
-.coin {
-  position: relative;
-  width: 64px; height: 64px;
-  border-radius: 50%;
+/* 真 3D 铜钱：inner 承载 preserve-3d，正反两面 backface-visibility 隐藏 */
+.coin { width: 64px; height: 64px; perspective: 800px; }
+.coin-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.25s ease; }
+.coin:not(.head) .coin-inner { transform: rotateX(180deg); }  /* 阴面（字，值 2） */
+.cf {
+  position: absolute; inset: 0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
   background: radial-gradient(circle at 35% 30%, #d9b45c, #a87f2a);
   border: 2px solid #7c5c1c;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  font-size: 0.95rem; color: #5c430f;
 }
-.coin::after {
-  content: "";
-  position: absolute; top: 50%; left: 50%;
-  width: 18px; height: 18px;
-  transform: translate(-50%, -50%);
-  background: var(--paper);
-  border: 1px solid #7c5c1c;
+.cf::after {
+  content: ""; position: absolute; top: 50%; left: 50%;
+  width: 16px; height: 16px; transform: translate(-50%, -50%);
+  background: var(--paper); border: 1px solid #7c5c1c;
 }
-.coin.head::before, .coin:not(.head)::before {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%) translateY(-22px);
-  font-size: 0.8rem; color: #5c430f;
+.cf.front { transform: rotateX(0deg); }      /* 阳面（背，值 3） */
+.cf.back  { transform: rotateX(180deg); }    /* 阴面（字，值 2） */
+.coins.tossing .coin-inner { animation: toss3d 0.9s cubic-bezier(0.3, 0.7, 0.4, 1); }
+@keyframes toss3d {
+  0%   { transform: rotateX(0deg) translateY(0); }
+  45%  { transform: rotateX(900deg) translateY(-56px) rotateZ(18deg); }
+  100% { transform: rotateX(1800deg) translateY(0); }
 }
-.coin.head::before { content: "背"; }        /* head = 阳面（无字之背，值 3） */
-.coin:not(.head)::before { content: "字"; } /* 阴面（有字之面，值 2） */
-.coins.tossing .coin { animation: toss 0.9s ease-in-out; }
-@keyframes toss {
-  0% { transform: rotateX(0deg) translateY(0); }
-  50% { transform: rotateX(540deg) translateY(-40px); }
-  100% { transform: rotateX(1080deg) translateY(0); }
-}
+
+/* 海报弹窗 */
+.modal { position: fixed; inset: 0; z-index: 20; background: rgba(43, 38, 34, 0.55); display: flex; flex-direction: column; align-items: center; gap: 0.8rem; padding: 2rem 1rem; overflow-y: auto; }
+.modal-head { display: flex; gap: 1rem; align-items: center; width: min(420px, 90vw); }
+.modal-head h2 { flex: 1; margin: 0; color: var(--paper); }
+#poster-img { width: min(420px, 90vw); border-radius: 6px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); }
+#poster-download { display: block; width: min(420px, 90vw); text-align: center; text-decoration: none; }
 
 /* 摇卦逐爻与卦画 */
 .cast-lines, .gua-lines { display: flex; flex-direction: column-reverse; align-items: center; gap: 0.45rem; margin: 1rem 0; }

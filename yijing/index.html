@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易占 · 易经占卜</title>
 <meta name="description" content="据《周易》古法起卦断卦：铜钱摇卦，排本卦之卦互卦，卦辞爻辞彖象原文与白话今译。">
-<link rel="stylesheet" href="css/yijing.css?v=20260926a">
+<link rel="stylesheet" href="css/yijing.css?v=20260926b">
 </head>
 <body>
 <header class="site-header">
@@ -35,10 +35,11 @@
     <h2>摇卦</h2>
     <p id="cast-progress" class="hint"></p>
     <div id="coins" class="coins">
-      <div class="coin"></div>
-      <div class="coin"></div>
-      <div class="coin"></div>
+      <div class="coin"><div class="coin-inner"><span class="cf front">背</span><span class="cf back">字</span></div></div>
+      <div class="coin"><div class="coin-inner"><span class="cf front">背</span><span class="cf back">字</span></div></div>
+      <div class="coin"><div class="coin-inner"><span class="cf front">背</span><span class="cf back">字</span></div></div>
     </div>
+    <p class="hint"><button id="btn-shake" class="link">开启摇一摇起卦</button>　<button id="btn-sound" class="link">音效：开</button></p>
     <div id="cast-lines" class="cast-lines"></div>
   </section>
 
@@ -49,6 +50,7 @@
     <div id="result-duan"></div>
     <div class="actions">
       <button id="btn-llm" class="primary">AI 进一步解读</button>
+      <button id="btn-poster" class="link">生成卦象海报</button>
       <button id="btn-again" class="link">再占一卦</button>
       <button id="btn-back" class="link">返回问卦</button>
     </div>
@@ -63,6 +65,15 @@
       </div>
     </div>
   </section>
+
+  <div id="poster-modal" class="modal hidden">
+    <div class="modal-head">
+      <h2>卦象海报</h2>
+      <button id="btn-poster-close" class="link">关闭</button>
+    </div>
+    <img id="poster-img" alt="卦象海报">
+    <a id="poster-download" class="primary" download="yijing-poster.png">保存海报</a>
+  </div>
 
   <aside id="history-panel" class="hidden">
     <div class="panel-head">
@@ -79,10 +90,10 @@
   <p><a href="/">返回 vlsc.net 首页</a></p>
 </footer>
 
-<script src="js/data/trigrams.js?v=20260926a"></script>
-<script src="js/data/hexagrams.js?v=20260926a"></script>
-<script src="js/cast.js?v=20260926a"></script>
-<script src="js/gua.js?v=20260926a"></script>
-<script src="js/app.js?v=20260926a"></script>
+<script src="js/data/trigrams.js?v=20260926b"></script>
+<script src="js/data/hexagrams.js?v=20260926b"></script>
+<script src="js/cast.js?v=20260926b"></script>
+<script src="js/gua.js?v=20260926b"></script>
+<script src="js/app.js?v=20260926b"></script>
 </body>
 </html>

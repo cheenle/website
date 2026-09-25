@@ -55,6 +55,7 @@ function tossStep(i) {
       coins.children[c].classList.toggle("head", faces[c]); // head = 阳面（背）
     }
     appendCastRow(i, value, faces);
+    playCoin();
     tossStep(i + 1);
   }, TOSS_MS);
 }
@@ -414,12 +415,174 @@ function sendChat() {
     });
 }
 
+
+// —— 音效：WebAudio 合成铜钱清脆声，无音频资源 ——
+let audioCtx = null;
+function soundOn() {
+  try { return localStorage.getItem("yijing-sound") !== "off"; } catch (e) { return true; }
+}
+function playCoin() {
+  if (!soundOn()) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const t = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = "triangle";
+    o.frequency.setValueAtTime(2400, t);
+    o.frequency.exponentialRampToValueAtTime(900, t + 0.07);
+    g.gain.setValueAtTime(0.18, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t); o.stop(t + 0.1);
+  } catch (e) { /* 无音频环境静默 */ }
+}
+function refreshSoundBtn() {
+  $("btn-sound").textContent = soundOn() ? "音效：开" : "音效：关";
+}
+function toggleSound() {
+  try { localStorage.setItem("yijing-sound", soundOn() ? "off" : "on"); } catch (e) { /* 忽略 */ }
+  refreshSoundBtn();
+}
+
+// —— 摇一摇起卦（DeviceMotion，iOS 需授权）——
+let shakeOn = false, lastShakeAt = 0, lastMag = null;
+function motionHandler(e) {
+  const a = e.accelerationIncludingGravity;
+  if (!a) return;
+  const mag = Math.abs(a.x || 0) + Math.abs(a.y || 0) + Math.abs(a.z || 0);
+  if (lastMag !== null && Math.abs(mag - lastMag) > 22) {
+    const now = Date.now();
+    if (now - lastShakeAt > 1200 && !$("screen-ask").classList.contains("hidden")) {
+      lastShakeAt = now;
+      startCast();
+    }
+  }
+  lastMag = mag;
+}
+function toggleShake() {
+  const enable = !shakeOn;
+  const apply = (ok) => {
+    shakeOn = ok;
+    if (ok) window.addEventListener("devicemotion", motionHandler);
+    else window.removeEventListener("devicemotion", motionHandler);
+    $("btn-shake").textContent = ok ? "摇一摇：开（摇动手机起卦）" : "开启摇一摇起卦";
+  };
+  if (enable && typeof DeviceMotionEvent !== "undefined" && DeviceMotionEvent.requestPermission) {
+    DeviceMotionEvent.requestPermission().then((r) => apply(r === "granted")).catch(() => apply(false));
+  } else {
+    apply(enable && typeof DeviceMotionEvent !== "undefined");
+  }
+}
+
+// —— 卦象海报：原生 Canvas，无第三方库 ——
+function wrapCJK(ctx, text, x, y, maxW, lh, maxLines) {
+  let line = "", lines = 0;
+  for (const ch of String(text)) {
+    if (ctx.measureText(line + ch).width > maxW) {
+      ctx.fillText(line, x, y); y += lh; line = ch;
+      if (++lines >= maxLines) { ctx.fillText(line + "…", x, y); return y + lh; }
+    } else line += ch;
+  }
+  if (line) { ctx.fillText(line, x, y); y += lh; }
+  return y;
+}
+
+function drawYaoColumn(ctx, bits, moving, x, yTop) {
+  const W = 300, H = 34, GAP = 26;
+  for (let i = 5; i >= 0; i--) {
+    const y = yTop + (5 - i) * (H + GAP);
+    ctx.fillStyle = "#2b2622";
+    if (bits[i] === 1) ctx.fillRect(x, y, W, H);
+    else { ctx.fillRect(x, y, W / 2 - 22, H); ctx.fillRect(x + W / 2 + 22, y, W / 2 - 22, H); }
+    if (moving.includes(i)) {
+      ctx.fillStyle = "#9e2b25";
+      ctx.font = "40px 'Songti SC','SimSun',serif";
+      ctx.fillText(bits[i] === 1 ? "○" : "×", x + W + 16, y + H - 2);
+    }
+  }
+}
+
+function drawPoster(r) {
+  const cv = document.createElement("canvas");
+  cv.width = 1080; cv.height = 1920;
+  const ctx = cv.getContext("2d");
+  ctx.fillStyle = "#f5f0e6"; ctx.fillRect(0, 0, 1080, 1920);
+  let seed = 7;
+  const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+  ctx.fillStyle = "rgba(43,38,34,0.05)";
+  for (let i = 0; i < 900; i++) ctx.fillRect(rnd() * 1080, rnd() * 1920, 2, 2);
+  ctx.strokeStyle = "rgba(43,38,34,0.12)";
+  ctx.beginPath(); ctx.moveTo(0, 1500);
+  ctx.bezierCurveTo(260, 1330, 420, 1470, 640, 1360);
+  ctx.bezierCurveTo(820, 1280, 960, 1420, 1080, 1340);
+  ctx.lineTo(1080, 1920); ctx.lineTo(0, 1920); ctx.closePath();
+  ctx.fillStyle = "rgba(43,38,34,0.06)"; ctx.fill(); ctx.stroke();
+  ctx.strokeStyle = "#2b2622"; ctx.lineWidth = 3; ctx.strokeRect(46, 46, 988, 1828);
+
+  ctx.fillStyle = "#9e2b25"; ctx.fillRect(860, 90, 130, 130);
+  ctx.fillStyle = "#fff"; ctx.font = "64px 'Songti SC','SimSun',serif";
+  ctx.fillText("易", 884, 152); ctx.fillText("占", 884, 212);
+
+  ctx.fillStyle = "#2b2622"; ctx.textAlign = "center";
+  ctx.font = "108px 'Songti SC','SimSun',serif";
+  ctx.fillText(r.ben ? r.ben.fullName : "？", 540, 330);
+  ctx.font = "46px 'Songti SC','SimSun',serif"; ctx.fillStyle = "#8a8175";
+  ctx.fillText(r.zhi ? `之 ${r.zhi.fullName}` : "六爻安静", 540, 402);
+  ctx.fillText(`${state.category} · ${state.question || "心中默念"}`.slice(0, 22), 540, 468);
+  ctx.textAlign = "left";
+
+  ctx.fillStyle = "#8a8175"; ctx.font = "42px 'Songti SC','SimSun',serif";
+  ctx.fillText("本卦", 180, 560); ctx.fillText("之卦", 620, 560);
+  drawYaoColumn(ctx, r.bits, r.moving, 180, 600);
+  drawYaoColumn(ctx, r.zbits, [], 620, 600);
+
+  const primary = r.entries[0];
+  ctx.fillStyle = "#9e2b25"; ctx.font = "44px 'Songti SC','SimSun',serif";
+  ctx.fillText(primary ? primary.source : "", 120, 1120);
+  ctx.fillStyle = "#2b2622"; ctx.font = "56px 'Songti SC','SimSun',serif";
+  let y = wrapCJK(ctx, primary ? primary.ci : "", 120, 1200, 840, 82, 3);
+
+  const tip = state.lastReading
+    ? String(state.lastReading).split(/[。！？]/)[0] + "。"
+    : (r.ben && r.ben.advice ? r.ben.advice[state.category] : "");
+  ctx.fillStyle = "#8a8175"; ctx.font = "40px 'Songti SC','SimSun',serif";
+  ctx.fillText("寄语", 120, y + 40);
+  ctx.fillStyle = "#2b2622"; ctx.font = "46px 'Songti SC','SimSun',serif";
+  y = wrapCJK(ctx, tip, 120, y + 110, 840, 70, 4);
+
+  ctx.fillStyle = "#8a8175"; ctx.font = "36px 'Songti SC','SimSun',serif";
+  ctx.textAlign = "center";
+  ctx.fillText("占断仅供参考，事在人为", 540, 1760);
+  ctx.textAlign = "left";
+  ctx.fillText("www.vlsc.net/yijing/", 120, 1820);
+  ctx.textAlign = "right";
+  ctx.fillText(new Date().toLocaleDateString("zh-CN"), 960, 1820);
+  ctx.textAlign = "left";
+  return cv.toDataURL("image/png");
+}
+
+function showPoster() {
+  const r = state.lastResult;
+  if (!r) return;
+  const url = drawPoster(r);
+  $("poster-img").src = url;
+  $("poster-download").href = url;
+  $("poster-modal").classList.remove("hidden");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   $("btn-start").addEventListener("click", startCast);
   $("btn-again").addEventListener("click", startCast);
   $("btn-back").addEventListener("click", () => showScreen("ask"));
   $("btn-llm").addEventListener("click", requestInterpret);
   $("chat-send").addEventListener("click", sendChat);
+  $("btn-poster").addEventListener("click", showPoster);
+  $("btn-poster-close").addEventListener("click", () => $("poster-modal").classList.add("hidden"));
+  $("btn-sound").addEventListener("click", toggleSound);
+  $("btn-shake").addEventListener("click", toggleShake);
+  refreshSoundBtn();
   $("chat-text").addEventListener("keydown", (e) => { if (e.key === "Enter") sendChat(); });
   $("btn-history").addEventListener("click", () => { renderHistory(); $("history-panel").classList.remove("hidden"); });
   $("btn-close-history").addEventListener("click", () => $("history-panel").classList.add("hidden"));

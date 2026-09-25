@@ -1,4 +1,4 @@
-/* global TRIGRAMS, HEXAGRAMS, castLine, huBits, trigramName, findHexagram, duanCi */
+/* global TRIGRAMS, HEXAGRAMS, castLine, huBits, trigramName, findHexagram, duanCi, yaoFacts, cuoBits, zongBits */
 
 const HISTORY_KEY = "yijing-history";
 const HISTORY_MAX = 50;
@@ -98,11 +98,16 @@ function renderResult() {
 
   // 摘要
   const movingNames = r.moving.map((i) => r.ben.yaos[i] ? r.ben.yaos[i].title : `第${i + 1}爻`).join("、") || "无";
+  const facts = r.moving.map((i) => `${r.ben.yaos[i] ? r.ben.yaos[i].title : `第${i + 1}爻`}：${yaoFacts(r.bits, i)}`).join("；");
+  const cuoHex = findHexagram(cuoBits(r.bits), HEXAGRAMS);
+  const zongHex = findHexagram(zongBits(r.bits), HEXAGRAMS);
   $("result-summary").innerHTML =
     `<p>所问：${escapeHtml(state.question || "心中默念")}（${state.category}）</p>` +
     `<p>得 <strong>${r.ben ? r.ben.fullName : "未知卦"}</strong>` +
     (r.zhi ? ` 之 <strong>${r.zhi.fullName}</strong>` : "") +
     `，动爻：${movingNames}</p>` +
+    (facts ? `<p class="facts">爻位：${escapeHtml(facts)}</p>` : "") +
+    `<p class="facts">互卦 ${huHex ? huHex.fullName : "?"} · 错卦 ${cuoHex ? cuoHex.fullName : "?"} · 综卦 ${zongHex ? zongHex.fullName : "?"}</p>` +
     `<p class="rule">断法：${r.rule}</p>`;
 
   // 三卦排盘
@@ -256,12 +261,23 @@ function clearHistory() {
 
 // —— AI 进一步解读：经 nginx → 本机代理 → LLM，浏览器不持密钥 ——
 function llmPayload(r) {
+  const hu = huBits(r.bits);
+  const huHex = findHexagram(hu.lower.concat(hu.upper), HEXAGRAMS);
+  const cuoHex = findHexagram(cuoBits(r.bits), HEXAGRAMS);
+  const zongHex = findHexagram(zongBits(r.bits), HEXAGRAMS);
   return {
     question: state.question,
     category: state.category,
-    ben: r.ben ? { fullName: r.ben.fullName } : null,
+    ben: r.ben ? { fullName: r.ben.fullName, tuan: r.ben.tuan, xiang: r.ben.xiang } : null,
     zhi: r.zhi ? { fullName: r.zhi.fullName } : null,
-    movingTitles: r.moving.map((i) => (r.ben.yaos[i] ? r.ben.yaos[i].title : `第${i + 1}爻`)),
+    hu: huHex ? huHex.fullName : null,
+    cuo: cuoHex ? cuoHex.fullName : null,
+    zong: zongHex ? zongHex.fullName : null,
+    moving: r.moving.map((i) => ({
+      title: r.ben.yaos[i] ? r.ben.yaos[i].title : `第${i + 1}爻`,
+      facts: yaoFacts(r.bits, i),
+      xiang: r.ben.yaos[i] ? r.ben.yaos[i].xiang : "",
+    })),
     rule: r.rule,
     duanci: r.entries.map((e) => ({ source: e.source, ci: e.ci, baihua: e.baihua })),
   };
@@ -283,8 +299,12 @@ function requestInterpret() {
   })
     .then((rp) => rp.json())
     .then((data) => {
-      if (!data || !data.ok) throw new Error((data && data.error) || "bad response");
-      renderLlm(data.text);
+      if (!data || !data.ok) {
+        throw new Error(data && data.error === "content-inspection"
+          ? "上游内容审查误拦，可稍后重试或换个问法"
+          : (data && data.error) || "bad response");
+      }
+      renderLlm(data.text, data.id);
     })
     .catch((e) => {
       panel.innerHTML = `<p class="llm-error">AI 解读暂不可用（${escapeHtml(e.message)}）。古典断辞如上，仍可依经而断。</p>`;
@@ -292,7 +312,7 @@ function requestInterpret() {
     .finally(() => { btn.disabled = false; });
 }
 
-function renderLlm(text) {
+function renderLlm(text, id) {
   const panel = $("llm-panel");
   panel.innerHTML = "";
   const head = document.createElement("h3");
@@ -304,6 +324,28 @@ function renderLlm(text) {
     p.textContent = para;
     panel.appendChild(p);
   }
+  const fb = document.createElement("div");
+  fb.className = "llm-feedback";
+  const tip = document.createElement("span");
+  tip.textContent = "此解读是否切题有用？";
+  const up = document.createElement("button");
+  up.className = "link";
+  up.textContent = "👍 有用";
+  const down = document.createElement("button");
+  down.className = "link";
+  down.textContent = "👎 不准";
+  const send = (rating) => {
+    up.disabled = down.disabled = true;
+    fetch("/yijing/api/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: id || null, rating, question: state.question, category: state.category }),
+    }).catch(() => {}).finally(() => { tip.textContent = "已记录，感谢反馈。"; });
+  };
+  up.addEventListener("click", () => send(1));
+  down.addEventListener("click", () => send(-1));
+  fb.append(tip, up, down);
+  panel.appendChild(fb);
   const note = document.createElement("p");
   note.className = "llm-note";
   note.textContent = "以上由大模型生成，非经文原意；占断仅供参考，事在人为。";

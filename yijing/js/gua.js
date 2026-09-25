@@ -128,6 +128,33 @@ function duanCi(lines, hexagrams) {
   return { rule, ben, zhi, moving, bits, zbits, entries };
 }
 
+
+// —— 爻位与卦变分析（象数事实层，供展示与 LLM 解读取用）——
+const WEI = ["初", "二", "三", "四", "五", "上"];
+
+// 单爻事实：当位/失正、中、应、乘承顺逆
+function yaoFacts(bits, i) {
+  const yang = bits[i] === 1;
+  const yangPos = i === 0 || i === 2 || i === 4; // 初、三、五为阳位
+  const facts = [`${WEI[i]}位${yang ? "阳" : "阴"}爻，${yang === yangPos ? "当位" : "失正"}`];
+  if (i === 1 || i === 4) facts.push("居中");
+  const j = i < 3 ? i + 3 : i - 3;
+  facts.push(`与${WEI[j]}爻${bits[j] !== bits[i] ? "有应" : "敌应"}`);
+  if (i > 0) {
+    if (!yang && bits[i - 1] === 1) facts.push("阴乘阳（逆）");
+    if (yang && bits[i - 1] === 0) facts.push("阳乘阴（顺）");
+  }
+  if (i < 5) {
+    if (!yang && bits[i + 1] === 1) facts.push("阴承阳（顺）");
+    if (yang && bits[i + 1] === 0) facts.push("阳承阴（逆）");
+  }
+  return facts.join("，");
+}
+
+// 错卦：六爻全反；综卦：上下颠倒
+function cuoBits(bits) { return bits.map((b) => 1 - b); }
+function zongBits(bits) { return bits.slice().reverse(); }
+
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { toBits, movingLines, zhiBits, huBits, trigramName, findHexagram, duanCi };
+  module.exports = { toBits, movingLines, zhiBits, huBits, trigramName, findHexagram, duanCi, yaoFacts, cuoBits, zongBits, WEI };
 }

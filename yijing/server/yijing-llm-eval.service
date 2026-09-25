@@ -1,0 +1,12 @@
+[Unit]
+Description=易占 AI 解读黄金评测（oneshot）
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=cheenle
+WorkingDirectory=/var/www/vlsc.net/yijing/server
+EnvironmentFile=/etc/yijing/llm.env
+ExecStart=/usr/bin/python3 /var/www/vlsc.net/yijing/server/eval_run.py
+# 评测失败（硬校验不过）也要留档，不当故障重启
+SuccessExitStatus=0 1

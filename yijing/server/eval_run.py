@@ -60,7 +60,7 @@ def judge(case, text):
             pass
     out = {}
     for k in ("xiangshu", "jingwen", "shili", "xingdong"):
-        km = re.search(k + r"["'\s]*[:：]\s*(\d)", raw)
+        km = re.search(k + r"""["'\s]*[:：]\s*(\d)""", raw)
         if km:
             out[k] = int(km.group(1))
     return out or None

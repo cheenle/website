@@ -289,7 +289,8 @@ class ThinkingLeakGuardTest(unittest.TestCase):
 
     def test_deep_replaces_base_structure(self):
         s = llm_proxy.system_prompt("健康", "reading", deep=True)
-        self.assertNotIn("【卦象大势】", s)
+        self.assertNotIn("结构固定为四段", s)  # 基础四段结构句必须被替换
+        self.assertIn("结构以深度模式五段为准", s)
         self.assertIn("结构以深度模式五段为准", s)
         s2 = llm_proxy.system_prompt("事业", "reading", deep=True)
         self.assertIn("【卦象大势】", s2)  # 非健康类深度模式仍用四段（无诊断语义）

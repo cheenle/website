@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易占 · 易经占卜</title>
 <meta name="description" content="据《周易》古法起卦断卦：铜钱摇卦，排本卦之卦互卦，卦辞爻辞彖象原文与白话今译。">
-<link rel="stylesheet" href="css/yijing.css?v=20260926h">
+<link rel="stylesheet" href="css/yijing.css?v=20260926i">
 </head>
 <body>
 <header class="site-header">
@@ -38,6 +38,11 @@
       <label for="num1">上卦数</label><input id="num1" type="number" min="1" max="999" value="5">
       <label for="num2">下卦数</label><input id="num2" type="number" min="1" max="999" value="3">
       <span class="hint">梅花以先天数除 8 取卦、除 6 取动爻</span>
+    </div>
+    <div class="track-row">
+      <button id="btn-deep" class="link">深度模式（自用）：未解锁</button>
+      <span id="deep-row" class="hidden"><input id="deep-key" type="password" placeholder="属主密钥" size="18">
+      <button id="btn-deep-ok" class="link">解锁</button></span>
     </div>
     <button id="btn-start" class="primary">净手摇卦</button>
     <button id="btn-history" class="link">查看占例记录</button>
@@ -125,11 +130,13 @@
   <p><a href="/">返回 vlsc.net 首页</a></p>
 </footer>
 
-<script src="js/data/trigrams.js?v=20260926h"></script>
-<script src="js/data/hexagrams.js?v=20260926h"></script>
-<script src="js/cast.js?v=20260926h"></script>
-<script src="js/gua.js?v=20260926h"></script>
-<script src="js/meihua.js?v=20260926h"></script>
-<script src="js/app.js?v=20260926h"></script>
+<script src="js/data/trigrams.js?v=20260926i"></script>
+<script src="js/data/hexagrams.js?v=20260926i"></script>
+<script src="js/cast.js?v=20260926i"></script>
+<script src="js/gua.js?v=20260926i"></script>
+<script src="js/meihua.js?v=20260926i"></script>
+<script src="js/najia.js?v=20260926i"></script>
+<script src="js/liuzhu.js?v=20260926i"></script>
+<script src="js/app.js?v=20260926i"></script>
 </body>
 </html>

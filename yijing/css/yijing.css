@@ -212,3 +212,6 @@ button { font: inherit; cursor: pointer; }
 .outcome-btns { display: flex; gap: 0.8rem; align-items: center; margin-bottom: 0.8rem; }
 .outcome-btns .primary { width: auto; padding: 0.5rem 1.4rem; font-size: 1rem; }
 .outcome-card textarea { width: 100%; }
+
+/* 纳甲装卦与深度模式 */
+#deep-row input { font: inherit; padding: 0.25rem 0.5rem; border: 1px solid var(--rule); border-radius: 4px; }

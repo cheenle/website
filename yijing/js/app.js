@@ -1,4 +1,4 @@
-/* global TRIGRAMS, HEXAGRAMS, castLine, huBits, trigramName, findHexagram, duanCi, yaoFacts, cuoBits, zongBits, meihuaByTime, meihuaByNumbers */
+/* global TRIGRAMS, HEXAGRAMS, castLine, huBits, trigramName, findHexagram, duanCi, yaoFacts, cuoBits, zongBits, meihuaByTime, meihuaByNumbers, najia, meridianOf */
 
 const HISTORY_KEY = "yijing-history";
 const HISTORY_MAX = 50;
@@ -7,7 +7,33 @@ const TOSS_MS = 900;
 const LINE_NAMES = { 6: "老阴（动）", 7: "少阳", 8: "少阴", 9: "老阳（动）" };
 const YAO_MARK = { 6: "×", 9: "○" };
 
-const state = { question: "", category: "综合", lines: [], chat: [], lastReading: "", lastLlmId: null };
+const state = { question: "", category: "综合", lines: [], chat: [], lastReading: "", lastLlmId: null, owner: "" };
+
+function ownerKey() {
+  if (state.owner) return state.owner;
+  try { state.owner = localStorage.getItem("yijing-owner") || ""; } catch (e) { state.owner = ""; }
+  return state.owner;
+}
+
+function verifyOwner() {
+  const key = $("deep-key").value.trim();
+  if (!key) return;
+  fetch("/yijing/api/verify", {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key }),
+  })
+    .then((rp) => rp.json())
+    .then((d) => {
+      if (d && d.ok) {
+        state.owner = key;
+        try { localStorage.setItem("yijing-owner", key); } catch (e) { /* 忽略 */ }
+        $("btn-deep").textContent = "深度模式（自用）：已解锁——健康类可辨证荐方";
+        $("deep-row").classList.add("hidden");
+      } else {
+        $("btn-deep").textContent = "深度模式：密钥不对";
+      }
+    })
+    .catch(() => { $("btn-deep").textContent = "深度模式：校验失败"; });
+}
 
 function $(id) { return document.getElementById(id); }
 
@@ -146,6 +172,20 @@ function renderResult() {
   const duan = $("result-duan");
   duan.innerHTML = "";
   for (const e of r.entries) duan.appendChild(entryBlock(e));
+
+
+  const nj = r.ben ? najia(r.bits, r.ben.fullName, new Date()) : null;
+  if (nj) {
+    const naj = document.createElement("div");
+    naj.className = "duan-entry";
+    const rows = nj.yaos.map((y, i) =>
+      `${["初","二","三","四","五","上"][i]}爻 ${y.liushou} ${y.ganZhi}（${y.wuxing}）${y.liuqin}${y.shi ? " ·世" : ""}${y.ying ? " ·应" : ""}`)
+      .join("　");
+    naj.innerHTML = `<div class="source">纳甲装卦（${nj.gong}宫·${nj.gongWuxing}）世${nj.shi}爻 应${nj.ying}爻</div>` +
+      `<p class="ci" style="font-size:0.95rem">${rows}</p>` +
+      `<p class="ref">用神：${nj.yongshen[state.category] || nj.yongshen["综合"]}；子午流注：当前${meridianOf(new Date()).shi}时当令${meridianOf(new Date()).jing}</p>`;
+    duan.insertBefore(naj, duan.firstChild);
+  }
 
   const advice = document.createElement("div");
   advice.className = "advice";
@@ -385,6 +425,7 @@ function llmPayload(r) {
       question: state.question,
       category: state.category,
       memory: buildMemory(),
+      owner: ownerKey() || undefined,
       gua: { upper: m.upper, lower: m.lower, movingIdx: [m.moving] },
       meihua: {
         methodNote: m.methodNote, ben: m.benName, zhi: m.zhiName, hu: m.huName,
@@ -404,6 +445,7 @@ function llmPayload(r) {
     question: state.question,
     category: state.category,
     memory: buildMemory(),
+    owner: ownerKey() || undefined,
     gua: { upper: r.ben.upper, lower: r.ben.lower, movingIdx: r.moving },
     ben: r.ben ? { fullName: r.ben.fullName, tuan: r.ben.tuan, xiang: r.ben.xiang } : null,
     zhi: r.zhi ? { fullName: r.zhi.fullName } : null,
@@ -634,7 +676,7 @@ function sendChat() {
   fetch("/yijing/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ category: state.category, context: chatContext(r), messages: state.chat }),
+    body: JSON.stringify({ category: state.category, owner: ownerKey() || undefined, context: chatContext(r), messages: state.chat }),
     signal: AbortSignal.timeout(100000),
   })
     .then((rp) => rp.json())
@@ -823,6 +865,9 @@ document.addEventListener("DOMContentLoaded", () => {
       $("num-row").classList.toggle("hidden", currentMethod() !== "meihua-num");
     });
   }
+  $("btn-deep").addEventListener("click", () => $("deep-row").classList.toggle("hidden"));
+  $("btn-deep-ok").addEventListener("click", verifyOwner);
+  if (ownerKey()) $("btn-deep").textContent = "深度模式（自用）：已解锁——健康类可辨证荐方";
   $("btn-sound").addEventListener("click", toggleSound);
   $("btn-shake").addEventListener("click", toggleShake);
   $("outcome-yes").addEventListener("click", () => submitOutcome(1));

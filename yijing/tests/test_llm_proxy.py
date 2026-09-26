@@ -226,7 +226,7 @@ class HealthCrossRefTest(unittest.TestCase):
     def test_health_system_has_five_sections(self):
         s = llm_proxy.system_prompt("健康", "chat")
         for frag in ["【卦象定脏】", "【内经印证】", "【病机推演】", "【调养建议】", "【医嘱】",
-                     "说卦传", "金匮真言论"]:
+                     "易卦×内经互证", "金匮真言论"]:
             self.assertIn(frag, s)
 
     def test_payload_carries_crossref(self):
@@ -236,3 +236,60 @@ class HealthCrossRefTest(unittest.TestCase):
         content = llm_proxy.build_payload(req)["messages"][0]["content"]
         self.assertIn("易卦×内经互证事实", content)
         self.assertIn("《说卦传》配耳", content)
+
+
+class DeepModeGateTest(unittest.TestCase):
+    def setUp(self):
+        os.environ["YIJING_OWNER_KEY"] = "test-secret"
+
+    def tearDown(self):
+        del os.environ["YIJING_OWNER_KEY"]
+
+    def test_gate(self):
+        self.assertTrue(llm_proxy.is_owner({"owner": "test-secret"}))
+        self.assertFalse(llm_proxy.is_owner({"owner": "wrong"}))
+        self.assertFalse(llm_proxy.is_owner({}))
+
+    def test_deep_health_prompt_has_fang_pool_and_sections(self):
+        s = llm_proxy.system_prompt("健康", "reading", deep=True)
+        for frag in ["【辨证】", "【方药】", "【针灸择时】", "【禁忌与红线】", "归脾汤", "酸枣仁汤"]:
+            self.assertIn(frag, s)
+        self.assertNotIn("不得作诊断", s)
+        self.assertNotIn("【卦象定脏】", s)  # 深度模式不得残留公众版结构指令
+
+    def test_public_health_still_safe(self):
+        s = llm_proxy.system_prompt("健康", "reading", deep=False)
+        self.assertIn("不得作诊断、不荐药方", s)
+        self.assertNotIn("归脾汤", s)
+
+    def test_payload_deep_only_with_owner(self):
+        req = dict(SAMPLE); req["category"] = "健康"; req["gua"] = {"upper": "离", "lower": "坤", "movingIdx": [1]}
+        req["owner"] = "test-secret"
+        self.assertIn("可用处方池", llm_proxy.build_payload(req)["system"])
+        del req["owner"]
+        self.assertNotIn("可用处方池", llm_proxy.build_payload(req)["system"])
+
+
+class ThinkingLeakGuardTest(unittest.TestCase):
+    def test_no_meta_language_rule(self):
+        self.assertIn("严禁输出思考过程", llm_proxy.SYSTEM_PROMPT)
+        self.assertIn("严禁思考过程外泄", llm_proxy.system_prompt("健康", "reading", deep=True))
+
+    def test_deep_budgets(self):
+        os.environ["YIJING_OWNER_KEY"] = "k"
+        try:
+            req = dict(SAMPLE); req["owner"] = "k"
+            p = llm_proxy.build_payload(req)
+            self.assertEqual(p["thinking"]["budget_tokens"], 2048)
+            self.assertEqual(p["max_tokens"], 3000)
+            p2 = llm_proxy.build_payload(SAMPLE)
+            self.assertEqual(p2["thinking"]["budget_tokens"], 1024)
+        finally:
+            del os.environ["YIJING_OWNER_KEY"]
+
+    def test_deep_replaces_base_structure(self):
+        s = llm_proxy.system_prompt("健康", "reading", deep=True)
+        self.assertNotIn("【卦象大势】", s)
+        self.assertIn("结构以深度模式五段为准", s)
+        s2 = llm_proxy.system_prompt("事业", "reading", deep=True)
+        self.assertIn("【卦象大势】", s2)  # 非健康类深度模式仍用四段（无诊断语义）

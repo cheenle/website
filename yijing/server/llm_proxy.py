@@ -16,6 +16,7 @@
   LLM_PORT        默认 8100
   LLM_LOG_DIR     默认 /home/cheenle/yijing-llm-logs
 """
+import hmac
 import json
 import os
 import sys
@@ -30,7 +31,7 @@ DEFAULT_MODEL = "qwen3.8-max-0902"
 DEFAULT_LOG_DIR = "/home/cheenle/yijing-llm-logs"
 MAX_BODY = 64 * 1024
 UPSTREAM_TIMEOUT = 90
-PROMPT_VERSION = "2026-09-26.v11"
+PROMPT_VERSION = "2026-09-26.v13"
 
 SYSTEM_PROMPT = (
     "你是兼通象数与义理的易学解读者，熟稔《周易》经传与朱熹《易学启蒙》断法。"
@@ -44,7 +45,7 @@ SYSTEM_PROMPT = (
     "4. 【事理推断】针对所问类别，把卦爻之意落到具体事理，不得空泛；每段至多三句；\n"
     "5. 【行动建议】给二至四条可执行建议，最后一条必须以「忌：」开头写忌讳，不得省略；\n"
     "6. 全文不超过五百字（含标点），宁简勿冗；只用所给经文，不得编造或引用未提供的卦爻辞；\n"
-    "7. 不使用「总的来说」「综上所述」之类套话；结尾另起一行写：占断仅供参考，事在人为。"
+    "7. 不使用「总的来说」「综上所述」之类套话；结尾另起一行写：占断仅供参考，事在人为；\n"    "8. 回复只输出规定段落的正文本身，严禁输出思考过程、自我问答、结构说明或「我来分析」之类元语言。"
 )
 
 CATEGORY_FOCUS = {
@@ -157,9 +158,51 @@ def health_block():
         lines.append("- 《%s》：%s" % (src, txt))
     return "\n".join(lines)
 
+# —— 深度模式（属主自用解锁）：可辨证、可荐方；公网默认关闭 ——
+def is_owner(req):
+    key = req.get("owner") or ""
+    env = os.environ.get("YIJING_OWNER_KEY", "")
+    return bool(key) and bool(env) and hmac.compare_digest(str(key), str(env))
 
-def system_prompt(category, mode="reading"):
+
+# 经方/时方池（公版组成，常规参考剂量 g）：方名、出处、组成、煎服、主证
+FANG_POOL = [
+    ("桂枝汤", "伤寒论", "桂枝9 芍药9 炙甘草6 生姜9 大枣12枚", "水煎，服后啜热粥温覆取微汗", "营卫不和、自汗恶风"),
+    ("小柴胡汤", "伤寒论", "柴胡12 黄芩9 人参6 半夏9 炙甘草6 生姜9 大枣4枚", "水煎去滓再煎温服", "少阳枢机不利、寒热往来、口苦咽干"),
+    ("理中丸", "伤寒论", "人参9 干姜9 白术9 炙甘草9", "水煎温服，或作丸", "中焦虚寒、腹满吐利"),
+    ("半夏泻心汤", "伤寒论", "半夏9 黄芩6 干姜6 人参6 黄连3 大枣4枚 炙甘草9", "水煎去滓再煎", "寒热错杂之痞、呕逆肠鸣"),
+    ("四君子汤", "太平惠民和剂局方", "人参9 白术9 茯苓9 炙甘草6", "水煎温服", "脾胃气虚、食少便溏"),
+    ("归脾汤", "济生方", "黄芪12 白术9 当归9 茯苓9 远志6 龙眼肉12 酸枣仁12 人参6 木香6 炙甘草3", "加姜枣水煎", "心脾两虚、心悸失眠、食少体倦"),
+    ("酸枣仁汤", "金匮要略", "酸枣仁15 炙甘草3 知母6 茯苓6 川芎6", "水煎分温", "肝血不足、虚烦不得眠"),
+    ("温胆汤", "三因极一病证方论", "半夏9 竹茹9 枳实9 陈皮9 炙甘草3 茯苓6", "加姜枣水煎", "胆郁痰扰、惊悸失眠、呕恶"),
+    ("六味地黄丸", "小儿药证直诀", "熟地24 山萸肉12 干山药12 泽泻9 丹皮9 茯苓9", "蜜丸或水煎减量", "肝肾阴虚、腰膝酸软、盗汗"),
+    ("逍遥散", "太平惠民和剂局方", "柴胡9 当归9 白芍9 白术9 茯苓9 炙甘草6 薄荷3 生姜3", "水煎温服", "肝郁血虚脾弱、胁胀神疲"),
+    ("补中益气汤", "脾胃论", "黄芪15 人参6 白术9 炙甘草6 当归6 陈皮6 升麻3 柴胡3", "水煎空腹温服", "脾虚气陷、倦怠乏力、久泻"),
+    ("血府逐瘀汤", "医林改错", "桃仁12 红花9 当归9 生地9 川芎6 赤芍6 牛膝9 桔梗5 柴胡3 枳壳6 甘草3", "水煎", "胸中血瘀、胸痛失眠、舌暗"),
+]
+
+# 子午流注：十二时辰配十二经
+SHICHEN_JING_PY = ["胆", "肝", "肺", "大肠", "胃", "脾", "心", "小肠", "膀胱", "肾", "心包", "三焦"]
+SHICHEN_ZHI = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
+
+
+def liuzhu_now(now=None):
+    import datetime
+    now = now or datetime.datetime.now()
+    i = ((now.hour + 1) % 24) // 2
+    return "%s时（%s）当令 %s经" % (SHICHEN_ZHI[i], "%02d:00-%02d:00" % ((i * 2 + 23) % 24, (i * 2 + 25) % 24 or 24), SHICHEN_JING_PY[i])
+
+
+def deep_health_block():
+    lines = ["深度模式（属主自用）：可作中医辨证与方药推荐。可用处方池（组成与常规参考剂量，g）："]
+    for name, src, comp, decoct, zhu in FANG_POOL:
+        lines.append("- %s（%s）：%s；煎服：%s；主证：%s" % (name, src, comp, decoct, zhu))
+    return "\n".join(lines)
+
+
+def system_prompt(category, mode="reading", deep=False):
     """按问事类别与模式动态组装 System Prompt。"""
+    reading_structure = "1. 结构固定为四段，段首用【卦象大势】【爻位细析】【事理推断】【行动建议】；\n"
     if mode == "meihua":
         base = MEIHUA_SYSTEM
     elif mode == "chat":
@@ -173,16 +216,27 @@ def system_prompt(category, mode="reading"):
         )
     else:
         base = SYSTEM_PROMPT
+        if deep and category == "健康":
+            # 深度模式五段与基础四段互斥，必须替换而非并存
+            base = base.replace(reading_structure,
+                                "1. 结构以深度模式五段为准（见类别专项要求），不使用四段结构；\n")
     out = base + "\n\n所问类别专项要求：" + CATEGORY_FOCUS.get(category, CATEGORY_FOCUS["综合"])
     if category == "健康":
-        out += ("\n\n黄帝内经理法：" + health_block() +
-                "\n健康类解读与追问须以「易卦×内经互证」为纲，结构固定五段："
-                "【卦象定脏】（上下经卦配脏腑、动爻爻位配身部，注明《说卦传》与咸卦爻辞依据）、"
-                "【内经印证】（引池内条文并注明篇名，结合当令四时）、"
-                "【病机推演】（以阴阳偏颇与五行生克互证，卦象语言与内经语言各至少一次）、"
-                "【调养建议】（起居/情志/饮食各至少一条，末条以「忌：」开头）、"
-                "【医嘱】（一句：具体病情以医嘱为准）。"
-                "引用内经只可用池内条文且不得改字；不得作诊断、不荐药方。")
+        common = ("\n\n黄帝内经理法：" + health_block() +
+                  "\n引用内经只可用池内条文且不得改字；须结合「易卦×内经互证」事实层"
+                  "（卦配脏腑、爻位配身、当令四时、生克推演、子午流注）。")
+        if deep:
+            out += common + ("\n\n" + deep_health_block() +
+                             "\n深度模式（属主自用）结构固定五段："
+                             "【辨证】（八纲+脏腑证型，给出证型名与依据，卦象与内经互证）、"
+                             "【治则】（治法八字以内）、"
+                             "【方药】（只可用池内方，可合方或加减但须注明；给出组成剂量与煎服法）、"
+                             "【针灸择时】（结合子午流注当令经与病位脏府，给取经取穴原则与宜忌时辰）、"
+                             "【禁忌与红线】（配伍禁忌与须立即就医的情形）。"
+                             "\n深度模式不作每轮医嘱套话，就医红线由【禁忌与红线】段承担；""\n深度模式字数上限放宽至九百字；回复只输出五段正文，严禁思考过程外泄。")
+        else:
+            out += common + ("\n健康类结构固定五段：【卦象定脏】【内经印证】【病机推演】【调养建议】【医嘱】；"
+                             "本模式面向公众：不得作诊断、不荐药方，仅作调养参考，并始终提醒以医嘱为准。")
     return out + MEMORY_RULE
 
 
@@ -231,16 +285,17 @@ def build_payload(req):
     lines.append("断法：%s" % req.get("rule", "?"))
     if req.get("category") == "健康":
         lines.extend(health_context_lines(req))
+        lines.append("- 子午流注：当前%s" % liuzhu_now())
     lines.extend(memory_lines(req))
     lines.append("断辞：")
     for e in duanci:
         lines.append("- %s：%s（白话：%s）" % (e.get("source", "?"), e.get("ci", ""), e.get("baihua", "")))
     return {
         "model": os.environ.get("LLM_MODEL", DEFAULT_MODEL),
-        "max_tokens": 2048,
-        # 思考型模型：给 thinking 设预算，避免思考吃满额度/超时导致正文为空
-        "thinking": {"type": "enabled", "budget_tokens": 1024},
-        "system": system_prompt(req.get("category", "综合"), "reading"),
+        "max_tokens": 3000 if is_owner(req) else 2048,
+        # 思考型模型：给 thinking 设预算，避免思考吃满额度/超时导致正文为空；深度模式加倍
+        "thinking": {"type": "enabled", "budget_tokens": 2048 if is_owner(req) else 1024},
+        "system": system_prompt(req.get("category", "综合"), "reading", is_owner(req)),
         "messages": [{"role": "user", "content": "\n".join(lines)}],
     }
 
@@ -257,6 +312,7 @@ def build_chat_payload(req):
         head.append("此前 AI 解读：%s" % str(ctx["reading"])[:600])
     if req.get("category") == "健康":
         head.extend(health_context_lines(req))
+        head.append("- 子午流注：当前%s" % liuzhu_now())
     head.extend(memory_lines({"memory": ctx.get("memory")}))
     msgs = [{"role": "user", "content": "\n".join(head)}]
     for m in (req.get("messages") or [])[-10:]:
@@ -264,9 +320,9 @@ def build_chat_payload(req):
             msgs.append({"role": m["role"], "content": m["content"][:2000]})
     return {
         "model": os.environ.get("LLM_MODEL", DEFAULT_MODEL),
-        "max_tokens": 800,
-        "thinking": {"type": "enabled", "budget_tokens": 512},
-        "system": system_prompt(req.get("category", "综合"), "chat"),
+        "max_tokens": 1600 if is_owner(req) else 800,
+        "thinking": {"type": "enabled", "budget_tokens": 1024 if is_owner(req) else 512},
+        "system": system_prompt(req.get("category", "综合"), "chat", is_owner(req)),
         "messages": msgs,
     }
 
@@ -287,15 +343,16 @@ def _build_meihua_payload(req):
         lines.append("本卦大象：%s" % ben["xiang"])
     if req.get("category") == "健康":
         lines.extend(health_context_lines(req))
+        lines.append("- 子午流注：当前%s" % liuzhu_now())
     lines.extend(memory_lines(req))
     lines.append("辅证卦辞：")
     for e in req.get("duanci") or []:
         lines.append("- %s：%s（白话：%s）" % (e.get("source", "?"), e.get("ci", ""), e.get("baihua", "")))
     return {
         "model": os.environ.get("LLM_MODEL", DEFAULT_MODEL),
-        "max_tokens": 2048,
-        "thinking": {"type": "enabled", "budget_tokens": 1024},
-        "system": system_prompt(req.get("category", "综合"), "meihua"),
+        "max_tokens": 3000 if is_owner(req) else 2048,
+        "thinking": {"type": "enabled", "budget_tokens": 2048 if is_owner(req) else 1024},
+        "system": system_prompt(req.get("category", "综合"), "meihua", is_owner(req)),
         "messages": [{"role": "user", "content": "\n".join(lines)}],
     }
 
@@ -379,6 +436,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path == "/interpret":
             self._interpret()
+        elif self.path == "/verify":
+            self._verify()
         elif self.path == "/chat":
             self._chat()
         elif self.path == "/feedback":
@@ -392,7 +451,7 @@ class Handler(BaseHTTPRequestHandler):
             self._send(400, {"ok": False, "error": "bad json"})
             return
         rid = uuid.uuid4().hex[:16]
-        log_event("interpret_req", {"id": rid, "req": req})
+        log_event("interpret_req", {"id": rid, "deep": is_owner(req), "req": req})
         t0 = time.time()
         text = ""
         try:
@@ -425,6 +484,13 @@ class Handler(BaseHTTPRequestHandler):
             return
         log_event("interpret_res", {"id": rid, "ms": int((time.time() - t0) * 1000), "text": text})
         self._send(200, {"ok": True, "text": text, "id": rid, "version": PROMPT_VERSION})
+
+    def _verify(self):
+        body = self._read_json()
+        if not isinstance(body, dict) or not is_owner({"owner": body.get("key")}):
+            self._send(403, {"ok": False, "error": "forbidden"})
+            return
+        self._send(200, {"ok": True})
 
     def _chat(self):
         req = self._read_json()

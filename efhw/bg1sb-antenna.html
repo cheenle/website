@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Full measured profile of BG1SB's own EFHW antenna: the f1=6.50 MHz resonance plateau, a raw-SWR panorama across seven bands, an evidence-based verdict on the 49:1 unun, PSK Reporter radiation cross-validation, and a quantitative record of rain-induced detuning. All data is reproducible."
+    />
+    <meta name="author" content="BG1SB" />
+    <meta name="theme-color" content="#0a0e14" />
+    <link rel="alternate" hreflang="zh-CN" href="zh/bg1sb-antenna.html" />
+    <link rel="alternate" hreflang="en" href="bg1sb-antenna.html" />
+    <title>
+      BG1SB EFHW Antenna Measured Profile — A Data-Driven Deep Dive — EFHW
+      Projects
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/octen.css?v=6" />
+    <link rel="stylesheet" href="css/efhw.css?v=2" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>📊</text></svg>"
+    />
+  </head>
+  <body data-site="efhw">
+    <nav class="navbar">
+      <div class="container navbar-content">
+        <a href="index.html" class="logo">
+          <span class="logo-icon"><i class="fas fa-broadcast-tower"></i></span>
+          <span>EFHW<span style="color: var(--accent)">Projects</span></span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="baluns.html">Baluns</a></li>
+          <li><a href="#resonance">Resonance</a></li>
+          <li><a href="#bands">7-Band SWR</a></li>
+          <li><a href="#radiation">Radiation</a></li>
+          <li><a href="#rain">Rain Detuning</a></li>
+          <li><a href="bg1sb-tuner-calc.html" style="color:#22d3ee;">🧮 Tuner Calc</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a href="zh/bg1sb-antenna.html" class="lang-btn">中文</a>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="subnav">
+      <div class="container subnav-inner">
+        <a href="#system">01 · Antenna &amp; Measurement System</a>
+        <a href="#resonance">02 · Resonance Structure</a>
+        <a href="#bands">03 · Raw SWR, 7 Bands</a>
+        <a href="#unun">04 · The 49:1 Verdict</a>
+        <a href="#radiation">05 · Radiation Cross-Check</a>
+        <a href="#rain">06 · Rain Detuning</a>
+        <a href="#tuner">07 · Tuner Profile</a>
+        <a href="#health">08 · Seed Healthcheck</a>
+        <a href="#conclusion">09 · Conclusions</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-chart-line"></i>
+          <span>Measured at the BG1SB station · Profile 2026-09-27 · Full learn-library calibration 2026-09-28 · Fully reproducible</span>
+        </div>
+        <h1 class="hero-title">
+          Every decibel of this antenna<br /><span class="gradient">comes with a measurement on file</span>
+        </h1>
+        <p class="hero-subtitle">
+          A 21.9 m EFHW sloper strung between a 4th-floor window sill and the
+          waist of a tree, fed through a Fair-Rite 2643251002 (2:14 turns,
+          49:1) unun and an ATR-1000 auto antenna tuner. This page is its
+          complete measured profile: fundamental resonance measured at
+          6.50 MHz, a raw-SWR panorama across all seven bands, an
+          evidence-based verdict on the 49:1 ratio, radiation cross-validated
+          by 7,000 km-class DX spots on PSK Reporter, and a minute-by-minute
+          record of tuner parameter drift through an entire rainfall. All raw
+          data (JSON) and the re-computation scripts live in the repository.
+        </p>
+        <div class="hero-actions">
+          <a href="#resonance" class="btn btn-primary btn-large"
+            ><i class="fas fa-wave-square"></i> See the resonance data</a
+          >
+          <a href="#conclusion" class="btn btn-secondary btn-large"
+            ><i class="fas fa-list-check"></i> Skip to conclusions</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="system">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">01 · Antenna &amp; Measurement System</span>
+          <h2 class="section-title">The device under test and the measurement chain</h2>
+          <p class="section-subtitle">
+            Before reading the numbers, meet the antenna and the ruler. The
+            measurement chain itself was cross-validated: every isolated
+            anomaly was re-measured and adjudicated, and all auto-tuning paths
+            were physically isolated during sweeps.
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr><th>Item</th><th>Parameter</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Antenna type</b></td>
+              <td>EFHW sloper</td>
+              <td>Feedpoint on a 4th-floor window sill (~10–12 m high), sloping down ~40° west of south (azimuth ≈220°), far end tied at the waist of a 3 m-high tree</td>
+            </tr>
+            <tr>
+              <td><b>Radiator length</b></td>
+              <td>≈ 21.5–21.9 m</td>
+              <td>Back-derived from f1=6.50 MHz (velocity factor 0.93–0.95); consistent with the eyeball estimate of "about 21 m"</td>
+            </tr>
+            <tr>
+              <td><b>Unun</b></td>
+              <td>Fair-Rite 2643251002, 2:14 turns (49:1)</td>
+              <td>Material 43, primary magnetising inductance L_m ≈ 4.3 µH</td>
+            </tr>
+            <tr>
+              <td><b>ATU</b></td>
+              <td>ATR-1000 (L-network, 0.1 µH / 10 pF quantisation)</td>
+              <td>With LC learn library; measurements taken in bypass (L=0/C=0) for raw SWR</td>
+            </tr>
+            <tr>
+              <td><b>Radio</b></td>
+              <td>Icom IC-M710 (MRRC remote system)</td>
+              <td>tune carrier keyed point by point; meter readings median-filtered</td>
+            </tr>
+            <tr>
+              <td><b>Method</b></td>
+              <td>In-house sweep engine <code>antenna_sweep.py</code></td>
+              <td>10 kHz steps, 0.4 s settle + 1.2–2.5 s sampling; learn library and SWR auto-tune guard disabled before each sweep, zero contamination verified after</td>
+            </tr>
+            <tr>
+              <td><b>Data cleaning</b></td>
+              <td>Dropout-run removal + 100% re-measurement verification</td>
+              <td>Isolated SWR=1.00 spikes are dropouts in the meter's reflected channel; all 36 removed points were re-measured with long dwell, <b>36/36 confirmed false readings</b> (e.g. 7130 kHz: 1.00→3.58)</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>Data discipline.</b> Every SWR value on this page is a measured
+          meter reading with the ATR-1000 in bypass, not a simulation. Every
+          "extrapolation" paragraph is explicitly labelled. Lessons learned
+          during measurement are recorded honestly too: the first re-measurement
+          was contaminated by the auto-tune guard of another system on the same
+          radio (mrrc_modern) — it triggered a tune while we were sweeping, and
+          subsequent points showed falsely low SWR with L/C engaged. That
+          dataset was voided and re-measured; the lesson is now baked into the
+          operating procedure.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="resonance">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">02 · Measured Resonance Structure</span>
+          <h2 class="section-title">f1 = 6.50 MHz: a textbook V-curve</h2>
+          <p class="section-subtitle">
+            Dense sweep of 102 points over 6.0–7.3 MHz in 10 kHz steps. The
+            SWR=1.00 plateau spans 160 kHz, with symmetric, smooth rises on
+            both flanks — no simulation could be any cleaner.
+          </p>
+        </div>
+        <figure style="text-align: center; margin: 2rem 0">
+          <img
+            src="images/bg1sb-f1-resonance-2026-09-27.png"
+            alt="Measured EFHW fundamental resonance region 6.0-7.3MHz: SWR V-curve and forward power corroborate each other"
+            style="max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1)"
+          />
+          <figcaption style="opacity: 0.7; margin-top: 0.5rem; font-size: 0.9rem">
+            Top: raw SWR (red band = SWR 1.00 plateau 6.42–6.58 MHz, green
+            band = the 40 m amateur segment). Bottom: forward power — the radio
+            puts out 9–10 W on the resonance plateau and falls to 5 W/2 W in
+            the mismatch regions; the ALC back-off curve mirrors the SWR curve,
+            and the two independent measurements corroborate each other.
+          </figcaption>
+        </figure>
+        <table class="spec-table">
+          <thead>
+            <tr><th>Harmonic</th><th>Measured position</th><th>Relative to integer multiple</th><th>Evidence</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>f1 (fundamental)</b></td>
+              <td><b>6.50 MHz</b> (plateau 6.42–6.58)</td>
+              <td>1.00</td>
+              <td>Directly measured flat bottom of the V</td>
+            </tr>
+            <tr>
+              <td>2f</td>
+              <td>≈ 13.9–14.0 MHz</td>
+              <td>2.15</td>
+              <td>20 m segment floor lowest at 14.000 (1.45) and still falling</td>
+            </tr>
+            <tr>
+              <td>3f</td>
+              <td>≈ 21.3 MHz</td>
+              <td>3.28</td>
+              <td>Plateau at 21.23–21.42 (SWR 1.00) within the 15 m band</td>
+            </tr>
+            <tr>
+              <td>4f</td>
+              <td>≈ 28.5 MHz</td>
+              <td>4.38</td>
+              <td>Deepest dip at 28.48 (1.66) within the 10 m band</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>The harmonic ratios drifting upward step by step (1 : 2.15 : 3.28 : 4.38) are the fingerprint of EFHW end effect:</b>
+          the wire-end distributed capacitance shortens the electrical length
+          most at the fundamental, and its influence shrinks with frequency, so
+          each higher resonance lands progressively above the ideal integer
+          multiple.<br /><br />
+          <b>This wire length is a happy accident:</b> f1 landing at 6.50 pushes
+          the entire 40 m segment onto the rising right flank of the resonance
+          (raw SWR is already 2.87 at 7.0 MHz, so the whole band demands the
+          tuner); but it also places 2f at the bottom edge of 20 m and 3f dead
+          centre of 15 m — the current length is a gift for the high bands and
+          a price for 40 m.
+          <b>The f1 region has Q ≈ 12</b> (SWR≤2 bandwidth 530 kHz), far wider
+          than the textbook "needle" — ground-proximity loss and feedline
+          participation lower the Q, and in exchange you get the wide plateau
+          on 15 m.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="bands">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">03 · Raw SWR Panorama, Seven Bands</span>
+          <h2 class="section-title">The true colours of every band, tuner in bypass</h2>
+          <p class="section-subtitle">
+            All seven amateur bands from 7–29.7 MHz, 312 points, dropouts
+            cleaned. This table answers: which bands work raw, which need the
+            tuner, and which to avoid.
+          </p>
+        </div>
+        <figure style="text-align: center; margin: 2rem 0">
+          <img
+            src="images/bg1sb-swr-3-30mhz-2026-09-27.png"
+            alt="Measured SWR panorama 3-30MHz: measured clusters as solid lines, interpolation dashed, resonance markers"
+            style="max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1)"
+          />
+          <figcaption style="opacity: 0.7; margin-top: 0.5rem; font-size: 0.9rem">
+            3–30 MHz panorama: bold solid lines + dots are measured clusters
+            (384 valid points); grey dashed lines are interpolations between
+            measurement clusters / extrapolation below 3.8 MHz (not measured);
+            purple dashed markers are the four measured resonance points.
+          </figcaption>
+        </figure>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Band</th><th>Median raw SWR</th><th>Lowest point</th><th>Shape</th><th>Usable without tuning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>80m</b> 3.8–3.9</td><td class="deny"><b>16.2</b></td>
+              <td>16.09</td><td>Dead flat</td>
+              <td class="deny">❌ Structurally dead band; no tuner can save it</td>
+            </tr>
+            <tr>
+              <td><b>40m</b> 7.0–7.3</td><td><b>3.47</b></td>
+              <td>2.87 @7.00</td><td>Monotonic rising flank</td>
+              <td class="deny">❌ Tuner mandatory across the band (post-tune SWR≈1.0–1.2)</td>
+            </tr>
+            <tr>
+              <td><b>30m</b> 10.1</td><td class="deny"><b>5.54</b></td>
+              <td>4.70</td><td>Flat</td><td class="deny">❌</td>
+            </tr>
+            <tr>
+              <td><b>20m</b> 14.0–14.35</td><td><b>1.90</b></td>
+              <td>1.45 @14.00</td><td>Gentle rise</td>
+              <td>⚠️ Lower half (≤14.20) usable raw</td>
+            </tr>
+            <tr>
+              <td><b>17m</b> 18.07–18.17</td><td class="deny"><b>12.54</b></td>
+              <td>9.64</td><td>Anti-resonance plateau</td>
+              <td class="deny">❌ Worst band on the wire; even the tuner struggles</td>
+            </tr>
+            <tr>
+              <td><b>15m</b> 21.0–21.45</td><td style="color:#10b981"><b>1.25</b></td>
+              <td>1.00 plateau</td><td>Gentle fall into plateau</td>
+              <td style="color:#10b981">✅ <b>Best band; no tuning needed anywhere</b></td>
+            </tr>
+            <tr>
+              <td><b>12m</b> 24.89–24.99</td><td class="deny"><b>5.53</b></td>
+              <td>5.51</td><td>Flat</td><td class="deny">❌</td>
+            </tr>
+            <tr>
+              <td><b>10m</b> 28.0–29.7</td><td><b>2.48</b></td>
+              <td>1.66 @28.48</td><td>Shallow dip</td>
+              <td>⚠️ Middle section (28.2–29.0) usable raw</td>
+            </tr>
+          </tbody>
+        </table>
+        <figure style="text-align: center; margin: 2rem 0">
+          <img
+            src="images/bg1sb-swr-7bands-2026-09-27.png"
+            alt="Measured raw SWR curves for the seven amateur bands"
+            style="max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1)"
+          />
+          <figcaption style="opacity: 0.7; margin-top: 0.5rem; font-size: 0.9rem">
+            Seven-band panorama (bypass, dropouts removed). Green/orange/red
+            dashed lines = SWR 1.5/2.0/3.0.
+          </figcaption>
+        </figure>
+        <div class="calc">
+          <b>Summary of raw-usable ranges (SWR≤2, measured):</b> 6.28–6.81 MHz,
+          14.00–14.20 MHz, 21.00–21.45 MHz (all of 15 m). <b>SWR≤3:</b> plus
+          6.07–7.02, all of 20 m, 28.01–29.41. The whole 15 m band at
+          SWR≤1.63 is this antenna's headline figure.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="unun">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">04 · The 49:1 Verdict</span>
+          <h2 class="section-title">The 49 vs 64 debate, settled by one bypass measurement</h2>
+          <p class="section-subtitle">
+            "49:1 or 64:1" is called "an argument about measurements" on the
+            research site. This page delivers the measured verdict for this
+            antenna.
+          </p>
+        </div>
+        <div class="calc">
+          <b>Criterion:</b> on the f1 resonance plateau, with the tuner in
+          bypass (L=0/C=0), measured SWR = 1.00. That means the "unun +
+          feedline" chain transforms the wire-end impedance to right around
+          50 Ω at resonance — <b>for this antenna 49:1 is a bulls-eye ratio</b>,
+          wire-end resonance resistance ≈ 2200–2700 Ω, close to the theoretical
+          2450 Ω (50 × 49). Swapping to 64:1 (target 3200 Ω) would instead pull
+          the rig-end impedance down into the 35–40 Ω region, leaving an
+          SWR≈1.3 residual floor at resonance.<br /><br />
+          <b>Power design value:</b> at 100 W the feedpoint voltage V=√(P·R) ≈
+          <b>495 Vrms / 700 V peak</b>. The unun's secondary insulation and the
+          inter-turn and first-two-turns insulation must be designed for
+          ≥700 V peak — consistent with the warning in the baluns topic page.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="radiation">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">05 · Radiation Cross-Validation</span>
+          <h2 class="section-title">Seven days of raw PSK Reporter data: where it actually points</h2>
+          <p class="section-subtitle">
+            165 FT8 spots over 7 days from the StarRocks database (raw data
+            behind the radio.vlsc.net:5000/antenna dashboard), cross-tabulated
+            by distance, azimuth quadrant and time of day.
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr><th>Dimension</th><th>Measured result</th><th>Interpretation</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Typical take-off angle</b></td>
+              <td>9–12° (dashboard hop/elevation analysis)</td>
+              <td>Mid-to-low angles, better than a typical low dipole — thanks to the 4th-floor feedpoint height</td>
+            </tr>
+            <tr>
+              <td><b>Main working region</b></td>
+              <td>40 m night-time single-hop 500–2000 km, mean TX SNR <b>-0.4 dB</b></td>
+              <td>Japan/Korea, Northeast and East China circle; radiation efficiency in the near region is completely normal</td>
+            </tr>
+            <tr>
+              <td><b>Strongest azimuth</b></td>
+              <td>225–270° (west-southwest), mean RX <b>-4.9 dB</b>, strongest overall</td>
+              <td>Exactly the sloper's downhill direction (≈220°) — front-to-back toward the low end of the wire matches theory</td>
+            </tr>
+            <tr>
+              <td><b>TX/RX asymmetry</b></td>
+              <td>TX means -3.5/-3.2 dB on 40 m/15 m, 6–8 dB stronger than RX (-11.1 dB)</td>
+              <td>The classic combination of respectable transmit efficiency plus elevated urban local receive noise</td>
+            </tr>
+            <tr>
+              <td><b>DX highlight</b></td>
+              <td>Copied by ZL1RPC (New Zealand, 10,412 km) at -4 dB during heavy rain on 9/26</td>
+              <td>Rain detuning was rescued by the tuner's automatic re-learning (auto-tune triggered at 20:04) — genuine low-angle DX capability</td>
+            </tr>
+            <tr>
+              <td><b>Time-of-day pattern</b></td>
+              <td>All 40 m RX concentrates in 00–06 h (Beijing night), peaking 02–04</td>
+              <td>Under daytime D-layer absorption, a low sloper receives virtually no 40 m skywave</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="rain">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">06 · Rain-Induced Detuning</span>
+          <h2 class="section-title">How one rainfall moved this antenna's resonance</h2>
+          <p class="section-subtitle">
+            Minute-by-minute cross of tuner learn parameters against Beijing's
+            hourly precipitation through one complete rainfall on 9/26–9/27. A
+            rare quantitative record of EFHW rain detuning.
+          </p>
+        </div>
+        <figure style="text-align: center; margin: 2rem 0">
+          <img
+            src="images/bg1sb-swr-rain-2026-09-27.png"
+            alt="Cross timeline of the rainfall and SWR/tuner parameter drift"
+            style="max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1)"
+          />
+        </figure>
+        <table class="spec-table">
+          <thead>
+            <tr><th>Period</th><th>Weather</th><th>Learn parameters at 7050 kHz</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Before rain (dry)</td><td>RH climbing</td><td>LC L=0.6–0.8 µH / C=480 pF</td><td>Baseline</td>
+            </tr>
+            <tr>
+              <td>20:00</td><td><b>Rain begins (3.4 mm/h)</b></td>
+              <td>SWR drifts to 1.77 at 20:01; auto re-tune at 20:04</td><td>Detuning occurs</td>
+            </tr>
+            <tr>
+              <td>Heavy rain</td><td>Rainfall peak</td>
+              <td><b>L=1.5 µH / C=420 pF</b></td><td>Series-L demand ×2.5</td>
+            </tr>
+            <tr>
+              <td>Rain tapering off</td><td>RH 94–98%</td><td>L=1.2–1.3 µH</td><td>Partial recovery</td>
+            </tr>
+            <tr>
+              <td>Late night after rain</td><td>Drying out</td><td>L=1.0–1.1 µH / C=470 pF</td><td>Continued recovery</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>Quantitative reading:</b> the series-L demand at 7.05 MHz rose from
+          0.6 → 1.5 µH, i.e. the antenna-side reactance shifted in the
+          capacitive direction by ΔX ≈ ω·ΔL ≈ <b>+40 Ω</b>. The mechanism is
+          textbook: rain raises the wire-to-ground distributed capacitance and
+          adds dielectric loss → electrical length increases → resonance moves
+          down (estimated 40–60 kHz) → the antenna looks more capacitive at a
+          fixed frequency → more series inductance is needed to compensate.
+          <b>The far end tied at a 3 m tree waist amplifies this effect</b> —
+          wet bark is a semiconductor, effectively paralleling a
+          weather-dependent R-C across the wire end. Operations implication:
+          after rain, run one 2-minute single-band sweep on your working bands
+          and compare against the dry baseline to quantify the drift.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tuner">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">07 · Tuner Parameter Profile</span>
+          <h2 class="section-title">Learn library: measured anchors + fitted fill + full-library calibration on 9-28</h2>
+          <p class="section-subtitle">
+            Current state of the ATR-1000 learn library. Measured anchors take
+            priority; fitted entries are tagged and get naturally overwritten
+            by real learning, and when deviation grows large the SWR guard
+            re-tunes and heals automatically. On 2026-09-28 a full-library
+            measured playback healthcheck (59 clusters) was run; all 20 failed
+            parameters were repaired.
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr><th>Band</th><th>Typical measured parameters</th><th>Anchor strength</th><th>Post-tune SWR</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>40m</td><td>LC · L=0.7–1.2 µH · C=440–480 pF</td>
+              <td>Anchor at 7050 kHz n=1075 (strongest) · re-tuned on upper edge 9-28</td><td>1.0–1.2</td>
+            </tr>
+            <tr>
+              <td>20m</td><td>CL · L=0.4–0.6 µH · C=110–170 pF</td>
+              <td>Multiple anchors with n=80+ · low edge back-filled 9-28, 1.0–1.4</td><td>1.0–1.2</td>
+            </tr>
+            <tr>
+              <td>15m</td><td>LC · L≈0–0.1 µH · C=20–40 pF</td>
+              <td>n=86–90</td><td>Nearly a straight through (raw 1.25)</td>
+            </tr>
+            <tr>
+              <td>10m</td><td><b>CL · L=0.1 µH · C=80–130 pF (9-28 topology-flip replay)</b></td>
+              <td>4 anchors re-tuned by device + 171-point interpolation</td><td>1.0–1.6</td>
+            </tr>
+            <tr>
+              <td class="deny">80m</td><td class="deny">C maxed at the 1270 pF ceiling yet only reaches 3.86</td>
+              <td class="deny">Structural wall</td><td class="deny">Abandoned</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>Why 80 m can never be tuned below 1.5 (three structural reasons):</b>
+          ① at 3.8 MHz the 21.9 m wire is only 0.28λ; the end-fed impedance is
+          extremely low-Z and highly capacitive, measured raw SWR a flat
+          16.1–16.3 across the band; ② matching it needs C≈2500–3500 pF, but
+          the ATR-1000's capacitance ceiling is only 1270 pF — measured best
+          full tune is 3.86; ③ even if SWR were brought down, feedline loss at
+          SWR 16 adds 3–6 dB, half the power heating the feedline. For 80 m,
+          put up a dedicated antenna.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="health">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">08 · Seed Healthcheck &amp; Calibration</span>
+          <h2 class="section-title">Full-library measured playback on 9-28: 20 of 59 clusters had failed</h2>
+          <p class="section-subtitle">
+            The SWR values recorded in the library are history, not today's
+            truth. Each learned parameter was played back point by point against
+            the real antenna (seed_healthcheck), then repaired by three means:
+            device re-tune / anchor interpolation / direct rewrite — this is
+            the learn library's first full calibration.
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr><th>Region</th><th>Healthcheck finding</th><th>Repair method</th><th>Measured SWR after repair</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>40 m upper edge 7160–7200</td><td>Drift 2.79–3.41</td>
+              <td>Device re-tune at 7160/7200 + anchor interpolation at 7170/7190</td><td><b>1.00</b></td>
+            </tr>
+            <tr>
+              <td><b>Entire 10 m band</b></td>
+              <td class="deny">Whole family failed 9.4–13.7 (topology flipped from LC to CL)</td>
+              <td>4-anchor device re-tune + least-squares fit replay of 171 points (CL L1/C8–C13)</td>
+              <td>1.00–1.61</td>
+            </tr>
+            <tr>
+              <td>15 m 21405 kHz</td><td>Mis-learned CL parameters 2.93</td>
+              <td>Rewritten LC L0/C4 (justified by measured neighbour points)</td><td>1.2</td>
+            </tr>
+            <tr>
+              <td>20 m low-edge, 4 points</td><td>Nodata in healthcheck</td>
+              <td>Back-filled; seeds confirmed healthy (measurement artefact)</td><td>1.00–1.38</td>
+            </tr>
+            <tr>
+              <td>80 m 3855 / 40 m 7063/7110</td><td>Mis-learned 2.33–15.8</td>
+              <td>Rewritten directly from adjacent measured anchors</td><td>≤1.5 (nominal)</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>One software-level root cause caught by this healthcheck:</b> MRRC's
+          PTT safety watchdog (TOT=120 s hard limit) does not exempt tune mode —
+          long auto-tuning sessions had PTT force-released at 120.9 s, and once
+          TX dropped, the tune commands sent to the ATU were silently ignored by
+          the device; all six tuning points of the first repair round were
+          no-ops. The second round re-armed tune before each tuning point to
+          reset the timer, and polled the log until "tune-confirmed learning"
+          appeared before moving to the next frequency (learning confirmation
+          requires relay stability &gt;8 s; any mid-way frequency change voids
+          it) — all succeeded.<br /><br />
+          <b>Companion upgrade (proxy V5.9.0):</b> after a full tune, if SWR
+          improved versus pre-tune and ≤1.8, the device-selected final
+          parameters are force-written into the library, no longer subject to
+          the 3 W learning-power gate — fixing the "tuned in vain" problem
+          where manual tune results under a weak tune carrier (~2 W) never
+          entered the library and were overwritten by old parameters. Auto-tune
+          trigger threshold set to SWR &gt; 2.0 (debounced 3.5 s).<br /><br />
+          <b>Calculator:</b> a
+          <a href="bg1sb-tuner-calc.html" style="color:#22d3ee;">🧮 frequency→L/C tuner calculator</a>
+          based on measured impedance anchors (5351.5 kHz Z=59+j112 Ω, among
+          others) is live — enter any frequency and it returns relay parameters
+          and predicted SWR; all formula derivations are public. Note the
+          calculator's uncertainty is ±3–5 steps; use it for seeding and
+          topology prediction only — final values come from the device's own
+          tune (60 m proof: computed optimum 1.46 vs device self-sweep 1.02).
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="conclusion">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">09 · Conclusions &amp; Actions</span>
+          <h2 class="section-title">The whole truth about this antenna</h2>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr><th>Metric</th><th>Measured value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Fundamental resonance f1</td><td><b>6.50 MHz</b> (plateau 6.42–6.58)</td></tr>
+            <tr><td>Harmonic family</td><td>2f≈13.95 / 3f≈21.3 / 4f≈28.5 MHz</td></tr>
+            <tr><td>Physical radiator length</td><td>≈ 21.5–21.9 m (VF 0.93–0.95)</td></tr>
+            <tr><td>Q at f1 / SWR≤2 bandwidth</td><td>Q≈12 / 530 kHz</td></tr>
+            <tr><td>Wire-end resonance resistance</td><td>≈ 2200–2700 Ω → a bulls-eye for 49:1</td></tr>
+            <tr><td>Best / worst band</td><td>15m (1.25, no tuner needed) / 17m (12.5, anti-resonant)</td></tr>
+            <tr><td>Typical radiation angle</td><td>9–12°</td></tr>
+            <tr><td>Rain detuning (7050)</td><td>ΔL +0.9 µH (ΔX≈+40 Ω, capacitive drift)</td></tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>Action list:</b>
+          ① Keep the current wire length — trimming the wire to raise f1 into
+          40 m would destroy 15 m's perfect plateau and the bottom edge of
+          20 m; not worth it;
+          ② Daily band priority: 15 m &gt; lower half of 20 m &gt; 40 m (with
+          tuner) &gt; middle of 10 m; avoid 17 m/30 m/12 m;
+          ③ Abandon 80 m on the current system entirely;
+          ④ after rain, run a single-band sweep on your working bands against
+          the baseline;
+          ⑤ To do: independent NanoVNA sweep at the unun end to characterise
+          feedline electrical length.<br /><br />
+          <b>Data &amp; reproducibility:</b> raw sweep JSON lives in the mrrc
+          repository under <code>antenna_sweeps/</code>, analysis scripts
+          <code>dev_tools/analyze_sweep.py</code>,
+          <code>fit_tuner_params.py</code>,
+          <code>seed_healthcheck.py</code> (learn-library healthcheck),
+          <code>fix_bad_seeds2.py</code> (bad-seed repair), the overall report
+          <code>docs/current/antenna/efhw-49-1-antenna-analysis-2026-09-27.md</code>,
+          and the full project retrospective at
+          <code>docs/current/antenna/efhw-atr1000-project-retrospective-2026-09-28.md</code>.
+          The sweep infrastructure (engine/API/frontend) is now solidified —
+          future dry/wet environment comparisons are a one-click re-run.
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p>
+            © 2026 BG1SB · EFHW antenna measured profile (profile 2026-09-27 / learn-library calibration 2026-09-28) ·
+            <a href="baluns.html">Baluns topic page</a> ·
+            <a href="index.html">EFHW home</a> ·
+            Not a single measured value on this page was invented.
+          </p>
+        </div>
+      </div>
+    </footer>
+    <script>
+      function toggleMobileMenu() {
+        document.querySelector(".nav-links").classList.toggle("active");
+      }
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          const t = document.querySelector(this.getAttribute("href"));
+          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+      const nav = document.querySelector(".navbar");
+      window.addEventListener("scroll", () => {
+        nav.style.background =
+          window.scrollY > 50 ? "rgba(10,14,20,0.98)" : "rgba(10,14,20,0.92)";
+      });
+    </script>
+    <script src="js/global-nav.js?v=8" defer data-gn="1"></script>
+  </body>
+</html>

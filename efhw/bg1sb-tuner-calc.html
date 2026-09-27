@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BG1SB EFHW · ATR-1000 天调参数测算器</title>
-<meta name="description" content="输入频率, 基于实测阻抗锚点模型测算 ATR-1000 天调 L/C 继电器参数 — 含完整公式推导与模型边界说明">
-<link rel="alternate" hreflang="en" href="../bg1sb-tuner-calc.html" />
-    <link rel="alternate" hreflang="zh-CN" href="bg1sb-tuner-calc.html" />
-<link rel="stylesheet" href="../css/octen.css?v=6">
-<link rel="stylesheet" href="../css/efhw.css?v=2">
+<title>BG1SB EFHW · ATR-1000 Tuner Parameter Calculator</title>
+<meta name="description" content="Enter a frequency to calculate ATR-1000 tuner L/C relay parameters from a measured impedance-anchor model — full formula derivation and model-boundary notes included">
+<link rel="alternate" hreflang="zh-CN" href="zh/bg1sb-tuner-calc.html" />
+<link rel="alternate" hreflang="en" href="bg1sb-tuner-calc.html" />
+<link rel="stylesheet" href="css/octen.css?v=6">
+<link rel="stylesheet" href="css/efhw.css?v=2">
 <style>
   :root { --mono: 'JetBrains Mono', ui-monospace, monospace; }
   body { background: #0b0f14; color: #d7dee8; }
@@ -48,16 +48,16 @@
 <body>
 <div class="calc-wrap">
   <div style="text-align:right; margin: 4px 0 -6px;">
-    <a href="../bg1sb-tuner-calc.html" class="lang-btn">English</a>
+    <a href="zh/bg1sb-tuner-calc.html" class="lang-btn">中文</a>
   </div>
-  <h1 style="font-size:26px; margin:18px 0 4px;">🧮 BG1SB EFHW · ATR-1000 天调参数测算器</h1>
-  <p class="note">数据基线：2026-09-27/28 实测（bypass 扫频 + 设备实调 + 继电器对打探针）。模型与公式见文末推导。</p>
+  <h1 style="font-size:26px; margin:18px 0 4px;">🧮 BG1SB EFHW · ATR-1000 Tuner Parameter Calculator</h1>
+  <p class="note">Data baseline: measurements of 2026-09-27/28 (bypass sweeps + device tunes + relay cross-probing). Model and formulas at the bottom of the page.</p>
 
   <div class="calc-card">
-    <h3>输入频率</h3>
+    <h3>Frequency input</h3>
     <div class="freq-row">
       <input id="freqIn" type="number" step="0.001" min="1" max="30" value="5.3515"> <span>MHz</span>
-      <button onclick="calc()">测算</button>
+      <button onclick="calc()">Calculate</button>
       <span class="band-btn" onclick="setF(3.850)">80m</span>
       <span class="band-btn" onclick="setF(5.3515)">60m</span>
       <span class="band-btn" onclick="setF(7.050)">40m</span>
@@ -72,59 +72,59 @@
   </div>
 
   <div class="calc-card">
-    <h3>天线阻抗模型曲线（实测锚点分段线性内插）</h3>
+    <h3>Antenna impedance model curve (piecewise-linear interpolation between measured anchors)</h3>
     <canvas id="swrCanvas"></canvas>
     <p class="note" id="curveNote"></p>
   </div>
 
   <div class="calc-card">
-    <h3>模型锚点表（数据来源与置信度）</h3>
+    <h3>Model anchor table (data sources and confidence)</h3>
     <table class="model" id="anchorTable"></table>
     <p class="note">
-      <span class="tag tag-meas">实测</span> 设备调谐 + 继电器对打探针双确认；
-      <span class="tag tag-fit">反推</span> 由学习库 L/C 按完美匹配假设反解，精度受达成 SWR&gt;1.0 与电表量化影响；
-      <span class="tag tag-weak">弱</span> 样本数少，仅供参考。
+      <span class="tag tag-meas">Measured</span> confirmed by both device tune and relay cross-probing;
+      <span class="tag tag-fit">Back-derived</span> inverted from learn-library L/C under a perfect-match assumption; accuracy limited by achieved SWR&gt;1.0 and meter quantisation;
+      <span class="tag tag-weak">Weak</span> few samples, reference only.
     </p>
   </div>
 
   <div class="calc-card">
-    <h3>推导：从继电器编码到天线阻抗</h3>
-    <p class="note"><b>1. ATR-1000 硬件抽象。</b>电感 8 位二进制继电器（步进 0.1µH，ind∈[0,127] → L=ind×0.1µH）；电容 7 位（步进 10pF，cap∈[0,127] → C=cap×10pF）；sw 选择电容挂在哪一侧：<b>sw=0 "LC"</b> = 串联 L + 负载（天线）侧并联 C；<b>sw=1 "CL"</b> = 源（电台）侧并联 C + 串联 L。拓扑方向已由继电器对打实测判定（L44/C34 点：LC 模型预测 1.81 / CL 模型预测 4.6 / 实测 2.32）。</p>
-    <p class="note"><b>2. 正解（已知天线阻抗 Z=R+jX，求调谐后输入阻抗）。</b></p>
+    <h3>Derivation: from relay codes to antenna impedance</h3>
+    <p class="note"><b>1. ATR-1000 hardware abstraction.</b> Inductance: 8-bit binary relays (0.1 µH steps, ind∈[0,127] → L=ind×0.1 µH); capacitance: 7-bit (10 pF steps, cap∈[0,127] → C=cap×10 pF); sw selects which side the capacitor hangs on: <b>sw=0 "LC"</b> = series L + shunt C on the load (antenna) side; <b>sw=1 "CL"</b> = shunt C on the source (rig) side + series L. The topology orientation was determined by relay cross-probing (at the L44/C34 point: LC model predicts 1.81 / CL model predicts 4.6 / measured 2.32).</p>
+    <p class="note"><b>2. Forward problem (given antenna impedance Z=R+jX, find the tuned input impedance).</b></p>
     <div class="formula">LC:  Z_in = jωL + 1 / (1/Z + jωC)<br>CL:  Z_in = 1 / (1/(jωL + Z) + jωC)<br>Γ = (Z_in − 50)/(Z_in + 50)，SWR = (1+|Γ|)/(1−|Γ|)，ω = 2πf</div>
-    <p class="note"><b>3. 反推（已知达成匹配的 L/C，求天线阻抗）。</b>令 Z_in=50 解出：</p>
+    <p class="note"><b>3. Inverse problem (given the L/C that achieved a match, find the antenna impedance).</b> Solve with Z_in=50:</p>
     <div class="formula">LC:  1/Z = 1/(50 − jωL) − jωC<br>CL:  Z = 1/(1/50 − jωC) − jωL</div>
-    <p class="note">反推假设"完美匹配"，而实际学习记录的达成 SWR 为 1.0–1.6，故反推值落在一条等 SWR 轮廓线上而非精确点——精确点需要"bypass SWR 幅值 + 多组继电器实测 SWR"联合约束（本页 5.3515MHz 锚点即由 4 约束最小二乘定为 59+j112）。</p>
-    <p class="note"><b>4. 测算器求解。</b>对输入频率在相邻锚点间对 R、X 分别做线性内插得到 Ẑ，然后暴力枚举 2×128×128 组 (sw, ind, cap) 取调谐后 SWR 最小者。同时给出次优拓扑解作对照。</p>
+    <p class="note">The inverse assumes a "perfect match", but real learn records show achieved SWR of 1.0–1.6, so the inverted value lies on a constant-SWR contour rather than an exact point — the exact point needs joint constraints of "bypass SWR magnitude + measured SWR with several relay settings" (the 5.3515 MHz anchor on this page was fixed at 59+j112 by a 4-constraint least-squares fit).</p>
+    <p class="note"><b>4. Calculator solve.</b> For the input frequency, R and X are each linearly interpolated between adjacent anchors to give Ẑ; then all 2×128×128 combinations of (sw, ind, cap) are brute-forced and the one with the lowest tuned SWR wins. The runner-up topology is shown alongside for comparison.</p>
   </div>
 
   <div class="calc-card">
-    <h3>模型边界（重要，别盲信）</h3>
-    <div class="warn">⚠️ 无锚点频段（尤其 3.9–5.3MHz、8–10MHz、16–18MHz、22–24MHz）的内插可能连电抗符号都错——60m 实测教训：两个多项式拟合族在无数据间隙里都猜成容性，实测是感性 +112Ω，按拟合参数会调到 SWR 22+。本测算器对远离锚点的频率会标<span class="conf-lo">低置信</span>，此时请用面板 Tune 让设备实测（确认学习会自动入库纠正）。</div>
+    <h3>Model boundaries (important — do not blindly trust)</h3>
+    <div class="warn">⚠️ Interpolation in anchor-free frequency ranges (especially 3.9–5.3 MHz, 8–10 MHz, 16–18 MHz, 22–24 MHz) can get even the sign of the reactance wrong — the 60 m measured lesson: two polynomial fit families both guessed capacitive across the data gap, while the measurement was inductive +112 Ω; tuning per the fit would land at SWR 22+. This calculator flags <span class="conf-lo">low confidence</span> for frequencies far from anchors; in that case use the panel Tune button and let the device measure (confirmed learning will automatically enter the library and correct it).</div>
     <p class="note" style="margin-top:10px;">
-      · 锚点都是<b>干燥天气</b>基线；雨水会使 17m 等反谐振区段 SWR 大幅漂移（2026-09-27 19:09 的 18.1MHz bypass=12.56 与当晚 00:11 实测 ≈5 不自洽，即为天气态变化）。<br>
-      · ATR 电表在低 SWR 端有量化压缩（读数普遍比模型低 0.1–0.2），SWR=1.00 为量程地板。<br>
-      · 反推 Z 的不确定度约 ±5Ω/±15Ω，映射到 L/C 约 ±3 步/±5 步；所以测算值是<b>调谐起点</b>，最终参数以设备扫描+实测为准。
+      · All anchors are <b>dry-weather</b> baselines; rain makes SWR drift substantially in anti-resonant regions such as 17 m (2026-09-27 19:09 18.1 MHz bypass=12.56 vs the ≈5 measured that night at 00:11 — inconsistent because the weather state changed).<br>
+      · The ATR meter is quantisation-compressed at the low-SWR end (readings generally 0.1–0.2 below the model); SWR=1.00 is the range floor.<br>
+      · Inverted-Z uncertainty is about ±5 Ω/±15 Ω (R/X), mapping to roughly ±3 steps/±5 steps in L/C; so treat calculated values as a <b>tuning starting point</b> — final parameters come from the device's own sweep + measurement.
     </p>
   </div>
 
-  <p class="note" style="text-align:center;">BG1SB · EFHW 21m · 49:1(2:14) 2643251002 · ATR-1000 · 数据基线 2026-09-28 · <a href="bg1sb-antenna.html" style="color:#7dd3fc;">返回天线深度分析</a></p>
+  <p class="note" style="text-align:center;">BG1SB · EFHW 21 m · 49:1 (2:14) 2643251002 · ATR-1000 · data baseline 2026-09-28 · <a href="bg1sb-antenna.html" style="color:#7dd3fc;">Back to the antenna deep dive</a></p>
 </div>
 
 <script>
-// ===== 实测阻抗锚点 (f_MHz, R, X, 来源, 样本数) =====
+// ===== Measured impedance anchors (f_MHz, R, X, source, sample count) =====
 const ANCHORS = [
   [3.850,   6.7,  42.4, 'fit', 496],
   [3.875,   7.1,  42.2, 'fit', 2],
   [3.900,   6.9,  41.9, 'fit', 1],
-  [5.3515, 59.0, 112.0, 'meas', 4],   // 4约束探针精修 (bypass7.85 + 3组继电器对打)
-  [6.500,  50.0,   0.0, 'meas', 99],  // bypass SWR=1.00 谐振平台 (6.42-6.58)
+  [5.3515, 59.0, 112.0, 'meas', 4],   // refined by 4-constraint probe (bypass 7.85 + 3 relay cross-probings)
+  [6.500,  50.0,   0.0, 'meas', 99],  // bypass SWR=1.00 resonance plateau (6.42-6.58)
   [7.050,  43.4,  37.1, 'fit', 1085],
   [7.074,  45.8,  48.8, 'fit', 159],
   [10.110, 50.0, -95.3, 'weak', 1],
   [14.074, 40.4, -15.7, 'fit', 82],
   [14.270, 33.0, -30.1, 'fit', 265],
-  [18.100, 14.4,  23.5, 'meas', 11],  // 设备重调 L1/C31->1.28 + L0/C31->1.31 对打确认
+  [18.100, 14.4,  23.5, 'meas', 11],  // device re-tune L1/C31->1.28 + L0/C31->1.31 cross-probe confirmed
   [21.074, 52.7,  -6.5, 'fit', 90],
   [21.400, 46.6,  12.5, 'fit', 88],
   [24.915, 26.6, -53.3, 'weak', 1],
@@ -161,7 +161,7 @@ function zin(f, zr, zi, sw, ind, cap) {
     const d = zr*zr + zi*zi;
     const yr = zr/d, yi = -zi/d + wC;      // Y = 1/Z + jωC
     const dd = yr*yr + yi*yi;
-    return [yr/dd, -yi/dd + wL];           // 1/Y = (yr − j·yi)/dd, 再串 jωL
+    return [yr/dd, -yi/dd + wL];           // 1/Y = (yr − j·yi)/dd, then series jωL
   } else {        // CL: 1/(1/(jωL+Z) + jωC)
     const ar = zr, ai = zi + wL;
     const d = ar*ar + ai*ai;
@@ -186,42 +186,42 @@ function solve(f, zr, zi, sw) {
 function setF(f) { document.getElementById('freqIn').value = f; calc(); }
 
 function conf(z) {
-  if (z.near < 0.05) return ['高', 'conf-hi'];
-  if (z.gap < 0.5) return ['中', 'conf-mid'];
-  return ['低（间隙内插）', 'conf-lo'];
+  if (z.near < 0.05) return ['High', 'conf-hi'];
+  if (z.gap < 0.5) return ['Mid', 'conf-mid'];
+  return ['Low (gap interp)', 'conf-lo'];
 }
 
 function calc() {
   const f = parseFloat(document.getElementById('freqIn').value);
   const el = document.getElementById('result');
-  if (!f || f < 3.5 || f > 29) { el.innerHTML = '<div class="kv"><div class="k">超出模型范围</div><div class="v">3.5–29 MHz</div></div>'; return; }
+  if (!f || f < 3.5 || f > 29) { el.innerHTML = '<div class="kv"><div class="k">Outside model range</div><div class="v">3.5–29 MHz</div></div>'; return; }
   const z = interpZ(f);
-  if (!z) { el.innerHTML = '<div class="kv"><div class="k">超出锚点范围</div><div class="v">—</div></div>'; return; }
+  if (!z) { el.innerHTML = '<div class="kv"><div class="k">Outside anchor range</div><div class="v">—</div></div>'; return; }
   const lc = solve(f, z.R, z.X, 0), cl = solve(f, z.R, z.X, 1);
   const best = lc.s <= cl.s ? { ...lc, name: 'LC (sw=0)' } : { ...cl, name: 'CL (sw=1)' };
   const alt  = lc.s <= cl.s ? { ...cl, name: 'CL (sw=1)' } : { ...lc, name: 'LC (sw=0)' };
   const [cn, cc] = conf(z);
   el.innerHTML = `
-    <div class="kv"><div class="k">估计天线阻抗 Ẑ</div><div class="v">${z.R.toFixed(1)} ${z.X>=0?'+':'−'}${Math.abs(z.X).toFixed(1)}j <small>Ω</small></div></div>
-    <div class="kv"><div class="k">bypass 裸 SWR（估计）</div><div class="v">${swrOf(z.R, z.X).toFixed(1)}</div></div>
-    <div class="kv"><div class="k">内插置信度</div><div class="v ${cc}">${cn}</div></div>
-    <div class="kv"><div class="k">推荐 ${best.name}</div><div class="v">L=${best.ind} C=${best.cap} <small>${(best.ind*0.1).toFixed(1)}µH / ${best.cap*10}pF · SWR≈${best.s.toFixed(2)}</small></div></div>
-    <div class="kv"><div class="k">备选 ${alt.name}</div><div class="v">L=${alt.ind} C=${alt.cap} <small>${(alt.ind*0.1).toFixed(1)}µH / ${alt.cap*10}pF · SWR≈${alt.s.toFixed(2)}</small></div></div>`;
+    <div class="kv"><div class="k">Estimated antenna impedance Ẑ</div><div class="v">${z.R.toFixed(1)} ${z.X>=0?'+':'−'}${Math.abs(z.X).toFixed(1)}j <small>Ω</small></div></div>
+    <div class="kv"><div class="k">Raw bypass SWR (estimated)</div><div class="v">${swrOf(z.R, z.X).toFixed(1)}</div></div>
+    <div class="kv"><div class="k">Interpolation confidence</div><div class="v ${cc}">${cn}</div></div>
+    <div class="kv"><div class="k">Recommended ${best.name}</div><div class="v">L=${best.ind} C=${best.cap} <small>${(best.ind*0.1).toFixed(1)}µH / ${best.cap*10}pF · SWR≈${best.s.toFixed(2)}</small></div></div>
+    <div class="kv"><div class="k">Alternative ${alt.name}</div><div class="v">L=${alt.ind} C=${alt.cap} <small>${(alt.ind*0.1).toFixed(1)}µH / ${alt.cap*10}pF · SWR≈${alt.s.toFixed(2)}</small></div></div>`;
 }
 
-// ===== 锚点表 =====
+// ===== Anchor table =====
 (function() {
-  let h = '<tr><th>f (MHz)</th><th>R (Ω)</th><th>X (Ω)</th><th>来源</th><th>n</th></tr>';
+  let h = '<tr><th>f (MHz)</th><th>R (Ω)</th><th>X (Ω)</th><th>Source</th><th>n</th></tr>';
   for (const [f, r, x, src, n] of ANCHORS) {
-    const tag = src === 'meas' ? '<span class="tag tag-meas">实测</span>'
-              : src === 'weak' ? '<span class="tag tag-weak">弱</span>'
-              : '<span class="tag tag-fit">反推</span>';
+    const tag = src === 'meas' ? '<span class="tag tag-meas">Measured</span>'
+              : src === 'weak' ? '<span class="tag tag-weak">Weak</span>'
+              : '<span class="tag tag-fit">Back-derived</span>';
     h += `<tr><td>${f.toFixed(4)}</td><td>${r.toFixed(1)}</td><td>${x>=0?'+':''}${x.toFixed(1)}</td><td>${tag}</td><td>${n>90?'—':n}</td></tr>`;
   }
   document.getElementById('anchorTable').innerHTML = h;
 })();
 
-// ===== R/X/bypass-SWR 曲线 =====
+// ===== R/X/bypass-SWR curve =====
 (function() {
   const cv = document.getElementById('swrCanvas');
   function draw() {
@@ -253,13 +253,13 @@ function calc() {
     for (let f = 4; f <= 28; f += 2) {
       ctx.fillText(f + 'M', fx(f) - 8, H - 8);
     }
-    // 锚点
+    // anchors
     ctx.fillStyle = '#facc15';
     for (const [f] of ANCHORS) { ctx.fillRect(fx(f)-1.5, H-28, 3, 4); }
   }
   draw(); window.addEventListener('resize', draw);
   document.getElementById('curveNote').textContent =
-    '青线 = 模型估计的 bypass 裸 SWR（对数轴，截断 30）；黄刻度 = 实测锚点位置。锚点间是线性内插，远离锚点处仅供参考。';
+    'Cyan = model-estimated raw bypass SWR (log axis, clamped at 30); yellow ticks = measured anchor positions. Linear interpolation between anchors; far from anchors, reference only.';
 })();
 
 calc();

@@ -60,7 +60,8 @@
         <a href="#radiation">05 · 辐射验证</a>
         <a href="#rain">06 · 雨致失谐</a>
         <a href="#tuner">07 · 天调画像</a>
-        <a href="#conclusion">08 · 结论</a>
+        <a href="#health">08 · 学习库体检</a>
+        <a href="#conclusion">09 · 结论</a>
       </div>
     </div>
 
@@ -68,7 +69,7 @@
       <div class="hero-content">
         <div class="hero-badge">
           <i class="fas fa-chart-line"></i>
-          <span>BG1SB 台站实测 · 2026-09-27 · 416 个 bypass 扫描点 · 全部可复算</span>
+          <span>BG1SB 台站实测 · 2026-09-27 画像 · 2026-09-28 学习库全校准 · 全部可复算</span>
         </div>
         <h1 class="hero-title">
           这根天线的每一分贝<br /><span class="gradient">都有测量记录在案</span>
@@ -435,10 +436,11 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">07 · 天调参数画像</span>
-          <h2 class="section-title">学习库：34 条实测锚点 + 270 条拟合填充</h2>
+          <h2 class="section-title">学习库：实测锚点 + 拟合填充 + 9-28 全库校准</h2>
           <p class="section-subtitle">
             ATR-1000 学习库的当前状态。实测锚点优先；拟合记录带标记、
             被真实学习自然覆盖，偏差大时 SWR 守卫自动重调自愈。
+            2026-09-28 做过一次全库实测回放体检（59 簇），20 条失效参数全部修复。
           </p>
         </div>
         <table class="spec-table">
@@ -448,18 +450,19 @@
           <tbody>
             <tr>
               <td>40m</td><td>LC · L=0.7–1.2 µH · C=440–480 pF</td>
-              <td>7050 kHz 锚点 n=1075（最强）</td><td>1.0–1.2</td>
+              <td>7050 kHz 锚点 n=1075（最强）· 9-28 上边沿重调</td><td>1.0–1.2</td>
             </tr>
             <tr>
               <td>20m</td><td>CL · L=0.4–0.6 µH · C=110–170 pF</td>
-              <td>多个 n=80+ 锚点</td><td>1.0–1.2</td>
+              <td>多个 n=80+ 锚点 · 9-28 低边补测 1.0–1.4</td><td>1.0–1.2</td>
             </tr>
             <tr>
               <td>15m</td><td>LC · L≈0–0.1 µH · C=20–40 pF</td>
               <td>n=86–90</td><td>近乎直通（裸 1.25）</td>
             </tr>
             <tr>
-              <td>10m</td><td>LC · L=0.2 µH · C=70–110 pF</td><td>n=5–52</td><td>1.2–1.5</td>
+              <td>10m</td><td><b>CL · L=0.1 µH · C=80–130 pF（9-28 拓扑翻转重播）</b></td>
+              <td>4 锚点设备重调 + 171 点插值</td><td>1.0–1.6</td>
             </tr>
             <tr>
               <td class="deny">80m</td><td class="deny">C 顶满 1270 pF 上限仍只到 3.86</td>
@@ -478,10 +481,70 @@
       </div>
     </section>
 
+    <section class="section" id="health">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">08 · 学习库体检与校准</span>
+          <h2 class="section-title">9-28 全库实测回放：59 簇中 20 簇已失效</h2>
+          <p class="section-subtitle">
+            库里的 SWR 记录值是历史，不代表今天。把每条学习参数拿到真实天线上
+            逐点回放验证（seed_healthcheck），再用设备调谐 / 锚点插值 / 直接改写
+            三手段修复——这是天调学习库的第一次全面校准。
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr><th>区域</th><th>体检发现</th><th>修复手段</th><th>修复后实测 SWR</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>40m 上边沿 7160–7200</td><td>漂移 2.79–3.41</td>
+              <td>设备重调 7160/7200 + 锚点插值 7170/7190</td><td><b>1.00</b></td>
+            </tr>
+            <tr>
+              <td><b>10m 全段</b></td>
+              <td class="deny">整族失效 9.4–13.7（拓扑从 LC 翻转为 CL）</td>
+              <td>4 锚点设备重调 + 最小二乘拟合 171 点重播（CL L1/C8–C13）</td>
+              <td>1.00–1.61</td>
+            </tr>
+            <tr>
+              <td>15m 21405 kHz</td><td>误学 CL 参数 2.93</td>
+              <td>改写 LC L0/C4（邻点实测依据）</td><td>1.2</td>
+            </tr>
+            <tr>
+              <td>20m 低边 4 点</td><td>体检 nodata</td>
+              <td>补测确认种子无恙（测量假象）</td><td>1.00–1.38</td>
+            </tr>
+            <tr>
+              <td>80m 3855 / 40m 7063/7110</td><td>误学习 2.33–15.8</td>
+              <td>按邻近实测锚点直接改写</td><td>≤1.5（标称）</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>这次体检抓到的一个软件级根因：</b>MRRC 的 PTT 安全看门狗（TOT=120 s
+          硬上限）不豁免 tune 模式——长时间自动调谐会话在 120.9 s 被强制收回 PTT，
+          TX 一断，发给天调的 tune 命令被设备静默忽略，第一轮修复 6 个调谐点
+          全部"假动作"。第二轮改为每个调谐点前 re-arm tune 重置计时，并轮询日志
+          等到"调谐确认学习"出现才切下一个频点（确认学习要求继电器稳定 &gt;8 秒，
+          任何中途切频都会作废），全部成功。<br /><br />
+          <b>配套升级（proxy V5.9.0）：</b>完整调谐结束后若 SWR 较调谐前改善且 ≤1.8，
+          设备选定的最终参数强制写库，不再受 3 W 学习功率门限制——修复了弱 tune
+          载波（约 2 W）下手动调谐结果永不入库、被旧库参数覆盖的"白调"问题。
+          自动调谐触发阈值定为 SWR &gt; 2.0（去抖 3.5 s）。<br /><br />
+          <b>测算工具：</b>基于实测阻抗锚点（5351.5 kHz Z=59+j112 Ω 等）的
+          <a href="bg1sb-tuner-calc.html" style="color:#22d3ee;">🧮 频率→L/C 天调测算器</a>已上线，
+          输入任意频率即出继电器参数与预计 SWR，公式推导全部公开。
+          注意测算不确定度 ±3–5 步，仅供播种与预判拓扑，终值以设备实调为准
+          （60m 实证：计算最优 1.46 vs 设备自扫 1.02）。
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="conclusion">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">08 · 结论与行动</span>
+          <span class="section-label">09 · 结论与行动</span>
           <h2 class="section-title">这根天线的全部真相</h2>
         </div>
         <table class="spec-table">
@@ -508,8 +571,11 @@
           ⑤ 待办：NanoVNA 在 UNUN 端独立扫频，标定馈线电气长度。<br /><br />
           <b>数据与复算：</b>原始扫描 JSON 存于 mrrc 仓库 <code>antenna_sweeps/</code>，
           分析脚本 <code>dev_tools/analyze_sweep.py</code>、
-          <code>fit_tuner_params.py</code>，总报告
-          <code>docs/current/antenna/efhw-49-1-antenna-analysis-2026-09-27.md</code>。
+          <code>fit_tuner_params.py</code>、<code>seed_healthcheck.py</code>（学习库体检）、
+          <code>fix_bad_seeds2.py</code>（坏种子修复），总报告
+          <code>docs/current/antenna/efhw-49-1-antenna-analysis-2026-09-27.md</code>，
+          项目全程复盘
+          <code>docs/current/antenna/efhw-atr1000-project-retrospective-2026-09-28.md</code>。
           扫频基础设施（引擎/API/前端）已固化，今后干/湿环境对比一键重跑。
         </div>
       </div>
@@ -519,7 +585,7 @@
       <div class="container">
         <div class="footer-bottom">
           <p>
-            © 2026 BG1SB · EFHW 天线实测画像（2026-09-27）·
+            © 2026 BG1SB · EFHW 天线实测画像（2026-09-27 画像 / 2026-09-28 学习库校准）·
             <a href="baluns.html">巴伦专题</a> ·
             <a href="../index.html">EFHW 首页</a> ·
             本页没有一个实测数值是编出来的。

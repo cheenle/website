@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BG1SB EFHW · ATR-1000 天调参数测算器</title>
+<meta name="description" content="输入频率, 基于实测阻抗锚点模型测算 ATR-1000 天调 L/C 继电器参数 — 含完整公式推导与模型边界说明">
+<link rel="stylesheet" href="../css/octen.css?v=6">
+<link rel="stylesheet" href="../css/efhw.css?v=2">
+<style>
+  :root { --mono: 'JetBrains Mono', ui-monospace, monospace; }
+  body { background: #0b0f14; color: #d7dee8; }
+  .calc-wrap { max-width: 1080px; margin: 0 auto; padding: 24px 18px 80px; }
+  .calc-card { background: #10161f; border: 1px solid #1e2a38; border-radius: 14px; padding: 22px 24px; margin: 18px 0; }
+  .calc-card h3 { margin: 0 0 12px; font-size: 18px; color: #7dd3fc; }
+  .freq-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .freq-row input { background: #0b0f14; border: 1px solid #2b3a4d; color: #e8f0f8; border-radius: 8px;
+                    padding: 10px 14px; font: 600 18px var(--mono); width: 160px; }
+  .freq-row button { background: #0e7490; color: #fff; border: 0; border-radius: 8px; padding: 10px 18px;
+                     font-weight: 700; cursor: pointer; }
+  .freq-row button:hover { background: #0891b2; }
+  .band-btn { background: #16202c; border: 1px solid #2b3a4d; color: #a8bdd2; border-radius: 6px;
+              padding: 5px 10px; font: 600 12px var(--mono); cursor: pointer; }
+  .band-btn:hover { border-color: #22d3ee; color: #22d3ee; }
+  .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 14px; }
+  .kv { background: #0b0f14; border: 1px solid #1e2a38; border-radius: 10px; padding: 12px 14px; }
+  .kv .k { font-size: 12px; color: #7d8fa6; margin-bottom: 4px; }
+  .kv .v { font: 700 20px var(--mono); color: #e8f0f8; }
+  .kv .v small { font-size: 12px; color: #7d8fa6; font-weight: 400; }
+  .conf-hi { color: #4ade80; } .conf-mid { color: #facc15; } .conf-lo { color: #f87171; }
+  table.model { width: 100%; border-collapse: collapse; font: 400 13px var(--mono); }
+  table.model th, table.model td { border-bottom: 1px solid #1e2a38; padding: 6px 8px; text-align: right; }
+  table.model th { color: #7d8fa6; font-weight: 600; text-align: right; }
+  table.model td:first-child, table.model th:first-child { text-align: left; }
+  .formula { background: #0b0f14; border-left: 3px solid #0e7490; border-radius: 6px;
+             padding: 12px 16px; margin: 10px 0; font: 500 15px var(--mono); color: #bfe3f5; overflow-x: auto; }
+  .note { color: #8fa3bb; font-size: 13px; line-height: 1.8; }
+  .warn { background: #2a1a12; border: 1px solid #7c4a21; border-radius: 10px; padding: 12px 16px; color: #fbbf24; font-size: 13px; }
+  .tag { display: inline-block; font: 600 11px var(--mono); border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
+  .tag-meas { background: #14532d; color: #86efac; }
+  .tag-fit { background: #3b2f0b; color: #fde047; }
+  .tag-weak { background: #3f1d1d; color: #fca5a5; }
+  #swrCanvas { width: 100%; height: 260px; background: #0b0f14; border: 1px solid #1e2a38; border-radius: 10px; }
+</style>
+</head>
+<body>
+<div class="calc-wrap">
+  <h1 style="font-size:26px; margin:18px 0 4px;">🧮 BG1SB EFHW · ATR-1000 天调参数测算器</h1>
+  <p class="note">数据基线：2026-09-27/28 实测（bypass 扫频 + 设备实调 + 继电器对打探针）。模型与公式见文末推导。</p>
+
+  <div class="calc-card">
+    <h3>输入频率</h3>
+    <div class="freq-row">
+      <input id="freqIn" type="number" step="0.001" min="1" max="30" value="5.3515"> <span>MHz</span>
+      <button onclick="calc()">测算</button>
+      <span class="band-btn" onclick="setF(3.850)">80m</span>
+      <span class="band-btn" onclick="setF(5.3515)">60m</span>
+      <span class="band-btn" onclick="setF(7.050)">40m</span>
+      <span class="band-btn" onclick="setF(10.110)">30m</span>
+      <span class="band-btn" onclick="setF(14.270)">20m</span>
+      <span class="band-btn" onclick="setF(18.100)">17m</span>
+      <span class="band-btn" onclick="setF(21.074)">15m</span>
+      <span class="band-btn" onclick="setF(24.915)">12m</span>
+      <span class="band-btn" onclick="setF(28.450)">10m</span>
+    </div>
+    <div class="result-grid" id="result"></div>
+  </div>
+
+  <div class="calc-card">
+    <h3>天线阻抗模型曲线（实测锚点分段线性内插）</h3>
+    <canvas id="swrCanvas"></canvas>
+    <p class="note" id="curveNote"></p>
+  </div>
+
+  <div class="calc-card">
+    <h3>模型锚点表（数据来源与置信度）</h3>
+    <table class="model" id="anchorTable"></table>
+    <p class="note">
+      <span class="tag tag-meas">实测</span> 设备调谐 + 继电器对打探针双确认；
+      <span class="tag tag-fit">反推</span> 由学习库 L/C 按完美匹配假设反解，精度受达成 SWR&gt;1.0 与电表量化影响；
+      <span class="tag tag-weak">弱</span> 样本数少，仅供参考。
+    </p>
+  </div>
+
+  <div class="calc-card">
+    <h3>推导：从继电器编码到天线阻抗</h3>
+    <p class="note"><b>1. ATR-1000 硬件抽象。</b>电感 8 位二进制继电器（步进 0.1µH，ind∈[0,127] → L=ind×0.1µH）；电容 7 位（步进 10pF，cap∈[0,127] → C=cap×10pF）；sw 选择电容挂在哪一侧：<b>sw=0 "LC"</b> = 串联 L + 负载（天线）侧并联 C；<b>sw=1 "CL"</b> = 源（电台）侧并联 C + 串联 L。拓扑方向已由继电器对打实测判定（L44/C34 点：LC 模型预测 1.81 / CL 模型预测 4.6 / 实测 2.32）。</p>
+    <p class="note"><b>2. 正解（已知天线阻抗 Z=R+jX，求调谐后输入阻抗）。</b></p>
+    <div class="formula">LC:  Z_in = jωL + 1 / (1/Z + jωC)<br>CL:  Z_in = 1 / (1/(jωL + Z) + jωC)<br>Γ = (Z_in − 50)/(Z_in + 50)，SWR = (1+|Γ|)/(1−|Γ|)，ω = 2πf</div>
+    <p class="note"><b>3. 反推（已知达成匹配的 L/C，求天线阻抗）。</b>令 Z_in=50 解出：</p>
+    <div class="formula">LC:  1/Z = 1/(50 − jωL) − jωC<br>CL:  Z = 1/(1/50 − jωC) − jωL</div>
+    <p class="note">反推假设"完美匹配"，而实际学习记录的达成 SWR 为 1.0–1.6，故反推值落在一条等 SWR 轮廓线上而非精确点——精确点需要"bypass SWR 幅值 + 多组继电器实测 SWR"联合约束（本页 5.3515MHz 锚点即由 4 约束最小二乘定为 59+j112）。</p>
+    <p class="note"><b>4. 测算器求解。</b>对输入频率在相邻锚点间对 R、X 分别做线性内插得到 Ẑ，然后暴力枚举 2×128×128 组 (sw, ind, cap) 取调谐后 SWR 最小者。同时给出次优拓扑解作对照。</p>
+  </div>
+
+  <div class="calc-card">
+    <h3>模型边界（重要，别盲信）</h3>
+    <div class="warn">⚠️ 无锚点频段（尤其 3.9–5.3MHz、8–10MHz、16–18MHz、22–24MHz）的内插可能连电抗符号都错——60m 实测教训：两个多项式拟合族在无数据间隙里都猜成容性，实测是感性 +112Ω，按拟合参数会调到 SWR 22+。本测算器对远离锚点的频率会标<span class="conf-lo">低置信</span>，此时请用面板 Tune 让设备实测（确认学习会自动入库纠正）。</div>
+    <p class="note" style="margin-top:10px;">
+      · 锚点都是<b>干燥天气</b>基线；雨水会使 17m 等反谐振区段 SWR 大幅漂移（2026-09-27 19:09 的 18.1MHz bypass=12.56 与当晚 00:11 实测 ≈5 不自洽，即为天气态变化）。<br>
+      · ATR 电表在低 SWR 端有量化压缩（读数普遍比模型低 0.1–0.2），SWR=1.00 为量程地板。<br>
+      · 反推 Z 的不确定度约 ±5Ω/±15Ω，映射到 L/C 约 ±3 步/±5 步；所以测算值是<b>调谐起点</b>，最终参数以设备扫描+实测为准。
+    </p>
+  </div>
+
+  <p class="note" style="text-align:center;">BG1SB · EFHW 21m · 49:1(2:14) 2643251002 · ATR-1000 · 数据基线 2026-09-28 · <a href="bg1sb-antenna.html" style="color:#7dd3fc;">返回天线深度分析</a></p>
+</div>
+
+<script>
+// ===== 实测阻抗锚点 (f_MHz, R, X, 来源, 样本数) =====
+const ANCHORS = [
+  [3.850,   6.7,  42.4, 'fit', 496],
+  [3.875,   7.1,  42.2, 'fit', 2],
+  [3.900,   6.9,  41.9, 'fit', 1],
+  [5.3515, 59.0, 112.0, 'meas', 4],   // 4约束探针精修 (bypass7.85 + 3组继电器对打)
+  [6.500,  50.0,   0.0, 'meas', 99],  // bypass SWR=1.00 谐振平台 (6.42-6.58)
+  [7.050,  43.4,  37.1, 'fit', 1085],
+  [7.074,  45.8,  48.8, 'fit', 159],
+  [10.110, 50.0, -95.3, 'weak', 1],
+  [14.074, 40.4, -15.7, 'fit', 82],
+  [14.270, 33.0, -30.1, 'fit', 265],
+  [18.100, 14.4,  23.5, 'meas', 11],  // 设备重调 L1/C31->1.28 + L0/C31->1.31 对打确认
+  [21.074, 52.7,  -6.5, 'fit', 90],
+  [21.400, 46.6,  12.5, 'fit', 88],
+  [24.915, 26.6, -53.3, 'weak', 1],
+  [28.074, 48.0,  35.9, 'fit', 5],
+  [28.450, 60.4,  30.2, 'fit', 52],
+];
+const L_STEP = 0.1e-6, C_STEP = 10e-12;
+
+function interpZ(f) {
+  if (f <= ANCHORS[0][0]) return null;
+  if (f >= ANCHORS[ANCHORS.length-1][0]) return null;
+  for (let i = 0; i < ANCHORS.length-1; i++) {
+    const [f0, r0, x0] = ANCHORS[i], [f1, r1, x1] = ANCHORS[i+1];
+    if (f >= f0 && f <= f1) {
+      const t = (f - f0) / (f1 - f0);
+      return { R: r0 + (r1-r0)*t, X: x0 + (x1-x0)*t, f0, f1,
+               gap: f1 - f0,
+               near: Math.min(Math.abs(f-f0), Math.abs(f-f1)) };
+    }
+  }
+  return null;
+}
+
+function swrOf(zr, zi) {
+  const nr = zr - 50, ni = zi, dr = zr + 50;
+  const g = Math.sqrt((nr*nr + ni*ni) / (dr*dr + ni*ni));
+  return g >= 1 ? 999 : (1+g)/(1-g);
+}
+
+// Z_in for given network; returns [re, im]
+function zin(f, zr, zi, sw, ind, cap) {
+  const w = 2*Math.PI*f*1e6, wL = w*ind*L_STEP, wC = w*cap*C_STEP;
+  if (sw === 0) { // LC: jωL + 1/(1/Z + jωC)
+    const d = zr*zr + zi*zi;
+    const yr = zr/d, yi = -zi/d + wC;      // Y = 1/Z + jωC
+    const dd = yr*yr + yi*yi;
+    return [yr/dd, -yi/dd + wL];           // 1/Y = (yr − j·yi)/dd, 再串 jωL
+  } else {        // CL: 1/(1/(jωL+Z) + jωC)
+    const ar = zr, ai = zi + wL;
+    const d = ar*ar + ai*ai;
+    const yr = ar/d, yi = -ai/d + wC;
+    const dd = yr*yr + yi*yi;
+    return [yr/dd, -yi/dd];
+  }
+}
+
+function solve(f, zr, zi, sw) {
+  let best = null;
+  for (let ind = 0; ind < 128; ind++) {
+    for (let cap = 0; cap < 128; cap++) {
+      const [re, im] = zin(f, zr, zi, sw, ind, cap);
+      const s = swrOf(re, im);
+      if (!best || s < best.s) best = { s, ind, cap };
+    }
+  }
+  return best;
+}
+
+function setF(f) { document.getElementById('freqIn').value = f; calc(); }
+
+function conf(z) {
+  if (z.near < 0.05) return ['高', 'conf-hi'];
+  if (z.gap < 0.5) return ['中', 'conf-mid'];
+  return ['低（间隙内插）', 'conf-lo'];
+}
+
+function calc() {
+  const f = parseFloat(document.getElementById('freqIn').value);
+  const el = document.getElementById('result');
+  if (!f || f < 3.5 || f > 29) { el.innerHTML = '<div class="kv"><div class="k">超出模型范围</div><div class="v">3.5–29 MHz</div></div>'; return; }
+  const z = interpZ(f);
+  if (!z) { el.innerHTML = '<div class="kv"><div class="k">超出锚点范围</div><div class="v">—</div></div>'; return; }
+  const lc = solve(f, z.R, z.X, 0), cl = solve(f, z.R, z.X, 1);
+  const best = lc.s <= cl.s ? { ...lc, name: 'LC (sw=0)' } : { ...cl, name: 'CL (sw=1)' };
+  const alt  = lc.s <= cl.s ? { ...cl, name: 'CL (sw=1)' } : { ...lc, name: 'LC (sw=0)' };
+  const [cn, cc] = conf(z);
+  el.innerHTML = `
+    <div class="kv"><div class="k">估计天线阻抗 Ẑ</div><div class="v">${z.R.toFixed(1)} ${z.X>=0?'+':'−'}${Math.abs(z.X).toFixed(1)}j <small>Ω</small></div></div>
+    <div class="kv"><div class="k">bypass 裸 SWR（估计）</div><div class="v">${swrOf(z.R, z.X).toFixed(1)}</div></div>
+    <div class="kv"><div class="k">内插置信度</div><div class="v ${cc}">${cn}</div></div>
+    <div class="kv"><div class="k">推荐 ${best.name}</div><div class="v">L=${best.ind} C=${best.cap} <small>${(best.ind*0.1).toFixed(1)}µH / ${best.cap*10}pF · SWR≈${best.s.toFixed(2)}</small></div></div>
+    <div class="kv"><div class="k">备选 ${alt.name}</div><div class="v">L=${alt.ind} C=${alt.cap} <small>${(alt.ind*0.1).toFixed(1)}µH / ${alt.cap*10}pF · SWR≈${alt.s.toFixed(2)}</small></div></div>`;
+}
+
+// ===== 锚点表 =====
+(function() {
+  let h = '<tr><th>f (MHz)</th><th>R (Ω)</th><th>X (Ω)</th><th>来源</th><th>n</th></tr>';
+  for (const [f, r, x, src, n] of ANCHORS) {
+    const tag = src === 'meas' ? '<span class="tag tag-meas">实测</span>'
+              : src === 'weak' ? '<span class="tag tag-weak">弱</span>'
+              : '<span class="tag tag-fit">反推</span>';
+    h += `<tr><td>${f.toFixed(4)}</td><td>${r.toFixed(1)}</td><td>${x>=0?'+':''}${x.toFixed(1)}</td><td>${tag}</td><td>${n>90?'—':n}</td></tr>`;
+  }
+  document.getElementById('anchorTable').innerHTML = h;
+})();
+
+// ===== R/X/bypass-SWR 曲线 =====
+(function() {
+  const cv = document.getElementById('swrCanvas');
+  function draw() {
+    const dpr = window.devicePixelRatio || 1;
+    const W = cv.clientWidth, H = cv.clientHeight;
+    cv.width = W*dpr; cv.height = H*dpr;
+    const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+    const fmin = 3.5, fmax = 29.0;
+    const fx = f => 40 + (f - fmin) / (fmax - fmin) * (W - 60);
+    // bypass SWR (log), clamp 30
+    ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 1.6; ctx.beginPath();
+    let started = false;
+    for (let px = 40; px <= W-20; px += 2) {
+      const f = fmin + (px - 40) / (W - 60) * (fmax - fmin);
+      const z = interpZ(f); if (!z) continue;
+      const s = Math.min(swrOf(z.R, z.X), 30);
+      const y = H - 24 - Math.log10(s) / Math.log10(30) * (H - 50);
+      if (!started) { ctx.moveTo(px, y); started = true; } else ctx.lineTo(px, y);
+    }
+    ctx.stroke();
+    // grid: SWR 1,2,3,5,10,30
+    ctx.fillStyle = '#5b6b80'; ctx.font = '10px JetBrains Mono, monospace';
+    ctx.strokeStyle = '#1e2a38'; ctx.lineWidth = 1;
+    for (const s of [1, 2, 3, 5, 10, 30]) {
+      const y = H - 24 - Math.log10(s) / Math.log10(30) * (H - 50);
+      ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(W-20, y); ctx.stroke();
+      ctx.fillText('SWR ' + s, 4, y + 3);
+    }
+    for (let f = 4; f <= 28; f += 2) {
+      ctx.fillText(f + 'M', fx(f) - 8, H - 8);
+    }
+    // 锚点
+    ctx.fillStyle = '#facc15';
+    for (const [f] of ANCHORS) { ctx.fillRect(fx(f)-1.5, H-28, 3, 4); }
+  }
+  draw(); window.addEventListener('resize', draw);
+  document.getElementById('curveNote').textContent =
+    '青线 = 模型估计的 bypass 裸 SWR（对数轴，截断 30）；黄刻度 = 实测锚点位置。锚点间是线性内插，远离锚点处仅供参考。';
+})();
+
+calc();
+</script>
+</body>
+</html>

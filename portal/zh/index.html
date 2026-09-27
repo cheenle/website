@@ -48,7 +48,7 @@
             <li><a href="#selector">项目选择</a></li>
             <li><a href="#projects">项目</a></li>
             <li><a href="#ecosystem">生态系统</a></li>
-            <li><a href="/blog/">博客</a></li>
+            <li><a href="/blog/">博客</a></li><li><a href="/rig/zh/">RIG</a></li>
             <li><a href="/zh/agentic.html">Agentic</a></li>
             <li><a href="engineering.html">工程体系</a></li>
             <li><a href="https://github.com/cheenle" target="_blank" rel="noopener">
@@ -341,6 +341,49 @@
     </div>
 </section>
 
+<!-- RIG 专栏 -->
+<section class="section" id="rig" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">RIG · 专栏</span>
+            <h2 class="section-title">传奇电台深度剖析</h2>
+            <p class="section-subtitle">一次只讲一台机器：它当年是怎么设计的、今天在实验室里测出来是什么水平、会老化成什么样以及怎么修，还有一份对"能改什么、改不了什么"诚实交代的现代化路线。<a href="/rig/zh/" style="color:var(--accent);">进入专栏 →</a></p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-radio"></i></div>
+                <h3>第 1 期 · ICOM IC-R9000</h3>
+                <p>1989 年旗舰的解剖：0.1–2000 MHz、四次变频、内置 CRT 频谱仪——以及 Sherwood 实验室数据与 2026 年旗舰的逐项对比。每一种有记录的老化故障及其修法，然后是分阶段路线：散热、换电容、换液晶、把 SDR 嫁接到 10.7 MHz 中频上。</p>
+                <ul>
+                    <li>1989–1998 · 598,000 日元 / 4,795 美元</li>
+                    <li>底噪 −131 dBm · 邻近动态范围 71 dB</li>
+                    <li>CRT → LCD · 中频引出 → SDR 瀑布图</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/rig/ic-r9000/zh/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-book-open"></i> 阅读全文</a>
+                    <a href="/rig/ic-r9000/" lang="en" style="color:var(--accent);font-size:0.85rem;">English</a>
+                </div>
+            </div>
+
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-wave-square"></i></div>
+                <h3>第 2 期 · JRC NRD-535</h3>
+                <p>日本无线（JRC）最后的全模拟旗舰：跟踪预选器、1 Hz DDS、WRTH 1991 年度最佳——以及一块没有修法、也没有备件的荧光显示屏。来自 JRC 前美国销售经理的设计内幕、JRC↔NDK 滤波器对照表、Gilfer × Kiwa 的 NRD-535GS 配方，以及在 70.455 MHz 一中频上的 SDR 嫁接。</p>
+                <ul>
+                    <li>1991–1997 · 1,200 美元（535D：1,690 美元）</li>
+                    <li>底噪 −135 dBm · 灵敏度 0.1 µV</li>
+                    <li>滤波器升级 · ECSS · RS-232 退路</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/rig/nrd-535/zh/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-book-open"></i> 阅读全文</a>
+                    <a href="/rig/nrd-535/" lang="en" style="color:var(--accent);font-size:0.85rem;">English</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="section section-cta" style="background: var(--bg-secondary);">
     <div class="container" style="text-align: center;">
         <h2 class="section-title" style="margin-bottom: 1rem;">准备开始探索？</h2>
@@ -379,7 +422,7 @@
             <div class="footer-section">
                 <h4>资源</h4>
                 <ul>
-                    <li><a href="/blog/">博客</a></li>
+                    <li><a href="/blog/">博客</a></li><li><a href="/rig/zh/">RIG</a></li>
                     <li><a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener">MRRC 仓库</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener">MRRC Modern 仓库</a></li>
                     <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC 仓库</a></li>
@@ -390,7 +433,7 @@
             <div class="footer-section">
                 <h4>站点</h4>
                 <ul>
-                    <li><a href="/blog/">博客</a></li>
+                    <li><a href="/blog/">博客</a></li><li><a href="/rig/zh/">RIG</a></li>
                     <li><a href="/zh/about.html">关于</a></li>
                     <li><a href="/zh/contact.html">联系方式</a></li>
                     <li><a href="/zh/privacy.html">隐私政策</a></li>
@@ -408,6 +451,6 @@ function toggleMobileMenu() { document.querySelector('.nav-links').classList.tog
 document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); });
 const nav = document.querySelector('.navbar'); window.addEventListener('scroll', () => { nav.style.background = window.scrollY > 50 ? 'rgba(0,0,0,0.98)' : 'rgba(0,0,0,0.92)'; });
 </script>
-    <script src="../js/global-nav.js?v=7" defer data-gn="1"></script>
+    <script src="../js/global-nav.js?v=8" defer data-gn="1"></script>
 </body>
 </html>

@@ -48,7 +48,7 @@
             <li><a href="#selector">Selector</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#ecosystem">Ecosystem</a></li>
-            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/blog/">Blog</a></li><li><a href="/rig/">RIG</a></li>
             <li><a href="/agentic.html">Agentic</a></li>
             <li><a href="engineering.html">Engineering</a></li>
             <li><a href="https://github.com/cheenle" target="_blank" rel="noopener">
@@ -355,6 +355,49 @@
     </div>
 </section>
 
+<!-- RIG column -->
+<section class="section" id="rig" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">RIG · Column</span>
+            <h2 class="section-title">Deep Dives into Legendary Radios</h2>
+            <p class="section-subtitle">One machine at a time: how it was designed, how it measures in a lab today, everything that ages and how to fix it, and a modernization roadmap honest about what can and cannot be improved. <a href="/rig/" style="color:var(--accent);">Browse the column →</a></p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-radio"></i></div>
+                <h3>No. 1 · ICOM IC-R9000</h3>
+                <p>Anatomy of a 1989 flagship: 0.1–2000 MHz, quadruple conversion, built-in CRT spectrum scope — and Sherwood's lab numbers against 2026 flagships. Every documented failure mode with its fix, then the staged roadmap: cool it, recap it, LCD it, graft an SDR onto the 10.7 MHz IF.</p>
+                <ul>
+                    <li>1989–1998 · ¥598,000 / US$4,795</li>
+                    <li>−131 dBm noise floor · 71 dB close-in DR</li>
+                    <li>CRT → LCD · IF tap → SDR waterfall</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/rig/ic-r9000/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-book-open"></i> Read (EN)</a>
+                    <a href="/rig/ic-r9000/zh/" lang="zh-CN" style="color:var(--accent);font-size:0.85rem;">中文版</a>
+                </div>
+            </div>
+
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-wave-square"></i></div>
+                <h3>No. 2 · JRC NRD-535</h3>
+                <p>The last all-analog flagship from Japan Radio Company: tracking preselector, 1 Hz DDS, WRTH's 1991 award — and a vacuum-fluorescent display with no fix and no spare parts. The design story from JRC's own US sales manager, the JRC↔NDK filter cross-reference, the Gilfer/Kiwa NRD-535GS recipe, and an SDR graft at 70.455 MHz.</p>
+                <ul>
+                    <li>1991–1997 · US$1,200 (535D: $1,690)</li>
+                    <li>−135 dBm noise floor · 0.1 µV sensitivity</li>
+                    <li>Filter upgrades · ECSS · RS-232 fallback</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/rig/nrd-535/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-book-open"></i> Read (EN)</a>
+                    <a href="/rig/nrd-535/zh/" lang="zh-CN" style="color:var(--accent);font-size:0.85rem;">中文版</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- CTA -->
 <section class="section section-cta" style="background: var(--bg-secondary);">
     <div class="container" style="text-align: center;">
@@ -394,7 +437,7 @@
             <div class="footer-section">
                 <h4>Resources</h4>
                 <ul>
-                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/blog/">Blog</a></li><li><a href="/rig/">RIG</a></li>
                     <li><a href="https://github.com/cheenle/UHRR_mac" target="_blank" rel="noopener">MRRC Repository</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener">MRRC Modern Repository</a></li>
                     <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC Repository</a></li>
@@ -405,7 +448,7 @@
             <div class="footer-section">
                 <h4>Site</h4>
                 <ul>
-                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/blog/">Blog</a></li><li><a href="/rig/">RIG</a></li>
                     <li><a href="/about.html">About</a></li>
                     <li><a href="/contact.html">Contact</a></li>
                     <li><a href="/privacy.html">Privacy Policy</a></li>
@@ -423,6 +466,6 @@ function toggleMobileMenu() { document.querySelector('.nav-links').classList.tog
 document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', function(e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); });
 const nav = document.querySelector('.navbar'); window.addEventListener('scroll', () => { nav.style.background = window.scrollY > 50 ? 'rgba(0,0,0,0.98)' : 'rgba(0,0,0,0.92)'; });
 </script>
-    <script src="js/global-nav.js?v=7" defer data-gn="1"></script>
+    <script src="js/global-nav.js?v=8" defer data-gn="1"></script>
 </body>
 </html>

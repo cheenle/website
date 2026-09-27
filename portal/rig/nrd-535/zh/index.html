@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JRC NRD-535：最后的全模拟旗舰——以及如何让它活下去 | VLSC RIG</title>
+    <meta name="description" content="JRC NRD-535 端到端深度剖析：来自 JRC 美国销售经理本人的设计故事、对比 2026 年旗舰的实验室数据、无解的 VFD 显示屏故障、借助 JRC↔NDK 对照表的滤波器升级、Gilfer/Kiwa NRD-535GS 配方，以及在 70.455 MHz 第一中频上的 SDR 嫁接。" />
+    <meta name="keywords" content="JRC NRD-535, NRD-535D, NRD-535GS, Kiwa 改装, ECSS, BWC, VFD 显示屏故障, Collins 机械滤波器, 全景显示（panadapter）, DRM 改装, 接收机修复, 业余无线电" />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="JRC NRD-535：最后的全模拟旗舰——以及如何让它活下去" />
+    <meta property="og:description" content="来自 JRC 美国销售经理的设计史、Sherwood 实验室数据、无解的显示屏故障、滤波器升级、NRD-535GS 配方，以及 70.455 MHz 上的 SDR 嫁接。" />
+    <meta property="og:url" content="https://www.vlsc.net/rig/nrd-535/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/rig/nrd-535/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/rig/nrd-535/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/rig/nrd-535/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/rig/nrd-535/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "JRC NRD-535：最后的全模拟旗舰——以及如何让它活下去",
+        "description": "JRC NRD-535 端到端剖析：设计史、对比现代旗舰的实测性能、VFD 显示屏故障、滤波器升级，以及 70.455 MHz 第一中频上的 SDR 嫁接。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "keywords": "JRC NRD-535, 接收机修复, Kiwa, ECSS, BWC, 全景显示（panadapter）, DRM, 业余无线电",
+        "articleSection": "RIG",
+        "mainEntityOfPage": "https://www.vlsc.net/rig/nrd-535/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">首页</a> › <a href="/rig/">RIG</a> › <span class="ba-crumb-cat">接收机</span> › JRC NRD-535</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero">
+        <div class="container">
+          <div class="hero-badge"><i class="fas fa-radio"></i><span>RIG · 传奇电台深度解析 · 第 2 期</span></div>
+          <h1>JRC NRD-535：<br /><span class="gradient">最后的全模拟旗舰——以及如何让它活下去</span></h1>
+          <p class="ag-hero-sub">九公斤的插拔模块、一个跟踪预选器、1 Hz DDS 调谐，还有一块比其余所有部件都先报废的真空荧光显示屏。这里有 JRC 美国销售经理亲笔的设计内幕、和 2026 年旗舰对比的实验室数据、那个至今无解的故障，还有一条完全建立在有据可查配方上的修复与升级路线。</p>
+          <p class="ba-meta">BG1SB 撰稿 &nbsp;·&nbsp; <time datetime="2026-09-27">2026-09-27</time> &nbsp;·&nbsp; 约 17 分钟</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#flagship">§01 最后的模拟机</a><a href="#architecture">§02 架构</a><a href="#non-d">§03 非 D 版？</a><a href="#measured">§04 实测</a><a href="#aging">§05 如何老化</a><a href="#filters">§06 滤波器</a><a href="#sdr-graft">§07 SDR 嫁接</a><a href="#verdict">§08 结论</a></nav></div></div>
+
+      <main class="ba-main">
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR——NRD-535 的六项发现</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>它是 Japan Radio Company 最后的全模拟旗舰</strong>——WRTH 1991 年"最佳通信接收机"，90 kHz–30 MHz，经 70.455 MHz / 455 kHz / 97 kHz 三重变频，变容二极管跟踪预选器，1 Hz 步进 DDS 调谐。1998 年，改用 DSP 的 NRD-545 接替了它。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>它的底噪和灵敏度至今仍是一流水准。</strong>Sherwood 实测 −135 dBm、0.1 µV——比 1989 年的 IC-R9000（−131 dBm）更安静，与开启前置放大器的 2026 年旗舰相差不过几 dB。HF 上大气噪声占主导，这点差距只存在于纸面上。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>合成器是软肋，而且是家族通病。</strong>本振相位噪声在 10 kHz 处实测 117 dBc/Hz——落后现代机器 27–39 dB，比 R9000 还差 11 dB。NRD-525、535 和 DSP 时代的 545 全都顶着同一个天花板。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>定制的 VFD 显示屏是个绝症，修不了。</strong>新件早就没有了；有文档记载的补救办法是换掉显示 DC-DC 变换器里那四颗 35–50 V 电解电容，而欧洲最后一批备件库存（含两台 CDE-705 显示单元）现已售罄。显示屏一死，机器就只剩电脑控制——但这日子还能过，因为 RS-232 是标配。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>滤波器是这台 1991 年接收机唯一能真正升级到现代水准的地方。</strong>JRC 美国销售经理亲自公布了 JRC↔NDK 滤波器对照表，Sherwood 至今还在卖带 JRC 转接板的 Collins 455 kHz 机械滤波器（$129），而 1995 年 Gilfer/Kiwa 的"NRD-535GS"配方也有完整文档。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>SDR 嫁接有文档、有支持。</strong>TSP Electronics 的 IFace 缓冲板从第一混频器输出端引出 70.455 MHz，换来全频段瀑布图；2003 年的一版改装为 DRM 解码加入了 455 kHz→12 kHz 变换器；免费 PC 软件（RXCommander、rxcontrol.org）通过标配 RS-232 口驱动全部功能，连 S 表读数都包括在内。</li>
+            </ul>
+            <div class="ba-readpath"><span>3 分钟速读：</span><a href="#measured">§04 实测</a><a href="#aging">§05 显示屏</a><a href="#verdict">§08 结论</a></div>
+          </div>
+        </div>
+
+        <section id="flagship" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 起源</span>
+            <h2 class="ag-section-title">1990 年 6 月，设计于三鹰</h2>
+            <p class="ag-section-subtitle">这段设计史，来自把它卖到北美的那个人。</p>
+          </header>
+          <p>Paul Lannuier（WW2PT）主持 JRC 纽约办事处，把 NRD-535 带进了北美市场。他的私人笔记保存在 Internet Archive 里；想从内部视角看懂这台接收机，没有比它更近的材料。1990 年 6 月，他带着<strong>NRD-535 工程团队负责人 T. Shiono</strong> 绘制的 A 至 D 四版概念草图，飞赴 JRC 三鹰工厂参加设计评审。最终产品把概念 A 的凹面箭头按钮，同概念 B 的控制布局和曲面前面板合在了一起；概念 C 和 D 的前面板扬声器方案让 Lannuier 顶了回去，弧形的 S 表 LCD 液晶段则是他回到纽约之后才补上的。RS-232 指令集之所以比 NRD-525 的更完善，很大程度上是听了短波监听爱好者 Tom Sundstrom（W2XQ）的力劝。</p>
+          <p>同一批笔记里还留着 JRC 业余产品线中最妙的一段轶事：前身船用接收机 NRD-240 上有一个"自动扫描启动"（Automatic Scan Start）按钮，标的是 <strong>ASS</strong>。Lannuier 在设计评审会上恳求："拜托，别让我去推销一个带屁股按钮的产品！"这个按钮后来就取消了。</p>
+          <p>商业方面：1990/91 年上市，标准版 NRD-535 约 1,200 美元，NRD-535D 约 1,690 美元；WRTH 1992 年的评测说它"对认真的短波监听者物超所值"，1991 年的最佳通信接收机奖也给了 JRC——"高性能、出色的电脑连接能力和易用性，让它成为当之无愧的赢家。"北美从头到尾只卖 D 型；标准版 535 面向的是对价格更敏感的欧洲市场。标准版约在 1997 年停产，D 型在 1998 年停产。<strong>JRC 已于 2017 年终止对所有业余机型的维修支持。</strong></p>
+        </div></section>
+
+        <section id="architecture" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 内部</span>
+            <h2 class="ag-section-title">跟踪预选器、三重变频、1 Hz DDS</h2>
+            <p class="ag-section-subtitle">模块化插拔板、离散器件射频，以及一块顺带容纳调谐编码器的显示屏。</p>
+          </header>
+          <p>信号路径：天线 → 35 MHz 低通 → 继电器切换的 20 dB 衰减器（单挡，实测 20.6 dB）→ <strong>变容二极管调谐的七频段跟踪预选器</strong>，微处理器让它的中心频率一路跟着接收频率走 → 射频放大 → 第一混频器 → <strong>70.455 MHz</strong> 第一中频（高侧注入以抑制镜像）→ 455 kHz 第二中频，双带宽噪声消隐器就在这一级 → 可切换的中频滤波器组 → BWC 级 → <strong>97 kHz</strong> 第三中频，可调陷波器、通带平移（±1 kHz，经电脑可达 ±2 kHz）和 ECSS 同步检波都在这一级 → 检波器。AGC 电压在 97 kHz 上生成。开关电源，100–240 VAC 或 12–16 VDC。</p>
+          <p>有三个架构层面的事实，决定了后文的一切：</p>
+          <ul>
+            <li><strong>全模块化插拔板。</strong>整机只靠四个接插件跟主板相连——对这一级别的接收机来说，维护和升级都友好得出奇。</li>
+            <li><strong>显示单元（CDE-705）里还包含调谐编码器接口。</strong>维修手册把"调谐旋钮不改变频率"这条故障指向<em>显示板上</em>的 PG1 和 IC7。所以显示屏出故障不只是外观问题——它可能连调谐功能一起带走。</li>
+            <li><strong>RS-232C 是标配</strong>（DB-25，4800 8N1）：36 项功能可远程控制，包括回读 S 表。它不像 90 年代的大多数竞品，不需要接口盒。</li>
+          </ul>
+          <p>滤波器位置：WIDE（原装为村田 CLF-D6，−6 dB 处约 8 kHz——后被 5.7 kHz 的 CLF-D6S 取代）、INTER（2 kHz 机械滤波器，实测约 2.6 kHz）、NARR（1 kHz，需 CFL-233 选件）、AUX（空置，默认 12 kHz）。可选晶体滤波器：CFL-231 240 Hz、CFL-232 500 Hz、CFL-233 1 kHz、CFL-218A 1.8 kHz、CFL-251 2.4 kHz。</p>
+        </div></section>
+
+        <section id="non-d" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 你手里是哪台 535？</span>
+            <h2 class="ag-section-title">非 D、D、Db、DG、GS：五个名字，同一副机身</h2>
+            <p class="ag-section-subtitle">这些后缀各是什么意思，以及如何确认机器里实际装的是什么。</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>版本</th><th>是什么</th><th>如何验证</th></tr></thead>
+            <tbody>
+              <tr><td><strong>NRD-535</strong>（非 D）</td><td>基础型号。ECSS、BWC 和 1 kHz 滤波器全是选件。主要在欧洲销售。</td><td>前面板上没有 BWC/ECSS 功能</td></tr>
+              <tr><td><strong>NRD-535D</strong></td><td>同一副机身，出厂即装有 CMF-78（ECSS）、CFL-243（BWC）和 CFL-233（1 kHz）。北美销售的唯一版本。</td><td>面板上有 ECSS 和 BWC 控制</td></tr>
+              <tr><td><strong>"NRD-535Db"</strong></td><td>不是官方型号——是经销商给<strong>序列号 BR56005</strong> 之后机器的叫法，这批机器有三处出厂改动：BWC 在 AM 模式及宽滤波器下也可用；CLF-D6S（5.7 kHz）取代过宽的 CLF-D6（8 kHz）；带 RS-232 修正的"D"版 EPROM。更早的机器可用套件（滤波器 + BWC 晶体 + EPROM）升级；升级后的板子编号为 <strong>CFL-243W</strong>。</td><td><strong>AM 模式下 BWC 对 WIDE 滤波器起作用吗？</strong>起作用，说明已装升级。</td></tr>
+              <tr><td><strong>NRD-535DG</strong></td><td>欧洲版 535D——构造完全相同。"G" = 欧洲（220 V 预设、欧规电源线），"U" = 北美；后缀只印在包装箱上，机身上从来没有。</td><td>看包装箱/市电预设</td></tr>
+              <tr><td><strong>NRD-535GS</strong></td><td>Gilfer × Kiwa 的 DX 机型，1995–97 年销售，$1,659.95（带 ECSS 为 $1,869.95）——"大概只卖了几十台"。以原厂非 D 版 535 为基础：INTER 位装 Kiwa 定制 3.5 kHz 陶瓷滤波器（取代 2.2 kHz），NARR 位装 CFL-251 2.4 kHz，AUX 位在 300/500/1k/1.8 kHz 中任选，<strong>后面板加一个可完全旁路 AUX 滤波级的拨动开关</strong>以获得完整的 12 kHz 节目音频，AGC 衰减更快、音频高频截止抬高、上台校准过、Gilfer 一年保修。</td><td>后面板的旁路拨动开关；Kiwa 文档</td></tr>
+            </tbody>
+          </table></div>
+          <p>GS 为什么在 2026 年还重要：它是一份<strong>经过商业验证、至今仍能逐件复刻的升级配方</strong>——凭下面这张滤波器对照表和一个拨动开关就能做到。</p>
+        </div></section>
+
+        <section id="measured" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 实验台</span>
+            <h2 class="ag-section-title">实测：安静、灵敏、受相位噪声拖累</h2>
+            <p class="ag-section-subtitle">Sherwood 对整个 JRC 家族的数据，与 2026 年旗舰同台。</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>接收机</th><th>底噪</th><th>灵敏度</th><th>阻塞 @100k</th><th>本振相位噪声 @10k</th><th>前端</th><th>滤波器极限抑制</th><th>宽带动态范围</th><th>邻近动态范围</th></tr></thead>
+            <tbody>
+              <tr><td>JRC NRD-515</td><td>−138</td><td>0.1 µV</td><td>103</td><td>118</td><td>C 0.8 倍频程</td><td>80</td><td>95 @20k</td><td><strong>77ᶠ @2k</strong></td></tr>
+              <tr><td>JRC NRD-525</td><td>−132</td><td>0.2</td><td>123</td><td>120</td><td>B 跟踪预选器</td><td>65</td><td>95 @50k</td><td>72 @5k</td></tr>
+              <tr><td><strong>JRC NRD-535</strong></td><td><strong>−135</strong></td><td><strong>0.1</strong></td><td>114</td><td><strong>117</strong></td><td>B 跟踪预选器</td><td>70</td><td>92 @50k</td><td>70 @5k</td></tr>
+              <tr><td>JRC NRD-545 (DSP)</td><td>−130</td><td>0.2</td><td>127</td><td>118</td><td>B 0.5 倍频程</td><td>65</td><td>96 @100k</td><td>68 @5k</td></tr>
+              <tr><td>Icom IC-R9000</td><td>−131</td><td>0.15</td><td>129</td><td>128</td><td>B 0.5 倍频程</td><td>90</td><td>93 @20k</td><td>71 @5k</td></tr>
+              <tr><td>Icom IC-R8600</td><td>−132/−142ᵇ</td><td>0.40/0.12ᵇ</td><td>125</td><td>144–148</td><td>B 半倍频程</td><td>105</td><td>98–109 @20k</td><td>98–107 @2k</td></tr>
+              <tr><td>Perseus</td><td>−123/−125ᵇ</td><td>0.15/0.1ᵇ</td><td>125</td><td>147</td><td>B 带通</td><td>109ᶠ</td><td>99 @20k</td><td>99 @2k</td></tr>
+              <tr><td>Yaesu FTdx-101D</td><td>−127/−141ᵇ</td><td>4.5/1.6ᵇ</td><td>&gt;147</td><td>154–155</td><td>A 跟踪预选器</td><td>&gt;115</td><td>110 @20k</td><td>110 @2k</td></tr>
+            </tbody>
+          </table></div>
+          <p style="font-size:.9em;color:var(--text-secondary);">ᵇ 前置放大器开启 · ᶠ 测量受相位噪声限制（ARRL 的 RMDR）。所有行取自同一张 Sherwood Engineering 表格、同一方法。NRD-535 的宽间隔数据在 50 kHz 间隔下测得；现代机器按 20 kHz 间隔测量。</p>
+          <p>这张表能读出四件事：</p>
+          <ul>
+            <li><strong>−135 dBm 和 0.1 µV 把 535 排在灵敏度第一梯队</strong>——好过 R9000，与开着前置放大器的现代机器相当。反正在 HF 上这不成问题：大气噪声远在它之上。</li>
+            <li><strong>相位噪声（117 dBc/Hz）是家族天花板。</strong>525 实测 120，DSP 时代的 545 实测 118。现代机器在 144–156。改装文献中没有任何方案触及这一项。</li>
+            <li><strong>近旁性能上 NRD-515 赢了 535</strong>——2 kHz 间隔 77 dB，对 535 的 5 kHz 间隔 70 dB。515 的 0.8 倍频程前端和 80 dB 滤波器极限抑制，在跟踪预选器帮不上忙的地方赢了下来。这也提醒我们：在这个家族里，"更新"不等于"更好"。</li>
+            <li><strong>滤波器极限抑制（70 dB）是唯一真正能补救的数字</strong>——现代机器实测 100–115 dB，§06 整节讲的就是如何用今天仍买得到的零件缩小这个差距。</li>
+          </ul>
+          <p>荷兰 WRTH/Radio Netherlands 的实验台补充了几条保留意见：经 2.6 kHz 滤波器实测动态范围 88 dB（换 300 Hz 选件为 98 dB，厂标 106 dB），30 kHz 间隔下三阶截点 +2 dBm，陷波深度约 25 dB（厂标 40 dB），S 表在 S5 以下纹丝不动，衰减器只有单独一挡 20 dB，以及显示屏辐射的噪声约为 525 的三倍。</p>
+        </div></section>
+
+        <section id="aging" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · 失效模式</span>
+            <h2 class="ag-section-title">NRD-535 如何老化——以及那个无解的故障</h2>
+            <p class="ag-section-subtitle">显示屏能要了整台机器的命；其余都只是保养。</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>症状</th><th>根因</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>显示屏几个月里逐渐变暗，然后彻底黑掉</td><td>定制的真空荧光显示屏（CDE-705 单元）寿命到头。NRD-525、NRD-535 和 JST-135 一律中招。</td><td><strong>无解。</strong>可以试试换掉显示 DC-DC 变换器里那四颗 35–50 V 电解电容；通常已是绝症。新件没有了，机器就只剩电脑控制一条路。</td></tr>
+              <tr><td>开机瞬间显示屏亮一下，然后熄灭</td><td>不一定是荧光管——TBHD 的一个维修案例追到了 <strong>CPU 参数损坏</strong></td><td>可修；先查 CPU/固件，再给 VFD 判死刑</td></tr>
+              <tr><td>静电爆裂或雷击声之后聋几秒钟；S 表打满</td><td>AGC 过冲——JRC 自己承认的设计缺陷</td><td><strong>可修：</strong>R105 短接至总计 500 kΩ，R103/R104 改为 100 kΩ（Nilsson）；或做 JRC 的 CAE-227A 中频板改造；或 Kiwa 的 AGC 改装</td></tr>
+              <tr><td>约 8–10 MHz 以上逐渐升起的数字杂噪</td><td>射频板离机箱太近；噪声还会顺着耳机线传导出去</td><td><strong>无法修复的设计缺陷。</strong>Nilsson 测了四台、想尽了办法，最后全部退货，改买了一台 NRD-525</td></tr>
+              <tr><td>ECSS 漂移、失锁</td><td>接收机没校准——Fenu-Radio：这"只发生在校准很差的机器上"</td><td>做一次完整校准即可修复</td></tr>
+              <tr><td>能听到 855 kHz 音调，转 BWC 旋钮时尤其明显；BWC 裙边太软</td><td>BWC 板设计问题（Nilsson："拖累整机"）</td><td>部分可解；他换上的 8 极点滤波器反而更糟。预期要放低一点</td></tr>
+              <tr><td>开机即死机，无接收</td><td><strong>DDS 单元故障</strong>（TBHD 案例）</td><td>可由专业人员修复</td></tr>
+              <tr><td>18 MHz 以上失锁</td><td>前任机主用错误容量的元件换过 VCO 微调/温补电容</td><td>可修——必须用严格符合规格的元件</td></tr>
+              <tr><td>调谐旋钮不改变频率；PBS/BWC 失灵；时钟漂移</td><td>PG1 编码器 / IC7、RV1/RV2、CV1——<strong>全都在 CDE-705 显示板上</strong></td><td>按维修手册诊断；编码器本身是磁式的，可靠</td></tr>
+              <tr><td>记忆丢失，开机报数据错误</td><td>CR2032 备份电池——额定寿命 5 年，所有存世机器都已超期</td><td>主动更换</td></tr>
+              <tr><td>旋钮太轻、转过头；前面板按键时灵时不灵</td><td>带配重的旋钮阻尼太小；计算器式的小轻触开关</td><td>刻度盘后垫毛毡垫圈；用酒精清洁开关（都是通用件）</td></tr>
+            </tbody>
+          </table></div>
+          <p>这些故障背后的零件市场已经关门。Universal Radio 的二手库存单上，共用的 CFH-36 中频滤波板 $89.95（已售出），NRD-525 数据 I/O 板和 loop 板 $22–90，一块 NRD-515 显示板 $34.95——但没有 535 的显示单元。<strong>CSY &amp; SON 那批 350 欧元的 NRD-535 备件库存（含两台 CDE-705 显示单元）现在标注"不再供应"。</strong>还能指望的只有：Klondike Mike's 的电容套件（70 颗，装了 BWC 和 ECSS 再加 40 颗）、日本拍卖市场上的选件板（CMF-78 ECSS 约 ¥4,800；CFL-243 BWC ¥14,000–35,000），以及拆机件来源机。</p>
+          <p>所以买机器时第一件事就是查显示屏，而且要留够时间查，冷机热机都要查。一台显示屏发暗的 535，不过是长着一副漂亮面板的拆机件来源机。</p>
+        </div></section>
+
+        <section id="filters" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · 真正有效的升级</span>
+            <h2 class="ag-section-title">滤波器：用还买得到的零件重建中频</h2>
+            <p class="ag-section-subtitle">JRC 自家的对照表，把"停产选件"变成"有现货的 NDK 零件"。</p>
+          </header>
+          <p>JRC 的可选晶体滤波器是 NDK 代工的，罐壳上从来不印 JRC 零件号。Lannuier 公布的这份对照表，对今天想升级 535 的人来说，是所有文档里最有用的一份：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>JRC</th><th>NDK</th><th>−6 dB 带宽</th></tr></thead>
+            <tbody>
+              <tr><td>CFL-231</td><td>YF455FM</td><td>240 Hz</td></tr>
+              <tr><td>CFL-232</td><td>YF455DQ</td><td>500 Hz</td></tr>
+              <tr><td>CFL-233</td><td>YF455DE</td><td>1.0 kHz</td></tr>
+              <tr><td>CFL-218A</td><td>YF455EBF</td><td>1.8 kHz</td></tr>
+              <tr><td>CFL-251</td><td>YF455EB</td><td>2.4 kHz</td></tr>
+            </tbody>
+          </table></div>
+          <p>三条有文档的升级路径，按折腾程度从小到大排列：</p>
+          <ol>
+            <li><strong>Sherwood 的 Collins 机械滤波器，含 JRC 转接板 $129。</strong>Sherwood Engineering 明确列出 NRD-515、525、535 的转接板（Racal 6790GM 的转接板 $179）。库存新品剩下的带宽是 6 kHz 和 5 kHz；同样 $129 还有大尺寸 455 kHz 晶体滤波器，带宽 2.4 kHz、2.1 kHz 和 400 Hz。这是把 535 的 70 dB 滤波器极限抑制直接推到现代 100+ dB 水平的一条近路——而且库存有限。</li>
+            <li><strong>复刻 NRD-535GS。</strong>INTER 位装 Kiwa 3.5 kHz 陶瓷滤波器（取代原厂 2.2 kHz），NARR 位装 CFL-251，AUX 位任选，后面板加拨动开关旁路 AUX 级以获得完整的 12 kHz 节目音频，AGC 衰减更快、音频截止频率抬高。卖 Kiwa 改装版 535D 的 Fenu-Radio 说这项改装"强烈推荐"：未改装的声音"相当闷"，改装之后"你会以为换了一台完全不同的机器"。</li>
+            <li><strong>Nilsson 的级联方案（进阶）。</strong>用 Eskab 板做多级级联——FL1 8 极点晶体滤波器（10–12 kHz）、FL2 CFX455I、FL3 CFK455I，之后 YTK 2.4/1.8/1.0 kHz，检波器之前再加一块 PLAM 板。两个用教训换来的细节：<strong>每只滤波器两侧都要加 20 kΩ 电阻</strong>（R25/R26/R16/R17/R40/R41），否则阻抗不对，裙边会严重起伏；Eskab AVC 板上要<strong>把 1 µF 钽电容换成 10,000 pF 陶瓷电容</strong>，否则恢复速度慢得离谱。</li>
+          </ol>
+          <p>既然机箱都开了，顺手做两件事。宽滤波器如果还是原装的 <strong>CLF-D6（约 8 kHz）</strong>，就换成 <strong>CLF-D6S（−6 dB 处 5.7 kHz，−60 dB 处 8.7 kHz）</strong>——JRC 自己都承认 D6 是倒退，90 年代曾免费给人换过。另外，动过任何滤波器或 AGC 之后都要做一次完整校准：Nilsson 坚持主振荡器必须精确归零，这台接收机出色的稳定度才有意义。</p>
+        </div></section>
+
+        <section id="sdr-graft" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · 数字嫁接</span>
+            <h2 class="ag-section-title">70.455 MHz 的 SDR、12 kHz 的 DRM，其余一切交给 RS-232</h2>
+            <p class="ag-section-subtitle">535 没有中频输出插孔——但它有更好的东西：一个标准串口。</p>
+          </header>
+          <p>与 IC-R9000 不同，NRD-535 没有原厂中频输出。两处嫁接都在机内完成，而且都有文档可查：</p>
+          <pre style="font-family:'JetBrains Mono',monospace;font-size:.85em;line-height:1.5;overflow-x:auto;">天线 → 跟踪预选器 → 射频放大 → 第一混频器
+                                    │
+                                    ├─ 原厂路径：70.455 MHz → 455 kHz → 97 kHz → 模拟解调 → 扬声器
+                                    │
+                                    ├─ 全景显示引出点（TSP IFace）：第一混频器输出，围绕 70.455 MHz 的宽带信号
+                                    │     → IFace 高阻缓冲 → 覆盖 70 MHz 的 SDR
+                                    │       （RTL-SDR 调谐器模式 / SDRplay / Airspy）
+                                    │     → HDSDR 或 SDR Console：全频段瀑布图、数字降噪、录音
+                                    │
+                                    └─ DRM 引出点（drmrx.org V1.02）：取自 CFH-36A 中频滤波板的 455 kHz
+                                          （P30 pin 22 = 455 kHz，pin 21 = 地，pin 1 = 混频器用 10.8 V；
+                                           或在 C19/L3 之后、FL3–FL6 之前取）
+                                          → LC 混频降到 12 kHz → 后面板 3.5 mm 插孔 → 声卡 → DReaM
+
+RS-232C（DB-25，标配）→ RXCommander / rxcontrol.org / OmniRig
+   全功能控制：频率、模式、滤波器、AGC、噪声消隐器、衰减器——以及 S 表回读</pre>
+          <p>动手焊之前值得先掌握的几件事：</p>
+          <ul>
+            <li><strong>全景显示（panadapter）的引出点在第一混频器，不在最后一级中频。</strong>TSP Electronics 为自家 IFace 缓冲板公布了 R9000 和 NRD-535 的引出点（原理图加 PCB 照片）；535 引出点上是围绕 70.455 MHz 的宽带信号，所以 SDR 必须调到那里——RTL-SDR 用调谐器模式（24–1766 MHz）可行，HF 直采模式不行。不需要 PTT 线：它是一台接收机。</li>
+            <li><strong>用高阻抗缓冲。</strong>把 50 Ω 负载直接挂在混频器输出上，会把接收机拖到接近全聋——这是 Drake R-4B 全景显示尝试留下的文档教训。用 IFace 或 JFET 源极跟随器。</li>
+            <li><strong>让 SDR 离显示屏远点。</strong>在 Patrick Canler 的四机对比中，NRD-535 的 VFD 干扰了放在一旁的 Bonito RadioJet。</li>
+            <li><strong>DRM 改装作为一条 12 kHz 声卡通道依然可用</strong>——虽然 DRM30 广播如今已经萎缩到只剩屈指可数的几部发射机（主要是 All India Radio）。2003 年的作者报告说，欧洲 10 kHz 宽的 DRM 发射上信噪比最高达到 30 dB，并留下一句至今成立的论断："这些接收机特性在 DRM 时代仍将至关重要：它们决定了你是收得好，还是根本收不到。"</li>
+            <li><strong>电脑控制不用额外硬件。</strong>RXCommander（HB9RXC，仍在线）附带 CMH-532 与 CBO-232 接口手册和 NRD-535 CAT 协议文档；rxcontrol.org 的免费 V1.3.6 能用键盘驱动全部功能、显示频段规划、自动选择滤波器带宽和检波模式，还能导入频率文件。这也是你的<strong>显示屏故障应急预案</strong>：VFD 黑屏之后，这台机器仍能从电脑上完整使用。</li>
+          </ul>
+          <p>嫁接能带来：全频段瀑布图（535 从来没有任何频谱显示）、I/Q 域的降噪和陷波（掌握的信息远超音频 DSP）、校准过的 dBm 读数、录音——还有显示屏之外的另一条活路。它带不来：近旁动态范围和相位噪声。那两项在 1990 年就定死了。</p>
+        </div></section>
+
+        <section id="verdict" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · 结论</span>
+            <h2 class="ag-section-title">留着它、换滤波器、做嫁接——并为显示屏备好预案</h2>
+            <p class="ag-section-subtitle">2016 年的一次试听仍把它排第一。2026 年的任务是让它活着。</p>
+          </header>
+          <p>SWLing Post 上登过一篇四机半盲测——1991 年的 NRD-535 对阵 AOR AR7030、Icom IC-R75 和一台 Bonito RadioJet 1102S SDR，同一个晚上、同一副天线——测试者把 <strong>NRD-535 排在了第一</strong>，理由是"易用，而且能从 QRM 里挖出可用的信号"。说到数字滤波，他写道 SDR 和 Icom"声音发干，有时还在哨音底下添上脆响，相比之下整体听感更差"。他的总结是："年龄不是障碍。"</p>
+          <p>一台修复并升级后的 535，把账算清楚，结论如下：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>维度</th><th>完工后落在哪里</th></tr></thead>
+            <tbody>
+              <tr><td>灵敏度 / 底噪</td><td><strong>已是一流</strong>——−135 dBm、0.1 µV。没什么可修的。</td></tr>
+              <tr><td>选择性</td><td><strong>可以达到现代水准</strong>——Collins 机械滤波器或 GS 配方能把滤波器极限抑制从 70 dB 推向 100+ dB</td></tr>
+              <tr><td>音频 / 听感舒适度</td><td>按 2016 年的对比<strong>胜过 SDR</strong>——Kiwa/GS 音频改装还能去掉原厂的闷声</td></tr>
+              <tr><td>频谱感知</td><td>由 70.455 MHz 的 IFace 嫁接补上——机器原生没有</td></tr>
+              <tr><td>近旁动态范围 / 相位噪声</td><td><strong>停留在 1991 年</strong>——5 kHz 处 70 dB、117 dBc/Hz，落后现代 20–40 dB。这是物理和架构决定的。</td></tr>
+              <tr><td>约 8–10 MHz 以上</td><td>内部数字噪声——射频板位置无解。用 SSB/ECSS、用窄滤波器，天线离机箱远一点</td></tr>
+              <tr><td>显示屏</td><td><strong>唯一无解的单点故障。</strong>现在就把电脑控制的兜底方案安排好；一块现代化的 CDE-705 替代品，是这个平台上最该优先解决、却一直没人解决的事</td></tr>
+            </tbody>
+          </table></div>
+          <p>预算：修复（电容套件、电池、校准）$100–200；滤波器 $129–400；ECSS 板在日本市场约 ¥4,800；IFace + SDR $60–150。合计<strong>约 $400–700</strong>——照上面这些证据看，这台接收机的听感仍然胜过市面上在售的许多机器。</p>
+          <p>前沿的情况再说白一点：没有人公布过可用的 CDE-705 显示屏替代方案——LED 段驱动没有、小尺寸 LCD 面板没有、从 NRD-545 移植也没有。谁做成了，谁就解决了那个决定这些接收机能不能活过下一个十年的唯一问题。动手之前有一件麻烦事值得知道：<strong>调谐编码器接口就在同一块板上</strong>，所以任何替代方案都得带上 PG1 和相关逻辑，而不只是把那几个数字显示出来。</p>
+          <p style="margin-top:1.5rem;"><em>两台都有的机主这样搭配：NRD-535 是 HF 的耳朵——安静、灵敏、有音乐感。IC-R9000 是 VHF/UHF 的眼睛——0.1–2000 MHz，带频谱显示。近旁动态范围上，两台都替代不了现代 SDR，也都别去试。</em></p>
+        </div></section>
+
+        <section id="sources" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">09 · 资料来源</span>
+            <h2 class="ag-section-title">资料来源与延伸阅读</h2>
+          </header>
+          <ul>
+            <li><a href="https://web.archive.org/web/20110824082400/http://www.lannuier.com/ww2pt/page.cfm?content=nrd535">Paul Lannuier（WW2PT）：JRC NRD-535 笔记</a>——设计史、NDK 滤波器对照表、Db 序列号分界、NRD-535GS 配方（存档）</li>
+            <li><a href="http://www.sherweng.com/table.html">Sherwood Engineering 接收机测试表</a>——§04 全部可对比的实验室数据</li>
+            <li><a href="http://www.sherweng.com/collins.htm">Sherwood：带 JRC 转接板的 Collins 455 kHz 机械滤波器</a></li>
+            <li><a href="https://www.dxinfo.se/NRD525-535_mod_GB.pdf">Thomas Nilsson：NRD 535 与 NRD 525 评注及改装</a>——数字噪声的判决、AVC 元件值、滤波器级联</li>
+            <li><a href="https://www.fenu-radio.ch/JRC_NRD-535D-en.htm">Fenu-Radio 谈 Kiwa 改装的 NRD-535D</a>以及 <a href="https://www.fenu-radio.ch/JRC_NRD-535DG-en.htm">NRD-535DG</a></li>
+            <li><a href="https://www.tspelettronica.com/en/2020/07/09/panadapter-sdr-per-nrd-535/">TSP Electronics：NRD-535 SDR 全景显示引出点</a></li>
+            <li><a href="https://www.drmrx.org/mods/NRD_535_V102.pdf">drmrx.org：NRD-535 DRM 改装，V1.02（2003）</a></li>
+            <li><a href="http://hb9rxc.homeip.net/rxcommander.html">RXCommander（HB9RXC）</a>，附 CMH-532 / CBO-232 / CAT 协议文档，以及 <a href="http://rxcontrol.org/Nrd535/index.html">rxcontrol.org 的免费 NRD-535 软件</a></li>
+            <li><a href="https://www.qsl.net/n9ewo/nrd535.html">N9EWO 谈 NRD-535</a>——显示屏故障预警和这个家族的噪声史</li>
+            <li><a href="https://swling.com/blog/2016/07/guest-post-patrick-compares-four-receivers/">SWLing Post：Patrick Canler 对比四台接收机</a>——2016 年的排名</li>
+            <li><a href="https://mwcircle.org/legacy-receiver-reviews/receiver-review-nrd-535/">Radio Netherlands / WRTH NRD-535 评测</a> · <a href="https://www.zcm.com.au/nrd535.htm">ZCM Services 机型档案</a> · <a href="https://klondikemikescapkits.com/products/jrc-nrd-535-electrolytic-capacitor-kit">Klondike Mike's 电容套件</a></li>
+          </ul>
+        </div></section>
+
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电爱好者、软件工程师。打造 VLSC 开源远程控制生态，也在修复那些让他体会到什么是好工程的电台。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>RIG 系列</h3>
+          <ul>
+            <li><a href="/rig/">RIG——本专栏</a></li>
+            <li><a href="/rig/ic-r9000/">第 1 期：ICOM IC-R9000——1989 年旗舰解剖</a></li>
+            <li><a href="/rig/nrd-535/">第 2 期：JRC NRD-535（即本文）</a></li>
+            <li><a href="/blog/psk-reporter-dxcc-hunting/">博客：用 PSK Reporter 猎新 DXCC</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/rig/ic-r9000/"><i class="fas fa-arrow-left"></i> 第 1 期：IC-R9000</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=8" defer data-gn="1"></script>
+  </body>
+</html>

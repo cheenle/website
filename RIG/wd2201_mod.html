@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 20.0.6.0 for Windows">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<TITLE>KURANISHI WD-2201 Mod</TITLE>
+</HEAD>
+<body>
+<CENTER><BR>
+<CENTER>
+<table bgcolor="#ffffff" cellspacing="0" border="1" width="800">
+  <TR>
+    <TD align="center" bgcolor="#ff80ff" width="649" height="26"><FONT size="+2" face="HGS創英角ﾎﾟｯﾌﾟ体">微小電力計　ＷＤ-２２０１<B>改造</B></FONT></TD>
+  </TR><TR>
+    <TD align="center" bgcolor="#ffffff" width="649">
+    <table width="100%" bgcolor="#ffffff">
+      <TBODY>
+        <TR>
+          <TD bgcolor="#ffffff">クラニシ　ＷＤ-２２０１に不満があったわけではありません<br>
+          接続をミスして、ＨＦ１００Ｗを入れて壊してしまったことが、ことの発端です<br>
+          チップ抵抗や、ショットキーダイオードを使ったりして、復旧を目指したのですが、思うような成果が得られません<br>
+          オークション市場を見ても、数は少ないし随分高額で取引されています(とても手が出せません！）<br>
+          そこで高名なデテクターを使って、本格的なアナログパワー計の製作を目指しました<BR>
+          <TABLE border="1" width="100%">
+            <TBODY>
+              <TR>
+                <TD>デテクターは、オークションで手に入れた　Ｗｉｌｔｒｏｎ　７５Ｓ５０　という　１０ＭＨｚ～１８ＧＨｚに対応した、Ｍａｘ１００ｍＷのもので、極性はネガティブでした<br>
+                このままでは、メーターの接続は負荷が重たいので、メータードライブ回路を組み入れました<br>
+                回路は、ＩＣＯＭ元技術部門の取締役（ＩＣＯＭで一番多くの特許保有者）　ＪＡ３ＦＭＰ　櫻井氏の執筆された『楽しいエレクトロニクス工作』から使わせていただきました<br>
+                仮で試験したところ、メータースケール一番上の０～２０ｍＷスケールが、ほぼほぼ計測値に一致しましたので、改造を進めることにしました</TD>
+              </TR>
+            </TBODY>
+          </TABLE>
+          </TD>
+        </TR>
+        <TR>
+          <TD bgcolor="#ffffff" align="center"><img src="gif/wd2201_m1.jpg" width="800" height="533" border="0"></TD>
+        </TR>
+        <TR>
+          <TD align="center" bgcolor="#ffffff">一番上のメータースケールが、ほぼほぼ計測値に一致します<br>
+          使用するのは(目で見るのは）この一番上のスケールだけ、これから換算です(1/10、1/1、10倍）</TD>
+        </TR>
+        <TR>
+          <TD align="center" bgcolor="#ffffff">
+          <HR>
+          </TD>
+        </TR>
+        <TR>
+          <TD align="center" bgcolor="#ffffff">
+          <TABLE border="0" width="100%">
+            <TBODY>
+              <TR>
+                <TD align="center"><img src="gif/wd2201_m2.jpg" width="400" height="300" border="0"></TD>
+                <TD>ＢＮＣレセプタクルは、未使用<br>
+                <br>
+                本来２０ｍＷスケールだけで良かったのですが、折角切り替えができるような構造になっていますので、活用することにしました<br>
+                デテクターの入力が、最大１００ｍＷですので、ここは要注意です</TD>
+              </TR>
+              <TR>
+                <td align="center" valign="top"><img src="gif/wd2201_m3.jpg" width="400" height="300" border="0"></td>
+                <TD>本体背面<br>
+                <br>
+                ＤＣ１２Ｖ入力端子を用意<br>
+                <br>
+                内部で定電圧化した±５Ｖを得ますので、簡単なアダプタの利用が可能です<BR>
+                </TD>
+              </TR>
+              <TR>
+                <TD align="center"><img src="gif/wd2201_m4.jpg" width="400" height="303" border="0"></TD>
+                <TD>検知部<br>
+                <br>
+                オリジナルは、右のケースに左の基板が収まっていました<br>
+                (上下、シールドされていました）<br>
+                <br>
+                その基板を使ったり、新たに基板を用意したりして、いろいろ試したのですが、いい結果が得られませんでした</TD>
+              </TR>
+              <TR>
+                <TD align="center"><img src="gif/wd2201_m5.jpg" width="400" height="300" border="0"></TD>
+                <TD>こちらが、最終形の内部です<br>
+                <br>
+                ＮＪ－ＳＭＡＪレセプタクルに、デテクターと、検出電圧を取り出すＢＮＣＰ・・・これだけの長さが無事収まりました<br>
+                <br>
+                基板は、ＤＣ１２Ｖから±５Ｖを得る電源回路と、入力電圧を反転させ、バッファリングするオペアンプを乗せただけのものです<br>
+                </TD>
+              </TR>
+              <TR>
+                <TD align="center"><img src="gif/wd2201_m6.jpg" width="400" height="339" border="0"></TD>
+                <TD>真上から見た内部<br>
+                <br>
+                スケール合わせのために、オリジナルの半固定ＶＲに固定抵抗を抱かせて調整範囲を変更しています<br>
+                <br>
+                <br>
+                <br>
+                <br>
+                </TD>
+              </TR>
+            </TBODY>
+          </TABLE>
+          </TD>
+        </TR>
+        <TR>
+          <td align="left" bgcolor="#ffffff"> １０ＭＨｚから３．２ＧＨｚまでは、動作の確認ができています(手持ちＳＳＧの範囲！）<br>
+          ほぼほぼ正確に表示します<br>あとは、外部アッテネータの利用で、活躍範囲が増えることでしょう<br>
+                <br>
+          デジタルのパワー計（Gigatoronics製）を持ってはいるのですが、変化するものを測るには、やはりアナログ方式のほうが便利なもので、このような微小電力計を用意することになってしまいました</td>
+        </TR>
+      </TBODY>
+    </table>
+    </TD>
+  </TR><TR>
+    <TD bgcolor="#ffffff" valign="top" width="649">
+    <TABLE width="100%">
+      <TBODY>
+        <TR>
+          <TD align="right" bgcolor="#c0c0c0">2020．08　　　ＪＡ４ＦＵＱ</TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    </TD>
+  </TR>
+
+</table>
+</CENTER>
+</CENTER>
+<CENTER><BR>
+<table cellspacing="5" width="800">
+  <TBODY>
+    <TR>
+      <TD colspan="3" align="right">無線機歴史博物館に　<A href="rekishi.html" target="_parent">戻る</A></TD>
+    </TR>
+    <TR>
+      <TD colspan="3">
+      <HR>
+      </TD>
+    </TR>
+  </TBODY>
+</table>
+</CENTER>
+<DIV align="center"><BR>
+</DIV>
+<DIV align="center">
+  <table width="800" cellpadding="2" cellspacing="1">
+    <TBODY>
+      <TR>
+        <TD nowrap align="center" width="77"><A target="_blank"><IMG src="gif/lej-cool-small.gif" alt="週間クールサイトに選ばれました" height="68" width="58" border="0"></A></TD>
+        <td align="left" width="522"><A href="http://www.seidensha-ltd.co.jp/~seiden/index.html" target="_blank"><IMG src="gif/title.gif" width="525" height="79" border="0"></A></td>
+      </TR>
+      <TR>
+        <TD colspan="2" align="center"><A href="http://www.seidensha-ltd.co.jp/~musenlan/" target="_blank"><IMG src="gif/title_01.gif" alt="無線ＬＡＮ専門サイト" height="59" width="349" border="0"></A></TD>
+      </TR>
+      <TR>
+        <td nowrap></td>
+        <td nowrap>青電舎：担当　堀<BR>
+        　　　Ｍａｉｌは　seiden<FONT color="#0000ff">_atmark_</FONT>po.harenet.ne.jp<br>
+        　　　　　　　　　　　　　　（お手数ですが、<FONT color="#0000ff">_atmark_</FONT>を @ に直して下さい）<BR>
+        　　　　　　お電話では、（０８６）２７５－５０００　<BR>
+        　　　　　　ＦＡＸは、０１２０－５４５０００<BR>
+        　　　　　　〒７０３－８２０７　岡山県岡山市中区祇園４３３－６</td>
+      </TR>
+      <TR>
+        <TD colspan="2" align="right" height="5"><A href="index.html" target="_top" terget="_top"><IMG src="gif/topbutton.jpg" height="24" width="56" border="0"></A></TD>
+      </TR>
+    </TBODY>
+  </table>
+</DIV>
+</body>
+</HTML>

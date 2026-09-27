@@ -22,6 +22,7 @@
     else if (/\/mrrc_modern\//.test(p)) SITE = 'mrrc_modern';
     else if (/\/mrrc_ft8\//.test(p)) SITE = 'mrrc_ft8';
     else if (/\/sdd\//.test(p)) SITE = 'sunmrrc';
+    else if (/\/rig\//.test(p)) SITE = 'rig';
     else SITE = 'portal';
   }
 
@@ -38,7 +39,8 @@
     mrrc_ft8: '/mrrc_ft8/',
     sunmrrc: '/sunmrrc/',
     efhw: '/efhw/',
-    blog: '/blog/'
+    blog: '/blog/',
+    rig: '/rig/',
   };
 
   var L = isCN ? {
@@ -112,7 +114,8 @@
         siteLink('mrrc_ft8', 'FT-8') +
         siteLink('sunmrrc', 'SunMRRC') +
         siteLink('efhw', 'EFHW') +
-        siteLink('blog', 'Blog') +
+        siteLink('blog', isCN ? '博客' : 'Blog') +
+        siteLink('rig', 'RIG') +
       '</nav>' +
       '<a class="vlsc-gn-gh" href="https://github.com/cheenle" target="_blank" rel="noopener" title="GitHub">' +
         '<i class="fab fa-github"></i>' +

@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ICOM IC-R9000: Anatomy of a 1989 Flagship — and How to Modernize It | VLSC RIG</title>
+    <meta name="description" content="An end-to-end deep analysis of the ICOM IC-R9000: architecture, lab-measured performance against modern flagships, every known failure mode and its fix, and a staged modernization roadmap — cooling, recap, LCD, and the 10.7 MHz IF tap that turns it into an SDR hybrid." />
+    <meta name="keywords" content="ICOM IC-R9000, receiver, wideband receiver, restoration, recap, CRT LCD mod, panadapter, SDR, 10.7 MHz IF, synchronous detector, Sherwood, NRD-535, amateur radio" />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="ICOM IC-R9000: Anatomy of a 1989 Flagship — and How to Modernize It" />
+    <meta property="og:description" content="Lab numbers vs modern flagships, every failure mode with its fix, and a staged roadmap: restore, cool, LCD, then graft an SDR onto the 10.7 MHz IF." />
+    <meta property="og:url" content="https://www.vlsc.net/rig/ic-r9000/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/rig/ic-r9000/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/rig/ic-r9000/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/rig/ic-r9000/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/rig/ic-r9000/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=4" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "ICOM IC-R9000: Anatomy of a 1989 Flagship — and How to Modernize It",
+        "description": "End-to-end analysis of the IC-R9000: architecture, measured performance vs modern flagships, failure modes and fixes, and a staged modernization roadmap including the 10.7 MHz SDR graft.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "keywords": "ICOM IC-R9000, receiver restoration, panadapter, SDR, synchronous detector, Sherwood, amateur radio",
+        "articleSection": "RIG",
+        "mainEntityOfPage": "https://www.vlsc.net/rig/ic-r9000/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/rig/">RIG</a> › <span class="ba-crumb-cat">Receivers</span> › ICOM IC-R9000</span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero">
+        <div class="container">
+          <div class="hero-badge"><i class="fas fa-radio"></i><span>RIG · Deep Dives into Legendary Radios · No. 1</span></div>
+          <h1>ICOM IC-R9000:<br /><span class="gradient">Anatomy of a 1989 Flagship — and How to Modernize It</span></h1>
+          <p class="ag-hero-sub">Twenty kilograms, 0.1–2000 MHz, an amber CRT, and a price tag that bought a car. This is the full picture: how it was built, how it actually measures against 2026 flagships, everything that breaks and how to fix it, and a staged roadmap that ends with an SDR grafted onto its 10.7 MHz IF.</p>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-27">Sep 27, 2026</time> &nbsp;·&nbsp; ~16 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#flagship">§01 The flagship</a><a href="#architecture">§02 Architecture</a><a href="#measured">§03 Measured</a><a href="#aging">§04 How it ages</a><a href="#restore">§05 Restore</a><a href="#sdr-graft">§06 SDR graft</a><a href="#frontier">§07 The frontier</a><a href="#verdict">§08 Verdict</a></nav></div></div>
+
+      <main class="ba-main">
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the R9000 in six findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The R9000 was Icom's 1989 attempt to sell a surveillance-grade receiver at half the professional price.</strong> 100 kHz–1999.8 MHz continuous, quadruple-conversion, a built-in CRT spectrum scope, ¥598,000 / US$4,795 — against Rohde &amp; Schwarz boxes that cost three times more.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Its lab numbers are a split verdict.</strong> Measured by Sherwood Engineering: −131 dBm noise floor (still fine on HF, where atmospheric noise dominates), 93 dB wide-spaced dynamic range — but only <strong>71 dB close-in dynamic range and 128 dBc/Hz synthesizer phase noise</strong>, 25–39 dB behind a modern flagship.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Every classic failure mode has one root cause: heat.</strong> The fan-less chassis slowly cooks its own electrolytics — REG and DC-DC converter caps dry out first, then the CRT circuitry. The amber CRT burns in and Icom no longer repairs it — LCD replacement is the standard cure.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>Nobody has ever improved the R9000's synthesizer or roofing filter — and nobody sensibly will.</strong> The RF chain is 1989 and stays 1989. What <em>can</em> reach 2026 levels is everything after the mixer.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The 10.7 MHz second IF is constant across the entire 0.1–2000 MHz range</strong>, so one buffered tap plus a $25–120 SDR gives you a color waterfall, synchronous AM, arbitrary digital filtering, noise reduction, calibrated dBm S-meter, recording, and digital-mode decoding — functions the R9000 never had.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>The right endgame is a hybrid station.</strong> A restored, LCD-equipped, SDR-grafted R9000 (about $400 in parts) for VHF/UHF, satellite and monitoring duty with 1989 ergonomics — plus a $200-class modern SDR for HF DX work that needs close-in dynamic range the old synthesizer cannot deliver.</li>
+            </ul>
+            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#measured">§03 measured</a><a href="#sdr-graft">§06 the SDR graft</a><a href="#verdict">§08 verdict</a></div>
+          </div>
+        </div>
+
+        <section id="flagship" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Positioning</span>
+            <h2 class="ag-section-title">A surveillance receiver at half price</h2>
+            <p class="ag-section-subtitle">Why Icom built a 20 kg receiver with a television tube in it.</p>
+          </header>
+          <p>In 1989, a professional surveillance receiver from Rohde &amp; Schwarz, Watkins-Johnson or Anritsu cost upwards of ¥2,000,000. Icom's answer was the IC-R9000: <strong>100 kHz to 1999.8 MHz continuous coverage, all modes, a built-in 5-inch amber CRT spectrum scope, and a ¥598,000 / US$4,795 price tag</strong> — "professional-grade performance at less than half the price," as the Japanese collector JA4FUQ puts it in his long-term report.</p>
+          <p>The R9000 shares its chassis and display concept with the IC-781, Icom's flagship HF transmitter of the same era, but the Dutch Radio Netherlands / Medium Wave Circle review team confirmed the receiver is not simply "a 781 without the finals." It was aimed at the gap between high-end amateur gear and government monitoring equipment — and governments noticed. The Dutch Radio Monitoring Service (RCD/AT) built roughly twenty <strong>PAN-2000 mobile interception systems</strong> around the R9000 in the mid-1990s, heavily modified: mains transformer removed for weight, CRT powered down to save an amp, AGC re-engineered, and the 10.7 MHz IF rerouted to clean BNC outputs feeding an FFT processor with a 10 MHz-wide panoramic display. Those ex-government units reached the surplus market around 2005–2007.</p>
+          <p>Production ran from 1989 to 1998 for the CRT version; the LCD-equipped <strong>IC-R9000L</strong> followed from 1999 to 2006, after which the 3 GHz IC-R9500 took over. In the US, cellular-listening legislation eventually restricted sales to government buyers. Four antenna ports — SO-239 and RCA for HF, two N-connectors for 30–1000 MHz and 1–2 GHz — tell you what Icom thought you would do with it.</p>
+        </div></section>
+
+        <section id="architecture" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · Inside</span>
+            <h2 class="ag-section-title">Quadruple conversion, and not a single DSP</h2>
+            <p class="ag-section-subtitle">An IF matrix designed before IF-DSP existed.</p>
+          </header>
+          <p>The R9000 is a <strong>quadruple-conversion superheterodyne</strong> with a band-dependent first IF: 48.8 MHz below 30 MHz, 778.6 MHz for 30–500 MHz, 278.6 MHz for 500–1000 MHz, and a down-converter unit above 1 GHz. The chain then converges on 10.7 MHz, 455 kHz, and back to 10.7 MHz. All filtering is done by crystal and mechanical filters — the bottom cover reveals FL-44A (±1.2 kHz), FL-52A (±250 Hz) crystal filters and a family of CFW455 ceramic filters. IF shift and the 50 dB manual notch work in the analog domain. The local oscillator is DDS-driven behind a ±0.25 ppm TCXO.</p>
+          <p>The front end is discrete and serious: 11 diode-switched LPF/BPF preselector banks, a PIN attenuator, four 3SK121 dual-gate MOSFETs for 30–1000 MHz, and a uPC1678G MMIC above 1 GHz. Sensitivity is honest even by 2026 standards: <strong>0.16 µV on HF SSB (10 dB S/N)</strong>, 0.32 µV up to 1 GHz.</p>
+          <p>Two design details matter for everything that follows in this article:</p>
+          <ul>
+            <li><strong>The 10.7 MHz second IF is constant for every band.</strong> Whatever you are listening to, from longwave to 1.9 GHz, it exists somewhere inside as a 10.7 MHz signal — one tap point covers the entire radio.</li>
+            <li><strong>The CRT is just an NTSC monitor.</strong> The display subsystem takes composite video — which is why CRT-to-LCD conversion is a connector swap, not a redesign, and why the scope can even render analog TV pictures.</li>
+          </ul>
+        </div></section>
+
+        <section id="measured" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Lab bench</span>
+            <h2 class="ag-section-title">Measured against 2026 flagships</h2>
+            <p class="ag-section-subtitle">Same lab, same method — Sherwood Engineering's receiver table.</p>
+          </header>
+          <p>Rob Sherwood (NC0B) has measured receivers with a consistent method for two decades, which makes his table one of the few places where a 1989 receiver and a 2025 flagship can be compared honestly. Here is the R9000 against its modern peers:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead>
+              <tr><th>Receiver</th><th>Noise floor</th><th>Blocking @100 kHz</th><th>LO phase noise @10 kHz</th><th>Wide DR @20 kHz</th><th>Close-in DR @2 kHz</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>ICOM IC-R9000 (1989)</strong></td><td>−131 dBm</td><td>129 dB</td><td>128 dBc/Hz</td><td>93 dB</td><td><strong>71 dB @5 kHz</strong></td></tr>
+              <tr><td>ICOM IC-R9500 (2003)</td><td>−127 / −135</td><td>119 dB</td><td>134 dBc/Hz</td><td>110 dB*</td><td>85 dB*</td></tr>
+              <tr><td>ICOM IC-R8600 (2017)</td><td>−131 / −142</td><td>125 dB</td><td>144–148 dBc/Hz</td><td>109 dB</td><td>107 dB</td></tr>
+              <tr><td>ICOM IC-7760 (2025)</td><td>−133 / −142</td><td>122 dB</td><td>146–148 dBc/Hz</td><td>99 dB</td><td>99 dB</td></tr>
+              <tr><td>Yaesu FTdx-101D</td><td>−127 / −141</td><td>&gt;147 dB</td><td>154–155 dBc/Hz</td><td>110 dB</td><td>110 dB</td></tr>
+              <tr><td>Kenwood TS-890S</td><td>−131 / −141</td><td>&gt;151 dB</td><td>155–156 dBc/Hz</td><td>106 dB</td><td>105 dB</td></tr>
+              <tr><td>ICOM IC-7300 (reference)</td><td>−133 / −141.5</td><td>123 dB</td><td>137–147 dBc/Hz</td><td>106 dB</td><td>97 dB</td></tr>
+            </tbody>
+          </table></div>
+          <p style="font-size:.9em;color:var(--text-secondary);">* R9500 figures marked phase-noise-limited in Sherwood's table. Close-in DR measured at 2 kHz spacing for modern rigs; the R9000 was measured at 5 kHz — at 2 kHz it would score lower still.</p>
+          <p>Three conclusions fall out of this table:</p>
+          <ul>
+            <li><strong>The noise floor gap is a pseudo-gap on HF.</strong> −131 dBm is far below the atmospheric noise on any HF band. The R9000's sensitivity is not the problem in 2026.</li>
+            <li><strong>The real gap is close-in dynamic range and phase noise.</strong> The R9000's 71 dB at 5 kHz spacing loses to a $300 IC-7300 (97 dB at 2 kHz) and is 39 dB behind an FTdx-101D. In a crowded band at night, that is the difference between hearing a weak station between two strong ones and hearing the skirt of the strong ones.</li>
+            <li><strong>This is an era ceiling, not an R9000 defect.</strong> Even Icom's own 2003 flagship R9500 is flagged as phase-noise-limited. Only direct-sampling SDRs and the latest hybrid superhets escaped it.</li>
+          </ul>
+          <p>The Radio Netherlands review team reached the matching subjective verdict in 1989: extremely low synthesizer noise for its day, 102 dB measured dynamic range through the narrow SSB filter, a handful of internal birdies (574 kHz being the notable one), a cramped keypad — and the advice that the radio only justifies its price if you exploit the VHF/UHF coverage, not just HF.</p>
+        </div></section>
+
+        <section id="aging" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · Failure modes</span>
+            <h2 class="ag-section-title">How an R9000 ages: one root cause, five symptoms</h2>
+            <p class="ag-section-subtitle">The fan-less box-within-a-box chassis cooks its own capacitors.</p>
+          </header>
+          <p>Every well-documented R9000 failure traces back to <strong>heat</strong>. The linear power supply and DC-DC converter run hot inside a sealed chassis — KD5OEI's repair notes end with the blunt advice: "Icom should have added a fan. You should add a fan." One owner reported replacing ninety electrolytics in a single overhaul; Klondike Mike's sells a 197-capacitor full-kit for the model. The symptom map, assembled from Icom's own service FAQ, YO9FZS's maintenance monograph, and the repair literature:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Symptom</th><th>Root cause</th><th>Fix</th></tr></thead>
+            <tbody>
+              <tr><td>Squelch erratic, volume/squelch interact, S-meter won't zero</td><td>Dried electrolytics in the shielded DC-DC converter (−12 V/−7 V rails sag)</td><td>Recap the DC-DC unit, 105 °C parts</td></tr>
+              <tr><td>Sensitivity sags across VHF/UHF, worse at band edges</td><td>Noisy REG rails detuning front-end varactors</td><td>Recap REG unit; check Q7/R32 (TIP132 substitutes for 2SD1406)</td></tr>
+              <tr><td>Video scrambles, loses sync</td><td><strong>C11 on the CRTC board</strong>, baked dry inside its shield can</td><td>Replace C11 (KD5OEI's classic case)</td></tr>
+              <tr><td>Vertical fold-over, poor linearity</td><td>C407/C410 on the CRT board; cracked solder joints</td><td>Low-ESR 105 °C caps + reflow joints</td></tr>
+              <tr><td>CRT dim, burnt-in menus</td><td>Phosphor wear after years of static menus</td><td>LCD conversion — Icom no longer repairs CRTs, not even on the R9000L</td></tr>
+              <tr><td>FM howls when warm, 30–499 / 1000–1499 MHz</td><td>Temperature-sensitive 768 Hz VCO (PLL-B IC15)</td><td>Replace IC15</td></tr>
+              <tr><td>Dead above 30 MHz, PLL lamp out</td><td>PLL unlock — reference, DDS, or VCO chain</td><td>Follow Icom FAQ chain: REG → reference osc → DDS → HPL</td></tr>
+              <tr><td>Data error at power-on, frequency display lost</td><td>BR2032 memory backup battery at end of life (5–7 years)</td><td>Replace <em>without power interruption</em> — parallel a 3 V source or the RAM loses its contents</td></tr>
+              <tr><td>Tuning knob sticks or jumps</td><td>Hardened grease in the optical encoder</td><td>Disassemble, clean, re-lubricate; the slotted disc is fragile</td></tr>
+              <tr><td>Weak above 30 MHz after someone forced a PL-259</td><td>N-connector center pin splayed</td><td>Straighten or replace the connector</td></tr>
+            </tbody>
+          </table></div>
+          <p>Two cultural notes worth knowing before you buy or restore: many R9000s spent their lives in government racks running 24/7, so CRT burn and capacitor wear correlate with provenance — prefer a lightly used private unit. And Murata's plastic-cased VCO trimmers of that era are a known Icom-wide liability (745, 751, 781, R9000, 970); when they fail, the repair bill climbs fast.</p>
+        </div></section>
+
+        <section id="restore" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · Phase 0</span>
+            <h2 class="ag-section-title">Restoration: the non-negotiable baseline</h2>
+            <p class="ag-section-subtitle">No upgrade matters until the radio is healthy.</p>
+          </header>
+          <ol>
+            <li><strong>Add cooling first.</strong> A 120 mm three-speed case fan on the rear heatsink at its lowest speed, powered from the switched 12 V rear socket, is nearly silent and measurably drops internal temperature; Sherwood once sold a full replacement rear panel with a fan ($149, discontinued). This single mod attacks the root cause of nearly everything else.</li>
+            <li><strong>Recap by failure domain, not blindly.</strong> REG unit and the DC-DC converter first (105 °C, name-brand parts); display boards as symptoms demand. One long-time owner warns that a full 197-cap blanket recap introduces as many faults as it fixes — work in sections and verify between them.</li>
+            <li><strong>Replace the memory battery before it dies.</strong> BR2032, with a parallel 3 V source while you swap. Both batteries, actually — there is a separate clock cell.</li>
+            <li><strong>Service the encoder and connectors.</strong> Re-lubricate the optical encoder; inspect the rear N-connectors for splayed center pins.</li>
+            <li><strong>Realign.</strong> Scope center frequency and horizontal scale per service manual §5-14, discriminator center, PLL checks per the Icom FAQ.</li>
+          </ol>
+        </div></section>
+
+        <section id="sdr-graft" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · The core move</span>
+            <h2 class="ag-section-title">The SDR graft: one tap modernizes everything after the mixer</h2>
+            <p class="ag-section-subtitle">The 10.7 MHz IF is constant across 0.1–2000 MHz. That is the door.</p>
+          </header>
+          <p>The R9000 turns out to be the ideal host for IF grafting: it is receive-only (no T/R switching to worry about), the second IF is 10.7 MHz on every band, and there is even a factory IF output on the rear panel. The architecture that the Dutch monitoring service pioneered with hardware FFT boxes in 1995 now costs $25 of SDR dongle:</p>
+          <pre style="font-family:'JetBrains Mono',monospace;font-size:.85em;line-height:1.5;overflow-x:auto;">Antenna → R9000 front end + mixers (0.1–2000 MHz)
+              │
+              ├─ factory path → analog demod → speaker (optionally via bhi DSP)
+              │
+              └─ tap at 2nd mixer output, before the 10.7 MHz filter
+                  → high-impedance buffer board (IFace / JFET follower)
+                  → SDR (RTL-SDR v3 TCXO or SDRplay RSP1A)
+                  → PC: HDSDR / SDR Console  (invert spectrum!)
+                      ├─ color waterfall, MHz-wide — replaces the CRT scope
+                      ├─ ECSS synchronous AM with AFC — the R9000 never had one
+                      ├─ arbitrary-bandwidth digital filters + auto-notch
+                      ├─ noise reduction / noise blanker
+                      ├─ calibrated dBm S-meter
+                      └─ RF/IF recording, digital-mode decoding
+              CI-V (USB) → OmniRig, poll ≤100 ms: click the waterfall, the R9000 tunes</pre>
+          <p>Engineering notes, each learned the hard way by someone:</p>
+          <ul>
+            <li><strong>Tap before the 10.7 MHz filter.</strong> The factory rear IF OUT sits after the selected IF filter, so it only ever shows that filter's bandwidth (≤230 kHz in WFM) and rides the AGC. A tap at the second mixer output — TSP Electronics publishes the exact R9000 tap points for their IFace buffer — gives a wide, honest spectrum.</li>
+            <li><strong>Buffer with high impedance.</strong> A 50 Ω load hung on the IF will suck the radio nearly deaf (documented on a Drake R-4B; the physics is universal). Use a JFET source follower or a proper IFace/PAT buffer board.</li>
+            <li><strong>The R9000's IF spectrum is inverted.</strong> Tick "Swap I/Q" in HDSDR or "Invert Spectrum" in SDR Console; on an AOR AR-DV1 hardware decoder, set IF DIR = REV (documented only in the addendum manual).</li>
+            <li><strong>Use BNC coax, not the old RCA video lead</strong> — loss at 10.7 MHz on the wrong cable cost one experimenter an afternoon. The Dutch RCD went further and replaced the RCA jack entirely with a BNC soldered straight onto the IF unit with Teflon coax, because the factory routing picks up spurs.</li>
+            <li><strong>Calibrate against WWV</strong> and put a ferrite on the SDR's USB cable to keep the PC's ground noise out of the radio.</li>
+          </ul>
+          <p>What this graft adds is not cosmetic. Synchronous detection (ECSS with AFC) rescues AM broadcast audio from selective-fading distortion — the single most-valued feature the R9000 lacks. Arbitrary digital bandwidth replaces four fixed filter positions. And with an AR-DV1 on the IF output, the 1989 receiver decodes DMR, dPMR, D-STAR and TETRA without a PC at all.</p>
+        </div></section>
+
+        <section id="frontier" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · The frontier</span>
+            <h2 class="ag-section-title">What nobody has done — and what nobody should</h2>
+            <p class="ag-section-subtitle">An honest map of the blank spots in the modification literature.</p>
+          </header>
+          <p>A thorough sweep of the English, German, Italian, Japanese and Chinese communities turns up <strong>no published case of anyone improving the R9000's synthesizer phase noise or replacing its 20 kHz first-IF roofing filter</strong>. The gaps are worth stating precisely, because they define where a determined builder could still contribute:</p>
+          <ul>
+            <li><strong>Roofing filter (theoretically the highest-value RF mod).</strong> Inrad's discontinued IC-781 kit — a 6-pole 4–5 kHz crystal filter plus a high-dynamic-range feedback amplifier inserted after the first mixer — improved IMD dynamic range by a measured 7–14 dB on that platform. Porting it means custom crystals at the R9000's 48.8 MHz HF first IF and resolving the conflict with the wideband scope and WFM modes. Nobody has done it. If you want to be first, the Inrad documentation is the template.</li>
+            <li><strong>Synthesizer phase noise (impractical).</strong> The DDS+PLL matrix tunes a local oscillator to 2 GHz and is deeply coupled to the CI-V control system. Rebuilding it with modern low-phase-noise parts is, in effect, designing a new receiver. Skip it.</li>
+            <li><strong>GPSDO reference injection (a blank page).</strong> No published mod exists, though the reference oscillator on the PLL-B unit is a plausible injection point for a disciplined 10 MHz source. Undocumented — proceed as your own research project.</li>
+          </ul>
+          <p>Two documented hardware upgrades <em>do</em> exist beyond maintenance. Sherwood's filter-logic mod enables the SSB-only 6 kHz filter in AM mode, giving AM four bandwidths (15/9/6/3 kHz) instead of three. And Sherwood's 455 kHz converter board drives the SE-3 Mk IV synchronous detector — the purist's PC-free route to sync AM, at $695 plus installation. One operating trick costs nothing: for FM DX, manually selecting FM-W (30 kHz) instead of WFM (150 kHz) is worth about 14 dB of S/N.</p>
+        </div></section>
+
+        <section id="verdict" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · Verdict</span>
+            <h2 class="ag-section-title">Where the R9000 wins in 2026 — and where it hands off</h2>
+            <p class="ag-section-subtitle">Restore it, cool it, graft it — then pair it, don't replace it.</p>
+          </header>
+          <p>The honest ledger, after all the measurements:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Dimension</th><th>After restoration + SDR graft</th></tr></thead>
+            <tbody>
+              <tr><td>Features &amp; ergonomics</td><td><strong>Meets or beats a modern flagship</strong> — waterfall, sync AM, arbitrary filters, NR, recording, digital modes, remote linkage</td></tr>
+              <tr><td>HF weak-signal DX in crowded bands</td><td>Restored to 1989 world-class — but close-in DR stays 20–30 dB behind 2026. Physics, not neglect.</td></tr>
+              <tr><td>VHF/UHF/microwave</td><td><strong>Still uniquely useful</strong> — 0.1–2000 MHz, four antenna ports, 1000 memories, and a spectrum display modern HF rigs don't have</td></tr>
+              <tr><td>Satellite</td><td>QO-100 via a PLL LNB's 739 MHz output, GOES/Meteosat WEFAX at 1691 MHz — both native, both feed the SDR chain</td></tr>
+              <tr><td>Reliability</td><td>Recap + cooling + LCD buys another two decades; the CRT path is a dead end, convert it</td></tr>
+            </tbody>
+          </table></div>
+          <p>The budget for the full DIY route: fan ~$30, capacitor kits ~$100, LCD module ~$140, IFace buffer ~$60, RTL-SDR ~$35, USB CI-V cable ~$25 — <strong>about $400</strong> to turn a $1,500–2,000 used R9000 into a hybrid station that no single 2026 product replicates. Sherwood's full treatment (filter mod + SE-3 + cooling) ran closer to $1,300 when it was offered.</p>
+          <p>And the pairing advice: put a $200-class modern SDR (an Airspy HF+ Discovery measures −141 dBm MDS and 116 dB blocking range) next to it for HF DX duty. The R9000 keeps VHF/UHF, satellite, monitoring, and — not a small thing — the sound and feel of the best analog year Icom ever had. That combination costs less than one modern flagship, and each half covers the other's weaknesses.</p>
+          <p style="margin-top:1.5rem;"><em>Next in the RIG series: <a href="/rig/nrd-535/">No. 2 — the JRC NRD-535</a>, the last all-analog flagship from Japan Radio Company, and the R9000's natural HF counterpart.</em></p>
+        </div></section>
+
+        <section id="sources" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">09 · Sources</span>
+            <h2 class="ag-section-title">Sources and further reading</h2>
+          </header>
+          <ul>
+            <li><a href="http://www.sherweng.com/table.html">Sherwood Engineering receiver test table</a> — all comparable lab numbers in §03</li>
+            <li><a href="https://mwcircle.org/legacy-receiver-reviews/receiver-review-icom-ic-r9000/">Radio Netherlands / Medium Wave Circle IC-R9000 review</a> — the definitive 1989 review</li>
+            <li><a href="https://www.qsl.net/icom/oldicomfaq/ic-r9000.html">Icom's own IC-R9000 service FAQ</a> — the failure-mode map of §04</li>
+            <li><a href="http://www.radiomanual.info/schemi/ICOM_HF/IC-781_technical_and_maintenance_issues.pdf">YO9FZS: IC-781 &amp; IC-R9000 technical and maintenance issues</a></li>
+            <li><a href="https://bunkerofdoom.com/r9000/index.html">KD5OEI: CRTC C11 and CRT board repairs</a></li>
+            <li><a href="https://www.cryptomuseum.com/df/icom/icr9000/mod.htm">Crypto Museum: the Dutch RCD PAN-2000 modifications</a></li>
+            <li><a href="https://www.tspelettronica.com/en/2020/06/29/panadapter-sdr-per-ic-r9000/">TSP Electronics: R9000 IF tap points for the IFace buffer</a></li>
+            <li><a href="http://forums.radioreference.com/threads/ic-r9000-digital-modes.475682/">RadioReference: R9000 IF → AR-DV1 digital decoding (the IF DIR = REV trick)</a></li>
+            <li><a href="http://www.sherweng.com/indepth.html">Sherwood SE-3 synchronous detector</a> and the <a href="https://web.archive.org/web/2018/http://www.sherweng.com/radios.html">R9000 filter-logic and converter mods</a> (archived)</li>
+            <li><a href="http://www.seidensha-ltd.co.jp/~seiden/ic-r9000.html">JA4FUQ's CRT→LCD conversion report</a> (Japanese) — the reversible DIY path</li>
+            <li><a href="https://www.inrad.net/product.php?productid=259">Inrad IC-781 roofing filter kit</a> — the template for the unclaimed frontier</li>
+          </ul>
+        </div></section>
+
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and restores the radios that taught him what good engineering feels like.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>The RIG series</h3>
+          <ul>
+            <li><a href="/rig/">RIG — the column</a></li>
+            <li><a href="/rig/ic-r9000/">No. 1: ICOM IC-R9000 (this article)</a></li>
+            <li><a href="/rig/nrd-535/">No. 2: JRC NRD-535 — The Last Analog Flagship</a></li>
+            <li><a href="/blog/ft710-usb-remote-control/">Blog: Remote-Controlling a Yaesu FT-710 with Just a USB Cable</a></li>
+            <li><a href="/blog/efhw-esp32s3-auto-tuner/">Blog: Designing an ESP32-S3 Servo-Driven Antenna Tuner</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/rig/"><i class="fas fa-arrow-left"></i> Back to RIG</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../js/global-nav.js?v=8" defer data-gn="1"></script>
+  </body>
+</html>

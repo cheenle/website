@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JRC NRD-535: The Last Analog Flagship — and How to Keep It Alive | VLSC RIG</title>
+    <meta name="description" content="An end-to-end deep analysis of the JRC NRD-535: the design story from JRC's own US sales manager, lab numbers against 2026 flagships, the VFD display failure that has no fix, filter upgrades using the JRC-to-NDK cross-reference, the Gilfer/Kiwa NRD-535GS recipe, and an SDR graft at the 70.455 MHz first IF." />
+    <meta name="keywords" content="JRC NRD-535, NRD-535D, NRD-535GS, Kiwa modification, ECSS, BWC, VFD display failure, Collins mechanical filter, panadapter, DRM modification, receiver restoration, amateur radio" />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="JRC NRD-535: The Last Analog Flagship — and How to Keep It Alive" />
+    <meta property="og:description" content="Design history from JRC's US sales manager, Sherwood lab numbers, the display failure with no fix, filter upgrades, the NRD-535GS recipe, and an SDR graft at 70.455 MHz." />
+    <meta property="og:url" content="https://www.vlsc.net/rig/nrd-535/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/rig/nrd-535/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/rig/nrd-535/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/rig/nrd-535/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/rig/nrd-535/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=4" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "JRC NRD-535: The Last Analog Flagship — and How to Keep It Alive",
+        "description": "End-to-end analysis of the JRC NRD-535: design history, measured performance vs modern flagships, the VFD display failure, filter upgrades, and an SDR graft at the 70.455 MHz first IF.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "keywords": "JRC NRD-535, receiver restoration, Kiwa, ECSS, BWC, panadapter, DRM, amateur radio",
+        "articleSection": "RIG",
+        "mainEntityOfPage": "https://www.vlsc.net/rig/nrd-535/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">Home</a> › <a href="/rig/">RIG</a> › <span class="ba-crumb-cat">Receivers</span> › JRC NRD-535</span><a class="ba-lang" href="zh/" lang="zh-CN">中文版</a></nav>
+
+      <header class="ag-hero">
+        <div class="container">
+          <div class="hero-badge"><i class="fas fa-radio"></i><span>RIG · Deep Dives into Legendary Radios · No. 2</span></div>
+          <h1>JRC NRD-535:<br /><span class="gradient">The Last Analog Flagship — and How to Keep It Alive</span></h1>
+          <p class="ag-hero-sub">Nine kilograms of plug-in modules, a tracking preselector, 1 Hz DDS tuning and a vacuum-fluorescent display that will outlive none of them. This is the full picture: the design story from JRC's own US sales manager, lab numbers against 2026 flagships, the failure that has no fix, and a restoration-and-upgrade roadmap built on documented recipes.</p>
+          <p class="ba-meta">By BG1SB &nbsp;·&nbsp; <time datetime="2026-09-27">Sep 27, 2026</time> &nbsp;·&nbsp; ~17 min read</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections"><a href="#flagship">§01 The last analog</a><a href="#architecture">§02 Architecture</a><a href="#non-d">§03 Non-D?</a><a href="#measured">§04 Measured</a><a href="#aging">§05 How it ages</a><a href="#filters">§06 Filters</a><a href="#sdr-graft">§07 SDR graft</a><a href="#verdict">§08 Verdict</a></nav></div></div>
+
+      <main class="ba-main">
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the NRD-535 in six findings</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>It was Japan Radio Company's last all-analog flagship</strong> — WRTH's 1991 "Best Communications Receiver," 90 kHz–30 MHz, triple conversion through 70.455 MHz / 455 kHz / 97 kHz, a varactor tracking preselector, and DDS tuning in 1 Hz steps. The DSP-based NRD-545 replaced it in 1998.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Its noise floor and sensitivity are still first-rate.</strong> Sherwood measures −135 dBm and 0.1 µV — quieter than the 1989 IC-R9000 (−131 dBm) and within a few dB of 2026 flagships with their preamps on. On HF, where atmospheric noise dominates, that gap is academic.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Its synthesizer is the weak link, and it is a family trait.</strong> LO phase noise measures 117 dBc/Hz at 10 kHz — 27–39 dB behind modern rigs, and 11 dB worse than the R9000. NRD-525, 535 and the DSP-era 545 all sit on the same ceiling.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The custom VFD display is a terminal, unfixable failure.</strong> No new parts exist; the documented attempt is four 35–50 V electrolytics in the display DC-DC converter, and Europe's last spare-parts stock (including two CDE-705 display units) is now sold out. A dead display demotes the radio to PC-controlled-only — which is survivable, because RS-232 is standard.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span><strong>The filters are the one place where a 1991 receiver can be genuinely upgraded to modern standards.</strong> JRC's own US sales manager published the JRC↔NDK filter cross-reference, Sherwood still sells Collins 455 kHz mechanical filters with a JRC adapter board for $129, and the 1995 Gilfer/Kiwa "NRD-535GS" recipe is documented in full.</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>An SDR graft is documented and supported.</strong> TSP Electronics' IFace buffer taps the first mixer output at 70.455 MHz for a full-band waterfall; a 2003 modification adds a 455 kHz→12 kHz converter for DRM decoding; and free PC software (RXCommander, rxcontrol.org) drives every function over the standard RS-232 port, S-meter readings included.</li>
+            </ul>
+            <div class="ba-readpath"><span>Read in 3 minutes:</span><a href="#measured">§04 measured</a><a href="#aging">§05 the display</a><a href="#verdict">§08 verdict</a></div>
+          </div>
+        </div>
+
+        <section id="flagship" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · Origin</span>
+            <h2 class="ag-section-title">Designed in Mitaka, June 1990</h2>
+            <p class="ag-section-subtitle">The design history, from the man who sold it in North America.</p>
+          </header>
+          <p>Paul Lannuier (WW2PT) ran JRC's New York office and brought the NRD-535 to the North American market. His personal notes, preserved in the Internet Archive, are the closest thing to an insider history of this receiver. In June 1990 he flew to JRC's Mitaka factory for the design review, armed with concept sketches A through D from <strong>T. Shiono, head of the NRD-535 engineering team</strong>. The final product combined concept A's dimpled arrow buttons with concept B's control layout and contoured front panel; Lannuier fought off the front-panel speakers of concepts C and D, and the curved S-meter LCD segments were added after he returned to New York. The RS-232 command set was improved over the NRD-525's largely at the urging of SWLer Tom Sundstrom (W2XQ).</p>
+          <p>The same notes preserve the best anecdote in JRC's amateur line: the predecessor marine receiver NRD-240 had an "Automatic Scan Start" button labelled <strong>ASS</strong>. "Please," Lannuier begged the design review, "don't make me market a product with an ass button!" The button was scrapped.</p>
+          <p>Commercially: released 1990/91 at about US$1,200 for the standard NRD-535 and US$1,690 for the NRD-535D; WRTH's 1992 review concluded it "offers excellent value for the serious shortwave listener" and gave JRC the 1991 Best Communications Receiver award — "high performance, excellent computer connectivity, and ease of use make this a clear winner." North America only ever got the D model; the standard 535 was the price-sensitive European variant. Production of the standard version ended around 1997, the D in 1998. <strong>JRC terminated all amateur-model repair support in 2017.</strong></p>
+        </div></section>
+
+        <section id="architecture" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · Inside</span>
+            <h2 class="ag-section-title">Tracking preselector, triple conversion, 1 Hz DDS</h2>
+            <p class="ag-section-subtitle">Modular plug-in boards, discrete RF, and a display that doubles as the tuning encoder's home.</p>
+          </header>
+          <p>The signal path: antenna → 35 MHz low-pass → relay-switched 20 dB attenuator (a single step, measured 20.6 dB) → <strong>varactor-tuned seven-band tracking preselector</strong>, its centre frequency continuously slaved to the received frequency by the microprocessor → RF amplifier → first mixer → <strong>70.455 MHz</strong> first IF (high-side injection for image rejection) → 455 kHz second IF, where the dual-width noise blanker lives → switchable IF filter bank → BWC stage → <strong>97 kHz</strong> third IF, where the tunable notch, passband shift (±1 kHz, ±2 kHz via computer) and ECSS synchronous detection all sit → detector. AGC voltage is generated at 97 kHz. Switching-mode power supply, 100–240 VAC or 12–16 VDC.</p>
+          <p>Three architectural facts matter for everything that follows:</p>
+          <ul>
+            <li><strong>Fully modular, plug-in boards.</strong> The whole machine connects to the main board through four connectors — maintenance and upgrades are unusually friendly for a receiver of this class.</li>
+            <li><strong>The display unit (CDE-705) also contains the tuning encoder interface.</strong> The service manual routes "tuning knob does not change frequency" to PG1 and IC7 <em>on the display board</em>. A display failure is therefore not only cosmetic — it can take the tuning function with it.</li>
+            <li><strong>RS-232C is standard</strong> (DB-25, 4800 8N1): 36 functions remotely controllable, including reading the S-meter back. No interface box required, unlike most 1990s competitors.</li>
+          </ul>
+          <p>Filter positions: WIDE (originally Murata CLF-D6, about 8 kHz at −6 dB — later replaced by the 5.7 kHz CLF-D6S), INTER (2 kHz mechanical, measured about 2.6 kHz), NARR (1 kHz, requires the CFL-233 option), AUX (empty, defaults to 12 kHz). Optional crystal filters: CFL-231 240 Hz, CFL-232 500 Hz, CFL-233 1 kHz, CFL-218A 1.8 kHz, CFL-251 2.4 kHz.</p>
+        </div></section>
+
+        <section id="non-d" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · Which 535 do you have?</span>
+            <h2 class="ag-section-title">Non-D, D, Db, DG, GS: five names, one chassis</h2>
+            <p class="ag-section-subtitle">What the suffixes mean, and how to tell what is actually installed.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Version</th><th>What it is</th><th>How to verify</th></tr></thead>
+            <tbody>
+              <tr><td><strong>NRD-535</strong> (non-D)</td><td>Base model. ECSS, BWC and the 1 kHz filter are all options. Mainly sold in Europe.</td><td>No BWC/ECSS functions on the front panel</td></tr>
+              <tr><td><strong>NRD-535D</strong></td><td>Same chassis with CMF-78 (ECSS), CFL-243 (BWC) and CFL-233 (1 kHz) factory-installed. The only version sold in North America.</td><td>ECSS and BWC controls present</td></tr>
+              <tr><td><strong>"NRD-535Db"</strong></td><td>Not an official model — a dealer coinage for units from <strong>serial BR56005</strong> on, with three factory changes: BWC enabled in AM and for the wide filter, CLF-D6S (5.7 kHz) replacing the too-wide CLF-D6 (8 kHz), EPROM version "D" with RS-232 fixes. Earlier units could be upgraded with a kit (filter + BWC crystal + EPROMs); the upgraded board is designated <strong>CFL-243W</strong>.</td><td><strong>Does BWC work on the WIDE filter in AM mode?</strong> If yes, the upgrade is installed.</td></tr>
+              <tr><td><strong>NRD-535DG</strong></td><td>The European 535D — identical construction. "G" = Europe (220 V preset, Euro cord), "U" = North America; the suffix is printed on the carton only, never on the radio.</td><td>Carton/mains preset</td></tr>
+              <tr><td><strong>NRD-535GS</strong></td><td>Gilfer × Kiwa's DX machine, sold 1995–97 at $1,659.95 ($1,869.95 with ECSS) — "probably only a few dozen." A stock non-D 535 with: Kiwa's custom 3.5 kHz ceramic in INTER (replacing the 2.2 kHz), CFL-251 2.4 kHz in NARR, your choice of 300/500/1k/1.8 kHz in AUX, <strong>a rear-panel toggle that bypasses the AUX filter stage entirely</strong> for full 12 kHz program audio, faster AGC decay, raised audio high-frequency cutoff, bench alignment, one-year Gilfer warranty.</td><td>Rear-panel bypass toggle; Kiwa documentation</td></tr>
+            </tbody>
+          </table></div>
+          <p>Why the GS matters in 2026: it is a <strong>commercially validated upgrade recipe you can still replicate</strong>, part by part, with the filter cross-reference below and a toggle switch.</p>
+        </div></section>
+
+        <section id="measured" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · Lab bench</span>
+            <h2 class="ag-section-title">Measured: quiet, sensitive, phase-noise-limited</h2>
+            <p class="ag-section-subtitle">Sherwood's numbers for the whole JRC family, next to 2026 flagships.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Receiver</th><th>Noise floor</th><th>Sensitivity</th><th>Blocking @100k</th><th>LO phase noise @10k</th><th>Front end</th><th>Filter ultimate</th><th>Wide DR</th><th>Narrow DR</th></tr></thead>
+            <tbody>
+              <tr><td>JRC NRD-515</td><td>−138</td><td>0.1 µV</td><td>103</td><td>118</td><td>C 0.8 octave</td><td>80</td><td>95 @20k</td><td><strong>77ᶠ @2k</strong></td></tr>
+              <tr><td>JRC NRD-525</td><td>−132</td><td>0.2</td><td>123</td><td>120</td><td>B tracking presel.</td><td>65</td><td>95 @50k</td><td>72 @5k</td></tr>
+              <tr><td><strong>JRC NRD-535</strong></td><td><strong>−135</strong></td><td><strong>0.1</strong></td><td>114</td><td><strong>117</strong></td><td>B tracking presel.</td><td>70</td><td>92 @50k</td><td>70 @5k</td></tr>
+              <tr><td>JRC NRD-545 (DSP)</td><td>−130</td><td>0.2</td><td>127</td><td>118</td><td>B 0.5 octave</td><td>65</td><td>96 @100k</td><td>68 @5k</td></tr>
+              <tr><td>Icom IC-R9000</td><td>−131</td><td>0.15</td><td>129</td><td>128</td><td>B 0.5 octave</td><td>90</td><td>93 @20k</td><td>71 @5k</td></tr>
+              <tr><td>Icom IC-R8600</td><td>−132/−142ᵇ</td><td>0.40/0.12ᵇ</td><td>125</td><td>144–148</td><td>B half octave</td><td>105</td><td>98–109 @20k</td><td>98–107 @2k</td></tr>
+              <tr><td>Perseus</td><td>−123/−125ᵇ</td><td>0.15/0.1ᵇ</td><td>125</td><td>147</td><td>B band-pass</td><td>109ᶠ</td><td>99 @20k</td><td>99 @2k</td></tr>
+              <tr><td>Yaesu FTdx-101D</td><td>−127/−141ᵇ</td><td>4.5/1.6ᵇ</td><td>&gt;147</td><td>154–155</td><td>A tracking presel.</td><td>&gt;115</td><td>110 @20k</td><td>110 @2k</td></tr>
+            </tbody>
+          </table></div>
+          <p style="font-size:.9em;color:var(--text-secondary);">ᵇ preamp engaged · ᶠ measurement phase-noise limited (ARRL's RMDR). All rows from the same Sherwood Engineering table, same method. The NRD-535's wide-spaced figure is at 50 kHz spacing; modern rigs are measured at 20 kHz.</p>
+          <p>Four things fall out of this table:</p>
+          <ul>
+            <li><strong>−135 dBm and 0.1 µV put the 535 at the top of the sensitivity league</strong> — better than the R9000 and comparable to modern rigs with preamps on. On HF this is a non-issue anyway: atmospheric noise sits far above it.</li>
+            <li><strong>Phase noise (117 dBc/Hz) is the family ceiling.</strong> The 525 measured 120, the DSP-era 545 measured 118. Modern rigs sit at 144–156. Nothing in the modification literature touches this.</li>
+            <li><strong>The NRD-515 beats the 535 close-in</strong> — 77 dB at 2 kHz spacing versus the 535's 70 dB at 5 kHz. The 515's 0.8-octave front end and 80 dB filter ultimate win where the tracking preselector does not. A useful reminder that "newer" is not "better" in this family.</li>
+            <li><strong>Filter ultimate rejection (70 dB) is the one number you can actually fix</strong> — modern rigs measure 100–115 dB, and §06 is entirely about closing that gap with parts you can still buy.</li>
+          </ul>
+          <p>The Dutch WRTH/Radio Netherlands bench added the caveats: measured dynamic range 88 dB through the 2.6 kHz filter (98 dB with the 300 Hz option, against a 106 dB factory claim), third-order intercept +2 dBm at 30 kHz spacing, notch depth about 25 dB against a 40 dB claim, an S-meter that does not move below S5, a single 20 dB attenuator step, and a display that radiates roughly three times more noise than the 525's.</p>
+        </div></section>
+
+        <section id="aging" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · Failure modes</span>
+            <h2 class="ag-section-title">How an NRD-535 ages — and the one failure with no fix</h2>
+            <p class="ag-section-subtitle">The display kills the radio; the rest is maintenance.</p>
+          </header>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Symptom</th><th>Root cause</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Display dims over months, then goes dark</td><td>Custom vacuum-fluorescent display (CDE-705 unit) end of life. Affects NRD-525, NRD-535 and JST-135 alike.</td><td><strong>No fix.</strong> Try the four 35–50 V electrolytics in the display DC-DC converter; usually fatal. No new parts. Radio becomes PC-controlled-only.</td></tr>
+              <tr><td>Display lights for a moment at power-on, then dies</td><td>Not always the tube — a TBHD repair case traced this to <strong>CPU parameter corruption</strong></td><td>Repairable; check CPU/firmware before condemning the VFD</td></tr>
+              <tr><td>Deaf for seconds after a static crack or lightning pop; S-meter pinned</td><td>AGC overshoot — a design flaw JRC acknowledged</td><td><strong>Fixable:</strong> R105 shorted to 500 kΩ total, R103/R104 to 100 kΩ (Nilsson); or JRC's CAE-227A IF-board rework; or Kiwa's AGC mod</td></tr>
+              <tr><td>Digital hash rising from about 8–10 MHz upward</td><td>RF board sits too close to the chassis; noise also conducts out through the headphone lead</td><td><strong>Unfixable design flaw.</strong> Nilsson tested four units, tried everything, returned them all and bought an NRD-525 instead</td></tr>
+              <tr><td>ECSS drifts and loses lock</td><td>Misaligned receiver — Fenu-Radio: it "only happens with badly aligned receivers"</td><td>Fixable by full alignment</td></tr>
+              <tr><td>855 kHz tone audible, especially when turning the BWC knob; BWC skirts too soft</td><td>BWC board design (Nilsson: "degrades the whole unit")</td><td>Partly; his 8-pole filter swaps made it worse. Manage expectations</td></tr>
+              <tr><td>Dead at power-on, no reception</td><td><strong>DDS unit failure</strong> (TBHD case)</td><td>Repairable by specialists</td></tr>
+              <tr><td>Unlocked above 18 MHz</td><td>VCO trimmer/temperature-compensation capacitor replaced with the wrong value by a previous owner</td><td>Repairable — use exact-spec parts</td></tr>
+              <tr><td>Tuning knob does not change frequency; PBS/BWC dead; clock drifts</td><td>PG1 encoder / IC7, RV1/RV2, CV1 — <strong>all on the CDE-705 display board</strong></td><td>Service-manual diagnostics; encoder itself is magnetic and reliable</td></tr>
+              <tr><td>Memories lost, data error at power-on</td><td>CR2032 backup battery — rated life 5 years, every surviving unit is past it</td><td>Replace proactively</td></tr>
+              <tr><td>Knob too light, overshoots; front-panel keys intermittent</td><td>Weighted knob with too little damping; small calculator-style tactile switches</td><td>Felt washer behind the dial; clean switches with alcohol (generic parts)</td></tr>
+            </tbody>
+          </table></div>
+          <p>The parts market has closed behind these failures. Universal Radio's used-stock list shows the shared CFH-36 IF filter board at $89.95 (sold), NRD-525 data-I/O and loop boards at $22–90, and an NRD-515 display board at $34.95 — but no 535 display units. <strong>CSY &amp; SON's €350 NRD-535 spare-parts stock, which included two CDE-705 display units, now reads "no longer available."</strong> What remains: a Klondike Mike's capacitor kit (70 caps, plus 40 more if BWC and ECSS are fitted), the option boards on the Japanese auction market (CMF-78 ECSS around ¥4,800; CFL-243 BWC ¥14,000–35,000), and donor radios.</p>
+          <p>Buying advice follows directly: check the display first, at length, cold and warm. A dim 535 is a parts donor with a nice front panel.</p>
+        </div></section>
+
+        <section id="filters" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · The upgrade that works</span>
+            <h2 class="ag-section-title">Filters: rebuilding the IF with parts you can still buy</h2>
+            <p class="ag-section-subtitle">JRC's own cross-reference table turns "obsolete option" into "in-stock NDK part."</p>
+          </header>
+          <p>JRC's optional crystal filters were made by NDK and never carried the JRC part number on the can. Lannuier published the cross-reference, which is the single most useful document for anyone upgrading a 535 today:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>JRC</th><th>NDK</th><th>−6 dB width</th></tr></thead>
+            <tbody>
+              <tr><td>CFL-231</td><td>YF455FM</td><td>240 Hz</td></tr>
+              <tr><td>CFL-232</td><td>YF455DQ</td><td>500 Hz</td></tr>
+              <tr><td>CFL-233</td><td>YF455DE</td><td>1.0 kHz</td></tr>
+              <tr><td>CFL-218A</td><td>YF455EBF</td><td>1.8 kHz</td></tr>
+              <tr><td>CFL-251</td><td>YF455EB</td><td>2.4 kHz</td></tr>
+            </tbody>
+          </table></div>
+          <p>Three documented upgrade paths, in increasing order of ambition:</p>
+          <ol>
+            <li><strong>Sherwood's Collins mechanical filters, $129 with the JRC adapter board.</strong> Sherwood Engineering explicitly lists adapter boards for the NRD-515, 525 and 535 (and the Racal 6790GM at $179). Remaining new-old-stock bandwidths are 6 kHz and 5 kHz; they also list large 455 kHz crystal filters at 2.4 kHz, 2.1 kHz and 400 Hz for the same $129. This is the direct route from the 535's 70 dB filter ultimate toward the 100+ dB modern figures — and the stock is finite.</li>
+            <li><strong>Replicate the NRD-535GS.</strong> Kiwa's 3.5 kHz ceramic in INTER (replacing the stock 2.2 kHz), CFL-251 in NARR, your choice in AUX, a rear-panel toggle to bypass the AUX stage for full 12 kHz program audio, faster AGC decay, raised audio cutoff. Fenu-Radio, who sells Kiwa-modified 535Ds, calls the modification "highly recommended": unmodified audio is "fairly muffled," and after the mod "you might think it is a totally different radio."</li>
+            <li><strong>Nilsson's cascade (advanced).</strong> Eskab boards with multi-stage cascading — FL1 8-pole crystal (10–12 kHz), FL2 CFX455I, FL3 CFK455I, then YTK 2.4/1.8/1.0 kHz, plus a PLAM board ahead of the detector. Two hard-won details: <strong>20 kΩ resistors on both sides of every filter</strong> (R25/R26/R16/R17/R40/R41) or the impedance is wrong and the skirts ripple badly; and on the Eskab AVC board, <strong>replace the 1 µF tantalum with 10,000 pF ceramic</strong> or recovery is far too slow.</li>
+          </ol>
+          <p>Two housekeeping items while the chassis is open. If the wide filter is still the original <strong>CLF-D6 (~8 kHz)</strong>, swap in the <strong>CLF-D6S (5.7 kHz at −6 dB, 8.7 kHz at −60 dB)</strong> — JRC themselves called the D6 a step backwards and replaced it free of charge in the 1990s. And after any filter or AGC work, do a full alignment: Nilsson insists the master oscillator must be set exactly to zero before the receiver's excellent stability means anything.</p>
+        </div></section>
+
+        <section id="sdr-graft" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · Digital graft</span>
+            <h2 class="ag-section-title">SDR at 70.455 MHz, DRM at 12 kHz, and RS-232 for everything else</h2>
+            <p class="ag-section-subtitle">The 535 has no IF output jack — but it has something better: a standard serial port.</p>
+          </header>
+          <p>Unlike the IC-R9000, the NRD-535 has no factory IF output. Both grafts are internal, and both are documented:</p>
+          <pre style="font-family:'JetBrains Mono',monospace;font-size:.85em;line-height:1.5;overflow-x:auto;">Antenna → tracking preselector → RF amp → 1st mixer
+                                          │
+                                          ├─ factory path: 70.455 MHz → 455 kHz → 97 kHz → analog demod → speaker
+                                          │
+                                          ├─ PANADAPTER TAP (TSP IFace): 1st mixer output, wideband around 70.455 MHz
+                                          │     → IFace high-Z buffer → SDR that covers 70 MHz
+                                          │       (RTL-SDR tuner mode / SDRplay / Airspy)
+                                          │     → HDSDR or SDR Console: full-band waterfall, digital NR, recording
+                                          │
+                                          └─ DRM TAP (drmrx.org V1.02): 455 kHz from the CFH-36A IF filter board
+                                                (P30 pin 22 = 455 kHz, pin 21 = ground, pin 1 = 10.8 V for the mixer;
+                                                 or take it after C19/L3, before FL3–FL6)
+                                                → LC mixer down to 12 kHz → rear-panel 3.5 mm jack → sound card → DReaM
+
+RS-232C (DB-25, standard) → RXCommander / rxcontrol.org / OmniRig
+   full control: frequency, mode, filters, AGC, noise blanker, attenuator — and S-meter readback</pre>
+          <p>Details worth having before you solder:</p>
+          <ul>
+            <li><strong>The panadapter tap is at the first mixer, not the last IF.</strong> TSP Electronics publishes the R9000 and NRD-535 tap points (schematic and PCB photos) for their IFace buffer; the 535's tap carries a wideband signal centred on 70.455 MHz, so the SDR must tune there — an RTL-SDR in tuner mode (24–1766 MHz) works, HF direct-sampling mode does not. No PTT line needed: it is a receiver.</li>
+            <li><strong>Buffer with high impedance.</strong> A 50 Ω load hung directly on a mixer output will suck the receiver deaf — the documented lesson from a Drake R-4B panadapter attempt. Use the IFace or a JFET source follower.</li>
+            <li><strong>Keep the SDR away from the display.</strong> In Patrick Canler's four-receiver comparison, the NRD-535's VFD disrupted the Bonito RadioJet sitting next to it.</li>
+            <li><strong>The DRM mod still works as a 12 kHz sound-card path</strong> even though DRM30 broadcasting has shrunk to a handful of transmitters (mostly All India Radio). The 2003 author reported SNRs up to 30 dB on European 10 kHz-wide DRM transmissions, and made the point that still holds: "These receiver characteristics will still be very important during the DRM era: they can make the difference between good reception or no reception at all."</li>
+            <li><strong>PC control needs no hardware.</strong> RXCommander (HB9RXC, still online) ships with the CMH-532 and CBO-232 interface manuals and the NRD-535 CAT protocol document; rxcontrol.org's free V1.3.6 drives everything from the keyboard, displays the bandplan, auto-selects filter bandwidth and detection mode, and imports frequency files. This is also your <strong>display-failure contingency</strong>: with the VFD dark, the radio remains fully usable from the PC.</li>
+          </ul>
+          <p>What the graft adds: a full-band waterfall (the 535 never had any spectrum display), I/Q-domain noise reduction and notch (more information than an audio DSP ever gets), calibrated dBm readings, recording — and a survival path for the display. What it cannot add: close-in dynamic range or phase noise. Those were fixed in 1990.</p>
+        </div></section>
+
+        <section id="verdict" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · Verdict</span>
+            <h2 class="ag-section-title">Keep it, filter it, graft it — and plan for the display</h2>
+            <p class="ag-section-subtitle">A 2016 listening test still ranks it first. The 2026 job is keeping it alive.</p>
+          </header>
+          <p>In a four-receiver blind-ish comparison published on SWLing Post — 1991 NRD-535 against AOR AR7030, Icom IC-R75 and a Bonito RadioJet 1102S SDR, one evening, same antenna — the tester ranked the <strong>NRD-535 first</strong>, "for its ease of use and ability to dig out a usable signal from the QRM." On digital filtering he wrote that the SDR and the Icom "give a dry sound and sometimes add snap under whistles. Listening is overall less pleasant in comparison." His summary line: "age is not a handicap."</p>
+          <p>The honest ledger for a restored, upgraded 535:</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Dimension</th><th>Where it lands after the work</th></tr></thead>
+            <tbody>
+              <tr><td>Sensitivity / noise floor</td><td><strong>Already first-rate</strong> — −135 dBm, 0.1 µV. Nothing to fix.</td></tr>
+              <tr><td>Selectivity</td><td><strong>Can reach modern levels</strong> — Collins mechanical filters or the GS recipe take filter ultimate from 70 dB toward 100+ dB</td></tr>
+              <tr><td>Audio / listening comfort</td><td><strong>Beats SDRs</strong> per the 2016 comparison — and the Kiwa/GS audio mod removes the stock muffled character</td></tr>
+              <tr><td>Spectrum awareness</td><td>Added by the 70.455 MHz IFace graft — the radio has none natively</td></tr>
+              <tr><td>Close-in dynamic range / phase noise</td><td><strong>Stays 1991</strong> — 70 dB at 5 kHz, 117 dBc/Hz. 20–40 dB behind modern. Physics and architecture.</td></tr>
+              <tr><td>Above ~8–10 MHz</td><td>Internal digital noise — unfixable RF-board placement. Use SSB/ECSS, narrow filters, and keep the antenna away from the chassis</td></tr>
+              <tr><td>Display</td><td><strong>The single point of failure with no fix.</strong> Plan the PC-control fallback now; a modern CDE-705 replacement is the great unsolved project of this platform</td></tr>
+            </tbody>
+          </table></div>
+          <p>Budget: restoration (capacitor kit, battery, alignment) $100–200; filters $129–400; ECSS board about ¥4,800 on the Japanese market; IFace + SDR $60–150. Call it <strong>$400–700</strong> for a receiver that, on the evidence above, still out-listens much of what is for sale.</p>
+          <p>And the frontier, stated plainly: nobody has published a working replacement for the CDE-705 display — not an LED segment driver, not a small LCD panel, not a transplant from the NRD-545. Whoever does it will have solved the one problem that decides whether these receivers survive the next decade. The complication worth knowing before you start: <strong>the tuning encoder interface lives on that same board</strong>, so any replacement must carry PG1 and the associated logic, not just the digits.</p>
+          <p style="margin-top:1.5rem;"><em>Pairing note for owners of both: the NRD-535 is the HF ear — quiet, sensitive, musical. The IC-R9000 is the VHF/UHF eye — 0.1–2000 MHz with a spectrum display. Neither replaces a modern SDR for close-in dynamic range, and neither should try.</em></p>
+        </div></section>
+
+        <section id="sources" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">09 · Sources</span>
+            <h2 class="ag-section-title">Sources and further reading</h2>
+          </header>
+          <ul>
+            <li><a href="https://web.archive.org/web/20110824082400/http://www.lannuier.com/ww2pt/page.cfm?content=nrd535">Paul Lannuier (WW2PT), Notes on the JRC NRD-535</a> — design history, the NDK filter cross-reference, the Db serial break, the NRD-535GS recipe (archived)</li>
+            <li><a href="http://www.sherweng.com/table.html">Sherwood Engineering receiver test table</a> — all comparable lab numbers in §04</li>
+            <li><a href="http://www.sherweng.com/collins.htm">Sherwood: Collins 455 kHz mechanical filters with JRC adapter boards</a></li>
+            <li><a href="https://www.dxinfo.se/NRD525-535_mod_GB.pdf">Thomas Nilsson: NRD 535 and NRD 525 comments and modifications</a> — the digital-noise verdict, AVC values, filter cascades</li>
+            <li><a href="https://www.fenu-radio.ch/JRC_NRD-535D-en.htm">Fenu-Radio on the Kiwa-modified NRD-535D</a> and the <a href="https://www.fenu-radio.ch/JRC_NRD-535DG-en.htm">NRD-535DG</a></li>
+            <li><a href="https://www.tspelettronica.com/en/2020/07/09/panadapter-sdr-per-nrd-535/">TSP Electronics: NRD-535 SDR panadapter tap points</a></li>
+            <li><a href="https://www.drmrx.org/mods/NRD_535_V102.pdf">drmrx.org: NRD-535 DRM modification, V1.02 (2003)</a></li>
+            <li><a href="http://hb9rxc.homeip.net/rxcommander.html">RXCommander (HB9RXC)</a> with the CMH-532 / CBO-232 / CAT protocol documents, and <a href="http://rxcontrol.org/Nrd535/index.html">rxcontrol.org's free NRD-535 software</a></li>
+            <li><a href="https://www.qsl.net/n9ewo/nrd535.html">N9EWO on the NRD-535</a> — the display-failure warning and the family's noise history</li>
+            <li><a href="https://swling.com/blog/2016/07/guest-post-patrick-compares-four-receivers/">SWLing Post: Patrick Canler compares four receivers</a> — the 2016 ranking</li>
+            <li><a href="https://mwcircle.org/legacy-receiver-reviews/receiver-review-nrd-535/">Radio Netherlands / WRTH NRD-535 review</a> · <a href="https://www.zcm.com.au/nrd535.htm">ZCM Services model file</a> · <a href="https://klondikemikescapkits.com/products/jrc-nrd-535-electrolytic-capacitor-kit">Klondike Mike's capacitor kit</a></li>
+          </ul>
+        </div></section>
+
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem, and restores the radios that taught him what good engineering feels like.</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>The RIG series</h3>
+          <ul>
+            <li><a href="/rig/">RIG — the column</a></li>
+            <li><a href="/rig/ic-r9000/">No. 1: ICOM IC-R9000 — Anatomy of a 1989 Flagship</a></li>
+            <li><a href="/rig/nrd-535/">No. 2: JRC NRD-535 (this article)</a></li>
+            <li><a href="/blog/psk-reporter-dxcc-hunting/">Blog: Finding New DXCC with PSK Reporter</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/rig/ic-r9000/"><i class="fas fa-arrow-left"></i> No. 1: IC-R9000</a><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../js/global-nav.js?v=8" defer data-gn="1"></script>
+  </body>
+</html>

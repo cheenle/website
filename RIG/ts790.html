@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 20.0.6.0 for Windows">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="Keywords" content="trio,ts790,TS790,ts-790,TS-790,kenwood,">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<TITLE>KENWOOD TS-790D</TITLE>
+</HEAD>
+<BODY>
+<CENTER><BR>
+<CENTER>
+<table bgcolor="#ffffff" cellspacing="0" border="1" width="800">
+  <TR>
+    <td align="center" bgcolor="#ff80ff" width="100%" height="26"><FONT size="+2" face="HGS創英角ﾎﾟｯﾌﾟ体"><B>ＫＥＮＷＯＯＤ　</B><B>ＴＳ－７９０Ｄ</B></FONT></td>
+  </TR><TR>
+    <TD align="center" bgcolor="#ffffff" width="649">
+    <table width="800" bgcolor="#ffffff">
+      <TBODY>
+        <TR>
+          <TD bgcolor="#ffffff" align="center"><img src="gif/ts790.jpg" width="800" height="426" border="0"></TD>
+        </TR>
+        <TR>
+          <TD bgcolor="#ffffff" align="center">１９８８年の発売　ＴＳ-７９０Ｄは、１４４・４３０ＭＨｚの２バンドに対応の２５Ｗ機です<br>
+          デュアルモード＆デュアル受信対応・・・２バンド・デュアル受信機能を搭載のオールモード機です<br>
+          バブル時代・・・￥２６９，０００が、発売時価格です<br>
+          １２００ＭＨｚは、ＵＴ-１０というオプションの追加で対応できるモデルでした<br>
+          ＵＴ-１０　￥７２，０００だったようです</TD>
+        </TR>
+        <TR>
+          <td bgcolor="#ffffff" align="left" width="800">小売業をやめた今となっては、あまり活躍の場は無いのですが、修理時の動作確認用に１４４～１２００MHｚに対応したオールモード・トランシーバ（受信機）として入手しました<br>
+          ここまでＴＳ-７７０を使用していましたが、１２００ＭＨｚバンドの追加を図ろうとしたものです<br>
+          ベースが１４４／４３０ＭＨｚの２バンドに対応するもので、あとから１２００ＭＨｚオプション・ユニットを追加したものです<br>
+          ３バンドそれなりに動作するはずであったのですが、ウソがあって１２００ＭＨｚユニットは壊れていました<br>
+          １４４／４３０ＭＨｚ帯は、それなりの動作をしています<br>
+          歳なり？に使用感のあるもので、結果複数のランプが切れています<br>
+          ボリューム類も取付が緩んでいたり、ガリがありますが、これらは特段の問題なく対応できそうです</td>
+        </TR>
+        <TR>
+          <TD bgcolor="#ffffff" align="center" nowrap>
+          <table border="0" width="100%">
+            <tbody>
+              <tr>
+                <td width="500"><img src="gif/ts790_1.jpg" width="500" height="261" border="0"></td>
+                <td width="300">リアパネルです<br>
+                アルミダイキャスト製の各バンドのユニットが装着された構造です<br>
+                電源は外部供給<br>
+                １２００MHｚ帯は、１０Ｗですが６Ａ位消費します、そのせいもあるのかユニットには空冷ファンが用意されています<br>
+                その他のバンドは２５Ｗ出力で、最大９Ａの消費電流です</td>
+              </tr>
+            </tbody>
+          </table>
+          </TD>
+        </TR>
+        <TR>
+          <TD bgcolor="#ffffff" align="left">ウソは残念なことで、例によって？修理スタートです<br>
+          １２００ＭＨｚ帯にバンドを切り替えると、１～2秒間周波数を表示しますが、すぐにその表示は消え、ドットだけが点灯する状態になります<br>
+          いわゆるＰＬＬロック外れのようです<br>
+          状態を追いかけると、どうも「C LOOP PLL IC」 MB87006AがＮＧのようです<br>
+          入力側のプリスケーラの信号は受けていますが、出力が出ていません<br>
+          故障個所は分かったのですが、困ったことに、このDIP型のＩＣは廃版で入手できそうにありません<br>
+          幸いなことにSOP16型のものは入手できそうで、変換基板を用意して交換することにしました<br>
+          ここまでの用意はできていたのですが、その先の手がつかず1年間放置したままでした<br>
+          まずは、このＩＣを交換して、様子を見るところからのスタートです</TD>
+        </TR>
+        <TR>
+          <TD align="center" bgcolor="#ffffff">
+          <HR>
+          </TD>
+        </TR>
+        <TR>
+          <TD align="center" bgcolor="#ffffff">
+          <table border="0">
+            <TBODY>
+              <TR>
+                <td align="center" width="400"><img src="gif/ts790_2.jpg" width="400" height="199" border="0"></td>
+                <td valign="middle" width="400">取り敢えず故障個所を見つけ、その後保管のために仮に組み立てていたものから、改めて問題のユニット　ＵＴ-１０を取り外しました<br>
+                このユニット上側は、高周波部です</td>
+              </TR>
+              <TR>
+                <TD align="center"><img src="gif/ts790_3.jpg" width="400" height="314" border="0"></TD>
+                <td valign="middle">ユニット下側にPLL基板があります<br>
+                その角部分に、今回壊れていたＰＬＬ-ＩＣが取り付いています<br>
+                この写真は、問題のあったPLL-IC交換場所が分かりやすいように、交換後に撮ったものです<br>
+                このIC部分に、ウレタンと思われる緩衝材が取り付いていましたが、劣化が激しく取り外しました</td>
+              </TR>
+              <TR>
+                <TD align="center"><img src="gif/ts790_6.jpg" width="400" height="300" border="0"></TD>
+                <td valign="middle">今回の対応に際し、お世話になったパーツ<br>
+                ＳＯＰ１６Ｐｉｎ=&gt;ＤＩＰ変換基板<br>
+                と<br>
+                ブレッドボード用のジャンプワイヤ<br>
+                このジャンプワイヤの片側を１８０°ひねって使用することで、うまい具合にＩＣソケットに対応できました</td>
+              </TR>
+              <TR>
+                <TD align="center"><img src="gif/ts790_4.jpg" width="400" height="325" border="0"></TD>
+                <td valign="middle">ICとコンデンサを取り換えた様子<br>
+                入手した変換基板のサイズが大きく、IC傍に縦に立っていた電解コンデンサ（５０Ｖ４．７μ）に当たるので、このコンデンサも取り外して横向きに取付し直しました</td>
+              </TR>
+              <TR>
+                <TD align="center"><img src="gif/ts790_5.jpg" width="400" height="260" border="0"></TD>
+                <td valign="middle">今回対処したＰＬＬ－IC部分のUpです<br>
+                全体に足が長くなるのは覚悟で、今後のトラブルを考えＩＣソケットを採用しました（丸ピン型）<br>
+                結果、動作に問題はありませんでした</td>
+              </TR>
+              <TR>
+                <td align="left" colspan="2">PLL-IC交換で、次なるトラブルの発生が見つかるかも？と思ったのですが、おかげなことに他のトラブルはありませんでした<br>
+                このPLL-IC交換のみで、１２００MHｚが運用できなかった問題は解決しました</td>
+              </TR>
+              <TR>
+                <td align="left" colspan="2">&nbsp;　　</td>
+              </TR>
+              <TR>
+                <td align="left" colspan="2">切れたPLの交換を行い、フロントパネルを外してガタついていたボリューム類の取付を締め直し、ガリオーム対応を実施、最後に送受スペックの確認を行い、修理対応デスク前の棚にあるＴＳ-７７０と入れ替えました<br>
+                電気的なスペックについて<br>
+                ３０年以上経過した今でも、新品時のスペックをクリアできているところは素晴らしいことです<br>
+                入手から1年がかり・・・足元が少しだけ片付きました</td>
+              </TR>
+              <TR>
+                <td align="right" colspan="2" bgcolor="#c0c0c0">&nbsp;2023．11　　　ＪＡ４ＦＵＱ</td>
+              </TR>
+              <TR>
+                <td align="left" colspan="2">大元の電源を入れっぱなしが良くない？<br>
+                送信ファイナル部には、本体の電源SWのON-OFFに関わらず、常にDC12Vが印加されています<br>
+                あるとき、本体左後ろが暖かかいことに気付きました<br>
+                本体の電源はずっとOFFです<br>
+                １２００MHｚファイナル・モジュールが壊れています<br>
+                ついでに感度を測ると２０ｄｂ位利得が低下しています<br>
+                ＦＭ用のファイナル・モジュールはジャンク箱にあったのですが、リニア動作のものはありません<br>
+                一か八か、中国に手配をしてみました<br>
+                受信については、ＴＯＰのＲＦアンプＦＥＴのドレイン電圧が異常に低い（０．数ボルト）<br>
+                回路図には３Ｖとあります<br>
+                ドレインの半田を外すと４Ｖ、これはこのＦＥＴの問題に違いないと<br>
+                ここでまたまた入手の問題、幸いジャンク箱に他社の１２００ＭＨｚユニットのジャンクが見つかり、これに同じＦＥＴ　ＭＦＧ１５０２が使用してあり、これを取り外して使用することにしました<br>
+                無事、定格の感度が得られました（－２０ｄｂでＳＱが開くかどうかくらい）<br>
+                色々あるジャンクが捨てられません（片付きません）<br>
+                送信動作は、中国からのモジュール入荷待ちです</td>
+              </TR>
+              <TR>
+                <td align="right" colspan="2">&nbsp;2024.09</td>
+              </TR>
+              <TR>
+                <td align="left" colspan="2">Ｍ５７７６２　パワーモジュール<br>
+                中華本土より、台湾経由で届きました<br>
+                が、まったく動作しません<br>
+                見た目は、オリジナルそうに見えますが、やられました<br>
+                幸運にも、国内で入手が出来て、こちらは問題なく動作しました<br>
+                これで、一連の作業完了です、カバーを閉めて元の棚に戻します<br>
+                今度は電源の入れっぱなしは止めて、外部電源部でON/OFFするようにします</td>
+              </TR>
+            </TBODY>
+          </table>
+          </TD>
+        </TR>
+      </TBODY>
+    </table>
+    </TD>
+  </TR><TR>
+    <TD bgcolor="#ffffff" valign="top" width="649">
+    <TABLE width="100%">
+      <TBODY>
+        <TR>
+          <TD align="right" bgcolor="#c0c0c0">&nbsp;続いて、色々起きます　2024.12</TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+    </TD>
+  </TR>
+
+</table>
+</CENTER>
+</CENTER>
+<CENTER><BR>
+<table cellspacing="5" width="800">
+  <TBODY>
+    <TR>
+      <TD colspan="3" align="right">無線機歴史博物館に　<A href="rekishi.html" target="_parent">戻る</A></TD>
+    </TR>
+    <TR>
+      <TD colspan="3">
+      <HR>
+      </TD>
+    </TR>
+  </TBODY>
+</table>
+</CENTER>
+<DIV align="center"><BR>
+</DIV>
+<DIV align="center">
+  <table width="800" cellpadding="2" cellspacing="1">
+    <TBODY>
+      <TR>
+        <TD nowrap align="center" width="77"><A target="_blank"><IMG src="gif/lej-cool-small.gif" alt="週間クールサイトに選ばれました" height="68" width="58" border="0"></A></TD>
+        <td align="left" width="522"><A href="http://www.seidensha-ltd.co.jp/~seiden/index.html" target="_blank"><IMG src="gif/title.gif" width="525" height="79" border="0"></A></td>
+      </TR>
+      <TR>
+        <TD colspan="2" align="center"><A href="http://www.seidensha-ltd.co.jp/~musenlan/" target="_blank"><IMG src="gif/title_01.gif" alt="無線ＬＡＮ専門サイト" height="59" width="349" border="0"></A></TD>
+      </TR>
+      <TR>
+        <td nowrap></td>
+        <td nowrap>青電舎：担当　堀<BR>
+        　　　Ｍａｉｌは　seiden<FONT color="#0000ff">_atmark_</FONT>po.harenet.ne.jp<br>
+        　　　　　　　　　　　　　　（お手数ですが、<FONT color="#0000ff">_atmark_</FONT>を @ に直して下さい）<BR>
+        　　　　　　お電話では、（０８６）２７５－５０００　<BR>
+        　　　　　　ＦＡＸは、０１２０－５４５０００<BR>
+        　　　　　　〒７０３－８２０７　岡山県岡山市中区祇園４３３－６</td>
+      </TR>
+      <TR>
+        <TD colspan="2" align="right" height="5"><A href="index.html" target="_top" terget="_top"><IMG src="gif/topbutton.jpg" height="24" width="56" border="0"></A></TD>
+      </TR>
+    </TBODY>
+  </table>
+</DIV>
+</BODY>
+</HTML>

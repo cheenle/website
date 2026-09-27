@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ICOM IC-R9000：1989 年旗舰解剖——以及如何让它现代化 | VLSC RIG</title>
+    <meta name="description" content="ICOM IC-R9000 端到端深度剖析：架构、与现代旗舰对比的实验室实测性能、所有已知失效模式及修复方案，以及一条分阶段现代化路线图——降温、换电容（recap）、LCD，还有把它变成 SDR 混合机的 10.7 MHz 中频引出点。" />
+    <meta name="keywords" content="ICOM IC-R9000, 接收机, 宽带接收机, 修复, 换电容（recap）, CRT LCD 改装, 全景显示（panadapter）, SDR, 10.7 MHz 中频, 同步检波器, Sherwood, NRD-535, 业余无线电" />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="ICOM IC-R9000：1989 年旗舰解剖——以及如何让它现代化" />
+    <meta property="og:description" content="实验室数据对比现代旗舰，每个失效模式及其修复方案，一条分阶段路线图：修复、降温、LCD，然后把 SDR 嫁接到 10.7 MHz 中频上。" />
+    <meta property="og:url" content="https://www.vlsc.net/rig/ic-r9000/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/rig/ic-r9000/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/rig/ic-r9000/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/rig/ic-r9000/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/rig/ic-r9000/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "ICOM IC-R9000：1989 年旗舰解剖——以及如何让它现代化",
+        "description": "IC-R9000 端到端剖析：架构、与现代旗舰对比的实测性能、失效模式与修复，以及包含 10.7 MHz SDR 嫁接在内的分阶段现代化路线图。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "keywords": "ICOM IC-R9000, 接收机修复, 全景显示（panadapter）, SDR, 同步检波器, Sherwood, 业余无线电",
+        "articleSection": "RIG",
+        "mainEntityOfPage": "https://www.vlsc.net/rig/ic-r9000/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar"><span class="ba-crumb"><a href="/">首页</a> › <a href="/rig/">RIG</a> › <span class="ba-crumb-cat">接收机</span> › ICOM IC-R9000</span><a class="ba-lang" href="../" lang="en">English</a></nav>
+
+      <header class="ag-hero">
+        <div class="container">
+          <div class="hero-badge"><i class="fas fa-radio"></i><span>RIG · 传奇电台深度解析 · 第 1 期</span></div>
+          <h1>ICOM IC-R9000：<br /><span class="gradient">1989 年旗舰解剖——以及如何让它现代化</span></h1>
+          <p class="ag-hero-sub">二十公斤、0.1–2000 MHz、一块琥珀色 CRT，以及一个能买辆车的价钱。这台机器是怎么造出来的、实测数据和 2026 年的旗舰差多少、什么地方会坏又怎么修，最后是一条分阶段路线图，收尾在"把 SDR 嫁接到 10.7 MHz 中频"上。</p>
+          <p class="ba-meta">BG1SB 撰稿 &nbsp;·&nbsp; <time datetime="2026-09-27">2026-09-27</time> &nbsp;·&nbsp; 约 16 分钟</p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#flagship">§01 这台旗舰</a><a href="#architecture">§02 架构</a><a href="#measured">§03 实测</a><a href="#aging">§04 如何老化</a><a href="#restore">§05 修复</a><a href="#sdr-graft">§06 SDR 嫁接</a><a href="#frontier">§07 前沿</a><a href="#verdict">§08 结论</a></nav></div></div>
+
+      <main class="ba-main">
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR——R9000 的六项要点</p>
+            <ul class="ba-tldr-list">
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>R9000 是 Icom 1989 年打出的一张牌：专业监听接收机的性能，只卖一半的价钱。</strong>100 kHz–1999.8 MHz 连续覆盖、四重变频、内置 CRT 频谱示波器，¥598,000 / US$4,795——Rohde &amp; Schwarz 的机器要贵三倍。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>它的实验室数据喜忧参半。</strong>Sherwood Engineering 实测：−131 dBm 底噪（在 HF 上仍然够用，因为大气噪声占主导），93 dB 宽带动态范围——但<strong>邻近动态范围只有 71 dB、合成器相位噪声 128 dBc/Hz</strong>，落后现代旗舰 25–39 dB。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>所有经典失效模式只有一个根因：热。</strong>无风扇的机箱慢慢"烤熟"自己的电解电容——REG 和 DC-DC 变换器的电容最先干涸，然后是 CRT 电路。琥珀色 CRT 会烧屏，而 Icom 已不再维修——换 LCD 是标准解法。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>R9000 的合成器和顶滤波器（roofing filter）至今没人改进过——不是没人想，是实在没有合理的下手之处。</strong>射频链路停在 1989 年，也会永远停在 1989 年；真正能追上 2026 年水平的，是混频器之后的部分。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>10.7 MHz 第二中频在 0.1–2000 MHz 整个频段内都是固定的</strong>，所以一个缓冲引出点加一台 $25–120 的 SDR，就能换来彩色瀑布图、同步 AM、任意数字滤波、降噪、校准 dBm S 表、录音和数字模式解码——这些 R9000 从来都没有过。</li>
+              <li><span class="ba-tldr-tag" data-claim-type="thesis">论点</span><strong>正确的终局是两套机器搭配着用。</strong>一台修好、换上 LCD、嫁接了 SDR 的 R9000（零件约 $400）负责 VHF/UHF、卫星和监听，保留 1989 年的操控手感；再加一台 $200 级的现代 SDR 去做那些吃邻近动态范围的 HF DX——那是老合成器给不了的。</li>
+            </ul>
+            <div class="ba-readpath"><span>3 分钟速读：</span><a href="#measured">§03 实测</a><a href="#sdr-graft">§06 SDR 嫁接</a><a href="#verdict">§08 结论</a></div>
+          </div>
+        </div>
+
+        <section id="flagship" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">01 · 定位</span>
+            <h2 class="ag-section-title">半价的专业监听接收机</h2>
+            <p class="ag-section-subtitle">Icom 为什么造了一台塞着显像管的 20 公斤接收机。</p>
+          </header>
+          <p>1989 年，Rohde &amp; Schwarz、Watkins-Johnson 或 Anritsu 的一台专业监听接收机，售价超过 ¥2,000,000。Icom 的答案是 IC-R9000：<strong>100 kHz 至 1999.8 MHz 连续覆盖、全模式、内置 5 英寸琥珀色 CRT 频谱示波器，售价 ¥598,000 / US$4,795</strong>——日本收藏家 JA4FUQ 在自己的长期使用报告里就这么说："不到一半价格的专业级性能"。</p>
+          <p>R9000 与同年代的 Icom 旗舰 HF 收发信机 IC-781 共享底盘和显示概念，但荷兰 Radio Netherlands / Medium Wave Circle 的评测团队确认，这台接收机并不是把 781"去掉末级功放"那么简单。它瞄准的是高端业余设备与政府监听设备之间的空档——而政府那边也看上了它。上世纪 90 年代中期，荷兰无线电监测局（RCD/AT）围绕 R9000 搭建了约二十套<strong>PAN-2000 移动截听系统</strong>，改动幅度很大：拆掉市电变压器减重、CRT 降功率运行省一安培电流、重新设计 AGC、把 10.7 MHz 中频改接到干净的 BNC 输出，再送进一台带 10 MHz 宽全景显示的 FFT 处理器。这批退役政府机大约在 2005–2007 年流入 surplus 市场。</p>
+          <p>CRT 版本生产于 1989–1998 年；1999–2006 年换成配 LCD 的 <strong>IC-R9000L</strong>，之后由 3 GHz 的 IC-R9500 接棒。在美国，蜂窝监听立法最终把销售限制给了政府买家。Icom 打算让你拿它做什么，看这四个天线口就知道了——HF 用 SO-239 和 RCA，30–1000 MHz 和 1–2 GHz 各用一个 N 型接头。</p>
+        </div></section>
+
+        <section id="architecture" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">02 · 内部</span>
+            <h2 class="ag-section-title">四重变频，一块 DSP 都没有</h2>
+            <p class="ag-section-subtitle">一套在 IF-DSP 诞生之前设计的中频矩阵。</p>
+          </header>
+          <p>R9000 是一台<strong>四重变频超外差</strong>接收机，第一中频随频段变化：30 MHz 以下为 48.8 MHz，30–500 MHz 为 778.6 MHz，500–1000 MHz 为 278.6 MHz，1 GHz 以上由变频单元下变。链路随后收敛到 10.7 MHz、455 kHz，再回到 10.7 MHz。所有滤波都由晶体滤波器和机械滤波器完成——打开底盖就能看到 FL-44A（±1.2 kHz）、FL-52A（±250 Hz）晶体滤波器和一族 CFW455 陶瓷滤波器。IF 移位和 50 dB 手动陷波都在模拟域实现。本振（LO）由 DDS 驱动，背后是 ±0.25 ppm 的温补晶振（TCXO）。</p>
+          <p>前端是离散器件堆出来的硬货：11 组二极管切换的 LPF/BPF 预选器组、一个 PIN 衰减器、30–1000 MHz 用四只 3SK121 双栅 MOSFET，1 GHz 以上用一颗 uPC1678G MMIC。灵敏度指标拿到今天也毫不含糊：<strong>HF SSB 0.16 µV（10 dB S/N）</strong>，1 GHz 以下 0.32 µV。</p>
+          <p>有两个设计细节决定了本文后面的一切：</p>
+          <ul>
+            <li><strong>10.7 MHz 第二中频在每个频段都是固定的。</strong>不管你听什么，从长波到 1.9 GHz，机内总有一处能取到这个信号的 10.7 MHz 版本——一个引出点就能覆盖整台机器。</li>
+            <li><strong>CRT 只是一台 NTSC 显示器。</strong>显示子系统吃的是复合视频信号，所以 CRT 换 LCD 只是换个接插件，算不上重新设计；也正因为如此，这台示波器连模拟电视画面都能显示。</li>
+          </ul>
+        </div></section>
+
+        <section id="measured" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">03 · 实验台</span>
+            <h2 class="ag-section-title">实测对比 2026 年旗舰</h2>
+            <p class="ag-section-subtitle">同一实验室、同一方法——Sherwood Engineering 的接收机测试表。</p>
+          </header>
+          <p>Rob Sherwood（NC0B）二十年来一直用同一套方法测接收机，也正因如此，他那张表才能把 1989 年的接收机和 2025 年的旗舰摆在同一条线上公平比较。下面是 R9000 与现代同类机型的对比：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead>
+              <tr><th>接收机</th><th>底噪</th><th>阻塞 @100 kHz</th><th>LO 相位噪声 @10 kHz</th><th>宽带动态范围 @20 kHz</th><th>邻近动态范围 @2 kHz</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>ICOM IC-R9000 (1989)</strong></td><td>−131 dBm</td><td>129 dB</td><td>128 dBc/Hz</td><td>93 dB</td><td><strong>71 dB @5 kHz</strong></td></tr>
+              <tr><td>ICOM IC-R9500 (2003)</td><td>−127 / −135</td><td>119 dB</td><td>134 dBc/Hz</td><td>110 dB*</td><td>85 dB*</td></tr>
+              <tr><td>ICOM IC-R8600 (2017)</td><td>−131 / −142</td><td>125 dB</td><td>144–148 dBc/Hz</td><td>109 dB</td><td>107 dB</td></tr>
+              <tr><td>ICOM IC-7760 (2025)</td><td>−133 / −142</td><td>122 dB</td><td>146–148 dBc/Hz</td><td>99 dB</td><td>99 dB</td></tr>
+              <tr><td>Yaesu FTdx-101D</td><td>−127 / −141</td><td>&gt;147 dB</td><td>154–155 dBc/Hz</td><td>110 dB</td><td>110 dB</td></tr>
+              <tr><td>Kenwood TS-890S</td><td>−131 / −141</td><td>&gt;151 dB</td><td>155–156 dBc/Hz</td><td>106 dB</td><td>105 dB</td></tr>
+              <tr><td>ICOM IC-7300（参考）</td><td>−133 / −141.5</td><td>123 dB</td><td>137–147 dBc/Hz</td><td>106 dB</td><td>97 dB</td></tr>
+            </tbody>
+          </table></div>
+          <p style="font-size:.9em;color:var(--text-secondary);">* Sherwood 表上给 R9500 的数据标了"受相位噪声限制"。现代机器的邻近动态范围按 2 kHz 间隔测量；R9000 按 5 kHz 测量——换到 2 kHz，得分还会更低。</p>
+          <p>从这张表能得出三个结论：</p>
+          <ul>
+            <li><strong>在 HF 上，底噪这一项的差距其实不算差距。</strong>−131 dBm 远低于任何 HF 频段的大气噪声。放到 2026 年，R9000 的灵敏度也不是问题。</li>
+            <li><strong>真正的差距在邻近动态范围和相位噪声。</strong>R9000 在 5 kHz 间隔下的 71 dB，输给一台 $300 的 IC-7300（2 kHz 间隔 97 dB），落后 FTdx-101D 整整 39 dB。在夜间拥挤的频段里，这 39 dB 的差距决定了你是能在两个强台之间听见那个弱台，还是只听见强台的裙边。</li>
+            <li><strong>这是时代的天花板，不是 R9000 的缺陷。</strong>连 Icom 自家 2003 年的旗舰 R9500，表上也标着受相位噪声限制。只有直接采样 SDR 和最新的混合超外差跳出了这个天花板。</li>
+          </ul>
+          <p>Radio Netherlands 评测团队 1989 年就给出了与之呼应的主观结论：以当时的标准看合成器噪声极低、窄 SSB 滤波器下实测动态范围 102 dB、有几个内部鸟台（574 kHz 是最出名的那个）、键盘局促——外加一句建议：这台机器的价钱，只有在你真的用上 VHF/UHF 覆盖、而不只是听 HF 的时候才花得值。</p>
+        </div></section>
+
+        <section id="aging" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">04 · 失效模式</span>
+            <h2 class="ag-section-title">R9000 如何老化：一个根因，五种症状</h2>
+            <p class="ag-section-subtitle">无风扇的"盒中盒"机箱烤熟了自己的电容。</p>
+          </header>
+          <p>每一个有完整文档的 R9000 故障，最后都能追到<strong>热</strong>上。线性电源和 DC-DC 变换器在密封机箱里高温运行——KD5OEI 的维修笔记收尾就是一句直白的建议："Icom 本该加个风扇。你应该加个风扇。"有位机主报告一次大修就换了九十颗电解电容；Klondike Mike's 也有这台机器的 197 颗电容全换套件在卖。下面这张症状对照表汇编自 Icom 官方服务 FAQ、YO9FZS 的维护专著和维修文献：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>症状</th><th>根因</th><th>修复</th></tr></thead>
+            <tbody>
+              <tr><td>静噪（squelch）不稳定，音量/静噪互相牵扯，S 表无法归零</td><td>屏蔽罩内 DC-DC 变换器的电解电容干涸（−12 V/−7 V 轨跌落）</td><td>更换 DC-DC 单元的电容，用 105 °C 器件</td></tr>
+              <tr><td>VHF/UHF 灵敏度下降，频段边缘更严重</td><td>REG 电源轨噪声超标，把前端变容二极管带得失谐</td><td>更换 REG 单元电容；检查 Q7/R32（TIP132 可替代 2SD1406）</td></tr>
+              <tr><td>画面乱码、丢失同步</td><td><strong>CRTC 板上的 C11</strong>，屏蔽罩里的高温把它烤干了</td><td>更换 C11（KD5OEI 的经典案例）</td></tr>
+              <tr><td>垂直卷边、线性度差</td><td>CRT 板上的 C407/C410；焊点开裂</td><td>低 ESR 105 °C 电容 + 重焊焊点</td></tr>
+              <tr><td>CRT 变暗、菜单烧屏</td><td>菜单长期静止不动，荧光粉磨损</td><td>换 LCD——Icom 不再维修 CRT，R9000L 也不例外</td></tr>
+              <tr><td>发热后 FM 啸叫，30–499 / 1000–1499 MHz</td><td>对温度敏感的 768 Hz VCO（PLL-B IC15）</td><td>更换 IC15</td></tr>
+              <tr><td>30 MHz 以上无接收，PLL 灯熄灭</td><td>PLL 失锁——基准、DDS 或 VCO 链路</td><td>按 Icom FAQ 链路排查：REG → 基准振荡器 → DDS → HPL</td></tr>
+              <tr><td>开机报数据错误，频率显示丢失</td><td>BR2032 记忆备份电池寿命到期（5–7 年）</td><td><em>不断电</em>更换——并联一个 3 V 电源，否则 RAM 内容丢失</td></tr>
+              <tr><td>调谐旋钮卡顿或跳变</td><td>光电编码器内的润滑脂硬化</td><td>拆解、清洁、重新润滑；开槽光栅盘很脆弱</td></tr>
+              <tr><td>有人硬插过 PL-259，30 MHz 以上灵敏度变差</td><td>N 型接头的中心针给撑开了</td><td>校直或更换接头</td></tr>
+            </tbody>
+          </table></div>
+          <p>买机器或动手修之前，有两条"行内常识"值得知道：很多 R9000 在政府机架上 24/7 跑了一辈子，烧屏和电容磨损的程度跟机器来历直接相关——尽量挑轻度使用的私人机。另外，村田那个年代的塑料壳 VCO 微调电容是 Icom 全系的已知隐患（745、751、781、R9000、970）；一旦失效，修起来的花销很快就上去了。</p>
+        </div></section>
+
+        <section id="restore" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">05 · 第 0 阶段</span>
+            <h2 class="ag-section-title">修复：这一步没有商量余地</h2>
+            <p class="ag-section-subtitle">机器恢复健康之前，任何升级都没有意义。</p>
+          </header>
+          <ol>
+            <li><strong>先加散热。</strong>在尾部散热片上装一把三速 120 mm 机箱风扇、用最低挡，从后面带开关的 12 V 插座取电——几乎听不见声音，实测也确实能把内部温度降下来；Sherwood 早年还卖过带风扇的整块替换尾板（$149，已停产）。光是这一项改造，就把后面几乎所有问题的根子给解决了。</li>
+            <li><strong>按故障分区换电容（recap），别盲目全换。</strong>先换 REG 单元和 DC-DC 变换器（105 °C、名牌器件）；显示板按需处理。有位老机主警告过，一次 197 颗电容的"地毯式全换"引进来的故障和修好的一样多——分区域施工，每一步之间都做验证。</li>
+            <li><strong>在记忆电池死之前换掉它。</strong>BR2032，更换时并联一个 3 V 电源。其实是两颗电池——还有一颗独立的时钟电池。</li>
+            <li><strong>保养编码器和接插件。</strong>给光电编码器重新上润滑脂；检查后部 N 型接头的中心针有没有被撑开。</li>
+            <li><strong>重新校准。</strong>按维修手册 §5-14 校准示波器中心频率和水平刻度、鉴频器中心，按 Icom FAQ 做 PLL 检查。</li>
+          </ol>
+        </div></section>
+
+        <section id="sdr-graft" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">06 · 核心动作</span>
+            <h2 class="ag-section-title">SDR 嫁接：一个引出点让混频器之后的一切现代化</h2>
+            <p class="ag-section-subtitle">10.7 MHz 中频在 0.1–2000 MHz 全频段固定。这就是那扇门。</p>
+          </header>
+          <p>事实证明，R9000 是嫁接中频的理想宿主：它只收不发（没有收发切换的问题），第二中频在每个频段都是 10.7 MHz，面板上甚至就有一个原厂中频输出。荷兰监测局 1995 年用硬件 FFT 盒子开创的这套架构，如今一只 $25 的 SDR 狗就能实现：</p>
+          <pre style="font-family:'JetBrains Mono',monospace;font-size:.85em;line-height:1.5;overflow-x:auto;">天线 → R9000 前端 + 混频器 (0.1–2000 MHz)
+              │
+              ├─ 原厂路径 → 模拟解调 → 扬声器（可选经 bhi DSP）
+              │
+              └─ 在第二混频器输出、10.7 MHz 滤波器之前引出
+                  → 高阻抗缓冲板（IFace / JFET 源极跟随器）
+                  → SDR（RTL-SDR v3 TCXO 或 SDRplay RSP1A）
+                  → PC：HDSDR / SDR Console（勾选频谱反转！）
+                      ├─ 彩色瀑布图，MHz 级宽度——取代 CRT 示波器
+                      ├─ 带 AFC 的 ECSS 同步 AM——R9000 从未有过
+                      ├─ 任意带宽数字滤波 + 自动陷波
+                      ├─ 降噪 / 噪声消隐器
+                      ├─ 校准 dBm S 表
+                      └─ RF/IF 录音、数字模式解码
+              CI-V (USB) → OmniRig，轮询 ≤100 ms：点击瀑布图，R9000 调谐</pre>
+          <p>工程注记，每一条都是前人用教训换来的：</p>
+          <ul>
+            <li><strong>在 10.7 MHz 滤波器之前引出。</strong>面板上的原厂 IF OUT 位于所选 IF 滤波器之后，所以只能看到该滤波器的带宽（WFM 下 ≤230 kHz）且受 AGC 控制。在第二混频器输出端引出——TSP Electronics 公布了 IFace 缓冲板的精确 R9000 引出点——才能拿到又宽又真实的频谱。</li>
+            <li><strong>用高阻抗缓冲。</strong>在 IF 上挂 50 Ω 负载会让机器接近全聋（Drake R-4B 上有完整记录，物理规律到哪儿都一样）。用 JFET 源极跟随器，或者正规的 IFace/PAT 缓冲板。</li>
+            <li><strong>R9000 的 IF 频谱是反的。</strong>在 HDSDR 中勾选"Swap I/Q"，或在 SDR Console 中选"Invert Spectrum"；在 AOR AR-DV1 硬件解码器上设 IF DIR = REV（这一条只在增补手册里有记载）。</li>
+            <li><strong>用 BNC 同轴，别用老的 RCA 视频线</strong>——有位玩家用错了电缆，光排查 10.7 MHz 上的损耗就搭进去一个下午。荷兰 RCD 做得更彻底：把 RCA 座整个换成 BNC，用特氟龙同轴直接焊到 IF 单元上，因为原厂走线会拾取杂散。</li>
+            <li><strong>对照 WWV 校准</strong>，并在 SDR 的 USB 线上套磁环，把电脑的接地噪声挡在机器之外。</li>
+          </ul>
+          <p>这次嫁接加上去的，不是花架子。同步检波（带 AFC 的 ECSS）能把 AM 广播音频从选择性衰落失真里救回来——这是 R9000 最缺、也是大家最看重的一项功能。任意数字带宽取代了四个固定滤波挡位。而把 AR-DV1 接在 IF 输出上，这台 1989 年的接收机不用电脑就能解码 DMR、dPMR、D-STAR 和 TETRA。</p>
+        </div></section>
+
+        <section id="frontier" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">07 · 前沿</span>
+            <h2 class="ag-section-title">没人做过的事——以及不该有人做的事</h2>
+            <p class="ag-section-subtitle">一张把改装文献里的空白如实标出来的地图。</p>
+          </header>
+          <p>把英、德、意、日、中文社区彻底梳理一遍之后，结果是：<strong>没有任何公开案例显示有人改进过 R9000 的合成器相位噪声，或更换过它 20 kHz 第一中频顶滤波器（roofing filter）</strong>。这些空白要说清楚，因为它们划出了后来者还能出力的地盘：</p>
+          <ul>
+            <li><strong>顶滤波器（roofing filter）（理论上价值最高的 RF 改装）。</strong>Inrad 已停产的 IC-781 套件——一个 6 极点 4–5 kHz 晶体滤波器加一块高动态范围反馈放大器，插在第一混频器之后——在那个平台上实测把 IMD 动态范围改善了 7–14 dB。想移植，就得为 R9000 的 48.8 MHz HF 第一中频定制晶体，还要解决它与宽带示波器和 WFM 模式的冲突。至今没人做到过。想当第一个的话，Inrad 的文档就是模板。</li>
+            <li><strong>合成器相位噪声（不现实）。</strong>DDS+PLL 矩阵把本振一路调到 2 GHz，还和 CI-V 控制系统深度耦合。要用现代低相位噪声器件重建它，实质上就等于重新设计一台接收机。这条路不用想。</li>
+            <li><strong>GPSDO 基准注入（一页空白）。</strong>PLL-B 单元上的基准振荡器是个合理的注入点，可以接入驯服过的 10 MHz 源，但目前没有任何公开改装。没有文档可循——就当成你自己的研究课题去做。</li>
+          </ul>
+          <p>除了保养和修复，<em>确实</em>还有两项有据可查的硬件升级。Sherwood 的滤波器逻辑改装让原本只在 SSB 下可用的 6 kHz 滤波器在 AM 模式下也能启用，AM 的带宽就从三种变成四种（15/9/6/3 kHz）。Sherwood 的 455 kHz 变换器板可以驱动 SE-3 Mk IV 同步检波器——想不靠电脑拿到同步 AM，这是最正统的一条路，售价 $695 外加安装费。还有一个零成本的操作技巧：做 FM DX 时，手动选 FM-W（30 kHz）而不是 WFM（150 kHz），大约能换来 14 dB 的 S/N。</p>
+        </div></section>
+
+        <section id="verdict" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">08 · 结论</span>
+            <h2 class="ag-section-title">R9000 在 2026 年哪里仍赢——哪里该交棒</h2>
+            <p class="ag-section-subtitle">修好它、给它散热、做嫁接——然后跟它搭配着用，而不是取代它。</p>
+          </header>
+          <p>所有测量做完之后，把账算清楚，结论如下：</p>
+          <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>维度</th><th>修复 + SDR 嫁接之后</th></tr></thead>
+            <tbody>
+              <tr><td>功能与操控手感</td><td><strong>持平或超过现代旗舰</strong>——瀑布图、同步 AM、任意滤波、降噪、录音、数字模式、远程联动</td></tr>
+              <tr><td>拥挤频段中的 HF 弱信号 DX</td><td>恢复到 1989 年的世界级水平——但邻近动态范围仍落后 2026 年 20–30 dB。这是物理决定的，不是没下功夫。</td></tr>
+              <tr><td>VHF/UHF/微波</td><td><strong>依然没有替代品</strong>——0.1–2000 MHz、四个天线口、1000 个记忆信道，以及现代 HF 机器没有的频谱显示</td></tr>
+              <tr><td>卫星</td><td>QO-100 经 PLL LNB 的 739 MHz 输出、GOES/Meteosat WEFAX 1691 MHz——两者都是原生支持，都汇入 SDR 链路</td></tr>
+              <tr><td>可靠性</td><td>换电容 + 散热 + LCD，能再撑二十年；CRT 这条路是死胡同，换掉它</td></tr>
+            </tbody>
+          </table></div>
+          <p>完整 DIY 路线的预算：风扇约 $30、电容套件约 $100、LCD 模组约 $140、IFace 缓冲板约 $60、RTL-SDR 约 $35、USB CI-V 线约 $25——<strong>约 $400</strong>，就能把一台二手 $1,500–2,000 的 R9000 变成一台 2026 年没有任何单一产品能复制的混合电台。Sherwood 的全套方案（滤波器改装 + SE-3 + 散热）当年报价接近 $1,300。</p>
+          <p>搭配建议：旁边放一台 $200 级的现代 SDR（Airspy HF+ Discovery 实测 MDS −141 dBm、阻塞动态范围 116 dB）负责 HF DX。R9000 则留住 VHF/UHF、卫星、监听，还有一点不能小看：Icom 模拟时代巅峰年份的声音与手感。这套组合比任何一台现代旗舰都便宜，而两边正好互补，各自补上了对方的短板。</p>
+          <p style="margin-top:1.5rem;"><em>RIG 系列下一篇：JRC NRD-535——Japan Radio Company 最后的全模拟旗舰，R9000 天然的 HF 搭档。</em></p>
+        </div></section>
+
+        <section id="sources" class="ag-section"><div class="container">
+          <header class="ag-section-header">
+            <span class="ag-section-label">09 · 资料来源</span>
+            <h2 class="ag-section-title">资料来源与延伸阅读</h2>
+          </header>
+          <ul>
+            <li><a href="http://www.sherweng.com/table.html">Sherwood Engineering 接收机测试表</a>——§03 全部可对比的实验室数据</li>
+            <li><a href="https://mwcircle.org/legacy-receiver-reviews/receiver-review-icom-ic-r9000/">Radio Netherlands / Medium Wave Circle IC-R9000 评测</a>——1989 年的权威评测</li>
+            <li><a href="https://www.qsl.net/icom/oldicomfaq/ic-r9000.html">Icom 官方 IC-R9000 服务 FAQ</a>——§04 失效模式对照表的来源</li>
+            <li><a href="http://www.radiomanual.info/schemi/ICOM_HF/IC-781_technical_and_maintenance_issues.pdf">YO9FZS：IC-781 与 IC-R9000 技术及维护问题</a></li>
+            <li><a href="https://bunkerofdoom.com/r9000/index.html">KD5OEI：CRTC C11 与 CRT 板维修</a></li>
+            <li><a href="https://www.cryptomuseum.com/df/icom/icr9000/mod.htm">Crypto Museum：荷兰 RCD 的 PAN-2000 改装</a></li>
+            <li><a href="https://www.tspelettronica.com/en/2020/06/29/panadapter-sdr-per-ic-r9000/">TSP Electronics：IFace 缓冲板的 R9000 IF 引出点</a></li>
+            <li><a href="http://forums.radioreference.com/threads/ic-r9000-digital-modes.475682/">RadioReference：R9000 IF → AR-DV1 数字解码（IF DIR = REV 技巧）</a></li>
+            <li><a href="http://www.sherweng.com/indepth.html">Sherwood SE-3 同步检波器</a>及<a href="https://web.archive.org/web/2018/http://www.sherweng.com/radios.html">R9000 滤波器逻辑与变换器改装</a>（存档）</li>
+            <li><a href="http://www.seidensha-ltd.co.jp/~seiden/ic-r9000.html">JA4FUQ 的 CRT→LCD 改装报告</a>（日文）——可逆的 DIY 路径</li>
+            <li><a href="https://www.inrad.net/product.php?productid=259">Inrad IC-781 顶滤波器（roofing filter）套件</a>——想认领那片无人前沿，这就是模板</li>
+          </ul>
+        </div></section>
+
+      </main>
+
+      <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+          <div class="ba-icon"><i class="fas fa-user"></i></div>
+          <div>
+            <h3>BG1SB</h3>
+            <p>业余无线电爱好者、软件工程师。打造 VLSC 开源远程控制生态，也在修复那些让他体会到什么是好工程的电台。</p>
+          </div>
+        </div>
+        <div class="blog-related">
+          <h3>RIG 系列</h3>
+          <ul>
+            <li><a href="/rig/">RIG——本专栏</a></li>
+            <li><a href="/rig/ic-r9000/">第 1 期：ICOM IC-R9000（即本文）</a></li>
+            <li><a href="/rig/nrd-535/">第 2 期：JRC NRD-535——最后的全模拟旗舰</a></li>
+            <li><a href="/blog/ft710-usb-remote-control/">博客：仅用一根 USB 线远程遥控 Yaesu FT-710</a></li>
+            <li><a href="/blog/efhw-esp32s3-auto-tuner/">博客：设计一台 ESP32-S3 舵机驱动的天线调谐器</a></li>
+          </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/rig/"><i class="fas fa-arrow-left"></i> 返回 RIG</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+      </div></footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=8" defer data-gn="1"></script>
+  </body>
+</html>

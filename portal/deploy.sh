@@ -124,7 +124,7 @@ done
 # Deliberately NOT chown -R / chmod -R "$REMOTE_WEBROOT": the DocumentRoot also
 # holds every sub-site, and chmod -R 755 used to mark all their files executable.
 sudo find "$REMOTE_WEBROOT" -maxdepth 1 -type f -exec sudo chmod 644 {} +
-for d in css js images blog zh; do
+for d in css js images blog zh rig; do
     if [ -d "$REMOTE_WEBROOT/$d" ]; then
         sudo find "$REMOTE_WEBROOT/$d" -type f -exec sudo chmod 644 {} +
         sudo find "$REMOTE_WEBROOT/$d" -type d -exec sudo chmod 755 {} +

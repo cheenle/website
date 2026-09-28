@@ -77,8 +77,8 @@
             <h2 class="ag-section-title">1990 年 6 月，设计于三鹰</h2>
             <p class="ag-section-subtitle">这段设计史，来自把它卖到北美的那个人。</p>
           </header>
-          <p>Paul Lannuier（WW2PT）主持 JRC 纽约办事处，把 NRD-535 带进了北美市场。他的私人笔记保存在 Internet Archive 里；想从内部视角看懂这台接收机，没有比它更近的材料。1990 年 6 月，他带着<strong>NRD-535 工程团队负责人 T. Shiono</strong> 绘制的 A 至 D 四版概念草图，飞赴 JRC 三鹰工厂参加设计评审。最终产品把概念 A 的凹面箭头按钮，同概念 B 的控制布局和曲面前面板合在了一起；概念 C 和 D 的前面板扬声器方案让 Lannuier 顶了回去，弧形的 S 表 LCD 液晶段则是他回到纽约之后才补上的。RS-232 指令集之所以比 NRD-525 的更完善，很大程度上是听了短波监听爱好者 Tom Sundstrom（W2XQ）的力劝。</p>
-          <p>同一批笔记里还留着 JRC 业余产品线中最妙的一段轶事：前身船用接收机 NRD-240 上有一个"自动扫描启动"（Automatic Scan Start）按钮，标的是 <strong>ASS</strong>。Lannuier 在设计评审会上恳求："拜托，别让我去推销一个带屁股按钮的产品！"这个按钮后来就取消了。</p>
+          <p>Paul Lannuier（WW2PT）主持 JRC 纽约办事处，把 NRD-535 带进了北美市场。他的私人笔记保存在 Internet Archive 里；想从内部视角看懂这台接收机，没有比它更近的材料。1990 年 6 月，他带着四版外观概念草图（评审前夕由<strong>NRD-535 工程团队负责人 T. Shiono</strong> 寄来，标为 A 至 D），飞赴 JRC 三鹰工厂参加设计评审。最终产品把概念 A 的凹面箭头按钮，同概念 B 的控制布局和曲面前面板合在了一起；概念 C 和 D 的前面板扬声器方案让 Lannuier 顶了回去，弧形的 S 表液晶段则是他回到纽约之后才补上的。RS-232 指令集之所以比 NRD-525 的更完善，很大程度上是听了短波监听爱好者 Tom Sundstrom（W2XQ）的力劝。</p>
+          <p>同一批笔记里还留着 JRC 业余产品线中最妙的一段轶事：当年在役的船用 GMDSS 接收机 NRD-240 上有一个"自动扫描启动"（Automatic Scan Start）按钮，标的是 <strong>ASS</strong>。Lannuier 在设计评审会上恳求："拜托，别让我去推销一个带屁股按钮的产品！"这个按钮后来就取消了。</p>
           <p>商业方面：1990/91 年上市，标准版 NRD-535 约 1,200 美元，NRD-535D 约 1,690 美元；WRTH 1992 年的评测说它"对认真的短波监听者物超所值"，1991 年的最佳通信接收机奖也给了 JRC——"高性能、出色的电脑连接能力和易用性，让它成为当之无愧的赢家。"北美从头到尾只卖 D 型；标准版 535 面向的是对价格更敏感的欧洲市场。标准版约在 1997 年停产，D 型在 1998 年停产。<strong>JRC 已于 2017 年终止对所有业余机型的维修支持。</strong></p>
         </div></section>
 
@@ -88,12 +88,12 @@
             <h2 class="ag-section-title">跟踪预选器、三重变频、1 Hz DDS</h2>
             <p class="ag-section-subtitle">模块化插拔板、离散器件射频，以及一块顺带容纳调谐编码器的显示屏。</p>
           </header>
-          <p>信号路径：天线 → 35 MHz 低通 → 继电器切换的 20 dB 衰减器（单挡，实测 20.6 dB）→ <strong>变容二极管调谐的七频段跟踪预选器</strong>，微处理器让它的中心频率一路跟着接收频率走 → 射频放大 → 第一混频器 → <strong>70.455 MHz</strong> 第一中频（高侧注入以抑制镜像）→ 455 kHz 第二中频，双带宽噪声消隐器就在这一级 → 可切换的中频滤波器组 → BWC 级 → <strong>97 kHz</strong> 第三中频，可调陷波器、通带平移（±1 kHz，经电脑可达 ±2 kHz）和 ECSS 同步检波都在这一级 → 检波器。AGC 电压在 97 kHz 上生成。开关电源，100–240 VAC 或 12–16 VDC。</p>
+          <p>信号路径：天线 → 35 MHz 低通 → 继电器切换的 20 dB 衰减器（只有一档，实测 20.6 dB）→ <strong>变容二极管调谐的七频段跟踪预选器</strong>，微处理器让它的中心频率一路跟着接收频率走 → 射频放大 → 第一混频器 → <strong>70.455 MHz</strong> 第一中频（高侧注入以抑制镜像）→ 455 kHz 第二中频，双带宽噪声消隐器就在这一级 → 可切换的中频滤波器组 → BWC 级 → <strong>97 kHz</strong> 第三中频，可调陷波器、通带平移（±1 kHz，经电脑可达 ±2 kHz）和 ECSS 同步检波都在这一级 → 检波器。AGC 电压在 97 kHz 上生成。开关电源，100–240 VAC 或 12–16 VDC。</p>
           <p>有三个架构层面的事实，决定了后文的一切：</p>
           <ul>
             <li><strong>全模块化插拔板。</strong>整机只靠四个接插件跟主板相连——对这一级别的接收机来说，维护和升级都友好得出奇。</li>
             <li><strong>显示单元（CDE-705）里还包含调谐编码器接口。</strong>维修手册把"调谐旋钮不改变频率"这条故障指向<em>显示板上</em>的 PG1 和 IC7。所以显示屏出故障不只是外观问题——它可能连调谐功能一起带走。</li>
-            <li><strong>RS-232C 是标配</strong>（DB-25，4800 8N1）：36 项功能可远程控制，包括回读 S 表。它不像 90 年代的大多数竞品，不需要接口盒。</li>
+            <li><strong>RS-232C 是标配</strong>（DB-25，4800 8N1）：36 项功能可远程控制，包括回读 S 表。不像 90 年代的大多数竞品，它不需要接口盒。</li>
           </ul>
           <p>滤波器位置：WIDE（原装为村田 CLF-D6，−6 dB 处约 8 kHz——后被 5.7 kHz 的 CLF-D6S 取代）、INTER（2 kHz 机械滤波器，实测约 2.6 kHz）、NARR（1 kHz，需 CFL-233 选件）、AUX（空置，默认 12 kHz）。可选晶体滤波器：CFL-231 240 Hz、CFL-232 500 Hz、CFL-233 1 kHz、CFL-218A 1.8 kHz、CFL-251 2.4 kHz。</p>
         </div></section>
@@ -111,7 +111,7 @@
               <tr><td><strong>NRD-535D</strong></td><td>同一副机身，出厂即装有 CMF-78（ECSS）、CFL-243（BWC）和 CFL-233（1 kHz）。北美销售的唯一版本。</td><td>面板上有 ECSS 和 BWC 控制</td></tr>
               <tr><td><strong>"NRD-535Db"</strong></td><td>不是官方型号——是经销商给<strong>序列号 BR56005</strong> 之后机器的叫法，这批机器有三处出厂改动：BWC 在 AM 模式及宽滤波器下也可用；CLF-D6S（5.7 kHz）取代过宽的 CLF-D6（8 kHz）；带 RS-232 修正的"D"版 EPROM。更早的机器可用套件（滤波器 + BWC 晶体 + EPROM）升级；升级后的板子编号为 <strong>CFL-243W</strong>。</td><td><strong>AM 模式下 BWC 对 WIDE 滤波器起作用吗？</strong>起作用，说明已装升级。</td></tr>
               <tr><td><strong>NRD-535DG</strong></td><td>欧洲版 535D——构造完全相同。"G" = 欧洲（220 V 预设、欧规电源线），"U" = 北美；后缀只印在包装箱上，机身上从来没有。</td><td>看包装箱/市电预设</td></tr>
-              <tr><td><strong>NRD-535GS</strong></td><td>Gilfer × Kiwa 的 DX 机型，1995–97 年销售，$1,659.95（带 ECSS 为 $1,869.95）——"大概只卖了几十台"。以原厂非 D 版 535 为基础：INTER 位装 Kiwa 定制 3.5 kHz 陶瓷滤波器（取代 2.2 kHz），NARR 位装 CFL-251 2.4 kHz，AUX 位在 300/500/1k/1.8 kHz 中任选，<strong>后面板加一个可完全旁路 AUX 滤波级的拨动开关</strong>以获得完整的 12 kHz 节目音频，AGC 衰减更快、音频高频截止抬高、上台校准过、Gilfer 一年保修。</td><td>后面板的旁路拨动开关；Kiwa 文档</td></tr>
+              <tr><td><strong>NRD-535GS</strong></td><td>Gilfer × Kiwa 的 DX 机型，1995–97 年销售，$1,659.95（带 ECSS 为 $1,869.95）——"大概只卖了几十台"。以原厂非 D 版 535 为基础：INTER 位装 Kiwa 定制 3.5 kHz 陶瓷滤波器（取代 2.2 kHz），NARR 位装 CFL-251 2.4 kHz，AUX 位在 300/500/1k/1.8 kHz 中任选，<strong>后面板加一个可完全旁路 AUX 滤波级的拨动开关</strong>以获得完整的 12 kHz 节目音频，AGC 衰减更快、音频高频截止抬高、每台出厂前做过台架检测与频率校准、Gilfer 一年保修。</td><td>后面板的旁路拨动开关；Kiwa 文档</td></tr>
             </tbody>
           </table></div>
           <p>GS 为什么在 2026 年还重要：它是一份<strong>经过商业验证、至今仍能逐件复刻的升级配方</strong>——凭下面这张滤波器对照表和一个拨动开关就能做到。</p>
@@ -141,10 +141,10 @@
           <ul>
             <li><strong>−135 dBm 和 0.1 µV 把 535 排在灵敏度第一梯队</strong>——好过 R9000，与开着前置放大器的现代机器相当。反正在 HF 上这不成问题：大气噪声远在它之上。</li>
             <li><strong>相位噪声（117 dBc/Hz）是家族天花板。</strong>525 实测 120，DSP 时代的 545 实测 118。现代机器在 144–156。改装文献中没有任何方案触及这一项。</li>
-            <li><strong>近旁性能上 NRD-515 赢了 535</strong>——2 kHz 间隔 77 dB，对 535 的 5 kHz 间隔 70 dB。515 的 0.8 倍频程前端和 80 dB 滤波器极限抑制，在跟踪预选器帮不上忙的地方赢了下来。这也提醒我们：在这个家族里，"更新"不等于"更好"。</li>
+            <li><strong>邻近动态范围这一项，NRD-515 赢了 535</strong>——2 kHz 间隔 77 dB，对 535 的 5 kHz 间隔 70 dB。515 的 0.8 倍频程前端和 80 dB 滤波器极限抑制，在跟踪预选器帮不上忙的地方赢了下来。这也提醒我们：在这个家族里，"更新"不等于"更好"。</li>
             <li><strong>滤波器极限抑制（70 dB）是唯一真正能补救的数字</strong>——现代机器实测 100–115 dB，§06 整节讲的就是如何用今天仍买得到的零件缩小这个差距。</li>
           </ul>
-          <p>荷兰 WRTH/Radio Netherlands 的实验台补充了几条保留意见：经 2.6 kHz 滤波器实测动态范围 88 dB（换 300 Hz 选件为 98 dB，厂标 106 dB），30 kHz 间隔下三阶截点 +2 dBm，陷波深度约 25 dB（厂标 40 dB），S 表在 S5 以下纹丝不动，衰减器只有单独一挡 20 dB，以及显示屏辐射的噪声约为 525 的三倍。</p>
+          <p>荷兰 WRTH/Radio Netherlands 的实验台补充了几条保留意见：经 2.6 kHz 滤波器实测动态范围 88 dB（换 300 Hz 选件为 98 dB，厂标 106 dB），30 kHz 间隔下三阶截点 +2 dBm，陷波深度约 25 dB（厂标 40 dB），S 表在 S5 以下纹丝不动，衰减器只有 20 dB 一档，以及显示屏辐射的噪声约为 525 的三倍。</p>
         </div></section>
 
         <section id="aging" class="ag-section"><div class="container">
@@ -169,8 +169,8 @@
               <tr><td>旋钮太轻、转过头；前面板按键时灵时不灵</td><td>带配重的旋钮阻尼太小；计算器式的小轻触开关</td><td>刻度盘后垫毛毡垫圈；用酒精清洁开关（都是通用件）</td></tr>
             </tbody>
           </table></div>
-          <p>这些故障背后的零件市场已经关门。Universal Radio 的二手库存单上，共用的 CFH-36 中频滤波板 $89.95（已售出），NRD-525 数据 I/O 板和 loop 板 $22–90，一块 NRD-515 显示板 $34.95——但没有 535 的显示单元。<strong>CSY &amp; SON 那批 350 欧元的 NRD-535 备件库存（含两台 CDE-705 显示单元）现在标注"不再供应"。</strong>还能指望的只有：Klondike Mike's 的电容套件（70 颗，装了 BWC 和 ECSS 再加 40 颗）、日本拍卖市场上的选件板（CMF-78 ECSS 约 ¥4,800；CFL-243 BWC ¥14,000–35,000），以及拆机件来源机。</p>
-          <p>所以买机器时第一件事就是查显示屏，而且要留够时间查，冷机热机都要查。一台显示屏发暗的 535，不过是长着一副漂亮面板的拆机件来源机。</p>
+          <p>这些故障背后的零件市场已经关门。Universal Radio 的二手库存单上，共用的 CFH-36 中频滤波板 $89.95（已售出），NRD-525 数据 I/O 板和 loop 板 $22–90，一块 NRD-515 显示板 $34.95——但没有 535 的显示单元。<strong>CSY &amp; SON 那批 350 欧元的 NRD-535 备件库存（含两台 CDE-705 显示单元）现在标注"不再供应"。</strong>还能指望的只有：Klondike Mike's 的电容套件（70 颗，装了 BWC 和 ECSS 再加 40 颗）、日本拍卖市场上的选件板（CMF-78 ECSS 约 ¥4,800；CFL-243 BWC ¥14,000–35,000），以及从报废机上拆下来的零件。</p>
+          <p>所以买机器时第一件事就是查显示屏，而且要留够时间查，冷机热机都要查。一台屏幕发暗的 535，本质上只是一台长着漂亮面板的拆机件库。</p>
         </div></section>
 
         <section id="filters" class="ag-section"><div class="container">
@@ -230,7 +230,7 @@ RS-232C（DB-25，标配）→ RXCommander / rxcontrol.org / OmniRig
             <li><strong>DRM 改装作为一条 12 kHz 声卡通道依然可用</strong>——虽然 DRM30 广播如今已经萎缩到只剩屈指可数的几部发射机（主要是 All India Radio）。2003 年的作者报告说，欧洲 10 kHz 宽的 DRM 发射上信噪比最高达到 30 dB，并留下一句至今成立的论断："这些接收机特性在 DRM 时代仍将至关重要：它们决定了你是收得好，还是根本收不到。"</li>
             <li><strong>电脑控制不用额外硬件。</strong>RXCommander（HB9RXC，仍在线）附带 CMH-532 与 CBO-232 接口手册和 NRD-535 CAT 协议文档；rxcontrol.org 的免费 V1.3.6 能用键盘驱动全部功能、显示频段规划、自动选择滤波器带宽和检波模式，还能导入频率文件。这也是你的<strong>显示屏故障应急预案</strong>：VFD 黑屏之后，这台机器仍能从电脑上完整使用。</li>
           </ul>
-          <p>嫁接能带来：全频段瀑布图（535 从来没有任何频谱显示）、I/Q 域的降噪和陷波（掌握的信息远超音频 DSP）、校准过的 dBm 读数、录音——还有显示屏之外的另一条活路。它带不来：近旁动态范围和相位噪声。那两项在 1990 年就定死了。</p>
+          <p>嫁接能带来：全频段瀑布图（535 从来没有任何频谱显示）、I/Q 域的降噪和陷波（掌握的信息远超音频 DSP）、校准过的 dBm 读数、录音——还有显示屏之外的另一条活路。它带不来：邻近动态范围和相位噪声。那两项在 1990 年就定死了。</p>
         </div></section>
 
         <section id="verdict" class="ag-section"><div class="container">
@@ -239,7 +239,7 @@ RS-232C（DB-25，标配）→ RXCommander / rxcontrol.org / OmniRig
             <h2 class="ag-section-title">留着它、换滤波器、做嫁接——并为显示屏备好预案</h2>
             <p class="ag-section-subtitle">2016 年的一次试听仍把它排第一。2026 年的任务是让它活着。</p>
           </header>
-          <p>SWLing Post 上登过一篇四机半盲测——1991 年的 NRD-535 对阵 AOR AR7030、Icom IC-R75 和一台 Bonito RadioJet 1102S SDR，同一个晚上、同一副天线——测试者把 <strong>NRD-535 排在了第一</strong>，理由是"易用，而且能从 QRM 里挖出可用的信号"。说到数字滤波，他写道 SDR 和 Icom"声音发干，有时还在哨音底下添上脆响，相比之下整体听感更差"。他的总结是："年龄不是障碍。"</p>
+          <p>SWLing Post 上登过一篇四机同场对比——1991 年的 NRD-535 对阵 AOR AR7030、Icom IC-R75 和一台 Bonito RadioJet 1102S SDR，同一个晚上、同一副天线——测试者把 <strong>NRD-535 排在了第一</strong>，理由是"易用，而且能从 QRM 里挖出可用的信号"。说到数字滤波，他写道 SDR 和 Icom"声音发干，有时还在哨叫声里添上啪嗒声，相比之下整体听感更差"。他的总结是："年龄不是障碍。"</p>
           <p>一台修复并升级后的 535，把账算清楚，结论如下：</p>
           <div class="ag-table-wrap"><table class="ag-table">
             <thead><tr><th>维度</th><th>完工后落在哪里</th></tr></thead>
@@ -255,7 +255,7 @@ RS-232C（DB-25，标配）→ RXCommander / rxcontrol.org / OmniRig
           </table></div>
           <p>预算：修复（电容套件、电池、校准）$100–200；滤波器 $129–400；ECSS 板在日本市场约 ¥4,800；IFace + SDR $60–150。合计<strong>约 $400–700</strong>——照上面这些证据看，这台接收机的听感仍然胜过市面上在售的许多机器。</p>
           <p>前沿的情况再说白一点：没有人公布过可用的 CDE-705 显示屏替代方案——LED 段驱动没有、小尺寸 LCD 面板没有、从 NRD-545 移植也没有。谁做成了，谁就解决了那个决定这些接收机能不能活过下一个十年的唯一问题。动手之前有一件麻烦事值得知道：<strong>调谐编码器接口就在同一块板上</strong>，所以任何替代方案都得带上 PG1 和相关逻辑，而不只是把那几个数字显示出来。</p>
-          <p style="margin-top:1.5rem;"><em>两台都有的机主这样搭配：NRD-535 是 HF 的耳朵——安静、灵敏、有音乐感。IC-R9000 是 VHF/UHF 的眼睛——0.1–2000 MHz，带频谱显示。近旁动态范围上，两台都替代不了现代 SDR，也都别去试。</em></p>
+          <p style="margin-top:1.5rem;"><em>两台都有的机主这样搭配：NRD-535 是 HF 的耳朵——安静、灵敏、有音乐感。IC-R9000 是 VHF/UHF 的眼睛——0.1–2000 MHz，带频谱显示。邻近动态范围上，两台都替代不了现代 SDR，也都别去试。</em></p>
         </div></section>
 
         <section id="sources" class="ag-section"><div class="container">
@@ -291,10 +291,10 @@ RS-232C（DB-25，标配）→ RXCommander / rxcontrol.org / OmniRig
         <div class="blog-related">
           <h3>RIG 系列</h3>
           <ul>
-            <li><a href="/rig/">RIG——本专栏</a></li>
-            <li><a href="/rig/ic-r9000/">第 1 期：ICOM IC-R9000——1989 年旗舰解剖</a></li>
-            <li><a href="/rig/nrd-535/">第 2 期：JRC NRD-535（即本文）</a></li>
-            <li><a href="/blog/psk-reporter-dxcc-hunting/">博客：用 PSK Reporter 猎新 DXCC</a></li>
+            <li><a href="/rig/zh/">RIG——本专栏</a></li>
+            <li><a href="/rig/ic-r9000/zh/">第 1 期：ICOM IC-R9000——1989 年旗舰解剖</a></li>
+            <li><a href="/rig/nrd-535/zh/">第 2 期：JRC NRD-535（即本文）</a></li>
+            <li><a href="/blog/psk-reporter-dxcc-hunting/zh/">博客：用 PSK Reporter 猎新 DXCC</a></li>
           </ul>
         </div>
         <div class="blog-prevnext"><a href="/rig/ic-r9000/zh/"><i class="fas fa-arrow-left"></i> 第 1 期：IC-R9000</a><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a></div>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaesu FT-710: The Deep Reference — Architecture, Lab Numbers, Firmware, Pitfalls | VLSC</title>
+    <meta name="description" content="The deep reference on the Yaesu FT-710: direct-sampling architecture, Sherwood and ARRL lab numbers against the FTdx10, IC-7300, IC-7610 and K3S, the full firmware history, every documented pitfall, and the remote-control ecosystem — including the spectrum channel this site reverse-engineered.">
+    <meta name="keywords" content="Yaesu FT-710, FT-710 AESS, FT-710 Field, direct sampling SDR, Sherwood dynamic range, FT4222 spectrum, SCU-LAN10, wfview, Hamlib 1049, CAT protocol, firmware V01-12, amateur radio">
+    <meta name="author" content="BG1SB">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Yaesu FT-710: The Deep Reference — Architecture, Lab Numbers, Firmware, Pitfalls">
+    <meta property="og:description" content="Two widespread myths corrected, the full Sherwood row, the FTDX10 comparison, firmware history to V01-12, and every remote-control path ranked.">
+    <meta property="og:url" content="https://www.vlsc.net/rig/ft710/">
+    <meta property="og:site_name" content="VLSC Projects">
+    <link rel="canonical" href="https://www.vlsc.net/rig/ft710/">
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/rig/ft710/">
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/rig/ft710/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/rig/ft710/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/octen.css?v=6">
+    <link rel="stylesheet" href="../../css/agentic.css?v=2">
+    <link rel="stylesheet" href="../../css/blog-article.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Yaesu FT-710: The Deep Reference",
+      "description": "Architecture, lab measurements, firmware history, known issues and the remote-control ecosystem of the Yaesu FT-710 direct-sampling SDR transceiver.",
+      "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+      "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+      "datePublished": "2026-09-28",
+      "dateModified": "2026-09-28",
+      "about": { "@type": "Product", "name": "Yaesu FT-710", "brand": { "@type": "Brand", "name": "Yaesu" } }
+    }
+    </script>
+</head>
+<body data-site="portal">
+    <nav class="navbar"><div class="container navbar-content">
+        <a href="/" class="logo"><span class="logo-icon"><i class="fas fa-satellite-dish"></i></span><span>VLSC<span style="color:var(--accent);">·</span>Projects</span></a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/#projects">Projects</a></li>
+            <li><a href="/blog/">Blog</a></li><li><a href="/rig/">RIG</a></li>
+            <li><a href="/agentic.html">Agentic</a></li>
+            <li><a href="/engineering.html">Engineering</a></li>
+            <li><a href="/rig/ft710/">FT-710</a></li>
+            <li><a href="https://github.com/cheenle" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
+        </ul>
+        <div class="nav-actions"><a href="/rig/ft710/zh/" class="lang-btn">中文</a><button class="mobile-menu-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button></div>
+    </div></nav>
+
+    <header class="ag-hero"><div class="ag-hero-inner">
+        <div class="hero-badge"><i class="fas fa-microchip"></i><span>RIG Companion · Radio Deep Reference</span></div>
+        <h1>Yaesu FT-710<br><span class="gradient">What a Modern SDR Subtracted — and What That Bought</span></h1>
+        <p>No roofing filters. No physical sub-tuning ring. No built-in RTTY/PSK decoder. No LAN port. Yaesu took the FTDX101's direct-sampling idea, removed almost everything analog from the receive path, and landed a receiver that measures 107 dB of close-in dynamic range at 2 kHz spacing — third on Sherwood Engineering's table, and the only sub-$1,100 radio to break 100 dB. This page is the reference we wish existed when we built our own remote-control stack for it: architecture, two independent lab datasets, the full firmware history, every documented pitfall, and all seven remote paths ranked.</p>
+        <div class="ag-hero-stats" aria-label="Key figures">
+            <span class="ag-pill"><i class="fas fa-wave-square"></i> 107 dB DR3 @2 kHz</span>
+            <span class="ag-pill"><i class="fas fa-display"></i> 4.3-inch resistive touch</span>
+            <span class="ag-pill"><i class="fas fa-weight-hanging"></i> 4.5 kg · 100 W</span>
+            <span class="ag-pill"><i class="fas fa-tag"></i> $900–1,100 street</span>
+        </div>
+    </div></header>
+
+    <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="Page sections">
+        <a href="#corrections">Corrections</a><a href="#versions">Versions</a><a href="#architecture">Architecture</a><a href="#measured">Measured</a><a href="#ftdx10">vs FTDX10</a><a href="#firmware">Firmware</a><a href="#issues">Known issues</a><a href="#remote">Remote &amp; CAT</a><a href="#ecosystem">Ecosystem</a><a href="#buying">Accessories &amp; buying</a><a href="#sources">Sources</a>
+    </nav></div></div>
+
+    <main>
+    <section class="ag-section" id="corrections"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">00 · Start here</span>
+            <h2 class="ag-section-title">Two "facts" about the FT-710 that are simply wrong</h2>
+            <p class="ag-section-subtitle">Both circulate widely online. Neither survives contact with Yaesu's own product page.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>The myth</th><th>The fact</th><th>Where it comes from</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>"10.1-inch touchscreen"</strong></td>
+                    <td><strong>4.3-inch</strong> TFT colour <strong>resistive</strong> touch panel (10.9 cm diagonal, ~95×56 mm active area, glove-operable)</td>
+                    <td>Yaesu's product page says "High Resolution 4.3-inch TFT Color Touch Panel Display"; QST, DX Engineering and RadioMasterList agree. The myth appears to come from reading the <em>10.9 cm</em> diagonal as inches. The largest screen Yaesu sells is the FTDX101's 7-inch panel — no 10.1-inch model exists.</td>
+                </tr>
+                <tr>
+                    <td><strong>"300 kHz real-time spectrum"</strong></td>
+                    <td>Scope span is <strong>1 kHz–1 MHz selectable</strong>, 30 FPS refresh, 100 dB display range</td>
+                    <td>Yaesu brochure: "sweep speed 30 FPS, range 100 dB, span width 1-1000 kHz"; confirmed by ab4oj's independent bench notes. <em>300 kHz</em> is the FTDX10 / FTDX101 figure.</td>
+                </tr>
+            </tbody>
+        </table></div>
+        <div class="ba-tldr" style="margin-top:2rem;"><div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> The radio in six findings</p>
+            <ul class="ba-tldr-list">
+                <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Close-in dynamic range is the headline, and it is real.</strong> Sherwood measures 107 dB DR3 at 2 kHz spacing (ARRL: 106 dB), third on the whole table — and it barely changes with spacing: 107 dB at 20 kHz, 106.5 dB at 2 kHz, a 0.5 dB drop. An IC-7300 loses 9 dB over the same range.</li>
+                <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>The noise floor is not the strong suit.</strong> −127 dBm with IPO (preamp off) is 6 dB worse than an IC-7300's −133 dBm. Preamp 1 brings it to −135 dBm, which then beats the 7300. "The FT-710 is quieter" is false as stated.</li>
+                <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Blocking is the structural weak point: 129 dB.</strong> Capped by ADC overload protection that triggers above roughly +1 dBm at the antenna (≈ S9+74 dB). FTdx10 measures 141 dB, K3S 150 dB, TS-890S over 151 dB.</li>
+                <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>AESS and Field are the same radio.</strong> Identical RF hardware, firmware and specifications; the only difference is the bundled accessories — SP-40 external speaker (AESS) versus carrying belt and handle kit (Field).</li>
+                <li><span class="ba-tldr-tag" data-claim-type="inference">Inference</span><strong>There is no IP+ switch because the dither never turns off.</strong> The FPGA injects PRBS noise ahead of the converters permanently. When comparing against Icom numbers, use their <code>ab</code> (IP+ ON) figures for dynamic range and the unfootnoted figures for noise floor — mixing conventions inverts the conclusion.</li>
+                <li><span class="ba-tldr-tag" data-claim-type="fact">Fact</span><strong>Firmware stopped at V01-12 (2024-02-29)</strong> — two and a half years without an update as of September 2026, while Yaesu's 2025 FTX-1 gets frequent releases. Check the installed version before buying; RT Systems software requires ≥ V01-10 and SCU-LAN10 requires ≥ V01-11.</li>
+            </ul>
+        </div></div>
+    </div></section>
+
+    <section class="ag-section" id="versions"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">01 · Line-up</span>
+            <h2 class="ag-section-title">AESS, Field, and the Japanese-only variants</h2>
+            <p class="ag-section-subtitle">One radio, two accessory bundles, and an import trap.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th></th><th>FT-710 AESS</th><th>FT-710 Field</th></tr></thead>
+            <tbody>
+                <tr><td><strong>SP-40 external speaker</strong></td><td>Included — pairs with the internal 65 mm top speaker as the AESS acoustic system (DSP crossover, 700–1000 Hz adjustable, side-mountable)</td><td>Not included; optional ($75–125)</td></tr>
+                <tr><td><strong>Carrying belt / handle kit</strong></td><td>Not included</td><td>Included</td></tr>
+                <tr><td>SSM-75E hand mic, DC cord + spare fuse, manual</td><td>Included</td><td>Included</td></tr>
+                <tr><td>Power supply</td><td>Not included</td><td>Not included</td></tr>
+                <tr><td><strong>RF hardware, firmware, specifications, every lab number</strong></td><td colspan="2" style="text-align:center"><strong>Identical</strong> — Field is not "missing AESS", it can take the SP-40 later</td></tr>
+            </tbody>
+        </table></div>
+        <p>Two practical notes: the SP-40 mounted on the left side <strong>blocks the SD card slot</strong>; and Field units appeared in European retail around late 2023, after the Japanese release of 2023-07-01.</p>
+        <p><strong>The import trap.</strong> Japan also sells the <strong>FT-710M (50 W)</strong> and <strong>FT-710S (10 W, 20 W on 6 m)</strong> at the same ¥154,000 as the 100 W model. Units that surface on auction sites as "FT-710" and refuse to go above 50 W or 10 W — with the power digits turning yellow — are these board-limited variants. The cap cannot be removed.</p>
+        <p><strong>Coverage and regional limits.</strong> RX 30 kHz–75 MHz continuous (guaranteed specs on 1.8–29.7 and 50–54 MHz); TX on the amateur bands 1.8–54 MHz, 5–100 W (AM carrier 5–25 W). Transmit on 70–70.5 MHz (4 m) is UK-version only; UK/European firmware C2 can open 5.250–5.406 MHz. US units ship with 15 preset 60 m memories plus an Alaska emergency channel (5.1675 MHz, within 92.6 km, SSB, ≤150 W PEP); a MARS/CAP expansion extends TX to 1.8–30 MHz (HRO offers the mod for $39.95). Stability ±0.5 ppm after one minute of warm-up. Made in Japan, three-year US warranty.</p>
+    </div></section>
+
+    <section class="ag-section" id="architecture"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">02 · Inside</span>
+            <h2 class="ag-section-title">Pure direct sampling: dual 14-bit converters, an FPGA, and two DSP cores</h2>
+            <p class="ag-section-subtitle">QST's framing: "Unlike the higher-priced FTDX10 and FTDX101D/MP, it's a direct-sampling SDR rather than a hybrid design with roofing filters."</p>
+        </header>
+        <pre style="font-family:'JetBrains Mono',monospace;font-size:.85em;line-height:1.55;overflow-x:auto;">Antenna (SO-239)
+  → preselector — continuous half-octave bandpass, not strictly per-band
+  → attenuator  OFF / 6 / 12 / 18 dB   (remembered per band)
+  → IPO (bypass) / AMP1 (≈10 dB) / AMP2 (≈20 dB)
+  → dual-channel 14-bit ADC   (third-party teardown: TI ADS62P45, I/Q pair — Yaesu has never published the part)
+  → FPGA — combines the two converter streams, DDC, generates the PRBS dither, builds the FFT scope
+  → NXP dual-core 32-bit floating-point DSP, 594 / 198 MHz
+      filtering · demodulation · DNR · NB · DNF · CONTOUR · APF · AGC
+  → DAC → audio, 2.5 W @ 4 Ω
+
+Transmit runs the other way: mic → codec → DSP → digital UP-converter in the FPGA
+  → high-speed DAC produces the excitation directly at the final transmit frequency → PA</pre>
+        <p>The clock is a <strong>250 MHz HRDDS</strong> with a ±0.5 ppm TCXO. ab4oj's aliasing tests put the effective converter rate at <strong>62.5 MHz</strong> (125 MHz to the converters after division); RadCom describes the transmit DAC as running at 250 MHz. The receive chain is a direct-sampling superhet with a <strong>digital low IF of 18 kHz (SSB/CW) or 24 kHz (AM/FM)</strong>, which is why Sherwood's table lists "First IF rejection: N/A" — there is no first IF to reject.</p>
+        <p>Three design decisions explain the measurements:</p>
+        <ul>
+            <li><strong>Two converters, combined digitally.</strong> Yaesu: the FPGA combines the signals "to reduce overload and overflow of the A/D converters and improve blocking characteristics."</li>
+            <li><strong>Always-on dither.</strong> The FPGA injects pseudo-random noise before conversion to suppress quantization error and improve IMD. There is <strong>no menu item to disable it</strong> — no IP+ equivalent. Front-end gain is IPO/AMP1/AMP2 plus the four attenuator steps, nothing else.</li>
+            <li><strong>No roofing filter, therefore no filter options to buy.</strong> Selectivity is entirely DSP: SHIFT/WIDTH/NOTCH/CONTOUR/APF/DNR/NB, CW bandwidth down to 50 Hz. This is the architectural difference from a K3S or FTDX10, and it is the reason the close-in numbers hold up while far-out blocking suffers.</li>
+        </ul>
+        <p>Protection behaviour, measured two ways: ab4oj found soft overload beginning near <strong>+2 dBm</strong> at the input (BDR 128 dB by his method); RadCom measured front-end gain compression starting around <strong>+1 dBm</strong> with IPO (10/20 dB lower with AMP1/AMP2). Sherwood's blocking figure of 129 dB is a 3 dB gain-compression point at 100 kHz spacing, and he notes explicitly that a signal above +1 dBm — nominally S9+74 dB — trips the protection circuit. <strong>There is no ADC overload (OVF) indicator</strong>, which ab4oj lists as a gap versus other direct-sampling rigs.</p>
+        <p>Marketing says "band-pass filters dedicated for the amateur bands"; ab4oj, citing the service manual plus his own sweep, reports <strong>continuous half-octave coverage with no in-band/out-of-band difference</strong> — trust the measurement. Below 1.7 MHz an 8 dB pad is inserted; sensitivity rolls off under 500 kHz and is down more than 30 dB at 200 kHz.</p>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Physical &amp; electrical</th><th>Specification</th><th>Measured (ARRL)</th></tr></thead>
+            <tbody>
+                <tr><td>Size</td><td colspan="2">239 × 80 × 247 mm (9.4 × 3.1 × 9.7 in, with protrusions)</td></tr>
+                <tr><td>Weight</td><td colspan="2">4.5 kg (9.92 lb)</td></tr>
+                <tr><td>Power</td><td>13.8 V ±15%; RX 1.8 A / 2.2 A, TX 100 W 21 A</td><td>RX 1.4 A (max brightness/volume); TX 100 W 18.2 A; TX 5 W 6.0 A</td></tr>
+                <tr><td>Latency</td><td>—</td><td>RX processing 25 ms (SSB); TX delay 21 ms; PTT release→50% audio 33 ms (SSB), 64 ms (CW full break-in); amp keying line→RF 15 ms</td></tr>
+                <tr><td>Internal ATU</td><td colspan="2">Relay-chain, 1.8–50 MHz, 16.7–150 Ω (HF) / 25–100 Ω (6 m), VSWR 3:1 (2:1 on 6 m), 100 memories; supports FC-40 and ATAS antennas</td></tr>
+                <tr><td>Audio</td><td>2.5 W @ 4 Ω, 10% THD</td><td>THD 0.20% at 1 VRMS</td></tr>
+                <tr><td>Display out</td><td colspan="2"><strong>DVI-D</strong>, 800×480 or 800×600, plus USB mouse/keyboard — QST's complaint: current monitors ship with HDMI/DisplayPort</td></tr>
+                <tr><td>Scope</td><td>1 kHz–1 MHz span, 30 FPS, 100 dB range, 3DSS, audio FFT/scope</td><td>Waterfall sensitivity −106/−113/−125 dBm (IPO/P1/P2); 3DSS −108/−117/−128 dBm; <strong>no averaging, no VBW</strong> — flagged by both Sherwood and ARRL</td></tr>
+            </tbody>
+        </table></div>
+    </div></section>
+
+    <section class="ag-section" id="measured"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">03 · Lab bench</span>
+            <h2 class="ag-section-title">Two independent labs, one consistent story</h2>
+            <p class="ag-section-subtitle">Sherwood's row for S/N 2J020104 (tested 2022-10-01, factory firmware), plus ARRL's QST re-measurement.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Parameter</th><th>FT-710 (Sherwood)</th><th>Notes</th></tr></thead>
+            <tbody>
+                <tr><td>Noise floor</td><td>−127 / −135ᵇ / −140⁶ dBm</td><td>IPO / preamp on / 6 m with preamp</td></tr>
+                <tr><td>AGC threshold</td><td>4.0 / 1.40 / 0.38 µV</td><td><strong>Highest in the comparison set, and not adjustable.</strong> Sherwood's preference is 2.5 µV with preamp off</td></tr>
+                <tr><td>Blocking @100 kHz</td><td>129 dB</td><td>3 dB gain compression; capped by ADC overload protection</td></tr>
+                <tr><td>Sensitivity (SSB, 10 dB S+N/N)</td><td>0.66 / 0.23 / 0.13 µV</td><td>IPO / P1 / P2 — the weakest IPO figure in the set</td></tr>
+                <tr><td>LO phase noise</td><td>150 dBc/Hz @10 kHz, 154 @30 kHz</td><td><strong>Not @50 kHz</strong>: beyond −154 dBc/Hz the overload protection trips, so no third-party 50 kHz figure exists</td></tr>
+                <tr><td>Front-end selectivity</td><td>B — bandpass</td><td>No tracking preselector</td></tr>
+                <tr><td>Filter ultimate rejection</td><td>108 dB</td><td>2400 Hz filter measured 2415/3073 Hz at −6/−60 dB, 109 dB ultimate; 500 Hz and 250 Hz filters 108 dB</td></tr>
+                <tr><td>DR3 wide / narrow</td><td><strong>107 dB @20 kHz / 107 dB @2 kHz</strong></td><td>Only 0.5 dB of spacing sensitivity in IPO; 105 dB across all spacings in P1, 101 dB in P2</td></tr>
+                <tr><td>S-meter</td><td>S9 = 80 µV (IPO) / 28 µV (P1) / 8 µV (P2)</td><td>Preamp 1 = 10 dB, Preamp 2 = 20 dB; 3 dB per S unit</td></tr>
+            </tbody>
+        </table></div>
+        <p>Sherwood's own caveat applies to every ranking on his table: he sorts by close-in dynamic range at 2 kHz because it is "the acid test for CW &amp; RTTY contest / DX pile-up operation", but "it is WRONG to interpret this single measurement as being representative for the overall performance of the radio."</p>
+        <p><strong>ARRL's QST re-measurement agrees within 1 dB</strong> — DR3 106 dB at 2 kHz, blocking 128 dB, RMDR 116 dB at 2 kHz, noise floor −127 dBm — with one disclosure that matters when quoting those numbers: the review sample initially failed to meet specifications, Yaesu traced it to <strong>a defective component inside the SDR unit and replaced the whole SDR board</strong>, after which it passed easily. That is first-hand evidence about early-batch QC.</p>
+        <h3 style="margin:2rem 0 1rem;">Against the field (Sherwood table, 2026-08-01 revision)</h3>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Radio</th><th>Noise floor<br>IPO/P1/P2</th><th>Blocking</th><th>LO noise<br>@10k/@50k</th><th>Filter<br>ultimate</th><th>DR wide<br>@20k</th><th>DR narrow<br>@2k</th><th>Street price</th></tr></thead>
+            <tbody>
+                <tr><td>Yaesu FTdx-101D/MP</td><td>−127/−136/−141</td><td>&gt;147</td><td>154 / 155</td><td>&gt;115</td><td>110</td><td><strong>110</strong></td><td>$3,500+</td></tr>
+                <tr><td>Yaesu FTdx10</td><td>−126/−135/−140</td><td>141</td><td>152 / 153</td><td>105</td><td>107</td><td>107</td><td>$1,650</td></tr>
+                <tr><td><strong>Yaesu FT-710</strong></td><td><strong>−127/−135/−140</strong></td><td><strong>129</strong></td><td><strong>150 / 154@30k</strong></td><td><strong>108</strong></td><td><strong>107</strong></td><td><strong>107</strong></td><td><strong>~$1,030</strong></td></tr>
+                <tr><td>Icom IC-7300</td><td>−133/−140.5/−141.5</td><td>123</td><td>137 / 147</td><td>&gt;100</td><td>106ᵃᵇ</td><td>97ᵃᵇ</td><td>~$1,000</td></tr>
+                <tr><td>Icom IC-7300 Mk2</td><td>−133/−141/−142</td><td>122–124</td><td>143–144 / 145–147</td><td>&gt;100</td><td>87–89ᵃᵇ</td><td>87–89ᵃᵇ</td><td>2025-11 launch</td></tr>
+                <tr><td>Icom IC-7610</td><td>−132/−140/−142</td><td>122 (119ᵃᵇ)</td><td>145–146 / 148–149</td><td>110</td><td>96–98ᵃᵇ</td><td>96–98ᵃᵇ</td><td>$3,500–3,900</td></tr>
+                <tr><td>Elecraft K3S</td><td>−135/−138/−145</td><td>150</td><td>144 / 146</td><td>110</td><td>107ᵠ</td><td>106ᵖ/ᵠ</td><td>$2,900 (100 W)</td></tr>
+                <tr><td>Kenwood TS-890S</td><td>−131/−140/−141</td><td>&gt;151</td><td>155 / 156</td><td>&gt;118</td><td>106</td><td>105</td><td>—</td></tr>
+                <tr><td>Xiegu G90 (reference)</td><td>—</td><td>116</td><td>113 / 134</td><td>—</td><td>78</td><td>76</td><td>$500</td></tr>
+            </tbody>
+        </table></div>
+        <p style="font-size:.9em;color:var(--text-secondary);">ᵃᵇ = measured with Icom's IP+ (dither) ON — the correct comparison against the FT-710, whose dither is always on. With IP+ off, the IC-7610 drops to 76 dB and the IC-7300 to 84 dB. ᵖ/ᵠ = K3S figures depend on the optional crystal roofing filters, a different mechanism from the FT-710's pure DSP filtering.</p>
+        <p><strong>Read the table by dimension, not by rank:</strong></p>
+        <ul>
+            <li><strong>Close-in DR — the FT-710 wins its class.</strong> 107 dB at 2 kHz: 18–20 dB above an IC-7300 Mk2, 10 dB above an IC-7300, 9 dB above an IC-7610 that costs three times as much. Only the FTdx-101D measures higher.</li>
+            <li><strong>Blocking — clearly behind.</strong> 129 dB sits just at Sherwood's "130 dB is a good number" line, 12 dB below the FTdx10 and 21–22 dB below a K3S or TS-890S — though still 6–7 dB above all three Icoms. ARRL confirmed the mechanism: the FT-710's blocking is essentially identical at 2, 5 and 20 kHz offsets (127–128 dB), because it is set by the converter's absolute overload point rather than by filter spacing.</li>
+            <li><strong>Noise floor and sensitivity — the other soft spot.</strong> −127 dBm and 0.66 µV in IPO are the weakest in the set; Preamp 1 is not optional on 10 m if you want quiet-rural weak-signal work.</li>
+            <li><strong>Phase noise — genuinely strong.</strong> 150 dBc/Hz at 10 kHz is 13 dB better than an IC-7300, 6–7 dB better than an IC-7300 Mk2, 4 dB better than an IC-7610; only the FTdx10, FTdx-101D and TS-890S measure higher.</li>
+            <li><strong>AGC threshold — worst in class and fixed.</strong> 4.0 µV with IPO against Sherwood's preferred 2.5 µV. All three Yaesu models share this trait.</li>
+        </ul>
+        <p>One comparability trap worth repeating: <strong>never place the FT-710's 107 dB next to an Icom's <code>ac</code> (dither-off) figure.</strong> Dynamic range compares against <code>ab</code>, noise floor against the unfootnoted value. Get this wrong and the ranking inverts.</p>
+    </div></section>
+
+    <section class="ag-section" id="ftdx10"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">04 · The upgrade question</span>
+            <h2 class="ag-section-title">FT-710 versus FTDX10: what the extra $600 buys</h2>
+            <p class="ag-section-subtitle">Sherwood's summary of his own long report: on 20 metres the two are "almost identical" in noise floor, AGC threshold, sensitivity and dynamic range.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Dimension</th><th>FT-710</th><th>FTDX10</th></tr></thead>
+            <tbody>
+                <tr><td>Receive architecture</td><td><strong>Pure direct sampling</strong>: dual 14-bit converters, FPGA combining, always-on dither, no roofing filter</td><td><strong>Hybrid</strong>: analog mixing to a 9 MHz IF with switchable roofing filters (300/500/1000 Hz…); a separate wideband path feeds the scope only</td></tr>
+                <tr><td>Blocking @100 kHz</td><td>129 dB</td><td><strong>141 dB</strong> — the roofing filter's advantage</td></tr>
+                <tr><td>Close-in DR @2 kHz</td><td><strong>107 dB</strong></td><td>107 dB — a tie</td></tr>
+                <tr><td>Noise floor (IPO/P1/6 m)</td><td>−127 / −135 / −140 dBm</td><td>−126 / −135 / −140 dBm</td></tr>
+                <tr><td>Filter ultimate</td><td><strong>108 dB</strong> (deeper digital filtering)</td><td>105 dB</td></tr>
+                <tr><td>DSP</td><td><strong>NXP</strong> dual-core 32-bit float, 594/198 MHz</td><td>TI DSP</td></tr>
+                <tr><td>Screen</td><td>4.3-inch touch</td><td>5-inch touch</td></tr>
+                <tr><td>Built-in CW/RTTY/PSK decoders</td><td><strong>No</strong></td><td>Yes</td></tr>
+                <tr><td>Weight</td><td><strong>4.5 kg</strong></td><td>5.9 kg</td></tr>
+                <tr><td>Amp keying connector</td><td><strong>8-pin mini-DIN</strong> (generic)</td><td>10-pin mini-DIN (harder to source)</td></tr>
+                <tr><td>Network remote</td><td>SCU-LAN10 over a <strong>single USB-B cable</strong></td><td>SCU-10LAN (dedicated multi-core cable)</td></tr>
+                <tr><td>Internal ATU</td><td><strong>Yes</strong>, 100 memories</td><td>No — needs FC-40 or similar</td></tr>
+                <tr><td>Main tuning knob</td><td>No sub-dial ring; 200 steps per revolution</td><td>Concentric sub-ring (clarifier etc.)</td></tr>
+                <tr><td>Price (Sept 2026)</td><td>~$1,030</td><td>$1,649.95</td></tr>
+            </tbody>
+        </table></div>
+        <p><strong>The short version:</strong> the FTDX10 buys far-out and out-of-band blocking with a physical 9 MHz IF and roofing filters. The FT-710 answers with a newer NXP DSP, always-on dither and dual-converter combining to <em>tie</em> the close-in figure, while being lighter, cheaper, deeper-filtering (108 vs 105 dB), and fitted with an ATU. It gives up 12 dB of blocking, the decoders, and screen size. Sherwood adds a subjective line worth quoting: "Overall the ergonomics of the 710 are better than the FTdx10." One eHam reviewer (W8RMV) sold his FTDX10 for an FT-710 over DNF/NB distortion complaints that NC0B and N4HNH had also raised.</p>
+        <p><strong>Choose by use, not by rank:</strong> serious CW contesting or SO2R → FTDX10 or K3S. Value, portability, transmit audio and a modern waterfall at $1,000 → FT-710. Two receivers or a 7-inch screen → IC-7610 / FTDX101 — noting that the IC-7610 measures 98 dB close-in against the FT-710's 107 dB at a third of the weight in your wallet. Ultralight SOTA at $500 → Xiegu G90 (78/76 dB, a different class entirely).</p>
+    </div></section>
+
+    <section class="ag-section" id="firmware"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">05 · Firmware</span>
+            <h2 class="ag-section-title">Six releases, then silence</h2>
+            <p class="ag-section-subtitle">Four separate firmware images — MAIN, DISPLAY, DSP, SDR — updated from an SD card.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Release</th><th>MAIN / DSP / SDR</th><th>What changed</th></tr></thead>
+            <tbody>
+                <tr><td>2022-09 shipping</td><td>pre-V01-06 (unpublished)</td><td>Factory firmware — the fixes below say what it needed</td></tr>
+                <tr><td>2022-11-15</td><td><strong>V01-06</strong> / V01-00 / V01-03</td><td>11 items: 28 MHz CW key-up noise; COM baud rate locked to 4800 with PRESET on; <strong>possible TX failure with a VL-1000 amplifier</strong>; record/playback freeze; headphone battery curve; external key delay; <strong>straight key could not send CW</strong>; bug-key anomaly; partial PC-keying loss in CW/CW-AUTO; baud-rate change not taking effect</td></tr>
+                <tr><td>2022-12-06</td><td><strong>V01-08</strong></td><td>Four CW fixes: internal keyer delay and extra characters; short sidetone with BK-IN off; CW AUTO not offsetting the transmit frequency. (V01-07 was never released publicly.)</td></tr>
+                <tr><td>2023-03-29</td><td><strong>V01-09</strong> / V01-01 / V01-04</td><td>14 items: AESS saved per mode; <strong>DNR character improved — removes the 1–7 "water" artefacts ARRL had noted</strong>; MIC EQ wrongly applied in DATA; QMB recall; band-stack loss after power-off; cursor memory; TUNER icon; CAT support for PMS; FA/FB repeater offsets; CAT-AI output during PRESET; EX command port selection; <strong>abnormal responses to consecutive CAT commands</strong></td></tr>
+                <tr><td>2023-07-06</td><td><strong>V01-10</strong></td><td>3 items: <strong>USB mouse scroll-wheel support</strong>; CAT bug fixes. RT Systems programming software requires this version or later.</td></tr>
+                <tr><td>2023-11-02</td><td><strong>V01-11</strong></td><td>5 items: <strong>SCU-LAN10 network remote support</strong> (LAN unit firmware ≥ V3.00); hand-mic MCH not saving; CAT pop-up change; TSQL wrongly enabled outside FM. From this release the update covers all six variants (710/M/S × AESS/Field).</td></tr>
+                <tr><td>2024-03-01 <em>(current)</em></td><td><strong>V01-12</strong></td><td>4 items: RTTY monitor-tone bug; <strong>echo on transmit audio when SCU-LAN is connected</strong>; 50 MHz repeater offset default 1 MHz → 500 kHz (US changelog)</td></tr>
+            </tbody>
+        </table></div>
+        <p><strong>Two and a half years without a release</strong> as of September 2026 — while Yaesu's 2025 FTX-1 keeps getting updates. QRZ forum users read this as a deliberate product-cycle choice. No firmware release ever changed the receive dynamic-range figures: the improvements were DNR, SCU-LAN10, mouse support, CAT and keying noise. (Sherwood's 107 dB was measured on SDR V01-03, ARRL's 106 dB on V01-04 — within sample scatter, which Sherwood puts at under 6 dB.)</p>
+        <p><strong>Update procedure traps</strong> — most bricked-update reports come from these four:</p>
+        <ol>
+            <li><strong>Update DISPLAY first.</strong> Yaesu's own warning: "If the MAIN firmware is updated first, the transceiver may not work properly."</li>
+            <li><code>.SFL</code> files go in the <strong>SD card root</strong> — not in Capture/MemList/Menu/PlayList — and the card must be <strong>formatted in the radio first</strong>.</li>
+            <li>Reset afterwards: power off, hold <strong>[DSP REST] + [FINE/FAST]</strong> while powering on; success shows 7.000.000 MHz.</li>
+            <li>No Windows required for the firmware itself (any OS can copy to the card), though Yaesu's programming software is Windows-only.</li>
+        </ol>
+    </div></section>
+
+    <section class="ag-section" id="issues"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">06 · Field experience</span>
+            <h2 class="ag-section-title">Known issues, ranked by how often they actually bite</h2>
+            <p class="ag-section-subtitle">From eHam's 78 reviews, QRZ, Reddit, groups.io and two lab reports. No recalls, no service bulletins, no safety notices exist for this model.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>#</th><th>Issue</th><th>What the evidence says</th><th>What to do</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td><strong>Fan runs long in RX, and some find it noisy</strong></td><td>Starts roughly 15–20 minutes after power-on and then keeps running even with no transmission (QST observed the same timing). One eHam reviewer had two units spin from cold start to shutdown, returned them, and reports "Yaesu reluctantly acknowledged it as a known issue". Other owners (W8RMV, NT9M, K8DXX) never noticed it.</td><td>Conservative cooling is the design; sensitivity to it is individual and concentrated in early batches. <strong>If fan noise matters to you, power the radio cold and listen before buying.</strong> Owners swap in a Noctua fan with good reports, or calibrate via the service menu (BAND + QMB + NAR at power-on).</td></tr>
+                <tr><td>2</td><td><strong>Full-power FT8 can destroy the PA</strong></td><td>Yaesu USA's FT8 setup guidance suggests ≤50 W for digital modes, but <strong>the operating manual contains no such limit</strong> — wsjtx.groups.io has a thread asking where the 50 W figure comes from. A documented failure: 50 consecutive FT8 cycles at 75 W left a radio "spraying harmonics on every band, every mode".</td><td>Treat it as unofficial but prudent guidance: derate for 100%-duty-cycle modes. Do not write it as a manual requirement.</td></tr>
+                <tr><td>3</td><td><strong>USB / CAT / digital-mode configuration pitfalls</strong></td><td>The single USB-B cable enumerates a dual-UART bridge, so Windows shows two ports and <strong>you must pick the "Enhanced" one</strong>; some users need a different port number per application. Setting the Windows USB audio device to 48 kHz breaks transmit audio — <strong>it must be 44100 Hz / 16-bit</strong> with enhancements off. Early CAT instability at 38400 bps (the 2022 "Hate my FT-710" thread) was fixed in V01-09.</td><td>See the full checklist in §07 — these are configuration problems, not hardware faults.</td></tr>
+                <tr><td>4</td><td><strong>ARRL's review sample had a defective SDR board</strong></td><td>The unit failed initial testing; Yaesu found a bad component inside the SDR unit and replaced the board, after which it passed easily.</td><td>First-hand evidence about early-batch QC. Quote ARRL's numbers with this context.</td></tr>
+                <tr><td>5</td><td><strong>Items never officially fixed</strong> (Toru Kato's 2023 list)</td><td>Paddle-to-tone delay; DNR unusable above level 4; audio discontinuities; <strong>RF POWER not configurable per band</strong>, so a careless QSY can overdrive an external amplifier; BK-IN and RF POWER menu nesting; <strong>CW AUTO enabled blocks transmit in USB-PRESET (FT8)</strong> — PTT and monitor audio present but no RF out, workaround is to turn CW AUTO off; slow TXW response for split.</td><td>V01-10 through V01-12 do not map onto these items and the community reports no confirmation of fixes. Assume most remain.</td></tr>
+                <tr><td>6</td><td><strong>Ergonomics complaints</strong></td><td>No backlighting on the top-panel buttons or legends; the STEP/MCH combined knob feels cheap and skips steps (one owner got a replacement unit from the factory with the same behaviour and solved it with a third-party CatMeters knob); clarifier is a single cycling key that takes three presses to switch off and occupies the main VFO; the peak power meter's hold cannot be disabled; DSP functions (Contour/APF) are buried in menus; the italic frequency font and top-mounted buttons have their detractors.</td><td>Subjective but consistent. Try before buying if any of these matter.</td></tr>
+                <tr><td>7</td><td><strong>S-meter reads low</strong></td><td>A 36-upvote thread reports strong signals only reaching S5.</td><td>Calibration convention, not a fault: the meter is calibrated in AMP1, so IPO reads about 12 dB lower. Sherwood measured S9 = 80 µV at IPO, 28 µV at P1.</td></tr>
+                <tr><td>8</td><td><strong>Power button behaviour</strong></td><td>Needs a ~2-second hold; powering back on immediately after shutdown may not respond for 10–30 seconds (a RadioReference user reproduced it systematically and attributes it to internal supply settling).</td><td>Normal. Wait before retrying.</td></tr>
+                <tr><td>9</td><td><strong>Radio shuts down mid-transmission</strong></td><td>Community consensus: supply voltage sag from undersized wiring or an inadequate supply. TX at 100 W draws about 21 A nominal (18.2 A measured).</td><td>Use a 25–35 A supply and heavy leads.</td></tr>
+                <tr><td>10</td><td><strong>ATU limits mistaken for a fault</strong></td><td>The internal tuner handles 3:1 (16.7–150 Ω). Wide-impedance antennas such as a G5RV will not tune on 15/12/10 m; at least one owner sent a healthy radio in for repair over this.</td><td>Know the range; add an FC-40 or a wider-range third-party tuner for such antennas.</td></tr>
+            </tbody>
+        </table></div>
+        <p><strong>Equally important — what we could not find:</strong> no official recall, free-repair programme or safety notice (searched Yaesu Japan/US, hamlife.jp timeline, QRZ, Reddit, groups.io); no reports of systematic internal birdies (one documented spur turned out to appear on a second FT-710 400 m away, i.e. an external source); no cluster of touchscreen failures; no widespread clock-drift or frequency-offset complaints. Yaesu USA's support line even has a dedicated "SDR HF Technical Support" menu option.</p>
+    </div></section>
+
+    <section class="ag-section" id="remote"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">07 · Control</span>
+            <h2 class="ag-section-title">One USB cable, four devices — and no LAN port</h2>
+            <p class="ag-section-subtitle">Yaesu's own page has promised network remote "available in the near future" since launch; today it still requires the external SCU-LAN10.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>What the USB-B cable enumerates</th><th>Chip</th><th>Used for</th></tr></thead>
+            <tbody>
+                <tr><td>Enhanced COM port (<strong>CAT-1</strong>)</td><td>Silicon Labs CP210x dual UART</td><td>CAT commands, 38400 bps (menu-adjustable)</td></tr>
+                <tr><td>Standard COM port (<strong>CAT-2</strong>)</td><td>Same bridge, second UART</td><td>PTT / CW keying / digital modes, or a second CAT channel; 4800 bps default</td></tr>
+                <tr><td>USB audio codec</td><td>C-Media</td><td>44.1 kHz RX and TX audio — no external sound card needed</td></tr>
+                <tr><td><strong>SPI spectrum bridge</strong></td><td>FTDI FT4222H (USB ID <code>0403:601c</code>)</td><td>Scope data. <strong>Not documented by Yaesu</strong> — this site reverse-engineered it (see §08)</td></tr>
+            </tbody>
+        </table></div>
+        <p>A third CAT path exists: the TUNER/LINEAR port can switch to 5 V TTL serial CAT at 38400 bps with the optional CT-58 cable, but it is mutually exclusive with an external tuner or amplifier. Otherwise the rear panel carries USB-A (keyboard/mouse), DVI-D, the SD slot, 6-pin mini-DIN (RTTY/DATA), 8-pin mini-DIN (tuner/linear/second CAT), 3.5 mm KEY / REM-ALC / EXT SPKR / PHONES and an RJ-45 mic jack. There is no RS-232 port as such, no separate receive antenna jack and no transverter output.</p>
+        <h3 style="margin:2rem 0 1rem;">CAT lineage — useful when software lacks a profile</h3>
+        <p>The protocol (CAT manual OM 2306-C) is Yaesu's two-letter ASCII set with fixed-length fields and a semicolon terminator — <code>FA014250000;</code> sets VFO-A to 14.25 MHz. Ham Radio Deluxe's knowledge base states plainly that <strong>FT-991A and FT-710 commands are identical apart from three new AESS commands</strong>, which is why HRD tells FT-710 owners to use the FT-991A profile. (That same article's title says FTDX10 while its body says FT-991A — trust the body.) Because CAT exposes <code>FA</code> and <code>FB</code> as independent frequency commands, the FT-710 has no SO2V limitation of the kind N1MM documents for the IC-7300's CI-V.</p>
+        <h3 style="margin:2rem 0 1rem;">SCU-LAN10 versus the built-in USB path</h3>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th></th><th>Built-in USB (one cable)</th><th>SCU-LAN10 ($299.95)</th></tr></thead>
+            <tbody>
+                <tr><td>Hardware</td><td>None beyond the cable</td><td>Ethernet unit that plugs into the radio's <strong>rear USB port</strong> (not ACC), powered by SAD-25B or E-DC-6, 9–16 V ≥800 mA</td></tr>
+                <tr><td>Transport</td><td>CAT + audio + spectrum on one cable</td><td>Four UDP streams on ports <strong>50000–50003</strong> (radio control, CAT, audio, spectrum); internet use requires forwarding all four</td></tr>
+                <tr><td>Bandwidth</td><td>—</td><td>≥2 Mbps unit→PC, ≥1.2 Mbps PC→unit</td></tr>
+                <tr><td>Clients</td><td>Anything: Hamlib, FLRig, WSJT-X, wfview, N1MM+, this site's MRRC — cross-platform</td><td><strong>Windows 10/11 only</strong> (SCU-LAN10_Software_V0300)</td></tr>
+                <tr><td>Digital modes</td><td>Fully supported via the radio's USB codec</td><td><strong>FT8 not officially supported</strong> — users resort to virtual sound cards into JTDX (RX works, TX is awkward) or a second computer at the radio</td></tr>
+                <tr><td>Firmware</td><td>None required</td><td><strong>MAIN ≥ V01-11 + LAN unit firmware V3.00 + Software V0300 must all be updated together</strong> or it will not work</td></tr>
+            </tbody>
+        </table></div>
+        <p>Timeline note: at launch the SCU-LAN10 did not support the FT-710 at all (a 2023-10 Reddit thread is titled exactly that); support arrived with V01-11 in November 2023.</p>
+        <h3 style="margin:2rem 0 1rem;">The pitfall checklist that saves an evening</h3>
+        <ol>
+            <li>Windows USB audio device: <strong>44100 Hz, 16-bit</strong>, enhancements off. The "studio quality" 48 kHz default breaks TX audio.</li>
+            <li><strong>CAT-1 TIME OUT TIMER: change 10 ms → 1000 ms.</strong> The factory value is short enough that <code>?;</code> queries get wrongly rejected.</li>
+            <li><strong>MOD SOURCE must be AUTO</strong>, or remote PTT keys the radio with no modulation.</li>
+            <li>DATA modulation source = USB; select DATA-U/L explicitly where needed.</li>
+            <li><strong>Remote CW keying: do not rely on the CAT <code>KY</code> command</strong> (carrier comes up but elements get lost). Use per-element DTR keying on CAT-2 (USB KEYING (CW) = DTR, CW BK-IN = ON/SEMI). On Linux some <code>cdc_acm</code> drivers cannot control DTR and will leave the radio <em>stuck transmitting</em> — if that happens, set USB KEYING (CW) to OFF.</li>
+            <li><strong>The internal ATU cannot be triggered over CAT.</strong> No such command exists; you must press TUNE on the panel.</li>
+            <li>Counter-intuitive: <strong>enable the "SCU-LAN10" menu item even with no hardware attached</strong> — that switch is what turns on USB spectrum output.</li>
+            <li>Pick the <strong>Enhanced</strong> COM port for CAT; the Standard one is for keying/PTT. Different applications may need different port numbers.</li>
+            <li>Linux: add a udev rule for <code>0403:601c</code>; CAT uses the CP2105 <code>if00</code> interface at 38400 bps. RF in the shack can travel back down the USB cable and crash CAT — one user needed eight ferrites.</li>
+            <li>WSJT-X has been reported to emit a short transmit burst right after a band change; keep an eye on it during contests.</li>
+        </ol>
+    </div></section>
+
+    <section class="ag-section" id="ecosystem"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">08 · Software</span>
+            <h2 class="ag-section-title">The ecosystem, and the spectrum channel nobody documented</h2>
+            <p class="ag-section-subtitle">Where support stands in 2026, and what this site contributed.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Software</th><th>Status</th><th>Notes</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Hamlib / rigctld</strong></td><td>Model <strong>1049</strong>, first added in Hamlib 4.5 (2022-10-30)</td><td>Rides Yaesu's shared <code>newcat</code> backend: <code>rigctld -m 1049 -r /dev/ttyUSB1 -s 38400 --vfo</code>. Known gaps: passband setting (<code>set_mode USB 2700</code>) does not take effect in 4.6.5/4.7.0 (issue #2021); <code>IF;</code> read error (#1550). POTACAT reports power and several controls unreliable over Hamlib and recommends native serial CAT.</td></tr>
+                <tr><td><strong>wfview</strong></td><td>Yaesu support added in <strong>v2.20 (2026-02-01)</strong>: FT-710 and FTX-1</td><td>Not Yaesu software — an open project by W6EL/M0VSE and others, originally for Icom. Supports USB direct and network via SCU-LAN10; the manual states FT-710 support "is beta at this time". v2.21 fixed a missing <code>ftd2xx.dll</code> on Windows (needed only for Yaesu scope data). Ships a rigctld-compatible server on 127.0.0.1:4532 and uses 50001–50003 for client/server — mind the overlap with SCU-LAN10's port range. Notably, the project's own release notes say scope data is <strong>currently FT-710-only</strong> among Yaesu radios, not even the FTX-1.</td></tr>
+                <tr><td>WSJT-X / JS8Call</td><td>Native</td><td>Rig "Yaesu FT-710", CAT on the Enhanced port at 38400, PTT via CAT, both audio directions on the FT-710 USB codec, mode DATA-U with PRESET. Back in 2023-02 neither FLRig nor HRD listed the radio and JS8Call users borrowed the FTDX10 profile.</td></tr>
+                <tr><td>FLRig</td><td>Listed (2024-06 model list)</td><td>eHam users report long-running FLdigi + FT-710 WEFAX decoding.</td></tr>
+                <tr><td>Win4YaesuSuite</td><td>"Now supports the FT-710 AESS", v1.544 (2026-08-14)</td><td>Its 2023-03 notes mention workarounds for FT-710 firmware bugs.</td></tr>
+                <tr><td>HRD</td><td>Uses the <strong>FT-991A</strong> profile</td><td>See the CAT lineage note above.</td></tr>
+                <tr><td>POTACAT / CatBkt / FT-Control / N1MM+</td><td>All supported</td><td>POTACAT has a dedicated FT-710 section covering both AESS and Field and contributes the largest set of practical pitfalls. N1MM+ guidance: Enhanced COM for control, Standard COM for CW/FSK/PTT keying.</td></tr>
+                <tr><td>RemoteTx</td><td>Quick-start page (2026-09-07) claims "FT-710 with spectrum scope", requires MAIN ≥ V01-12</td><td>The radio list page did not show the FT-710 when checked — verify before relying on it.</td></tr>
+                <tr><td>SimpleHRR</td><td>Free; Raspberry Pi 2B/3B + USB cable, web app on port 50000</td><td>Explicitly "no SCU-LAN10 needed"; simple on a LAN, more work over the internet; limited to RPi 2B–3B+.</td></tr>
+                <tr><td>RemoteHams (RCForb)</td><td>Unclear</td><td>Announced FTDX10 support and "sibling models" in 2022-11; no page confirms the FT-710 — do not assume.</td></tr>
+            </tbody>
+        </table></div>
+        <h3 style="margin:2rem 0 1rem;">What this site added</h3>
+        <p>Yaesu never documented the FT4222H spectrum channel. <a href="/blog/ft710-usb-remote-control/">Our reverse-engineering write-up</a> did: 4096-byte frames carrying 850 amplitude bins per receiver at roughly 30 fps, inverted amplitude bytes, a 150-byte metadata block and sync tail; SPI at 375 kHz with SS = 0x01; the CAT side needs 38400 bps, <code>AI0;</code> to stop the auto stream, a 20 ms post-write delay, and <code>EX040101</code>/<code>EX040200</code> to switch scope output on. Transmit corrupts the scope stream, so the driver closes and reopens the FT4222 around TX; when the S-meter is unavailable we synthesize one from the spectrum. That work is what <a href="/mrrc_modern/">MRRC Modern</a> runs on.</p>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Remote path</th><th>Cost</th><th>Platform</th><th>FT8/digital</th><th>Spectrum</th></tr></thead>
+            <tbody>
+                <tr><td>SCU-LAN10 + Yaesu software</td><td>$299.95</td><td>Windows only</td><td><strong>Not officially supported</strong></td><td>Yes, dual-band waterfall</td></tr>
+                <tr><td>wfview client/server</td><td>Free</td><td>Cross-platform</td><td>Audio not handled over USB</td><td>Yes (via SCU-LAN10; FT-710 support marked beta)</td></tr>
+                <tr><td>rigctld + any client</td><td>Free</td><td>Cross-platform</td><td>Yes</td><td>No</td></tr>
+                <tr><td>SimpleHRR (RPi)</td><td>Free + Pi</td><td>Browser</td><td>LAN-simple</td><td>No</td></tr>
+                <tr><td>RemoteTx</td><td>Paid</td><td>—</td><td>Claimed, verify</td><td>Claimed</td></tr>
+                <tr><td><strong>MRRC Modern (this site)</strong></td><td><strong>Free, open source</strong></td><td><strong>Browser, any OS</strong></td><td><strong>Yes</strong></td><td><strong>Yes — 850 bins from the FT4222 SPI channel, no extra hardware</strong></td></tr>
+            </tbody>
+        </table></div>
+        <p>Related reading from our own work: <a href="/blog/ft710-usb-remote-control/">the USB internals</a>, <a href="/blog/opus-vs-pcm-remote-audio/">Opus versus PCM for remote audio</a> (which is why the SCU-LAN10's ≥2 Mbps requirement matters), and <a href="/blog/efhw-esp32s3-auto-tuner/">a servo-driven EFHW tuner</a> for antennas the internal 3:1 ATU cannot handle.</p>
+    </div></section>
+
+    <section class="ag-section" id="buying"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">09 · Buying</span>
+            <h2 class="ag-section-title">Price, accessories, and where it actually shines</h2>
+            <p class="ag-section-subtitle">September 2026 street pricing — the list price is not the price.</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Channel</th><th>AESS</th><th>Field</th></tr></thead>
+            <tbody>
+                <tr><td>DX Engineering</td><td>$1,149.95 list → <strong>$1,029.95</strong> (63 reviews, 4.75/5)</td><td>$1,169.95 list → <strong>$1,069.95</strong> (47 reviews, 4.75/5)</td></tr>
+                <tr><td>Ham Radio Outlet</td><td>$1,299.95 list → <strong>$1,029.95</strong> with a $100 Yaesu coupon</td><td>$1,199.95 → $1,074.95</td></tr>
+                <tr><td>GigaParts</td><td><strong>$999.95</strong> (from $1,099.95)</td><td>$1,074.95 → <strong>$884.95</strong></td></tr>
+                <tr><td>ARRL QST (2023-08 review)</td><td>$1,150 manufacturer's price at the time</td><td>—</td></tr>
+                <tr><td>RadioMasterList price history</td><td>$1,299.95 (2022-09 and 2023-03); $1,339.90 with MARS/CAP</td><td>—</td></tr>
+                <tr><td>Europe / UK</td><td>RadioWorld UK £979.96 (£816.63 ex-VAT) + £85 cashback; MHzOutdoor €1,119 → €999</td><td>—</td></tr>
+                <tr><td>Japan launch (2022-08)</td><td colspan="2">¥154,000 including tax — the same price for the 100 W, 50 W (M) and 10 W (S) variants</td></tr>
+                <tr><td>Reported street prices</td><td>$1,000 (eHam K7KHZ); Reddit 2024 promo $818–875</td><td>$879 shipped (K8DXX, 2024-02); $900 (N2DTS, 2024-01)</td></tr>
+            </tbody>
+        </table></div>
+        <p><strong>Read: real transactions cluster in $900–1,100</strong>; $1,299 is an inflated list price. Curiously, this check found Field <em>more</em> expensive than AESS by $40 at two dealers, where historically Field ran about $100 cheaper — compare per-dealer, not by rule. Competitor anchors from the same week: FTDX10 $1,649.95, IC-7300 about $1,000 on promotion, IC-7610 $3,499.95 (the 2025 IC-7610-32 at $3,899.95), K3S from $2,300 (10 W) / $2,900 (100 W), Xiegu G90 $499.99.</p>
+        <h3 style="margin:2rem 0 1rem;">Accessories worth the money</h3>
+        <ul>
+            <li><strong>SD card (≥32 GB), not included</strong> — stores all settings, memories, QSO recordings, screenshots and firmware updates. Note that VOX does not work while recording.</li>
+            <li><strong>A 25–35 A supply</strong> — TX at 100 W draws 21 A nominal, 18.2 A measured. Owners run Astron RS-35M or Alinco 32 A units; a field report on LiFePO4 (Bioenno 12 V 15 Ah) shows 11.5 A on SSB peaks, and a Reddit measurement gives RX 1.35 A / TX peak 18 A.</li>
+            <li><strong>Microphone</strong>: the bundled SSM-75E already draws good audio reports; upgrades are the M-70 ($144.95), M-90D ($174.95) and M-100 dual-diaphragm ($439.95). The real lever is the <strong>three-band parametric EQ (PRMTRC)</strong>, which stores a separate profile with the processor on and off.</li>
+            <li><strong>SP-40</strong> ($75–125) if you bought Field and want AESS. Opinions split sharply: one reviewer calls AESS "a joke" against a good monitor speaker, most owners like it. It is a voicing choice — listen first.</li>
+            <li><strong>No filter options exist</strong> — there is no roofing filter slot and nothing to buy. Selectivity is DSP.</li>
+            <li>Others: SCU-LAN10 $299.95 / £229.99 (needs MAIN ≥ V01-11); FH-2 CW keyboard $94.95; SMB-209 mobile bracket $37.95; MHG-1 handle $14.95; YH-77STA headphones $84.95; CT-39A data cable $9.95; ATAS-120A mobile antenna $349.95; ATAS-25 portable $209.95; ATBK-100 balcony counterpoise $84.95; FC-40 external tuner $274.95 / €285; RT Systems YPS-FT710 software $25 (needs firmware ≥ V01-10); CatMeters CatTouch/Catknobz for the knob complaint.</li>
+        </ul>
+        <h3 style="margin:2rem 0 1rem;">Portable and mobile</h3>
+        <p>Field is marketed for "mobile, field day, and portable operations" and there is a dedicated SMB-209 bracket — but <strong>the front panel does not detach</strong>, so it is less flexible in a vehicle than an FT-891 or IC-705. At 4.5 kg it is not a SOTA radio; POTA and car-camping are its sweet spot, with the MHG-1 handle or the Field strap as the usual additions. There is no internal battery and no IP rating. Current draw comparison from DX Engineering's own video: FT-891 RX 2 A / TX 23 A versus FT-710 RX 2.2 A / TX 21 A; one QRZ reviewer considers the ~1.7 A class receive draw high for backpacking and suggests dropping to 20–40 W in the field.</p>
+        <p>Where owners report it excelling: NT9M pulled weak stations out from under S9+20 pileups in a 160 m CW contest; VE3VTH worked a buried POTA station on a crowded Winter Field Day band for the first time; K8DXX set up a G90 with a portable antenna next to it and describes the difference as "like night and day"; KK7XE expects it to become "a great rig for portable stuff like POTA, and camping trips".</p>
+        <h3 style="margin:2rem 0 1rem;">Reputation, in numbers</h3>
+        <p>eHam carries <strong>78 reviews</strong> (June 2026 snapshot) and DX Engineering shows <strong>4.75/5</strong> on both variants (63 and 47 reviews). The recurring praise, across independent reviewers: a quiet receiver with real dynamic range ("best CW receiver I have used in 30 years" — VK2IK), value for money ("punches way above its weight class" — K8DXX), DNR and DSP tooling clearly ahead of the IC-7300, the touch/mouse/DVI desktop workflow, and transmit audio that is good out of the box with plenty of EQ headroom. The recurring complaints are the fan, the STEP/MCH knob, unlit legends, the dated DVI-D output, Windows-only official drivers, and menu complexity relative to an IC-7300.</p>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>Buy it if…</th><th>Skip it if…</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>You want near-flagship close-in dynamic range (107 dB, third on Sherwood's table) at $1,000; you operate in a city or on crowded bands where 150 dBc/Hz-class phase noise matters; you care about SSB audio and EQ; you want a big external display and mouse operation; you need an internal ATU and a light 4.5 kg chassis for POTA-style outings.</td>
+                    <td>You contest CW seriously or run SO2R (FTDX10, K3S); you need two receivers (IC-7610, FTDX101); you want V/UHF in one box (FT-991A, IC-7100); your budget is $500 for ultralight SOTA (G90, IC-705); fan noise ruins your CW — listen to a cold unit first; you are a heavy Linux digital-mode user — check the driver situation.</td>
+                </tr>
+            </tbody>
+        </table></div>
+        <p><strong>AESS or Field?</strong> Home station and audio-focused → AESS (the SP-40 alone costs $75–125 and the two bundles often differ by less than $100). POTA, mobile, or you already own good speakers → Field, for the strap and the lower weight.</p>
+    </div></section>
+
+    <section class="ag-section" id="sources"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">10 · Sources</span>
+            <h2 class="ag-section-title">Primary sources</h2>
+            <p class="ag-section-subtitle">Every figure on this page traces to one of these; the full annotated source list is in our research notes.</p>
+        </header>
+        <ul>
+            <li><a href="http://www.sherweng.com/table.html">Sherwood Engineering receiver table</a> and the FT-710 long-form report (S/N 2J020104, tested 2022-10-01) — all comparative lab numbers</li>
+            <li><a href="https://www.arrl.org/files/file/ProductReviewsForDeb/2023/pr082023.pdf">ARRL / QST August 2023 product review</a> — independent lab data and the SDR-board disclosure</li>
+            <li><a href="https://www.qsl.net/ab4oj/test/docs/ft710notes.pdf">ab4oj's FT-710 bench notes</a> — converter identification, sampling-rate derivation, overload points, service-manual findings</li>
+            <li><a href="https://yaesu.com/product-detail.aspx?Model=FT-710&amp;CatName=HF%20Transceivers/Amplifiers">Yaesu's FT-710 product page</a> plus four official manuals (operation, CAT OM 2306-C, firmware update, SCU-LAN10 update)</li>
+            <li>RadCom's G3SJX in-depth review (interior photographs, DAC clock, front-end compression points) and DC4KU's independent test report</li>
+            <li><a href="https://www.radiomasterlist.com/en/yaesu-ft-710.html">RadioMasterList FT-710</a> — brochure quotations and price history</li>
+            <li>Dealer pages for version differences and pricing: <a href="https://www.hamradio.com/detail.cfm?pid=H0-018470">HRO (Field)</a>, <a href="https://www.dxengineering.com/parts/ysu-ft-710-field">DX Engineering</a>, GigaParts, R&amp;L, WiMo, MHzOutdoor, <a href="https://www.hamlife.jp/2022/08/10/yaesu-ft710aess-price/">hamlife.jp (Japan launch and M/S variants)</a></li>
+            <li><a href="https://www.eham.net/reviews/detail/12377">eHam reviews (78)</a>, QRZ forums, Reddit r/amateurradio, wsjtx.groups.io, WorldwideDX (Toru Kato's 2023 open-issues list)</li>
+            <li>Software: <a href="https://github.com/Hamlib/Hamlib">Hamlib</a> (model 1049, issues #2021 / #1550), wfview release notes v2.20/v2.21, RT Systems knowledge base, Ham Radio Deluxe KB (2023-03-28), N1MM+ documentation, POTACAT's FT-710 chapter</li>
+        </ul>
+        <p style="margin-top:1.5rem;color:var(--text-secondary);font-size:.9375rem;"><em>Companion reading in the RIG column: <a href="/rig/ic-r9000/">No. 1 — the ICOM IC-R9000</a> and <a href="/rig/nrd-535/">No. 2 — the JRC NRD-535</a> measure what 1989 and 1991 flagships could do. The FT-710 is the other half of that argument: a modern radio that removed the analog filtering those machines depended on, and got 107 dB of close-in dynamic range for $1,000 — while giving up 20 dB of blocking to a roofing filter that is no longer there.</em></p>
+    </div></section>
+    </main>
+
+    <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+                <h3>BG1SB</h3>
+                <p>Amateur radio operator and software engineer. Builds the VLSC open-source remote-control ecosystem — including the FT4222 spectrum path this page describes.</p>
+            </div>
+        </div>
+        <div class="blog-related">
+            <h3>Related</h3>
+            <ul>
+                <li><a href="/blog/ft710-usb-remote-control/">Remote-Controlling a Yaesu FT-710 with Just a USB Cable</a></li>
+                <li><a href="/mrrc_modern/">MRRC Modern — the open-source remote stack that runs on this radio</a></li>
+                <li><a href="/rig/">RIG — Deep Dives into Legendary Radios</a></li>
+                <li><a href="/blog/opus-vs-pcm-remote-audio/">Opus vs PCM for HF Remote Audio</a></li>
+                <li><a href="https://github.com/cheenle" target="_blank" rel="noopener">All repositories on GitHub</a></li>
+            </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/rig/"><i class="fas fa-arrow-left"></i> Back to RIG</a><a href="/rig/ft710/zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a></div>
+    </div></footer>
+    <script src="../../js/global-nav.js?v=8" defer data-gn="1"></script>
+</body>
+</html>

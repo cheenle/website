@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaesu FT-710：深度参考——架构、实测数据、固件与坑点 | VLSC</title>
+    <meta name="description" content="Yaesu FT-710 深度参考：直接采样架构、Sherwood 与 ARRL 实验室数据对比 FTdx10、IC-7300、IC-7610 和 K3S、完整固件历史、每一个有据可查的坑点，以及远程控制生态，包括本站逆向出来的那条频谱通道。">
+    <meta name="keywords" content="Yaesu FT-710, FT-710 AESS, FT-710 Field, 直接采样 SDR, Sherwood 动态范围, FT4222 频谱, SCU-LAN10, wfview, Hamlib 1049, CAT 协议, 固件 V01-12, 业余无线电">
+    <meta name="author" content="BG1SB">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Yaesu FT-710：深度参考 — 架构、实验室数据、固件与坑点">
+    <meta property="og:description" content="纠正两处流传甚广的讹传、Sherwood 完整数据行、FTDX10 对比、到 V01-12 的固件历史，以及七条远程控制通路的全部排名。">
+    <meta property="og:url" content="https://www.vlsc.net/rig/ft710/zh/">
+    <meta property="og:site_name" content="VLSC Projects">
+    <link rel="canonical" href="https://www.vlsc.net/rig/ft710/zh/">
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/rig/ft710/">
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/rig/ft710/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/rig/ft710/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/octen.css?v=6">
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2">
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Yaesu FT-710：深度参考",
+      "description": "Yaesu FT-710 直接采样 SDR 收发信机的架构、实验室实测、固件历史、已知问题与远程控制生态。",
+      "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+      "publisher": { "@type": "Organization", "name": "VLSC Projects", "url": "https://www.vlsc.net/" },
+      "datePublished": "2026-09-28",
+      "dateModified": "2026-09-28",
+      "about": { "@type": "Product", "name": "Yaesu FT-710", "brand": { "@type": "Brand", "name": "Yaesu" } }
+    }
+    </script>
+</head>
+<body data-site="portal">
+    <nav class="navbar"><div class="container navbar-content">
+        <a href="/" class="logo"><span class="logo-icon"><i class="fas fa-satellite-dish"></i></span><span>VLSC<span style="color:var(--accent);">·</span>Projects</span></a>
+        <ul class="nav-links">
+            <li><a href="/zh/">首页</a></li>
+            <li><a href="/zh/#projects">项目</a></li>
+            <li><a href="/blog/">博客</a></li><li><a href="/rig/zh/">RIG</a></li>
+            <li><a href="/zh/agentic.html">Agentic</a></li>
+            <li><a href="/zh/engineering.html">工程体系</a></li>
+            <li><a href="/rig/ft710/zh/">FT-710</a></li>
+            <li><a href="https://github.com/cheenle" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
+        </ul>
+        <div class="nav-actions"><a href="/rig/ft710/" class="lang-btn">English</a><button class="mobile-menu-toggle" aria-label="打开菜单"><i class="fas fa-bars"></i></button></div>
+    </div></nav>
+
+    <header class="ag-hero"><div class="ag-hero-inner">
+        <div class="hero-badge"><i class="fas fa-microchip"></i><span>RIG 专栏伴读 · 电台深度参考</span></div>
+        <h1>Yaesu FT-710<br><span class="gradient">一台现代 SDR 减掉了什么，又换来了什么</span></h1>
+        <p>没有顶滤波器（roofing filter），没有物理副调谐环，没有内置 RTTY/PSK 解码器，也没有 LAN 口。Yaesu 拿 FTDX101 的直接采样思路，把接收链路里的模拟部分几乎全部拆掉，最后交出一台 2 kHz 间隔邻近动态范围实测 107 dB 的接收机：Sherwood Engineering 榜单第 3，也是唯一一台价格低于 $1,100 却突破 100 dB 的机器。这一页就是我们当年给这台机器搭远程控制栈时，希望手边就有的那份参考：架构、两套独立实验室数据、完整固件历史、每一个有据可查的坑点，以及七条远程通路的全部排名。</p>
+        <div class="ag-hero-stats" aria-label="关键数字">
+            <span class="ag-pill"><i class="fas fa-wave-square"></i> 107 dB DR3 @2 kHz</span>
+            <span class="ag-pill"><i class="fas fa-display"></i> 4.3 英寸电阻触摸屏</span>
+            <span class="ag-pill"><i class="fas fa-weight-hanging"></i> 4.5 kg · 100 W</span>
+            <span class="ag-pill"><i class="fas fa-tag"></i> 实际成交价 $900–1,100</span>
+        </div>
+    </div></header>
+
+    <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节">
+        <a href="#corrections">纠错</a><a href="#versions">版本</a><a href="#architecture">架构</a><a href="#measured">实测</a><a href="#ftdx10">对比 FTDX10</a><a href="#firmware">固件</a><a href="#issues">已知问题</a><a href="#remote">远程与 CAT</a><a href="#ecosystem">生态</a><a href="#buying">配件与选购</a><a href="#sources">资料来源</a>
+    </nav></div></div>
+
+    <main>
+    <section class="ag-section" id="corrections"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">00 · 从这里开始</span>
+            <h2 class="ag-section-title">关于 FT-710 的两条"常识"，其实是错的</h2>
+            <p class="ag-section-subtitle">两条都在网上流传甚广，也都经不起 Yaesu 自家产品页的对照。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>讹传</th><th>事实</th><th>出处</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>"10.1 英寸触摸屏"</strong></td>
+                    <td><strong>4.3 英寸</strong> TFT 彩色<strong>电阻式</strong>触摸屏（对角 10.9 cm，活跃显示区约 95×56 mm，可戴手套操作）</td>
+                    <td>Yaesu 产品页写的是 "High Resolution 4.3-inch TFT Color Touch Panel Display"；QST、DX Engineering 和 RadioMasterList 口径一致。这条讹传的来源，看起来是把 <em>10.9 cm</em> 的对角线当成了英寸。Yaesu 在售的最大屏幕是 FTDX101 的 7 英寸面板，产品线里不存在任何 10.1 英寸机型。</td>
+                </tr>
+                <tr>
+                    <td><strong>"300 kHz 实时频谱"</strong></td>
+                    <td>频谱仪跨度 <strong>1 kHz–1 MHz 可选</strong>，刷新 30 FPS，显示范围 100 dB</td>
+                    <td>Yaesu 彩页原文："sweep speed 30 FPS, range 100 dB, span width 1-1000 kHz"；ab4oj 的独立实验台记录给出同样结论。<em>300 kHz</em> 是 FTDX10 / FTDX101 的指标。</td>
+                </tr>
+            </tbody>
+        </table></div>
+        <div class="ba-tldr" style="margin-top:2rem;"><div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> 六条结论读懂这台机器</p>
+            <ul class="ba-tldr-list">
+                <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>邻近动态范围是它的招牌，而且名副其实。</strong>Sherwood 实测 2 kHz 间隔 DR3 为 107 dB（ARRL：106 dB），全表第 3。它几乎不随间隔变化：20 kHz 是 107 dB，2 kHz 是 106.5 dB，只掉 0.5 dB。同样一段区间，IC-7300 要掉 9 dB。</li>
+                <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>底噪不是它的强项。</strong>IPO（关预放）下 −127 dBm，比 IC-7300 的 −133 dBm 差 6 dB。开预放 1 到 −135 dBm，这才反超 7300。"FT-710 更安静"这句话，照字面讲是错的。</li>
+                <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>阻塞是结构性短板：129 dB。</strong>天花板来自 ADC 过载保护，天线口超过约 +1 dBm（≈ S9+74 dB）就触发。FTdx10 实测 141 dB，K3S 150 dB，TS-890S 超过 151 dB。</li>
+                <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>AESS 和 Field 是同一台机器。</strong>射频硬件、固件、规格完全相同，差别只在随附附件：AESS 附 SP-40 外置扬声器，Field 附携带背带和提手套件。</li>
+                <li><span class="ba-tldr-tag" data-claim-type="inference">推断</span><strong>没有 IP+ 开关，因为抖动从来不关。</strong>FPGA 一直在转换器前面注入 PRBS 噪声。跟 Icom 的数据对比时，动态范围要用它们带 <code>ab</code>（IP+ 开）的数字，底噪要用不带脚注的数字；两套口径混用，结论正好反过来。</li>
+                <li><span class="ba-tldr-tag" data-claim-type="fact">事实</span><strong>固件停在 V01-12（2024-02-29）</strong>。到 2026 年 9 月已经两年半没有更新，而 Yaesu 2025 年的 FTX-1 一直在频繁发版。买之前先查装的是哪一版：RT Systems 写频软件要求 ≥ V01-10，SCU-LAN10 要求 ≥ V01-11。</li>
+            </ul>
+        </div></div>
+    </div></section>
+
+    <section class="ag-section" id="versions"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">01 · 型号阵容</span>
+            <h2 class="ag-section-title">AESS、Field，以及只在日本卖的版本</h2>
+            <p class="ag-section-subtitle">一台机器，两种附件包，外加一个海淘陷阱。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th></th><th>FT-710 AESS</th><th>FT-710 Field</th></tr></thead>
+            <tbody>
+                <tr><td><strong>SP-40 外置扬声器</strong></td><td>随附。与机内顶部 65 mm 扬声器组成 AESS 声学系统（DSP 分频，700–1000 Hz 可调，可侧挂）</td><td>不随附，可选购（$75–125）</td></tr>
+                <tr><td><strong>携带背带 / 提手套件</strong></td><td>不含</td><td>随附</td></tr>
+                <tr><td>SSM-75E 手咪、DC 电源线 + 备用保险丝、说明书</td><td>含</td><td>含</td></tr>
+                <tr><td>电源</td><td>不含</td><td>不含</td></tr>
+                <tr><td><strong>射频硬件、固件、规格、全部实验室数据</strong></td><td colspan="2" style="text-align:center"><strong>完全相同</strong>。Field 不是"缺了 AESS"，后补 SP-40 即可</td></tr>
+            </tbody>
+        </table></div>
+        <p>两条实用提醒：SP-40 挂在机身左侧时<strong>挡住 SD 卡槽</strong>；Field 版在日本 2023-07-01 发布之后，约 2023 年底才出现在欧洲零售渠道。</p>
+        <p><strong>海淘陷阱。</strong>日本还卖 <strong>FT-710M（50 W）</strong>和 <strong>FT-710S（10 W，6 m 上 20 W）</strong>，与 100 W 版同价 ¥154,000。拍卖网站上以"FT-710"名义出现、功率拧不过 50 W 或 10 W、数字还会变黄的机器，就是这些板上限功率的版本。这个限制去不掉。</p>
+        <p><strong>频率覆盖与地区限制。</strong>接收 30 kHz–75 MHz 连续（保证指标只在 1.8–29.7 和 50–54 MHz）；发射限业余频段 1.8–54 MHz，5–100 W（AM 载波 5–25 W）。70–70.5 MHz（4 m）发射仅英国版有；英国/欧版固件 C2 可开 5.250–5.406 MHz。美规机出厂预置 15 个 60 m 记忆频道，外加一个阿拉斯加应急频道（5.1675 MHz，限距阿拉斯加 92.6 km 内、SSB、PEP ≤150 W）；MARS/CAP 扩展可把发射拉到 1.8–30 MHz（HRO 提供这项改装，$39.95）。预热一分钟后稳定度 ±0.5 ppm。日本制造，美国三年保修。</p>
+    </div></section>
+
+    <section class="ag-section" id="architecture"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">02 · 机内</span>
+            <h2 class="ag-section-title">纯直接采样：双 14-bit 转换器、一颗 FPGA、两个 DSP 核</h2>
+            <p class="ag-section-subtitle">QST 的定性："它不像价格更高的 FTDX10 与 FTDX101D/MP，不是带顶滤波器的混合设计，而是一台直接采样 SDR。"</p>
+        </header>
+        <pre style="font-family:'JetBrains Mono',monospace;font-size:.85em;line-height:1.55;overflow-x:auto;">天线（SO-239）
+  → 预选器：连续半倍频程带通，并非严格分波段
+  → 衰减器  OFF / 6 / 12 / 18 dB   （按波段分别记忆）
+  → IPO（旁路）/ AMP1（≈10 dB）/ AMP2（≈20 dB）
+  → 双通道 14-bit ADC   （第三方拆机指认：TI ADS62P45，I/Q 一对；Yaesu 从未公布过型号）
+  → FPGA：合并两路转换器数据流、DDC、产生 PRBS 抖动、构建 FFT 频谱
+  → NXP 双核 32-bit 浮点 DSP，594 / 198 MHz
+      滤波 · 解调 · DNR · NB · DNF · CONTOUR · APF · AGC
+  → DAC → 音频，2.5 W @ 4 Ω
+
+发射走反方向：话筒 → 编解码器 → DSP → FPGA 内的数字上变频器
+  → 高速 DAC 直接在最终发射频率上产生激励信号 → 功放</pre>
+        <p>时钟是 <strong>250 MHz HRDDS</strong>，配 ±0.5 ppm 温补晶振（TCXO）。ab4oj 的混叠测试推算出有效转换速率为 <strong>62.5 MHz</strong>（分频后送到转换器的是 125 MHz）；RadCom 则说发射 DAC 跑在 250 MHz。接收链路是一台直接采样超外差，<strong>数字低中频 18 kHz（SSB/CW）或 24 kHz（AM/FM）</strong>。这也是 Sherwood 表上 "First IF rejection: N/A" 的由来：没有第一中频，谈不上抑制。</p>
+        <p>三个设计决定解释了这些实测数据：</p>
+        <ul>
+            <li><strong>两个转换器，数字域合并。</strong>Yaesu 的说法是，FPGA 把两路信号合并，"以减小 A/D 转换器的过载与溢出，改善阻塞特性"。</li>
+            <li><strong>抖动常开。</strong>FPGA 在转换前注入伪随机噪声，压制量化误差、改善 IMD。菜单里<strong>没有任何一项能关掉它</strong>，也没有 IP+ 的对应物。前端增益只有 IPO/AMP1/AMP2 三档加衰减器四档，再无其他。</li>
+            <li><strong>没有顶滤波器，也就没有滤波器选件可买。</strong>选择性全部由 DSP 完成：SHIFT/WIDTH/NOTCH/CONTOUR/APF/DNR/NB，CW 带宽可低至 50 Hz。这是它与 K3S、FTDX10 的架构性区别，也解释了为什么近距数据站得住、远距阻塞却吃亏。</li>
+        </ul>
+        <p>保护行为有两套测法：ab4oj 发现输入约 <strong>+2 dBm</strong> 起进入软过载（按他的方法 BDR 为 128 dB）；RadCom 测到 IPO 档约 <strong>+1 dBm</strong> 起前端增益开始压缩（AMP1/AMP2 时相应低 10/20 dB）。Sherwood 的 129 dB 阻塞是 100 kHz 间隔下的 3 dB 增益压缩点，他还明确写到，超过 +1 dBm（标称 S9+74 dB）的信号会触发保护电路。<strong>机器没有 ADC 过载（OVF）指示灯</strong>，ab4oj 把这一点列为它与其他直接采样机的差距。</p>
+        <p>宣传口径是"业余频段专用带通滤波器"；ab4oj 引维修手册加自己的扫频结果，给出的是<strong>连续半倍频程覆盖，带内带外没有差别</strong>。这里以实测为准。1.7 MHz 以下会插入 8 dB 衰减；500 kHz 以下灵敏度开始滚降，200 kHz 处已跌超过 30 dB。</p>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>物理与电气</th><th>厂标规格</th><th>实测（ARRL）</th></tr></thead>
+            <tbody>
+                <tr><td>尺寸</td><td colspan="2">239 × 80 × 247 mm（9.4 × 3.1 × 9.7 英寸，含凸出部分）</td></tr>
+                <tr><td>重量</td><td colspan="2">4.5 kg（9.92 lb）</td></tr>
+                <tr><td>供电与功耗</td><td>13.8 V ±15%；接收 1.8 A / 2.2 A，发射 100 W 21 A</td><td>接收 1.4 A（亮度/音量最大）；发射 100 W 18.2 A；发射 5 W 6.0 A</td></tr>
+                <tr><td>延时</td><td>—</td><td>接收处理 25 ms（SSB）；发射延时 21 ms；PTT 释放→50% 音频 33 ms（SSB）、64 ms（CW 全插入）；功放键控线→射频 15 ms</td></tr>
+                <tr><td>内置天调</td><td colspan="2">继电器链式，1.8–50 MHz，16.7–150 Ω（HF）/ 25–100 Ω（6 m），VSWR 3:1（6 m 上 2:1），100 个存储；支持 FC-40 与 ATAS 天线</td></tr>
+                <tr><td>音频</td><td>2.5 W @ 4 Ω，10% THD</td><td>1 VRMS 下 THD 0.20%</td></tr>
+                <tr><td>外接显示输出</td><td colspan="2"><strong>DVI-D</strong>，800×480 或 800×600，另加 USB 鼠标/键盘。QST 的抱怨是：现在的显示器只给 HDMI/DisplayPort</td></tr>
+                <tr><td>频谱仪</td><td>跨度 1 kHz–1 MHz，30 FPS，100 dB 范围，3DSS，音频 FFT/示波</td><td>瀑布图灵敏度 −106/−113/−125 dBm（IPO/P1/P2）；3DSS −108/−117/−128 dBm；<strong>无平均、无 VBW</strong>，Sherwood 和 ARRL 都点了这一条</td></tr>
+            </tbody>
+        </table></div>
+    </div></section>
+
+    <section class="ag-section" id="measured"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">03 · 实验台</span>
+            <h2 class="ag-section-title">两家独立实验室，一个一致的故事</h2>
+            <p class="ag-section-subtitle">Sherwood 对序列号 2J020104 的那一行（2022-10-01 测试，出厂固件），加上 ARRL 在 QST 的复测。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>项目</th><th>FT-710（Sherwood）</th><th>说明</th></tr></thead>
+            <tbody>
+                <tr><td>底噪</td><td>−127 / −135ᵇ / −140⁶ dBm</td><td>IPO / 开预放 / 6 m 开预放</td></tr>
+                <tr><td>AGC 阈值</td><td>4.0 / 1.40 / 0.38 µV</td><td><strong>整组对比里最高，而且不可调。</strong>Sherwood 的偏好是关预放时 2.5 µV</td></tr>
+                <tr><td>阻塞 @100 kHz</td><td>129 dB</td><td>3 dB 增益压缩；被 ADC 过载保护封顶</td></tr>
+                <tr><td>灵敏度（SSB，10 dB S+N/N）</td><td>0.66 / 0.23 / 0.13 µV</td><td>IPO / P1 / P2；IPO 档是整组里最弱的</td></tr>
+                <tr><td>本振相位噪声</td><td>150 dBc/Hz @10 kHz，154 @30 kHz</td><td><strong>没有 @50 kHz 的数字</strong>：超过 −154 dBc/Hz 过载保护就会触发，所以第三方拿不到 50 kHz 的数据</td></tr>
+                <tr><td>前端选择性</td><td>B：带通</td><td>无跟踪预选器</td></tr>
+                <tr><td>滤波器极限抑制</td><td>108 dB</td><td>2400 Hz 滤波器实测 −6/−60 dB 处为 2415/3073 Hz，极限抑制 109 dB；500 Hz 与 250 Hz 滤波器 108 dB</td></tr>
+                <tr><td>DR3 宽带 / 邻近</td><td><strong>107 dB @20 kHz / 107 dB @2 kHz</strong></td><td>IPO 档对间隔只有 0.5 dB 的敏感度；P1 全间隔 105 dB，P2 101 dB</td></tr>
+                <tr><td>S 表</td><td>S9 = 80 µV（IPO）/ 28 µV（P1）/ 8 µV（P2）</td><td>预放 1 = 10 dB，预放 2 = 20 dB；每个 S 单位 3 dB</td></tr>
+            </tbody>
+        </table></div>
+        <p>Sherwood 自己给的这条保留意见，适用于他表上的每一个排名：他按 2 kHz 邻近动态范围排序，因为那是"CW 与 RTTY 比赛 / DX pileup（抢叫）操作的试金石"，但"把这一项单独当作整机性能的代表，是错的"。</p>
+        <p><strong>ARRL 在 QST 的复测与之相差不到 1 dB</strong>：2 kHz DR3 106 dB、阻塞 128 dB、2 kHz RMDR 116 dB、底噪 −127 dBm。但引用这些数字时必须带上他们的一处披露：评测样机初测未达标，Yaesu 查出 <strong>SDR 单元内一个元件有缺陷，整块换了 SDR 板</strong>，之后轻松通过。这是关于早期批次品控的一手证据。</p>
+        <h3 style="margin:2rem 0 1rem;">与同场机型对比（Sherwood 表 2026-08-01 修订版）</h3>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>机型</th><th>底噪<br>IPO/P1/P2</th><th>阻塞</th><th>本振噪声<br>@10k/@50k</th><th>滤波器<br>极限抑制</th><th>宽带动态范围<br>@20k</th><th>邻近动态范围<br>@2k</th><th>实际成交价</th></tr></thead>
+            <tbody>
+                <tr><td>Yaesu FTdx-101D/MP</td><td>−127/−136/−141</td><td>&gt;147</td><td>154 / 155</td><td>&gt;115</td><td>110</td><td><strong>110</strong></td><td>$3,500+</td></tr>
+                <tr><td>Yaesu FTdx10</td><td>−126/−135/−140</td><td>141</td><td>152 / 153</td><td>105</td><td>107</td><td>107</td><td>$1,650</td></tr>
+                <tr><td><strong>Yaesu FT-710</strong></td><td><strong>−127/−135/−140</strong></td><td><strong>129</strong></td><td><strong>150 / 154@30k</strong></td><td><strong>108</strong></td><td><strong>107</strong></td><td><strong>107</strong></td><td><strong>~$1,030</strong></td></tr>
+                <tr><td>Icom IC-7300</td><td>−133/−140.5/−141.5</td><td>123</td><td>137 / 147</td><td>&gt;100</td><td>106ᵃᵇ</td><td>97ᵃᵇ</td><td>~$1,000</td></tr>
+                <tr><td>Icom IC-7300 Mk2</td><td>−133/−141/−142</td><td>122–124</td><td>143–144 / 145–147</td><td>&gt;100</td><td>87–89ᵃᵇ</td><td>87–89ᵃᵇ</td><td>2025-11 上市</td></tr>
+                <tr><td>Icom IC-7610</td><td>−132/−140/−142</td><td>122 (119ᵃᵇ)</td><td>145–146 / 148–149</td><td>110</td><td>96–98ᵃᵇ</td><td>96–98ᵃᵇ</td><td>$3,500–3,900</td></tr>
+                <tr><td>Elecraft K3S</td><td>−135/−138/−145</td><td>150</td><td>144 / 146</td><td>110</td><td>107ᵠ</td><td>106ᵖ/ᵠ</td><td>$2,900（100 W）</td></tr>
+                <tr><td>Kenwood TS-890S</td><td>−131/−140/−141</td><td>&gt;151</td><td>155 / 156</td><td>&gt;118</td><td>106</td><td>105</td><td>—</td></tr>
+                <tr><td>Xiegu G90（参照）</td><td>—</td><td>116</td><td>113 / 134</td><td>—</td><td>78</td><td>76</td><td>$500</td></tr>
+            </tbody>
+        </table></div>
+        <p style="font-size:.9em;color:var(--text-secondary);">ᵃᵇ = 开 Icom 的 IP+（抖动）测得，这才是与 FT-710 对比的正确口径，因为 FT-710 的抖动常开。关掉 IP+，IC-7610 跌到 76 dB，IC-7300 跌到 84 dB。ᵖ/ᵠ = K3S 的数据依赖可选晶体顶滤波器，与 FT-710 的纯 DSP 滤波不是同一机制。</p>
+        <p><strong>这张表要按维度读，不要按名次读：</strong></p>
+        <ul>
+            <li><strong>邻近动态范围：FT-710 赢下自己这一档。</strong>2 kHz 107 dB，比 IC-7300 Mk2 高 18–20 dB，比 IC-7300 高 10 dB，比价格三倍于它的 IC-7610 高 9 dB。只有 FTdx-101D 测得更高。</li>
+            <li><strong>阻塞：明显落后。</strong>129 dB 刚好卡在 Sherwood 那句"130 dB 才算好数字"的线上，比 FTdx10 低 12 dB，比 K3S 或 TS-890S 低 21–22 dB，但仍比三台 Icom 高 6–7 dB。ARRL 印证了机理：FT-710 在 2、5、20 kHz 偏移上的阻塞几乎相同（127–128 dB），因为它由转换器的绝对过载点决定，与滤波器间隔无关。</li>
+            <li><strong>底噪与灵敏度：另一处软肋。</strong>IPO 档 −127 dBm 和 0.66 µV 是整组最弱；想在安静郊区做弱信号，10 m 上预放 1 不是可选项。</li>
+            <li><strong>相位噪声：确实强。</strong>10 kHz 处 150 dBc/Hz，比 IC-7300 好 13 dB，比 IC-7300 Mk2 好 6–7 dB，比 IC-7610 好 4 dB；只有 FTdx10、FTdx-101D 和 TS-890S 更高。</li>
+            <li><strong>AGC 阈值：同档最差，还固定不可调。</strong>IPO 下 4.0 µV，而 Sherwood 偏好 2.5 µV。三款 Yaesu 机型都有这个特点。</li>
+        </ul>
+        <p>有一个可比性陷阱值得再说一遍：<strong>绝不要把 FT-710 的 107 dB 与 Icom 带 <code>ac</code>（关抖动）的数字并列。</strong>动态范围对 <code>ab</code>，底噪对不带脚注的值。搞错这一步，名次就会反过来。</p>
+    </div></section>
+
+    <section class="ag-section" id="ftdx10"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">04 · 升级之问</span>
+            <h2 class="ag-section-title">FT-710 对 FTDX10：多花的 $600 买到了什么</h2>
+            <p class="ag-section-subtitle">Sherwood 给自己那份长报告下的结论：在 20 米波段上，两者的底噪、AGC 阈值、灵敏度和动态范围"几乎完全相同"。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>维度</th><th>FT-710</th><th>FTDX10</th></tr></thead>
+            <tbody>
+                <tr><td>接收架构</td><td><strong>纯直接采样</strong>：双 14-bit 转换器、FPGA 合并、抖动常开、无顶滤波器</td><td><strong>混合</strong>：模拟混频到 9 MHz 中频，配可切换顶滤波器（300/500/1000 Hz 等）；另一条宽带通路只喂频谱仪</td></tr>
+                <tr><td>阻塞 @100 kHz</td><td>129 dB</td><td><strong>141 dB</strong>，顶滤波器的优势</td></tr>
+                <tr><td>邻近动态范围 @2 kHz</td><td><strong>107 dB</strong></td><td>107 dB，打平</td></tr>
+                <tr><td>底噪（IPO/P1/6 m）</td><td>−127 / −135 / −140 dBm</td><td>−126 / −135 / −140 dBm</td></tr>
+                <tr><td>滤波器极限抑制</td><td><strong>108 dB</strong>（数字滤波更深）</td><td>105 dB</td></tr>
+                <tr><td>DSP</td><td><strong>NXP</strong> 双核 32-bit 浮点，594/198 MHz</td><td>TI DSP</td></tr>
+                <tr><td>屏幕</td><td>4.3 英寸触摸</td><td>5 英寸触摸</td></tr>
+                <tr><td>内置 CW/RTTY/PSK 解码器</td><td><strong>无</strong></td><td>有</td></tr>
+                <tr><td>重量</td><td><strong>4.5 kg</strong></td><td>5.9 kg</td></tr>
+                <tr><td>功放键控接口</td><td><strong>8 芯 mini-DIN</strong>（通用件）</td><td>10 芯 mini-DIN（更难找）</td></tr>
+                <tr><td>网络远程</td><td>SCU-LAN10，走<strong>一根 USB-B 线</strong></td><td>SCU-10LAN（专用多芯线）</td></tr>
+                <tr><td>内置天调</td><td><strong>有</strong>，100 个存储</td><td>无，需要 FC-40 或同类</td></tr>
+                <tr><td>主调谐旋钮</td><td>无副调谐环；每圈 200 步</td><td>同心副环（clarifier 等）</td></tr>
+                <tr><td>价格（2026 年 9 月）</td><td>~$1,030</td><td>$1,649.95</td></tr>
+            </tbody>
+        </table></div>
+        <p><strong>一句话版本：</strong>FTDX10 用物理 9 MHz 中频加顶滤波器，换来远距与带外阻塞。FT-710 的回应是更新的 NXP DSP、常开抖动和双转换器合并，把近距数据<em>打平</em>，同时更轻、更便宜、滤波更深（108 对 105 dB），还自带天调。它让出去的是 12 dB 阻塞、解码器和屏幕尺寸。Sherwood 还留下一句值得引用的主观评价："整体上 710 的人机操作比 FTdx10 更好。"eHam 上一位评测者（W8RMV）就是卖掉 FTDX10 换 FT-710，理由与 NC0B、N4HNH 提过的 DNF/NB 失真相同。</p>
+        <p><strong>按用途选，不要按名次选：</strong>认真打 CW 比赛或做 SO2R，选 FTDX10 或 K3S。$1,000 要性价比、便携、发射音质和一块现代瀑布图，选 FT-710。要两个接收机或 7 英寸屏，选 IC-7610 / FTDX101；不过要注意，IC-7610 近距实测 98 dB，FT-710 是 107 dB，而钱包的负担只有它的三分之一。$500 的超轻 SOTA，选 Xiegu G90（78/76 dB，完全另一档）。</p>
+    </div></section>
+
+    <section class="ag-section" id="firmware"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">05 · 固件</span>
+            <h2 class="ag-section-title">六次发布，然后沉默</h2>
+            <p class="ag-section-subtitle">四个独立固件映像：MAIN、DISPLAY、DSP、SDR，都从 SD 卡更新。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>发布</th><th>MAIN / DSP / SDR</th><th>变更内容</th></tr></thead>
+            <tbody>
+                <tr><td>2022-09 出货</td><td>V01-06 之前（未公开）</td><td>出厂固件；下面那些修复项说明了它当时缺什么</td></tr>
+                <tr><td>2022-11-15</td><td><strong>V01-06</strong> / V01-00 / V01-03</td><td>11 项：28 MHz CW key-up 噪声；PRESET 开启时 COM 波特率被锁在 4800；<strong>接 VL-1000 功放时可能无法发射</strong>；录音/回放死机；耳机电量曲线；外接电键延迟；<strong>直键无法发 CW</strong>；虫键异常；CW/CW-AUTO 下 PC 键控部分失效；波特率修改不生效</td></tr>
+                <tr><td>2022-12-06</td><td><strong>V01-08</strong></td><td>四项 CW 修复：内置电键延迟与多余字符；BK-IN 关闭时侧音变短；CW AUTO 不偏移发射频率。（V01-07 从未公开发布。）</td></tr>
+                <tr><td>2023-03-29</td><td><strong>V01-09</strong> / V01-01 / V01-04</td><td>14 项：AESS 按模式保存；<strong>DNR 特性改善，去掉了 ARRL 提到的 1–7 档"水声"伪影</strong>；DATA 模式误加 MIC EQ；QMB 调用；关机后频段堆栈丢失；光标记忆；TUNER 图标；CAT 支持 PMS；FA/FB 反映中继频差；PRESET 操作时的 CAT-AI 输出；EX 命令端口选择；<strong>连续 CAT 命令应答异常</strong></td></tr>
+                <tr><td>2023-07-06</td><td><strong>V01-10</strong></td><td>3 项：<strong>支持 USB 鼠标滚轮</strong>；CAT bug 修复。RT Systems 写频软件要求这一版或更高。</td></tr>
+                <tr><td>2023-11-02</td><td><strong>V01-11</strong></td><td>5 项：<strong>支持 SCU-LAN10 网络远程</strong>（LAN 单元固件 ≥ V3.00）；手咪改 MCH 不保存；CAT 弹窗变更；非 FM 模式误开 TSQL。从这一版起，更新覆盖全部六个型号（710/M/S × AESS/Field）。</td></tr>
+                <tr><td>2024-03-01 <em>（现行）</em></td><td><strong>V01-12</strong></td><td>4 项：RTTY 监听音 bug；<strong>连接 SCU-LAN 时发射音频带回声</strong>；50 MHz 中继频差默认值 1 MHz → 500 kHz（美方 changelog）</td></tr>
+            </tbody>
+        </table></div>
+        <p>到 2026 年 9 月，<strong>两年半没有发布</strong>，而 Yaesu 2025 年的 FTX-1 一直在更新。QRZ 论坛用户把这解读为刻意的产品周期安排。没有任何一次固件发布改动过接收动态范围的数据：改进集中在 DNR、SCU-LAN10、鼠标支持、CAT 和键控噪声。（Sherwood 的 107 dB 是在 SDR V01-03 上测的，ARRL 的 106 dB 在 V01-04 上测的，两者都落在样机离散度之内，Sherwood 认为这个离散度小于 6 dB。）</p>
+        <p><strong>更新流程里的坑</strong>。大多数刷成砖的报告都出自这四条：</p>
+        <ol>
+            <li><strong>先更新 DISPLAY。</strong>Yaesu 自己的警告："如果先更新 MAIN 固件，机器可能无法正常工作。"</li>
+            <li><code>.SFL</code> 文件要放在 <strong>SD 卡根目录</strong>，不能放进 Capture/MemList/Menu/PlayList，而且卡必须<strong>先在机器里格式化</strong>。</li>
+            <li>刷完要复位：关机，按住 <strong>[DSP REST] + [FINE/FAST]</strong> 开机，成功时显示 7.000.000 MHz。</li>
+            <li>固件本身不需要 Windows（任何系统都能往卡里拷文件），但 Yaesu 的写频软件只有 Windows 版。</li>
+        </ol>
+    </div></section>
+
+    <section class="ag-section" id="issues"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">06 · 实战经验</span>
+            <h2 class="ag-section-title">已知问题，按实际咬人的频率排序</h2>
+            <p class="ag-section-subtitle">来源是 eHam 的 78 条评价、QRZ、Reddit、groups.io 和两份实验室报告。这个型号没有召回、没有维修通告，也没有安全公告。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>#</th><th>问题</th><th>证据怎么说</th><th>怎么办</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td><strong>接收时风扇长时间运转，有人嫌吵</strong></td><td>开机约 15–20 分钟后启动，之后即使不发射也一直转（QST 观察到同样的时间）。eHam 一位评测者有两台机器从冷启动转到关机，退了货，并说"Yaesu 勉强承认这是已知问题"。另一些机主（W8RMV、NT9M、K8DXX）根本没注意到。</td><td>保守散热本身就是设计取向；对它的敏感度因人而异，且集中在早期批次。<strong>在意风扇噪声，就冷机通电听一遍再买。</strong>有机主换装 Noctua 风扇，反馈不错；也有人走维修菜单校准（开机时按 BAND + QMB + NAR）。</td></tr>
+                <tr><td>2</td><td><strong>满功率 FT8 可能毁掉功放</strong></td><td>Yaesu 美国的 FT8 设置指南建议数字模式 ≤50 W，但<strong>操作手册里没有这条限制</strong>；wsjtx.groups.io 上有一个帖子在问 50 W 这个数字从何而来。有一例记录在案的损坏：75 W 连跑 50 个 FT8 周期之后，机器"在每个波段、每种模式上到处喷谐波"。</td><td>把它当成非官方但稳妥的建议：100% 占空比模式要降额。不要把它写成手册要求。</td></tr>
+                <tr><td>3</td><td><strong>USB / CAT / 数字模式配置的坑</strong></td><td>一根 USB-B 线会枚举出双 UART 桥，Windows 因此显示两个端口，<strong>必须选"Enhanced"那一个</strong>；有些用户还得为不同软件分别指定端口号。把 Windows 的 USB 音频设备设成 48 kHz 会毁掉发射音频，<strong>必须是 44100 Hz / 16-bit</strong> 并关闭增强。早期 38400 bps 下 CAT 不稳（2022 年那个"Hate my FT-710"帖子）已在 V01-09 修复。</td><td>完整清单见 §07。这些都是配置问题，不是硬件故障。</td></tr>
+                <tr><td>4</td><td><strong>ARRL 的评测样机 SDR 板有缺陷</strong></td><td>样机初测未达标；Yaesu 查出 SDR 单元内一个元件不良，换板之后轻松通过。</td><td>关于早期批次品控的一手证据。引用 ARRL 的数字时要带上这个前提。</td></tr>
+                <tr><td>5</td><td><strong>官方从未修复的项目</strong>（Toru Kato 2023 年的清单）</td><td>桨键到侧音的延迟；DNR 超过 4 档就不可用；音频断续；<strong>RF POWER 不能按波段设置</strong>，一次不小心的 QSY 就可能把外接功放推过头；BK-IN 与 RF POWER 的菜单嵌套；<strong>开着 CW AUTO 时 USB-PRESET（FT8）无法发射</strong>，PTT 和监听音频都在，但没有射频输出，绕法是关掉 CW AUTO；split 操作时 TXW 响应慢。</td><td>V01-10 到 V01-12 与这些项目对不上，社区也没有任何修复确认。默认大部分还在。</td></tr>
+                <tr><td>6</td><td><strong>人机操作上的抱怨</strong></td><td>顶部按键和丝印都没有背光；STEP/MCH 复合旋钮手感廉价还会跳步（一位机主从工厂换回的机器同样如此，最后用第三方 CatMeters 旋钮解决）；clarifier 是单个循环按键，要按三下才能关掉，还占用主 VFO；峰值功率表的 hold 关不掉；DSP 功能（Contour/APF）埋在菜单深处；斜体频率字体和顶部按键也有人不喜欢。</td><td>主观，但说法一致。在意这些就上手试过再买。</td></tr>
+                <tr><td>7</td><td><strong>S 表读数偏低</strong></td><td>一个 36 赞的帖子说强信号也只到 S5。</td><td>这是校准约定，不是故障：S 表按 AMP1 校准，所以 IPO 档读数低约 12 dB。Sherwood 实测 IPO 下 S9 = 80 µV，P1 下 28 µV。</td></tr>
+                <tr><td>8</td><td><strong>电源键行为</strong></td><td>需要按住约 2 秒；关机后立刻再开机，可能 10–30 秒没有反应（一位 RadioReference 用户系统性复现了这一点，归因于内部电源的稳定过程）。</td><td>正常现象。等一会儿再试。</td></tr>
+                <tr><td>9</td><td><strong>发射途中关机</strong></td><td>社区共识：线材过细或电源不足导致电压跌落。100 W 发射标称约 21 A（实测 18.2 A）。</td><td>用 25–35 A 电源和足够粗的线材。</td></tr>
+                <tr><td>10</td><td><strong>把天调的能力边界当成故障</strong></td><td>内置天调能处理 3:1（16.7–150 Ω）。G5RV 这类宽阻抗天线在 15/12/10 m 上调不出来；至少有一位机主因此把好机器送去维修。</td><td>先弄清范围；这类天线要配 FC-40 或范围更宽的第三方天调。</td></tr>
+            </tbody>
+        </table></div>
+        <p><strong>同样重要的是我们没找到的东西：</strong>没有官方召回、免费维修计划或安全公告（查过 Yaesu 日/美官网、hamlife.jp 时间线、QRZ、Reddit、groups.io）；没有系统性内部鸟台的报告（一例记录在案的杂散，在 400 米外的另一台 FT-710 上同样出现，说明是外部来源）；没有触摸屏故障的集中报告；没有普遍的时钟漂移或频率偏移抱怨。Yaesu 美国的支持热线甚至专门有一个"SDR HF Technical Support"菜单项。</p>
+    </div></section>
+
+    <section class="ag-section" id="remote"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">07 · 控制</span>
+            <h2 class="ag-section-title">一根 USB 线，四个设备，却没有 LAN 口</h2>
+            <p class="ag-section-subtitle">Yaesu 自家页面从发布起就写着网络远程"即将提供"；到今天仍然需要外置的 SCU-LAN10。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>USB-B 线枚举出的设备</th><th>芯片</th><th>用途</th></tr></thead>
+            <tbody>
+                <tr><td>增强 COM 口（<strong>CAT-1</strong>）</td><td>Silicon Labs CP210x 双 UART</td><td>CAT 命令，38400 bps（菜单可调）</td></tr>
+                <tr><td>标准 COM 口（<strong>CAT-2</strong>）</td><td>同一颗桥的第二路 UART</td><td>PTT / CW 键控 / 数字模式，或作为第二路 CAT；默认 4800 bps</td></tr>
+                <tr><td>USB 音频编解码器</td><td>C-Media</td><td>44.1 kHz 收发音频，不需要外接声卡</td></tr>
+                <tr><td><strong>SPI 频谱桥</strong></td><td>FTDI FT4222H（USB ID <code>0403:601c</code>）</td><td>频谱数据。<strong>Yaesu 没有文档</strong>，由本站逆向得出（见 §08）</td></tr>
+            </tbody>
+        </table></div>
+        <p>还有第三条 CAT 通路：配上选件 CT-58 线，TUNER/LINEAR 口可以切换成 38400 bps 的 5 V TTL 串口 CAT，但它与外接天调或功放互斥。后面板其余部分是 USB-A（键盘/鼠标）、DVI-D、SD 卡槽、6 芯 mini-DIN（RTTY/DATA）、8 芯 mini-DIN（天调/功放/第二路 CAT）、3.5 mm 的 KEY / REM-ALC / EXT SPKR / PHONES，以及 RJ-45 话筒插座。没有严格意义上的 RS-232 口，没有独立的接收天线插座，也没有变频器输出。</p>
+        <h3 style="margin:2rem 0 1rem;">CAT 谱系：软件没有现成机型档案时有用</h3>
+        <p>协议（CAT 手册 OM 2306-C）是 Yaesu 的双字母 ASCII 指令集，字段定长，以分号结尾：<code>FA014250000;</code> 把 VFO-A 设到 14.25 MHz。Ham Radio Deluxe 的知识库写得很直白，<strong>FT-991A 与 FT-710 的指令除三条新增 AESS 命令外完全相同</strong>，所以 HRD 让 FT-710 机主直接用 FT-991A 档案。（同一篇文章标题写 FTDX10，正文写 FT-991A，以正文为准。）CAT 把 <code>FA</code> 和 <code>FB</code> 作为两条独立的频率命令暴露出来，因此 FT-710 没有 N1MM 为 IC-7300 的 CI-V 记录的那类 SO2V 限制。</p>
+        <h3 style="margin:2rem 0 1rem;">SCU-LAN10 与内置 USB 通路</h3>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th></th><th>内置 USB（一根线）</th><th>SCU-LAN10（$299.95）</th></tr></thead>
+            <tbody>
+                <tr><td>硬件</td><td>除线以外不需要任何东西</td><td>以太网盒子，插在机器<strong>后面板的 USB 口</strong>（不是 ACC），由 SAD-25B 或 E-DC-6 供电，9–16 V ≥800 mA</td></tr>
+                <tr><td>传输</td><td>CAT、音频、频谱共用一根线</td><td>四条 UDP 流走 <strong>50000–50003</strong> 端口（机器控制、CAT、音频、频谱）；跨互联网使用需要把四个端口都转发</td></tr>
+                <tr><td>带宽</td><td>—</td><td>盒子→PC ≥2 Mbps，PC→盒子 ≥1.2 Mbps</td></tr>
+                <tr><td>客户端</td><td>什么都行：Hamlib、FLRig、WSJT-X、wfview、N1MM+，以及本站的 MRRC，跨平台</td><td><strong>仅 Windows 10/11</strong>（SCU-LAN10_Software_V0300）</td></tr>
+                <tr><td>数字模式</td><td>通过机器内置的 USB 编解码器完整支持</td><td><strong>官方不支持 FT8</strong>。用户要么用虚拟声卡接 JTDX（收没问题，发很别扭），要么在机器旁边再放一台电脑</td></tr>
+                <tr><td>固件</td><td>不需要</td><td><strong>MAIN ≥ V01-11、LAN 单元固件 V3.00、软件 V0300 必须一起更新到位</strong>，否则用不了</td></tr>
+            </tbody>
+        </table></div>
+        <p>时间线补充：SCU-LAN10 发布时完全不支持 FT-710（2023-10 有一个 Reddit 帖子标题就是这么写的）；支持随 2023 年 11 月的 V01-11 才到位。</p>
+        <h3 style="margin:2rem 0 1rem;">能省下你一个晚上的坑点清单</h3>
+        <ol>
+            <li>Windows 的 USB 音频设备：<strong>44100 Hz、16-bit</strong>，关闭增强。默认的"录音室质量"48 kHz 会毁掉发射音频。</li>
+            <li><strong>CAT-1 TIME OUT TIMER：把 10 ms 改成 1000 ms。</strong>出厂值太短，<code>?;</code> 查询会被误拒。</li>
+            <li><strong>MOD SOURCE 必须是 AUTO</strong>，否则远程 PTT 只按键不带调制。</li>
+            <li>DATA 调制源设为 USB；需要时显式选择 DATA-U/L。</li>
+            <li><strong>远程 CW 键控：不要依赖 CAT 的 <code>KY</code> 命令</strong>，载波起来了但电码会丢。改用 CAT-2 上逐元素的 DTR 键控（USB KEYING (CW) = DTR，CW BK-IN = ON/SEMI）。Linux 上有些 <code>cdc_acm</code> 驱动控制不了 DTR，会让机器<em>卡在发射状态</em>；真遇到就把 USB KEYING (CW) 设为 OFF。</li>
+            <li><strong>内置天调无法通过 CAT 触发。</strong>没有这条命令，只能按面板上的 TUNE。</li>
+            <li>反直觉的一条：<strong>即使没接硬件，也要把"SCU-LAN10"菜单项打开</strong>。USB 频谱输出正是由这个开关控制的。</li>
+            <li>CAT 选 <strong>Enhanced</strong> COM 口，Standard 口留给键控/PTT。不同软件可能需要不同的端口号。</li>
+            <li>Linux：为 <code>0403:601c</code> 加一条 udev 规则；CAT 走 CP2105 的 <code>if00</code> 接口，38400 bps。电台里的射频会顺着 USB 线倒灌回来把 CAT 打崩，有一位用户装了八个磁环才解决。</li>
+            <li>有报告说 WSJT-X 换过频段后会短暂发射一下；比赛时要留意。</li>
+        </ol>
+    </div></section>
+
+    <section class="ag-section" id="ecosystem"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">08 · 软件</span>
+            <h2 class="ag-section-title">软件生态，以及那条没人写文档的频谱通道</h2>
+            <p class="ag-section-subtitle">2026 年的支持现状，以及本站补上的那一块。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>软件</th><th>状态</th><th>说明</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Hamlib / rigctld</strong></td><td>机型 <strong>1049</strong>，Hamlib 4.5（2022-10-30）首次收录</td><td>走 Yaesu 共用的 <code>newcat</code> 后端：<code>rigctld -m 1049 -r /dev/ttyUSB1 -s 38400 --vfo</code>。已知缺口：通带设置（<code>set_mode USB 2700</code>）在 4.6.5/4.7.0 上不生效（issue #2021）；<code>IF;</code> 读取报错（#1550）。POTACAT 反映经 Hamlib 时功率和若干控制项不可靠，建议改用原生串口 CAT。</td></tr>
+                <tr><td><strong>wfview</strong></td><td><strong>v2.20（2026-02-01）</strong>加入 Yaesu 支持：FT-710 与 FTX-1</td><td>不是 Yaesu 的软件，是 W6EL/M0VSE 等人的开源项目，最初为 Icom 而做。支持 USB 直连，也支持经 SCU-LAN10 走网络；手册写明 FT-710 支持"目前仍是 beta"。v2.21 修掉了 Windows 上缺失 <code>ftd2xx.dll</code> 的问题（只有 Yaesu 频谱数据需要它）。自带一个兼容 rigctld 的服务端，监听 127.0.0.1:4532，客户端/服务端用 50001–50003，注意与 SCU-LAN10 的端口区间重叠。项目自己的发布说明还写明，在 Yaesu 机型里频谱数据<strong>目前只有 FT-710 支持</strong>，连 FTX-1 都没有。</td></tr>
+                <tr><td>WSJT-X / JS8Call</td><td>原生支持</td><td>机型选"Yaesu FT-710"，CAT 走增强口 38400，PTT 经 CAT，收发两个方向的音频都用 FT-710 的 USB 编解码器，模式 DATA-U 配 PRESET。回到 2023-02，FLRig 和 HRD 都还没有收录这台机器，JS8Call 用户借用了 FTDX10 档案。</td></tr>
+                <tr><td>FLRig</td><td>已收录（2024-06 机型表）</td><td>eHam 用户报告 FLdigi + FT-710 长时间解 WEFAX 可用。</td></tr>
+                <tr><td>Win4YaesuSuite</td><td>v1.544（2026-08-14）："现已支持 FT-710 AESS"</td><td>它 2023-03 的说明里提到过针对 FT-710 固件 bug 的绕法。</td></tr>
+                <tr><td>HRD</td><td>使用 <strong>FT-991A</strong> 档案</td><td>见上文 CAT 谱系一节。</td></tr>
+                <tr><td>POTACAT / CatBkt / FT-Control / N1MM+</td><td>全部支持</td><td>POTACAT 有专门的 FT-710 章节，AESS 和 Field 都覆盖，贡献了最多实战坑点。N1MM+ 的建议：控制用增强 COM，CW/FSK/PTT 键控用标准 COM。</td></tr>
+                <tr><td>RemoteTx</td><td>快速上手页（2026-09-07）声称支持"带频谱仪的 FT-710"，要求 MAIN ≥ V01-12</td><td>查看时机型列表页并没有列出 FT-710，依赖它之前先自行确认。</td></tr>
+                <tr><td>SimpleHRR</td><td>免费；树莓派 2B/3B + USB 线，网页应用跑在 50000 端口</td><td>明确写着"不需要 SCU-LAN10"；局域网内简单，跨互联网要多花功夫；仅限树莓派 2B–3B+。</td></tr>
+                <tr><td>RemoteHams (RCForb)</td><td>不明</td><td>2022-11 宣布支持 FTDX10 及"同系列机型"；没有任何页面确认 FT-710，不要想当然。</td></tr>
+            </tbody>
+        </table></div>
+        <h3 style="margin:2rem 0 1rem;">本站补上的那一块</h3>
+        <p>Yaesu 从未给 FT4222H 频谱通道写过文档。<a href="/blog/ft710-usb-remote-control/">我们的逆向记录</a>把它写全了：4096 字节帧，每个接收机 850 个幅度值，约 30 fps，幅度字节取反，另有 150 字节元数据块和同步尾；SPI 375 kHz，SS = 0x01；CAT 侧需要 38400 bps、用 <code>AI0;</code> 停掉自动流、写后 20 ms 延时，以及用 <code>EX040101</code>/<code>EX040200</code> 打开频谱输出。发射会污染频谱流，所以驱动在发射前后关闭并重开 FT4222；S 表读不到时，我们用频谱合成一个。<a href="/mrrc_modern/">MRRC Modern</a> 跑的就是这套工作。</p>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>远程通路</th><th>成本</th><th>平台</th><th>FT8 与数字模式</th><th>频谱</th></tr></thead>
+            <tbody>
+                <tr><td>SCU-LAN10 + Yaesu 软件</td><td>$299.95</td><td>仅 Windows</td><td><strong>官方不支持</strong></td><td>有，双频段瀑布图</td></tr>
+                <tr><td>wfview 客户端/服务端</td><td>免费</td><td>跨平台</td><td>音频不经 USB 处理</td><td>有（经 SCU-LAN10；FT-710 支持标注为 beta）</td></tr>
+                <tr><td>rigctld + 任意客户端</td><td>免费</td><td>跨平台</td><td>支持</td><td>无</td></tr>
+                <tr><td>SimpleHRR（树莓派）</td><td>免费 + 树莓派</td><td>浏览器</td><td>局域网内简单</td><td>无</td></tr>
+                <tr><td>RemoteTx</td><td>付费</td><td>—</td><td>自称支持，需自行确认</td><td>自称支持</td></tr>
+                <tr><td><strong>MRRC Modern（本站）</strong></td><td><strong>免费，开源</strong></td><td><strong>浏览器，任意系统</strong></td><td><strong>支持</strong></td><td><strong>有：FT4222 SPI 通道的 850 个幅度值，不需要额外硬件</strong></td></tr>
+            </tbody>
+        </table></div>
+        <p>本站的延伸阅读：<a href="/blog/ft710-usb-remote-control/">USB 内部机制</a>、<a href="/blog/opus-vs-pcm-remote-audio/">远程音频用 Opus 还是 PCM</a>（这解释了 SCU-LAN10 的 ≥2 Mbps 要求为什么重要），以及<a href="/blog/efhw-esp32s3-auto-tuner/">一台舵机驱动的 EFHW 天调</a>，专门对付内置 3:1 天调搞不定的天线。</p>
+    </div></section>
+
+    <section class="ag-section" id="buying"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">09 · 选购</span>
+            <h2 class="ag-section-title">价格、配件，以及它真正发光的地方</h2>
+            <p class="ag-section-subtitle">2026 年 9 月的实际成交价：标价不等于成交价。</p>
+        </header>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>渠道</th><th>AESS</th><th>Field</th></tr></thead>
+            <tbody>
+                <tr><td>DX Engineering</td><td>标价 $1,149.95 → <strong>$1,029.95</strong>（63 条评价，4.75/5）</td><td>标价 $1,169.95 → <strong>$1,069.95</strong>（47 条评价，4.75/5）</td></tr>
+                <tr><td>Ham Radio Outlet</td><td>标价 $1,299.95，叠加 $100 Yaesu 优惠券后 <strong>$1,029.95</strong></td><td>$1,199.95 → $1,074.95</td></tr>
+                <tr><td>GigaParts</td><td><strong>$999.95</strong>（原 $1,099.95）</td><td>$1,074.95 → <strong>$884.95</strong></td></tr>
+                <tr><td>ARRL QST（2023-08 评测）</td><td>当时的厂商价 $1,150</td><td>—</td></tr>
+                <tr><td>RadioMasterList 价格历史</td><td>$1,299.95（2022-09 与 2023-03）；含 MARS/CAP 为 $1,339.90</td><td>—</td></tr>
+                <tr><td>欧洲 / 英国</td><td>RadioWorld UK £979.96（不含增值税 £816.63）+ £85 现金回馈；MHzOutdoor €1,119 → €999</td><td>—</td></tr>
+                <tr><td>日本首发（2022-08）</td><td colspan="2">¥154,000 含税；100 W、50 W（M）、10 W（S）三个版本同价</td></tr>
+                <tr><td>用户报告的成交价</td><td>$1,000（eHam K7KHZ）；Reddit 2024 促销 $818–875</td><td>$879 含运费（K8DXX，2024-02）；$900（N2DTS，2024-01）</td></tr>
+            </tbody>
+        </table></div>
+        <p><strong>读法：真实成交集中在 $900–1,100</strong>，$1,299 是虚高的标价。有意思的是，这次核查发现两家经销商的 Field 反而比 AESS <em>贵</em> $40，而以往 Field 通常便宜约 $100，所以要逐家比，不要按规律套。同一周的竞品价格锚点：FTDX10 $1,649.95，IC-7300 促销后约 $1,000，IC-7610 $3,499.95（2025 年的 IC-7610-32 为 $3,899.95），K3S 起价 $2,300（10 W）/ $2,900（100 W），Xiegu G90 $499.99。</p>
+        <h3 style="margin:2rem 0 1rem;">值得花钱的配件</h3>
+        <ul>
+            <li><strong>SD 卡（≥32 GB），不随附</strong>。所有设置、存储、QSO 录音、截图和固件更新都放在卡上。注意录音时 VOX 不工作。</li>
+            <li><strong>一台 25–35 A 电源</strong>。100 W 发射标称 21 A，实测 18.2 A。机主们用 Astron RS-35M 或 Alinco 32 A；一份磷酸铁锂（Bioenno 12 V 15 Ah）野外报告给出 SSB 峰值 11.5 A，Reddit 上的一次测量是接收 1.35 A、发射峰值 18 A。</li>
+            <li><strong>话筒</strong>：随附的 SSM-75E 已经拿到不错的音频反馈；升级选项是 M-70（$144.95）、M-90D（$174.95）和双振膜 M-100（$439.95）。真正的杠杆是<strong>三段参量均衡（PRMTRC）</strong>，处理器开与关各存一套配置。</li>
+            <li><strong>SP-40</strong>（$75–125），买的是 Field 又想要 AESS 时补上。评价两极：一位评测者说跟一对好的监听音箱比，AESS"就是个笑话"，多数机主却喜欢。这是音色取向问题，先听再决定。</li>
+            <li><strong>没有滤波器选件</strong>。没有顶滤波器插槽，也没东西可买，选择性全在 DSP。</li>
+            <li>其他：SCU-LAN10 $299.95 / £229.99（需要 MAIN ≥ V01-11）；FH-2 CW 键盘 $94.95；SMB-209 车载支架 $37.95；MHG-1 提手 $14.95；YH-77STA 耳机 $84.95；CT-39A 数据线 $9.95；ATAS-120A 车载天线 $349.95；ATAS-25 便携天线 $209.95；ATBK-100 阳台对重 $84.95；FC-40 外置天调 $274.95 / €285；RT Systems YPS-FT710 写频软件 $25（需要固件 ≥ V01-10）；嫌旋钮不行就配 CatMeters CatTouch/Catknobz。</li>
+        </ul>
+        <h3 style="margin:2rem 0 1rem;">便携与车载</h3>
+        <p>Field 的宣传定位是"车载、Field Day 和便携操作"，还有专用的 SMB-209 支架。但<strong>前面板不能分离</strong>，装在车里不如 FT-891 或 IC-705 灵活。4.5 kg 的重量做不了 SOTA，POTA 和车载露营才是它的舒适区，常配的加件是 MHG-1 提手或 Field 背带。没有内置电池，也没有 IP 防护等级。DX Engineering 自己视频里的电流对比：FT-891 接收 2 A / 发射 23 A，FT-710 接收 2.2 A / 发射 21 A；一位 QRZ 评测者认为约 1.7 A 级的接收电流对背包出行偏高，建议野外把功率降到 20–40 W。</p>
+        <p>机主们说它出色的地方：NT9M 在 160 m CW 比赛里，从 S9+20 的 pileup 底下把弱台拽了出来；VE3VTH 第一次在拥挤的 Winter Field Day 频段上通联到一个被盖住的 POTA 台；K8DXX 在旁边架了一台配便携天线的 G90，形容差别"像白天和黑夜"；KK7XE 认为它会成为"POTA 和露营这类便携场景下的一台好机器"。</p>
+        <h3 style="margin:2rem 0 1rem;">口碑，用数字说</h3>
+        <p>eHam 上有 <strong>78 条评价</strong>（2026 年 6 月快照），DX Engineering 两个版本都是 <strong>4.75/5</strong>（63 条和 47 条）。独立评测者反复给出的好评：接收安静、动态范围货真价实（"三十年里我用过最好的 CW 接收机"，VK2IK）、值这个价（"表现远超它这一档"，K8DXX）、DNR 与 DSP 工具明显领先 IC-7300、触摸/鼠标/DVI 的桌面化操作流程，以及开箱即用的发射音质和充足的 EQ 余量。反复出现的抱怨是风扇、STEP/MCH 旋钮、无背光丝印、过时的 DVI-D 输出、官方驱动只有 Windows 版，以及菜单比 IC-7300 复杂。</p>
+        <div class="ag-table-wrap"><table class="ag-table">
+            <thead><tr><th>该买，如果你……</th><th>别买，如果你……</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>想用 $1,000 拿到接近旗舰的邻近动态范围（107 dB，Sherwood 表第 3）；在城市或拥挤频段操作，150 dBc/Hz 级相位噪声真的有用；在意 SSB 音质和 EQ；想要一块大外接屏加鼠标操作；需要内置天调，还需要 4.5 kg 的轻机身去跑 POTA 这类外出活动。</td>
+                    <td>认真打 CW 比赛或跑 SO2R（选 FTDX10、K3S）；需要两个接收机（IC-7610、FTDX101）；想一台机器覆盖 V/UHF（FT-991A、IC-7100）；预算 $500 做超轻 SOTA（G90、IC-705）；风扇噪声会毁掉你的 CW，那就先冷机听一遍；重度依赖 Linux 数字模式，先查清驱动现状。</td>
+                </tr>
+            </tbody>
+        </table></div>
+        <p><strong>AESS 还是 Field？</strong>固定台、看重音质，选 AESS：光 SP-40 就要 $75–125，两个套装的差价常常不到 $100。跑 POTA、车载，或者已经有好音箱，选 Field，图它的背带和更轻的重量。</p>
+    </div></section>
+
+    <section class="ag-section" id="sources"><div class="container">
+        <header class="ag-section-header">
+            <span class="ag-section-label">10 · 资料来源</span>
+            <h2 class="ag-section-title">一手来源</h2>
+            <p class="ag-section-subtitle">本页每一个数字都能追溯到下面其中之一；完整的带注释来源清单在我们的调研笔记里。</p>
+        </header>
+        <ul>
+            <li><a href="http://www.sherweng.com/table.html">Sherwood Engineering 接收机测试表</a>与 FT-710 长报告（序列号 2J020104，2022-10-01 测试），全部可对比的实验室数据出自这两处</li>
+            <li><a href="https://www.arrl.org/files/file/ProductReviewsForDeb/2023/pr082023.pdf">ARRL / QST 2023 年 8 月产品评测</a>，独立实验室数据与 SDR 板的披露</li>
+            <li><a href="https://www.qsl.net/ab4oj/test/docs/ft710notes.pdf">ab4oj 的 FT-710 实验台记录</a>，转换器型号指认、采样率推导、过载点、维修手册发现</li>
+            <li><a href="https://yaesu.com/product-detail.aspx?Model=FT-710&amp;CatName=HF%20Transceivers/Amplifiers">Yaesu 的 FT-710 产品页</a>，外加四份官方手册（操作、CAT OM 2306-C、固件更新、SCU-LAN10 更新）</li>
+            <li>RadCom 上 G3SJX 的深度评测（内部照片、DAC 时钟、前端压缩点），以及 DC4KU 的独立测试报告</li>
+            <li><a href="https://www.radiomasterlist.com/en/yaesu-ft-710.html">RadioMasterList FT-710</a>，彩页引文与价格历史</li>
+            <li>版本差异与定价的经销商页面：<a href="https://www.hamradio.com/detail.cfm?pid=H0-018470">HRO（Field）</a>、<a href="https://www.dxengineering.com/parts/ysu-ft-710-field">DX Engineering</a>、GigaParts、R&amp;L、WiMo、MHzOutdoor、<a href="https://www.hamlife.jp/2022/08/10/yaesu-ft710aess-price/">hamlife.jp（日本首发与 M/S 版本）</a></li>
+            <li><a href="https://www.eham.net/reviews/detail/12377">eHam 评价（78 条）</a>、QRZ 论坛、Reddit r/amateurradio、wsjtx.groups.io、WorldwideDX（Toru Kato 2023 年未解决问题清单）</li>
+            <li>软件：<a href="https://github.com/Hamlib/Hamlib">Hamlib</a>（机型 1049，issue #2021 / #1550）、wfview v2.20/v2.21 发布说明、RT Systems 知识库、Ham Radio Deluxe KB（2023-03-28）、N1MM+ 文档、POTACAT 的 FT-710 章节</li>
+        </ul>
+        <p style="margin-top:1.5rem;color:var(--text-secondary);font-size:.9375rem;"><em>RIG 专栏的配套阅读：<a href="/rig/ic-r9000/">第 1 期 ICOM IC-R9000</a> 与<a href="/rig/nrd-535/">第 2 期 JRC NRD-535</a> 量出了 1989 年和 1991 年的旗舰能做到什么。FT-710 是这个论证的另一半：一台现代机器拆掉了那些老机器赖以工作的模拟滤波，用 $1,000 换来 107 dB 邻近动态范围，代价是把 20 dB 阻塞让给了一块已经不存在的顶滤波器。</em></p>
+    </div></section>
+    </main>
+
+    <footer class="ba-footer"><div class="ba-footer-inner">
+        <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+                <h3>BG1SB</h3>
+                <p>业余无线电操作员、软件工程师，VLSC 开源远程控制生态的构建者。本页写到的 FT4222 频谱通路，也出自这套工作。</p>
+            </div>
+        </div>
+        <div class="blog-related">
+            <h3>延伸阅读</h3>
+            <ul>
+                <li><a href="/blog/ft710-usb-remote-control/">一根 USB 线遥控 Yaesu FT-710</a></li>
+                <li><a href="/mrrc_modern/">MRRC Modern：跑在这台机器上的开源远程栈</a></li>
+                <li><a href="/rig/">RIG：传奇电台深度解析</a></li>
+                <li><a href="/blog/opus-vs-pcm-remote-audio/">Opus 对 PCM：HF 远程音频</a></li>
+                <li><a href="https://github.com/cheenle" target="_blank" rel="noopener">GitHub 上的全部仓库</a></li>
+            </ul>
+        </div>
+        <div class="blog-prevnext"><a href="/rig/zh/"><i class="fas fa-arrow-left"></i> 返回 RIG 专栏</a><a href="/rig/ft710/" lang="en">English <i class="fas fa-arrow-right"></i></a></div>
+    </div></footer>
+    <script src="../../../js/global-nav.js?v=8" defer data-gn="1"></script>
+</body>
+</html>

@@ -7,8 +7,11 @@ BASE = "https://www.vlsc.net"
 
 # Redirect stubs (meta-refresh pages whose canonical lives elsewhere) must not
 # be advertised to crawlers: from-intent-to-delivery merged into
-# seven-billion-tokens on 2026-09-06 and 301s at the nginx layer.
-EXCLUDE_PREFIXES = ('blog/from-intent-to-delivery/',)
+# seven-billion-tokens on 2026-09-06 and 301s at the nginx layer; ft710.html
+# moved into the RIG column on 2026-09-28 (/ft710.html -> /rig/ft710/,
+# /zh/ft710.html -> /rig/ft710/zh/) after ~30 minutes live at the old URLs.
+EXCLUDE_PREFIXES = ('blog/from-intent-to-delivery/',
+                    'ft710.html', 'zh/ft710.html')
 
 
 def find_html(base):

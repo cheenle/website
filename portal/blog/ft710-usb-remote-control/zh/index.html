@@ -81,7 +81,7 @@
       <div class="ag-anchor-shell"><div class="container"><nav class="ag-anchor-nav" aria-label="页面章节"><a href="#anatomy">01</a><a href="#ft4222">02</a><a href="#scopeframe">03</a><a href="#cat">04</a><a href="#pipeline">05</a><a href="#tx">06</a><a href="#fallback">07</a><a href="#vs-sculan10">08</a><a href="#closing">09</a></nav></div></div>
 
       <main class="ba-main">
-        <p class="lede">如果你有 FT-710，又想过远程，那你一定碰见过 SCU-LAN10：雅马哈那只把电台接上局域网的小盒子。它确实能用，但它是额外一只盒子、一套私有协议、一个关着的黑箱。这篇讲另一条路：用一根 USB 线控制 FT-710，读出真正的频谱与瀑布图，同时把音频带出来，不需要任何额外硬件。</p>
+        <p class="lede">如果你有 FT-710，又想过远程，那你一定碰见过 SCU-LAN10：Yaesu那只把电台接上局域网的小盒子。它确实能用，但它是额外一只盒子、一套私有协议、一个关着的黑箱。这篇讲另一条路：用一根 USB 线控制 FT-710，读出真正的频谱与瀑布图，同时把音频带出来，不需要任何额外硬件。</p>
 
         <div class="ba-tldr" id="tldr">
           <div class="ba-tldr-card">
@@ -112,7 +112,7 @@
               <tr><td>USB 音频编解码</td><td>C-Media</td><td>44.1 kHz 接收采集 + 发射回放</td></tr>
             </tbody>
           </table></div>
-          <p>大多数人以为「USB 就等于 CAT」，因为只有串口是用户看得见的。FT4222 桥和 C-Media 编解码平时被前面板显示和雅马哈自己的 SCU-LAN10 内部消化掉了。用 FTDI D2XX 驱动、按描述符字符串 <code>"FT4222 A"</code> 打开设备，那条藏着的频谱通路就在那里。</p>
+          <p>大多数人以为「USB 就等于 CAT」，因为只有串口是用户看得见的。FT4222 桥和 C-Media 编解码平时被前面板显示和Yaesu自己的 SCU-LAN10 内部消化掉了。用 FTDI D2XX 驱动、按描述符字符串 <code>"FT4222 A"</code> 打开设备，那条藏着的频谱通路就在那里。</p>
           <p>这篇讲的是一个开源项目 MRRC FT-710 的故事，它的起点是一个大多数机主都不知道的事实：FT-710 里已经装好了高质量远程控制需要的一切。背后那只 USB 口不是一条 CAT 串口，它同时暴露三个互相独立的接口。</p>
         </div></section>
 
@@ -157,9 +157,9 @@ Read size:   4096 bytes per transaction</code></pre>
           <header class="ag-section-header">
             <span class="ag-section-label">04 · CAT</span>
             <h2 class="ag-section-title">增强 COM 口上的 CAT</h2>
-            <p class="ag-section-subtitle">38400 波特的雅马哈原生 CAT，不用 Hamlib，也不用 rigctld。</p>
+            <p class="ag-section-subtitle">38400 波特的Yaesu原生 CAT，不用 Hamlib，也不用 rigctld。</p>
           </header>
-          <p>控制走 CP210x 串口，用的是雅马哈原生 CAT，不经过 Hamlib，也不经过 rigctld。这个项目刻意不依赖 Hamlib，SDD 里有一条架构决策专门记了这件事（AD-002）：对 FT-710 的 CAT 方言来说，直接实现更小也更快。</p>
+          <p>控制走 CP210x 串口，用的是Yaesu原生 CAT，不经过 Hamlib，也不经过 rigctld。这个项目刻意不依赖 Hamlib，SDD 里有一条架构决策专门记了这件事（AD-002）：对 FT-710 的 CAT 方言来说，直接实现更小也更快。</p>
           <p>协议就是那套熟悉的两字母指令格式：</p>
           <pre><code>FA014200000;   # 把 VFO-A 设到 14.200 MHz</code></pre>
           <p>实际使用中要紧的几条：</p>
@@ -222,7 +222,7 @@ EX040200   # 把频谱设成 CENTER 模式（不是 FIX 模式）</code></pre>
             <tbody>
               <tr><td>硬件</td><td>单独一只网络盒子</td><td>无：你已经有的那根 USB 线</td></tr>
               <tr><td>频谱通路</td><td>以太网上的私有 UDP</td><td>原始 4096 字节 SPI 帧，开源解码</td></tr>
-              <tr><td>客户端</td><td>雅马哈软件</td><td>任何现代浏览器（WebSocket）</td></tr>
+              <tr><td>客户端</td><td>Yaesu软件</td><td>任何现代浏览器（WebSocket）</td></tr>
               <tr><td>频谱降级</td><td>无</td><td>FT4222 缺席时用 S 表合成</td></tr>
               <tr><td>可审查性</td><td>关着的黑箱</td><td>帧格式与 CAT 实现全部有文档</td></tr>
             </tbody>
@@ -252,6 +252,7 @@ EX040200   # 把频谱设成 CENTER 模式（不是 FIX 模式）</code></pre>
         <div class="blog-related">
           <h3>延伸阅读</h3>
           <ul>
+            <li><a href="/rig/ft710/zh/">FT-710 深度专题：架构、实验室数据、固件与全部坑点</a></li>
             <li><a href="/blog/opus-vs-pcm-remote-audio/zh/">Opus 对 PCM：HF 远程音频的延迟、带宽与取舍</a></li>
             <li><a href="/blog/efhw-esp32s3-auto-tuner/zh/">设计一台 ESP32-S3 舵机驱动的天线调谐器</a></li>
             <li><a href="/blog/three-axes/zh/">三板斧：从业务意图到现场证据，端到端</a></li>

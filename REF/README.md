@@ -109,6 +109,57 @@
 
 **验证**：HTML 解析通过；本地 HTTP 服务 `/`、`/zh/`、`/rig/`、`/rig/nrd-535/`、`/rig/nrd-535/zh/` 均 200；首页中英各含 1 个 `id="rig"` 区块；本地链接检查无死链；`pytest portal/tests/` 100 通过 / 1 失败（mrrc 子站旧页面的既有失败，与本次无关）。
 
+## 任务六：Yaesu FT-710 深度研究与专题页（2026-09-28）
+
+**目标**：对 Yaesu FT-710 做与 IC-R9000／NRD-535 同规格的全面深入研究，并在 portal 上生成一个专题页。
+
+**方法**：5 路并行调研代理（配额窗口已恢复）→ 覆盖 60+ 独立来源（Yaesu 日/美官方页与 4 份官方手册、Sherwood 长报告原始 PDF、ARRL QST 2023-08 原始 PDF、RadCom G3SJX 深度评测、ab4oj 与 DC4KU 两份独立实验室报告、经销商规格与价格、eHam 78 条评价/QRZ/Reddit/groups.io）。原始输出 12.6 万字符，由子代理按 subagent 边界稳健切分归档。
+
+| # | 方向 | 原始记录 |
+|---|---|---|
+| 19 | 规格与架构（含两处前提纠错） | [19-FT710-规格与架构.md](19-FT710-规格与架构.md) |
+| 20 | 实测基准（Sherwood 完整行 + 横向对比 + IP+/dither 可比性规则） | [20-FT710-实测基准.md](20-FT710-实测基准.md) |
+| 21 | 固件历史（V01-06→V01-12）与已知问题 | [21-FT710-固件与已知问题.md](21-FT710-固件与已知问题.md) |
+| 22 | 远程控制与软件生态（CAT 考据、SCU-LAN10、软件矩阵） | [22-FT710-远程控制与软件生态.md](22-FT710-远程控制与软件生态.md) |
+| 23 | 选购、配件与口碑 | [23-FT710-选购配件与口碑.md](23-FT710-选购配件与口碑.md) |
+
+汇总报告：[FT-710-最终报告.md](FT-710-最终报告.md)（同步存于 `RIG/research/FT-710.md`，9 章 + 2 附录，含 23 条来源矛盾判定表与"措辞纪律"清单）。
+
+**必须纠正的两处流传错误**（专题页开篇即写）：屏幕是 **4.3 英寸电阻触摸屏**（不是 10.1 英寸；疑为把 10.9 cm 对角线误读成英寸）；频谱跨度是 **1 kHz–1 MHz、30 FPS、100 dB**（不是 300 kHz，那是 FTDX10/101 的指标）。
+
+**关键结论**：① 2 kHz 邻近动态范围 **107 dB**（ARRL 106 dB），Sherwood 全表第 3，是 1,100 美元以下唯一破 100 dB 的机器，且从 20 kHz 到 2 kHz 只掉 0.5 dB（纯直采无顶滤波器的结构性优势；IC-7300 同条件掉 9 dB）；② 弱项是**阻塞 129 dB**（被 ADC 过载保护硬性封顶，>+1 dBm ≈ S9+74 dB 触发）、**IPO 底噪 −127 dBm**（比 IC-7300 差 6 dB，开 P1 后 −135 反超）、**AGC 阈值 4.0 µV 全组最高且不可调**；③ 本振相噪 150 dBc/Hz@10 kHz 是真强项（无 50 kHz 数据，因超过 −154 后保护电路触发）；④ AESS 与 Field 是同一台机器，只差附件；⑤ 固件停在 **V01-12（2024-02-29）**，两年半无更新；⑥ 无任何官方召回/维修公告；⑦ ARRL 的样机曾查出 **SDR 板缺陷元件**、换板后才达标（引用其数据须带此前提）；⑧ 对比 Icom 数据时必须统一用 `ab`（IP+ ON）口径，混用会得出相反结论。
+
+**与本站既有资产的关系**：`portal/blog/ft710-usb-remote-control/` 已把 FT4222 SPI 频谱通道逆向写透（4096 字节帧、850 bin、~30 fps），专题页只做一句话内链并升华为"本站是官方未文档化通道的独立第二来源"；MRRC Modern 作为"免硬件、跨平台、开源"的远程路径，与 SCU-LAN10（$299.95、Windows-only、FT8 官方不支持）正面对照。子代理发现并修正了一处失效链接：`/mrrc_ft710/` 单机站已于 2026-09-12 归档、301 至 `/mrrc_modern/`。
+
+**产出**：
+- `portal/ft710.html`（英文专题页，10 节：纠错 → 版本 → 架构 → 实测 → vs FTDX10 → 固件 → 已知问题 → 控制接口 → 软件生态 → 选购）+ `portal/zh/ft710.html`（中文，子代理翻译）
+- 站内入口：首页中英 RIG 区块各加一张"配套专题"卡片；FT-710 USB 博客中英两版的延伸阅读各加一条链接；专题页自身 navbar 含 FT-710 项
+- sitemap 重新生成（88 条 URL）
+
+**验证**：`pytest portal/tests/` 100 通过 / 1 失败（mrrc 子站既有失败，与本次无关）；中文版完成后补做链接与 HTTP 200 校验。
+
+**收尾（同日）**：
+- `portal/zh/ft710.html` 生成（61,812 字节 / 469 行，与英文版行数一致）。子代理逐项校验：id 11/11、class 多重集 155/155、全部标签多重集 1049/1049、`<pre>` 1/1、`<table>` 14/14、`data-claim-type` 6/6；带单位量值 218/218、固件版本号 25/25、ISO 日期 30/30、金额 78/78 完全一致；错误译法（混音器/接收者/屋顶滤波器）0 处；`10.1 英寸` 与 `300 kHz` 仅出现在"讹传"引号内与辟谣句中
+- **修复了英文版的一个真实缺陷**：`portal/ft710.html` 漏写 `<title>`（子代理发现），中英两版均已补上
+- 品牌译名统一：`portal/blog/ft710-usb-remote-control/zh/index.html` 中 5 处"雅马哈"改为 Yaesu，与新页面一致
+- 中文页正文内链保持指向英文版（与 `rig/*/zh` 系列既有做法一致，目标页均带语言切换）；navbar 按 7 个既有 `portal/zh/*.html` 的写法（`/blog/` + `/rig/zh/`）
+- sitemap 重新生成：**89 条 URL**，含 `/ft710.html` 与 `/zh/ft710.html`
+- 最终校验：6 个相关页面 HTML 解析通过；本地 HTTP `/ft710.html`、`/zh/ft710.html`、`/`、`/zh/`、`/rig/`、`/rig/nrd-535/`、`/blog/ft710-usb-remote-control/zh/` 全部 200；站内链接无死链（`/mrrc*/`、`/efhw/`、`/sunmrrc/` 等子站路径已确认在仓库根存在，由 nginx alias 提供）
+
+**迁移到 RIG 专栏下（同日，应用户要求）**：专题页原挂在站点根目录，已迁入专栏目录，与 `rig/ic-r9000/`、`rig/nrd-535/` 同构。上文提到的 `portal/ft710.html` / `portal/zh/ft710.html` 现在是**跳转占位页**，正文位置为：
+- `portal/rig/ft710/index.html` → https://www.vlsc.net/rig/ft710/
+- `portal/rig/ft710/zh/index.html` → https://www.vlsc.net/rig/ft710/zh/
+
+配套处理：
+- 旧 URL 在 **nginx 层做 301**（`nginx/vlsc.net.conf` 加两条 `location =`，与 `from-intent-to-delivery` 同一处先例），根目录与 `zh/` 下另留 meta-refresh + `noindex` 占位页兜底；占位页仍加载 global-nav.js 以满足 `test_analytics_coverage` 的全站约束
+- `portal/make_sitemap.py` 的 `EXCLUDE_PREFIXES` 加入两个占位页（sitemap 必须等于生成器输出，不能手改）；sitemap 仍为 89 条，其中 rig 相关 8 条，`ft710.html` 零残留
+- 全站引用改到新地址：首页中英卡片、博客中英延伸阅读；`portal/rig/index.html` 与 `zh/` 各新增一张 **"配套专题 / Companion"** 卡片（不编为第 3 期，因为 FT-710 是在产现代机而非传奇老机）
+- **顺带修掉一批中文页指向英文页的链接**：FT-710 中文页 navbar（`/zh/`、`/zh/#projects`、`/zh/agentic.html`、`/zh/engineering.html`、`/rig/ft710/zh/`），以及 `rig/ic-r9000/zh` 与 `rig/nrd-535/zh` 的面包屑与页脚（`/zh/`、`/rig/zh/`、`/rig/ic-r9000/zh/`）
+- 迁移前后结构逐项比对一致：id 11/11、class 多重集 155/155、`<table>` 14/14、`<pre>` 1/1、`data-claim-type` 6/6、数字与型号 token（英文 860、中文 857）完全相同；变化的 36 处属性全部是路径与 canonical
+- **发现并规避了一个部署风险**：仓库里的 `nginx/vlsc.net.conf` 与线上配置**已漂移**——线上用 `resolver` + 变量式 `proxy_pass`（按 DNS 名回源，家庭 IPv6 变更无需 reload），仓库副本仍是硬编码 IPv6 地址。因此**没有整份覆盖线上配置**，而是在本地副本与线上文件上做同一处精准插入（线上先备份为 `vlsc.net.bak-ft710-301-20260928202700`，`nginx -t` 通过后 reload）。仓库副本仍落后于线上，需要单独同步
+
+**线上验证**：`/rig/ft710/`、`/rig/ft710/zh/`、`/rig/`、`/rig/zh/`、两篇老文章中文版全部 200；`/ft710.html` 与 `/zh/ft710.html` 均 **301** 到对应新地址；sitemap 89 条且无 `ft710.html`；首页中英卡片、RIG 落地页（4 处引用）、博客中文版延伸阅读均已指向新地址。备份：`/var/www/backups/landing_20260928_202725.tgz`。
+
 ## 核心结论速查
 
 **IC-R9000（1989–98）**：通病根因是散热——REG/DC-DC 电解电容批量干涸、CRT 烧屏且官方停修（只能第三方 LCD 改装）。保养三板斧：加风扇、预防性换 105°C 电容、记忆电池不断电更换。

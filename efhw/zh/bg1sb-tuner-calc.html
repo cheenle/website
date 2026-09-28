@@ -99,16 +99,16 @@
   </div>
 
   <div class="calc-card">
-    <h3>模型边界（重要，别盲信）</h3>
-    <div class="warn">⚠️ 无锚点频段（尤其 3.9–5.3MHz、8–10MHz、16–18MHz、22–24MHz）的内插可能连电抗符号都错——60m 实测教训：两个多项式拟合族在无数据间隙里都猜成容性，实测是感性 +112Ω，按拟合参数会调到 SWR 22+。本测算器对远离锚点的频率会标<span class="conf-lo">低置信</span>，此时请用面板 Tune 让设备实测（确认学习会自动入库纠正）。</div>
+    <h3>模型边界（重要）</h3>
+    <div class="warn">⚠️ 无锚点频段（尤其 3.9–5.3MHz、8–10MHz、16–18MHz、22–24MHz）的内插可能连电抗符号都错——60m 实测教训：两个多项式拟合族在无数据区间均给出容性结果，而实测为感性 +112Ω，按拟合参数会调到 SWR 22+。本测算器对远离锚点的频率会标<span class="conf-lo">低置信</span>，此时请用面板 Tune 让设备实测（确认学习会自动入库纠正）。</div>
     <p class="note" style="margin-top:10px;">
       · 锚点都是<b>干燥天气</b>基线；雨水会使 17m 等反谐振区段 SWR 大幅漂移（2026-09-27 19:09 的 18.1MHz bypass=12.56 与当晚 00:11 实测 ≈5 不自洽，即为天气态变化）。<br>
-      · ATR 电表在低 SWR 端有量化压缩（读数普遍比模型低 0.1–0.2），SWR=1.00 为量程地板。<br>
+      · ATR 电表在低 SWR 端存在量化压缩（读数普遍比模型低 0.1–0.2），SWR=1.00 为量程下限。<br>
       · 反推 Z 的不确定度约 ±5Ω/±15Ω，映射到 L/C 约 ±3 步/±5 步；所以测算值是<b>调谐起点</b>，最终参数以设备扫描+实测为准。
     </p>
   </div>
 
-  <p class="note" style="text-align:center;">BG1SB · EFHW 21m · 49:1(2:14) 2643251002 · ATR-1000 · 数据基线 2026-09-28 · <a href="bg1sb-antenna.html" style="color:#7dd3fc;">返回天线深度分析</a></p>
+  <p class="note" style="text-align:center;">BG1SB · EFHW 21m · 49:1(2:14) 2643251002 · ATR-1000 · 数据基线 2026-09-28 · <a href="bg1sb-antenna.html" style="color:#7dd3fc;">返回天线实测分析</a></p>
 </div>
 
 <script>

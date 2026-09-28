@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="BG1SB 自用 EFHW 天线的全面实测画像：f1=6.50MHz 谐振平台、七段裸 SWR 全景、49:1 UNUN 实测裁决、PSK Reporter 辐射交叉验证、雨致失谐定量记录。全部数据可复算。"
+      content="BG1SB 自用 EFHW 天线的实测数据汇总：f1=6.50MHz 谐振平台、七段裸 SWR 全景、49:1 UNUN 实测对比、PSK Reporter 辐射交叉验证、雨致失谐定量记录。数据可复算。"
     />
     <meta name="author" content="BG1SB" />
     <meta name="theme-color" content="#0a0e14" />
     <link rel="alternate" hreflang="en" href="../bg1sb-antenna.html" />
     <link rel="alternate" hreflang="zh-CN" href="bg1sb-antenna.html" />
-    <title>BG1SB EFHW 天线实测画像 — 数据驱动的深度分析 — EFHW Projects</title>
+    <title>BG1SB EFHW 天线实测画像 — EFHW Projects</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -59,7 +59,7 @@
         <a href="#system">01 · 天线与测量系统</a>
         <a href="#resonance">02 · 谐振结构</a>
         <a href="#bands">03 · 七段裸 SWR</a>
-        <a href="#unun">04 · 49:1 裁决</a>
+        <a href="#unun">04 · 49:1 对比</a>
         <a href="#radiation">05 · 辐射验证</a>
         <a href="#rain">06 · 雨致失谐</a>
         <a href="#tuner">07 · 天调画像</a>
@@ -72,18 +72,18 @@
       <div class="hero-content">
         <div class="hero-badge">
           <i class="fas fa-chart-line"></i>
-          <span>BG1SB 台站实测 · 2026-09-27 画像 · 2026-09-28 学习库全校准 · 全部可复算</span>
+          <span>BG1SB 台站实测 · 2026-09-27 扫描 · 2026-09-28 学习库校准 · 数据可复算</span>
         </div>
         <h1 class="hero-title">
-          这根天线的每一分贝<br /><span class="gradient">都有测量记录在案</span>
+          EFHW 斜拉天线的<br /><span class="gradient">实测数据画像</span>
         </h1>
         <p class="hero-subtitle">
-          一副架在 4 楼窗台与树腰之间的 21.9 米 EFHW 斜拉线，配 Fair-Rite
-          2643251002（2:14 匝，49:1）UNUN 和 ATR-1000 自动天调。
-          本页是它的完整实测画像：基波谐振实测 6.50 MHz、七段裸 SWR 全景、
-          49:1 变比的实证裁决、PSK Reporter 七千公里级 DX 的辐射交叉验证，
+          一副架设在 4 楼窗台与树腰之间的 21.9 米 EFHW 斜拉天线，配 Fair-Rite
+          2643251002（2:14 匝，49:1）UNUN 与 ATR-1000 自动天调。
+          本页汇总它的实测数据：基波谐振 6.50 MHz、七段裸 SWR 全景、
+          49:1 变比的实测对比、PSK Reporter 七千公里级 DX 的辐射交叉验证，
           以及一次完整降雨过程中天调参数漂移的逐分钟记录。
-          所有原始数据（JSON）与复算脚本都在仓库里。
+          所有原始数据（JSON）与复算脚本均已公开。
         </p>
         <div class="hero-actions">
           <a href="#resonance" class="btn btn-primary btn-large"
@@ -102,8 +102,8 @@
           <span class="section-label">01 · 天线与测量系统</span>
           <h2 class="section-title">被测对象与测量链</h2>
           <p class="section-subtitle">
-            读数据之前先认识天线和尺子。测量链本身经过交叉验证：
-            孤立异常点全部复测裁决，测量期间所有自动调谐通道物理隔离。
+            先说明被测天线与测量方法。测量链经过交叉验证：
+            孤立异常点全部复测确认，测量期间所有自动调谐通道物理隔离。
           </p>
         </div>
         <table class="spec-table">
@@ -114,7 +114,7 @@
             <tr>
               <td><b>天线形式</b></td>
               <td>EFHW 斜拉线（sloper）</td>
-              <td>馈电点 4 楼窗台（约 10–12 m 高），向导线南偏西 ~40°（方位 ≈220°）斜下，末端挂 3 m 高树腰</td>
+              <td>馈电点 4 楼窗台（约 10–12 m 高），导线朝南偏西 ~40°（方位 ≈220°）斜下，末端挂 3 m 高树腰</td>
             </tr>
             <tr>
               <td><b>振子长度</b></td>
@@ -150,10 +150,10 @@
         </table>
         <div class="calc">
           <b>数据纪律。</b>本页所有 SWR 数值来自 ATR-1000 bypass 状态的实测电表读数，
-          不来自仿真。所有"推演"段落明确标注。测量中吸取的教训也如实记录：
+          不来自仿真；所有"推演"段落均已标注。测量中也记录了一次失败：
           第一次复测曾被同台另一套系统（mrrc_modern）的自动调谐守卫污染——
-          它在我们扫描时触发了调谐，后续频点带着 L/C 测出了假低 SWR。
-          该数据已作废重测，此教训已固化为操作规程。
+          对方在扫描期间触发调谐，后续频点带着 L/C 读数，得到偏低的假 SWR。
+          该数据已作废重测，并固化为操作规程。
         </div>
       </div>
     </section>
@@ -162,10 +162,10 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">02 · 谐振结构实测</span>
-          <h2 class="section-title">f1 = 6.50 MHz：教科书式的 V 曲线</h2>
+          <h2 class="section-title">f1 = 6.50 MHz：基波谐振实测</h2>
           <p class="section-subtitle">
             6.0–7.3 MHz 以 10 kHz 步进加密扫描 102 点。
-            SWR=1.00 平台宽 160 kHz，两翼对称平滑上升——没有任何仿真能比这更干净。
+            SWR=1.00 平台宽 160 kHz，两翼对称平滑上升。
           </p>
         </div>
         <figure style="text-align: center; margin: 2rem 0">
@@ -212,14 +212,14 @@
           </tbody>
         </table>
         <div class="calc">
-          <b>谐波比逐级上漂（1 : 2.15 : 3.28 : 4.38）是 EFHW 末端效应的指纹：</b>
+          <b>谐波比逐级上漂（1 : 2.15 : 3.28 : 4.38）是 EFHW 末端效应的典型特征：</b>
           线端分布电容在基波时对电气长度的缩短作用占比最大，频率越高影响越小，
-          于是高次谐振逐级高于理想整数倍。<br /><br />
-          <b>这个线长是"意外优化"：</b>f1 压在 6.50 使整条 40m 段落在谐振右侧上升翼
-          （7.0 MHz 起步裸 SWR 已 2.87，全段必须天调）；但它同时把 2f 送到 20m 下沿、
-          3f 送进 15m 正中——当前长度对高波段是礼物，对 40m 是代价。
-          <b>f1 区品质因数 Q ≈ 12</b>（SWR≤2 带宽 530 kHz），比教科书"针尖"宽得多——
-          近地损耗与馈线参与拉低了 Q，换来的正是 15m 的宽平台。
+          因此高次谐振逐级高于理想整数倍。<br /><br />
+          <b>当前线长属于一次无意的优化：</b>f1 位于 6.50 MHz，使整条 40m 段落在谐振右侧上升翼
+          （7.0 MHz 起步裸 SWR 已 2.87，全段必须天调）；同时它把 2f 落在 20m 下沿、
+          3f 落在 15m 段内——这个长度对高波段有利，对 40m 是代价。
+          <b>f1 区品质因数 Q ≈ 12</b>（SWR≤2 带宽 530 kHz），明显宽于理想无损谐振——
+          近地损耗与馈线参与拉低了 Q，对应收益是 15m 的宽平台。
         </div>
       </div>
     </section>
@@ -228,10 +228,10 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">03 · 七段裸 SWR 全景</span>
-          <h2 class="section-title">天调 bypass 下，每段的真实成色</h2>
+          <h2 class="section-title">天调 bypass 下各波段的裸 SWR 实测</h2>
           <p class="section-subtitle">
             7–29.7 MHz 全部七个业余段，312 点，掉读已清洗。
-            这张表回答"哪段能裸用、哪段靠天调、哪段别碰"。
+            下表给出各波段能否免调使用的判断。
           </p>
         </div>
         <figure style="text-align: center; margin: 2rem 0">
@@ -254,8 +254,8 @@
           <tbody>
             <tr>
               <td><b>80m</b> 3.8–3.9</td><td class="deny"><b>16.2</b></td>
-              <td>16.09</td><td>平坦如镜</td>
-              <td class="deny">❌ 结构性死段，天调也救不了</td>
+              <td>16.09</td><td>平坦</td>
+              <td class="deny">❌ 结构性失配，天调无法修复</td>
             </tr>
             <tr>
               <td><b>40m</b> 7.0–7.3</td><td><b>3.47</b></td>
@@ -274,7 +274,7 @@
             <tr>
               <td><b>17m</b> 18.07–18.17</td><td class="deny"><b>12.54</b></td>
               <td>9.64</td><td>反谐振平台</td>
-              <td class="deny">❌ 全线最差，天调也费力</td>
+              <td class="deny">❌ 全线最差，天调匹配困难</td>
             </tr>
             <tr>
               <td><b>15m</b> 21.0–21.45</td><td style="color:#10b981"><b>1.25</b></td>
@@ -305,7 +305,7 @@
         <div class="calc">
           <b>裸用区间汇总（SWR≤2，实测）：</b>6.28–6.81 MHz、14.00–14.20 MHz、
           21.00–21.45 MHz（15m 全段）。<b>SWR≤3：</b>再加 6.07–7.02、20m 全段、
-          28.01–29.41。15m 全段 SWR≤1.63 是这根天线最亮眼的指标。
+          28.01–29.41。15m 全段 SWR≤1.63 是本天线表现最好的指标。
         </div>
       </div>
     </section>
@@ -313,18 +313,18 @@
     <section class="section" id="unun">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">04 · 49:1 裁决</span>
-          <h2 class="section-title">49 与 64 之争，用一次 bypass 测量终局</h2>
+          <span class="section-label">04 · 49:1 变比对比</span>
+          <h2 class="section-title">49:1 与 64:1 变比的实测对比</h2>
           <p class="section-subtitle">
-            "49:1 还是 64:1"在研究站被称为"测量之争"。本页给出本天线的实测裁决。
+            "49:1 还是 64:1"只能由实测回答。以下为本天线的实测结果。
           </p>
         </div>
         <div class="calc">
           <b>判据：</b>在 f1 谐振平台上，天调 bypass（L=0/C=0）实测 SWR = 1.00。
-          这意味着"UNUN + 馈线"链在谐振点把线端阻抗正好变换到了 50 Ω 附近——
-          <b>49:1 对这根天线是正中靶心的变比</b>，线端谐振电阻 ≈ 2200–2700 Ω，
-          贴近理论值 2450 Ω（50 × 49）。换 64:1（目标 3200 Ω）反而会把台端压到
-          35–40 Ω 区间，谐振点也剩 SWR≈1.3 的残底。<br /><br />
+          这说明"UNUN + 馈线"链在谐振点把线端阻抗变换到了 50 Ω 附近——
+          <b>对该天线而言 49:1 是合适的变比</b>，线端谐振电阻 ≈ 2200–2700 Ω，
+          接近理论值 2450 Ω（50 × 49）。若换 64:1（目标 3200 Ω），台端阻抗会落到
+          35–40 Ω 区间，谐振点残留 SWR≈1.3。<br /><br />
           <b>功率设计值：</b>100 W 发射时馈点电压 V=√(P·R) ≈
           <b>495 Vrms / 700 V peak</b>。UNUN 次级绝缘、匝间与前两匝绝缘
           必须按 ≥700 V 峰值设计——与巴伦专题的告诫一致。
@@ -336,10 +336,10 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">05 · 辐射特性交叉验证</span>
-          <h2 class="section-title">PSK Reporter 七天裸数据：它到底往哪打</h2>
+          <h2 class="section-title">PSK Reporter 七天数据：辐射方向实测</h2>
           <p class="section-subtitle">
-            StarRocks 库中 7 天 165 条 FT8 spot（看板 radio.vlsc.net:5000/antenna 的裸数据），
-            按距离分层、方位象限、时段交叉。
+            StarRocks 库中 7 天 165 条 FT8 spot（看板 radio.vlsc.net:5000/antenna 原始数据），
+            按距离、方位象限、时段交叉统计。
           </p>
         </div>
         <table class="spec-table">
@@ -350,17 +350,17 @@
             <tr>
               <td><b>典型仰角</b></td>
               <td>9–12°（看板 hop/elevation 分析）</td>
-              <td>中低仰角，比典型低架偶极好——得益于 4 楼馈点高度</td>
+              <td>中低仰角，优于典型低架偶极，主要来自 4 楼馈点高度</td>
             </tr>
             <tr>
               <td><b>主力工作区</b></td>
               <td>40m 夜间单跳 500–2000 km，TX 均 SNR <b>-0.4 dB</b></td>
-              <td>日韩/东北/华东圈，临近区辐射效率完全正常</td>
+              <td>日韩/东北/华东方向为主；临近区辐射效率正常</td>
             </tr>
             <tr>
               <td><b>最强方位</b></td>
               <td>225–270°（西南偏西）RX 均 <b>-4.9 dB</b>，全场最强</td>
-              <td>正是 sloper 下坡端指向（≈220°）——低端导线下指方向的前后比与理论一致</td>
+              <td>与 sloper 下坡端指向（≈220°）一致——低端导线下指方向的前后比与理论相符</td>
             </tr>
             <tr>
               <td><b>TX/RX 不对称</b></td>
@@ -368,9 +368,9 @@
               <td>发射效率尚可 + 城区本地接收噪声偏高的典型组合</td>
             </tr>
             <tr>
-              <td><b>DX 高光</b></td>
+              <td><b>DX 最远记录</b></td>
               <td>9/26 大雨中被 ZL1RPC（新西兰 10412 km）以 -4 dB 抄收</td>
-              <td>雨中失谐被天调自动重学救回（20:04 自动触发调谐）——低仰角 DX 能力实打实</td>
+              <td>天调自动重学补偿了雨中失谐（20:04 自动触发调谐），验证低仰角 DX 能力</td>
             </tr>
             <tr>
               <td><b>时段特性</b></td>
@@ -386,10 +386,10 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">06 · 雨致失谐</span>
-          <h2 class="section-title">一场雨如何移动这根天线的谐振点</h2>
+          <h2 class="section-title">降雨过程中的谐振点漂移</h2>
           <p class="section-subtitle">
-            9/26–9/27 一次完整降雨过程中，天调学习参数与北京逐时降水量的逐分钟交叉。
-            这是 EFHW 雨致失谐罕见的定量实录。
+            9/26–9/27 一次完整降雨过程中，天调学习参数与北京逐时降水量的逐分钟交叉对照。
+            EFHW 雨致失谐的定量记录不多，这是一次完整实录。
           </p>
         </div>
         <figure style="text-align: center; margin: 2rem 0">
@@ -425,12 +425,12 @@
         </table>
         <div class="calc">
           <b>定量解读：</b>7.05 MHz 上串联 L 需求从 0.6 → 1.5 µH，即天线侧电抗
-          向容性方向移动了 ΔX ≈ ω·ΔL ≈ <b>+40 Ω</b>。机制与教科书一致：
+          向容性方向移动了 ΔX ≈ ω·ΔL ≈ <b>+40 Ω</b>。机制与理论一致：
           雨水增加导线对地分布电容并引入介质损耗 → 电气长度变长 →
           谐振点下移（估算 40–60 kHz）→ 固定频点上更偏容性 → 需要更多串联电感补偿。
-          <b>末端挂在 3 m 树腰上放大了这个效应</b>——湿树皮是半导体，
-          相当于给导线末端并了一个随天气变化的 R-C。
-          运维含义：雨天后对常用段跑一次 2 分钟单段扫频，对比干燥基线即可量化漂移。
+          <b>末端挂在 3 m 树腰上放大了这一效应</b>：湿树皮导电，
+          相当于在导线末端并联了一个随天气变化的 R-C 网络。
+          运维建议：雨天后对常用段跑一次 2 分钟单段扫频，与干燥基线对比即可量化漂移。
         </div>
       </div>
     </section>
@@ -441,9 +441,9 @@
           <span class="section-label">07 · 天调参数画像</span>
           <h2 class="section-title">学习库：实测锚点 + 拟合填充 + 9-28 全库校准</h2>
           <p class="section-subtitle">
-            ATR-1000 学习库的当前状态。实测锚点优先；拟合记录带标记、
-            被真实学习自然覆盖，偏差大时 SWR 守卫自动重调自愈。
-            2026-09-28 做过一次全库实测回放体检（59 簇），20 条失效参数全部修复。
+            ATR-1000 学习库现状。实测锚点优先；拟合记录带标记，
+            会被后续真实学习自然覆盖；偏差过大时由 SWR 守卫触发自动重调修正。
+            2026-09-28 完成一次全库实测回放体检（59 簇），20 条失效参数全部修复。
           </p>
         </div>
         <table class="spec-table">
@@ -468,18 +468,18 @@
               <td>4 锚点设备重调 + 171 点插值</td><td>1.0–1.6</td>
             </tr>
             <tr>
-              <td class="deny">80m</td><td class="deny">C 顶满 1270 pF 上限仍只到 3.86</td>
-              <td class="deny">结构性撞墙</td><td class="deny">放弃</td>
+              <td class="deny">80m</td><td class="deny">C 已达 1270 pF 上限，最好仅到 3.86</td>
+              <td class="deny">结构性失配</td><td class="deny">放弃</td>
             </tr>
           </tbody>
         </table>
         <div class="calc">
-          <b>80m 为什么永远调不进 1.5（三层结构原因）：</b>
-          ① 21.9 m 导线在 3.8 MHz 只有 0.28λ，端馈阻抗极低阻高容抗，裸 SWR 实测
-          16.1–16.3 全段平坦；② 匹配它需要 C≈2500–3500 pF，ATR-1000 电容上限
-          只有 1270 pF——实测 full tune 最好仅 3.86；③ 即使调下 SWR，
-          馈线在 SWR 16 下的附加损耗 3–6 dB，一半功率热在馈线里。
-          要 80m 只能架专用天线。
+          <b>80m 无法调到 1.5 以下的三层结构原因：</b>
+          ① 21.9 m 导线在 3.8 MHz 仅 0.28λ，端馈阻抗呈低阻高容抗，裸 SWR 实测
+          16.1–16.3 且全段平坦；② 匹配需要 C≈2500–3500 pF，而 ATR-1000 电容上限
+          1270 pF——实测 full tune 最好仅 3.86；③ 即使压低 SWR，
+          馈线在 SWR 16 下的附加损耗仍有 3–6 dB，约一半功率耗在馈线上。
+          如需 80m，只能架设专用天线。
         </div>
       </div>
     </section>
@@ -490,9 +490,9 @@
           <span class="section-label">08 · 学习库体检与校准</span>
           <h2 class="section-title">9-28 全库实测回放：59 簇中 20 簇已失效</h2>
           <p class="section-subtitle">
-            库里的 SWR 记录值是历史，不代表今天。把每条学习参数拿到真实天线上
-            逐点回放验证（seed_healthcheck），再用设备调谐 / 锚点插值 / 直接改写
-            三手段修复——这是天调学习库的第一次全面校准。
+            库中 SWR 记录是历史值，不代表当前状态。本次将每条学习参数拿到真实天线上
+            逐点回放验证（seed_healthcheck），再按设备调谐 / 锚点插值 / 直接改写
+            三种手段修复——这是该学习库的首次全面校准。
           </p>
         </div>
         <table class="spec-table">
@@ -516,7 +516,7 @@
             </tr>
             <tr>
               <td>20m 低边 4 点</td><td>体检 nodata</td>
-              <td>补测确认种子无恙（测量假象）</td><td>1.00–1.38</td>
+              <td>补测确认种子有效（测量假象）</td><td>1.00–1.38</td>
             </tr>
             <tr>
               <td>80m 3855 / 40m 7063/7110</td><td>误学习 2.33–15.8</td>
@@ -525,19 +525,19 @@
           </tbody>
         </table>
         <div class="calc">
-          <b>这次体检抓到的一个软件级根因：</b>MRRC 的 PTT 安全看门狗（TOT=120 s
-          硬上限）不豁免 tune 模式——长时间自动调谐会话在 120.9 s 被强制收回 PTT，
-          TX 一断，发给天调的 tune 命令被设备静默忽略，第一轮修复 6 个调谐点
-          全部"假动作"。第二轮改为每个调谐点前 re-arm tune 重置计时，并轮询日志
-          等到"调谐确认学习"出现才切下一个频点（确认学习要求继电器稳定 &gt;8 秒，
-          任何中途切频都会作废），全部成功。<br /><br />
+          <b>本次体检发现的一个软件级根因：</b>MRRC 的 PTT 安全看门狗（TOT=120 s
+          硬上限）不豁免 tune 模式——长时间自动调谐会话在 120.9 s 被强制收回 PTT；
+          TX 中断后，发给天调的 tune 命令被设备静默忽略，第一轮修复的 6 个调谐点
+          全部未生效。第二轮改为每个调谐点前 re-arm tune 重置计时，并轮询日志
+          直至出现"调谐确认学习"再切下一个频点（确认学习要求继电器稳定 &gt;8 秒，
+          中途切频即作废），全部成功。<br /><br />
           <b>配套升级（proxy V5.9.0）：</b>完整调谐结束后若 SWR 较调谐前改善且 ≤1.8，
           设备选定的最终参数强制写库，不再受 3 W 学习功率门限制——修复了弱 tune
-          载波（约 2 W）下手动调谐结果永不入库、被旧库参数覆盖的"白调"问题。
+          载波（约 2 W）下手动调谐结果不入库、反被旧库参数覆盖的问题。
           自动调谐触发阈值定为 SWR &gt; 2.0（去抖 3.5 s）。<br /><br />
           <b>测算工具：</b>基于实测阻抗锚点（5351.5 kHz Z=59+j112 Ω 等）的
           <a href="bg1sb-tuner-calc.html" style="color:#22d3ee;">🧮 频率→L/C 天调测算器</a>已上线，
-          输入任意频率即出继电器参数与预计 SWR，公式推导全部公开。
+          输入频率即给出继电器参数与预计 SWR，公式推导全部公开。
           注意测算不确定度 ±3–5 步，仅供播种与预判拓扑，终值以设备实调为准
           （60m 实证：计算最优 1.46 vs 设备自扫 1.02）。
         </div>
@@ -548,7 +548,7 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">09 · 结论与行动</span>
-          <h2 class="section-title">这根天线的全部真相</h2>
+          <h2 class="section-title">结论与建议</h2>
         </div>
         <table class="spec-table">
           <thead>
@@ -559,7 +559,7 @@
             <tr><td>谐波族</td><td>2f≈13.95 / 3f≈21.3 / 4f≈28.5 MHz</td></tr>
             <tr><td>振子实长</td><td>≈ 21.5–21.9 m（VF 0.93–0.95）</td></tr>
             <tr><td>f1 区 Q / SWR≤2 带宽</td><td>Q≈12 / 530 kHz</td></tr>
-            <tr><td>线端谐振电阻</td><td>≈ 2200–2700 Ω → 49:1 正中靶心</td></tr>
+            <tr><td>线端谐振电阻</td><td>≈ 2200–2700 Ω（与 49:1 变比匹配）</td></tr>
             <tr><td>最佳/最差波段</td><td>15m（1.25 免调）/ 17m（12.5 反谐振）</td></tr>
             <tr><td>典型辐射仰角</td><td>9–12°</td></tr>
             <tr><td>雨致失谐（7050）</td><td>ΔL +0.9 µH（ΔX≈+40 Ω，容性漂移）</td></tr>
@@ -567,9 +567,9 @@
         </table>
         <div class="calc">
           <b>行动清单：</b>
-          ① 维持现有线长——裁线抬 f1 进 40m 会毁掉 15m 的完美平台和 20m 下沿，得不偿失；
+          ① 维持现有线长——裁线将 f1 抬入 40m 会同时破坏 15m 平台与 20m 下沿的匹配，得不偿失；
           ② 日常用段优先级：15m &gt; 20m 下半段 &gt; 40m（天调）&gt; 10m 中段，避开 17m/30m/12m；
-          ③ 80m 彻底放弃在现系统上调谐；
+          ③ 80m 放弃在现系统上调谐；
           ④ 雨天后对常用段跑一次单段扫频对比基线；
           ⑤ 待办：NanoVNA 在 UNUN 端独立扫频，标定馈线电气长度。<br /><br />
           <b>数据与复算：</b>原始扫描 JSON 存于 mrrc 仓库 <code>antenna_sweeps/</code>，
@@ -579,7 +579,7 @@
           <code>docs/current/antenna/efhw-49-1-antenna-analysis-2026-09-27.md</code>，
           项目全程复盘
           <code>docs/current/antenna/efhw-atr1000-project-retrospective-2026-09-28.md</code>。
-          扫频基础设施（引擎/API/前端）已固化，今后干/湿环境对比一键重跑。
+          扫频基础设施（引擎/API/前端）已固化，后续干湿环境对比可一键重跑。
         </div>
       </div>
     </section>
@@ -591,7 +591,7 @@
             © 2026 BG1SB · EFHW 天线实测画像（2026-09-27 画像 / 2026-09-28 学习库校准）·
             <a href="baluns.html">巴伦专题</a> ·
             <a href="../index.html">EFHW 首页</a> ·
-            本页没有一个实测数值是编出来的。
+            页面数值均可溯源至 mrrc 仓库的原始扫描记录。
           </p>
         </div>
       </div>

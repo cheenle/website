@@ -30,6 +30,8 @@ ARTICLES: dict[str, tuple[str, tuple[str, ...]]] = {
     "opus-vs-pcm-remote-audio": (TIER_FIELD, ("en", "zh")),
     "psk-reporter-dxcc-hunting": (TIER_FIELD, ("en", "zh")),
     "moon-loop": (TIER_ESSAY, ("en", "zh")),
+    "ming-shi": (TIER_ESSAY, ("en", "zh")),
+    "liang": (TIER_ESSAY, ("en", "zh")),
     "juekun": (TIER_ARCHIVE, ("root",)),
     "from-intent-to-delivery": (TIER_STUB, ("en", "zh")),
 }
@@ -39,7 +41,13 @@ TLDR_EXEMPT = {"seven-billion-tokens/almanac", "seven-billion-tokens/ledger", "s
 CLASSIC_MIN = {TIER_ESSAY: 3, TIER_FIELD: 0}
 MAX_AVG_SENTENCE = {TIER_ESSAY: 40, TIER_FIELD: 55}
 MAX_DASH_PERMILLE = 6.0
-CLAIM_TYPES = {"fact", "inference", "thesis", "analogy"}
+CLAIM_TYPES = {"fact", "inference", "thesis", "analogy", "excluded"}
+# "excluded"（已排除）于 2026-10-01 加入，依据是《量》§08 的一次测量：全站 39 篇、
+# 218 个 claim-box 里，正文出现 76 处否定性表述，其中 10 处落在 claim-box 内，
+# 无一例外被标成 fact / thesis / analogy。也就是说本站一直在做否定担保（写下取不到
+# 的东西），却没有对应的格子，只能把「缺失」误标成「事实」。这一类对应量论的
+# 无体量（anupalabdhi）与 NabaOS 的 abhava 类（arXiv:2603.10060）。
+# 追加成员对既有文章向后兼容：测试断言的是子集关系。
 
 # 语体阈值挂起项（今天是 5 篇破折号超标）
 PENDING_DASH: dict[str, str] = {

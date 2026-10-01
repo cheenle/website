@@ -65,6 +65,7 @@
 <url><loc>https://www.vlsc.net/mrrc_ft8/zh/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/mrrc_modern/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/mrrc_modern/zh/</loc><changefreq>weekly</changefreq></url>
+<url><loc>https://www.vlsc.net/mrrc_hub/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/sunmrrc/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/sunmrrc/zh/</loc><changefreq>weekly</changefreq></url>
 <url><loc>https://www.vlsc.net/efhw/</loc><changefreq>weekly</changefreq></url>
@@ -84,6 +85,10 @@
 <url><loc>https://www.vlsc.net/mrrc_ft8/sdd.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/mrrc_ft8/zh/new-dxcc-auto-call.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/mrrc_ft8/zh/sdd.html</loc><lastmod>2026-09-12</lastmod></url>
+<url><loc>https://www.vlsc.net/mrrc_hub/design.html</loc><lastmod>2026-10-01</lastmod></url>
+<url><loc>https://www.vlsc.net/mrrc_hub/start.html</loc><lastmod>2026-10-01</lastmod></url>
+<url><loc>https://www.vlsc.net/mrrc_hub/trouble.html</loc><lastmod>2026-10-01</lastmod></url>
+<url><loc>https://www.vlsc.net/mrrc_hub/use.html</loc><lastmod>2026-10-01</lastmod></url>
 <url><loc>https://www.vlsc.net/mrrc_modern/agentic.html</loc><lastmod>2026-09-12</lastmod></url>
 <url><loc>https://www.vlsc.net/mrrc_modern/guide.html</loc><lastmod>2026-09-25</lastmod></url>
 <url><loc>https://www.vlsc.net/mrrc_modern/sdd.html</loc><lastmod>2026-09-25</lastmod></url>

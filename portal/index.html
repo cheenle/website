@@ -145,6 +145,11 @@
                     <td>Pluggable-backend USB remote (FT-710 / IC-7300 / IC-7300MK2)</td>
                 </tr>
                 <tr>
+                    <td>A radio on a private LAN, no public IP</td>
+                    <td><a href="/mrrc_hub/">MRRC Cloud Hub</a></td>
+                    <td>Cloud access layer for MRRC Modern — the instance dials out, so nothing needs port forwarding</td>
+                </tr>
+                <tr>
                     <td>SunSDR2 DX</td>
                     <td><a href="/sunmrrc/">SunMRRC</a></td>
                     <td>SDR server + web frontend + native iOS client</td>
@@ -170,7 +175,7 @@
         <div class="section-header">
             <span class="section-label">Projects</span>
             <h2 class="section-title">Explore the Suite</h2>
-            <p class="section-subtitle">Seven open-source remote control projects — universal HF rigs, SDR platforms, digital-mode DSP servers, antenna automation, native mobile apps, and multi-radio USB-native control.</p>
+            <p class="section-subtitle">Six open-source projects — universal HF rigs, SDR platforms, digital-mode DSP servers, antenna automation, multi-radio USB-native control, and one cloud access layer.</p>
         </div>
 
         <div class="features-grid">
@@ -204,6 +209,22 @@
                 <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
                     <a href="/mrrc_modern/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> Website</a>
                     <a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> Source</a>
+                </div>
+            </div>
+
+            <!-- MRRC Cloud Hub -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-cloud"></i></div>
+                <h3>MRRC Cloud Hub</h3>
+                <p>Access layer for MRRC Modern instances sitting behind a private LAN, CGNAT or a changing IPv6: the instance dials out, so nothing needs a public address, port forwarding or UPnP. One callsign, one entry. Radio control, audio, spectrum and PTT safety stay exactly where MRRC Modern put them.</p>
+                <ul>
+                    <li>Design reviewed · MVP not implemented</li>
+                    <li>Stage 1 live: outbound tunnel · wildcard entry · real TLS</li>
+                    <li>PTT release stays on the instance</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/mrrc_hub/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> Website</a>
+                    <a href="https://github.com/cheenle/mrrc_hub" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> Source</a>
                 </div>
             </div>
 
@@ -266,7 +287,7 @@
     <div class="container">
         <div class="section-header">
             <span class="section-label">Ecosystem</span>
-            <h2 class="section-title">Four Approaches, One Vision</h2>
+            <h2 class="section-title">Four Radio Paths, One Access Layer</h2>
             <p class="section-subtitle">Different hardware demands different architectures. Our projects span the full spectrum — from traditional CAT-controlled HF rigs to USB-native multi-radio control, direct-IQ SDR transceivers, and antenna automation.</p>
         </div>
 
@@ -287,10 +308,14 @@
                 <div class="metric"><i class="fas fa-wifi"></i></div>
                 <div class="metric-label">UDP IQ<br><small>SunSDR2 DX — raw IQ streaming + proprietary protocol</small></div>
             </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-cloud"></i></div>
+                <div class="metric-label">Cloud access<br><small>MRRC Cloud Hub — outbound tunnel, callsign entry, no port forwarding</small></div>
+            </div>
         </div>
 
         <p style="text-align:center;color:var(--text-secondary);margin-top:2rem;font-size:0.9375rem;max-width:700px;margin-left:auto;margin-right:auto;">
-            <strong>Why four approaches?</strong> Traditional HF radios expose a serial CAT interface. The FT-710 adds FT4222 SPI for real spectrum data — no SCU-LAN10 dongle needed. MRRC Modern extends the same USB-native architecture to the Icom IC-7300 family via pluggable backends. The SunSDR2 DX streams raw IQ samples over UDP, requiring server-side demodulation. Different radios, different protocols, one shared design system.
+            <strong>Why four paths?</strong> Traditional HF radios expose a serial CAT interface. The FT-710 adds FT4222 SPI for real spectrum data — no SCU-LAN10 dongle needed. MRRC Modern extends the same USB-native architecture to the Icom IC-7300 family via pluggable backends. The SunSDR2 DX streams raw IQ samples over UDP, requiring server-side demodulation. Different radios, different protocols, one shared design system. <strong>MRRC Cloud Hub is not a fifth radio path</strong> — it is the access layer in front of an MRRC Modern instance: the radio keeps its local control plane, and only reachability changes.
         </p>
     </div>
 </section>
@@ -350,6 +375,10 @@
             <div class="perf-card">
                 <div class="metric">FT-8</div>
                 <div class="metric-label">Digital-mode DSP path<br><small>WSJT-X Improved + supervised worker</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric">Cloud Hub</div>
+                <div class="metric-label">Cloud access path<br><small>Outbound tunnel + callsign entry</small></div>
             </div>
         </div>
     </div>
@@ -446,6 +475,7 @@
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX Server</li>
                     <li><a href="/efhw/">EFHW</a> — Antenna Research &amp; Auto-Tuner</li>
                     <li><a href="/mrrc_ft8/">MRRC-FT8</a> — Headless FT8/FT4 Server</li>
+                    <li><a href="/mrrc_hub/">MRRC Cloud Hub</a> — Cloud Access Layer</li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -457,6 +487,7 @@
                     <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC Repository</a></li>
                     <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">EFHW Repository</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_ft8" target="_blank" rel="noopener">MRRC-FT8 Repository</a></li>
+                    <li><a href="https://github.com/cheenle/mrrc_hub" target="_blank" rel="noopener">MRRC Cloud Hub Repository</a></li>
                 </ul>
             </div>
             <div class="footer-section">

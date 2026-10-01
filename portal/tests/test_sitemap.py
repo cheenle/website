@@ -78,8 +78,9 @@ def test_all_subsite_pages_are_indexed():
     # 金丝雀：目录遍历静默失效时，seen 会掉到很小的值。
     # 2026-09-12 校准为 24 —— 当年有两个子站退役（mrrc_ft710 归档、
     # sunsdrmobile 并入 SunMRRC），每个都会合法地减少这个数。
+    # 2026-10-01 上调为 29 —— mrrc_hub 文档站加入（5 页，中文单语，无 zh/）。
     # 以后退役子站时同步下调此值，但不得为了让测试变绿而调。
-    assert seen >= 24, "只匹配到 %d 页，目录遍历可能失效" % seen
+    assert seen >= 29, "只匹配到 %d 页，目录遍历可能失效" % seen
 
 
 def test_new_efhw_baluns_pages_are_indexed():

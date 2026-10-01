@@ -7,11 +7,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a workspace grouping HAM radio project websites. All are pure static HTML/CSS/JS — no frameworks, no build tools, no npm.
 
 **Landing page:**
-- **portal/** — Unified landing page at `https://www.vlsc.net/` introducing all five projects and their ecosystem relationship. Deploys to the DocumentRoot (`/var/www/vlsc.net/`). Uses octen.css cyan/teal theme.
+- **portal/** — Unified landing page at `https://www.vlsc.net/` introducing all six projects and their ecosystem relationship. Deploys to the DocumentRoot (`/var/www/vlsc.net/`). Uses octen.css cyan/teal theme.
 
 **Project sub-sites (symlinks):**
-- **MRRC** (`mrrc/` → `/Users/cheenle/UHRR/MRRC/website/`) — Website for the MRRC (Mobile Remote Radio Control) project. Deployed to `https://www.vlsc.net/mrrc/`.
+- **MRRC** (`mrrc/` → `/Users/cheenle/HAM/MRRC/website/`) — Website for the MRRC (Mobile Remote Radio Control) project. Deployed to `https://www.vlsc.net/mrrc/`.
+- **MRRC Modern** (`mrrc_modern/` → `/Users/cheenle/HAM/mrrc_modern/website/`) — Website for MRRC Modern, the pluggable-backend USB remote (FT-710 / IC-7300 / IC-7300MK2). Deployed to `https://www.vlsc.net/mrrc_modern/`. Its `js/global-nav.js` is one of the shared-navigation copies enumerated in `portal/tests/test_analytics_coverage.py`.
 - **MRRC FT-710** (`mrrc_ft710/` → `/Users/cheenle/HAM/mrrc_ft710/website/`) — **已归档 2026-09-12，并入 MRRC Modern。** 仓库只读（GitHub archived），网站 `/mrrc_ft710/` 已 301 到 `/mrrc_modern/`，`website/deploy.sh` 已加禁用守卫。 `mrrc_modern` 是严格超集（同一根提交 `9403e2e`，ft710 零独有代码模块），因此该目录仍保留作为历史入口与跨站 grep 目标。以下描述为归档前状态：Website for the MRRC FT-710 (Software SCU-LAN10 replacement for Yaesu FT-710). Uses octen.css with amber (`#f0a030`) brand overrides in `css/ft710.css`.
+- **MRRC Cloud Hub** (`mrrc_hub/` → `/Users/cheenle/HAM/hub/mrrc_hub/website/`) — **新增 2026-10-01。** 云端接入层的文档站，中文单语，5 页（概览 / 接入四步 / 使用与分享 / 排障 / 设计与实现）。它不是电台产品：不做电台控制与媒体，只把内网里的 MRRC Modern 实例经出站隧道 + 通配入口暴露到公网（主路 `<呼号>.mrrc.vlsc.net:9988`，退化路 `https://www.vlsc.net/mrrc_modern/<呼号大写>/`）。Deployed to `https://www.vlsc.net/mrrc_hub/`. **该仓有自己的 `SDD/` 与 `.agents/skills/sdd-guardian/`**（金规则 `hub-no-direct-ptt-write`、`hub-token-not-in-url`）：改动前先拉简报，提交前 `python3 .agents/skills/sdd-guardian/harness/sdd_context.py check --staged` 必须 clean。`css/octen.css` 是 `mrrc_modern` 的逐字节拷贝，**永不 fork**（`deploy.sh` 有哈希闸门会拦）。本站**不复制** `global-nav.js`，而是热链 `https://www.vlsc.net/js/global-nav.js`（同源），因此 `<body data-site="mrrc_hub">` 必须与那份 canonical 脚本的 `PATHS` 键一致 —— 值写错不会报错，只会静默不高亮。
 - **SunMRRC** (`sunmrrc/` → `/Users/cheenle/HAM/sunsdr/sunmrrc/website/`) — Website for the SunMRRC (SunSDR2 DX Mobile Radio Control) project. Deployed to `https://www.vlsc.net/sunmrrc/`.
 - **SunsdrMobile** (`SunsdrMobile/` → `/Users/cheenle/HAM/sunsdr/SunsdrMobile/website/`) — **已合并入 SunMRRC 2026-09-12。** 它不是独立产品，而是 SunMRRC 服务的**原生 iOS 客户端**（打开浏览器所用的同四条 WebSocket 连接）。网站 `/sunsdrmobile/` 已 301 到 `/sunmrrc/ios/`，仓库只读（GitHub archived），其 9 个提交已用 `git subtree` 导入 `sunsdr` 仓。以下描述为合并前状态：Promotional website for the SunsdrMobile native iOS app for SunSDR2 DX.
 - **EFHW** (`efhw/`) — Product website for the EFHW Fuchs ATU V3.0 and EFHW antenna knowledge ecosystem. Deployed to `https://www.vlsc.net/efhw/`. Uses octen.css with emerald green (`#10b981`) brand overrides in `css/efhw.css`.
@@ -62,7 +64,7 @@ Measurable red lines for new Chinese copy: 逗号分隔的子句 ≤20 字为佳
 ### Cross-site checks
 
 Sub-site directories under `website/` are symlinks into other git repositories
-(`mrrc/`, `mrrc_modern/`, `mrrc_ft710/`, `sunmrrc/`, `SunsdrMobile/`, `mrrc_ft8/`, `ft8/`);
+(`mrrc/`, `mrrc_modern/`, `mrrc_hub/`, `mrrc_ft710/`, `sunmrrc/`, `SunsdrMobile/`, `mrrc_ft8/`, `ft8/`);
 `portal/`, `efhw/`, `yijing/` and `nginx/` are real directories.
 
 **Site-wide greps must list the site directories explicitly — as a shell ARRAY, never as a
@@ -74,14 +76,19 @@ machine's actual tooling (`grep` resolves to **ugrep 7.5.0**, not BSD grep; the 
    `grep -R pattern .` reports a clean tree while every sub-site hit stays invisible.
    Measured: 0 hits under `./mrrc_ft710/` and `./mrrc/` for a string that occurs in both.
 2. **zsh does not word-split unquoted parameter expansions.** Assigning the list to a string
-   and expanding `$SITES` passes all eight directories as ONE nonexistent path. ugrep prints
+   and expanding `$SITES` passes all nine directories as ONE nonexistent path. ugrep prints
    `warning: … No such file or directory`, exits 2, and produces no matches — which at a
    prompt is indistinguishable from "clean tree". This is a silent false green across every
    sub-site, produced by the very pattern meant to prevent one.
 
 ```zsh
-SITES=(portal/ mrrc/ mrrc_ft710/ mrrc_modern/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/)
-grep -Rn "pattern" $SITES       # correct: array expands to 8 args  → 8 hits measured
+SITES=(portal/ mrrc/ mrrc_ft710/ mrrc_modern/ mrrc_hub/ sunmrrc/ SunsdrMobile/ mrrc_ft8/ efhw/)
+grep -Rn "pattern" $SITES       # correct: array expands to 9 args — each is searched
+```
+
+Re-measured 2026-10-01 on the new symlink: `grep -Rn global-nav mrrc_hub/ --include='*.html'`
+→ 5 hits; the same command without the trailing slash → **0 hits**. The rule holds for
+`mrrc_hub/` exactly as it did for the older sub-sites.  → 8 hits measured
 grep -Rn "pattern" .            # WRONG: misses all symlinked sub-sites → 0 hits
 ```
 
@@ -126,7 +133,9 @@ broken image until the files are placed on disk. Deployment ships them from the 
 (`portal/deploy.sh` tars the directory, not the git index), so production is unaffected. If
 you add a tracked asset under those directories, say so explicitly — the default is disk-only.
 
-## Common patterns across all five sites
+## Common patterns across all six sites
+
+- **Cross-site nav**: each public site loads a shared script — `js/global-nav.js` (portal, MRRC, MRRC Modern, EFHW) or `js/scope.js` (SunMRRC, MRRC-FT8) — which injects the site-wide top band (`vlsc-gn` / `scope-gn`), GA4, AdSense and the feedback widget. The hub site hotlinks the portal's copy instead of carrying one (see its bullet above). Adding a site means editing **every** copy's `PATHS` + `siteLink(...)` list, not just the portal's.
 
 - **Design**: `css/octen.css` — dark theme with cyan/teal accent (`#22d3ee`), Inter + JetBrains Mono fonts, responsive. Font Awesome 6.4 for icons. Embedded SVG favicons.
 - **i18n**: Chinese translations live in `zh/` mirroring the EN file structure. MRRC uses `js/i18n.js` for runtime language switching; SunMRRC has separate `zh/index.html`.
@@ -379,7 +388,15 @@ cd /Users/cheenle/HAM/website/portal
 ./deploy.sh
 
 # MRRC
-cd /Users/cheenle/UHRR/MRRC/website
+cd /Users/cheenle/HAM/MRRC/website
+./deploy.sh
+
+# MRRC Modern
+cd /Users/cheenle/HAM/mrrc_modern/website
+./deploy.sh
+
+# MRRC Cloud Hub（该仓有自己的 deploy.sh；跑前会过金规则 + octen.css 哈希闸门）
+cd /Users/cheenle/HAM/hub/mrrc_hub/website
 ./deploy.sh
 
 # SunMRRC

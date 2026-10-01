@@ -17,6 +17,9 @@ REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 GA_ID = "G-JQLSKV1MCT"
 
 # The 7 shared-script copies carrying the snippet, across 5 repositories.
+# mrrc_hub is deliberately absent: its pages hotlink the canonical copy at
+# https://www.vlsc.net/js/global-nav.js instead of carrying a second one, so it
+# appears in SITES (pages must still load a shared script) but not here.
 SCRIPTS = [
     "portal/js/global-nav.js",
     "efhw/js/global-nav.js",
@@ -28,12 +31,13 @@ SCRIPTS = [
 ]
 
 # Every HTML page under these sites must load one of the shared scripts.
-SITES = ["portal", "efhw", "mrrc", "mrrc_modern", "sunmrrc", "mrrc_ft8"]
+SITES = ["portal", "efhw", "mrrc", "mrrc_modern", "sunmrrc", "mrrc_ft8", "mrrc_hub"]
 SHARED = ("scope.js", "global-nav.js")
 
 # Canary, calibrated 2026-09-13: 29+4+25+23+20+21 = 122 pages. Retiring a
 # sub-site legitimately lowers this; do not lower it to make a walk failure pass.
-MIN_PAGES = 120
+# 2026-10-01: mrrc_hub joins with 5 pages → 127 measured, floor kept just under.
+MIN_PAGES = 125
 
 
 def _read(rel):

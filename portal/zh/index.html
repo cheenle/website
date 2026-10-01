@@ -143,6 +143,11 @@
                     <td>可插拔后端 USB 远程（FT-710 / IC-7300 / IC-7300MK2）</td>
                 </tr>
                 <tr>
+                    <td>电台在客户内网、没有公网 IP</td>
+                    <td><a href="/mrrc_hub/">MRRC Cloud Hub</a></td>
+                    <td>MRRC Modern 的云端接入层 —— 实例主动出站，无需端口映射</td>
+                </tr>
+                <tr>
                     <td>SunSDR2 DX</td>
                     <td><a href="/sunmrrc/">SunMRRC</a></td>
                     <td>UDP IQ 解调 + 实时瀑布图服务端</td>
@@ -167,7 +172,7 @@
         <div class="section-header">
             <span class="section-label">项目</span>
             <h2 class="section-title">探索项目套件</h2>
-            <p class="section-subtitle">七个开源远程控制项目 —— 通用 HF 电台、SDR 平台、数字模式 DSP 服务器、天线自动化、原生移动应用和多电台 USB 原生控制。</p>
+            <p class="section-subtitle">六个开源项目 —— 通用 HF 电台、SDR 平台、数字模式 DSP 服务器、天线自动化、多电台 USB 原生控制，外加一层云端接入。</p>
         </div>
 
         <div class="features-grid">
@@ -199,6 +204,22 @@
                 <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
                     <a href="/mrrc_modern/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
                     <a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
+                </div>
+            </div>
+
+            <!-- MRRC Cloud Hub -->
+            <div class="feature-card animate">
+                <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-cloud"></i></div>
+                <h3>MRRC Cloud Hub</h3>
+                <p>给内网、运营商大内网或 IPv6 常变的 MRRC Modern 实例做接入层：实例主动出站，因此不需要公网地址、端口映射或 UPnP。呼号即入口，同一呼号只对应一个入口。电台控制、音频、频谱与 PTT 安全仍归 MRRC Modern，接入层不复写它们。</p>
+                <ul>
+                    <li>设计已评审 · MVP 未实现</li>
+                    <li>阶段 1 已跑通：出站隧道 · 通配入口 · 真证书</li>
+                    <li>PTT 释放留在实例本地</li>
+                </ul>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="/mrrc_hub/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
+                    <a href="https://github.com/cheenle/mrrc_hub" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
                 </div>
             </div>
 
@@ -308,6 +329,10 @@
                 <div class="metric">FT-8</div>
                 <div class="metric-label">数字模式 DSP 路线<br><small>WSJT-X Improved + 受监督 Worker</small></div>
             </div>
+            <div class="perf-card">
+                <div class="metric">Cloud Hub</div>
+                <div class="metric-label">云端接入路线<br><small>出站隧道 + 呼号入口</small></div>
+            </div>
         </div>
     </div>
 </section>
@@ -316,7 +341,7 @@
     <div class="container">
         <div class="section-header">
             <span class="section-label">生态系统</span>
-            <h2 class="section-title">四种方案，同一愿景</h2>
+            <h2 class="section-title">四条电台路线，一层云端接入</h2>
             <p class="section-subtitle">不同硬件需要不同架构。我们的项目覆盖全频谱 —— 从传统 CAT 控制的 HF 电台到 USB 原生多电台控制、直接 IQ 采样的 SDR 收发信机和天线自动化。</p>
         </div>
 
@@ -336,6 +361,10 @@
             <div class="perf-card">
                 <div class="metric"><i class="fas fa-wifi"></i></div>
                 <div class="metric-label">UDP IQ<br><small>SunSDR2 DX — 原始 IQ 流 + 私有协议</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-cloud"></i></div>
+                <div class="metric-label">云端接入<br><small>MRRC Cloud Hub — 出站隧道、呼号即入口、无需端口映射</small></div>
             </div>
         </div>
     </div>
@@ -432,6 +461,7 @@
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX 服务器</li>
                     <li><a href="/efhw/">EFHW</a> — 天线研究与自动调谐</li>
                     <li><a href="/mrrc_ft8/">MRRC-FT8</a> — Headless FT8/FT4 服务器</li>
+                    <li><a href="/mrrc_hub/">MRRC Cloud Hub</a> — 云端接入层</li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -443,6 +473,7 @@
                     <li><a href="https://github.com/cheenle/sunsdr" target="_blank" rel="noopener">SunMRRC 仓库</a></li>
                     <li><a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">EFHW 仓库</a></li>
                     <li><a href="https://github.com/cheenle/mrrc_ft8" target="_blank" rel="noopener">MRRC-FT8 仓库</a></li>
+                    <li><a href="https://github.com/cheenle/mrrc_hub" target="_blank" rel="noopener">MRRC Cloud Hub 仓库</a></li>
                 </ul>
             </div>
             <div class="footer-section">

@@ -75,7 +75,9 @@ pages = find_html(ROOT)
 # sub-site roots (deployed as nginx aliases under the same domain)
 # mrrc_modern was missing from this list: its root and agentic.html were
 # never in the sitemap even though nginx serves them.
-SUBSITES = ['/mrrc/', '/mrrc_ft8/', '/mrrc_modern/',
+# mrrc_hub joins 2026-10-01 with the cloud-hub doc site (5 pages, Chinese only,
+# so there is no /mrrc_hub/zh/ root to emit).
+SUBSITES = ['/mrrc/', '/mrrc_ft8/', '/mrrc_modern/', '/mrrc_hub/',
             '/sunmrrc/', '/efhw/']
 
 urls = []

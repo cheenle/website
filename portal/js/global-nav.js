@@ -20,6 +20,7 @@
     else if (/\/sunmrrc\//.test(p)) SITE = 'sunmrrc';
     else if (/\/efhw\//.test(p)) SITE = 'efhw';
     else if (/\/mrrc_modern\//.test(p)) SITE = 'mrrc_modern';
+    else if (/\/mrrc_hub\//.test(p)) SITE = 'mrrc_hub';
     else if (/\/mrrc_ft8\//.test(p)) SITE = 'mrrc_ft8';
     else if (/\/sdd\//.test(p)) SITE = 'sunmrrc';
     else if (/\/rig\//.test(p)) SITE = 'rig';
@@ -36,6 +37,7 @@
     agentic: '/agentic.html',
     mrrc: '/mrrc/',
     mrrc_modern: '/mrrc_modern/',
+    mrrc_hub: '/mrrc_hub/',
     mrrc_ft8: '/mrrc_ft8/',
     sunmrrc: '/sunmrrc/',
     efhw: '/efhw/',
@@ -111,6 +113,7 @@
         siteLink('agentic', 'Agentic') +
         siteLink('mrrc', 'MRRC') +
         siteLink('mrrc_modern', 'Modern') +
+        siteLink('mrrc_hub', 'Hub') +
         siteLink('mrrc_ft8', 'FT-8') +
         siteLink('sunmrrc', 'SunMRRC') +
         siteLink('efhw', 'EFHW') +

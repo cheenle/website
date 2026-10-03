@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>云端的第一公里：把一台 NAT 后面的电台放上互联网 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="没有公网 IP、不能端口映射、没有 UPnP 的电台，如何在互联网上拥有一个入口：四条不变量、让每个实例可被校验的证书模型，以及那个让全新安装看起来像死机的缺陷。"
+    />
+    <meta
+      name="keywords"
+      content="智能体工程, agentic engineering, 远程电台, NAT 穿透, frp 隧道, nginx, 自签证书, 信任包, 现场报告, VLSC"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="云端的第一公里：把一台 NAT 后面的电台放上互联网" />
+    <meta
+      property="og:description"
+      content="给 NAT 后的电台一个互联网入口所需的四条不变量，以及四个让可用安装看起来像死机的构建机默认值。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/cloud-first-mile/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/cloud-first-mile/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/cloud-first-mile/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/cloud-first-mile/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/cloud-first-mile/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "云端的第一公里：把一台 NAT 后面的电台放上互联网",
+        "description": "出站隧道、逐实例证书校验、生成式路由，以及一个不持有任何特权的自助门户：四条不变量，加上在真机上找到的失效模式。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-10-03",
+        "dateModified": "2026-10-03",
+        "keywords": "远程电台, NAT 穿透, frp 隧道, nginx, 信任包, 现场报告",
+        "articleSection": "现场",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/cloud-first-mile/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar">
+        <span class="ba-crumb">
+          <a href="/">首页</a> › <a href="/blog/zh/">博客</a> ›
+          <span class="ba-crumb-cat">现场 · 云端 Hub</span>
+        </span>
+      </nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge">
+            <i class="fas fa-tower-broadcast"></i><span>现场 · 远程电台基础设施</span>
+          </div>
+          <h1>云端的<span class="gradient">第一公里</span>。</h1>
+          <p>
+            一个业余电台通常没有公网地址：运营商 NAT，有时是两层，不能端口映射，路由器上也没有 UPnP，而且没人管它。可一台要被远程使用的电台，必须在互联网上有一个入口。本文写的是这个入口怎么设计，以及那四个让一套正常安装看起来像死机的默认值。
+          </p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-network-wired"></i> 出站只需一个端口：8989</span>
+            <span class="ag-pill"><i class="fas fa-globe"></i> 入口 = https://&lt;呼号&gt;.mrrc.vlsc.net/</span>
+            <span class="ag-pill"><i class="fas fa-shield-halved"></i> 逐实例证书钉扎</span>
+            <span class="ag-pill"><i class="fas fa-route"></i> 路由生成，从不手改</span>
+          </div>
+          <p class="ba-meta">
+            BG1SB &nbsp;·&nbsp; <time datetime="2026-10-03">2026 年 10 月 3 日</time> &nbsp;·&nbsp;
+            约 12 分钟
+          </p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell">
+        <div class="container">
+          <nav class="ag-anchor-nav" aria-label="页面章节">
+            <a href="#constraints">约束</a><a href="#invariants">不变量</a
+            ><a href="#blackscreen">黑屏</a><a href="#timing">时序</a><a href="#rules">现场四则</a
+            ><a href="#steps">三步</a>
+          </nav>
+        </div>
+      </div>
+
+      <main class="ba-main">
+        <p class="lede">
+          这套系统里真正有意思的不是隧道。隧道的形状早就有定论。有意思的是另外三件事：一个陌生人的电台凭什么能在一个由呼号推导出来的名字上被访问；那个名字凭什么可被校验，而不只是被转发；以及新增下一个电台凭什么是一行改动，而不是在生产 Web 服务器上开一次编辑会。
+        </p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 五条主张</p>
+            <ul class="ba-tldr-list">
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">事实</span
+                ><strong>实例向外拨，hub 从不向内拨。</strong>隧道客户端连一个端口，8989，把本地的电台服务映射到 hub 的一个回环端口上。客户网络不需要任何入站许可。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">事实</span
+                ><strong>每个实例按它自己的证书被校验。</strong>实例自签，hub 的信任包由注册表生成。于是只有登记过的实例会被信任，而续期不需要跨机同步。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="inference">推断</span
+                ><strong>生成式路由才是增长便宜的原因。</strong>注册表每行是标签、回环端口、上游证书名。一条命令渲染出 nginx 的映射与通配 vhost。加一个实例等于加一行。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="thesis">立论</span
+                ><strong>自助门户不持有任何特权。</strong>它能记录申请、能签发实例证书。它不能重载 Web 服务器，也不能改防火墙。需要 root 的两条命令是打印出来交给运维的。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="excluded">已排除</span
+                ><strong>本文不涉及电台行为。</strong>下面所有验证都在没有接收发信机的机器上完成。CAT、音频与发射路径需要物理硬件，不在本记录范围内。
+              </li>
+            </ul>
+            <div class="ba-readpath">
+              <span>三分钟读完：</span><a href="#invariants">§02 四条不变量</a
+              ><a href="#blackscreen">§03 黑屏</a><a href="#steps">§06 三步</a>
+            </div>
+          </div>
+        </div>
+
+        <section id="constraints" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">01 · 约束</span>
+              <h2 class="ag-section-title">客户网络不肯做的事</h2>
+              <p class="ag-section-subtitle">下面每个设计决定都出自这张表，不出自偏好。</p>
+            </header>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>约束</th><th>后果</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>实例侧没有公网 IP，不能端口映射，没有 UPnP</td>
+                    <td>入口不能建在客户端，所以隧道必须出站</td>
+                  </tr>
+                  <tr>
+                    <td>有的网络只放行 80 与 443，有的几乎什么都放行</td>
+                    <td>控制端口只能有一个，而且必须可配置，不能假定</td>
+                  </tr>
+                  <tr>
+                    <td>用户操作的是电台，不是服务器</td>
+                    <td>登记必须在应用里点几下完成，审批发生在完全不同的地方</td>
+                  </tr>
+                  <tr>
+                    <td>一台设备属于一个呼号</td>
+                    <td>
+                      入口名就是呼号本身：<code>https://bg9aaa.mrrc.vlsc.net/</code>，没有端口、路径与产品后缀
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>实例可能跑在 Windows、macOS、Linux 或树莓派上</td>
+                    <td>整条路径不得假定某种 shell、某个包管理器，或一个可写的程序目录</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">事实 · 测出来的，不是想出来的</span>
+              <p>
+                端口这件事是靠测量定下来的，不是靠品味。有一个面向用户的端口存在了好几周，后来发现它从未对公网开放过：三条不同的网络都拒绝它，而同一台机器的 443 应答如常。在那个发现之前写下的客户端，除了走兜底路径的那一次请求，其余全部在静默失败。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="invariants" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">02 · 不变量</span>
+              <h2 class="ag-section-title">四件必须一直成立的事</h2>
+              <p class="ag-section-subtitle">每一条都存在，因为去掉它就出过事故。</p>
+            </header>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>① 只出站</h3>
+                <p>
+                  实例上的隧道客户端连 <code>tunnel.mrrc.vlsc.net:8989</code>，把电台的本地端口映射到 hub 的一个回环端口，例如 <code>127.0.0.1:18803</code>。hub 的 Web 服务器把呼号主机名反代到那个回环端口。实例只需要一条出站 TCP，别的都不需要。隧道断了它自己重连，几秒一次，不需要用户动手。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>② 按实例自己的证书校验</h3>
+                <p>
+                  实例在首次运行时自签，主体名就是它的入口名。hub 的上游校验指向一个由注册表生成的信任包：系统根证书，加上每个已登记实例的公钥。由此得到两个性质。续期不需要跨机同步。不在注册表里的实例，即使侥幸建起隧道也无法被服务。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>③ 路由是生成的</h3>
+                <p>
+                  注册表每个实例一行：标签、回环端口、以及上游证书应当携带的名字。一条命令渲染出 nginx 的映射与通配 vhost。加实例等于加一行，再重跑一次生成。没有人手工编辑 Web 服务器配置，这也是外行能运维这套东西的唯一原因。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>④ 门户不持有特权</h3>
+                <p>
+                  自助门户以非特权服务账号跑在回环上。它记录申请，用呼号数据库核验呼号，签发实例证书。它不能重载 nginx，也不能改防火墙。需要 root 的两步是打印成命令交给运维执行的。所以门户即便被攻破，也拿不到机器。
+                </p>
+              </article>
+            </div>
+
+            <blockquote
+              class="ba-quote"
+              data-quote-id="nginx-selfsigned-upstream"
+              data-quote-kind="engineering"
+              data-quote-cite="nginx 错误日志，hub 主机，2026-10-01"
+            >
+              <p class="ba-quote-orig" lang="en">
+                upstream SSL certificate verify error: (18:self-signed certificate) while SSL
+                handshaking to upstream
+              </p>
+              <p class="ba-quote-trans" lang="zh">
+                上游 SSL 证书校验失败：（18：自签名证书），发生在与上游进行 SSL 握手期间。
+              </p>
+              <span class="ba-quote-cite">nginx 错误日志，hub 主机，2026-10-01</span>
+            </blockquote>
+
+            <p>
+              这一行是第二条不变量唯一可见的失败方式。隧道是通的，应用在服务，浏览器到达了 hub，而 hub 拒绝了自己的上游，因为那个实例的证书不在信任包里。修它是一次重新生成，不是一次调试，前提是证书文件名与注册表里的标签一致。
+            </p>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">推断 · 这里为什么钉扎优于公有 CA</span>
+              <p>
+                给每个实例签公有证书，推理上更简单，实际上做不到：这些名字是运维自己控制的通配域下的逐实例主机名，而每一次续期都会变成两台机器之间的协同事件。钉扎自签证书，是把那份协同换成一次本来就必须存在的生成动作，因为注册表无论如何都是路由的唯一真相来源。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="blackscreen" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">03 · 黑屏</span>
+              <h2 class="ag-section-title">四个只在构建机上成立的默认值</h2>
+              <p class="ag-section-subtitle">报障的原话是「装完起不来」。它其实一直在跑。</p>
+            </header>
+
+            <p>
+              hub 上线第一天，一个客户装完应用，看到的是一片黑。服务在跑，端口在听，日志也这么说。日志里还说了另一句，读起来像脚注：
+            </p>
+
+            <blockquote
+              class="ba-quote"
+              data-quote-id="ssl-disabled-warning"
+              data-quote-kind="engineering"
+              data-quote-cite="MRRC Modern 服务日志，客户机器，2026-10-02"
+            >
+              <p class="ba-quote-orig" lang="en">
+                SSL disabled or cert/key not found (cert=C:\Program Files\MRRC
+                Modern\_internal\certs\fullchain.pem key=...\radio.vlsc.net.key)
+              </p>
+              <p class="ba-quote-trans" lang="zh">
+                SSL 已停用，或找不到证书与私钥。证书路径在安装目录内部，私钥文件名是开发机上那一张。
+              </p>
+              <span class="ba-quote-cite">MRRC Modern 服务日志，客户机器，2026-10-02</span>
+            </blockquote>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>默认值</th><th>在客户机上发生了什么</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>证书路径指向打包目录内部</td>
+                    <td>
+                      程序目录对普通用户只读，所以找不到证书。服务静默退回纯 HTTP，而启动器打开的是 https 地址。浏览器报协议错误，屏幕就黑在那里。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>日志目录指向打包目录内部</td>
+                    <td>每次启动都报权限错误，于是一条日志都没有，也就失去了诊断上一行的唯一手段。</td>
+                  </tr>
+                  <tr>
+                    <td>串口默认值是 macOS 的设备名</td>
+                    <td>
+                      Windows 上电台就在 <code>COM5</code>，而应用去找
+                      <code>/dev/cu.SLAB_USBtoUART</code>，一个在那台机器上不可能存在的路径。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>登录口令默认值是源码里的一个常量</td>
+                    <td>
+                      在有人改掉之前，同一网络里任何人都能登录。只有绕过启动器时才可达，因为启动器会生成随机口令。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>收口靠三条结构性改动，而不是四次逐条修补：</p>
+            <ul>
+              <li>凡是运行时可写的路径，默认值一律落在用户自己的数据目录，按平台解析，且永不抛异常。</li>
+              <li>缺证书就当场签一张。退回纯 HTTP 现在需要显式开关，而且用了会大声说出来。</li>
+              <li>
+                一条闸门测试：任何可写默认值只要落在程序目录内，整套测试变红。它第一次运行就咬出第五个案例，一个内存通道文件。
+              </li>
+            </ul>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">立论 · 真正的缺陷是静默降级</span>
+              <p>
+                默认值写错，只要它会喊，就还能救。把一个坏路径变成不可用产品的，是那个安静退让的决定：没有证书变成没有 TLS，没有可写目录变成没有日志，用户手里只剩一块黑色矩形和零证据。现在这套代码里的每一个兜底，要么自己修好，要么自己报告。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="timing" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">04 · 时序</span>
+              <h2 class="ag-section-title">两个只存在于顺序里的缺陷</h2>
+              <p class="ag-section-subtitle">单元测试抓不到它们，因为它们的性质是顺序。</p>
+            </header>
+
+            <h3 class="ag-subhead">新证书，旧进程</h3>
+            <p>
+              TLS 上下文只在服务启动时建立一次。登记会把新证书写到同一个路径。运行中的进程继续服务旧的那张，而 hub 按新的那张校验，于是入口回 502，同时每个部件单独看都健康。最难的一种顺序是先重启、后登记：文件在进程已经起来之后才变，任何基于导入时快照的判断都会说无需处理。
+            </p>
+            <p>
+              能扛住所有顺序的判据，是两个时间戳的比较：证书文件的写入时间晚于本进程的启动时间，就必须重启。界面现在会这么说，并给出重启入口。而重启动作在没能先把接管者拉起来之前，拒绝退出。
+            </p>
+
+            <h3 class="ag-subhead">一条等着被请求的隧道</h3>
+            <p>
+              隧道原先只从一个地方启动：设置对话框为了渲染自己而调用的那个端点。后果是一台夜里重启过的机器，会一直不服务，直到早上有人打开那个对话框。它是在一次端到端验收里被发现的，不是在开发过程中，因为开发者刚刚点过那个对话框。
+            </p>
+            <p>
+              现在已登记的实例在启动时就拉起隧道。拉起失败会记日志，但不阻止服务启动，而对话框仍然会重试。同一个状态因此有两条路径可达，而不是一条。
+            </p>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">推断 · 顺序缺陷为什么能活过评审</span>
+              <p>
+                这两个缺陷在任何单一状态下都不可见。每个部件的行为都是对的：服务提供它拿到的那张证书，隧道在被要求时启动。缺陷住在一个部件的写与另一个部件的读之间。评审部件找不到它。从一台干净机器出发，用一个别扭的顺序把整条流程跑一遍，才找得到。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="rules" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">05 · 现场四则</span>
+              <h2 class="ag-section-title">四条因为缺过而写下来的规矩</h2>
+              <p class="ag-section-subtitle">每一条都至少花掉过一轮白跑。</p>
+            </header>
+
+            <ul>
+              <li>
+                <strong>不要把退出码当证据。</strong>一次构建报告成功，日志里有编译成功那一行，版本文件写着新版本号，而产物是上一版的。证据是三样：版本号，一个带年份的时间戳，一个与上一版不同的哈希。
+              </li>
+              <li>
+                <strong>不要在已发布的版本号上重建。</strong>升级通道比较版本串，所以已经装了那个号的机器永远看不到重建的包。它的升级按钮会永远重放同一个版本。
+              </li>
+              <li>
+                <strong>一趟发布列车一个司机。</strong>两个写者共用一棵树，产出了一份带着新版本标签、旧版本尺寸与哈希的清单。解法是让清单在服务器上由实际发布的文件生成。
+              </li>
+              <li>
+                <strong>每一次现场失败，当天变成一条测试。</strong>否则它会换个名字回来。这轮写下的闸门里，一条当场找到新缺陷，另一条从此挡住了一整类问题出厂。
+              </li>
+            </ul>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>层</th><th>它的真相写在哪</th><th>入口不通时先看什么</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>隧道</td>
+                    <td>实例上隧道客户端自己的日志</td>
+                    <td>它有没有登录成功并注册上代理</td>
+                  </tr>
+                  <tr>
+                    <td>hub 监听</td>
+                    <td>隧道服务器持有的回环套接字</td>
+                    <td>那个实例的端口到底有没有在听</td>
+                  </tr>
+                  <tr>
+                    <td>上游 TLS</td>
+                    <td>Web 服务器的错误日志</td>
+                    <td>error 18 指向信任包；名字不匹配指向注册表第三列</td>
+                  </tr>
+                  <tr>
+                    <td>应用</td>
+                    <td>实例自己的日志，在用户数据目录里</td>
+                    <td>它到底有没有在服务 TLS，服务的是哪张证书</td>
+                  </tr>
+                  <tr>
+                    <td>网络路径</td>
+                    <td>没有文件，只有探测</td>
+                    <td>从外面能不能连上那个端口，且要从两条网络各测一次</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="steps" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">06 · 三步</span>
+              <h2 class="ag-section-title">使用者实际要做的</h2>
+              <p class="ag-section-subtitle">不开 shell，不改配置文件，不做端口映射。</p>
+            </header>
+
+            <ol>
+              <li>按平台安装应用。</li>
+              <li>
+                打开设置对话框，选择云端接入，填呼号，提交申请。如果运维已经批准并给了一次性登记口令，把口令粘进同一个对话框即可直接认领已批准的入口，跳过等待。
+              </li>
+              <li>被提示时重启。应用会自己登记证书、写隧道配置、拉起隧道，并把入口打印出来。</li>
+            </ol>
+
+            <p>结果是一个只由呼号推导出来的名字：</p>
+            <pre><code>https://bg9aaa.mrrc.vlsc.net/            # 443，无端口、无路径、无产品后缀
+https://bg9aaa.mrrc.vlsc.net/login       # 登录页
+https://bg9aaa.mrrc.vlsc.net/api/health  # 健康时返回 401：活着，并且在问你是谁</code></pre>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>启动器起不来时</h3>
+                <p>
+                  服务不需要它也能跑。从开始菜单启动服务入口，浏览器打开
+                  <code>http://127.0.0.1:8888/</code>，口令就打印在那个窗口里。启动器只做三件事：播种配置、启动服务、打开浏览器。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>环境已经一团糟时</h3>
+                <p>
+                  清理助手会先把配置、证书与日志备份到桌面，然后卸载应用，清掉设置、环境变量与计划任务。它只动一份固定清单里的路径，不碰无关产品，除非明确要求。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>只需要修界面时</h3>
+                <p>
+                  界面与资源类修复以几百 KB 的补丁下发，而不是整包安装。补丁会校验自己的哈希与适用版本，备份它替换掉的每个文件，然后重启应用。编译进去的逻辑不能这样修，仍需整包升级。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>出了别的问题时</h3>
+                <p>
+                  界面里一个按钮就能生成诊断包：日志尾部、一份白名单内的环境键、以及一份摘要。摘要在人类看到之前，已经先被机器读过一遍。上传走的是站点同一个 443。
+                </p>
+              </article>
+            </div>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">事实 · 验证了什么，在什么上面验证的</span>
+              <p>
+                整条序列在真机上端到端跑通过：撤销一个实例，从应用提交申请，在门户批准，刷新，登记，重启，最后健康端点从入口返回 401。跑过一台 Windows 虚拟机，也跑过一台干净的 macOS 机器，包含从公开下载地址全新安装的那一遍。本文没有在任何地方验证过电台行为：那些机器上都没有接收发信机。
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="ba-footer">
+        <div class="ba-footer-inner">
+          <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+              <h3>BG1SB</h3>
+              <p>业余无线电操作员与软件工程师。维护 VLSC 开源远程控制生态，并把电台与基础设施实际做了什么写下来。</p>
+            </div>
+          </div>
+          <div class="blog-related">
+            <h3>相关阅读</h3>
+            <ul>
+              <li><a href="/blog/two-models/zh/">两个模型，一棵工作树：四十八小时并行实录</a></li>
+              <li><a href="/blog/support-loop/zh/">闻过则喜：一周上报如何变成发布</a></li>
+              <li><a href="/blog/ft710-usb-remote-control/zh/">一根 USB 线远程控制 FT-710</a></li>
+              <li><a href="/blog/opus-vs-pcm-remote-audio/zh/">远程音频：Opus 与 PCM</a></li>
+              <li><a href="/mrrc_hub/">MRRC Cloud Hub：运维文档</a></li>
+              <li><a href="/zh/engineering.html">框架、闭环与活的 SDD：VLSC 工程体系</a></li>
+            </ul>
+          </div>
+          <div class="blog-prevnext">
+            <a href="/blog/zh/"><i class="fas fa-arrow-left"></i> 返回博客</a
+            ><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=9" defer data-gn="1"></script>
+  </body>
+</html>

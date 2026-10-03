@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Cloud's First Mile: Putting a Radio Behind NAT on the Internet — VLSC Blog</title>
+    <meta
+      name="description"
+      content="How a radio with no public IP, no port forwarding and no UPnP gets an entry on the internet: four invariants, the certificate model that makes each instance verifiable, and the failure that made a freshly installed app show a black screen."
+    />
+    <meta
+      name="keywords"
+      content="agentic engineering, remote radio, NAT traversal, frp tunnel, nginx, self-signed certificate, trust bundle, field report, VLSC"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="The Cloud's First Mile: Putting a Radio Behind NAT on the Internet"
+    />
+    <meta
+      property="og:description"
+      content="Four invariants for giving a NATed radio an entry on the internet, and the four build-machine defaults that made a working install look dead."
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/cloud-first-mile/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/cloud-first-mile/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/cloud-first-mile/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/cloud-first-mile/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/cloud-first-mile/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Cloud's First Mile: Putting a Radio Behind NAT on the Internet",
+        "description": "An outbound tunnel, per-instance certificate verification, generated routes and a portal that performs no privileged action: four invariants, plus the failure modes found on real machines.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-10-03",
+        "dateModified": "2026-10-03",
+        "keywords": "remote radio, NAT traversal, frp tunnel, nginx, trust bundle, field report",
+        "articleSection": "Field",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/cloud-first-mile/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar">
+        <span class="ba-crumb">
+          <a href="/">Home</a> › <a href="/blog/">Blog</a> ›
+          <span class="ba-crumb-cat">Field · Cloud Hub</span>
+        </span>
+      </nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge">
+            <i class="fas fa-tower-broadcast"></i><span>Field · Remote Radio Infrastructure</span>
+          </div>
+          <h1>The cloud's <span class="gradient">first mile</span>.</h1>
+          <p>
+            An amateur radio station usually has no public address: carrier NAT, sometimes twice, no
+            port forwarding, no UPnP on a router nobody administers. Yet a radio meant to be used
+            remotely needs an entry on the internet. This is the design that gives it one without
+            asking anyone to touch their network, and the four defaults that made a working install
+            look dead.
+          </p>
+          <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-network-wired"></i> 1 outbound port: 8989</span>
+            <span class="ag-pill"><i class="fas fa-globe"></i> entry = https://&lt;callsign&gt;.mrrc.vlsc.net/</span>
+            <span class="ag-pill"><i class="fas fa-shield-halved"></i> per-instance certificate pinning</span>
+            <span class="ag-pill"><i class="fas fa-route"></i> routes generated, never hand-edited</span>
+          </div>
+          <p class="ba-meta">
+            By BG1SB &nbsp;·&nbsp; <time datetime="2026-10-03">Oct 3, 2026</time> &nbsp;·&nbsp; ~12 min
+            read
+          </p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell">
+        <div class="container">
+          <nav class="ag-anchor-nav" aria-label="Page sections">
+            <a href="#constraints">Constraints</a><a href="#invariants">Invariants</a
+            ><a href="#blackscreen">The black screen</a><a href="#timing">Timing</a
+            ><a href="#rules">Field rules</a><a href="#steps">Three steps</a>
+          </nav>
+        </div>
+      </div>
+
+      <main class="ba-main">
+        <p class="lede">
+          The interesting part of this system is not the tunnel. Tunnels are a solved shape. The
+          interesting part is what has to be true for a stranger's radio to be reachable at a name
+          derived from their callsign, for that name to be verifiable rather than merely forwarded,
+          and for adding the next radio to be a one-line change instead of an editing session on a
+          production web server.
+        </p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — the design in five claims</p>
+            <ul class="ba-tldr-list">
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
+                ><strong>The instance dials out; the hub never dials in.</strong> A tunnel client
+                connects to one port, 8989, and maps the local radio server onto a private loopback
+                port on the hub. The customer's network needs zero inbound access.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
+                ><strong>Each instance is verified against its own certificate.</strong> Instances
+                self-sign; the hub's trust bundle is generated from the registry, so only registered
+                instances are trusted and renewals need no cross-machine synchronisation.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="inference">Inference</span
+                ><strong>Generated routes are what make growth cheap.</strong> The registry is
+                <code>label, port, upstream name</code> per line; one command emits the nginx map and
+                the wildcard vhost. Adding an instance is one line.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span
+                ><strong>The self-service portal performs no privileged action.</strong> It can record
+                an application and sign an instance certificate. It cannot reload the web server or
+                touch a firewall, and the two commands that need root are printed for an operator
+                instead.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="excluded">Excluded</span
+                ><strong>Not covered here: radio behaviour.</strong> Everything below was verified on
+                machines without a transceiver attached. CAT, audio and transmit paths need physical
+                hardware and are outside this record.
+              </li>
+            </ul>
+            <div class="ba-readpath">
+              <span>Read in 3 minutes:</span><a href="#invariants">§02 the four invariants</a
+              ><a href="#blackscreen">§03 the black screen</a><a href="#steps">§06 three steps</a>
+            </div>
+          </div>
+        </div>
+
+        <section id="constraints" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">01 · Constraints</span>
+              <h2 class="ag-section-title">What the customer's network will not do</h2>
+              <p class="ag-section-subtitle">
+                Every design decision below follows from this table, not from preference.
+              </p>
+            </header>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>Constraint</th><th>Consequence</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>No public IP, no port forwarding, no UPnP at the instance</td>
+                    <td>The entry cannot live at the client, so the tunnel must be outbound</td>
+                  </tr>
+                  <tr>
+                    <td>Some networks permit only 80 and 443; others permit almost anything</td>
+                    <td>
+                      Exactly one control port, and it must be configurable rather than assumed
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>The user operates a radio, not a server</td>
+                    <td>
+                      Enrolment has to be a few clicks inside the application, with the operator's
+                      approval happening somewhere else entirely
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>One device belongs to one callsign</td>
+                    <td>
+                      The entry name is the callsign itself: <code>https://bg9aaa.mrrc.vlsc.net/</code>,
+                      with no port, path or product suffix
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Instances may run on Windows, macOS, Linux or a Pi</td>
+                    <td>
+                      Nothing in the path may assume a shell, a package manager or a writable program
+                      directory
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">Fact · measured, not assumed</span>
+              <p>
+                The port choice was settled by measurement rather than by taste. A second user-facing
+                port that had existed for weeks turned out never to have been reachable from the public
+                internet at all: three different networks refused it while the same host answered 443
+                without complaint. Applications written before that discovery had been quietly failing
+                on every request except the one that happened to use a fallback path.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="invariants" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">02 · Invariants</span>
+              <h2 class="ag-section-title">Four things that must stay true</h2>
+              <p class="ag-section-subtitle">
+                Each one exists because removing it produced an incident.
+              </p>
+            </header>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>① Outbound only</h3>
+                <p>
+                  A tunnel client on the instance connects to <code>tunnel.mrrc.vlsc.net:8989</code> and
+                  maps the radio's local port onto a loopback port on the hub, such as
+                  <code>127.0.0.1:18803</code>. The hub's web server proxies the callsign hostname to
+                  that loopback port. The instance needs one outbound TCP connection and nothing else.
+                  If the tunnel drops it reconnects on its own, every few seconds, with no user action.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>② Verify each instance against its own certificate</h3>
+                <p>
+                  The instance self-signs at first run, with its entry name as the subject. The hub's
+                  upstream verification points at a bundle generated from the registry: system roots
+                  plus every registered instance's public key. Two properties follow. Renewals need no
+                  cross-machine synchronisation, and an instance that is not in the registry cannot be
+                  served even if it somehow opens a tunnel.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>③ Routes are generated</h3>
+                <p>
+                  The registry holds one line per instance: label, loopback port, and the name the
+                  upstream certificate is expected to carry. A single command renders the nginx map and
+                  the wildcard vhost. Adding an instance is one line plus a regeneration. Nobody edits
+                  the web server's configuration by hand, which is the only reason a non-expert can
+                  operate this at all.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>④ The portal holds no privileges</h3>
+                <p>
+                  The self-service portal runs on loopback as an unprivileged service account. It
+                  records applications, verifies callsigns against a callsign database, and signs
+                  instance certificates. It cannot reload nginx and cannot change a firewall. The two
+                  steps that need root are printed as commands for an operator to run. A compromised
+                  portal therefore gains no machine.
+                </p>
+              </article>
+            </div>
+
+            <blockquote
+              class="ba-quote"
+              data-quote-id="nginx-selfsigned-upstream"
+              data-quote-kind="engineering"
+              data-quote-cite="nginx error log, hub host, 2026-10-01"
+            >
+              <p class="ba-quote-orig" lang="en">
+                upstream SSL certificate verify error: (18:self-signed certificate) while SSL
+                handshaking to upstream
+              </p>
+              <p class="ba-quote-trans" lang="zh">
+                上游 SSL 证书校验失败：（18：自签名证书）发生在与上游进行 SSL 握手时。
+              </p>
+              <span class="ba-quote-cite">nginx error log, hub host, 2026-10-01</span>
+            </blockquote>
+
+            <p>
+              That single line is invariant ② failing in the only way it can fail visibly. The tunnel
+              was up, the application was serving, the browser reached the hub, and the hub refused its
+              own upstream because the instance's certificate was not in the bundle. Fixing it is a
+              regeneration, not a debugging session, provided the certificate file is named after the
+              registry label.
+            </p>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">Inference · why pinning beats a public CA here</span>
+              <p>
+                A public certificate for each instance would be simpler to reason about and impossible
+                to issue: the names are per-instance hostnames under a wildcard the operator controls,
+                and every renewal would become a coordinated event between two machines. Pinning the
+                self-signed certificate trades that coordination for a generation step that already has
+                to exist, because the registry is the source of truth for routes anyway.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="blackscreen" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">03 · The black screen</span>
+              <h2 class="ag-section-title">Four defaults that only held on the build machine</h2>
+              <p class="ag-section-subtitle">
+                Reported as "installed it and it will not start". It was running the whole time.
+              </p>
+            </header>
+
+            <p>
+              On the first day the hub went live, a customer installed the application and saw a black
+              screen. The service was up, the port was listening, and the log said so. What the log
+              also said, in a warning that reads like a footnote:
+            </p>
+
+            <blockquote
+              class="ba-quote"
+              data-quote-id="ssl-disabled-warning"
+              data-quote-kind="engineering"
+              data-quote-cite="MRRC Modern server log, customer machine, 2026-10-02"
+            >
+              <p class="ba-quote-orig" lang="en">
+                SSL disabled or cert/key not found (cert=C:\Program Files\MRRC
+                Modern\_internal\certs\fullchain.pem key=...\radio.vlsc.net.key)
+              </p>
+              <p class="ba-quote-trans" lang="zh">
+                SSL 已停用，或找不到证书与私钥。证书路径在安装目录内部，私钥文件名是开发机上那一张。
+              </p>
+              <span class="ba-quote-cite">MRRC Modern server log, customer machine, 2026-10-02</span>
+            </blockquote>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>Default</th><th>What happened on a customer machine</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Certificate path inside the packaged directory</td>
+                    <td>
+                      The program directory is read-only for a normal user, so no certificate was
+                      found; the server silently fell back to plain HTTP while the launcher opened an
+                      <code>https://</code> address. The browser reported a protocol error. The screen
+                      stayed black.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Log directory inside the packaged directory</td>
+                    <td>
+                      A permissions error on every start, and therefore no logs at all, which removed
+                      the only way to diagnose the previous row.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Serial port defaulting to a macOS device name</td>
+                    <td>
+                      On Windows the radio was sitting on <code>COM5</code> while the application looked
+                      for <code>/dev/cu.SLAB_USBtoUART</code>, a path that cannot exist there.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Login password defaulting to a constant in the source</td>
+                    <td>
+                      Anyone on the local network could authenticate until somebody changed it. Only
+                      reachable when the launcher, which generates a random one, was bypassed.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Three structural changes closed the class, rather than the four instances of it:</p>
+            <ul>
+              <li>
+                Every path the program writes to at runtime defaults into the user's own data
+                directory, resolved per platform and never allowed to raise.
+              </li>
+              <li>
+                A missing certificate is signed on the spot. Serving plain HTTP now requires an
+                explicit flag, and says so loudly when used.
+              </li>
+              <li>
+                A gate test fails the suite if any writable default resolves inside the program
+                directory. It caught a fifth case, a memory-channels file, on its first run.
+              </li>
+            </ul>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">Thesis · the silent fallback is the actual defect</span>
+              <p>
+                A wrong default is recoverable if it announces itself. What turned a bad path into an
+                unusable product was the decision to degrade quietly: no certificate became no TLS, no
+                writable directory became no logs, and the user was left with a black rectangle and no
+                evidence. Every fallback in this codebase now either fixes itself or reports itself.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="timing" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">04 · Timing</span>
+              <h2 class="ag-section-title">Two defects that only exist in sequence</h2>
+              <p class="ag-section-subtitle">
+                Neither shows up in a unit test, because each is a property of an ordering.
+              </p>
+            </header>
+
+            <h3 class="ag-subhead">A new certificate, an old process</h3>
+            <p>
+              The TLS context is built once, when the server starts. Enrolling writes a fresh
+              certificate to the same path. The running process keeps serving the previous one while the
+              hub verifies against the new one, so the entry answers 502 with everything individually
+              healthy. The nastiest ordering is restart first, enrol second: the file changes while the
+              process is already up, and any check based on a snapshot taken at import time reports
+              that nothing needs doing.
+            </p>
+            <p>
+              The criterion that survives every ordering is a comparison of two timestamps: if the
+              certificate file was written after this process started, a restart is required. The
+              interface now says so and offers the restart, and the restart refuses to exit unless it
+              has already started something that will bring the server back.
+            </p>
+
+            <h3 class="ag-subhead">A tunnel that waits to be asked for</h3>
+            <p>
+              The tunnel used to start from exactly one place: the endpoint the settings dialog calls
+              to render itself. The consequence is that a machine which reboots overnight serves
+              nothing until somebody opens that dialog in the morning. Found during an end-to-end
+              acceptance run, not during development, because the developer had just clicked through
+              the dialog.
+            </p>
+            <p>
+              An instance that is already enrolled now starts its tunnel at boot. Failure to start is
+              logged and does not prevent the server from coming up, and the dialog still retries, so
+              there are two paths to the same state rather than one.
+            </p>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">Inference · why sequence bugs survive review</span>
+              <p>
+                Both defects are invisible in any single state. Each component behaved correctly: the
+                server served the certificate it had been given, the tunnel started when asked. The
+                defect lived in the gap between one component's write and another's read. Reviewing
+                components cannot find it; running the whole flow from a clean machine, in an
+                inconvenient order, can.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="rules" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">05 · Field rules</span>
+              <h2 class="ag-section-title">Four rules written down after losing time to their absence</h2>
+              <p class="ag-section-subtitle">Each one cost at least one wasted cycle.</p>
+            </header>
+
+            <ul>
+              <li>
+                <strong>Never accept an exit code as proof.</strong> A build reported success, the log
+                contained the line saying compilation succeeded, and the version file named the new
+                release. The artifact was the previous one. Proof is a version, a timestamp that
+                includes the year, and a hash different from the last release.
+              </li>
+              <li>
+                <strong>Never rebuild under a published version number.</strong> The upgrade channel
+                compares version strings, so a machine that already installed that number will never
+                see the rebuild. Its update button replays the same version forever.
+              </li>
+              <li>
+                <strong>One driver per release train.</strong> Two writers on one tree produced a
+                manifest carrying a new version label with the previous version's size and hash. The
+                fix is to generate the manifest on the server from the files actually published.
+              </li>
+              <li>
+                <strong>Every field failure becomes a test the same day.</strong> Otherwise it returns
+                under another name. Of the gates written during this work, one found a new bug
+                immediately and another has prevented a whole category from shipping since.
+              </li>
+            </ul>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>Layer</th><th>Where its truth is written</th><th>Read this first when an entry fails</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Tunnel</td>
+                    <td>The tunnel client's own log on the instance</td>
+                    <td>Whether it logged in and registered its proxy</td>
+                  </tr>
+                  <tr>
+                    <td>Hub listener</td>
+                    <td>Loopback sockets owned by the tunnel server</td>
+                    <td>Whether the instance's port is listening at all</td>
+                  </tr>
+                  <tr>
+                    <td>Upstream TLS</td>
+                    <td>The web server's error log</td>
+                    <td>error 18 means the trust bundle; a name mismatch means the registry's third column</td>
+                  </tr>
+                  <tr>
+                    <td>Application</td>
+                    <td>The instance's own log, in the user's data directory</td>
+                    <td>Whether it is serving TLS at all, and which certificate</td>
+                  </tr>
+                  <tr>
+                    <td>Network path</td>
+                    <td>Nothing; only a probe</td>
+                    <td>Whether the port is reachable from outside, tested from two networks</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="steps" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">06 · Three steps</span>
+              <h2 class="ag-section-title">What an operator actually does</h2>
+              <p class="ag-section-subtitle">
+                No shell, no configuration file, no port forwarding.
+              </p>
+            </header>
+
+            <ol>
+              <li>Install the application for the platform in use.</li>
+              <li>
+                Open the settings dialog, choose the cloud entry, type the callsign and submit the
+                application. If the operator has already approved it and handed over a one-time
+                enrolment secret, pasting that secret into the same dialog claims the approved entry
+                directly and skips the wait.
+              </li>
+              <li>
+                Restart when asked. The application enrols its own certificate, writes the tunnel
+                configuration, starts the tunnel and prints the entry.
+              </li>
+            </ol>
+
+            <p>The result is a name derived from the callsign and nothing else:</p>
+            <pre><code>https://bg9aaa.mrrc.vlsc.net/          # 443, no port, no path, no product suffix
+https://bg9aaa.mrrc.vlsc.net/login     # the login page
+https://bg9aaa.mrrc.vlsc.net/api/health # 401 while healthy: alive, and asking who you are</code></pre>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>If the launcher will not start</h3>
+                <p>
+                  The server runs without it. Start the server entry from the start menu, open
+                  <code>http://127.0.0.1:8888/</code>, and read the password the window prints. The
+                  launcher only seeds configuration, starts the server and opens a browser.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>If the environment is a mess</h3>
+                <p>
+                  A cleanup helper backs up configuration, certificates and logs to the desktop, then
+                  removes the application, its settings, its environment variables and its scheduled
+                  tasks. It touches nothing outside a fixed list of paths and leaves unrelated products
+                  alone unless explicitly asked.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>If only the interface needs fixing</h3>
+                <p>
+                  Interface and asset fixes ship as a few-hundred-kilobyte patch instead of a full
+                  installer. The patch verifies its own hash and the version it applies to, backs up
+                  every file it replaces, and restarts the application. Compiled logic cannot be
+                  patched and still needs a full release.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>If something is wrong and none of this explains it</h3>
+                <p>
+                  One button in the interface builds a diagnosis bundle: log tails, a whitelist of
+                  environment keys, and a summary that has already been read once by a machine before a
+                  human sees it. It uploads over the same 443 the site uses.
+                </p>
+              </article>
+            </div>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">Fact · what was verified, and on what</span>
+              <p>
+                The full sequence was run end to end on real machines: revoke an instance, apply from
+                the application, approve in the portal, refresh, enrol, restart, and reach the entry
+                with a 401 from the health endpoint. It was run on a Windows virtual machine and on a
+                clean macOS machine, including a fresh install from the public download. What was not
+                verified anywhere in this article is radio behaviour: no transceiver was attached to
+                any of those machines.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="ba-footer">
+        <div class="ba-footer-inner">
+          <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+              <h3>BG1SB</h3>
+              <p>
+                Amateur radio operator and software engineer. Builds the VLSC open-source remote-control
+                ecosystem, and writes down what the radios and the infrastructure actually did.
+              </p>
+            </div>
+          </div>
+          <div class="blog-related">
+            <h3>Related reading</h3>
+            <ul>
+              <li>
+                <a href="/blog/two-models/">Two Models, One Working Tree: forty-eight hours in parallel</a>
+              </li>
+              <li>
+                <a href="/blog/support-loop/">The Support Loop: how a week of reports became releases</a>
+              </li>
+              <li>
+                <a href="/blog/ft710-usb-remote-control/">Remote-controlling a Yaesu FT-710 with one USB cable</a>
+              </li>
+              <li>
+                <a href="/blog/opus-vs-pcm-remote-audio/">Opus versus PCM for remote audio</a>
+              </li>
+              <li><a href="/mrrc_hub/">MRRC Cloud Hub: the operator's documentation</a></li>
+              <li>
+                <a href="/engineering.html">Harness, Loops &amp; Living SDD: the VLSC system</a>
+              </li>
+            </ul>
+          </div>
+          <div class="blog-prevnext">
+            <a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a
+            ><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </footer>
+    </article>
+    <script src="../../js/global-nav.js?v=9" defer data-gn="1"></script>
+  </body>
+</html>

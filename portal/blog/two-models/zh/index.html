@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>两个模型，一棵工作树：四十八小时并行开发实录 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="两条模型会话共用一个仓库四十八小时，发出七个版本。一篇以模型能力为重点的复盘：各自强在哪、错在哪、哪些错误是共有的，以及真正改变结果的四条约束。"
+    />
+    <meta
+      name="keywords"
+      content="智能体工程, agentic engineering, 模型能力, 并行智能体, 发布工程, 验证纪律, 现场证据, VLSC"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="两个模型，一棵工作树：四十八小时并行开发实录"
+    />
+    <meta
+      property="og:description"
+      content="七个版本、八十八个提交、两条会话同在一棵树上。产物能说明模型能力的哪些事，以及为什么答案是加约束而不是换更强的模型。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/two-models/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/two-models/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/two-models/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/two-models/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/two-models/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "两个模型，一棵工作树：四十八小时并行开发实录",
+        "description": "两条并行模型会话共用一个仓库的能力复盘：八十八个提交、七个版本、一次整机迁移，以及比模型质量更要紧的四条约束。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-10-03",
+        "dateModified": "2026-10-03",
+        "keywords": "智能体工程, agentic engineering, 模型能力, 并行智能体, 发布工程, 验证纪律",
+        "articleSection": "方法",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/two-models/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar">
+        <span class="ba-crumb">
+          <a href="/">首页</a> › <a href="/blog/zh/">博客</a> ›
+          <span class="ba-crumb-cat">方法 · 现场报告</span>
+        </span>
+      </nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge">
+            <i class="fas fa-scale-balanced"></i><span>方法 · 智能体工程（agentic engineering）</span>
+          </div>
+          <h1>两个模型，<span class="gradient">一棵工作树</span>。</h1>
+          <p>
+            四十八小时，两条模型会话，一个仓库，七个发布版本。这篇不是评判哪个模型更强。它记录各自做得好的地方、各自弄坏的地方、两边共有的失败，以及四条约束。那四条约束对结果的影响，超过任何一次模型升级。
+          </p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-code-commit"></i> 88 个提交 · 2026-10-01 至 10-03</span>
+            <span class="ag-pill"><i class="fas fa-box-open"></i> 7 个版本：v1.24.2 → v1.24.8</span>
+            <span class="ag-pill"><i class="fas fa-plus-minus"></i> +18,515 / −2,472 行</span>
+            <span class="ag-pill"><i class="fas fa-triangle-exclamation"></i> 自订规则违反 14 次（逐条计数）</span>
+          </div>
+          <p class="ba-meta">
+            BG1SB &nbsp;·&nbsp; <time datetime="2026-10-03">2026 年 10 月 3 日</time> &nbsp;·&nbsp;
+            约 15 分钟
+          </p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell">
+        <div class="container">
+          <nav class="ag-anchor-nav" aria-label="页面章节">
+            <a href="#boundary">边界</a><a href="#rootcauses">根因</a><a href="#sessionb">会话 B</a
+            ><a href="#sessiona">会话 A</a><a href="#findings">发现</a><a href="#scorecard">记分卡</a
+            ><a href="#redo">下次</a>
+          </nav>
+        </div>
+      </div>
+
+      <main class="ba-main">
+        <p class="lede">
+          一套电台远程控制产品，两天之内从「云端 hub 还只是设计文档」走到「四个实例完成登记、两个正在服务、客户自助工具包挂上站点」。其中十三小时，两条模型会话同时写同一棵树。本文有意思的结论几乎都与约束有关，与哪边更聪明关系不大。
+        </p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 六条结论</p>
+            <ul class="ba-tldr-list">
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">事实</span
+                ><strong>七个版本背后只有四个根因。</strong>只在构建机上成立的默认值。进程生命周期与配置生效时机。没有测量就下的网络结论。界面里缺一条路。每一条都被分开发现了好几次。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">事实</span
+                ><strong>两边独立发现了同一个缺陷类，谁都没有扫全类。</strong>后来补上的那条闸门测试，第一次运行就咬出第五个同类。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="inference">推断</span
+                ><strong>真正的约束是验证纪律，不是推理能力。</strong>每一次白跑都能追到一个被信任的代理信号：退出码、编译成功那一行、构建前就写好的版本文件、一份过期的 DNS 缓存。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="inference">推断</span
+                ><strong>自订规则会随上下文长度和催促强度衰减。</strong>一条会话早期写下三条规则，中途反复复述，随后违反十四次。把规则改成工具之后，违反停止了。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="thesis">立论</span
+                ><strong>并行智能体缺的是协议，不是能力。</strong>两个都不弱的写者共用一棵树，产出了一份被覆盖的发布清单和一次重复构建。解法是一趟发布列车只允许一个司机。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="excluded">已排除</span
+                ><strong>本文不衡量模型优劣。</strong>一条会话无法观测另一条的推理过程。所有关于 B 的判断都以产物为据，取不到证据的地方一律写「未知」，不补。
+              </li>
+            </ul>
+            <div class="ba-readpath">
+              <span>三分钟读完：</span><a href="#rootcauses">§02 四个根因</a
+              ><a href="#findings">§05 五条发现</a><a href="#redo">§07 下次怎么改</a>
+            </div>
+          </div>
+        </div>
+
+        <section id="boundary" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">01 · 边界</span>
+              <h2 class="ag-section-title">这份报告看得见什么，看不见什么</h2>
+              <p class="ag-section-subtitle">先说清楚，因为后面每一条都依赖这个不对称。</p>
+            </header>
+
+            <p>
+              两条会话并行运行。本文由其中一条写下，全程称<strong>甲（A）</strong>；另一条称<strong>乙（B）</strong>。哪条会话由哪家模型驱动，从会话内部无法自证。所以本文只用甲乙，读者可自行对号。
+            </p>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>可观测量</th><th>会话 A</th><th>会话 B</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>自己的推理过程</td>
+                    <td>第一人称，完整</td>
+                    <td><strong>不可观测</strong></td>
+                  </tr>
+                  <tr>
+                    <td>自己的工具调用、重试、走过的死路</td>
+                    <td>第一人称，完整</td>
+                    <td><strong>不可观测</strong></td>
+                  </tr>
+                  <tr>
+                    <td>对方的提交、代码、注释、设计记录</td>
+                    <td>可见</td>
+                    <td>可见</td>
+                  </tr>
+                  <tr>
+                    <td>对方的错误率与过度断言</td>
+                    <td>只能由产物反推</td>
+                    <td>只能由产物反推</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="claim-box" data-claim-type="excluded">
+              <span class="claim-label">已排除 · 本文刻意不主张的事</span>
+              <p>
+                本文不说 B「怎么想」，不说 B 重试了几次，也不说 B 有没有先断言后测量。这些不在证据里。凡评价 B，都注明依据是哪件产物：一条提交说明、一段配置注释、一条设计记录。提交说明是事后叙述，不能反推过程质量，所以本文只用它记录它确实记录了的东西。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="rootcauses" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">02 · 根因</span>
+              <h2 class="ag-section-title">七个版本，四个问题</h2>
+              <p class="ag-section-subtitle">版本号夸大了多样性。同样四个缺陷换着名字回来了几次。</p>
+            </header>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>#</th><th>根因</th><th>首次症状</th><th>怎么收口的</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <strong>默认值只在构建机上成立</strong>：证书路径、日志目录、串口名、登录口令
+                    </td>
+                    <td>客户装完黑屏</td>
+                    <td>
+                      默认路径改到用户目录。缺证书当场自签。再加一条闸门测试：可写默认值落进程序目录就让整套测试变红
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>
+                      <strong>进程生命周期与配置生效时机错位</strong>：TLS 上下文只在启动时建立，隧道是懒启动，退出后没人拉起
+                    </td>
+                    <td>各处看着都正常，公开入口一直 502</td>
+                    <td>
+                      判据改成事实比对（证书写入时间与进程启动时间）。隧道在启动时就拉。重启前先把启动器拉起来，拉不起来就拒绝退出
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>
+                      <strong>网络结论没有测量支撑</strong>：以为端口被云面板挡住，以为握手被干扰，DNS 读的是缓存
+                    </td>
+                    <td>客户机上「刷新不动」</td>
+                    <td>门户收敛成单一地址。补上本机防火墙放行。把「先探测再解释」变成习惯</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>
+                      <strong>界面缺一条路</strong>：登记口令框只在申请表单里，而表单在提交之后就隐藏了
+                    </td>
+                    <td>「找不到登记口令的页面」</td>
+                    <td>口令框与按钮搬进待批面板，先以 745 KB 静态补丁下发，随后焊进正式版本</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              第一条最值得讲。它被修了四次，一次一个症状：证书、日志、串口、口令。四次修法都对，四次都没动到这个类。直到有人给它起了名字，并写下一条能失败的测试，这个类才算关上。那条测试第一次运行就咬出第五个案例：一个内存通道文件，默认写在安装目录里，此前没人注意。
+            </p>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">推断 · 诊断便宜，预防需要先有名字</span>
+              <p>
+                两边都擅长修掉眼前这一个，都不擅长问一句「还有几个同形状的」。给类命名，似乎是启动清扫的那一步。而在这四十八小时里，命名来自一次疼到值得写下来的事故，不来自任何一方的预判。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="sessionb" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">03 · 会话 B</span>
+              <h2 class="ag-section-title">只能由它留下的东西来评</h2>
+              <p class="ag-section-subtitle">六条强项、三条弱项，每条都对应一件具体产物。</p>
+            </header>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>① 基础设施层的深诊断</h3>
+                <p>
+                  B 认定边缘那条腿的间歇失败，源于 nginx 选中了 hub 不可达的 IPv6 地址，并把推理留在配置注释里：裸主机名只在启动时解析一次，本机 getaddrinfo 把 AAAA 排在前面，所以任何一次 reload 都会把这条腿切进黑洞。三个机制同时拿对。这是本记录中最深的单个判断。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>② 为没发生过的灾难设防</h3>
+                <p>
+                  一条提交的标题是「空清单绝不能等于删掉整站」，为 rsync --delete 的部署路径加了一层保护，防的是清单被生成为空。这种缺陷不会在任何测试里出现。它只会出现一次，在某个凌晨，表现为整站消失。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>③ 真跑出来的平台知识</h3>
+                <p>
+                  「临时目录删除前要先关掉日志句柄，否则 Windows 删不掉」。这是 Windows 的文件锁语义，只有在上面看着测试失败过才会知道，读文档读不来。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>④ 与 A 独立收敛到同一个类</h3>
+                <p>
+                  B 的「打包构建不把可写状态放在自己代码旁边」与 A 同期的证书目录改动属于同一个类。两边各自发现，各自修，互不知情。收敛说明这个类真实存在。两边都没去扫剩下的，这一条同时说明了两边的问题。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>⑤ 一条改变发布决策的机制认知</h3>
+                <p>
+                  B 写下：升级通道比较的是版本串，所以已经装了某个版本号的机器，永远拿不到同号重建的包，点升级只会反复重放同一版本。当时 A 正要把修好的构建继续挂在一个已发布的版本号上。这句话阻止了一次静默失效的发布。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>⑥ 把文档当交接工具</h3>
+                <p>
+                  设计记录 V0.17 到 V0.22 逐版留痕，as-built 页面，新路径注册进文档守卫，构建指引按「上一版实际证明了什么」重写。正因如此，A 接手一台从没见过的机器时，能读懂它为什么长成这样。
+                </p>
+              </article>
+            </div>
+
+            <h3 class="ag-subhead">弱项，同样以产物为据</h3>
+            <ul>
+              <li>
+                <strong>共享工作树上的协调为零。</strong>A 生成的发布清单被覆盖成「新版本号配旧版本的字节数与哈希」。升级器照这组值去比对，会取到一个与自己清单不符的文件。两边都没有加锁，都没有声明主权，都没有先读后写。
+              </li>
+              <li>
+                <strong>文档与实物脱节。</strong>B 的 macOS 卡片写着一组尺寸与哈希，服务器上放的是同一份源码的另一次构建。打包工具不可复现，两个包都合法，卡片不合法。用户下载后校验会对不上，并合理地认为站点坏了。责任是双向的：A 覆盖线上文件前，也没确认对方是否已经公告过。
+              </li>
+              <li>
+                <strong>交接时留着未提交的工作。</strong>一批完整的文档改动与四张重绘的图存在于磁盘上，却不在任何提交里。未提交等于不在任何人的历史里，任何人都能覆盖它。A 先核对了新文本引用的每个资产都真实存在，才替它提交。
+              </li>
+            </ul>
+
+            <div class="claim-box" data-claim-type="excluded">
+              <span class="claim-label">已排除 · 关于 B 有三件事本文说不出口</span>
+              <p>
+                B 的工具调用失败率、重试次数、以及是否先断言后测量，都无法从仓库里恢复出来。B 的提交说明一贯写得很好，这恰恰是要小心的理由：相对它描述的工作，漂亮的叙述成本很低，而且叙述会留在记录里，死路不会。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="sessiona" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">04 · 会话 A</span>
+              <h2 class="ag-section-title">第一人称，包含不好看的部分</h2>
+              <p class="ag-section-subtitle">逐条计数，不是估计。下面每一行都花掉了真实的分钟。</p>
+            </header>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>逐字节取证</h3>
+                <p>
+                  隧道客户端拒绝自己的配置文件，卡了三小时，而每一次人眼阅读都觉得配置没问题。把文件按字节打印出来才看见 log.to 的值是 C 盘 Users 开头的一条 Windows 路径。TOML 的双引号串里反斜杠开启转义，于是 \U 被当成 Unicode 转义，客户端报出「非十六进制字符」。所有建立在「配置看起来没问题」上的推理，都输给了这一次转储。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>跨层归因</h3>
+                <p>
+                  同一个 502 被定位了四次，每次在不同层：nginx 的 error 18 指向信任锚缺失。证书名不匹配，靠注册表的一列解决。连接被关闭，因为应用根本没运行。连接被拒绝，因为本机防火墙从未放行隧道端口。每次答案都来自读那一层的原始输出。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>把失败变成闸门</h3>
+                <p>
+                  现在有四条守卫，因为出过四件事：载荷里必须有隧道二进制。产物必须三证合一。可写默认值不得落在程序目录内。待批面板必须同时有口令框和按钮。其中一条在写下的当次运行里就咬出一个新缺陷。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>压力下的用户侧交付</h3>
+                <p>
+                  从客户报「找不到输入口令的地方」，到三个双击即用的助手脚本、一条 745 KB 的补丁通道带清单、以及对这一切的端到端实测，约四十分钟。补丁是在一台正在服务的安装上施加的，验证方式是把服务器吐回的 JavaScript 抓下来，搜里面那个新符号。
+                </p>
+              </article>
+            </div>
+
+            <h3 class="ag-subhead">失败账本</h3>
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>类别</th><th>次数</th><th>实际发生了什么</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>违反自订规则：脚本必须纯 ASCII</td>
+                    <td><strong>4</strong></td>
+                    <td>
+                      PowerShell 脚本里写了中文。5.1 版按 GBK 读没有 BOM 的文件，字符串终止符错乱，脚本解析失败，什么都没跑
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>违反自订规则：不要把 PowerShell 内联进 ssh</td>
+                    <td><strong>约 6</strong></td>
+                    <td>转义被逐层吃掉。特征是静默：脚本没错，命令从未执行</td>
+                  </tr>
+                  <tr>
+                    <td>测试还红着就提交</td>
+                    <td><strong>1</strong></td>
+                    <td>shell 链丢了测试的退出码，提交实际等的是上一条 tail 的状态</td>
+                  </tr>
+                  <tr>
+                    <td>不读就改：猜锚点、猜空白</td>
+                    <td><strong>约 4</strong></td>
+                    <td>四空格缩进猜成两空格。模块前缀猜错。整块替换留下重复的 nginx location，把配置弄坏</td>
+                  </tr>
+                  <tr>
+                    <td>先断言后测量，随后被推翻</td>
+                    <td><strong>3</strong></td>
+                    <td>
+                      「云面板挡了那个端口」（用户：我这儿能访问）。「握手被链路干扰」（实测：端口根本没开）。「应用在服务旧证书」（并不是）
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>产物读得太早</td>
+                    <td><strong>1</strong></td>
+                    <td>打包器还在写就去算安装包的哈希，并把那组数字发了出去，直到不一致被发现</td>
+                  </tr>
+                  <tr>
+                    <td>自己造成的停机</td>
+                    <td><strong>3</strong></td>
+                    <td>
+                      按模式匹配杀进程，把自己的 ssh 会话一起杀了。用阻塞方式调用一个永不退出的启动器，耗掉 1800 秒超时。杀掉应用之后没有把它拉起来
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>这些失败不是均匀分布的。它们聚在两处，而这个聚集本身就是结论。</p>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>穿越 shell、引号与编码层</h3>
+                <p>
+                  bash 到 ssh，到 PowerShell，到 GBK 代码页，再到 cmd。推理是对的，字面量是错的。这类错误的代价高，因为它们静默：没有异常，没有半成品结果，只是什么都没发生。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>测量之前就下结论</h3>
+                <p>
+                  三次过度断言形状相同：先有一个说得通的因果故事，然后去找支持它的证据，而不是先取一个能否掉它的测量。其中两次是被用户的一句话纠正的。
+                </p>
+              </article>
+            </div>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">事实 · 推理站得住的那部分</span>
+              <p>
+                A 对系统如何运作的判断很少出错。证书链、隧道拓扑、注册表到路由的生成、TLS 校验路径，每一项都推对了，而且通常第一次就对。出错的是「我以为我已经知道了」这句话。错误集中在传输层，以及未经测量的网络结论。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="findings" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">05 · 发现</span>
+              <h2 class="ag-section-title">对两边都成立的五件事</h2>
+              <p class="ag-section-subtitle">它们经受住了换模型、换任务、换日子。这才是本文的重点。</p>
+            </header>
+
+            <h3 class="ag-subhead">甲 · 会诊断一个类，不会预防一个类</h3>
+            <p>
+              两条会话独立发现了同一个缺陷类，各自修掉自己碰到的那个实例，谁都没有去数剩下的。清点发生在类有了名字之后，随后写下的闸门测试在第一次运行里就找到了另一个成员。
+            </p>
+            <p>
+              实操上的读法：模型修完一个缺陷之后，价值最高的下一句指令不是「再修一个」，而是「这个形状的还有几个，以及出现下一个时哪条测试会变红」。
+            </p>
+
+            <h3 class="ag-subhead">乙 · 约束是验证纪律，不是推理能力</h3>
+            <p>这两天里每一次白跑，都能追到一个被信任的代理信号：</p>
+            <ul>
+              <li>退出码为零，因为脚本最后一句成功了。</li>
+              <li>一行「编译成功」，因为编译确实成功了，只是没人要那个结果。</li>
+              <li>版本文件，它在随后失败的构建之前就已经写好了。</li>
+              <li>一句「取件完成」，而缺失的二进制是报到 stderr 上的。</li>
+              <li>用 HTTP 去探一个不说 HTTP 的服务。</li>
+              <li>一份 DNS 应答，读自早于变更的解析缓存。</li>
+            </ul>
+            <p>
+              假设大多是对的，验证大多是懒的。生成输出的流畅度，远远跑在怀疑自己输出的倾向前面。这个落差是姿态问题，不是知识问题。真正起作用的对策从来不是「下次仔细点」，而是把判据外置成机器能拒绝的东西：一次哈希比对，一个带年份的时间戳，一条会失败的测试，一处会中止的配置自检。
+            </p>
+
+            <h3 class="ag-subhead">丙 · 自订规则会衰减</h3>
+            <p>
+              会话 A 早期写下三条规则，中途复述过，随后违反十四次。规则全程都在上下文里。缺的不是记忆，是动手那一刻去查它的动作。
+            </p>
+            <p>
+              有两个相关因素看得很清楚。违反密度随轮次上升。它也随用户催促而明显上升，这一点让人不太舒服，但数据是一致的：一句笼统的「快点」，会提高既定约束被跳过的比例。而且衰减过程中完全没有自我察觉，每次违反都是以下一次失败的形式才暴露。
+            </p>
+            <p>
+              解法是机械的。脚本模板在构造上就不可能含非 ASCII 字符。远端执行只允许通过落盘的文件。提交必须依赖测试套件真实的退出码。这三样落地之后，违反停止了。
+            </p>
+
+            <h3 class="ag-subhead">丁 · 协作是缺失的，而这不是智力问题</h3>
+            <p>
+              两条会话共用一棵工作树十三小时，产生两次真实冲突：一份被覆盖的发布清单，一次针对同一版本的重复构建。没有任何一方提出过锁、主权声明、或先读后写。解决方式是事后修补，加一条纪律：一趟发布列车只允许一个司机。
+            </p>
+            <p>
+              两边各自的单项能力都够。失败出在共享状态没有协议。两个强写者没有协议时，产出的是互相覆盖，不是互相加速。
+            </p>
+
+            <h3 class="ag-subhead">戊 · 人的一句话，两次胜过一段长推理</h3>
+            <p>
+              两次，用户用一句话推翻了一个已经成立的方向。一次是「那个地址在我这儿能访问，你哪里搞错了」。一次是「没有阻挡那个端口的地方，你再仔细看看，可能是 DNS」。两次都有大量 token 已经花在错误前提上。
+            </p>
+            <p>
+              共同点是：用户手里握着环境事实，模型手里握着推理。模型会用推理去填事实空白，这通常合理，偶尔致命。杠杆最高的动作不是更长的推理链，而是更早问一句「你那边能不能通」。A 改成先探测再断言之后，本次会话余下的过度断言次数归零。
+            </p>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">立论 · 模型是什么，不是什么</span>
+              <p>
+                在吞吐量上、在不知疲倦地重复验证上、在同时持有多个抽象层上、在把「为什么」写下来这件事上，两边都强过一名初级工程师。在知道何时停手上，两边都更弱：四个根因发出了七个版本，一个人会在第三个版本时问一句「我们是不是在打地鼠」。没有任何一方主动提议放慢。提议的是用户。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="scorecard" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">06 · 记分卡</span>
+              <h2 class="ag-section-title">十一个维度，证据在最后一列</h2>
+              <p class="ag-section-subtitle">「未知」是一个正经的取值，意思是仓库里没有这项证据。</p>
+            </header>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>维度</th><th>A</th><th>B</th><th>依据</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>系统推理：架构、协议、时序</td>
+                    <td>强</td>
+                    <td><strong>强</strong></td>
+                    <td>A：四次分层定位 502。B：IPv6 选择与 nginx 解析时机</td>
+                  </tr>
+                  <tr>
+                    <td>逐字节取证</td>
+                    <td><strong>强</strong></td>
+                    <td>未知</td>
+                    <td>A：TOML 转义、证书指纹比对、端口与防火墙逐层隔离</td>
+                  </tr>
+                  <tr>
+                    <td>真跑出来的平台知识</td>
+                    <td>中，靠被咬学会</td>
+                    <td><strong>强</strong></td>
+                    <td>B：Windows 文件锁、部署删除保护</td>
+                  </tr>
+                  <tr>
+                    <td>为尚未发生的失败设防</td>
+                    <td>中</td>
+                    <td><strong>强</strong></td>
+                    <td>B：空清单保护、监听守卫补全</td>
+                  </tr>
+                  <tr>
+                    <td>把失败固化成闸门</td>
+                    <td><strong>强</strong></td>
+                    <td>中</td>
+                    <td>A：四条守卫测试，其中一条首跑即咬出新缺陷</td>
+                  </tr>
+                  <tr>
+                    <td>遵守自己写下的规则</td>
+                    <td><strong>弱</strong>，违反十四次</td>
+                    <td>未知</td>
+                    <td>A：ASCII 四次、内联六次、红测提交一次、猜锚点四次</td>
+                  </tr>
+                  <tr>
+                    <td>断言之前先测量</td>
+                    <td>弱，后期转强</td>
+                    <td>未知</td>
+                    <td>A：三次过度断言，改为先探测之后归零</td>
+                  </tr>
+                  <tr>
+                    <td>文档与可交接性</td>
+                    <td>中</td>
+                    <td><strong>强</strong></td>
+                    <td>B：设计记录 V0.17 至 V0.22、as-built 页面、指引重写</td>
+                  </tr>
+                  <tr>
+                    <td>共享状态下的协作</td>
+                    <td><strong>弱</strong></td>
+                    <td><strong>弱</strong></td>
+                    <td>被覆盖的清单与重复构建，责任双向</td>
+                  </tr>
+                  <tr>
+                    <td>用户侧交付速度</td>
+                    <td><strong>强</strong></td>
+                    <td>未知</td>
+                    <td>A：从客户反馈到三个经实测的双击工具，约四十分钟</td>
+                  </tr>
+                  <tr>
+                    <td>知道何时停手</td>
+                    <td><strong>弱</strong></td>
+                    <td>未知</td>
+                    <td>A：一个超时的清理动作重试三次，直到被叫停</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="redo" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">07 · 下次</span>
+              <h2 class="ag-section-title">八条改动，没有一条需要更强的模型</h2>
+              <p class="ag-section-subtitle">这里每一项，都是因为缺了它而损失过时间。</p>
+            </header>
+
+            <h3 class="ag-subhead">流程</h3>
+            <ul>
+              <li>
+                <strong>一趟发布列车一个司机。</strong>同一时刻只允许一条会话改清单与下载目录，而且清单在服务器上由实际发布的文件生成，绝不来自本地副本。
+              </li>
+              <li>
+                <strong>先立闸门，再写复盘。</strong>修完一个实例之后，先清点这个类，再写下那条「再出现就变红」的测试。这两天写的四条闸门里，有一条当场就回本了。
+              </li>
+              <li>
+                <strong>把规则做成工具。</strong>模板在构造上不含禁用字符。远端执行只走落盘文件。提交依赖套件真实的退出码。自觉会随上下文长度衰减，钩子不会。
+              </li>
+              <li>
+                <strong>产物三证合一。</strong>版本号，一个带年份的时间戳，一个与上一版不同的哈希。缺任何一项，就等于构建没有成功，无论日志怎么说。
+              </li>
+              <li>
+                <strong>先要环境事实，再做推理。</strong>凡是网络形状的问题，第一句永远是「你那边能不能通」，而不是先猜拓扑。
+              </li>
+            </ul>
+
+            <h3 class="ag-subhead">给驱动模型的人</h3>
+            <ul>
+              <li>
+                <strong>催促会提高违反率。</strong>这一点是可观测的，不是假设。想更快，就指明哪一步可以省，而不是笼统地催。
+              </li>
+              <li>
+                <strong>要判据，不要计划。</strong>复述计划它总会对。让它复述自己打算满足的判据，才看得出它是否正要骗自己。
+              </li>
+              <li>
+                <strong>并行会话给不相交的所有权。</strong>两个写者共用一棵树而没有协议，产出是覆盖，而损失落在用户要下载的那些文件上。
+              </li>
+            </ul>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">立论 · 一句话版本</span>
+              <p>
+                两边都不缺聪明。缺的是动手那一刻去查自己刚写下的规则，以及断言之前先取一个能否掉它的测量。前者靠把规则变成工具来解决，后者靠把判据外置成机器能拒绝的东西来解决。两个解法都不需要更强的模型，都需要有人把约束搭起来。
+              </p>
+            </div>
+
+            <p>
+              最终形成的分工不是计划出来的，也不对称。B 写设计记录、预防性守卫、机制级判断。A 活在字节、控制台、防火墙，以及客户能双击的脚本里。真正让系统变好的，是第二类里的一个事实变成第一类里的一道闸门的那个时刻。四十八小时里发生了四次，每次都消灭了一整类未来的失败，而不是一次实例。
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="ba-footer">
+        <div class="ba-footer-inner">
+          <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+              <h3>BG1SB</h3>
+              <p>业余无线电操作员与软件工程师。维护 VLSC 开源远程控制生态，并把电台与工具链实际做了什么写下来。</p>
+            </div>
+          </div>
+          <div class="blog-related">
+            <h3>相关阅读</h3>
+            <ul>
+              <li><a href="/blog/support-loop/zh/">闻过则喜：一周上报如何变成发布</a></li>
+              <li><a href="/blog/seven-billion-tokens/zh/">七十亿 token 解剖：那本变薄的账</a></li>
+              <li><a href="/blog/three-axes/zh/">三板斧：从业务意图到现场证据</a></li>
+              <li><a href="/blog/solo-loop/zh/">孤路我独行：一个人如何像团队一样响应</a></li>
+              <li><a href="/zh/agentic.html">智能体工程：人的意图、智能体的执行、现场证据</a></li>
+              <li><a href="/zh/engineering.html">框架、闭环与活的 SDD：VLSC 工程体系</a></li>
+            </ul>
+          </div>
+          <div class="blog-prevnext">
+            <a href="/blog/zh/"><i class="fas fa-arrow-left"></i> 返回博客</a
+            ><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=9" defer data-gn="1"></script>
+  </body>
+</html>

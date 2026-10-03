@@ -20,6 +20,7 @@ ARTICLES: dict[str, tuple[str, tuple[str, ...]]] = {
     "connections-recursive-intelligence": (TIER_ESSAY, ("en", "zh")),
     "solo-loop": (TIER_FIELD, ("en", "zh")),
     "support-loop": (TIER_FIELD, ("en", "zh")),
+    "two-models": (TIER_FIELD, ("en", "zh")),
     "three-axes": (TIER_FIELD, ("en", "zh")),
     "seven-billion-tokens": (TIER_FIELD, ("en", "zh")),
     "seven-billion-tokens/almanac": (TIER_FIELD, ("en", "zh")),

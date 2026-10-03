@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two Models, One Working Tree: Forty-Eight Hours of Parallel Development — VLSC Blog</title>
+    <meta
+      name="description"
+      content="Two model sessions shared one repository for forty-eight hours and shipped seven releases. A capability retrospective: what each was strong at, where each failed, which failures both shared, and the four constraints that actually changed the outcome."
+    />
+    <meta
+      name="keywords"
+      content="agentic engineering, model capability, parallel agents, release engineering, verification discipline, field evidence, VLSC"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Two Models, One Working Tree: Forty-Eight Hours of Parallel Development"
+    />
+    <meta
+      property="og:description"
+      content="Seven releases, 88 commits, two sessions on one tree. What the artifacts say about model capability — and why the fix was constraints, not smarter models."
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/two-models/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/two-models/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/two-models/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/two-models/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/two-models/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Two Models, One Working Tree: Forty-Eight Hours of Parallel Development",
+        "description": "A capability retrospective on two parallel model sessions sharing one repository: 88 commits, seven releases, one host migration, and the four constraints that mattered more than model quality.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-10-03",
+        "dateModified": "2026-10-03",
+        "keywords": "agentic engineering, model capability, parallel agents, release engineering, verification discipline",
+        "articleSection": "Method",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/two-models/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar">
+        <span class="ba-crumb">
+          <a href="/">Home</a> › <a href="/blog/">Blog</a> ›
+          <span class="ba-crumb-cat">Method · Field Report</span>
+        </span>
+      </nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge">
+            <i class="fas fa-scale-balanced"></i><span>Method · Agentic Engineering</span>
+          </div>
+          <h1>Two models, <span class="gradient">one working tree</span>.</h1>
+          <p>
+            Forty-eight hours, two model sessions, one repository, seven releases. This is not a
+            verdict on which model is better. It is a record of what each did well, what each broke,
+            which failures they shared, and the four constraints that changed the outcome more than
+            any improvement in model quality would have.
+          </p>
+          <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-code-commit"></i> 88 commits · Oct 1–3, 2026</span>
+            <span class="ag-pill"><i class="fas fa-box-open"></i> 7 releases: v1.24.2 → v1.24.8</span>
+            <span class="ag-pill"><i class="fas fa-plus-minus"></i> +18,515 / −2,472 lines</span>
+            <span class="ag-pill"><i class="fas fa-triangle-exclamation"></i> 14 self-rule violations, counted</span>
+          </div>
+          <p class="ba-meta">
+            By BG1SB &nbsp;·&nbsp; <time datetime="2026-10-03">Oct 3, 2026</time> &nbsp;·&nbsp; ~15 min
+            read
+          </p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell">
+        <div class="container">
+          <nav class="ag-anchor-nav" aria-label="Page sections">
+            <a href="#boundary">Boundary</a><a href="#rootcauses">Root causes</a
+            ><a href="#sessionb">Session B</a><a href="#sessiona">Session A</a
+            ><a href="#findings">Findings</a><a href="#scorecard">Scorecard</a
+            ><a href="#redo">Next time</a>
+          </nav>
+        </div>
+      </div>
+
+      <main class="ba-main">
+        <p class="lede">
+          A radio-control product went from "the cloud hub is a design document" to "four instances
+          registered, two serving traffic, a customer self-service kit on the website" in two days.
+          Two model sessions worked the same tree at the same time for thirteen of those hours. Almost
+          every interesting finding is about <strong>how the work was constrained</strong>, not about
+          how smart either session was.
+        </p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — six findings</p>
+            <ul class="ba-tldr-list">
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
+                ><strong>Seven releases carried four root causes.</strong> Defaults that only held on
+                the build machine; process lifetime versus configuration timing; network claims made
+                without measurement; one missing path in the UI. Each was found separately, several
+                times.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
+                ><strong>Both sessions found the same bug class independently</strong> and neither
+                swept for the rest. A gate test written afterwards caught a fifth instance
+                immediately.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="inference">Inference</span
+                ><strong>The binding constraint was verification discipline, not reasoning.</strong>
+                Every wasted cycle traced to trusting a proxy signal: an exit code, a
+                "Successful compile" line, a version file written before the build, a cached DNS
+                answer.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="inference">Inference</span
+                ><strong>Self-imposed rules decay with context length and with urgency.</strong> One
+                session wrote three rules early, restated them repeatedly, then violated them
+                fourteen times. Turning them into tooling stopped the violations.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span
+                ><strong>Parallel agents need a protocol, not more capability.</strong> Two strong
+                writers on one tree produced an overwritten release manifest and a duplicate build.
+                The fix was one driver per release train.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="excluded">Excluded</span
+                ><strong>Model quality is not what this report measures.</strong> One session's
+                reasoning is unobservable from the other; every claim about it here rests on
+                artifacts, and the gaps are marked unknown rather than filled in.
+              </li>
+            </ul>
+            <div class="ba-readpath">
+              <span>Read in 3 minutes:</span><a href="#rootcauses">§02 four root causes</a
+              ><a href="#findings">§05 the five findings</a><a href="#redo">§07 what to change</a>
+            </div>
+          </div>
+        </div>
+
+        <section id="boundary" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">01 · Boundary</span>
+              <h2 class="ag-section-title">What this report can and cannot see</h2>
+              <p class="ag-section-subtitle">
+                Stated first, because everything after it depends on the asymmetry.
+              </p>
+            </header>
+
+            <p>
+              Two sessions ran in parallel. This article was written by one of them, referred to
+              throughout as <strong>A</strong>; the other is <strong>B</strong>. Which commercial model
+              drove which session is not something a session can verify from inside, so the labels stay
+              abstract and the reader can map them.
+            </p>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>Observable</th><th>Session A</th><th>Session B</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Its own reasoning</td>
+                    <td>First-person, complete</td>
+                    <td><strong>Not observable</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Its own tool calls, retries, dead ends</td>
+                    <td>First-person, complete</td>
+                    <td><strong>Not observable</strong></td>
+                  </tr>
+                  <tr>
+                    <td>The other's commits, code, comments, design records</td>
+                    <td>Visible</td>
+                    <td>Visible</td>
+                  </tr>
+                  <tr>
+                    <td>The other's error rate or overclaiming</td>
+                    <td>Only inferable from artifacts</td>
+                    <td>Only inferable from artifacts</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="claim-box" data-claim-type="excluded">
+              <span class="claim-label">Excluded · what is deliberately not claimed here</span>
+              <p>
+                Nothing in this article states what B "thought", how often B retried, or whether B
+                overclaimed. Those are not in evidence. Where B is assessed, the assessment names the
+                artifact it came from: a commit message, a configuration comment, a design-record
+                entry. A commit message is an after-the-fact narrative and cannot be used to infer
+                process quality, so it is used here only for what it documents.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="rootcauses" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">02 · Root causes</span>
+              <h2 class="ag-section-title">Seven releases, four problems</h2>
+              <p class="ag-section-subtitle">
+                The version count overstates the variety. The same four defects returned under
+                different names.
+              </p>
+            </header>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>#</th><th>Root cause</th><th>First symptom</th><th>How it closed</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <strong>Defaults that only held on the build machine</strong>: certificate path,
+                      log directory, serial-port name, login password
+                    </td>
+                    <td>A customer's screen went black after install</td>
+                    <td>
+                      User-directory defaults, sign a certificate when one is missing, and a gate test
+                      that fails the suite if a writable default lands inside the program directory
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>
+                      <strong>Process lifetime versus configuration timing</strong>: the TLS context is
+                      built once; the tunnel started lazily; nothing restarted the app
+                    </td>
+                    <td>The public entry answered 502 while everything looked healthy</td>
+                    <td>
+                      A factual criterion (certificate mtime versus process start), the tunnel started
+                      at boot, and a restart that refuses to exit unless it can relaunch itself
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>
+                      <strong>Network claims made without measurement</strong>: a port believed blocked
+                      by a cloud panel, a handshake believed interfered with, a DNS answer read from
+                      cache
+                    </td>
+                    <td>"Refresh does nothing" on a customer machine</td>
+                    <td>
+                      One portal address, the host's own firewall rule added, and the habit of probing
+                      before explaining
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>
+                      <strong>A missing path in the UI</strong>: the enrolment-secret field lived only
+                      in the apply form, which hides once an application exists
+                    </td>
+                    <td>"I cannot find where to enter the secret"</td>
+                    <td>
+                      The field and button moved into the pending panel, shipped early as a 745 KB
+                      static patch, then baked into the next release
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              Cause 1 is the instructive one. It was fixed four separate times, once per symptom:
+              certificate, logs, serial port, password. Each fix was correct and each left the class
+              intact. The class only closed when someone named it and wrote a test that could fail.
+              That test caught a fifth case nobody had noticed, a memory-channels file defaulting into
+              the install directory.
+            </p>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">Inference · diagnosis is cheap, prevention needs a name</span>
+              <p>
+                Both sessions were good at fixing the instance in front of them and poor at asking how
+                many more existed. Naming a class appears to be the step that unlocks the sweep, and in
+                these forty-eight hours the naming came from an incident painful enough to write about,
+                not from either model anticipating it.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="sessionb" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">03 · Session B</span>
+              <h2 class="ag-section-title">Judged from what it left behind</h2>
+              <p class="ag-section-subtitle">
+                Six strengths and three weaknesses, each tied to a specific artifact.
+              </p>
+            </header>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>① Infrastructure diagnosis at depth</h3>
+                <p>
+                  B concluded that an intermittent edge failure came from nginx selecting the hub's
+                  unreachable IPv6 address, and left the reasoning in the configuration: a bare
+                  hostname resolves once at start-up, this host's <code>getaddrinfo</code> prefers
+                  AAAA, so any reload switches that leg into a black hole. That is three mechanisms
+                  held correctly at once. It is the deepest single judgement in this record.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>② Guarding a catastrophe that had not happened</h3>
+                <p>
+                  A commit titled <em>an empty manifest must never mean "delete the whole site"</em>
+                  protects an <code>rsync --delete</code> path against a manifest generated empty. No
+                  test would ever surface that bug. It surfaces once, at three in the morning, as a
+                  missing website.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>③ Platform knowledge from real runs</h3>
+                <p>
+                  <em>Close the log handler before the temp dir goes away, or Windows cannot delete
+                  it.</em> Windows file-locking semantics, learned by watching a suite fail on that
+                  platform rather than by reading about it.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>④ Independent convergence on the same class</h3>
+                <p>
+                  B's <em>a packaged build never keeps writable state next to its own code</em> and A's
+                  certificate-directory change are the same class, found separately and fixed
+                  separately. Convergence is evidence the class was real. That neither side swept for
+                  the rest is evidence about both.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>⑤ A mechanism insight that changed a release</h3>
+                <p>
+                  B wrote down that the upgrade channel compares version strings, so a machine that
+                  already installed a given number will never receive a rebuild under it, and its
+                  update button replays the same version forever. A was about to hang a corrected
+                  build on an already-published number. That sentence prevented a silently
+                  ineffective release.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>⑥ Documentation as a handover instrument</h3>
+                <p>
+                  Design-record versions V0.17 through V0.22, as-built pages, new paths registered with
+                  the documentation guardian, and the build guidance rewritten from what the previous
+                  release actually proved. This is why A could pick up a host it had never seen and
+                  know why it was shaped that way.
+                </p>
+              </article>
+            </div>
+
+            <h3 class="ag-subhead">Weaknesses, also from artifacts</h3>
+            <ul>
+              <li>
+                <strong>Zero coordination on a shared tree.</strong> A generated release manifest was
+                overwritten into a state carrying the new version label with the previous version's
+                byte count and hash. An updater comparing those values fetches a file that does not
+                match its own manifest. Neither session locked, claimed ownership, or read before
+                writing.
+              </li>
+              <li>
+                <strong>Documentation divorced from the artifact.</strong> B's macOS card advertised
+                one size and hash while the server held another build of the same source. Packaging
+                tools are not reproducible, so both builds were legitimate; the card was not. A user
+                who downloads and verifies gets a mismatch and reasonably concludes the site is
+                broken. Responsibility is shared: A overwrote the published file without checking
+                whether the other session had already announced it.
+              </li>
+              <li>
+                <strong>Handing over uncommitted work.</strong> A complete documentation pass and four
+                regenerated figures existed on disk but not in any commit. Uncommitted work is in no
+                one's history and can be overwritten by anyone. A committed it after verifying that
+                every asset the new text referenced actually existed.
+              </li>
+            </ul>
+
+            <div class="claim-box" data-claim-type="excluded">
+              <span class="claim-label">Excluded · the three things this cannot say about B</span>
+              <p>
+                B's tool-call failure rate, its retry count, and whether it asserted before measuring
+                are not recoverable from a repository. B's commit messages are consistently excellent,
+                which is a reason to be careful: polished narration is cheap relative to the work it
+                describes, and it survives in the record while the dead ends do not.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="sessiona" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">04 · Session A</span>
+              <h2 class="ag-section-title">First person, including the parts that do not flatter</h2>
+              <p class="ag-section-subtitle">
+                Counted, not estimated. Every row below cost real minutes.
+              </p>
+            </header>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>Byte-level forensics</h3>
+                <p>
+                  A tunnel client rejected its own configuration for three hours while every reading of
+                  the file looked correct. Dumping it byte by byte showed
+                  <code>log.to = "C:\Users\..."</code>. Inside a TOML basic string a backslash begins an
+                  escape, so <code>\U</code> was parsed as a Unicode escape and the client reported a
+                  non-hexadecimal character. Every inference built on "the configuration looks fine"
+                  lost to one dump.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Attribution across layers</h3>
+                <p>
+                  The same 502 was diagnosed four times at four different layers: nginx error 18 for a
+                  missing trust anchor, a certificate-name mismatch resolved by a registry column, a
+                  closed connection because the application was not running, and finally a refused
+                  connection because the host's own firewall had never allowed the tunnel port. Each
+                  answer came from reading that layer's raw output.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Failures converted into gates</h3>
+                <p>
+                  Four guards now exist because four things went wrong: the payload must contain the
+                  tunnel binary; an artifact needs three proofs; no writable default may sit inside the
+                  program directory; the pending panel must carry both the secret field and its button.
+                  One of them caught a fifth bug the moment it was written.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Delivery under pressure</h3>
+                <p>
+                  From a customer reporting a missing input field to three double-clickable helpers, a
+                  745 KB patch channel with a manifest, and an end-to-end test of all of it: about forty
+                  minutes. The patch was applied to a live installation and verified by fetching the
+                  served JavaScript back and grepping it for the new symbol.
+                </p>
+              </article>
+            </div>
+
+            <h3 class="ag-subhead">The failure ledger</h3>
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>Category</th><th>Count</th><th>What actually happened</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Violating its own rule: scripts must be pure ASCII</td>
+                    <td><strong>4</strong></td>
+                    <td>
+                      Chinese text inside a PowerShell script; version 5.1 reads a BOM-less file as GBK,
+                      string terminators break, the script fails to parse and nothing runs
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Violating its own rule: never inline PowerShell over ssh</td>
+                    <td><strong>≈6</strong></td>
+                    <td>
+                      Escapes eaten layer by layer. The signature is silence: the script is valid, the
+                      command never executed
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Committing with the suite red</td>
+                    <td><strong>1</strong></td>
+                    <td>
+                      A shell chain lost the test exit code, so the commit waited on the exit status of
+                      the preceding <code>tail</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Patching without reading: guessed anchors and whitespace</td>
+                    <td><strong>≈4</strong></td>
+                    <td>
+                      Four-space indentation guessed as two, a module prefix guessed wrong, a block
+                      replacement that left a duplicate nginx location and broke the configuration
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Asserting before measuring, then being overturned</td>
+                    <td><strong>3</strong></td>
+                    <td>
+                      "The cloud panel blocks that port" (the user: it works from here). "The handshake
+                      is being interfered with" (measured: the port was simply closed). "The app is
+                      serving a stale certificate" (it was not)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Reading an artifact too early</td>
+                    <td><strong>1</strong></td>
+                    <td>
+                      Hashed an installer while the packer was still writing it, and published those
+                      numbers until the mismatch was caught
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Self-inflicted outages</td>
+                    <td><strong>3</strong></td>
+                    <td>
+                      A pattern-based process kill that matched its own ssh session; a blocking call on
+                      a launcher that never exits, consuming a 1800-second timeout; killing an
+                      application and not restarting it
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              The failures are not spread evenly. They cluster in two places, and the clustering is the
+              finding.
+            </p>
+
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>Crossing shell, quoting and encoding layers</h3>
+                <p>
+                  bash to ssh to PowerShell to a GBK code page to cmd. The reasoning was right and the
+                  literal was wrong. These errors are silent, which is what makes them expensive: no
+                  exception, no partial result, just nothing happening.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Concluding before measuring</h3>
+                <p>
+                  All three overclaims share one shape: a plausible causal story first, then a search
+                  for evidence that supports it, instead of first taking a measurement capable of
+                  refuting it. Two of the three were corrected by a single sentence from the user.
+                </p>
+              </article>
+            </div>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">Fact · where the reasoning held up</span>
+              <p>
+                A's models of how the system worked were rarely wrong. The certificate chain, the
+                tunnel topology, the registry-to-route generation, the TLS verification path: each was
+                reasoned out correctly, usually on the first attempt. What failed was the sentence "I
+                believe I already know this", and the failures were concentrated in transport layers
+                and in unmeasured network claims.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="findings" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">05 · Findings</span>
+              <h2 class="ag-section-title">Five things that are true of both</h2>
+              <p class="ag-section-subtitle">
+                These survived the change of model, of task, and of day. That is why they are the
+                point of the article.
+              </p>
+            </header>
+
+            <h3 class="ag-subhead">a · Good at diagnosing a class, poor at preventing one</h3>
+            <p>
+              Two sessions found the same defect class independently. Each fixed the instance it
+              touched. Neither enumerated the rest. The enumeration happened only after the class had a
+              name, and the gate test that followed found another member on its first run.
+            </p>
+            <p>
+              The practical reading: after a model fixes a bug, the highest-value next instruction is
+              not "fix the next one" but "how many more of this shape exist, and what test would go red
+              if another appeared".
+            </p>
+
+            <h3 class="ag-subhead">b · Verification discipline, not reasoning, is the constraint</h3>
+            <p>Every wasted cycle in these two days traces to a trusted proxy signal:</p>
+            <ul>
+              <li>An exit code of zero, because the final statement in the script succeeded.</li>
+              <li>
+                A "successful compile" line, because compilation did succeed and nobody wanted the
+                result.
+              </li>
+              <li>A version file, written before the build that then failed.</li>
+              <li>A "fetch complete" message, with the missing binary reported on stderr.</li>
+              <li>An HTTP probe against a service that does not speak HTTP.</li>
+              <li>A DNS answer read from a resolver cache that predated the change.</li>
+            </ul>
+            <p>
+              The hypotheses were mostly right. The verification was mostly lazy. Fluency at generating
+              output runs far ahead of the disposition to doubt it, and that gap is a posture, not a
+              knowledge deficit. The countermeasure that worked was never "be more careful". It was
+              externalising the criterion into something a machine can refuse: a hash comparison, a
+              timestamp with a year in it, a test that fails, a configuration check that aborts.
+            </p>
+
+            <h3 class="ag-subhead">c · Self-imposed rules decay</h3>
+            <p>
+              Session A wrote three rules early, restated them mid-session, and violated them fourteen
+              times. The rules were in context the entire time. What was missing was not memory but the
+              act of consulting them at the moment of acting.
+            </p>
+            <p>
+              Two correlates were visible. Violation density rose with turn count. It also rose
+              measurably after the user pushed for speed, which is uncomfortable but consistent: a
+              general instruction to hurry raises the rate at which stated constraints get skipped. The
+              decay carried no self-awareness whatsoever. Each violation surfaced only as the next
+              failure.
+            </p>
+            <p>
+              The remedy was mechanical. Script templates that are ASCII by construction. Remote
+              execution only through a file copied to the target. A test suite run whose exit code the
+              commit actually depends on. After those went in, the violations stopped.
+            </p>
+
+            <h3 class="ag-subhead">d · Coordination was absent, and that is not an intelligence problem</h3>
+            <p>
+              Thirteen hours of two sessions on one working tree produced two real collisions: an
+              overwritten release manifest, and two builds of the same version published against one
+              another. Neither session proposed a lock, an ownership claim, or a read-before-write
+              step. The resolution was repair after the fact plus one rule: a release train has a
+              single driver.
+            </p>
+            <p>
+              Both sessions were individually competent at the shared task. The failure was in the
+              absence of a protocol for shared state. Two strong writers without one produce mutual
+              overwriting, not mutual acceleration.
+            </p>
+
+            <h3 class="ag-subhead">e · A human sentence beat a long inference, twice</h3>
+            <p>
+              Twice the user overturned an established direction with one line. Once: that address
+              works from my machine, so where did you go wrong. Once: nothing is blocking that port,
+              look again, could it be DNS. In both cases a great many tokens had already been spent
+              building on the wrong premise.
+            </p>
+            <p>
+              The common factor is that the user held environmental facts and the model held inference.
+              Models fill factual gaps with reasoning, which is usually reasonable and occasionally
+              catastrophic. The high-leverage move is not a longer chain of reasoning but an earlier
+              question: can you reach it from where you are. After A switched to measuring before
+              asserting, the overclaim count went to zero for the rest of the session.
+            </p>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">Thesis · what the models were and were not</span>
+              <p>
+                Better than a junior engineer at throughput, at re-verification without boredom, at
+                holding several abstraction layers at once, and at writing down why. Worse at knowing
+                when to stop: four root causes became seven releases, and a person would have asked at
+                the third whether the team was playing whack-a-mole. Neither model proposed slowing
+                down. The user did.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="scorecard" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">06 · Scorecard</span>
+              <h2 class="ag-section-title">Eleven dimensions, evidence in the last column</h2>
+              <p class="ag-section-subtitle">
+                "Unknown" is a real entry. It means the repository does not carry the evidence.
+              </p>
+            </header>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>Dimension</th><th>A</th><th>B</th><th>Evidence</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Systems reasoning: architecture, protocol, timing</td>
+                    <td>Strong</td>
+                    <td><strong>Strong</strong></td>
+                    <td>A: four layered 502 diagnoses. B: IPv6 selection and nginx resolution timing</td>
+                  </tr>
+                  <tr>
+                    <td>Byte-level forensics</td>
+                    <td><strong>Strong</strong></td>
+                    <td>Unknown</td>
+                    <td>A: the TOML escape, certificate fingerprints, port and firewall isolation</td>
+                  </tr>
+                  <tr>
+                    <td>Platform knowledge earned by running things</td>
+                    <td>Moderate, learned by being bitten</td>
+                    <td><strong>Strong</strong></td>
+                    <td>B: Windows file locking, deployment delete-guarding</td>
+                  </tr>
+                  <tr>
+                    <td>Anticipating failures that have not occurred</td>
+                    <td>Moderate</td>
+                    <td><strong>Strong</strong></td>
+                    <td>B: the empty-manifest guard, completing the bind guard</td>
+                  </tr>
+                  <tr>
+                    <td>Converting failure into gates</td>
+                    <td><strong>Strong</strong></td>
+                    <td>Moderate</td>
+                    <td>A: four guard tests, one of which caught a new bug on its first run</td>
+                  </tr>
+                  <tr>
+                    <td>Adherence to its own stated rules</td>
+                    <td><strong>Weak</strong>, fourteen violations</td>
+                    <td>Unknown</td>
+                    <td>A: ASCII four times, inlining six, one red-suite commit, four guessed anchors</td>
+                  </tr>
+                  <tr>
+                    <td>Measuring before asserting</td>
+                    <td>Weak, then strong</td>
+                    <td>Unknown</td>
+                    <td>A: three overclaims, zero after the switch to probe-first</td>
+                  </tr>
+                  <tr>
+                    <td>Documentation and handover quality</td>
+                    <td>Moderate</td>
+                    <td><strong>Strong</strong></td>
+                    <td>B: design record V0.17 to V0.22, as-built pages, rewritten guidance</td>
+                  </tr>
+                  <tr>
+                    <td>Collaboration on shared state</td>
+                    <td><strong>Weak</strong></td>
+                    <td><strong>Weak</strong></td>
+                    <td>The overwritten manifest and the duplicate build; responsibility is shared</td>
+                  </tr>
+                  <tr>
+                    <td>Speed of user-facing delivery</td>
+                    <td><strong>Strong</strong></td>
+                    <td>Unknown</td>
+                    <td>A: forty minutes from a customer report to three tested double-click tools</td>
+                  </tr>
+                  <tr>
+                    <td>Knowing when to stop</td>
+                    <td><strong>Weak</strong></td>
+                    <td>Unknown</td>
+                    <td>A: retried a timed-out cleanup three times until told to stop</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="redo" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">07 · Next time</span>
+              <h2 class="ag-section-title">Eight changes, none of which require a better model</h2>
+              <p class="ag-section-subtitle">
+                Every item here was learned by losing time to its absence.
+              </p>
+            </header>
+
+            <h3 class="ag-subhead">Process</h3>
+            <ul>
+              <li>
+                <strong>One driver per release train.</strong> Only one session may touch the manifest
+                and the download directory at a time, and the manifest is generated on the server from
+                the files actually published, never from a local copy.
+              </li>
+              <li>
+                <strong>Gates before post-mortems.</strong> After fixing one instance of a defect,
+                enumerate the class, then write the test that must go red if another appears. Of the
+                four gates written in these two days, one paid for itself immediately.
+              </li>
+              <li>
+                <strong>Turn rules into tooling.</strong> Templates that cannot contain the forbidden
+                characters, remote execution only through files on disk, a commit that depends on the
+                suite's real exit code. Self-discipline decays with context length; a hook does not.
+              </li>
+              <li>
+                <strong>Three proofs per artifact.</strong> Version, a timestamp that includes the year,
+                and a hash different from the previous release. Missing any one means the build did not
+                succeed, whatever the log says.
+              </li>
+              <li>
+                <strong>Ask for environmental facts first.</strong> For anything network-shaped, the
+                opening question is whether the other end can reach it, not what the topology probably
+                is.
+              </li>
+            </ul>
+
+            <h3 class="ag-subhead">For whoever is driving</h3>
+            <ul>
+              <li>
+                <strong>Urgency raises the violation rate.</strong> This was observable, not
+                hypothetical. To go faster, name the step that may be skipped rather than issuing a
+                general hurry.
+              </li>
+              <li>
+                <strong>Ask for criteria, not plans.</strong> A model will always restate a plan
+                correctly. Restating the criterion it intends to satisfy is what exposes whether it is
+                about to fool itself.
+              </li>
+              <li>
+                <strong>Give parallel sessions disjoint ownership.</strong> Two writers on one tree
+                without a protocol produce overwriting, and the damage lands in the artifacts users
+                download.
+              </li>
+            </ul>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">Thesis · the one sentence version</span>
+              <p>
+                Neither session lacked intelligence. What was missing was the habit of consulting its
+                own freshly written rule at the moment of acting, and of taking a refutable measurement
+                before asserting. The first is solved by turning rules into tools. The second is solved
+                by externalising criteria into things a machine can refuse. Neither solution requires a
+                stronger model. Both require a human to build the constraint.
+              </p>
+            </div>
+
+            <p>
+              The division of labour that emerged was not planned and was not symmetric. B wrote the
+              design record, the preventive guards and the mechanism-level judgements. A lived in bytes,
+              consoles, firewalls and scripts a customer can double-click. What actually improved the
+              system was the moment a fact from the second kind became a gate in the first. That
+              happened four times in forty-eight hours, and each time it removed a whole category of
+              future failure rather than one instance of it.
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="ba-footer">
+        <div class="ba-footer-inner">
+          <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+              <h3>BG1SB</h3>
+              <p>
+                Amateur radio operator and software engineer. Builds the VLSC open-source remote-control
+                ecosystem, and writes down what the radios and the tooling actually did.
+              </p>
+            </div>
+          </div>
+          <div class="blog-related">
+            <h3>Related reading</h3>
+            <ul>
+              <li>
+                <a href="/blog/support-loop/">The Support Loop: how a week of reports became releases</a>
+              </li>
+              <li>
+                <a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected: the ledger</a>
+              </li>
+              <li>
+                <a href="/blog/three-axes/">The Three Axes: from business intent to field evidence</a>
+              </li>
+              <li><a href="/blog/solo-loop/">The Solo Loop: one person answering like a team</a></li>
+              <li>
+                <a href="/agentic.html"
+                  >Agentic Engineering: human intent, agentic execution, field evidence</a
+                >
+              </li>
+              <li>
+                <a href="/engineering.html">Harness, Loops &amp; Living SDD: the VLSC system</a>
+              </li>
+            </ul>
+          </div>
+          <div class="blog-prevnext">
+            <a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a
+            ><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </footer>
+    </article>
+    <script src="../../js/global-nav.js?v=9" defer data-gn="1"></script>
+  </body>
+</html>

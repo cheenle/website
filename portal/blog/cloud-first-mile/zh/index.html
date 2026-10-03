@@ -92,8 +92,8 @@
       <div class="ag-anchor-shell">
         <div class="container">
           <nav class="ag-anchor-nav" aria-label="页面章节">
-            <a href="#constraints">约束</a><a href="#invariants">不变量</a
-            ><a href="#blackscreen">黑屏</a><a href="#timing">时序</a><a href="#rules">现场四则</a
+            <a href="#constraints">无门</a><a href="#invariants">四守</a
+            ><a href="#blackscreen">四默</a><a href="#timing">先后</a><a href="#rules">四则</a
             ><a href="#steps">三步</a>
           </nav>
         </div>
@@ -130,8 +130,8 @@
               </li>
             </ul>
             <div class="ba-readpath">
-              <span>三分钟读完：</span><a href="#invariants">§02 四条不变量</a
-              ><a href="#blackscreen">§03 黑屏</a><a href="#steps">§06 三步</a>
+              <span>三分钟读完：</span><a href="#invariants">§02 四守</a
+              ><a href="#blackscreen">§03 四默</a><a href="#steps">§06 三步</a>
             </div>
           </div>
         </div>
@@ -139,8 +139,8 @@
         <section id="constraints" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">01 · 约束</span>
-              <h2 class="ag-section-title">客户网络不肯做的事</h2>
+              <span class="ag-section-label">01 · 无门</span>
+              <h2 class="ag-section-title">没有门，也不许凿一扇</h2>
               <p class="ag-section-subtitle">下面每个设计决定都出自这张表，不出自偏好。</p>
             </header>
 
@@ -188,8 +188,8 @@
         <section id="invariants" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">02 · 不变量</span>
-              <h2 class="ag-section-title">四件必须一直成立的事</h2>
+              <span class="ag-section-label">02 · 四守</span>
+              <h2 class="ag-section-title">四条守住的，每条都赔过一次事故</h2>
               <p class="ag-section-subtitle">每一条都存在，因为去掉它就出过事故。</p>
             </header>
 
@@ -201,7 +201,7 @@
                 </p>
               </article>
               <article class="ag-card">
-                <h3>② 按实例自己的证书校验</h3>
+                <h3>② 各验各的证书</h3>
                 <p>
                   实例在首次运行时自签，主体名就是它的入口名。hub 的上游校验指向一个由注册表生成的信任包：系统根证书，加上每个已登记实例的公钥。由此得到两个性质。续期不需要跨机同步。不在注册表里的实例，即使侥幸建起隧道也无法被服务。
                 </p>
@@ -252,8 +252,8 @@
         <section id="blackscreen" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">03 · 黑屏</span>
-              <h2 class="ag-section-title">四个只在构建机上成立的默认值</h2>
+              <span class="ag-section-label">03 · 四默</span>
+              <h2 class="ag-section-title">四处静默：没证书、没日志、没串口、没口令</h2>
               <p class="ag-section-subtitle">报障的原话是「装完起不来」。它其实一直在跑。</p>
             </header>
 
@@ -331,8 +331,8 @@
         <section id="timing" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">04 · 时序</span>
-              <h2 class="ag-section-title">两个只存在于顺序里的缺陷</h2>
+              <span class="ag-section-label">04 · 先后</span>
+              <h2 class="ag-section-title">两个只在顺序里存在的缺陷</h2>
               <p class="ag-section-subtitle">单元测试抓不到它们，因为它们的性质是顺序。</p>
             </header>
 
@@ -364,8 +364,8 @@
         <section id="rules" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">05 · 现场四则</span>
-              <h2 class="ag-section-title">四条因为缺过而写下来的规矩</h2>
+              <span class="ag-section-label">05 · 四则</span>
+              <h2 class="ag-section-title">四条用白跑换来的规矩</h2>
               <p class="ag-section-subtitle">每一条都至少花掉过一轮白跑。</p>
             </header>
 
@@ -425,7 +425,7 @@
           <div class="container">
             <header class="ag-section-header">
               <span class="ag-section-label">06 · 三步</span>
-              <h2 class="ag-section-title">使用者实际要做的</h2>
+              <h2 class="ag-section-title">使用者只做三步，一步不开 shell</h2>
               <p class="ag-section-subtitle">不开 shell，不改配置文件，不做端口映射。</p>
             </header>
 
@@ -444,14 +444,14 @@ https://bg9aaa.mrrc.vlsc.net/api/health  # 健康时返回 401：活着，并且
 
             <div class="ag-loop-grid">
               <article class="ag-card">
-                <h3>启动器起不来时</h3>
+                <h3>启动器不来时</h3>
                 <p>
                   服务不需要它也能跑。从开始菜单启动服务入口，浏览器打开
                   <code>http://127.0.0.1:8888/</code>，口令就打印在那个窗口里。启动器只做三件事：播种配置、启动服务、打开浏览器。
                 </p>
               </article>
               <article class="ag-card">
-                <h3>环境已经一团糟时</h3>
+                <h3>环境已经乱了时</h3>
                 <p>
                   清理助手会先把配置、证书与日志备份到桌面，然后卸载应用，清掉设置、环境变量与计划任务。它只动一份固定清单里的路径，不碰无关产品，除非明确要求。
                 </p>

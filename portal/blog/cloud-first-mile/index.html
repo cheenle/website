@@ -99,9 +99,9 @@
       <div class="ag-anchor-shell">
         <div class="container">
           <nav class="ag-anchor-nav" aria-label="Page sections">
-            <a href="#constraints">Constraints</a><a href="#invariants">Invariants</a
-            ><a href="#blackscreen">The black screen</a><a href="#timing">Timing</a
-            ><a href="#rules">Field rules</a><a href="#steps">Three steps</a>
+            <a href="#constraints">No door</a><a href="#invariants">Four holds</a
+            ><a href="#blackscreen">Four silences</a><a href="#timing">Order</a
+            ><a href="#rules">Four rules</a><a href="#steps">Three steps</a>
           </nav>
         </div>
       </div>
@@ -152,8 +152,8 @@
               </li>
             </ul>
             <div class="ba-readpath">
-              <span>Read in 3 minutes:</span><a href="#invariants">§02 the four invariants</a
-              ><a href="#blackscreen">§03 the black screen</a><a href="#steps">§06 three steps</a>
+              <span>Read in 3 minutes:</span><a href="#invariants">§02 four holds</a
+              ><a href="#blackscreen">§03 four silences</a><a href="#steps">§06 three steps</a>
             </div>
           </div>
         </div>
@@ -161,8 +161,8 @@
         <section id="constraints" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">01 · Constraints</span>
-              <h2 class="ag-section-title">What the customer's network will not do</h2>
+              <span class="ag-section-label">01 · No door</span>
+              <h2 class="ag-section-title">No door, and no permit to cut one</h2>
               <p class="ag-section-subtitle">
                 Every design decision below follows from this table, not from preference.
               </p>
@@ -225,8 +225,8 @@
         <section id="invariants" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">02 · Invariants</span>
-              <h2 class="ag-section-title">Four things that must stay true</h2>
+              <span class="ag-section-label">02 · Four holds</span>
+              <h2 class="ag-section-title">Four that held, each paid for once</h2>
               <p class="ag-section-subtitle">
                 Each one exists because removing it produced an incident.
               </p>
@@ -244,7 +244,7 @@
                 </p>
               </article>
               <article class="ag-card">
-                <h3>② Verify each instance against its own certificate</h3>
+                <h3>② Each is verified against its own certificate</h3>
                 <p>
                   The instance self-signs at first run, with its entry name as the subject. The hub's
                   upstream verification points at a bundle generated from the registry: system roots
@@ -315,8 +315,8 @@
         <section id="blackscreen" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">03 · The black screen</span>
-              <h2 class="ag-section-title">Four defaults that only held on the build machine</h2>
+              <span class="ag-section-label">03 · Four silences</span>
+              <h2 class="ag-section-title">Four silences: no certificate, no logs, no port, no password</h2>
               <p class="ag-section-subtitle">
                 Reported as "installed it and it will not start". It was running the whole time.
               </p>
@@ -415,8 +415,8 @@
         <section id="timing" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">04 · Timing</span>
-              <h2 class="ag-section-title">Two defects that only exist in sequence</h2>
+              <span class="ag-section-label">04 · Order</span>
+              <h2 class="ag-section-title">Two defects that exist only in an order</h2>
               <p class="ag-section-subtitle">
                 Neither shows up in a unit test, because each is a property of an ordering.
               </p>
@@ -468,8 +468,8 @@
         <section id="rules" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">05 · Field rules</span>
-              <h2 class="ag-section-title">Four rules written down after losing time to their absence</h2>
+              <span class="ag-section-label">05 · Four rules</span>
+              <h2 class="ag-section-title">Four rules, each paid for in wasted cycles</h2>
               <p class="ag-section-subtitle">Each one cost at least one wasted cycle.</p>
             </header>
 
@@ -538,7 +538,7 @@
           <div class="container">
             <header class="ag-section-header">
               <span class="ag-section-label">06 · Three steps</span>
-              <h2 class="ag-section-title">What an operator actually does</h2>
+              <h2 class="ag-section-title">Three steps, and not one shell</h2>
               <p class="ag-section-subtitle">
                 No shell, no configuration file, no port forwarding.
               </p>
@@ -565,7 +565,7 @@ https://bg9aaa.mrrc.vlsc.net/api/health # 401 while healthy: alive, and asking w
 
             <div class="ag-loop-grid">
               <article class="ag-card">
-                <h3>If the launcher will not start</h3>
+                <h3>When the launcher will not start</h3>
                 <p>
                   The server runs without it. Start the server entry from the start menu, open
                   <code>http://127.0.0.1:8888/</code>, and read the password the window prints. The
@@ -573,7 +573,7 @@ https://bg9aaa.mrrc.vlsc.net/api/health # 401 while healthy: alive, and asking w
                 </p>
               </article>
               <article class="ag-card">
-                <h3>If the environment is a mess</h3>
+                <h3>When the environment is a mess</h3>
                 <p>
                   A cleanup helper backs up configuration, certificates and logs to the desktop, then
                   removes the application, its settings, its environment variables and its scheduled
@@ -582,7 +582,7 @@ https://bg9aaa.mrrc.vlsc.net/api/health # 401 while healthy: alive, and asking w
                 </p>
               </article>
               <article class="ag-card">
-                <h3>If only the interface needs fixing</h3>
+                <h3>When only the interface needs fixing</h3>
                 <p>
                   Interface and asset fixes ship as a few-hundred-kilobyte patch instead of a full
                   installer. The patch verifies its own hash and the version it applies to, backs up
@@ -591,7 +591,7 @@ https://bg9aaa.mrrc.vlsc.net/api/health # 401 while healthy: alive, and asking w
                 </p>
               </article>
               <article class="ag-card">
-                <h3>If something is wrong and none of this explains it</h3>
+                <h3>When none of this explains it</h3>
                 <p>
                   One button in the interface builds a diagnosis bundle: log tails, a whitelist of
                   environment keys, and a summary that has already been read once by a machine before a

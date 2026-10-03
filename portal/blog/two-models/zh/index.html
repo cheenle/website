@@ -95,9 +95,9 @@
       <div class="ag-anchor-shell">
         <div class="container">
           <nav class="ag-anchor-nav" aria-label="页面章节">
-            <a href="#boundary">边界</a><a href="#rootcauses">根因</a><a href="#sessionb">会话 B</a
-            ><a href="#sessiona">会话 A</a><a href="#findings">发现</a><a href="#scorecard">记分卡</a
-            ><a href="#redo">下次</a>
+            <a href="#boundary">可见</a><a href="#rootcauses">四因</a><a href="#sessionb">乙迹</a
+            ><a href="#sessiona">甲账</a><a href="#findings">五得</a><a href="#scorecard">对账</a
+            ><a href="#redo">补牢</a>
           </nav>
         </div>
       </div>
@@ -137,8 +137,8 @@
               </li>
             </ul>
             <div class="ba-readpath">
-              <span>三分钟读完：</span><a href="#rootcauses">§02 四个根因</a
-              ><a href="#findings">§05 五条发现</a><a href="#redo">§07 下次怎么改</a>
+              <span>三分钟读完：</span><a href="#rootcauses">§02 四因</a
+              ><a href="#findings">§05 五得</a><a href="#redo">§07 补牢</a>
             </div>
           </div>
         </div>
@@ -146,8 +146,8 @@
         <section id="boundary" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">01 · 边界</span>
-              <h2 class="ag-section-title">这份报告看得见什么，看不见什么</h2>
+              <span class="ag-section-label">01 · 可见</span>
+              <h2 class="ag-section-title">一边看得见全程，一边只看得见产物</h2>
               <p class="ag-section-subtitle">先说清楚，因为后面每一条都依赖这个不对称。</p>
             </header>
 
@@ -197,8 +197,8 @@
         <section id="rootcauses" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">02 · 根因</span>
-              <h2 class="ag-section-title">七个版本，四个问题</h2>
+              <span class="ag-section-label">02 · 四因</span>
+              <h2 class="ag-section-title">七个版本，四个病根</h2>
               <p class="ag-section-subtitle">版本号夸大了多样性。同样四个缺陷换着名字回来了几次。</p>
             </header>
 
@@ -264,8 +264,8 @@
         <section id="sessionb" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">03 · 会话 B</span>
-              <h2 class="ag-section-title">只能由它留下的东西来评</h2>
+              <span class="ag-section-label">03 · 乙迹</span>
+              <h2 class="ag-section-title">乙：只从留下的东西评</h2>
               <p class="ag-section-subtitle">六条强项、三条弱项，每条都对应一件具体产物。</p>
             </header>
 
@@ -308,7 +308,7 @@
               </article>
             </div>
 
-            <h3 class="ag-subhead">弱项，同样以产物为据</h3>
+            <h3 class="ag-subhead">弱项，同样只看产物</h3>
             <ul>
               <li>
                 <strong>共享工作树上的协调为零。</strong>A 生成的发布清单被覆盖成「新版本号配旧版本的字节数与哈希」。升级器照这组值去比对，会取到一个与自己清单不符的文件。两边都没有加锁，都没有声明主权，都没有先读后写。
@@ -333,8 +333,8 @@
         <section id="sessiona" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">04 · 会话 A</span>
-              <h2 class="ag-section-title">第一人称，包含不好看的部分</h2>
+              <span class="ag-section-label">04 · 甲账</span>
+              <h2 class="ag-section-title">甲：第一人称，含不好看的那几页</h2>
               <p class="ag-section-subtitle">逐条计数，不是估计。下面每一行都花掉了真实的分钟。</p>
             </header>
 
@@ -365,7 +365,7 @@
               </article>
             </div>
 
-            <h3 class="ag-subhead">失败账本</h3>
+            <h3 class="ag-subhead">甲的账本</h3>
             <div class="ag-table-wrap">
               <table class="ag-table">
                 <thead>
@@ -446,8 +446,8 @@
         <section id="findings" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">05 · 发现</span>
-              <h2 class="ag-section-title">对两边都成立的五件事</h2>
+              <span class="ag-section-label">05 · 五得</span>
+              <h2 class="ag-section-title">五条，对两边都成立</h2>
               <p class="ag-section-subtitle">它们经受住了换模型、换任务、换日子。这才是本文的重点。</p>
             </header>
 
@@ -473,7 +473,7 @@
               假设大多是对的，验证大多是懒的。生成输出的流畅度，远远跑在怀疑自己输出的倾向前面。这个落差是姿态问题，不是知识问题。真正起作用的对策从来不是「下次仔细点」，而是把判据外置成机器能拒绝的东西：一次哈希比对，一个带年份的时间戳，一条会失败的测试，一处会中止的配置自检。
             </p>
 
-            <h3 class="ag-subhead">丙 · 自订规则会衰减</h3>
+            <h3 class="ag-subhead">丙 · 自己写的规矩会衰减</h3>
             <p>
               会话 A 早期写下三条规则，中途复述过，随后违反十四次。规则全程都在上下文里。缺的不是记忆，是动手那一刻去查它的动作。
             </p>
@@ -512,8 +512,8 @@
         <section id="scorecard" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">06 · 记分卡</span>
-              <h2 class="ag-section-title">十一个维度，证据在最后一列</h2>
+              <span class="ag-section-label">06 · 对账</span>
+              <h2 class="ag-section-title">十一项，证据在末列</h2>
               <p class="ag-section-subtitle">「未知」是一个正经的取值，意思是仓库里没有这项证据。</p>
             </header>
 
@@ -598,8 +598,8 @@
         <section id="redo" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">07 · 下次</span>
-              <h2 class="ag-section-title">八条改动，没有一条需要更强的模型</h2>
+              <span class="ag-section-label">07 · 补牢</span>
+              <h2 class="ag-section-title">八条，没有一条要更强的模型</h2>
               <p class="ag-section-subtitle">这里每一项，都是因为缺了它而损失过时间。</p>
             </header>
 
@@ -622,7 +622,7 @@
               </li>
             </ul>
 
-            <h3 class="ag-subhead">给驱动模型的人</h3>
+            <h3 class="ag-subhead">给握缰绳的人</h3>
             <ul>
               <li>
                 <strong>催促会提高违反率。</strong>这一点是可观测的，不是假设。想更快，就指明哪一步可以省，而不是笼统地催。

@@ -62,15 +62,15 @@
     </div>
 </nav>
 
-<!-- 国庆横幅 -->
+<!-- 国庆横幅，图片为主体，沿用中秋那版的做法（提交 43e080d）。
+     海报不进 git：portal/images/ 已被 .gitignore 排除，靠 deploy.sh 从工作树打包上线。
+     alt 只陈述节日与落款，不描述照片内容。 -->
 <section class="section" id="national-day" style="background: var(--bg-primary); padding: 5.5rem 0 0;">
     <div class="container" style="text-align: center;">
-        <div style="display:inline-block;max-width:540px;width:100%;padding:2.75rem 2rem 2.5rem;border-radius:14px;background:linear-gradient(160deg,#7f1d1d 0%,#b91c1c 55%,#dc2626 100%);border:1px solid rgba(250,204,21,.45);box-shadow:0 8px 40px rgba(220,38,38,.28);">
-            <img src="../images/flag-prc.svg" alt="中华人民共和国国旗" width="96" height="64" style="width:96px;height:64px;border-radius:2px;box-shadow:0 2px 10px rgba(0,0,0,.35);">
-            <h2 style="color:#fef3c7;font-size:2.1rem;letter-spacing:.06em;margin:1rem 0 .4rem;">国庆快乐</h2>
-            <p style="color:#fde68a;font-size:.95rem;margin:0 0 .9rem;">2026 年 10 月 1 日 · 建国七十七周年</p>
-            <p style="color:rgba(254,243,199,.88);font-size:.9rem;margin:0;">VLSC 电台与全部值守闭环，向祖国问好。73 与 88 de BG1SB</p>
-        </div>
+        <img src="../images/guoqing-bg1sb.jpg" srcset="../images/guoqing-bg1sb.jpg 1x, ../images/guoqing-bg1sb@2x.jpg 2x" alt="2026 年国庆 · 建国七十七周年 · 73 与 88 de BG1SB" width="1080" height="810" loading="eager" fetchpriority="high" style="max-width: 540px; width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(250,204,21,.35); box-shadow: 0 8px 40px rgba(220,38,38,.28);">
+        <h2 style="color: #fef3c7; font-size: 2.1rem; letter-spacing: .06em; margin: 1.4rem 0 .4rem;">国庆快乐</h2>
+        <p style="color: #fde68a; font-size: .95rem; margin: 0 0 .9rem;">2026 年 10 月 1 日 · 建国七十七周年</p>
+        <p style="color: var(--text-secondary); font-size: .9rem; margin: 0;">VLSC 电台与全部值守闭环，向祖国问好。73 与 88 de BG1SB</p>
     </div>
 </section>
 

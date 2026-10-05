@@ -3,24 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reins Side by Side: Forty-Eight Hours, Two Models, One Working Tree — VLSC Blog</title>
+    <title>Reins Side by Side: Three Sessions, Five Days, Twenty-Six Releases — VLSC Blog</title>
     <meta
       name="description"
-      content="Two model sessions shared one repository for forty-eight hours and shipped seven releases. A capability retrospective: what each was strong at, where each failed, which failures both shared, and the four constraints that actually changed the outcome."
+      content="Three model sessions, three repositories, five days, twenty-six releases. The five-day sequel to the forty-eight-hour retrospective: four old root causes returned under new names, the guards themselves started lying, and parallel collaboration went from two collisions to zero. Not by discipline, by structure."
     />
     <meta
       name="keywords"
-      content="agentic engineering, model capability, parallel agents, release engineering, verification discipline, field evidence, VLSC"
+      content="agentic engineering, model capability, parallel agents, release engineering, verification discipline, mutation testing, field evidence, VLSC"
     />
     <meta name="author" content="BG1SB" />
     <meta property="og:type" content="article" />
     <meta
       property="og:title"
-      content="Reins Side by Side: Forty-Eight Hours, Two Models, One Working Tree"
+      content="Reins Side by Side: Three Sessions, Five Days, Twenty-Six Releases"
     />
     <meta
       property="og:description"
-      content="Seven releases, 88 commits, two sessions on one tree. What the artifacts say about model capability — and why the fix was constraints, not smarter models."
+      content="296 commits, 26 releases, a third session joining mid-window. Four old root causes each gained a new case, and one new cause surfaced: nothing gates a claim against its own verification."
     />
     <meta property="og:url" content="https://www.vlsc.net/blog/two-models/" />
     <meta property="og:site_name" content="VLSC Projects" />
@@ -45,8 +45,8 @@
       {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "Reins Side by Side: Forty-Eight Hours, Two Models, One Working Tree",
-        "description": "A capability retrospective on two parallel model sessions sharing one repository: 88 commits, seven releases, one host migration, and the four constraints that mattered more than model quality.",
+        "headline": "Reins Side by Side: Three Sessions, Five Days, Twenty-Six Releases",
+        "description": "A capability retrospective on three parallel model sessions across three repositories: 296 commits, 26 releases, a third session joining mid-window, and how the constraints tightened themselves.",
         "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
         "publisher": {
           "@type": "Organization",
@@ -54,8 +54,8 @@
           "url": "https://www.vlsc.net/"
         },
         "datePublished": "2026-10-03",
-        "dateModified": "2026-10-03",
-        "keywords": "agentic engineering, model capability, parallel agents, release engineering, verification discipline",
+        "dateModified": "2026-10-05",
+        "keywords": "agentic engineering, model capability, parallel agents, release engineering, verification discipline, mutation testing",
         "articleSection": "Method",
         "mainEntityOfPage": "https://www.vlsc.net/blog/two-models/"
       }
@@ -77,20 +77,22 @@
           </div>
           <h1>Reins <span class="gradient">side by side</span>.</h1>
           <p>
-            Forty-eight hours, two model sessions, one repository, seven releases. This is not a
-            verdict on which model is better. It is a record of what each did well, what each broke,
-            which failures they shared, and the four constraints that changed the outcome more than
-            any improvement in model quality would have.
+            This is the five-day sequel to the forty-eight-hour retrospective. Three model
+            sessions, three repositories, twenty-six releases. It records what happened after
+            those two days: four root causes returning under new names, the guards themselves
+            starting to lie, a third session joining mid-window, and parallel collaboration going
+            from two collisions to zero. Not by discipline. By structure.
           </p>
           <div class="ag-hero-stats" aria-label="Article summary">
-            <span class="ag-pill"><i class="fas fa-code-commit"></i> 88 commits · Oct 1–3, 2026</span>
-            <span class="ag-pill"><i class="fas fa-box-open"></i> 7 releases: v1.24.2 → v1.24.8</span>
-            <span class="ag-pill"><i class="fas fa-plus-minus"></i> +18,515 / −2,472 lines</span>
-            <span class="ag-pill"><i class="fas fa-triangle-exclamation"></i> 14 self-rule violations, counted</span>
+            <span class="ag-pill"><i class="fas fa-code-commit"></i> 296 commits · Oct 1–5, 2026</span>
+            <span class="ag-pill"><i class="fas fa-box-open"></i> 26 releases: 18 desktop (v1.22.0 → v1.25.3) + 8 Android</span>
+            <span class="ag-pill"><i class="fas fa-plus-minus"></i> +55,426 / −5,140 lines · 3 repos</span>
+            <span class="ag-pill"><i class="fas fa-flask"></i> +275 tests · 5 tickets, all environmental</span>
           </div>
           <p class="ba-meta">
-            By BG1SB &nbsp;·&nbsp; <time datetime="2026-10-03">Oct 3, 2026</time> &nbsp;·&nbsp; ~15 min
-            read
+            By BG1SB &nbsp;·&nbsp; <time datetime="2026-10-03">Published Oct 3, 2026</time>
+            &nbsp;·&nbsp; <time datetime="2026-10-05">Updated Oct 5 as the five-day edition</time>
+            &nbsp;·&nbsp; ~20 min read
           </p>
         </div>
       </header>
@@ -98,21 +100,22 @@
       <div class="ag-anchor-shell">
         <div class="container">
           <nav class="ag-anchor-nav" aria-label="Page sections">
-            <a href="#boundary">Visible</a><a href="#rootcauses">Four causes</a
+            <a href="#boundary">Visible</a><a href="#rootcauses">Causes</a
             ><a href="#sessionb">B's traces</a><a href="#sessiona">A's ledger</a
-            ><a href="#findings">Five holds</a><a href="#scorecard">Reckoning</a
-            ><a href="#redo">Mending</a>
+            ><a href="#sessionc">C's shadow</a><a href="#findings">Six holds</a
+            ><a href="#scorecard">Reckoning</a><a href="#redo">Mending</a>
           </nav>
         </div>
       </div>
 
       <main class="ba-main">
         <p class="lede">
-          A radio-control product went from "the cloud hub is a design document" to "four instances
-          registered, two serving traffic, a customer self-service kit on the website" in two days.
-          Two model sessions worked the same tree at the same time for thirteen of those hours. Almost
-          every interesting finding is about <strong>how the work was constrained</strong>, not about
-          how smart either session was.
+          In the first forty-eight hours, two sessions shipped seven releases on one working tree
+          and collided twice. The three days that followed did not go the way of "get a smarter
+          model". They went another way: collisions went to zero, the root causes came back for
+          visits, a third session joined, and a cause nobody had named surfaced at last: nothing
+          gates a claim against its own verification. After five days, the users' questions had
+          become dumber. That is what a system getting healthier looks like.
         </p>
 
         <div class="ba-tldr" id="tldr">
@@ -121,46 +124,56 @@
             <ul class="ba-tldr-list">
               <li>
                 <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
-                ><strong>Seven releases carried four root causes.</strong> Defaults that only held on
-                the build machine; process lifetime versus configuration timing; network claims made
-                without measurement; one missing path in the UI. Each was found separately, several
-                times.
+                ><strong>None of the four old root causes died; each gained a new case.</strong>
+                "Defaults that only held on the build machine" returned for a fifth time under a
+                new name: the macOS package inherited the builder's MacPorts certificate path, so
+                the trust store was empty on user machines and registration, diagnostics upload
+                and update checks all failed (v1.25.1).
               </li>
               <li>
                 <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
-                ><strong>Both sessions found the same bug class independently</strong> and neither
-                swept for the rest. A gate test written afterwards caught a fifth instance
-                immediately.
+                ><strong>Five user tickets, all classified environmental, none became a hotfix.</strong>
+                Three were published as public answers, each with raw evidence attached. The
+                questions were "the radio is not connected" and "how do I configure that domain".
+                Against forty-eight hours when tickets drove hotfixes, this is what settling down
+                looks like.
               </li>
               <li>
                 <span class="ba-tldr-tag" data-claim-type="inference">Inference</span
-                ><strong>The binding constraint was verification discipline, not reasoning.</strong>
-                Every wasted cycle traced to trusting a proxy signal: an exit code, a
-                "Successful compile" line, a version file written before the build, a cached DNS
-                answer.
+                ><strong>Guards themselves can spin idle.</strong> The guard checking a table's row
+                labels never ran, yet reported twenty-seven passing groups. What exposed it was
+                not the suite but mutation testing: restore the defect, and the guard stays
+                green. Verification scripts are not the only things that lie; verification
+                itself does.
               </li>
               <li>
                 <span class="ba-tldr-tag" data-claim-type="inference">Inference</span
-                ><strong>Self-imposed rules decay with context length and with urgency.</strong> One
-                session wrote three rules early, restated them repeatedly, then violated them
-                fourteen times. Turning them into tooling stopped the violations.
+                ><strong>Verification scripts were caught lying in five quiet ways within one
+                hour.</strong> PowerShell variables are case-insensitive, a bare 000 is octal
+                zero, a timestamp without a baseline, a 200 answer from another instance, a
+                symbol walk reading the wrong table. Criteria must come from the product's own
+                output, never from scaffolding built for the test.
               </li>
               <li>
                 <span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span
-                ><strong>Parallel agents need a protocol, not more capability.</strong> Two strong
-                writers on one tree produced an overwritten release manifest and a duplicate build.
-                The fix was one driver per release train.
+                ><strong>The zero-collision second half is a triumph of structure, not
+                discipline.</strong> Two real collisions in the first half; then the third
+                session arrived with its own worktree and release channel, and every
+                cross-session action was re-verified by hash. The only remaining incident was
+                v1.25.2 shipping without a refreshed upgrade manifest, named in the next
+                release's tag notes.
               </li>
               <li>
                 <span class="ba-tldr-tag" data-claim-type="excluded">Excluded</span
-                ><strong>Model quality is not what this report measures.</strong> One session's
-                reasoning is unobservable from the other; every claim about it here rests on
-                artifacts, and the gaps are marked unknown rather than filled in.
+                ><strong>Model quality is still not what this report measures.</strong> No session
+                can observe another's reasoning. Everything said about B and C rests on
+                artifacts, and the gaps stay marked "unknown". The new session is called C and is
+                judged the same way.
               </li>
             </ul>
             <div class="ba-readpath">
-              <span>Read in 3 minutes:</span><a href="#rootcauses">§02 four causes</a
-              ><a href="#findings">§05 five holds</a><a href="#redo">§07 mending</a>
+              <span>Read in 3 minutes:</span><a href="#rootcauses">§02 causes</a
+              ><a href="#findings">§06 six holds</a><a href="#redo">§08 mending</a>
             </div>
           </div>
         </div>
@@ -169,44 +182,54 @@
           <div class="container">
             <header class="ag-section-header">
               <span class="ag-section-label">01 · Visible</span>
-              <h2 class="ag-section-title">One side sees the process; the other sees only artifacts</h2>
+              <h2 class="ag-section-title">Two are visible only through artifacts, one first-hand</h2>
               <p class="ag-section-subtitle">
                 Stated first, because everything after it depends on the asymmetry.
               </p>
             </header>
 
             <p>
-              Two sessions ran in parallel. This article was written by one of them, referred to
-              throughout as <strong>A</strong>; the other is <strong>B</strong>. Which commercial model
-              drove which session is not something a session can verify from inside, so the labels stay
-              abstract and the reader can map them.
+              The first article introduced sessions A and B. In the five-day window a third
+              joined, called <strong>C</strong>. A is the session writing this article, with a
+              complete first-person view; B and C are reachable only through what they left
+              behind. Which commercial model drove which session is not something a session can
+              verify from inside, so the labels stay abstract and the reader can map them.
+            </p>
+            <p>
+              The way C joined is itself a finding: it did not fight A and B for the same tree.
+              It arrived with its own worktree, its own branch, and its own release channel. The
+              article will return to this.
             </p>
 
             <div class="ag-table-wrap">
               <table class="ag-table">
                 <thead>
-                  <tr><th>Observable</th><th>Session A</th><th>Session B</th></tr>
+                  <tr><th>Observable</th><th>Session A</th><th>Session B</th><th>Session C</th></tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>Its own reasoning</td>
                     <td>First-person, complete</td>
                     <td><strong>Not observable</strong></td>
+                    <td><strong>Not observable</strong></td>
                   </tr>
                   <tr>
                     <td>Its own tool calls, retries, dead ends</td>
                     <td>First-person, complete</td>
                     <td><strong>Not observable</strong></td>
+                    <td><strong>Not observable</strong></td>
                   </tr>
                   <tr>
-                    <td>The other's commits, code, comments, design records</td>
+                    <td>The others' commits, code, comments, design records</td>
+                    <td>Visible</td>
                     <td>Visible</td>
                     <td>Visible</td>
                   </tr>
                   <tr>
-                    <td>The other's error rate or overclaiming</td>
-                    <td>Only inferable from artifacts</td>
-                    <td>Only inferable from artifacts</td>
+                    <td>Home repository for the five days</td>
+                    <td>Release repo: desktop, support chain, download site</td>
+                    <td>Hub repo: portal, installers, SDD record</td>
+                    <td>Android client repo (own worktree)</td>
                   </tr>
                 </tbody>
               </table>
@@ -215,11 +238,12 @@
             <div class="claim-box" data-claim-type="excluded">
               <span class="claim-label">Excluded · what is deliberately not claimed here</span>
               <p>
-                Nothing in this article states what B "thought", how often B retried, or whether B
-                overclaimed. Those are not in evidence. Where B is assessed, the assessment names the
-                artifact it came from: a commit message, a configuration comment, a design-record
-                entry. A commit message is an after-the-fact narrative and cannot be used to infer
-                process quality, so it is used here only for what it documents.
+                Nothing in this article states what B or C "thought", how often they retried, or
+                whether they asserted before measuring. Those are not in evidence. Where B and C
+                are assessed, the assessment names the artifact it came from: a commit message, a
+                comment, a design-record entry. A commit message is an after-the-fact narrative
+                and cannot be used to infer process quality, so it is used here only for what it
+                documents.
               </p>
             </div>
           </div>
@@ -228,67 +252,88 @@
         <section id="rootcauses" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">02 · Four causes</span>
-              <h2 class="ag-section-title">Seven releases, four diseases</h2>
+              <span class="ag-section-label">02 · Causes</span>
+              <h2 class="ag-section-title">Four old causes revisit, one new cause surfaces</h2>
               <p class="ag-section-subtitle">
-                The version count overstates the variety. The same four defects returned under
-                different names.
+                They were named forty-eight hours in. Over five days they returned under new
+                names several times.
               </p>
             </header>
+
+            <p>
+              The first article recorded four root causes: defaults that only held on the build
+              machine; process lifetime versus configuration timing; network claims made without
+              measurement; a missing path in the UI. Over five days each of the four gained a new
+              case, and one further cause surfaced for the first time. It is not a product
+              defect; it is a governance defect. Its name: nothing gates a claim against its own
+              verification.
+            </p>
 
             <div class="ag-table-wrap">
               <table class="ag-table">
                 <thead>
-                  <tr><th>#</th><th>Root cause</th><th>First symptom</th><th>How it closed</th></tr>
+                  <tr><th>Cause</th><th>Its new name on day five</th></tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>1</td>
+                    <td><strong>① Defaults that only held on the build machine</strong></td>
                     <td>
-                      <strong>Defaults that only held on the build machine</strong>: certificate path,
-                      log directory, serial-port name, login password
-                    </td>
-                    <td>A customer's screen went black after install</td>
-                    <td>
-                      User-directory defaults, sign a certificate when one is missing, and a gate test
-                      that fails the suite if a writable default lands inside the program directory
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>
-                      <strong>Process lifetime versus configuration timing</strong>: the TLS context is
-                      built once; the tunnel started lazily; nothing restarted the app
-                    </td>
-                    <td>The public entry answered 502 while everything looked healthy</td>
-                    <td>
-                      A factual criterion (certificate mtime versus process start), the tunnel started
-                      at boot, and a restart that refuses to exit unless it can relaunch itself
+                      The macOS package inherited the builder's MacPorts OpenSSL with the
+                      certificate path hardcoded to /opt/local. That path does not exist on user
+                      machines, so the trust store was empty: portal registration, diagnostics
+                      upload and update checks all failed with CERTIFICATE_VERIFY_FAILED
+                      (v1.25.1). The same package parked the FTDI libraries in the wrong
+                      directory while the launcher anchored elsewhere: forty-two spectrum starts,
+                      every one frames=0, the UI silently falling back to the S-meter. Nobody
+                      knew.
                     </td>
                   </tr>
                   <tr>
-                    <td>3</td>
+                    <td><strong>② Process lifetime versus timing</strong></td>
                     <td>
-                      <strong>Network claims made without measurement</strong>: a port believed blocked
-                      by a cloud panel, a handshake believed interfered with, a DNS answer read from
-                      cache
-                    </td>
-                    <td>"Refresh does nothing" on a customer machine</td>
-                    <td>
-                      One portal address, the host's own firewall rule added, and the habit of probing
-                      before explaining
+                      frps receives SIGHUP and exits cleanly; systemd records the clean exit as a
+                      successful reload and never restarts it. Measured on the host: a gap of
+                      about seven seconds. A transmit heartbeat waits on one key-press handler
+                      returning, and the watchdog, seeing a session that held the key but stayed
+                      silent inside a window of tens of milliseconds, released the user's freshly
+                      pressed PTT seven times in one day (v1.25.3). The first-run serial probe,
+                      with no write timeout, hung forever on one field machine and held COM3 for
+                      hours (v1.25.0).
                     </td>
                   </tr>
                   <tr>
-                    <td>4</td>
+                    <td><strong>③ Network claims made without measurement</strong></td>
                     <td>
-                      <strong>A missing path in the UI</strong>: the enrolment-secret field lived only
-                      in the apply form, which hides once an application exists
+                      An investigation followed the host written in deploy/README and concluded
+                      "all three instances offline". That host had been retired; even its
+                      registries had forked. The same README misdirected two investigations in a
+                      row. And a conclusion nailed down two days earlier, "IPv6 does not work",
+                      was overturned by the next measurement: on the new hub, v6 ran at 82 ms
+                      with zero packet loss.
                     </td>
-                    <td>"I cannot find where to enter the secret"</td>
+                  </tr>
+                  <tr>
+                    <td><strong>④ A missing path in the UI</strong></td>
                     <td>
-                      The field and button moved into the pending panel, shipped early as a 745 KB
-                      static patch, then baked into the next release
+                      The approval prompt told the user to click "Settings → Cloud → Refresh
+                      status". That menu does not exist; its measured appearance count is zero.
+                      The real entry lived in the drawer. The Android settings page offered no
+                      way back at all (v1.1.5). One failed admin-console login re-rendered the
+                      page, and a relative path doubled the URL into /admin/admin/login. A 404.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>⑤ Nothing gates a claim against verification (new)</strong></td>
+                    <td>
+                      The README said route automation was installed "✓ cannot be missed again ✓".
+                      Measured on the live host: only the service was installed; the script and
+                      the timer were both missing. Routes had not been regenerated for thirty-six
+                      hours since the merge night. The first instance to complete the entire
+                      flow found everything ready except the entry, and got a 404. The checkmark
+                      had no check behind it. It was a wish. The download page's Raspberry Pi
+                      card belongs to the same class: it advertised v1.17.0 as current while the
+                      file its link pointed to had long vanished from the server, answering 404
+                      on every visit for an unknowable stretch.
                     </td>
                   </tr>
                 </tbody>
@@ -296,20 +341,20 @@
             </div>
 
             <p>
-              Cause 1 is the instructive one. It was fixed four separate times, once per symptom:
-              certificate, logs, serial port, password. Each fix was correct and each left the class
-              intact. The class only closed when someone named it and wrote a test that could fail.
-              That test caught a fifth case nobody had noticed, a memory-channels file defaulting into
-              the install directory.
+              Cause 1 deserves one more telling. In forty-eight hours it was fixed four times:
+              certificate, logs, serial port, password. On day five it appeared a fifth time,
+              dressed as inherited paths for a trust store and a dynamic library, and bit three
+              functions at once. The name was still on the wall, but the class had changed
+              clothes. Naming closed the old outfits, not the new ones.
             </p>
 
             <div class="claim-box" data-claim-type="inference">
-              <span class="claim-label">Inference · diagnosis is cheap, prevention needs a name</span>
+              <span class="claim-label">Inference · names prevent recurrence, not mutation</span>
               <p>
-                Both sessions were good at fixing the instance in front of them and poor at asking how
-                many more existed. Naming a class appears to be the step that unlocks the sweep, and in
-                these forty-eight hours the naming came from an incident painful enough to write about,
-                not from either model anticipating it.
+                A gate test is shaped so that the old name's instance going red. A variant in
+                new clothes is not recognised. Every one of these closures still ended with a
+                human asking "is this that one again". No model proposed that step on its own.
+                Naming prevents recurrence; variants still take a concrete outbreak.
               </p>
             </div>
           </div>
@@ -319,66 +364,84 @@
           <div class="container">
             <header class="ag-section-header">
               <span class="ag-section-label">03 · B's traces</span>
-              <h2 class="ag-section-title">B: judged only from what it left behind</h2>
+              <h2 class="ag-section-title">B: the hub line, one hundred and six commits</h2>
               <p class="ag-section-subtitle">
-                Six strengths and three weaknesses, each tied to a specific artifact.
+                The portal grew from nothing to 2,569 lines and the SDD record gained twenty
+                versions. Each item names its artifact.
               </p>
             </header>
 
+            <p>
+              B's home ground was MRRC Cloud Hub: the admin portal, the installer chain, the SDD
+              design record. At the start of the window there was no portal; at the end, eight
+              modules and forty-nine test groups, with the SDD running from V0.8 to V0.28. It
+              also produced the window's cleanest case of self-check failure.
+            </p>
+
             <div class="ag-loop-grid">
               <article class="ag-card">
-                <h3>① Infrastructure diagnosis at depth</h3>
+                <h3>① Executing an idle guard</h3>
                 <p>
-                  B concluded that an intermittent edge failure came from nginx selecting the hub's
-                  unreachable IPv6 address, and left the reasoning in the configuration: a bare
-                  hostname resolves once at start-up, this host's <code>getaddrinfo</code> prefers
-                  AAAA, so any reload switches that leg into a black hole. That is three mechanisms
-                  held correctly at once. It is the deepest single judgement in this record.
+                  The system view's two-column table had lost its row labels, and the guard
+                  responsible for checking exactly that had never run: the header width went into
+                  a variable that was never written, a permanently false condition short-circuited
+                  the check, and the suite reported twenty-seven passing groups. Mutation testing
+                  exposed it: restore the defect verbatim, and the guard stays green. After the
+                  fix, three mutants each went red with a precise signature. The comment left
+                  behind is a verdict: a guard that passes on broken input is worse than no
+                  guard.
                 </p>
               </article>
               <article class="ag-card">
-                <h3>② Guarding a catastrophe that had not happened</h3>
+                <h3>② Redefining "online"</h3>
                 <p>
-                  A commit titled <em>an empty manifest must never mean "delete the whole site"</em>
-                  protects an <code>rsync --delete</code> path against a manifest generated empty. No
-                  test would ever surface that bug. It surfaces once, at three in the morning, as a
-                  missing website.
+                  An frpc registration does not mean serving: the loopback port answers anyone
+                  on the host. B split the boolean into four states, serving, plain-http, hollow
+                  and down, and made probing concurrent. Measured: 4.82 seconds serial, 1.6
+                  concurrent. The criterion moved from "connectable" to "an HTTP answer
+                  received, any status code counts".
                 </p>
               </article>
               <article class="ag-card">
-                <h3>③ Platform knowledge from real runs</h3>
+                <h3>③ "Not installed" is also an answer</h3>
                 <p>
-                  <em>Close the log handler before the temp dir goes away, or Windows cannot delete
-                  it.</em> Windows file-locking semantics, learned by watching a suite fail on that
-                  platform rather than by reading about it.
+                  Pulling the five-layer view, host → service → tunnel → instance → app, showed
+                  the routes timer's state as not-found. Not-found is not missing data; it is the
+                  answer: the automation was never installed, and routes had been stale for
+                  thirty-plus hours. After the fix, a new instance's 404 became a 302 on the
+                  spot.
                 </p>
               </article>
               <article class="ag-card">
-                <h3>④ Independent convergence on the same class</h3>
+                <h3>④ Authentication shipped in one day</h3>
                 <p>
-                  B's <em>a packaged build never keeps writable state next to its own code</em> and A's
-                  certificate-directory change are the same class, found separately and fixed
-                  separately. Convergence is evidence the class was real. That neither side swept for
-                  the rest is evidence about both.
+                  Python 3.13 removed the crypt module, leaving no standard-library way to verify
+                  htpasswd $apr1$ hashes. B hand-wrote the MD5 digest logic and cross-validated
+                  it against openssl passwd; nonexistent usernames run a dummy hash against
+                  timing side channels; the login guard locks at fixed thresholds; audit entries
+                  attribute to a named operator. The spec came first: eleven decisions, each
+                  approved by a human before work started.
                 </p>
               </article>
               <article class="ag-card">
-                <h3>⑤ A mechanism insight that changed a release</h3>
+                <h3>⑤ Two assumptions overturned on deployment day</h3>
                 <p>
-                  B wrote down that the upgrade channel compares version strings, so a machine that
-                  already installed a given number will never receive a rebuild under it, and its
-                  update button replays the same version forever. A was about to hang a corrected
-                  build on an already-published number. That sentence prevented a silently
-                  ineffective release.
+                  The pre-implementation assumptions were that frp hot-reloads and that the panel
+                  exposes cumulative traffic. Deployment falsified both on the spot: SIGHUP makes
+                  frps exit cleanly, which systemd records as a successful reload, and the panel
+                  carries only today's traffic, so bandwidth became a differential between
+                  adjacent samples with wraparound detection. The spec records the overturning as
+                  it happened; the assumptions were not quietly edited.
                 </p>
               </article>
               <article class="ag-card">
-                <h3>⑥ Documentation as a handover instrument</h3>
+                <h3>⑥ Its own slaps stay in the record</h3>
                 <p>
-                  Design-record versions V0.17 through V0.22, as-built pages, new paths registered with
-                  the documentation guardian, and the build guidance rewritten from what the previous
-                  release actually proved. This is why A could pick up a host it had never seen and
-                  know why it was shaped that way.
+                  V0.22 claimed to have moved the README to the new version; the next version
+                  records that the file it forgot was this repository's own, "no documentation
+                  consistency gate exists here; it can only be caught by a reader". A docstring
+                  described the implementation from ten minutes earlier. V0.16 carried a duplicate
+                  number, left standing. The record's honesty is its most valuable asset.
                 </p>
               </article>
             </div>
@@ -386,35 +449,32 @@
             <h3 class="ag-subhead">Weaknesses, also read from artifacts</h3>
             <ul>
               <li>
-                <strong>Zero coordination on a shared tree.</strong> A generated release manifest was
-                overwritten into a state carrying the new version label with the previous version's
-                byte count and hash. An updater comparing those values fetches a file that does not
-                match its own manifest. Neither session locked, claimed ownership, or read before
-                writing.
+                <strong>"✓ cannot be missed again" was falsified by measurement.</strong> The
+                route automation had been missing for thirty-six hours, and the first victim
+                instance ate a 404. "Cannot be missed" lived in the README; it was never written
+                into any check.
               </li>
               <li>
-                <strong>Documentation divorced from the artifact.</strong> B's macOS card advertised
-                one size and hash while the server held another build of the same source. Packaging
-                tools are not reproducible, so both builds were legitimate; the card was not. A user
-                who downloads and verifies gets a mismatch and reasonably concludes the site is
-                broken. Responsibility is shared: A overwrote the published file without checking
-                whether the other session had already announced it.
+                <strong>A retired host served as the source of truth and misdirected two
+                investigations.</strong> deploy/README named a decommissioned machine as the SSH
+                target; its registries had forked. Both investigations trusted it first and
+                concluded wrong twice.
               </li>
               <li>
-                <strong>Handing over uncommitted work.</strong> A complete documentation pass and four
-                regenerated figures existed on disk but not in any commit. Uncommitted work is in no
-                one's history and can be overwritten by anyone. A committed it after verifying that
-                every asset the new text referenced actually existed.
+                <strong>The window's final commit was still fixing B itself.</strong> A failed
+                admin login re-render doubled a relative path into /admin/admin/login. It is the
+                closing commit of the five days, and it has no SDD version entry.
               </li>
             </ul>
 
             <div class="claim-box" data-claim-type="excluded">
-              <span class="claim-label">Excluded · the three things this cannot say about B</span>
+              <span class="claim-label">Excluded · the three things still unsayable about B</span>
               <p>
-                B's tool-call failure rate, its retry count, and whether it asserted before measuring
-                are not recoverable from a repository. B's commit messages are consistently excellent,
-                which is a reason to be careful: polished narration is cheap relative to the work it
-                describes, and it survives in the record while the dead ends do not.
+                B's tool-call failure rate, retry count, and whether it asserted before measuring
+                remain unrecoverable from a repository. What is recoverable is its consistent
+                method: every guard it writes is validated by mutation testing before it counts
+                as a guard. The method is highly consistent; the reasoning behind it is not
+                guessed here.
               </p>
             </div>
           </div>
@@ -424,55 +484,104 @@
           <div class="container">
             <header class="ag-section-header">
               <span class="ag-section-label">04 · A's ledger</span>
-              <h2 class="ag-section-title">A: first person, including the unflattering pages</h2>
+              <h2 class="ag-section-title">A: first person, with new ledger pages</h2>
               <p class="ag-section-subtitle">
-                Counted, not estimated. Every row below cost real minutes.
+                The first forty-eight hours' ledger stays on the books. Here are days three
+                through five.
               </p>
             </header>
 
             <div class="ag-loop-grid">
               <article class="ag-card">
-                <h3>Byte-level forensics</h3>
+                <h3>The patch channel's first live fire</h3>
                 <p>
-                  A tunnel client rejected its own configuration for three hours while every reading of
-                  the file looked correct. Dumping it byte by byte showed
-                  <code>log.to = "C:\Users\..."</code>. Inside a TOML basic string a backslash begins an
-                  escape, so <code>\U</code> was parsed as a Unicode escape and the client reported a
-                  non-hexadecimal character. Every inference built on "the configuration looks fine"
-                  lost to one dump.
+                  "I cannot find where to enter the secret" could not wait for an installer. The
+                  static-asset patch channel fired on the day it was built: 745 KB against 54 MB,
+                  one download, one double-click. Acceptance meant fetching the JavaScript the
+                  server actually served and grepping it for the new symbol. The mechanism was
+                  then welded into v1.24.8, and the patch channel became part of release
+                  engineering rather than a one-off rescue.
                 </p>
               </article>
               <article class="ag-card">
-                <h3>Attribution across layers</h3>
+                <h3>v1.25.0: works out of the box</h3>
                 <p>
-                  The same 502 was diagnosed four times at four different layers: nginx error 18 for a
-                  missing trust anchor, a certificate-name mismatch resolved by a registry column, a
-                  closed connection because the application was not running, and finally a refused
-                  connection because the host's own firewall had never allowed the tunnel port. Each
-                  answer came from reading that layer's raw output.
+                  Six user-visible defects, each traced to a measured root cause: the first-run
+                  serial probe hung forever, the hardware's self-description matching no probe
+                  keyword, probing the board-management port first, write timeout None; approval
+                  polling moved from a dialog into the server polling itself every thirty
+                  seconds; a certificate comparison comparing the wrong objects; a bare route
+                  treated as a directory so the API was asked for HTML; a refresh button styled
+                  like it was disabled; Windows listening on loopback by default. Every one came
+                  from a field reading, not an inference.
                 </p>
               </article>
               <article class="ag-card">
-                <h3>Failures converted into gates</h3>
+                <h3>Five ways a verification script lies</h3>
                 <p>
-                  Four guards now exist because four things went wrong: the payload must contain the
-                  tunnel binary; an artifact needs three proofs; no writable default may sit inside the
-                  program directory; the pending panel must carry both the secret field and its button.
-                  One of them caught a fifth bug the moment it was written.
+                  Around one release, five quiet lies were measured within an hour. PowerShell
+                  variable names are case-insensitive: $l overwrote the report list $L, and
+                  process output was written into the "report" with success reported. A bare 000
+                  parsed as octal zero, so a status comparison could never match. A timestamp
+                  window with no pre-run baseline. That 200 answer came from another instance. A
+                  symbol walk looking in the wrong table. No script errored; every sentence was
+                  false.
                 </p>
               </article>
               <article class="ag-card">
-                <h3>Delivery under pressure</h3>
+                <h3>The clean room's double standard</h3>
                 <p>
-                  From a customer reporting a missing input field to three double-clickable helpers, a
-                  745 KB patch channel with a manifest, and an end-to-end test of all of it: about forty
-                  minutes. The patch was applied to a live installation and verified by fetching the
-                  served JavaScript back and grepping it for the new symbol.
+                  Inside the multi-layer verification, the clean-room layer caught all three
+                  packaging defects. But one note matters: it only catches them with the field
+                  configuration, 127.0.0.1. Two of the defects tested green under the
+                  double-colon default environment; they only appeared on the field path. A wrong
+                  environment impersonates a right one through a single default value.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Self-naming a missed manifest refresh</h3>
+                <p>
+                  After v1.25.2 shipped, the upgrade manifest was never refreshed, so machines on
+                  1.25.1 could never receive it. The discoverer was the next release's own
+                  process: the tag notes name the omission and record that 1.25.1 machines will
+                  jump straight to 1.25.3, collecting both fixes. The miss was not hidden,
+                  because it was written where it must be read.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Two slaps from the Raspberry Pi image</h3>
+                <p>
+                  First slap: the download card advertised v1.17.0 as current while the file its
+                  link pointed to had vanished from the server, answering 404 on every visit for
+                  an unknowable stretch. The image was rebuilt for v1.24.0 with pi-gen in Docker
+                  (native aarch64, about twenty-four minutes), and the repository's image
+                  verifier reported VERIFY_OK. Its one warning, a version-sensitive check, was
+                  recorded in the commit rather than smoothed over. The new image went up under
+                  both a versioned name and the fixed name; the old image is archived beside it.
+                </p>
+                <p>
+                  Second slap: a later release's global substitution rewrote the image's byte
+                  count from 662,225,336 to 654,077,021, the Windows byte count with a stray
+                  leading digit, and the installer step still carried the previous build's hash.
+                  The lesson was already on file: a byte count and an SVG colour can be the same
+                  string. Its recurrence means the lesson entered the documents without becoming
+                  a check. Both numbers are now taken from the artifacts themselves.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Five tickets, three public answers</h3>
+                <p>
+                  All five tickets classified environmental: the FT-710's three paths not
+                  connected, a wildcard domain mistaken for a configuration item, a tunnel entry
+                  never started. Three answers went public, each with diagnosis, steps and raw
+                  evidence, and the third cites an earlier on-site answer as its evidence. No
+                  ticket became a hotfix; but the known-issue card hanging next to the tickets
+                  drove v1.25.1, a macOS trust-store defect that only exploded on user machines.
                 </p>
               </article>
             </div>
 
-            <h3 class="ag-subhead">A's ledger, counted</h3>
+            <h3 class="ag-subhead">A's new ledger (days three to five, each row has a commit)</h3>
             <div class="ag-table-wrap">
               <table class="ag-table">
                 <thead>
@@ -480,61 +589,44 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Violating its own rule: scripts must be pure ASCII</td>
-                    <td><strong>4</strong></td>
+                    <td>Verification scripts concluding wrong</td>
+                    <td><strong>5 kinds</strong></td>
                     <td>
-                      Chinese text inside a PowerShell script; version 5.1 reads a BOM-less file as GBK,
-                      string terminators break, the script fails to parse and nothing runs
+                      Measured within one hour: case-insensitive variable collision, octal zero,
+                      baseline-less timestamp, a 200 from another instance, a symbol walk reading
+                      the wrong table
                     </td>
                   </tr>
                   <tr>
-                    <td>Violating its own rule: never inline PowerShell over ssh</td>
-                    <td><strong>≈6</strong></td>
+                    <td>Published artifact numbers drifting</td>
+                    <td><strong>4 places</strong></td>
                     <td>
-                      Escapes eaten layer by layer. The signature is silence: the script is valid, the
-                      command never executed
+                      The checker's SKIP mode was a blindfold: silent without artifacts. Flipped
+                      to FAIL, four drifts surfaced, and it aborted the other platform's build
+                      gate
                     </td>
                   </tr>
                   <tr>
-                    <td>Committing with the suite red</td>
+                    <td>Build voided</td>
                     <td><strong>1</strong></td>
                     <td>
-                      A shell chain lost the test exit code, so the commit waited on the exit status of
-                      the preceding <code>tail</code>
+                      tar residue grew from 46 entries to 53, six files inside the installer, a
+                      difference of 6,478 bytes. The call came from reading the exe's own archive
+                      table, not its mtime
                     </td>
                   </tr>
                   <tr>
-                    <td>Patching without reading: guessed anchors and whitespace</td>
-                    <td><strong>≈4</strong></td>
-                    <td>
-                      Four-space indentation guessed as two, a module prefix guessed wrong, a block
-                      replacement that left a duplicate nginx location and broke the configuration
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Asserting before measuring, then being overturned</td>
-                    <td><strong>3</strong></td>
-                    <td>
-                      "The cloud panel blocks that port" (the user: it works from here). "The handshake
-                      is being interfered with" (measured: the port was simply closed). "The app is
-                      serving a stale certificate" (it was not)
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Reading an artifact too early</td>
+                    <td>Missed manifest refresh</td>
                     <td><strong>1</strong></td>
-                    <td>
-                      Hashed an installer while the packer was still writing it, and published those
-                      numbers until the mismatch was caught
-                    </td>
+                    <td>latest.json not updated after v1.25.2; named in the v1.25.3 tag notes</td>
                   </tr>
                   <tr>
-                    <td>Self-inflicted outages</td>
-                    <td><strong>3</strong></td>
+                    <td>Post-release dead-link sweep</td>
+                    <td><strong>1 round</strong></td>
                     <td>
-                      A pattern-based process kill that matched its own ssh session; a blocking call on
-                      a launcher that never exits, consuming a 1800-second timeout; killing an
-                      application and not restarting it
+                      The night of v1.25.0: the install script handed users an address that did
+                      not answer, six links pointed into the void, an entire operations chapter
+                      was missing. The sweep arrived before the celebration
                     </td>
                   </tr>
                 </tbody>
@@ -542,37 +634,118 @@
             </div>
 
             <p>
-              The failures are not spread evenly. They cluster in two places, and the clustering is the
-              finding.
+              The old ledger from the first forty-eight hours stays on the books: four ASCII-rule
+              violations; about six PowerShell-over-ssh inlinings; one commit with the suite red;
+              about four patch-without-reading incidents; three assert-before-measure overclaims
+              overturned; one artifact read too early; three self-inflicted outages. The new
+              entries do not cancel the old ones; they outgrow them.
+            </p>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">Fact · progress is not a zero-mistake record</span>
+              <p>
+                Across five days A still missed one manifest refresh, voided one build, and was
+                fooled by verification scripts in five ways. The progress lives elsewhere: every
+                mistake landed somewhere it must be read. Named in a tag, flipped from SKIP to
+                FAIL, written into the skill documents. Mistakes continue; their survival time
+                gets shorter.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="sessionc" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">05 · C's shadow</span>
+              <h2 class="ag-section-title">C: eight releases in a day, and three slaps from real hardware</h2>
+              <p class="ag-section-subtitle">
+                The third session is judged only from artifacts. Its artifacts are one day inside
+                a phone.
+              </p>
+            </header>
+
+            <p>
+              C's territory was the Android client. It arrived with its own worktree, its own
+              branch and a one-command release script. From the v1.0.0 launch it shipped to
+              v1.1.5 within a single day, JVM tests growing from 52 to 105. Its documentation
+              discipline resembles B's: design first, four errors caught during plan-phase
+              verification before any work started, sixteen tasks in a TDD sequence. Its field
+              closure resembles A's: every slap from real hardware became a line of code the same
+              day.
             </p>
 
             <div class="ag-loop-grid">
               <article class="ag-card">
-                <h3>Crossing shell, quoting and encoding layers</h3>
+                <h3>Slap one: wiring gaps</h3>
                 <p>
-                  bash to ssh to PowerShell to a GBK code page to cmd. The reasoning was right and the
-                  literal was wrong. These errors are silent, which is what makes them expensive: no
-                  exception, no partial result, just nothing happening.
+                  v1.1.0's release plan said "real-device acceptance pending". The device answered
+                  the same day: RX audio and spectrum had never started. The cause was two wiring
+                  gaps: the playback function had no call site, and the waterfall stream had no
+                  writer. Plan-phase verification and JVM tests had all passed, because the
+                  injected dependencies were null. The unit tests tested imaginary wiring.
                 </p>
               </article>
               <article class="ag-card">
-                <h3>Concluding before measuring</h3>
+                <h3>Slap two: halved frames</h3>
                 <p>
-                  All three overclaims share one shape: a plausible causal story first, then a search
-                  for evidence that supports it, instead of first taking a measurement capable of
-                  refuting it. Two of the three were corrected by a single sentence from the user.
+                  After the wiring fix it still played only half. The JNI layer took an array
+                  length in samples, and the codec received half of it, so every 20 ms packet was
+                  treated as 10 ms. This is the shape of a JNI contract; it is not in any
+                  document, and an emulator cannot hear it.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Slap three: a race dropping events</h3>
+                <p>
+                  Controls work, spectrum works, RX silent, PTT will not key. The cause was a
+                  thread-unsafe collection: four concurrent callbacks adding and removing, one
+                  lost add, and the aggregate condition never holding. The fix was a
+                  concurrency-safe structure plus removing the single gate: RX watches only the
+                  audio stream, PTT watches only the radio stream, matching the web client.
+                  Concurrency invariants went into the tests the same release, 101 to 105.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>Turning a user's sentence into letters</h3>
+                <p>
+                  After the three slaps, C added a line of diagnostics to the device: eight
+                  letters marking whether each stage, control, spectrum, audio, JNI and the rest,
+                  was alive, later extended to report per-channel status. When a user next says
+                  "no audio", that one line of letters points straight at the broken stage. The
+                  diagnostic line is the real device's return gift: it turned the unobservable
+                  into something remotely readable.
                 </p>
               </article>
             </div>
 
-            <div class="claim-box" data-claim-type="fact">
-              <span class="claim-label">Fact · where the reasoning held up</span>
+            <h3 class="ag-subhead">Process invention: never fight another wave for the same tree</h3>
+            <p>
+              Android and desktop share one site tree, and a full-site deploy rolls the other
+              wave's download cards back. C measured that incident: one Android release briefly
+              served stale desktop cards while a newer desktop version was current. The fix was
+              not care; it was structure. The release script gained an --apk-only mode touching
+              nothing but the Android block; the card script rewrites only its own block on the
+              live pages and byte-verifies both pages and the APK hash afterwards. A's commits
+              carry the record of C: "the other session released v1.1.1; the card follows, hash
+                  re-verified byte-for-byte against the live APK."
+            </p>
+            <p>
+              Against zero coordination in the first forty-eight hours, this is a real
+              displacement in how collaboration works: the cross-session trust action changed
+              from declaration to re-verification. B committed documents on A's behalf; A
+              verified hashes on C's behalf; nobody trusted anyone's hand.
+            </p>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">Inference · C's blind spot and its growth have the same shape</span>
               <p>
-                A's models of how the system worked were rarely wrong. The certificate chain, the
-                tunnel topology, the registry-to-route generation, the TLS verification path: each was
-                reasoned out correctly, usually on the first attempt. What failed was the sentence "I
-                believe I already know this", and the failures were concentrated in transport layers
-                and in unmeasured network claims.
+                C's three real-device defects share one origin: there was no real device in the
+                plan-phase verification environment. Its response was not more documentation but
+                more observability. What makes the same blind spot cheaper next time is not
+                "remember to test on a real device"; it is killing the device's unobservability
+                in advance. The thought runs in the same vein as A's and B's gates, but faster
+                on the draw: three slaps, three return gifts the same day.
               </p>
             </div>
           </div>
@@ -581,103 +754,81 @@
         <section id="findings" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">05 · Five holds</span>
-              <h2 class="ag-section-title">Five that hold for both</h2>
+              <span class="ag-section-label">06 · Six holds</span>
+              <h2 class="ag-section-title">Six that hold across sessions</h2>
               <p class="ag-section-subtitle">
-                These survived the change of model, of task, and of day. That is why they are the
-                point of the article.
+                They survived a third session joining, a third repository, and a second kind of
+                client.
               </p>
             </header>
 
-            <h3 class="ag-subhead">a · Good at diagnosing a class, poor at preventing one</h3>
+            <h3 class="ag-subhead">a · Names prevent recurrence, not mutation</h3>
             <p>
-              Two sessions found the same defect class independently. Each fixed the instance it
-              touched. Neither enumerated the rest. The enumeration happened only after the class had a
-              name, and the gate test that followed found another member on its first run.
-            </p>
-            <p>
-              The practical reading: after a model fixes a bug, the highest-value next instruction is
-              not "fix the next one" but "how many more of this shape exist, and what test would go red
-              if another appeared".
+              The four root causes' names are all on the wall, and each returned in new clothes
+              within five days: trust-store paths, SIGHUP semantics, the key-press liveness
+              window. None was a verbatim instance of an old name. After a model fixes one
+              instance, it does not spontaneously ask "which class is this a variant of". A human
+              still does that step. The instruction to whoever holds the reins stays unchanged:
+              after a fix, ask for the class first, then for the gate.
             </p>
 
-            <h3 class="ag-subhead">b · Verification discipline, not reasoning, is the constraint</h3>
-            <p>Every wasted cycle in these two days traces to a trusted proxy signal:</p>
-            <ul>
-              <li>An exit code of zero, because the final statement in the script succeeded.</li>
-              <li>
-                A "successful compile" line, because compilation did succeed and nobody wanted the
-                result.
-              </li>
-              <li>A version file, written before the build that then failed.</li>
-              <li>A "fetch complete" message, with the missing binary reported on stderr.</li>
-              <li>An HTTP probe against a service that does not speak HTTP.</li>
-              <li>A DNS answer read from a resolver cache that predated the change.</li>
-            </ul>
+            <h3 class="ag-subhead">b · Distrust must be institutionalised, and the institutions must be checked</h3>
             <p>
-              The hypotheses were mostly right. The verification was mostly lazy. Fluency at generating
-              output runs far ahead of the disposition to doubt it, and that gap is a posture, not a
-              knowledge deficit. The countermeasure that worked was never "be more careful". It was
-              externalising the criterion into something a machine can refuse: a hash comparison, a
-              timestamp with a year in it, a test that fails, a configuration check that aborts.
+              The forty-eight-hour lesson was not to trust proxy signals. Within five days that
+              distrust iterated once more: after exit codes came guards, and after guards came
+              mutation testing for the guards. The idle guard delivered a clean verdict: a guard
+              that passes on broken input is worse than no guard, because it also occupies the
+              name "already checked". Likewise, verification scripts are treated as liars: five
+              ways of lying on file, and criteria come only from the product's own output.
             </p>
 
-            <h3 class="ag-subhead">c · Rules you wrote yourself decay</h3>
+            <h3 class="ag-subhead">c · Structure beats discipline, verified a second time</h3>
             <p>
-              Session A wrote three rules early, restated them mid-session, and violated them fourteen
-              times. The rules were in context the entire time. What was missing was not memory but the
-              act of consulting them at the moment of acting.
-            </p>
-            <p>
-              Two correlates were visible. Violation density rose with turn count. It also rose
-              measurably after the user pushed for speed, which is uncomfortable but consistent: a
-              general instruction to hurry raises the rate at which stated constraints get skipped. The
-              decay carried no self-awareness whatsoever. Each violation surfaced only as the next
-              failure.
-            </p>
-            <p>
-              The remedy was mechanical. Script templates that are ASCII by construction. Remote
-              execution only through a file copied to the target. A test suite run whose exit code the
-              commit actually depends on. After those went in, the violations stopped.
+              The forty-eight-hour fix was "one driver per release train", running on
+              self-discipline. The five-day fix is ownership partition: one line, one worktree,
+              one release channel, block-scoped rewrites with hash re-verification. Self-discipline
+              decays; structure does not. The collision count for the second half of the window
+              is zero, independent of urgency and of elapsed days.
             </p>
 
-            <h3 class="ag-subhead">d · Coordination was absent, and that is not an intelligence problem</h3>
+            <h3 class="ag-subhead">d · A real device is a kind of environment, not a kind of test</h3>
             <p>
-              Thirteen hours of two sessions on one working tree produced two real collisions: an
-              overwritten release manifest, and two builds of the same version published against one
-              another. Neither session proposed a lock, an ownership claim, or a read-before-write
-              step. The resolution was repair after the fact plus one rule: a release train has a
-              single driver.
-            </p>
-            <p>
-              Both sessions were individually competent at the shared task. The failure was in the
-              absence of a protocol for shared state. Two strong writers without one produce mutual
-              overwriting, not mutual acceleration.
+              Emulators, JVMs and unit tests all live inside the plan-phase imagination. Wiring
+              gaps, JNI frame lengths and lost concurrency events appeared only on real hardware.
+              C's response was to kill the device's unobservability on the client side: one line
+              of letters, remotely readable. A and B should each ask the same question: in my
+              environment, which line is still unobservable?
             </p>
 
-            <h3 class="ag-subhead">e · A human sentence beat a long inference, twice</h3>
+            <h3 class="ag-subhead">e · Users' questions getting dumber is the evidence of health</h3>
             <p>
-              Twice the user overturned an established direction with one line. Once: that address
-              works from my machine, so where did you go wrong. Once: nothing is blocking that port,
-              look again, could it be DNS. In both cases a great many tokens had already been spent
-              building on the wrong premise.
+              Five tickets in five days: the radio's three paths not connected, a wildcard domain
+              mistaken for a config item, a tunnel entry never started, one empty description.
+              Not one was a product defect; each was answered with an evidence page. Forty-eight
+              hours in, tickets drove hotfixes; five days later, tickets are only environmental.
+              The best stability metric for a product is precisely the degradation of its ticket
+              content.
             </p>
+
+            <h3 class="ag-subhead">f · Approval points are still part of the design</h3>
             <p>
-              The common factor is that the user held environmental facts and the model held inference.
-              Models fill factual gaps with reasoning, which is usually reasonable and occasionally
-              catastrophic. The high-leverage move is not a longer chain of reasoning but an earlier
-              question: can you reach it from where you are. After A switched to measuring before
-              asserting, the overclaim count went to zero for the rest of the session.
+              B's authentication spec carried eleven decisions, each approved by a human before
+              work started. A's macOS packaging plan listed three deviations under the heading
+                  "needs your nod". An installation-acceptance record keeps the line: had you not
+              asked, I would have skipped this step. All three sessions show the same restraint
+              in the same place: acceptance criteria belong to the human, not to the model. This
+              is not politeness; it is a boundary none of them crossed in five days.
             </p>
 
             <div class="claim-box" data-claim-type="thesis">
-              <span class="claim-label">Thesis · what the models were and were not</span>
+              <span class="claim-label">Thesis · the five-day answer in one sentence</span>
               <p>
-                Better than a junior engineer at throughput, at re-verification without boredom, at
-                holding several abstraction layers at once, and at writing down why. Worse at knowing
-                when to stop: four root causes became seven releases, and a person would have asked at
-                the third whether the team was playing whack-a-mole. Neither model proposed slowing
-                down. The user did.
+                The forty-eight-hour answer was "add constraints, not a better model". The
+                five-day addendum: constraints also fail, so constraints need their own
+                verification. Mutation testing verifies guards; hash re-verification verifies
+                cross-session actions; tag records name their own omissions. The answer is the
+                same sentence, with one more layer of distrust in it. A stronger model is still
+                not required; denser distrust is.
               </p>
             </div>
           </div>
@@ -686,84 +837,116 @@
         <section id="scorecard" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">06 · Reckoning</span>
-              <h2 class="ag-section-title">Eleven rows, evidence in the last column</h2>
+              <span class="ag-section-label">07 · Reckoning</span>
+              <h2 class="ag-section-title">Fourteen rows, evidence in the last column</h2>
               <p class="ag-section-subtitle">
-                "Unknown" is a real entry. It means the repository does not carry the evidence.
+                "Unknown" is a real entry. For rows before C joined, its column stays blank.
               </p>
             </header>
 
             <div class="ag-table-wrap">
               <table class="ag-table">
                 <thead>
-                  <tr><th>Dimension</th><th>A</th><th>B</th><th>Evidence</th></tr>
+                  <tr><th>Dimension</th><th>A</th><th>B</th><th>C</th><th>Evidence</th></tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>Systems reasoning: architecture, protocol, timing</td>
                     <td>Strong</td>
                     <td><strong>Strong</strong></td>
-                    <td>A: four layered 502 diagnoses. B: IPv6 selection and nginx resolution timing</td>
+                    <td>Moderate</td>
+                    <td>A: four layered 502 diagnoses. B: IPv6 selection, frps lifetime. C: protocol alignment has design docs; no deep timing case seen</td>
                   </tr>
                   <tr>
                     <td>Byte-level forensics</td>
                     <td><strong>Strong</strong></td>
                     <td>Unknown</td>
-                    <td>A: the TOML escape, certificate fingerprints, port and firewall isolation</td>
-                  </tr>
-                  <tr>
-                    <td>Platform knowledge earned by running things</td>
-                    <td>Moderate, learned by being bitten</td>
-                    <td><strong>Strong</strong></td>
-                    <td>B: Windows file locking, deployment delete-guarding</td>
-                  </tr>
-                  <tr>
-                    <td>Anticipating failures that have not occurred</td>
                     <td>Moderate</td>
-                    <td><strong>Strong</strong></td>
-                    <td>B: the empty-manifest guard, completing the bind guard</td>
+                    <td>A: the TOML escape, voiding a build by reading the exe's archive table. C: byte-for-byte hash re-verification when publishing cards, a process act rather than diagnosis</td>
+                  </tr>
+                  <tr>
+                    <td>Real-device acceptance instinct</td>
+                    <td>Moderate, learned via tickets</td>
+                    <td>Unknown</td>
+                    <td>Weak → strong, same-day returns</td>
+                    <td>C: three device defects fixed the same day and turned into a diagnostic line. A: the trust-store defect surfaced on a user's machine, then became a TLS gate</td>
                   </tr>
                   <tr>
                     <td>Converting failure into gates</td>
                     <td><strong>Strong</strong></td>
+                    <td>Strong</td>
                     <td>Moderate</td>
-                    <td>A: four guard tests, one of which caught a new bug on its first run</td>
+                    <td>A: TLS trust gate, build-machine-defaults guard. B: after the idle-guard fix, three mutants each went red with a precise signature. C: concurrency invariants into tests</td>
                   </tr>
                   <tr>
-                    <td>Adherence to its own stated rules</td>
-                    <td><strong>Weak</strong>, fourteen violations</td>
-                    <td>Unknown</td>
-                    <td>A: ASCII four times, inlining six, one red-suite commit, four guessed anchors</td>
-                  </tr>
-                  <tr>
-                    <td>Measuring before asserting</td>
-                    <td>Weak, then strong</td>
-                    <td>Unknown</td>
-                    <td>A: three overclaims, zero after the switch to probe-first</td>
-                  </tr>
-                  <tr>
-                    <td>Documentation and handover quality</td>
+                    <td>Guard self-check (mutation verification)</td>
                     <td>Moderate</td>
                     <td><strong>Strong</strong></td>
-                    <td>B: design record V0.17 to V0.22, as-built pages, rewritten guidance</td>
+                    <td>Unknown</td>
+                    <td>B: the idle guard was executed by mutation testing; every guard since is verified the same way</td>
+                  </tr>
+                  <tr>
+                    <td>Self-doubt toward verification scripts</td>
+                    <td>Strong, five lies on file</td>
+                    <td>Unknown</td>
+                    <td>Unknown</td>
+                    <td>A: five quiet lying modes measured within an hour and written into the record</td>
+                  </tr>
+                  <tr>
+                    <td>Release-channel hygiene</td>
+                    <td>Moderate, one missed manifest</td>
+                    <td>Unknown</td>
+                    <td><strong>Strong</strong></td>
+                    <td>C: --apk-only and block-scoped card updates were structure from the start. A: missed latest.json once, named in the tag notes</td>
+                  </tr>
+                  <tr>
+                    <td>Documentation-to-artifact consistency</td>
+                    <td>Moderate</td>
+                    <td><strong>Weak → moderate</strong></td>
+                    <td>Strong</td>
+                    <td>B: "✓ cannot be missed again" falsified, retired host misdirecting two investigations; also the most diligent self-reporter. C: a signing guard that fails without a keystore</td>
                   </tr>
                   <tr>
                     <td>Collaboration on shared state</td>
-                    <td><strong>Weak</strong></td>
-                    <td><strong>Weak</strong></td>
-                    <td>The overwritten manifest and the duplicate build; responsibility is shared</td>
+                    <td>Weak → moderate</td>
+                    <td>Weak → moderate</td>
+                    <td><strong>Strong</strong></td>
+                    <td>Two collisions in the first half (overwritten manifest, duplicate build); zero after ownership partition, cross-session actions hash-re-verified</td>
                   </tr>
                   <tr>
                     <td>Speed of user-facing delivery</td>
                     <td><strong>Strong</strong></td>
                     <td>Unknown</td>
-                    <td>A: forty minutes from a customer report to three tested double-click tools</td>
+                    <td>Strong</td>
+                    <td>A: a 745 KB patch shipped the day the channel was built. C: five fixes in one day, all three device defects closed same-day</td>
                   </tr>
                   <tr>
                     <td>Knowing when to stop</td>
-                    <td><strong>Weak</strong></td>
+                    <td>Weak</td>
                     <td>Unknown</td>
-                    <td>A: retried a timed-out cleanup three times until told to stop</td>
+                    <td>Unknown</td>
+                    <td>A: retried a timed-out cleanup three times until told to stop (first-article record; no new evidence of improvement in five days, and none of worsening)</td>
+                  </tr>
+                  <tr>
+                    <td>Anticipating failures that have not occurred</td>
+                    <td>Moderate</td>
+                    <td><strong>Strong</strong></td>
+                    <td>Moderate</td>
+                    <td>B: the empty-manifest guard, timing side-channel countermeasures. C: the diagnostic line is defence laid for its own future</td>
+                  </tr>
+                  <tr>
+                    <td>Documentation and handover quality</td>
+                    <td>Moderate</td>
+                    <td><strong>Strong</strong></td>
+                    <td>Strong</td>
+                    <td>B: twenty SDD versions, slaps kept in the record. C: design, plan and changelog for every version</td>
+                  </tr>
+                  <tr>
+                    <td>Adherence to its own stated rules</td>
+                    <td><strong>Weak</strong>, fourteen violations in the first article</td>
+                    <td>Unknown</td>
+                    <td>Unknown</td>
+                    <td>A: ASCII four times, inlining six, one red-suite commit, four guessed anchors (first-article ledger)</td>
                   </tr>
                 </tbody>
               </table>
@@ -774,80 +957,115 @@
         <section id="redo" class="ag-section">
           <div class="container">
             <header class="ag-section-header">
-              <span class="ag-section-label">07 · Mending</span>
-              <h2 class="ag-section-title">Eight changes, not one requiring a better model</h2>
+              <span class="ag-section-label">08 · Mending</span>
+              <h2 class="ag-section-title">Eleven changes, still not one requiring a better model</h2>
               <p class="ag-section-subtitle">
-                Every item here was learned by losing time to its absence.
+                The first five carry over; the next six grew during these five days. Every item
+                cost time to its absence.
               </p>
             </header>
 
-            <h3 class="ag-subhead">Process</h3>
+            <h3 class="ag-subhead">Carried over</h3>
             <ul>
               <li>
-                <strong>One driver per release train.</strong> Only one session may touch the manifest
-                and the download directory at a time, and the manifest is generated on the server from
-                the files actually published, never from a local copy.
+                <strong>One driver per release train.</strong> The five-day upgrade: one product
+                line, one worktree, one release channel. On a shared tree, only block-scoped
+                rewrites, with hash re-verification afterwards.
               </li>
               <li>
-                <strong>Gates before post-mortems.</strong> After fixing one instance of a defect,
-                enumerate the class, then write the test that must go red if another appears. Of the
-                four gates written in these two days, one paid for itself immediately.
+                <strong>Gates before post-mortems.</strong> Before a guard goes on duty, mutate:
+                restore the defect, and the guard must go red. A guard that passes on broken
+                input is worse than no guard.
               </li>
               <li>
-                <strong>Turn rules into tooling.</strong> Templates that cannot contain the forbidden
-                characters, remote execution only through files on disk, a commit that depends on the
-                suite's real exit code. Self-discipline decays with context length; a hook does not.
+                <strong>Turn rules into tooling.</strong> Self-discipline decays with context
+                length; a hook does not. Verified in the first article, not overturned in five
+                days, and therefore not re-verified.
               </li>
               <li>
-                <strong>Three proofs per artifact.</strong> Version, a timestamp that includes the year,
-                and a hash different from the previous release. Missing any one means the build did not
-                succeed, whatever the log says.
+                <strong>Three proofs per artifact.</strong> Version, a timestamp that includes
+                the year, and a hash different from the previous release. Upgrade: tag notes
+                name their own omissions, and the manifest is generated on the server from the
+                files actually published, never from a local copy.
               </li>
               <li>
-                <strong>Ask for environmental facts first.</strong> For anything network-shaped, the
-                opening question is whether the other end can reach it, not what the topology probably
-                is.
+                <strong>Ask for environmental facts first.</strong> Hostnames in READMEs expire
+                too. The source of truth itself needs an owner.
+              </li>
+            </ul>
+
+            <h3 class="ag-subhead">New</h3>
+            <ul>
+              <li>
+                <strong>A checkmark must map to a failing check.</strong> An unverified claim is
+                treated as unfinished. "Cannot be missed" is a prophecy, and prophecies do not
+                take part in builds.
+              </li>
+              <li>
+                <strong>Design verification scripts as liars.</strong> Variable case-folding,
+                octal literals, timestamp baselines, answer provenance, symbol-lookup tables:
+                five quiet lying modes are on file. Criteria come only from the product's own
+                output.
+              </li>
+              <li>
+                <strong>Environment defaults are a disguise hotspot.</strong> Defects that test
+                green under the double-colon environment surface under the loopback field
+                configuration. The clean room must be shaped like the field, or it verifies a
+                different product.
+              </li>
+              <li>
+                <strong>Deployment documents are a source of truth; change them when facts
+                change.</strong> One retired host misdirected two investigations. A drift of more
+                than a day between document and live system prices the document at zero.
+              </li>
+              <li>
+                <strong>Clients carry their own observability.</strong> One line of letters
+                locates which stage "no audio" died in. Real-device defects cannot be eliminated;
+                make the next one cheap.
+              </li>
+              <li>
+                <strong>The first patrol after a release comes before the second round of
+                development.</strong> The night of v1.25.0: the install script handed out an
+                address that did not answer, six links pointed into the void, an entire chapter
+                was missing. Patrol before celebration.
               </li>
             </ul>
 
             <h3 class="ag-subhead">For whoever holds the reins</h3>
             <ul>
               <li>
-                <strong>Urgency raises the violation rate.</strong> This was observable, not
-                hypothetical. To go faster, name the step that may be skipped rather than issuing a
-                general hurry.
+                <strong>Urgency raises the violation rate.</strong> Recorded in the first article;
+                five days produced no new data against it, so it stands as fact. To go faster,
+                name the step that may be skipped rather than issuing a general hurry.
               </li>
               <li>
-                <strong>Ask for criteria, not plans.</strong> A model will always restate a plan
-                correctly. Restating the criterion it intends to satisfy is what exposes whether it is
-                about to fool itself.
+                <strong>Ask for criteria, not plans.</strong> A restated plan is always correct; a
+                restated criterion exposes whether the model is about to fool itself.
               </li>
               <li>
-                <strong>Give parallel sessions disjoint ownership.</strong> Two writers on one tree
-                without a protocol produce overwriting, and the damage lands in the artifacts users
-                download.
+                <strong>Ask for the acceptance step explicitly.</strong> One record carries the
+                line: had you not asked, I would have skipped this step. A model does not
+                spontaneously choose the most painful verification; it needs to be named.
+              </li>
+              <li>
+                <strong>Give parallel sessions disjoint ownership, then let structure hold
+                discipline.</strong> The five days prove the second half: once the structure is in
+                place, nobody needs to remember to be careful.
               </li>
             </ul>
 
             <div class="claim-box" data-claim-type="thesis">
-              <span class="claim-label">Thesis · the one sentence version</span>
+              <span class="claim-label">Thesis · the five-day close</span>
               <p>
-                Neither session lacked intelligence. What was missing was the habit of consulting its
-                own freshly written rule at the moment of acting, and of taking a refutable measurement
-                before asserting. The first is solved by turning rules into tools. The second is solved
-                by externalising criteria into things a machine can refuse. Neither solution requires a
-                stronger model. Both require a human to build the constraint.
+                A lives in bytes, releases and the scripts a customer can double-click. B lives
+                in the record, the guards and the mechanism-level judgements. C learned both
+                ways of working in one day and invented a third. What improves the system is
+                still the same move: a field fact becomes a gate. It happened more often in five
+                days, and now the gates are checked too. Neither solution needs a stronger
+                model. Someone must build distrust into structure, and then let the structure
+                stand on its own.
               </p>
             </div>
-
-            <p>
-              The division of labour that emerged was not planned and was not symmetric. B wrote the
-              design record, the preventive guards and the mechanism-level judgements. A lived in bytes,
-              consoles, firewalls and scripts a customer can double-click. What actually improved the
-              system was the moment a fact from the second kind became a gate in the first. That
-              happened four times in forty-eight hours, and each time it removed a whole category of
-              future failure rather than one instance of it.
-            </p>
           </div>
         </section>
       </main>
@@ -868,22 +1086,21 @@
             <h3>Related reading</h3>
             <ul>
               <li>
-                <a href="/blog/support-loop/">The Support Loop: how a week of reports became releases</a>
+                <a href="/blog/cloud-first-mile/">The Borrowed Light: How a Radio Behind NAT Gets an Address on the Internet</a>
               </li>
               <li>
-                <a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected: the ledger</a>
+                <a href="/blog/support-loop/">The Support Loop: How a Week of Reports Became Two Releases</a>
               </li>
               <li>
-                <a href="/blog/three-axes/">The Three Axes: from business intent to field evidence</a>
+                <a href="/blog/seven-billion-tokens/">Seven Billion Tokens, Dissected: The Ledger That Shrank</a>
               </li>
-              <li><a href="/blog/solo-loop/">The Solo Loop: one person answering like a team</a></li>
+              <li>
+                <a href="/blog/three-axes/">The Three Axes: From Business Intent to Field Evidence, End to End</a>
+              </li>
               <li>
                 <a href="/agentic.html"
                   >Agentic Engineering: human intent, agentic execution, field evidence</a
                 >
-              </li>
-              <li>
-                <a href="/engineering.html">Harness, Loops &amp; Living SDD: the VLSC system</a>
               </li>
             </ul>
           </div>

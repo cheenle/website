@@ -1396,7 +1396,7 @@
                 <tr>
                   <td>主要设备</td>
                   <td>Hamlib 支持的电台</td>
-                  <td>FT-710；Modern 的 IC-7300 系列</td>
+                  <td>FT-710；Modern 的十一种机型</td>
                   <td>SunSDR2 DX / ExpertSDR</td>
                   <td>电台与音频接口</td>
                   <td>EFHW 匹配网络与 ESP32-S3</td>
@@ -1544,9 +1544,9 @@ $ echo $?
             <article class="ag-card">
               <h3>MRRC Modern</h3>
               <p>
-                <strong>版本：</strong>v1.14.3<br /><strong>Profile：</strong
-                >FT-710、IC-7300、IC-7300MK2<br /><strong>自动化测试：</strong
-                >724 项
+                <strong>版本：</strong>v1.25.5<br /><strong>Profile：</strong
+                >十一种——FT-710、FTDX10、FTDX101D、FTDX101MP、FTX-1F、FT-891、IC-7300、IC-7300MK2、IC-705、IC-7610、IC-7760<br /><strong>自动化测试：</strong
+                >1897 项
               </p>
               <p>
                 IC 系列真机验收与自动化覆盖单列。 <strong>过程证据：</strong>
@@ -1613,10 +1613,10 @@ $ echo $?
                       </td>
                     </tr>
                     <tr>
-                      <td>MRRC Modern v1.14.3</td>
-                      <td>三个机型 Profile；724 项测试</td>
+                      <td>MRRC Modern v1.25.5</td>
+                      <td>十一个机型 Profile；1897 项测试</td>
                       <td>自动化测试</td>
-                      <td>IC 真机验收单独记录。724 项于 2026-09-12 在 macOS 上、用仓库自己的虚拟环境（Python 3.13）运行，无收集错误。用系统 Python 3.9 跑同一套测试会在收集期因 <code>X | None</code> 注解失败，环境局限，非产品缺陷。</td>
+                      <td>IC 真机验收单独记录。1897 项于 2026-10-11 在 macOS 上、用仓库自己的虚拟环境（Python 3.13）运行，无收集错误，取代 2026-09-12 快照（v1.14.3，724 项）。用系统 Python 3.9 跑同一套测试会在收集期因 <code>X | None</code> 注解失败，环境局限，非产品缺陷。</td>
                     </tr>
                     <tr>
                       <td>SunMRRC / SunsdrMobile</td>

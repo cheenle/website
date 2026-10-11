@@ -1742,7 +1742,7 @@
                 <tr>
                   <td>Primary equipment</td>
                   <td>Hamlib-supported radios</td>
-                  <td>FT-710; IC-7300 family via Modern</td>
+                  <td>FT-710; eleven rigs via Modern</td>
                   <td>SunSDR2 DX / ExpertSDR</td>
                   <td>Radio + audio interface</td>
                   <td>EFHW matching network + ESP32-S3</td>
@@ -1913,13 +1913,14 @@ $ echo $?
             <article class="ag-card">
               <h3>MRRC Modern</h3>
               <p>
-                <strong>Version:</strong> v1.14.3<br /><strong
+                <strong>Version:</strong> v1.25.5<br /><strong
                   >Profiles:</strong
                 >
-                FT-710, IC-7300, IC-7300MK2<br /><strong
+                eleven — FT-710, FTDX10, FTDX101D, FTDX101MP, FTX-1F, FT-891,
+                IC-7300, IC-7300MK2, IC-705, IC-7610, IC-7760<br /><strong
                   >Automated tests:</strong
                 >
-                724
+                1897
               </p>
               <p>
                 IC-series physical-radio acceptance is tracked separately from
@@ -2000,16 +2001,18 @@ $ echo $?
                       </td>
                     </tr>
                     <tr>
-                      <td>MRRC Modern v1.14.3</td>
-                      <td>Three declared radio profiles; 724 tests</td>
+                      <td>MRRC Modern v1.25.5</td>
+                      <td>Eleven declared radio profiles; 1897 tests</td>
                       <td>Automated test</td>
                       <td>
                         IC physical-radio acceptance is separately recorded.
-                        724 ran on macOS 2026-09-12 inside the project's own virtualenv
-                        (Python 3.13), with no collection errors. Running the same
-                        suite under the system Python 3.9 fails at collection on
-                        <code>X | None</code> annotations — an environment limit,
-                        not a product defect.
+                        1897 ran on macOS 2026-10-11 inside the project's own
+                        virtualenv (Python 3.13), with no collection errors —
+                        superseding the 2026-09-12 snapshot (v1.14.3, 724
+                        tests). Running the same suite under the system
+                        Python 3.9 fails at collection on
+                        <code>X | None</code> annotations — an environment
+                        limit, not a product defect.
                       </td>
                     </tr>
                     <tr>

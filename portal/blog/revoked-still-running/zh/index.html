@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>撤而不停：Cloud Hub 时代的头十一天 — VLSC 博客</title>
+    <meta
+      name="description"
+      content="10 月 1 日至 11 日，VLSC 机群的十一天：一台 125 元的 W103D 盒子，WiFi 芯片被 2020 年的旧固件逐步楔死，厂家的 2021 出厂固件入库救赎；一台被撤销的 Cloud Hub 实例仍在运行，占着已分派给另一呼号的穿透端口。桌面版十发、Android 八日二十余发、频谱带宽 151 → 38 → 19 kbps、FT-891 入列，以及那条教训：撤销必须停掉那个东西。"
+    />
+    <meta
+      name="keywords"
+      content="机群运维, Cloud Hub, MRRC Modern, Android, W103D, MT7663S 固件, frp 穿透, 撤销, 频谱带宽, FT-891, Hamlib, 现场报告, VLSC"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="撤而不停：Cloud Hub 时代的头十一天"
+    />
+    <meta
+      property="og:description"
+      content="125 元盒子的 WiFi 被 2020 年固件楔死；一台被撤销的实例占着别人的穿透端口。VLSC 机群的十一天，2026-10-01 至 10-11，以及那条教训：撤销必须停掉那个东西。"
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/revoked-still-running/zh/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/revoked-still-running/zh/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/revoked-still-running/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/revoked-still-running/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/revoked-still-running/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "撤而不停：Cloud Hub 时代的头十一天",
+        "description": "VLSC 机群的十一天，2026-10-01 至 10-11：W103D 盒子的 WiFi 取证、Cloud Hub 撤销事故、桌面版十发、Android 二十余发、频谱带宽分级，与 FT-891。",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-10-11",
+        "dateModified": "2026-10-11",
+        "keywords": "机群运维, Cloud Hub, MRRC Modern, Android, W103D, MT7663S 固件, 撤销, 频谱带宽, FT-891",
+        "articleSection": "现场",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/revoked-still-running/zh/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar">
+        <span class="ba-crumb">
+          <a href="/">首页</a> › <a href="/blog/zh/">博客</a> ›
+          <span class="ba-crumb-cat">现场 · 机群纪实</span>
+        </span>
+      </nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge">
+            <i class="fas fa-tower-broadcast"></i><span>现场 · 机群运维</span>
+          </div>
+          <h1>撤而<span class="gradient">不停</span>。</h1>
+          <p>
+            10 月 1 日，Cloud Hub 时代开局。到 10 月 11 日的十一天里，机群发出桌面版十发、
+            Android 八日二十余发；一台 125 元的 W103D 盒子被发现 WiFi 芯片正被 2020 年的旧固件
+            逐步楔死；一台 Yaesu FT-891 成为第十一个入列的电台后端；而一台已被撤销的
+            Cloud Hub 实例仍在运行，占着一个注册表里已经分派给另一呼号的穿透端口。
+            两个故事本篇讲全，其余记在账上。
+          </p>
+          <div class="ag-hero-stats" aria-label="文章摘要">
+            <span class="ag-pill"><i class="fas fa-code-commit"></i> 桌面版十发 · 10-01 至 10-11（v1.24.2 → v1.25.5）</span>
+            <span class="ag-pill"><i class="fas fa-box-open"></i> Android 八日二十余发（v1.0.0 → v1.1.31）</span>
+            <span class="ag-pill"><i class="fas fa-wifi"></i> W103D 125 元 · 2021 N9 固件入库</span>
+            <span class="ag-pill"><i class="fas fa-ban"></i> 一台被撤销实例占着别人的穿透端口</span>
+          </div>
+          <p class="ba-meta">
+            BG1SB &nbsp;·&nbsp; <time datetime="2026-10-11">2026 年 10 月 11 日发布</time>
+            &nbsp;·&nbsp; 约 14 分钟
+          </p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell">
+        <div class="container">
+          <nav class="ag-anchor-nav" aria-label="页面章节">
+            <a href="#sameday">同日</a><a href="#firmware">固件</a
+            ><a href="#revocation">撤销</a><a href="#cadence">节奏</a
+            ><a href="#bandwidth">带宽</a><a href="#radios">电台</a
+            ><a href="#next">接下来</a>
+          </nav>
+        </div>
+      </div>
+
+      <main class="ba-main">
+        <p class="lede">
+          10 月 11 日这一天，机群里先后浮出两条安静的事实。125 元的 W103D 电台盒子（
+          当天刚带着六处首启修复重新发布镜像）被查出 WiFi 芯片正被基础镜像里 2020 年的旧固件
+          逐步楔死：连接约三十秒即掉，扫描整体卡死，一次约十六分钟的 MCU 挂死。药方是厂家
+          自己的 2021 出厂固件：入库时做 SHA-256 校验，用 dpkg-divert 护住，下个镜像起随包。
+          换固件之后实测：
+          200 个包，丢包 0.5%，平均 6.3 毫秒，零掉线。同一天，Cloud Hub 交出互补的另一条：
+          一台几天前已被撤销的实例仍在运行，占着一个注册表里已经重新分派给另一呼号的
+          穿透端口。一台机器靠换掉镜像里向来如此的旧文件得救；另一台机器从未被停掉，
+          因为撤销一行记录不等于停掉一个进程。两条事实之间，是十一天、十发桌面版、
+          二十余发 Android，和一台新电台。
+        </p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — 六条结论</p>
+            <ul class="ba-tldr-list">
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">事实</span
+                ><strong>125 元盒子的 WiFi 是固件案，不是硬件案。</strong>
+                基础镜像的 2020 N9 固件逐步楔死 MT7663S：约三十秒掉线、扫描卡死、
+                约十六分钟 MCU 挂死。厂家 2021 N9 固件入库（构建时 SHA-256 校验，
+                dpkg-divert 护守，下个镜像起随包）。换固件后实测：200 个包、丢包 0.5%、
+                平均 6.3 毫秒、零掉线。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">事实</span
+                ><strong>撤销≠吊销：一台被撤销的 Cloud Hub 实例仍在运行。</strong>
+                它占着一个已重新分派给另一呼号的穿透端口。取证文档以事故名为题；
+                三台机器已修复。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">事实</span
+                ><strong>节奏守住了：十一日十发；八日二十余发。</strong>
+                MRRC Modern 十一天发出十个版本（v1.24.2 → v1.25.5）。Android 从
+                10 月 3 日首发 v1.0.0，到 10 月 10 日已至 v1.1.31。v1.1.29 构建于一棵
+                脏工作树，记在它在名下的功能实际由 v1.1.30 发出。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">事实</span
+                ><strong>频谱带宽按 socket 协商 full/mid/low 三级：151 → 38 →
+                19 kbps。</strong>
+                不声明分级的客户端收到的流与从前逐字节一致：老客户端既不坏也不变。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="thesis">立论</span
+                ><strong>机群运维里，撤销必须停掉那个东西。</strong>
+                只删一行的撤销，在被进程能感觉到的东西拦下来之前，只是一句愿望。
+                注册表与进程各执一词，这次赢的是进程。
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="excluded">已排除</span
+                ><strong>这个窗口里没有一台真 FT-891 上过工作台。</strong>
+                它的表格离线取自 Hamlib；未核验型号的 TX 闸门默认拒绝键控，
+                新后端的现场核验仍然开放。
+              </li>
+            </ul>
+            <div class="ba-readpath">
+              <span>三分钟读完：</span><a href="#firmware">§02 固件</a
+              ><a href="#revocation">§03 撤销</a><a href="#next">§07 接下来</a>
+            </div>
+          </div>
+        </div>
+
+        <section id="sameday" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">01 · 同日</span>
+              <h2 class="ag-section-title">同一天，装下了两条</h2>
+              <p class="ag-section-subtitle">
+                10 月 11 日按序：一盒重发、一案收网、一次改版、一起事故。
+              </p>
+            </header>
+
+            <p>
+              本篇是这个半月的下半程。上半程（三条模型会话、三个仓库、10 月 3 日至 8 日的
+              二十六次发布）由<a href="/blog/two-models/zh/">《并辔而行》</a>记录，可作前读，
+              独立成篇。本篇从那条线的终点出发，走到 10 月 11 日；同样独立成篇。
+            </p>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>条目</th><th>2026-10-11 发生了什么</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>W103D 镜像</strong></td>
+                    <td>
+                      镜像 v1.25.5 带着六处首启修复重新发布（10-07 首发）
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>WiFi 固件</strong></td>
+                    <td>
+                      「固件日」：MT7663S 取证收口，基础镜像的 2020 N9 固件出局，
+                      厂家 2021 N9 固件入库
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>管理台</strong></td>
+                    <td>
+                      二十项界面改版发布：设计系统、CSRF 全覆盖、两步确认、
+                      无 JS 降级、审计筛选
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>撤销</strong></td>
+                    <td>
+                      一台被撤销的实例仍在运行，占用已重新分派的穿透端口；
+                      取证文档落卷，三台机器修复
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              同日堆叠正是题眼。机群的表面（盒子镜像、桌面版、管理台、穿透注册表）
+              长得比它的停止机制快。其中两行是主戏：固件取证，因为解药是厂家早备好的
+              一年之隔的出厂文件；撤销事故，因为表里其余每一行都默认「已撤销」等于
+              「已停止」。剩下的章节，是承载这一切的节奏与工程。
+            </p>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">事实 · 每一行都有日期戳</span>
+              <p>
+                表中每一项都能对到仓库 git 历史或 changelog 里 2026-10-11 的条目：
+                发布 tag、镜像构建日志、管理台任务清单、事故取证文档。没有一条
+                来自记忆。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="firmware" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">02 · 固件</span>
+              <h2 class="ag-section-title">2020 年的固件正在楔死芯片</h2>
+              <p class="ag-section-subtitle">
+                125 元的盒子，一枚 MT7663S，一味在厂家 2021 出厂镜像里躺了一年的解药。
+              </p>
+            </header>
+
+            <p>
+              W103D 是一台 125 元的电台盒子。它的镜像 v1.25.5 于 10 月 7 日发布，
+              10 月 11 日带着六处首启修复重发；同一个 10 月 11 日，又成了它 WiFi 的
+              「固件日」。MT7663S 的故障形状像硬件濒死：连接约三十秒即掉，无线扫描
+              整体卡死，最久一次 MCU 挂死约十六分钟。
+            </p>
+            <p>
+              取证没有把锅扣给硬件。基础镜像给这枚芯片带的是 2020 年的 N9 固件，
+              正是它逐步把芯片楔死。厂家的出厂镜像里躺着同一硅片的 2021 N9 固件，
+              于是解药直接从厂家 vendor 进来：2021 N9 文件入库，焊死两道防护。构建时
+              校验文件的 SHA-256；dpkg-divert 守在身边，例行软件包升级休想悄悄把
+              2020 年的文件换回去。
+            </p>
+            <p>
+              换固件之后实测：200 个包，丢包 0.5%，平均 6.3 毫秒，零掉线。
+              芯片从来是好的；它只是被喂了一种驱动层无从防御的毒药。
+            </p>
+
+            <h3 class="ag-subhead">两条固件日移不动的边界</h3>
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>热点在空气中并不存在</h3>
+                <p>
+                  这块板子的 AP 模式不发信标。软件故事假设的那个引导热点，无论配置
+                  怎么写，都不在空中。首次配置因此走有线网口或 HDMI。这是硬件边界，
+                  如实记下，哪个固件日都移不动它。
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>「开放」热点从来没有真正开放</h3>
+                <p>
+                  就算热点能建起来，NetworkManager 1.42 的无密码热点命令也会悄悄生成
+                  一个随机 WPA 密码。那个「开放」热点从未真正开放：客户端被要求提供
+                  一个没人拿到过的密码。两条发现合起来，把这块板子的无线引导方案送进了
+                  档案馆：写进文档，而不是留给用户去发现。
+                </p>
+              </article>
+            </div>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">推断 · 渐进式故障教给测试一件事</span>
+              <p>
+                楔死是渐进发生的：前期检查全绿，后期检查全红。任何只看开场的检查（
+                关联成功了、扫描返回了）都会在芯片垂死时报告健康。对一种要三十秒才
+                抵达的故障，「启动没问题」不是连通的判决。
+              </p>
+            </div>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">事实 · 测了什么，没测什么</span>
+              <p>
+                「修好了」的全部证据就是那一次 200 包的实测：丢包 0.5%，平均
+                6.3 毫秒，零掉线。更长的话头本文不接：没有隔夜浸泡、没有吞吐上限、
+                没有距离测试。那些值得一跑；写作本文时还没有跑。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="revocation" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">03 · 撤销</span>
+              <h2 class="ag-section-title">撤销不等于停止</h2>
+              <p class="ag-section-subtitle">
+                撤销≠吊销。注册表删了一行，进程占着端口。
+              </p>
+            </header>
+
+            <p>
+              Cloud Hub（mrrc_hub）于 10 月 1 日在 <code>portal.mrrc.vlsc.net</code>
+              上线：呼号自助注册，对照 Club Log 的呼号库核验，二十七万余条。10 月 5 日，
+              它长出管理端认证与 frps 穿透流量指标。10 月 11 日，管理台界面改版发布，
+              二十项任务：设计系统、CSRF 全覆盖、两步确认、无 JS 降级、审计筛选。
+            </p>
+            <p>
+              同一天交出了给本文命名的事故。一台几天前已被撤销的实例仍在运行，
+              占着一个注册表此后已重新分派给另一呼号的穿透端口。取证文档把结论写进
+              标题：撤销≠吊销，撤销记录不等于撤销进程。三台机器修复。
+            </p>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>注册表相信的</th><th>进程实际在做的</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>实例已撤销，端口空闲</td>
+                    <td>穿透仍在，端口仍被占着</td>
+                  </tr>
+                  <tr>
+                    <td>端口已重新分派给另一呼号</td>
+                    <td>被撤销实例的进程还蹲在端口上</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">立论 · 机群运维里，撤销必须停掉那个东西</span>
+              <p>
+                只删一行的撤销，在被进程能感觉到的东西拦下来之前，只是一句愿望。
+                这一次注册表与进程各执一词，赢的是进程：行没了，端口还在。机群的
+                停止键不是数据库里的标志位，是一次「它真的停了」的核验。
+              </p>
+            </div>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">推断 · 「注册不等于服务」的镜像句</span>
+              <p>
+                前作记过一句：frpc 注册成功从来说明不了在服务。这次的事故是同一形状、
+                符号相反：撤销成功从来说明不了已停止。两类是同一类病，把数据库的一行
+                当成现网的担保。这一类现在有了两个具名案例。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="cadence" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">04 · 节奏</span>
+              <h2 class="ag-section-title">十一日十发；八日二十余发</h2>
+              <p class="ag-section-subtitle">
+                发布列车按点跑车，下表是有日期的几站。
+              </p>
+            </header>
+
+            <p>
+              MRRC Modern 在本窗口的十一天里发出十个版本，自 v1.24.2 至 v1.25.5。
+              有日期的几站：
+            </p>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>日期</th><th>版本</th><th>它带的东西</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>10-01</td>
+                    <td><strong>v1.24.2 / v1.24.3</strong></td>
+                    <td>
+                      Cloud Hub 时代开局：边缘默认、一呼号一入口，:9988 端口与
+                      /mrrc_modern/&lt;callsign&gt;/ 路径后缀成为历史
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-02</td>
+                    <td><strong>v1.24.4</strong></td>
+                    <td>
+                      全机群自韩国 VPS 迁往香港；单机布局，一台机器，一个地址
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-03</td>
+                    <td><strong>v1.25.0</strong></td>
+                    <td>
+                      已批准的 Cloud Hub 实例自行接入，三十秒自查；首跑串口探测
+                      不再可能挂死
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-04</td>
+                    <td><strong>v1.25.1</strong></td>
+                    <td>
+                      自带 TLS 信任库，macOS 的 CERTIFICATE_VERIFY_FAILED 修复；
+                      FTDI 路径修复把频谱还了回来
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-06</td>
+                    <td><strong>v1.25.4</strong></td>
+                    <td>
+                      macOS 孤儿 frpc 清理：负责猎杀僵尸穿透的守卫早已悄悄自我停用，
+                      六次启动后找出六条孤儿隧道；关机现在会停掉穿透子进程
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-09</td>
+                    <td><strong>v1.25.5</strong></td>
+                    <td>
+                      快排按钮回答「我现在在哪」，MODE/BAND/FILTER/ATT/PRE 直接显示
+                      当前值；频谱带宽分级 AD-025（§05）；环境文件收拢为唯一的写者/读者
+                      （env_store）
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              Android 端 10 月 3 日首发 v1.0.0，到 10 月 10 日已至 v1.1.31，八天二十余发。
+              它长出了 Cloud Hub 引导向导、一键 CQ、FT-710 风格的 S 表、渐进式瀑布，
+              以及与桌面版同一套的频谱带宽分级。
+            </p>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">事实 · 有一发名不副实</span>
+              <p>
+                v1.1.29 构建于一棵脏工作树；记在它在名下的功能实际由 v1.1.30 发出。
+                此处点名，因为记录应当如此。一个意思是「磁盘上有什么算什么」的版本号，
+                是一个什么都不意味的版本号。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="bandwidth" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">05 · 带宽</span>
+              <h2 class="ag-section-title">151 → 38 → 19 kbps</h2>
+              <p class="ag-section-subtitle">
+                频谱分级 AD-025，按 socket 协商；不声明分级老客户端字节不变。
+              </p>
+            </header>
+
+            <p>
+              v1.25.5 还用快排回答了操作员的第一问「我现在在哪？」：MODE/BAND/
+              FILTER/ATT/PRE 按钮如今直接显示电台的当前值，不必再由用户去记。
+            </p>
+            <p>
+              这一版的工程胜仗是频谱带宽分级 AD-025。每个 socket 协商三级之一（
+              full、mid、low），瀑布载荷随之压缩：151 → 38 → 19 kbps。计费或弱链路上的
+              手机按连接牺牲瀑布的丰盛换顺滑，不动电台通路。同一版把环境文件收拢为
+              唯一的写者/读者对 env_store：一个写者，一个读者，再没有多只手拧出来的
+              配置漂移。
+            </p>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">事实 · 兼容靠协商达成，不靠版本检查</span>
+              <p>
+                不声明分级的客户端收到的流与从前逐字节一致。老客户端既不坏也不变；
+                承载兼容的是协商本身，不是发布说明。
+              </p>
+            </div>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">推断 · 按 socket 协商胜过全局开关，因为约束长在连接上</span>
+              <p>
+                全局带宽设置等于让连得最差的客户端替同一台服务器上的所有人做主。
+                按 socket 协商，让计费流量上的手机与专线里的桌面各揣各的预算抵达同一实例；
+                socket 自己知道它的约束。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="radios" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">06 · 电台</span>
+              <h2 class="ag-section-title">第十一个后端，与默认的拒绝</h2>
+              <p class="ag-section-subtitle">
+                10-06 支持 Yaesu FT-891：表格离线取自 Hamlib，发射闸门验过才开。
+              </p>
+            </header>
+
+            <p>
+              10 月 6 日，电台注册表迎来 Yaesu FT-891：总计第十一个后端，第五个
+              Yaesu。它的全部表格离线取自 Hamlib。而未核验型号的 TX 闸门默认拒绝键控：
+              一个表格未经核验的电台型号，在人点头之前不能发射。
+            </p>
+
+            <div class="claim-box" data-claim-type="excluded">
+              <span class="claim-label">已排除 · 这个窗口里没有一台真 FT-891</span>
+              <p>
+                这十一天里，工作台上没有摆过 FT-891。它的 CAT 与音频表取自 Hamlib，
+                是表格级验证，不是电台级验证；新后端的现场核验仍然开放。TX 闸门是
+                同一诚实的另一半：没有验过的地方，默认是拒绝，不是放行。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="next" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">07 · 接下来</span>
+              <h2 class="ag-section-title">台面上的两件事</h2>
+              <p class="ag-section-subtitle">
+                一张镜像，一套令牌。
+              </p>
+            </header>
+
+            <ul>
+              <li>
+                <strong>固件修复版镜像构建。</strong> 10 月 11 日重发的 W103D 镜像
+                已带入库的 2021 N9 固件；下一次构建把这味解药变成人人可得的默认。
+              </li>
+              <li>
+                <strong>Hub 逐实例令牌。</strong> Cloud Hub 改用按实例发放的令牌，
+                每台实例以自己自称，不再共用一份凭证。
+              </li>
+            </ul>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">立论 · 半月的下半程，与上半程收在同一句话里</span>
+              <p>
+                一个现场事实变成一道闸门。盒子的闸门是一个带哈希校验、软件包升级
+                换不回去的固件文件；hub 的闸门还在打：能停掉东西的撤销，而不只是
+                那件事的记录被撤销。这十一天的教训只有一句，撤销≠吊销。机群里，
+                没有核验，就没有停止。
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="ba-footer">
+        <div class="ba-footer-inner">
+          <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+              <h3>BG1SB</h3>
+              <p>业余无线电操作员与软件工程师。维护 VLSC 开源远程控制生态，并把电台与基础设施实际做了什么写下来。</p>
+            </div>
+          </div>
+          <div class="blog-related">
+            <h3>相关阅读</h3>
+            <ul>
+              <li><a href="/blog/two-models/zh/">并辔而行：三个会话、五天、二十六次发布</a></li>
+              <li><a href="/blog/cloud-first-mile/zh/">凿壁借光：一台 NAT 后面的电台，如何拥有互联网上的入口</a></li>
+              <li><a href="/blog/support-loop/zh/">闻过则喜：一周的上报，如何变成两次发布</a></li>
+              <li><a href="/blog/ft710-usb-remote-control/zh/">一根 USB 线遥控 Yaesu FT-710</a></li>
+              <li><a href="/mrrc_hub/">MRRC Cloud Hub 运维文档</a></li>
+            </ul>
+          </div>
+          <div class="blog-prevnext">
+            <a href="/blog/zh/"><i class="fas fa-arrow-left"></i> 返回博客</a
+            ><a href="../" lang="en">English <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </footer>
+    </article>
+    <script src="../../../js/global-nav.js?v=9" defer data-gn="1"></script>
+  </body>
+</html>

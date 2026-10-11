@@ -22,6 +22,7 @@ ARTICLES: dict[str, tuple[str, tuple[str, ...]]] = {
     "support-loop": (TIER_FIELD, ("en", "zh")),
     "two-models": (TIER_FIELD, ("en", "zh")),
     "cloud-first-mile": (TIER_FIELD, ("en", "zh")),
+    "revoked-still-running": (TIER_FIELD, ("en", "zh")),
     "muscle-and-mind": (TIER_ESSAY, ("en", "zh")),
     "three-axes": (TIER_FIELD, ("en", "zh")),
     "seven-billion-tokens": (TIER_FIELD, ("en", "zh")),

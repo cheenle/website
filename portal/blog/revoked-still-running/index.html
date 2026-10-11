@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Revoked, Still Running: Eleven Days of the Cloud-Hub Era — VLSC Blog</title>
+    <meta
+      name="description"
+      content="October 1–11 across the VLSC fleet: a ¥125 radio box whose WiFi chip was being wedged by firmware from 2020, cured by the manufacturer's own 2021 firmware; a revoked Cloud Hub instance that kept running and squatted another callsign's tunnel port. Ten desktop releases, twenty-plus Android releases, spectrum tiers at 151 → 38 → 19 kbps, the FT-891 — and the lesson that revocation must stop the thing."
+    />
+    <meta
+      name="keywords"
+      content="fleet operations, Cloud Hub, MRRC Modern, Android, W103D, MT7663S firmware, frp tunnel, revocation, spectrum bandwidth, FT-891, Hamlib, field report, VLSC"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Revoked, Still Running: Eleven Days of the Cloud-Hub Era"
+    />
+    <meta
+      property="og:description"
+      content="A ¥125 box's WiFi wedged by 2020 firmware; a revoked instance squatting another callsign's port. Eleven days across the VLSC fleet, Oct 1–11, 2026 — and the lesson that revocation must stop the thing."
+    />
+    <meta property="og:url" content="https://www.vlsc.net/blog/revoked-still-running/" />
+    <meta property="og:site_name" content="VLSC Projects" />
+    <link rel="canonical" href="https://www.vlsc.net/blog/revoked-still-running/" />
+    <link rel="alternate" hreflang="en" href="https://www.vlsc.net/blog/revoked-still-running/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vlsc.net/blog/revoked-still-running/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vlsc.net/blog/revoked-still-running/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../../css/agentic.css?v=2" />
+    <link rel="stylesheet" href="../../css/blog-article.css?v=4" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Revoked, Still Running: Eleven Days of the Cloud-Hub Era",
+        "description": "Eleven days across the VLSC fleet, October 1–11, 2026: the ¥125 W103D box's WiFi forensics, the Cloud Hub revocation incident, ten desktop releases, twenty-plus Android releases, spectrum tiers, and the FT-891.",
+        "author": { "@type": "Person", "name": "BG1SB", "url": "https://github.com/cheenle" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VLSC Projects",
+          "url": "https://www.vlsc.net/"
+        },
+        "datePublished": "2026-10-11",
+        "dateModified": "2026-10-11",
+        "keywords": "fleet operations, Cloud Hub, MRRC Modern, Android, W103D, MT7663S firmware, revocation, spectrum bandwidth, FT-891",
+        "articleSection": "Field",
+        "mainEntityOfPage": "https://www.vlsc.net/blog/revoked-still-running/"
+      }
+    </script>
+  </head>
+  <body data-site="portal">
+    <article class="ba-article">
+      <nav class="ba-topbar">
+        <span class="ba-crumb">
+          <a href="/">Home</a> › <a href="/blog/">Blog</a> ›
+          <span class="ba-crumb-cat">Field · Fleet Report</span>
+        </span>
+      </nav>
+
+      <header class="ag-hero ba-hero">
+        <div class="ag-hero-inner">
+          <div class="hero-badge">
+            <i class="fas fa-tower-broadcast"></i><span>Field · Fleet Operations</span>
+          </div>
+          <h1>Revoked, <span class="gradient">still running</span>.</h1>
+          <p>
+            The Cloud Hub era began on October 1. In the eleven days through October 11 the
+            fleet shipped ten desktop releases and twenty-plus Android releases; a ¥125 radio
+            box was found with a WiFi chip slowly wedged by firmware from 2020; a Yaesu FT-891
+            became the eleventh supported radio; and a Cloud Hub instance that had been
+            revoked was still running, squatting a tunnel port the registry had already given
+            to another callsign. Two of those stories are told in full here. The rest is the
+            ledger.
+          </p>
+          <div class="ag-hero-stats" aria-label="Article summary">
+            <span class="ag-pill"><i class="fas fa-code-commit"></i> 10 desktop releases · Oct 1–11 (v1.24.2 → v1.25.5)</span>
+            <span class="ag-pill"><i class="fas fa-box-open"></i> Android 20+ releases in 8 days (v1.0.0 → v1.1.31)</span>
+            <span class="ag-pill"><i class="fas fa-wifi"></i> W103D ¥125 box · 2021 N9 firmware vendored in</span>
+            <span class="ag-pill"><i class="fas fa-ban"></i> 1 revoked instance squatting another callsign's port</span>
+          </div>
+          <p class="ba-meta">
+            By BG1SB &nbsp;·&nbsp; <time datetime="2026-10-11">Published Oct 11, 2026</time>
+            &nbsp;·&nbsp; ~14 min read
+          </p>
+        </div>
+      </header>
+
+      <div class="ag-anchor-shell">
+        <div class="container">
+          <nav class="ag-anchor-nav" aria-label="Page sections">
+            <a href="#sameday">Same day</a><a href="#firmware">Firmware</a
+            ><a href="#revocation">Revocation</a><a href="#cadence">Cadence</a
+            ><a href="#bandwidth">Bandwidth</a><a href="#radios">Radios</a
+            ><a href="#next">Next</a>
+          </nav>
+        </div>
+      </div>
+
+      <main class="ba-main">
+        <p class="lede">
+          On October 11 the fleet produced two quiet facts inside one day. The ¥125 W103D
+          radio box — its image re-issued that day with six first-boot fixes — turned out to
+          have a WiFi chip progressively wedged by firmware from 2020: connections dropped
+          after roughly thirty seconds, wireless scans wedged entirely, one sixteen-minute
+          MCU hang. The cure was the manufacturer's own 2021 factory firmware, vendored into
+          the build behind a SHA-256 check and dpkg-divert protection — effective from the next
+          image; after the swap, a 200-packet run measured 0.5% loss and a 6.3 ms average,
+          with zero drops.
+          Hours later the Cloud Hub produced the complement: an instance revoked days
+          earlier was still running, and it was squatting a tunnel port the registry had
+          already reallocated to another callsign. One machine was healed by replacing what
+          the base image had always shipped. One machine was never stopped, because revoking
+          a row is not stopping a process. Between those two facts sit eleven days, ten
+          desktop releases, twenty-plus Android releases, and one new radio.
+        </p>
+
+        <div class="ba-tldr" id="tldr">
+          <div class="ba-tldr-card">
+            <p class="ba-tldr-title"><i class="fas fa-list-ol"></i> TL;DR — six findings</p>
+            <ul class="ba-tldr-list">
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
+                ><strong>The ¥125 box's WiFi was a firmware case, not a hardware case.</strong>
+                The base image's 2020 N9 firmware progressively wedges the MT7663S: drops
+                after ~30 s, scans that wedge, a ~16 min MCU hang. The factory 2021 N9
+                firmware is now vendored into the build (SHA-256 verified, dpkg-divert
+                protected) and ships in the next image. After the swap: 200 packets, 0.5%
+                loss, 6.3 ms average, zero drops.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
+                ><strong>撤销≠吊销: a revoked Cloud Hub instance kept running.</strong>
+                It squatted a tunnel port that had been reallocated to another callsign. The
+                forensics doc carries the incident's name in its title; three boxes were
+                repaired.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
+                ><strong>The cadence held: ten in eleven, twenty-plus in eight.</strong>
+                MRRC Modern shipped ten releases in eleven days (v1.24.2 → v1.25.5). The
+                Android app went from its first public release v1.0.0 on Oct 3 to v1.1.31 by
+                Oct 10. v1.1.29 was built from a dirty worktree; its features actually
+                shipped in v1.1.30.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="fact">Fact</span
+                ><strong>Spectrum tiers negotiate full/mid/low per socket: 151 → 38 →
+                19 kbps.</strong>
+                Clients that declare no tier receive byte-identical streams to what they
+                always got — old clients neither break nor change.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="thesis">Thesis</span
+                ><strong>In fleet operations, revocation must stop the thing.</strong>
+                A revocation that only deletes a row is a wish until something the process
+                can feel checks it. The registry and the process disagreed; the registry
+                lost.
+              </li>
+              <li>
+                <span class="ba-tldr-tag" data-claim-type="excluded">Excluded</span
+                ><strong>No physical FT-891 sat on the bench in this window.</strong>
+                Its tables were sourced offline from Hamlib; the unverified-model TX gate
+                refuses keying by default, and field verification of the new backend remains
+                open.
+              </li>
+            </ul>
+            <div class="ba-readpath">
+              <span>Read in 3 minutes:</span><a href="#firmware">§02 firmware</a
+              ><a href="#revocation">§03 revocation</a><a href="#next">§07 next</a>
+            </div>
+          </div>
+        </div>
+
+        <section id="sameday" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">01 · Same Day</span>
+              <h2 class="ag-section-title">One day carried both quiet facts</h2>
+              <p class="ag-section-subtitle">
+                October 11, in order: a box re-issued, a firmware case closed, an overhaul
+                shipped, an incident surfaced.
+              </p>
+            </header>
+
+            <p>
+              This article is the second half of the fortnight. The first half — three model
+              sessions, three repositories, twenty-six releases across October 3–8 — is told
+              in <a href="/blog/two-models/">Reins Side by Side</a>, which is prior reading
+              and stands on its own. This one starts where that story ends and reaches
+              October 11; it also stands alone.
+            </p>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>Item</th><th>What happened on 2026-10-11</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>W103D image</strong></td>
+                    <td>
+                      Image v1.25.5 re-issued with six first-boot fixes (first published
+                      10-07)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>WiFi firmware</strong></td>
+                    <td>
+                      "Firmware day": MT7663S forensics closed — the base image's 2020 N9
+                      firmware out, the factory 2021 N9 firmware vendored into the build
+                      (next image)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Admin portal</strong></td>
+                    <td>
+                      Twenty-task UI overhaul shipped: design system, CSRF everywhere,
+                      two-stage confirmations, a no-JS fallback, audit filtering
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Revocation</strong></td>
+                    <td>
+                      A revoked instance found still running, squatting a tunnel port
+                      reallocated to another callsign; forensics doc written, three boxes
+                      repaired
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              The same-day pile-up is the point. The fleet's surface — box images, desktop
+              releases, an admin portal, a tunnel registry — grew faster than its stop
+              mechanisms. Two of these rows are centerpiece stories: the firmware forensics,
+              because a year-old factory file was the cure; the revocation incident, because
+              every other row on this table assumed that "revoked" means "stopped". The
+              remaining sections are the cadence and the engineering that carried them.
+            </p>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">Fact · every row is dated in the record</span>
+              <p>
+                Each item in this table traces to a dated entry in the repositories' git
+                history or changelogs: release tags, image build logs, the admin portal's
+                task list, the incident's forensics document. Nothing here is recalled from
+                memory.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="firmware" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">02 · Firmware</span>
+              <h2 class="ag-section-title">The 2020 firmware was wedging the chip</h2>
+              <p class="ag-section-subtitle">
+                A ¥125 box, an MT7663S, and a cure that had been sitting in the factory's
+                own 2021 image all along.
+              </p>
+            </header>
+
+            <p>
+              The W103D is a ¥125 radio box. Its image v1.25.5 was published on October 7
+              and re-issued on October 11 with six first-boot fixes; that same October 11
+              became "firmware day" for its WiFi. The MT7663S was failing in a way that
+              looks like dying hardware: a connection would drop after roughly thirty
+              seconds, wireless scans would wedge entirely, and once the MCU hung for about
+              sixteen minutes.
+            </p>
+            <p>
+              The forensics did not blame the hardware. The base image ships a 2020 N9
+              firmware for this chip, and that firmware progressively wedges it. The
+              manufacturer's factory image carries a 2021 N9 firmware for the same silicon —
+              so the fix was vendored straight from the factory: the 2021 N9 file went into
+              the image, with two protections welded on. The build verifies the file's
+              SHA-256 at image build time, and dpkg-divert guards it so a routine package
+              upgrade cannot silently put the 2020 file back.
+            </p>
+            <p>
+              After the swap, the measured run: 200 packets, 0.5% loss, 6.3 ms average,
+              zero drops. The chip was never bad; it was being administered a poison it had
+              no driver-level defence against.
+            </p>
+
+            <h3 class="ag-subhead">Two boundaries the firmware could not move</h3>
+            <div class="ag-loop-grid">
+              <article class="ag-card">
+                <h3>The hotspot does not exist in the air</h3>
+                <p>
+                  On this board, AP mode sends no beacons. The onboarding hotspot that the
+                  software story assumes is literally not on the air, no matter what the
+                  configuration says. The first configuration therefore goes over wired
+                  Ethernet or HDMI. This is a hardware boundary, recorded as one — no
+                  firmware day moves it.
+                </p>
+              </article>
+              <article class="ag-card">
+                <h3>The "open" hotspot was never open</h3>
+                <p>
+                  Even where a hotspot could exist, NetworkManager 1.42's passwordless
+                  hotspot command silently generates a random WPA password. The "open"
+                  hotspot was never actually open: clients were being asked for a password
+                  that nobody had been given. The two findings retire wireless onboarding
+                  for this board — written into the documentation instead of being
+                  discovered by the user.
+                </p>
+              </article>
+            </div>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">Inference · a progressive failure teaches a testing lesson</span>
+              <p>
+                The wedge was progressive: early checks green, late checks red. Any check
+                that watches only the first moments — association succeeded, scan returned —
+                reports health while the chip is already dying. "Boots fine" is not a
+                connectivity verdict for a failure that needs thirty seconds to arrive.
+              </p>
+            </div>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">Fact · what was measured, and what was not</span>
+              <p>
+                The evidence for "fixed" is the 200-packet run: 0.5% loss, 6.3 ms average,
+                zero drops. Nothing longer is claimed here — no overnight soak, no
+                throughput ceiling, no distance test. Those would be worth running; they
+                have not been run at the time of writing.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="revocation" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">03 · Revocation</span>
+              <h2 class="ag-section-title">Revoked is not stopped</h2>
+              <p class="ag-section-subtitle">
+                撤销≠吊销. The registry deleted a row; the process kept the port.
+              </p>
+            </header>
+
+            <p>
+              The Cloud Hub (mrrc_hub) went live on October 1 at
+              <code>portal.mrrc.vlsc.net</code>: callsign self-registration, verified against
+              Club Log's callsign database of 270k+ entries. On October 5 it grew admin
+              authentication and frps tunnel metrics. On October 11 the admin portal's UI
+              overhaul shipped — twenty tasks: a design system, CSRF everywhere, two-stage
+              confirmations, a no-JS fallback, audit filtering.
+            </p>
+            <p>
+              The same day produced the incident that names this article. An instance that
+              had been revoked days earlier was still running, and it was squatting a tunnel
+              port the registry had since reallocated to another callsign. The forensics
+              document carries the finding in its title: 撤销≠吊销 — revoking the record is
+              not revoking the process. Three boxes were repaired.
+            </p>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>What the registry believed</th><th>What the process was doing</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Instance revoked; its port free</td>
+                    <td>Tunnel still up; port still held</td>
+                  </tr>
+                  <tr>
+                    <td>Port reallocated to another callsign</td>
+                    <td>The revoked instance's process still squatting on it</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">Thesis · in fleet operations, revocation must stop the thing</span>
+              <p>
+                A revocation that only deletes a row is a wish until something the process
+                can feel checks it. Here the registry and the process disagreed, and the
+                registry lost — the row was gone, the port was not. The stop button for a
+                fleet is not a database flag; it is a verification that the thing is
+                actually down.
+              </p>
+            </div>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">Inference · "registered is not serving", sign flipped</span>
+              <p>
+                An earlier retrospective recorded that an frpc registration never meant
+                serving. This incident is the same shape with the sign reversed: a
+                revocation never meant stopping. Both are one class of defect — a database
+                row treated as a live guarantee. The class now has two named cases.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="cadence" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">04 · Cadence</span>
+              <h2 class="ag-section-title">Ten in eleven; twenty-plus in eight</h2>
+              <p class="ag-section-subtitle">
+                The release trains ran on schedule; the table lists the dated stops.
+              </p>
+            </header>
+
+            <p>
+              MRRC Modern shipped ten releases in the eleven days of this window, from
+              v1.24.2 through v1.25.5. The dated ones:
+            </p>
+
+            <div class="ag-table-wrap">
+              <table class="ag-table">
+                <thead>
+                  <tr><th>Date</th><th>Release</th><th>What it carried</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>10-01</td>
+                    <td><strong>v1.24.2 / v1.24.3</strong></td>
+                    <td>
+                      The Cloud Hub era begins: edge by default, one entry per callsign —
+                      the :9988 port and the /mrrc_modern/&lt;callsign&gt;/ path suffix are
+                      gone
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-02</td>
+                    <td><strong>v1.24.4</strong></td>
+                    <td>
+                      Whole-fleet migration from the Korea VPS to Hong Kong; single-host
+                      layout — one machine, one address
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-03</td>
+                    <td><strong>v1.25.0</strong></td>
+                    <td>
+                      Approved Cloud Hub instances connect themselves, with a 30-second
+                      self-check; the first-run serial probe can no longer hang
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-04</td>
+                    <td><strong>v1.25.1</strong></td>
+                    <td>
+                      Ships its own TLS trust store — CERTIFICATE_VERIFY_FAILED on macOS
+                      fixed; the FTDI path fix put the spectrum back
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-06</td>
+                    <td><strong>v1.25.4</strong></td>
+                    <td>
+                      macOS orphaned-frpc cleanup: the guard that should have been killing
+                      stale tunnels had silently disabled itself, and six orphaned tunnels
+                      were found after six launches; shutdown now stops the tunnel child
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>10-09</td>
+                    <td><strong>v1.25.5</strong></td>
+                    <td>
+                      Quick-row buttons answer "where am I now" — MODE/BAND/FILTER/ATT/PRE
+                      show current values; spectrum bandwidth tiers AD-025 (§05); the env
+                      file collapsed to a single writer/reader (env_store)
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>
+              The Android app had its first public release, v1.0.0, on October 3; by October
+              10 it stood at v1.1.31 — twenty-plus releases in eight days. It grew a Cloud
+              Hub onboarding wizard, one-touch CQ, an FT-710-style S-meter, an incremental
+              waterfall, and the same spectrum bandwidth tiers as the desktop.
+            </p>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">Fact · one release was not what it claimed</span>
+              <p>
+                v1.1.29 was built from a dirty worktree; the features recorded under its
+                number actually shipped in v1.1.30. It is named here because the record
+                should say so — a version number that means "whatever was on disk" is a
+                version number that means nothing.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="bandwidth" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">05 · Bandwidth</span>
+              <h2 class="ag-section-title">151 → 38 → 19 kilobits</h2>
+              <p class="ag-section-subtitle">
+                Spectrum tiers AD-025, negotiated per socket; undeclared old clients are
+                byte-identical.
+              </p>
+            </header>
+
+            <p>
+              v1.25.5 also answered the operator's first question — "where am I now?" — in
+              the quick row: the MODE/BAND/FILTER/ATT/PRE buttons now show the radio's
+              current values instead of demanding that the user remember them.
+            </p>
+            <p>
+              The engineering win of the release is spectrum bandwidth tiers, AD-025. A
+              socket negotiates one of three tiers — full, mid, low — and the waterfall
+              payload compresses accordingly: 151 → 38 → 19 kbps. A phone on a metered or
+              weak link trades waterfall richness for smoothness, per connection, without
+              touching the radio path. The same release collapsed the environment file to a
+              single writer/reader pair, env_store: one writer, one reader, no more
+              configuration drift from multiple hands.
+            </p>
+
+            <div class="claim-box" data-claim-type="fact">
+              <span class="claim-label">Fact · compatibility by negotiation, not by version check</span>
+              <p>
+                A client that declares no tier receives a stream byte-identical to what it
+                always received. Old clients neither break nor change; the negotiation, not
+                the release notes, carries the compatibility.
+              </p>
+            </div>
+
+            <div class="claim-box" data-claim-type="inference">
+              <span class="claim-label">Inference · per-socket beats global, because the constraint is per-socket</span>
+              <p>
+                A global bandwidth setting forces the worst-connected client to dictate for
+                everyone on the same server. Per-socket negotiation lets the metered phone
+                and the desktop on a LAN reach the same instance with different budgets; the
+                socket knows its own constraint.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="radios" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">06 · Radios</span>
+              <h2 class="ag-section-title">An eleventh backend, a default refusal</h2>
+              <p class="ag-section-subtitle">
+                Yaesu FT-891, supported on 10-06: tables offline from Hamlib, transmit
+                gated until verified.
+              </p>
+            </header>
+
+            <p>
+              On October 6 the radio registry gained the Yaesu FT-891 — the eleventh
+              backend overall, the fifth from Yaesu. All of its tables were sourced offline
+              from Hamlib. And the unverified-model TX gate refuses keying by default: a
+              radio model whose tables have not been verified cannot transmit until a human
+              says it can.
+            </p>
+
+            <div class="claim-box" data-claim-type="excluded">
+              <span class="claim-label">Excluded · no physical FT-891 in this window</span>
+              <p>
+                No FT-891 sat on the bench during these eleven days. Its CAT and audio
+                tables are Hamlib-sourced and table-verified, not radio-verified; field
+                verification of the new backend remains open. The TX gate is the other half
+                of the same honesty: where verification has not happened, the default is
+                refusal, not permission.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="next" class="ag-section">
+          <div class="container">
+            <header class="ag-section-header">
+              <span class="ag-section-label">07 · Next</span>
+              <h2 class="ag-section-title">Two items on the bench</h2>
+              <p class="ag-section-subtitle">
+                One image, one token scheme.
+              </p>
+            </header>
+
+            <ul>
+              <li>
+                <strong>The firmware-fixed image build.</strong> The October 11 re-issue of
+                the W103D image already carries the vendored 2021 N9 firmware; the next
+                image build makes that fix the default everyone receives.
+              </li>
+              <li>
+                <strong>Hub per-instance tokens.</strong> Cloud Hub moves to per-instance
+                tokens, so each instance authenticates as itself rather than as a shared
+                credential.
+              </li>
+            </ul>
+
+            <div class="claim-box" data-claim-type="thesis">
+              <span class="claim-label">Thesis · the fortnight's second half closes like its first</span>
+              <p>
+                A field fact becomes a gate. The box's gate is a hash-checked firmware file
+                that package upgrades cannot overwrite; the hub's gate is still being built
+                — a revocation that stops the thing, not just the record of the thing. The
+                lesson of these eleven days is one sentence: 撤销≠吊销. In a fleet, nothing
+                is stopped until something checks.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="ba-footer">
+        <div class="ba-footer-inner">
+          <div class="blog-author">
+            <div class="ba-icon"><i class="fas fa-user"></i></div>
+            <div>
+              <h3>BG1SB</h3>
+              <p>
+                Amateur radio operator and software engineer. Builds the VLSC open-source remote-control
+                ecosystem, and writes down what the radios and the infrastructure actually did.
+              </p>
+            </div>
+          </div>
+          <div class="blog-related">
+            <h3>Related reading</h3>
+            <ul>
+              <li>
+                <a href="/blog/two-models/">Reins Side by Side: three sessions, five days, twenty-six releases</a>
+              </li>
+              <li>
+                <a href="/blog/cloud-first-mile/">The Borrowed Light: how a radio behind NAT gets an address</a>
+              </li>
+              <li>
+                <a href="/blog/support-loop/">The Support Loop: how a week of reports became two releases</a>
+              </li>
+              <li>
+                <a href="/blog/ft710-usb-remote-control/">Remote-controlling a Yaesu FT-710 with one USB cable</a>
+              </li>
+              <li><a href="/mrrc_hub/">MRRC Cloud Hub: the operator's documentation</a></li>
+            </ul>
+          </div>
+          <div class="blog-prevnext">
+            <a href="/blog/"><i class="fas fa-arrow-left"></i> Back to Blog</a
+            ><a href="zh/" lang="zh-CN">中文版 <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </footer>
+    </article>
+    <script src="../../js/global-nav.js?v=9" defer data-gn="1"></script>
+  </body>
+</html>

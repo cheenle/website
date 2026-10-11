@@ -77,14 +77,14 @@
     <p>商用 HF 电台远程控制方案往往封闭、昂贵，且绑定单一厂商的应用。而电台硬件本身的能力远超大多数方案所暴露出来的部分。VLSC 要回答三个问题：</p>
     <ul>
         <li><strong>能否不依赖厂商网卡就通过网络控制现代电台？</strong> —— 能：FT-710 项目直接用一根 USB 线读取电台内部 FT4222 SPI 频谱接口。</li>
-        <li><strong>能否把 SunSDR2 DX 这样的 SDR 提供给任意浏览器和原生 App？</strong> —— 能：SunMRRC + SunsdrMobile 是一对基于 WebSocket 的客户端-服务端组合。</li>
+        <li><strong>能否把 SunSDR2 DX 这样的 SDR 提供给任意浏览器和原生 App？</strong> —— 能：SunMRRC + 其原生 iOS 客户端，基于 WebSocket。</li>
         <li><strong>天线调谐器能否廉价、自主、且由网络驱动？</strong> —— 能：EFHW 调谐器是一台约 430 元的 ESP32-S3 设备，通过 WebSocket 读取 SWR。</li>
     </ul>
 
     <h2>项目一览</h2>
     <div class="tp-grid">
         <div class="tp-card"><h3><a href="/mrrc/" style="color:var(--accent);">MRRC</a></h3><p>通过 Hamlib/rigctld 实现对任意电台的通用 HF 远程控制。</p></div>
-        <div class="tp-card"><h3><a href="/mrrc_modern/" style="color:var(--accent);">MRRC Modern</a></h3><p>可插拔后端 USB 远程，支持 FT-710 与 Icom IC-7300/IC-7300MK2。</p></div>
+        <div class="tp-card"><h3><a href="/mrrc_modern/" style="color:var(--accent);">MRRC Modern</a></h3><p>可插拔后端 USB 远程，支持十一种机型 —— 八重洲 FT-710/FTDX/FTX-1 与 Icom IC-7300/IC-705/IC-7610/IC-7760。</p></div>
         <div class="tp-card"><h3><a href="/mrrc_hub/" style="color:var(--accent);">MRRC Cloud Hub</a></h3><p>内网 MRRC Modern 实例的云端接入层 —— 实例主动出站。</p></div>
         <div class="tp-card"><h3><a href="/sunmrrc/" style="color:var(--accent);">SunMRRC</a></h3><p>SunSDR2 DX 远程服务器，含 IQ 解调与双编解码音频链路。</p></div>
         <div class="tp-card"><h3><a href="/efhw/" style="color:var(--accent);">EFHW</a></h3><p>ESP32-S3 伺服驱动 Fuchs ATU，偏压器同轴供电，WiFi 控制。</p></div>

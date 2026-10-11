@@ -60,23 +60,34 @@
 
 <header class="page-hero">
     <h1>Privacy Policy</h1>
-    <p>Last updated: September 13, 2026</p>
+    <p>Last updated: October 11, 2026</p>
 </header>
 
 <section class="tp-section">
 
     <h2>Summary</h2>
-    <p>This website (<code>www.vlsc.net</code>) is a static informational site. It has <strong>no user accounts, no login, no comment forms, and no newsletter</strong>. In short: we collect almost nothing about you, and everything we do collect is standard web-server operation.</p>
+    <p>This website (<code>www.vlsc.net</code>) is an informational site with <strong>no user accounts, no login, and no newsletter</strong>. The one place you can write to us is the feedback widget at the bottom of every page, which accepts comments only from verified amateur-radio callsigns (see <em>Feedback comments</em> below). Beyond that we collect almost nothing about you — everything else is standard web-server operation.</p>
 
     <h2>What this site does not collect</h2>
     <ul>
-        <li><strong>No personal data you give us</strong> — there are no forms, no registration, no payment processing, and no email signup on this site.</li>
-        <li><strong>No account and no profile</strong> — there is nothing to log into, and we build no profile of you. The one analytics script we run (Google Analytics 4) is read as aggregates only; see <em>Analytics</em> below.</li>
-        <li><strong>No cookies of our own</strong> — this site sets no cookie of its own: no account cookie, no session cookie, no advertising cookie. The only first-party cookies here are the ones Google Analytics sets, which any content blocker can stop.</li>
+        <li><strong>No accounts and no login</strong> — nothing on this site requires registration or a password. The feedback widget asks only for a callsign and a comment; it creates no account and builds no profile of you.</li>
+        <li><strong>No tracking cookies of our own</strong> — this site sets no cookie of its own: no account cookie, no session cookie, no advertising cookie, and the feedback widget sets none either. The only first-party cookies here are the ones Google Analytics sets, which any content blocker can stop.</li>
+        <li><strong>No selling or sharing</strong> — nothing this site collects (server logs or feedback comments) is sold or shared with third parties.</li>
     </ul>
 
     <h2>Server logs</h2>
     <p>The web server (nginx) records standard access logs: the request IP address, the page requested, the HTTP user-agent string, and timestamps. This is normal operation for any web server and is used for security (detecting abuse), diagnostics, and aggregate traffic statistics. Logs are not sold or shared with third parties, and they contain no personal information beyond what a browser sends to any website.</p>
+
+    <h2>Feedback comments</h2>
+    <p>Every page on this site loads a shared script (<code>js/global-nav.js</code>) that injects a feedback section at the bottom of the page. It exists so support questions and bug reports land where the operator will actually see them. It is the only feature on this site that stores something you write.</p>
+    <ul>
+        <li><strong>What you provide</strong> — your amateur-radio callsign and a comment of up to 2000 characters. Before a comment is accepted, the callsign is checked against the public Club Log callsign database; only verified callsigns can post. Your callsign and comment are then displayed publicly on the page they were posted to.</li>
+        <li><strong>What is stored</strong> — callsign, comment text, the page URL, and a timestamp, in a server-side SQLite database on <code>www.vlsc.net</code>. That is the minimum needed to show the conversation.</li>
+        <li><strong>IP address</strong> — the server sees your IP address, as it does for any web request, and uses it only for rate limiting (a few comments per hour per IP, and per callsign per day) and abuse prevention. It is not displayed, not part of the public record, and not shared.</li>
+        <li><strong>Why</strong> — support. Comments are how users reach the operator, and how answers get written back.</li>
+        <li><strong>Retention</strong> — comments are kept until the operator deletes them; there is no fixed expiry and no automated deletion. To have a comment of yours removed, email <code style="color:var(--accent);">contact@vlsc.net</code>.</li>
+        <li><strong>No tracking</strong> — the feedback widget sets no cookies and runs no analytics of its own.</li>
+    </ul>
 
     <h2>Analytics — Google Analytics 4</h2>
     <p>We use <strong>Google Analytics 4</strong> (measurement ID <code>G-JQLSKV1MCT</code>) to understand which pages and which projects are actually read. The script loads from <code>googletagmanager.com</code>, sets <strong>first-party cookies</strong> on this domain — principally <code>_ga</code> and <code>_ga_*</code>, with the lifetimes Google specifies by default — and sends a page-view record to Google: the page URL, the referring page, an approximate location derived from your IP address, and your browser and device strings.</p>
@@ -120,7 +131,7 @@
     <h2>Changes to this policy</h2>
     <p>If this policy changes, the "Last updated" date at the top of this page will be revised. Material changes will be called out on the project's GitHub repositories.</p>
 
-    <p class="last-updated">VLSC Projects · www.vlsc.net · Privacy Policy · Last updated September 13, 2026</p>
+    <p class="last-updated">VLSC Projects · www.vlsc.net · Privacy Policy · Last updated October 11, 2026</p>
 </section>
 
 <footer class="footer">
@@ -134,7 +145,7 @@
                 <h4>Projects</h4>
                 <ul>
                     <li><a href="/mrrc/">MRRC</a> — Universal HF Remote</li>
-                    <li><a href="/mrrc_modern/">MRRC Modern</a> — FT-710 / IC-7300 Remote</li>
+                    <li><a href="/mrrc_modern/">MRRC Modern</a> — Eleven-Rig USB Remote</li>
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX Server</li>
                     <li><a href="/efhw/">EFHW</a> — Antenna Auto-Tuner</li>
                     <li><a href="/mrrc_ft8/">MRRC-FT8</a> — Headless FT8/FT4 Server</li>

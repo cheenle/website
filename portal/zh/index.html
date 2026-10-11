@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/octen.css?v=6">
+    <link rel="stylesheet" href="../css/octen.css?v=7">
     <link rel="stylesheet" href="../css/sunsdrmobile.css?v=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -66,7 +66,7 @@
     <div class="hero-content">
         <div class="hero-badge">
             <i class="fas fa-satellite-dish"></i>
-            <span>五个项目 · 一个生态</span>
+            <span>六个项目 · 一个生态</span>
         </div>
         <h1 class="hero-title">
             业余无线电<br>
@@ -100,7 +100,7 @@
         <div class="qr-card">
             <img src="../images/qr-wechat-group.jpg" alt="MRRC-HAM 同好群微信二维码">
         </div>
-        <p class="qr-note">该二维码 7 天内（10 月 8 日前）有效，重新进入将更新。</p>
+        <p class="qr-note">加入 MRRC-HAM 同好群。</p>
     </div>
 </section>
 
@@ -126,14 +126,14 @@
                     <td>通过 Hamlib/rigctld 的通用远程控制路径</td>
                 </tr>
                 <tr>
-                    <td>Yaesu FT-710 或 Icom IC-7300</td>
+                    <td>Yaesu FT-710 / FTDX / FTX-1，或 Icom IC-7300 / IC-705 / IC-7610 / IC-7760</td>
                     <td><a href="/mrrc_modern/">MRRC Modern</a></td>
-                    <td>可插拔后端 USB 远程（FT-710 / IC-7300 / IC-7300MK2）</td>
+                    <td>可插拔后端 USB 远程 —— 支持十一种电台</td>
                 </tr>
                 <tr>
                     <td>电台在客户内网、没有公网 IP</td>
-                    <td><a href="/mrrc_hub/">MRRC Cloud Hub</a></td>
-                    <td>MRRC Modern 的云端接入层 —— 实例主动出站，无需端口映射</td>
+                    <td><a href="https://portal.mrrc.vlsc.net/">MRRC Cloud Hub</a></td>
+                    <td>公开自助门户已上线 —— 一个呼号一个入口，实例主动出站，无需端口映射</td>
                 </tr>
                 <tr>
                     <td>SunSDR2 DX</td>
@@ -183,12 +183,20 @@
             <div class="feature-card animate">
                 <div class="icon" style="background:var(--accent-glow);color:var(--accent);"><i class="fas fa-code-branch"></i></div>
                 <h3>MRRC Modern</h3>
-                <p>八重洲 FT-710 与 Icom IC-7300/IC-7300MK2 的可插拔后端 USB 原生远程控制。FT4222 SPI 或 CI-V 频谱、双向 Opus 48kHz 音频、4 条 WebSocket 通道完整 CAT/CI-V 控制——同一套代码，支持多台电台。</p>
+                <p>面向十一种电台的可插拔后端 USB 原生远程控制：Yaesu FT-710、FTDX10、FTDX101D、FTDX101MP、FTX-1F、FT-891 与 Icom IC-7300、IC-7300MK2、IC-705、IC-7610、IC-7760。FT4222 SPI 或 CI-V 频谱、双向 Opus 48kHz 音频、4 条 WebSocket 通道完整 CAT/CI-V 控制——同一套代码，支持多台电台。</p>
                 <ul>
-                    <li>v1.12.1 · 682 项测试 · GPLv3</li>
-                    <li>FT-710 + IC-7300 + IC-7300MK2 后端</li>
-                    <li>直连 USB · 无需 Hamlib · PWA + 移动应用</li>
+                    <li>v1.25.5 · 1897 项测试 · GPLv3</li>
+                    <li>十一种后端 · Windows + macOS + Android + iOS</li>
+                    <li>直连 USB · 无需 Hamlib · PWA + 原生应用</li>
                 </ul>
+                <div class="platform-chips">
+                    <span class="platform-chip"><i class="fab fa-windows"></i> Windows v1.25.5</span>
+                    <span class="platform-chip"><i class="fab fa-apple"></i> macOS v1.25.5</span>
+                    <span class="platform-chip"><i class="fab fa-android"></i> Android v1.1.31</span>
+                    <span class="platform-chip"><i class="fab fa-app-store-ios"></i> iOS 原生</span>
+                    <a href="/mrrc_modern/zh/w103d.html" class="platform-chip"><i class="fas fa-microchip"></i> W103D 镜像 v1.25.5</a>
+                </div>
+                <p style="margin:0.6rem 0 0;font-size:0.85rem;color:var(--text-secondary);">……或者刷入 <a href="/mrrc_modern/zh/w103d.html" style="color:var(--accent);">125 元的 W103D 盒子镜像</a>，把 FT-710 变成常驻远程电台。</p>
                 <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
                     <a href="/mrrc_modern/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
                     <a href="https://github.com/cheenle/mrrc_modern" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.85rem;"><i class="fab fa-github"></i> 源码</a>
@@ -201,9 +209,9 @@
                 <h3>MRRC Cloud Hub</h3>
                 <p>给内网、运营商大内网或 IPv6 常变的 MRRC Modern 实例做接入层：实例主动出站，因此不需要公网地址、端口映射或 UPnP。呼号即入口，同一呼号只对应一个入口。电台控制、音频、频谱与 PTT 安全仍归 MRRC Modern，接入层不复写它们。</p>
                 <ul>
-                    <li>设计已评审 · MVP 未实现</li>
-                    <li>阶段 1 已跑通：出站隧道 · 通配入口 · 真证书</li>
-                    <li>PTT 释放留在实例本地</li>
+                    <li>已上线 —— portal.mrrc.vlsc.net 公开自助注册</li>
+                    <li>一个呼号一个入口 · 真证书 · 出站隧道</li>
+                    <li>隧道内置在 MRRC Modern v1.25.x</li>
                 </ul>
                 <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
                     <a href="/mrrc_hub/" style="color:var(--accent);font-size:0.85rem;"><i class="fas fa-external-link-alt"></i> 网站</a>
@@ -263,6 +271,40 @@
     </div>
 </section>
 
+<!-- 平台 -->
+<section class="section" id="platforms" style="background: var(--bg-primary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">平台</span>
+            <h2 class="section-title">一套代码，全平台</h2>
+            <p class="section-subtitle">同一套 MRRC Modern 无线电控制，提供 Windows 安装包、macOS DMG、Android APK、原生 iOS 应用——以及 W103D 盒子镜像：一台 125 元的电视盒变身常驻 FT-710 远程电台。</p>
+        </div>
+        <div class="perf-grid">
+            <div class="perf-card">
+                <div class="metric"><i class="fab fa-windows"></i></div>
+                <div class="metric-label">Windows 安装包<br><small>MRRC-Modern-v1.25.5-Setup.exe</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fab fa-apple"></i></div>
+                <div class="metric-label">macOS DMG<br><small>MRRC-Modern-v1.25.5-arm64.dmg · Apple Silicon</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fab fa-android"></i></div>
+                <div class="metric-label">Android APK<br><small>v1.1.31</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fab fa-app-store-ios"></i></div>
+                <div class="metric-label">iOS 原生应用<br><small>经 Modern 站点跳转安装</small></div>
+            </div>
+            <div class="perf-card">
+                <div class="metric"><i class="fas fa-microchip"></i></div>
+                <div class="metric-label">W103D 盒子镜像<br><small>1.25.5-w103d.img.gz —— 125 元电视盒变身常驻电台</small></div>
+            </div>
+        </div>
+        <p style="text-align:center;color:var(--text-secondary);margin-top:1.5rem;font-size:0.9rem;">全部下载见 <a href="/mrrc_modern/" style="color:var(--accent);">MRRC Modern 站点</a> · <a href="/mrrc_modern/zh/w103d.html" style="color:var(--accent);">W103D 盒子故事</a></p>
+    </div>
+</section>
+
 <section class="section" style="background: var(--bg-secondary);">
     <div class="container">
         <div class="section-header">
@@ -299,7 +341,7 @@
             </div>
             <div class="perf-card">
                 <div class="metric">MRRC Modern</div>
-                <div class="metric-label">多电台 USB 路线<br><small>FT-710 + IC-7300 后端</small></div>
+                <div class="metric-label">多电台 USB 路线<br><small>十一种后端 —— 八重洲 + Icom</small></div>
             </div>
             <div class="perf-card">
                 <div class="metric">SunSDR2 DX</div>
@@ -307,7 +349,7 @@
             </div>
             <div class="perf-card">
                 <div class="metric">iOS 原生</div>
-                <div class="metric-label">移动客户端路线<br><small>SwiftUI + AVAudioEngine</small></div>
+                <div class="metric-label">移动客户端路线<br><small>SwiftUI + AVAudioEngine · Android + macOS 客户端</small></div>
             </div>
             <div class="perf-card">
                 <div class="metric">EFHW</div>
@@ -344,7 +386,7 @@
             </div>
             <div class="perf-card">
                 <div class="metric"><i class="fas fa-code-branch"></i></div>
-                <div class="metric-label">直连 USB 多电台<br><small>MRRC Modern — FT-710 / IC-7300 / IC-7300MK2</small></div>
+                <div class="metric-label">直连 USB 多电台<br><small>MRRC Modern — 十一种后端，八重洲 + Icom</small></div>
             </div>
             <div class="perf-card">
                 <div class="metric"><i class="fas fa-wifi"></i></div>
@@ -445,7 +487,7 @@
                 <h4>项目</h4>
                 <ul>
                     <li><a href="/mrrc/">MRRC</a> — 通用 HF 远程</li>
-                    <li><a href="/mrrc_modern/">MRRC Modern</a> — FT-710 / IC-7300 远程</li>
+                    <li><a href="/mrrc_modern/">MRRC Modern</a> — 十一电台 USB 远程</li>
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX 服务器</li>
                     <li><a href="/efhw/">EFHW</a> — 天线研究与自动调谐</li>
                     <li><a href="/mrrc_ft8/">MRRC-FT8</a> — Headless FT8/FT4 服务器</li>

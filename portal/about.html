@@ -77,14 +77,14 @@
     <p>Commercial remote-control solutions for HF radios are often closed, expensive, and tied to one vendor's app. The radio hardware itself is capable of far more than most of it exposes. VLSC exists to answer three questions:</p>
     <ul>
         <li><strong>Can we control a modern radio over the network without vendor dongles?</strong> — Yes: the FT-710 project reads the internal FT4222 SPI spectrum interface over a plain USB cable.</li>
-        <li><strong>Can an SDR like the SunSDR2 DX be served to any browser and to native apps?</strong> — Yes: SunMRRC + SunsdrMobile are a client-server pair built around WebSockets.</li>
+        <li><strong>Can an SDR like the SunSDR2 DX be served to any browser and to native apps?</strong> — Yes: SunMRRC + its native iOS client are built around WebSockets.</li>
         <li><strong>Can an antenna tuner be cheap, autonomous, and network-driven?</strong> — Yes: the EFHW tuner is a ~430-CNY ESP32-S3 device that reads SWR over WebSocket.</li>
     </ul>
 
     <h2>The projects</h2>
     <div class="tp-grid">
         <div class="tp-card"><h3><a href="/mrrc/" style="color:var(--accent);">MRRC</a></h3><p>Universal HF remote control for any radio via Hamlib/rigctld.</p></div>
-        <div class="tp-card"><h3><a href="/mrrc_modern/" style="color:var(--accent);">MRRC Modern</a></h3><p>Pluggable-backend USB remote for FT-710 and Icom IC-7300/IC-7300MK2.</p></div>
+        <div class="tp-card"><h3><a href="/mrrc_modern/" style="color:var(--accent);">MRRC Modern</a></h3><p>Pluggable-backend USB remote for eleven rigs — Yaesu FT-710/FTDX/FTX-1 and Icom IC-7300/IC-705/IC-7610/IC-7760.</p></div>
         <div class="tp-card"><h3><a href="/mrrc_hub/" style="color:var(--accent);">MRRC Cloud Hub</a></h3><p>Cloud access layer for MRRC Modern instances with no public IP — the instance dials out.</p></div>
         <div class="tp-card"><h3><a href="/sunmrrc/" style="color:var(--accent);">SunMRRC</a></h3><p>SunSDR2 DX remote server with IQ demodulation and a dual-codec audio chain.</p></div>
         <div class="tp-card"><h3><a href="/efhw/" style="color:var(--accent);">EFHW</a></h3><p>ESP32-S3 servo-driven Fuchs ATU with bias-tee coax power and WiFi control.</p></div>

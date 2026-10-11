@@ -60,23 +60,34 @@
 
 <header class="page-hero">
     <h1>隐私政策</h1>
-    <p>最后更新：2026 年 9 月 13 日</p>
+    <p>最后更新：2026 年 10 月 11 日</p>
 </header>
 
 <section class="tp-section">
 
     <h2>摘要</h2>
-    <p>本网站（<code>www.vlsc.net</code>）是一个纯静态信息站。它<strong>没有用户账户、没有登录、没有评论表单、也没有新闻通讯</strong>。简而言之：我们几乎不收集你的任何信息，我们所收集的一切都只是标准 Web 服务器的常规运行数据。</p>
+    <p>本网站（<code>www.vlsc.net</code>）是一个信息站，<strong>没有用户账户、没有登录、也没有新闻通讯</strong>。全站唯一能留言的地方是每个页面底部的反馈组件——它只接受经过验证的业余无线电呼号（见下方「反馈留言」）。除此之外，我们几乎不收集你的任何信息，其余一切都只是标准 Web 服务器的常规运行数据。</p>
 
     <h2>本网站不收集的内容</h2>
     <ul>
-        <li><strong>不收集你主动提供的数据</strong> —— 本网站没有表单、没有注册、没有支付流程、也没有邮箱订阅。</li>
-        <li><strong>没有账户、也没有画像</strong> —— 本站没有可登录之处，我们也不为你建立画像。我们唯一运行的分析脚本（Google Analytics 4）只以聚合形式阅读，详见下方「分析」一节。</li>
-        <li><strong>我们自己的 Cookie 一个都没有</strong> —— 本网站不设置任何属于自己的 Cookie：没有账户 Cookie、没有会话 Cookie、没有广告 Cookie。这里唯一的第一方 Cookie 来自 Google Analytics，任何内容拦截器都能阻止它。</li>
+        <li><strong>没有账户、也没有登录</strong> —— 本站没有任何需要注册或口令的地方。反馈组件只要一个呼号和一段留言，它不建立账户，也不为你建立画像。</li>
+        <li><strong>我们自己的跟踪 Cookie 一个都没有</strong> —— 本网站不设置任何属于自己的 Cookie：没有账户 Cookie、没有会话 Cookie、没有广告 Cookie，反馈组件也不例外。这里唯一的第一方 Cookie 来自 Google Analytics，任何内容拦截器都能阻止它。</li>
+        <li><strong>不出售、不共享</strong> —— 本站所收集的一切（服务器日志或反馈留言）都不会被出售或与第三方共享。</li>
     </ul>
 
     <h2>服务器日志</h2>
     <p>Web 服务器（nginx）记录标准的访问日志：请求 IP 地址、请求的页面、HTTP User-Agent 字符串以及时间戳。这是任何 Web 服务器的正常运行方式，用于安全（检测滥用）、诊断和汇总的流量统计。日志不会出售或与第三方共享，其中除任何浏览器访问任何网站都会发送的内容外，不包含其他个人信息。</p>
+
+    <h2>反馈留言</h2>
+    <p>本站每个页面都会加载一个共享脚本（<code>js/global-nav.js</code>），在页面底部注入反馈区块。它存在的意义，是使用问题与 bug 报告能落在操作者真的看得见的地方。这是全站唯一会存储你输入内容的功能。</p>
+    <ul>
+        <li><strong>你提供什么</strong> —— 你的业余无线电呼号和一段最多 2000 字的留言。留言被接受前，呼号会先与公开的 Club Log 呼号库核对，只有通过验证的呼号才能留言。你的呼号与留言会公开展示在它所发布的页面上。</li>
+        <li><strong>存储什么</strong> —— 呼号、留言文本、页面 URL 和时间戳，保存在 <code>www.vlsc.net</code> 服务器端的 SQLite 数据库里。这是展示这段对话所需的最小集合。</li>
+        <li><strong>IP 地址</strong> —— 与任何 Web 请求一样，服务器会看到你留言时的 IP 地址，它只用于限流（每个 IP 每小时、每个呼号每天各可发少量留言）和防滥用。它不公开展示，也不与第三方共享。</li>
+        <li><strong>为什么收集</strong> —— 为了支持。留言是用户联系操作者、也是答案被写回的通道。</li>
+        <li><strong>保留多久</strong> —— 留言会一直保留到操作者将其删除；没有固定过期时间，也没有自动删除。如需删除自己的留言，请发邮件至 <code style="color:var(--accent);">contact@vlsc.net</code>。</li>
+        <li><strong>不做跟踪</strong> —— 反馈组件不设置 Cookie，也不运行任何自己的统计脚本。</li>
+    </ul>
 
     <h2>分析 —— Google Analytics 4</h2>
     <p>我们使用 <strong>Google Analytics 4</strong>（衡量 ID <code>G-JQLSKV1MCT</code>）来了解哪些页面、哪些项目真的被阅读。该脚本从 <code>googletagmanager.com</code> 加载，在本域设置<strong>第一方 Cookie</strong>——主要是 <code>_ga</code> 与 <code>_ga_*</code>，有效期采用 Google 的默认设定——并向 Google 发送一条网页浏览记录：页面 URL、来源页面、由你的 IP 地址推导出的粗略位置，以及浏览器与设备字符串。</p>
@@ -120,7 +131,7 @@
     <h2>政策变更</h2>
     <p>如果本政策发生变更，页面顶部的"最后更新"日期会被修订。重大变更将在各项目的 GitHub 仓库中说明。</p>
 
-    <p class="last-updated">VLSC 项目 · www.vlsc.net · 隐私政策 · 最后更新 2026 年 9 月 13 日</p>
+    <p class="last-updated">VLSC 项目 · www.vlsc.net · 隐私政策 · 最后更新 2026 年 10 月 11 日</p>
 </section>
 
 <footer class="footer">
@@ -134,7 +145,7 @@
                 <h4>项目</h4>
                 <ul>
                     <li><a href="/mrrc/">MRRC</a> — 通用 HF 远程</li>
-                    <li><a href="/mrrc_modern/">MRRC Modern</a> — FT-710 / IC-7300 远程</li>
+                    <li><a href="/mrrc_modern/">MRRC Modern</a> — 十一电台 USB 远程</li>
                     <li><a href="/sunmrrc/">SunMRRC</a> — SunSDR2 DX 服务器</li>
                     <li><a href="/efhw/">EFHW</a> — 天线自动调谐器</li>
                     <li><a href="/mrrc_ft8/">MRRC-FT8</a> — 无头 FT8/FT4 服务器</li>

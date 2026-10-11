@@ -557,6 +557,20 @@ a:focus-visible, button:focus-visible, .btn:focus-visible {
 a.platform-chip { transition: border-color 0.3s var(--ease), color 0.3s var(--ease); }
 a.platform-chip:hover { border-color: var(--border-hover); color: var(--text-primary); text-decoration: none; }
 
+/* Architecture diagram (homepage, inline SVG) */
+.arch-svg { display: block; width: 100%; height: auto; }
+.arch-svg text { font-family: var(--font-sans); }
+.arch-svg .a-title { fill: var(--text-primary); font-size: 14px; font-weight: 600; }
+.arch-svg .a-label { fill: var(--text-secondary); font-size: 11.5px; }
+.arch-svg .a-mono { fill: var(--text-secondary); font-size: 11px; font-family: var(--font-mono); }
+.arch-svg .a-zone-label { fill: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; }
+.arch-svg .a-edge-label { fill: var(--text-muted); font-size: 10.5px; }
+.arch-svg .a-box { fill: var(--bg-card); stroke: var(--border); stroke-width: 1; }
+.arch-svg .a-box-accent { fill: var(--accent-glow); stroke: var(--accent-dim); stroke-width: 1; }
+.arch-svg .a-zone { fill: none; stroke: var(--accent-dim); stroke-width: 1; stroke-dasharray: 6 5; opacity: 0.75; }
+.arch-svg .a-edge { stroke: var(--accent-dim); stroke-width: 1.4; fill: none; marker-end: url(#archArrow); }
+.arch-svg .a-edge-muted { stroke: var(--border-hover); stroke-width: 1.2; fill: none; stroke-dasharray: 5 4; marker-end: url(#archArrowMuted); }
+
 /* ── Steps / Quick Start ── */
 .steps {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

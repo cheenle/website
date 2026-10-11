@@ -4,6 +4,11 @@
 Replaces the old Apache-specific analyze.py. Handles nginx combined log format
 with optional vhost filtering via a custom log_format.
 
+Dimensions: per-domain (vhost) and per sub-site (first path segment) breakdowns
+with long-term daily summaries, bandwidth, engagement (returning visitors, visit
+span, pages/visitor), 7x24h activity heatmap, traffic sources, devices, status
+codes, top 404s and most active visitors.
+
 Usage:
     python3 analyze_nginx.py          # incremental parse + render dashboard
     python3 analyze_nginx.py --full   # full re-parse of all available logs
@@ -23,11 +28,14 @@ import time
 import argparse
 from datetime import datetime, timedelta, timezone
 from collections import Counter, defaultdict
+from urllib.parse import urlparse
 
 # --- Constants ---
 STATS_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(STATS_DIR, "stats_nginx.db")
-HTML_PATH = os.path.join(STATS_DIR, "index.html")
+# Dashboard output — override via env so the SQLite DB (visitor IPs) can live
+# outside the web-served directory: STATS_HTML_PATH=/home/cheenle/stats/index.html
+HTML_PATH = os.environ.get("STATS_HTML_PATH", os.path.join(STATS_DIR, "index.html"))
 MMDB_PATH = os.path.join(STATS_DIR, "GeoLite2-Country.mmdb")
 CST = timezone(timedelta(hours=8))
 HITS_RETENTION_DAYS = 30
@@ -71,6 +79,37 @@ SCANNER_PATH_TOKENS = [
     "phpmyadmin", "wp-login", "xmlrpc", ".asp", "phpunit", "actuator",
     "geoserver", "web/config", "sdk/weblanguage", "hello.world",
 ]
+
+# Search engines — referer hosts containing the key roll up to the label
+SEARCH_ENGINES = {
+    "google.": "Google", "bing.com": "Bing", "baidu.com": "Baidu",
+    "duckduckgo.com": "DuckDuckGo", "sogou.com": "Sogou", "so.com": "360 Search",
+    "yandex.": "Yandex", "search.yahoo": "Yahoo",
+}
+
+# Known sub-sites (first path segment) — everything else rolls up to "portal"
+KNOWN_SITES = {
+    "mrrc", "mrrc_modern", "mrrc_ft8", "mrrc_ft710", "sunmrrc", "sunsdrmobile",
+    "efhw", "yijing", "blog", "rig", "stats", "feedback", "mrrc_hub",
+    "mrrc_portal", "ft8",
+}
+
+
+def site_from_path(path):
+    """Map a request path to its sub-site (first segment) or 'portal'."""
+    if not path:
+        return "portal"
+    seg = path.lstrip("/").split("/", 1)[0].split("?", 1)[0].lower()
+    return seg if seg in KNOWN_SITES else "portal"
+
+
+def fmt_bytes(n):
+    """Human-readable byte count."""
+    n = float(n or 0)
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if n < 1024 or unit == "TB":
+            return f"{int(n)} B" if unit == "B" else f"{n:.1f} {unit}"
+        n /= 1024
 
 _MONTH_MAP = {
     "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
@@ -305,7 +344,8 @@ def init_db():
             ua_os      TEXT,
             is_bot     INTEGER DEFAULT 0,
             is_404     INTEGER DEFAULT 0,
-            country    TEXT
+            country    TEXT,
+            site       TEXT
         );
         CREATE INDEX IF NOT EXISTS idx_hits_ts ON hits(ts);
         CREATE INDEX IF NOT EXISTS idx_hits_path ON hits(path);
@@ -323,9 +363,43 @@ def init_db():
             top_countries TEXT,
             bots_pct      REAL
         );
+        CREATE TABLE IF NOT EXISTS daily_domain_summary (
+            date        TEXT NOT NULL,
+            vhost       TEXT NOT NULL,
+            pv          INTEGER DEFAULT 0,
+            uv          INTEGER DEFAULT 0,
+            bytes_total INTEGER DEFAULT 0,
+            bots        INTEGER DEFAULT 0,
+            PRIMARY KEY (date, vhost)
+        );
+        CREATE TABLE IF NOT EXISTS daily_site_summary (
+            date        TEXT NOT NULL,
+            site        TEXT NOT NULL,
+            pv          INTEGER DEFAULT 0,
+            uv          INTEGER DEFAULT 0,
+            bytes_total INTEGER DEFAULT 0,
+            PRIMARY KEY (date, site)
+        );
     """)
     conn.commit()
     return conn
+
+
+def migrate_db(conn):
+    """Add hits.site to pre-existing databases and backfill it from path."""
+    cols = [r[1] for r in conn.execute("PRAGMA table_info(hits)")]
+    if "site" not in cols:
+        conn.execute("ALTER TABLE hits ADD COLUMN site TEXT")
+        conn.commit()
+    if conn.execute("SELECT 1 FROM hits WHERE site IS NULL LIMIT 1").fetchone():
+        for site in sorted(KNOWN_SITES):
+            conn.execute(
+                "UPDATE hits SET site=? WHERE site IS NULL AND (path LIKE ? OR path=?)",
+                (site, f"/{site}/%", f"/{site}")
+            )
+        conn.execute("UPDATE hits SET site='portal' WHERE site IS NULL")
+        conn.commit()
+        print("  Backfilled hits.site for existing rows")
 
 
 def get_parse_state(conn):
@@ -357,13 +431,14 @@ def _insert_from_lines(conn, lines):
             is_bot = 1
         country = lookup_country(parsed["ip"])
         is_404 = 1 if parsed["status"] == 404 else 0
+        site = site_from_path(parsed["path"])
         cur.execute(
             """INSERT INTO hits (ts, vhost, ip, method, path, status, bytes, referer, ua,
-               ua_browser, ua_os, is_bot, is_404, country)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+               ua_browser, ua_os, is_bot, is_404, country, site)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (parsed["ts"], parsed["vhost"], parsed["ip"], parsed["method"],
              parsed["path"], parsed["status"], parsed["bytes"], parsed["referer"],
-             parsed["ua"], browser, os_name, is_bot, is_404, country)
+             parsed["ua"], browser, os_name, is_bot, is_404, country, site)
         )
         count += 1
     conn.commit()
@@ -389,6 +464,8 @@ def ingest_logs(conn, full=False):
         prev_position = 0
         conn.execute("DELETE FROM hits")
         conn.execute("DELETE FROM daily_summary")
+        conn.execute("DELETE FROM daily_domain_summary")
+        conn.execute("DELETE FROM daily_site_summary")
         conn.execute("DELETE FROM meta WHERE key LIKE 'historical%'")
         conn.commit()
         print("  Full re-parse requested — cleared existing data")
@@ -402,16 +479,19 @@ def ingest_logs(conn, full=False):
         _ingest_historical_logs(conn)
         prev_position = 0
 
-    if prev_position >= current_size and prev_inode == current_inode and not full:
-        print(f"  No new data (position={prev_position}, size={current_size})")
+    lines = read_log_lines(NGINX_LOG)
+    if prev_position >= len(lines) and prev_inode == current_inode and not full:
+        print(f"  No new data (position={prev_position}, lines={len(lines)})")
         return 0
 
-    lines = read_log_lines(NGINX_LOG)
     new_lines = lines[prev_position:] if prev_position < len(lines) else []
     new_count = _insert_from_lines(conn, new_lines)
 
-    save_parse_state(conn, NGINX_LOG, len(lines) if new_lines else current_size, current_inode)
-    print(f"  Inserted {new_count} new hits (position now {len(lines) if new_lines else current_size})")
+    if full:
+        _ingest_historical_logs(conn)
+
+    save_parse_state(conn, NGINX_LOG, len(lines), current_inode)
+    print(f"  Inserted {new_count} new hits (position now {len(lines)})")
     return new_count
 
 
@@ -447,8 +527,10 @@ def cleanup_old_hits(conn):
     conn.commit()
 
 
-def update_daily_summary(conn):
-    today = datetime.now(CST).strftime("%Y-%m-%d")
+def summarize_date(conn, date):
+    """(Re)build daily_summary + per-domain + per-site summaries for one date (CST)."""
+    day_start, day_end = date + "T00:00:00", date + "T23:59:59"
+
     cur = conn.execute("""
         SELECT
             COUNT(*) AS pv,
@@ -460,28 +542,28 @@ def update_daily_summary(conn):
             SUM(CASE WHEN status BETWEEN 500 AND 599 THEN 1 ELSE 0 END) AS s5xx,
             ROUND(100.0 * SUM(is_bot) / MAX(COUNT(*), 1), 1) AS bots_pct
         FROM hits WHERE ts >= ? AND ts < ?
-    """, (today + "T00:00:00", today + "T23:59:59"))
+    """, (day_start, day_end))
     row = cur.fetchone()
 
     cur = conn.execute("""
         SELECT path, COUNT(*) AS c FROM hits
         WHERE ts >= ? AND ts < ? AND is_bot = 0 AND status < 400
         GROUP BY path ORDER BY c DESC LIMIT 10
-    """, (today + "T00:00:00", today + "T23:59:59"))
+    """, (day_start, day_end))
     top_pages = json.dumps([{"path": r[0], "count": r[1]} for r in cur.fetchall()])
 
     cur = conn.execute("""
         SELECT referer, COUNT(*) AS c FROM hits
         WHERE ts >= ? AND ts < ? AND is_bot = 0 AND referer != '' AND referer != '-'
         GROUP BY referer ORDER BY c DESC LIMIT 10
-    """, (today + "T00:00:00", today + "T23:59:59"))
+    """, (day_start, day_end))
     top_refs = json.dumps([{"ref": r[0], "count": r[1]} for r in cur.fetchall()])
 
     cur = conn.execute("""
         SELECT country, COUNT(*) AS c FROM hits
         WHERE ts >= ? AND ts < ? AND is_bot = 0
         GROUP BY country ORDER BY c DESC LIMIT 10
-    """, (today + "T00:00:00", today + "T23:59:59"))
+    """, (day_start, day_end))
     top_countries = json.dumps([{"country": r[0], "count": r[1]} for r in cur.fetchall()])
 
     conn.execute("""
@@ -489,15 +571,56 @@ def update_daily_summary(conn):
         (date, pv, uv, bytes_total, status_2xx, status_3xx, status_4xx, status_5xx,
          top_pages, top_refs, top_countries, bots_pct)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
-    """, (today, row[0], row[1], row[2] or 0, row[3], row[4], row[5], row[6],
+    """, (date, row[0], row[1], row[2] or 0, row[3], row[4], row[5], row[6],
           top_pages, top_refs, top_countries, row[7] or 0.0))
+
+    conn.execute("DELETE FROM daily_domain_summary WHERE date=?", (date,))
+    for vhost, pv, uv, b, bots in conn.execute("""
+        SELECT vhost, COUNT(*), COUNT(DISTINCT ip||'|'||ua),
+               COALESCE(SUM(bytes),0), COALESCE(SUM(is_bot),0)
+        FROM hits WHERE ts >= ? AND ts < ? GROUP BY vhost
+    """, (day_start, day_end)):
+        conn.execute(
+            "INSERT INTO daily_domain_summary VALUES (?,?,?,?,?,?)",
+            (date, vhost or "-", pv, uv, b, bots)
+        )
+
+    conn.execute("DELETE FROM daily_site_summary WHERE date=?", (date,))
+    for site, pv, uv, b in conn.execute("""
+        SELECT COALESCE(site, 'portal'), COUNT(*), COUNT(DISTINCT ip||'|'||ua),
+               COALESCE(SUM(bytes),0)
+        FROM hits WHERE ts >= ? AND ts < ? AND is_bot = 0
+        GROUP BY COALESCE(site, 'portal')
+    """, (day_start, day_end)):
+        conn.execute(
+            "INSERT INTO daily_site_summary VALUES (?,?,?,?,?)",
+            (date, site, pv, uv, b)
+        )
+
     conn.commit()
-    print(f"  Updated daily_summary for {today}: PV={row[0]}, UV={row[1]}")
+
+
+def update_daily_summary(conn, full=False):
+    today = datetime.now(CST).strftime("%Y-%m-%d")
+    if full:
+        dates = [r[0] for r in conn.execute(
+            "SELECT DISTINCT SUBSTR(ts, 1, 10) FROM hits ORDER BY 1")]
+        for d in dates:
+            summarize_date(conn, d)
+        print(f"  Rebuilt summaries for {len(dates)} day(s)")
+        return
+    summarize_date(conn, today)
+    row = conn.execute("SELECT pv, uv FROM daily_summary WHERE date=?", (today,)).fetchone()
+    if row:
+        print(f"  Updated daily_summary for {today}: PV={row[0]}, UV={row[1]}")
 
 
 def query_stats(conn):
-    today = datetime.now(CST).strftime("%Y-%m-%d")
-    month_start = datetime.now(CST).strftime("%Y-%m-01")
+    now = datetime.now(CST)
+    today = now.strftime("%Y-%m-%d")
+    month_start = now.strftime("%Y-%m-01")
+    day_start, day_end = today + "T00:00:00", today + "T23:59:59"
+    d30_start = (now - timedelta(days=29)).strftime("%Y-%m-%d")
 
     def q(sql, params=()):
         row = conn.execute(sql, params).fetchone()
@@ -513,25 +636,84 @@ def query_stats(conn):
     stats["today_pv"] = q("SELECT COALESCE(SUM(pv),0) FROM daily_summary WHERE date=?", (today,))
     stats["today_uv"] = q(
         "SELECT COUNT(DISTINCT ip||'|'||ua) FROM hits WHERE ts>=? AND ts<?",
-        (today + "T00:00:00", today + "T23:59:59")
+        (day_start, day_end)
     )
     stats["month_pv"] = q("SELECT COALESCE(SUM(pv),0) FROM daily_summary WHERE date>=?", (month_start,))
     stats["total_pv"] = q("SELECT COALESCE(SUM(pv),0) FROM daily_summary")
+    stats["today_bytes"] = q(
+        "SELECT COALESCE(SUM(bytes),0) FROM hits WHERE ts>=? AND ts<?", (day_start, day_end))
+    stats["month_bytes"] = q(
+        "SELECT COALESCE(SUM(bytes_total),0) FROM daily_summary WHERE date>=?", (month_start,))
+
+    human_pv = q(
+        "SELECT COUNT(*) FROM hits WHERE ts>=? AND ts<? AND is_bot=0", (day_start, day_end)) or 0
+    human_uv = q(
+        "SELECT COUNT(DISTINCT ip||'|'||ua) FROM hits WHERE ts>=? AND ts<? AND is_bot=0",
+        (day_start, day_end)) or 0
+    stats["human_pv"] = human_pv
+    stats["human_uv"] = human_uv
+    stats["pages_per_uv"] = round(human_pv / human_uv, 1) if human_uv else 0.0
 
     hourly = qall("""
         SELECT SUBSTR(ts,12,2) AS h, COUNT(*) FROM hits
         WHERE ts>=? AND ts<? AND is_bot=0
         GROUP BY h ORDER BY h
-    """, (today + "T00:00:00", today + "T23:59:59"))
+    """, (day_start, day_end))
     stats["hourly"] = [(int(h), c) for h, c in hourly]
     stats["hourly_max"] = max([c for _, c in hourly]) if hourly else 0
+    stats["peak_hour"] = max(stats["hourly"], key=lambda x: x[1])[0] if hourly else None
 
     daily = qall("""
         SELECT date, pv, uv FROM daily_summary
         WHERE date >= ? ORDER BY date
-    """, ((datetime.now(CST) - timedelta(days=29)).strftime("%Y-%m-%d"),))
+    """, (d30_start,))
     stats["daily"] = [(d, pv, uv) for d, pv, uv in daily]
     stats["daily_max"] = max([pv for _, pv, _ in daily]) if daily else 1
+
+    # --- Per-domain (vhost) breakdown ---
+    vhost_30d = dict(qall(
+        "SELECT vhost, SUM(pv) FROM daily_domain_summary WHERE date>=? GROUP BY vhost",
+        (d30_start,)))
+    vhost_rows = qall("""
+        SELECT vhost, COUNT(*), COUNT(DISTINCT ip||'|'||ua), COALESCE(SUM(bytes),0)
+        FROM hits WHERE ts>=? AND ts<? GROUP BY vhost ORDER BY 2 DESC
+    """, (day_start, day_end))
+    total_vhost_pv = sum(r[1] for r in vhost_rows) or 1
+    stats["vhosts"] = [
+        {"vhost": v or "-", "pv": pv, "uv": uv, "bytes": b,
+         "pv30": int(vhost_30d.get(v or "-", 0)),
+         "share": round(100 * pv / total_vhost_pv, 1)}
+        for v, pv, uv, b in vhost_rows
+    ]
+
+    # --- Per sub-site breakdown (first path segment) ---
+    site_30d = dict(qall(
+        "SELECT site, SUM(pv) FROM daily_site_summary WHERE date>=? GROUP BY site",
+        (d30_start,)))
+    site_rows = qall("""
+        SELECT COALESCE(site,'portal'), COUNT(*), COUNT(DISTINCT ip||'|'||ua),
+               COALESCE(SUM(bytes),0)
+        FROM hits WHERE ts>=? AND ts<? AND is_bot=0
+        GROUP BY COALESCE(site,'portal') ORDER BY 2 DESC
+    """, (day_start, day_end))
+    total_site_pv = sum(r[1] for r in site_rows) or 1
+    stats["sites"] = [
+        {"site": s, "pv": pv, "uv": uv, "bytes": b,
+         "pv30": int(site_30d.get(s, 0)),
+         "share": round(100 * pv / total_site_pv, 1)}
+        for s, pv, uv, b in site_rows
+    ]
+
+    # Top pages per top site (for tabbed view)
+    site_pages = {}
+    for entry in stats["sites"][:8]:
+        rows = qall("""
+            SELECT path, COUNT(*) AS c FROM hits
+            WHERE ts>=? AND ts<? AND is_bot=0 AND status<400 AND COALESCE(site,'portal')=?
+            GROUP BY path ORDER BY c DESC LIMIT 8
+        """, (day_start, day_end, entry["site"]))
+        site_pages[entry["site"]] = [{"path": r[0], "count": r[1]} for r in rows]
+    stats["site_pages"] = site_pages
 
     stats["top_pages"] = json.loads(q(
         "SELECT top_pages FROM daily_summary WHERE date=?", (today,)
@@ -541,6 +723,25 @@ def query_stats(conn):
         "SELECT top_refs FROM daily_summary WHERE date=?", (today,)
     ) or "[]")
 
+    # Referer sources grouped by domain (search engines rolled up, internal excluded)
+    ref_rows = qall("""
+        SELECT referer, COUNT(*) AS c FROM hits
+        WHERE ts>=? AND ts<? AND is_bot=0 AND referer != '' AND referer != '-'
+        GROUP BY referer
+    """, (day_start, day_end))
+    sources = Counter()
+    for ref, c in ref_rows:
+        host = (urlparse(ref).netloc or ref).lower()
+        if not host or host.endswith("vlsc.net"):
+            continue
+        label = host
+        for key, name in SEARCH_ENGINES.items():
+            if key in host:
+                label = name
+                break
+        sources[label] += c
+    stats["ref_sources"] = sources.most_common(12)
+
     stats["top_countries"] = json.loads(q(
         "SELECT top_countries FROM daily_summary WHERE date=?", (today,)
     ) or "[]")
@@ -549,7 +750,7 @@ def query_stats(conn):
         SELECT ua_browser, COUNT(*) AS c FROM hits
         WHERE ts>=? AND ts<? AND is_bot=0
         GROUP BY ua_browser ORDER BY c DESC
-    """, (today + "T00:00:00", today + "T23:59:59"))
+    """, (day_start, day_end))
     total_browser = sum(c for _, c in browser_rows) or 1
     stats["browsers"] = [(b, c, round(100 * c / total_browser, 1)) for b, c in browser_rows]
 
@@ -557,30 +758,119 @@ def query_stats(conn):
         SELECT ua_os, COUNT(*) AS c FROM hits
         WHERE ts>=? AND ts<? AND is_bot=0
         GROUP BY ua_os ORDER BY c DESC
-    """, (today + "T00:00:00", today + "T23:59:59"))
+    """, (day_start, day_end))
     total_os = sum(c for _, c in os_rows) or 1
     stats["os_list"] = [(o, c, round(100 * c / total_os, 1)) for o, c in os_rows]
 
+    # Device type split
+    dev_rows = qall("""
+        SELECT CASE
+            WHEN LOWER(ua) LIKE '%ipad%' OR LOWER(ua) LIKE '%tablet%' THEN 'Tablet'
+            WHEN LOWER(ua) LIKE '%mobile%' OR LOWER(ua) LIKE '%iphone%'
+                 OR LOWER(ua) LIKE '%android%' THEN 'Mobile'
+            ELSE 'Desktop' END AS dev, COUNT(*) AS c
+        FROM hits WHERE ts>=? AND ts<? AND is_bot=0 GROUP BY dev ORDER BY c DESC
+    """, (day_start, day_end))
+    total_dev = sum(c for _, c in dev_rows) or 1
+    stats["devices"] = [(d, c, round(100 * c / total_dev, 1)) for d, c in dev_rows]
+
+    # Status code distribution
+    srow = conn.execute("""
+        SELECT SUM(CASE WHEN status BETWEEN 200 AND 299 THEN 1 ELSE 0 END),
+               SUM(CASE WHEN status BETWEEN 300 AND 399 THEN 1 ELSE 0 END),
+               SUM(CASE WHEN status BETWEEN 400 AND 499 THEN 1 ELSE 0 END),
+               SUM(CASE WHEN status BETWEEN 500 AND 599 THEN 1 ELSE 0 END)
+        FROM hits WHERE ts>=? AND ts<?
+    """, (day_start, day_end)).fetchone()
+    stats["status_dist"] = [(srow[i] or 0) for i in range(4)]
+
+    stats["top_404"] = qall("""
+        SELECT path, COUNT(*) AS c FROM hits
+        WHERE ts>=? AND ts<? AND status=404
+        GROUP BY path ORDER BY c DESC LIMIT 10
+    """, (day_start, day_end))
+
+    # 7-day x 24-hour activity heatmap (human traffic)
+    d7_start = (now - timedelta(days=6)).strftime("%Y-%m-%d")
+    heat_rows = qall("""
+        SELECT SUBSTR(ts,1,10) AS d, CAST(SUBSTR(ts,12,2) AS INTEGER) AS h, COUNT(*) AS c
+        FROM hits WHERE ts>=? AND is_bot=0 GROUP BY d, h
+    """, (d7_start + "T00:00:00",))
+    stats["heatmap"] = {(d, h): c for d, h, c in heat_rows}
+    stats["heatmap_days"] = [
+        (now - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(6, -1, -1)]
+    stats["heatmap_max"] = max(stats["heatmap"].values()) if stats["heatmap"] else 0
+
+    # --- Engagement / activity ---
+    unique_ips = q(
+        "SELECT COUNT(DISTINCT ip) FROM hits WHERE ts>=? AND ts<? AND is_bot=0",
+        (day_start, day_end)) or 0
+    returning = q("""
+        SELECT COUNT(DISTINCT ip) FROM hits
+        WHERE ts>=? AND ts<? AND is_bot=0
+          AND ip IN (SELECT DISTINCT ip FROM hits WHERE ts<? AND is_bot=0)
+    """, (day_start, day_end, day_start)) or 0
+    stats["unique_ips"] = unique_ips
+    stats["returning_ips"] = returning
+    stats["returning_pct"] = round(100 * returning / unique_ips, 1) if unique_ips else 0.0
+
+    spans = qall("""
+        SELECT MIN(ts), MAX(ts) FROM hits
+        WHERE ts>=? AND ts<? AND is_bot=0
+        GROUP BY ip||'|'||ua HAVING COUNT(*) > 1
+    """, (day_start, day_end))
+    durations = []
+    for t0, t1 in spans:
+        try:
+            delta = (datetime.fromisoformat(t1) - datetime.fromisoformat(t0)).total_seconds()
+            if 0 < delta <= 12 * 3600:
+                durations.append(delta)
+        except (ValueError, TypeError):
+            pass
+    stats["avg_duration_min"] = round(sum(durations) / len(durations) / 60, 1) if durations else 0.0
+
+    # Most active visitors today
+    av_rows = qall("""
+        SELECT ip, COUNT(*) AS reqs, COUNT(DISTINCT path) AS pages,
+               MAX(country), MIN(ts), MAX(ts), MAX(ua_browser), MAX(ua_os)
+        FROM hits WHERE ts>=? AND ts<? AND is_bot=0
+        GROUP BY ip ORDER BY reqs DESC LIMIT 15
+    """, (day_start, day_end))
+    active = []
+    for ip, reqs, pages, country, t0, t1, browser, osname in av_rows:
+        try:
+            dur = (datetime.fromisoformat(t1) - datetime.fromisoformat(t0)).total_seconds()
+        except (ValueError, TypeError):
+            dur = 0
+        active.append({
+            "ip": ip, "reqs": reqs, "pages": pages,
+            "country": country or "Unknown",
+            "first": (t0 or "")[11:19], "last": (t1 or "")[11:19],
+            "duration_min": round(dur / 60, 1),
+            "browser": browser or "?", "os": osname or "?",
+        })
+    stats["active_visitors"] = active
+
     stats["today_404"] = q(
         "SELECT COUNT(*) FROM hits WHERE ts>=? AND ts<? AND status=404",
-        (today + "T00:00:00", today + "T23:59:59")
+        (day_start, day_end)
     )
     stats["bots_pct"] = q(
         "SELECT COALESCE(bots_pct,0) FROM daily_summary WHERE date=?", (today,)
     ) or 0.0
     stats["total_hits_today"] = q(
         "SELECT COUNT(*) FROM hits WHERE ts>=? AND ts<?",
-        (today + "T00:00:00", today + "T23:59:59")
+        (day_start, day_end)
     )
 
     suspicious = qall("""
         SELECT ip, COUNT(*) AS c, GROUP_CONCAT(DISTINCT SUBSTR(path,1,80)) AS paths FROM hits
         WHERE ts>=? AND ts<? AND is_bot=1
         GROUP BY ip HAVING c >= 3 ORDER BY c DESC LIMIT 5
-    """, (today + "T00:00:00", today + "T23:59:59"))
+    """, (day_start, day_end))
     stats["suspicious"] = [(ip, c, paths) for ip, c, paths in suspicious]
 
-    stats["last_update"] = datetime.now(CST).strftime("%Y-%m-%d %H:%M:%S CST")
+    stats["last_update"] = now.strftime("%Y-%m-%d %H:%M:%S CST")
 
     return stats
 
@@ -616,23 +906,67 @@ def render_html(stats):
             svg_points_pv += f"{x:.1f},{y_pv:.1f} "
             svg_points_uv += f"{x:.1f},{y_uv:.1f} "
 
-    # Top pages
-    pages_html = ""
-    for item in stats["top_pages"]:
-        path = item["path"][:60]
-        count = item["count"]
-        pct = round(count / max(stats["today_pv"], 1) * 100)
-        pages_html += f'<tr><td class="mono">{path}</td><td>{count}</td><td>{pct}%</td></tr>'
-    if not pages_html:
-        pages_html = '<tr><td colspan="3" class="empty">No data yet</td></tr>'
+    # Domains (vhosts)
+    vhost_html = ""
+    for v in stats["vhosts"]:
+        vhost_html += (
+            f'<tr><td class="mono">{v["vhost"]}</td><td>{v["pv"]:,}</td>'
+            f'<td>{v["uv"]:,}</td><td>{fmt_bytes(v["bytes"])}</td><td>{v["pv30"]:,}</td>'
+            f'<td class="share-cell">{_pct_bar(v["share"])}'
+            f'<span class="share-pct">{v["share"]}%</span></td></tr>'
+        )
+    if not vhost_html:
+        vhost_html = '<tr><td colspan="6" class="empty">No data yet</td></tr>'
 
-    # Referrers
-    refs_html = ""
-    for item in stats["top_refs"]:
-        ref = item["ref"][:60]
-        refs_html += f'<tr><td class="mono">{ref}</td><td>{item["count"]}</td></tr>'
-    if not refs_html:
-        refs_html = '<tr><td colspan="2" class="empty">No referrer data yet</td></tr>'
+    # Sub-sites (human traffic)
+    sites_html = ""
+    for s in stats["sites"]:
+        sites_html += (
+            f'<tr><td class="mono">/{s["site"]}/</td><td>{s["pv"]:,}</td>'
+            f'<td>{s["uv"]:,}</td><td>{fmt_bytes(s["bytes"])}</td><td>{s["pv30"]:,}</td>'
+            f'<td class="share-cell">{_pct_bar(s["share"], "#7c3aed")}'
+            f'<span class="share-pct">{s["share"]}%</span></td></tr>'
+        )
+    if not sites_html:
+        sites_html = '<tr><td colspan="6" class="empty">No data yet</td></tr>'
+
+    # 7-day x 24-hour heatmap
+    heat_html = ""
+    hmax = max(stats["heatmap_max"], 1)
+    for d in stats["heatmap_days"]:
+        cells = ""
+        for h in range(24):
+            c = stats["heatmap"].get((d, h), 0)
+            alpha = (0.12 + 0.88 * c / hmax) if c else 0.04
+            cells += (
+                f'<div class="heat-cell" style="background:rgba(0,212,255,{alpha:.2f})" '
+                f'title="{d} {h:02d}:00 — {c} hits"></div>'
+            )
+        heat_html += f'<div class="heat-row"><span class="heat-day">{d[5:]}</span>{cells}</div>'
+    heat_hours = "".join(f'<span>{h}</span>' for h in range(24))
+
+    # Top pages per site (tabbed)
+    tab_buttons = ""
+    for i, entry in enumerate(stats["sites"][:8]):
+        active = " active" if i == 0 else ""
+        tab_buttons += (
+            f"<button class=\"tab-btn{active}\" "
+            f"onclick=\"showSite('{entry['site']}',this)\">{entry['site']}</button>"
+        )
+    default_rows = stats["site_pages"].get(stats["sites"][0]["site"], []) if stats["sites"] else []
+    site_pages_rows = ""
+    for item in default_rows:
+        site_pages_rows += f'<tr><td class="mono">{item["path"][:70]}</td><td>{item["count"]}</td></tr>'
+    if not site_pages_rows:
+        site_pages_rows = '<tr><td colspan="2" class="empty">No data yet</td></tr>'
+    site_pages_json = json.dumps(stats["site_pages"], ensure_ascii=False).replace("</", "<\\/")
+
+    # Referer sources (grouped by domain)
+    ref_src_html = ""
+    for name, c in stats["ref_sources"]:
+        ref_src_html += f'<tr><td>{name}</td><td>{c}</td></tr>'
+    if not ref_src_html:
+        ref_src_html = '<tr><td colspan="2" class="empty">No external referrers yet</td></tr>'
 
     # Countries
     countries_html = ""
@@ -655,6 +989,48 @@ def render_html(stats):
         os_html += f'<div class="dist-row"><span class="dist-label">{name}</span><span class="dist-value">{pct}%</span>{_pct_bar(pct, "#7c3aed")}</div>'
     if not os_html:
         os_html = '<div class="empty">No data</div>'
+
+    # Devices
+    device_html = ""
+    for name, count, pct in stats["devices"]:
+        device_html += f'<div class="dist-row"><span class="dist-label">{name}</span><span class="dist-value">{pct}%</span>{_pct_bar(pct, "#10b981")}</div>'
+    if not device_html:
+        device_html = '<div class="empty">No data</div>'
+
+    # Status codes
+    total_req = sum(stats["status_dist"]) or 1
+    status_html = ""
+    status_meta = [
+        ("2xx Success", "#10b981"), ("3xx Redirect", "#00d4ff"),
+        ("4xx Client Error", "#f59e0b"), ("5xx Server Error", "#ef4444"),
+    ]
+    for (label, color), c in zip(status_meta, stats["status_dist"]):
+        pct = round(100 * c / total_req, 1)
+        status_html += (
+            f'<div class="dist-row"><span class="dist-label wide">{label} ({c:,})</span>'
+            f'<span class="dist-value">{pct}%</span>{_pct_bar(pct, color)}</div>'
+        )
+
+    # Top 404 paths
+    p404_html = ""
+    for path, c in stats["top_404"]:
+        p404_html += f'<tr><td class="mono">{path[:70]}</td><td>{c}</td></tr>'
+    if not p404_html:
+        p404_html = '<tr><td colspan="2" class="empty">No 404s today</td></tr>'
+
+    # Most active visitors
+    av_html = ""
+    for v in stats["active_visitors"]:
+        av_html += (
+            f'<tr><td class="mono">{v["ip"]}</td><td>{v["reqs"]}</td><td>{v["pages"]}</td>'
+            f'<td>{country_flag(v["country"])}</td>'
+            f'<td class="mono small">{v["first"]}–{v["last"]}</td>'
+            f'<td>{v["duration_min"]} min</td><td>{v["browser"]} / {v["os"]}</td></tr>'
+        )
+    if not av_html:
+        av_html = '<tr><td colspan="7" class="empty">No visitors yet</td></tr>'
+
+    peak_hour_txt = f'{stats["peak_hour"]:02d}:00' if stats["peak_hour"] is not None else "—"
 
     # Suspicious
     suspicious_html = ""
@@ -704,7 +1080,7 @@ body {{
 .header-meta {{ color: var(--text-muted); font-size: 0.85rem; text-align: right; }}
 .header-meta span {{ display: block; }}
 
-.cards {{ display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }}
+.cards {{ display: grid; grid-template-columns: repeat(6,1fr); gap: 16px; margin-bottom: 32px; }}
 .card {{
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: 12px; padding: 24px; text-align: center;
@@ -765,6 +1141,37 @@ td {{ padding: 8px 12px; border-bottom: 1px solid rgba(45,45,61,0.5); font-size:
 .anomaly-stat {{ font-size: 0.9rem; }}
 .anomaly-stat strong {{ color: var(--warning); }}
 
+.share-cell {{ display: flex; align-items: center; gap: 8px; min-width: 150px; }}
+.share-pct {{ font-size: 0.8rem; color: var(--text-secondary); width: 44px; flex-shrink: 0; }}
+
+.heat-row {{ display: flex; align-items: center; gap: 2px; margin-bottom: 2px; }}
+.heat-day {{ width: 46px; font-size: 0.7rem; color: var(--text-muted); flex-shrink: 0; }}
+.heat-cell {{ flex: 1; height: 16px; border-radius: 2px; min-width: 8px; }}
+.heat-hours {{ display: flex; gap: 2px; margin: 6px 0 0 48px; }}
+.heat-hours span {{ flex: 1; text-align: center; font-size: 0.6rem; color: var(--text-muted); min-width: 8px; }}
+
+.tab-btn {{
+    background: var(--bg-light); color: var(--text-secondary);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 4px 12px; font-size: 0.8rem; cursor: pointer; margin: 0 4px 8px 0;
+}}
+.tab-btn.active {{ background: var(--primary); color: #000; border-color: var(--primary); font-weight: 600; }}
+
+.dist-label.wide {{ width: 170px; }}
+
+.engage {{ display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }}
+.engage-item {{
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+}}
+.engage-num {{ font-size: 1.4rem; font-weight: 700; color: var(--purple);
+    font-family: 'JetBrains Mono', monospace; }}
+.engage-label {{ font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }}
+
+@media (max-width: 1024px) {{
+    .cards {{ grid-template-columns: repeat(3,1fr); }}
+    .engage {{ grid-template-columns: repeat(2,1fr); }}
+}}
 @media (max-width: 768px) {{
     .cards {{ grid-template-columns: repeat(2,1fr); }}
     .grid-2 {{ grid-template-columns: 1fr; }}
@@ -773,6 +1180,7 @@ td {{ padding: 8px 12px; border-bottom: 1px solid rgba(45,45,61,0.5); font-size:
 }}
 @media (max-width: 480px) {{
     .cards {{ grid-template-columns: 1fr; }}
+    .engage {{ grid-template-columns: 1fr; }}
     .header {{ flex-direction: column; text-align: center; }}
     .header-meta {{ text-align: center; }}
 }}
@@ -792,6 +1200,8 @@ td {{ padding: 8px 12px; border-bottom: 1px solid rgba(45,45,61,0.5); font-size:
 <div class="cards">
     <div class="card"><div class="card-number">{stats["today_pv"]:,}</div><div class="card-label">Today PV</div></div>
     <div class="card"><div class="card-number">{stats["today_uv"]:,}</div><div class="card-label">Today UV</div></div>
+    <div class="card"><div class="card-number">{stats["pages_per_uv"]}</div><div class="card-label">Pages / Visitor (human)</div></div>
+    <div class="card"><div class="card-number">{fmt_bytes(stats["today_bytes"])}</div><div class="card-label">Bandwidth Today</div></div>
     <div class="card"><div class="card-number">{stats["month_pv"]:,}</div><div class="card-label">Month PV</div></div>
     <div class="card"><div class="card-number">{stats["total_pv"]:,}</div><div class="card-label">Total PV (All-time)</div></div>
 </div>
@@ -816,14 +1226,47 @@ td {{ padding: 8px 12px; border-bottom: 1px solid rgba(45,45,61,0.5); font-size:
     </div>
 </div>
 
+<div class="section">
+    <div class="section-title">\U0001f310 Domains (vhosts, today vs 30-day)</div>
+    <div class="table-box">
+        <table><thead><tr><th>Domain</th><th>PV today</th><th>UV today</th><th>Bandwidth</th><th>PV 30d</th><th>Share</th></tr></thead><tbody>{vhost_html}</tbody></table>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-title">\U0001f9e9 Sub-sites (human traffic, today vs 30-day)</div>
+    <div class="table-box">
+        <table><thead><tr><th>Site</th><th>PV today</th><th>UV today</th><th>Bandwidth</th><th>PV 30d</th><th>Share</th></tr></thead><tbody>{sites_html}</tbody></table>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-title">\U0001f525 Activity Heatmap (last 7 days × 24h, human traffic)</div>
+    <div class="trend-box">
+        {heat_html}
+        <div class="heat-hours">{heat_hours}</div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-title">\U0001f4aa Engagement (today, human visitors)</div>
+    <div class="engage">
+        <div class="engage-item"><div class="engage-num">{stats["unique_ips"]:,}</div><div class="engage-label">Unique IPs</div></div>
+        <div class="engage-item"><div class="engage-num">{stats["returning_pct"]}%</div><div class="engage-label">Returning Visitors ({stats["returning_ips"]:,} IPs)</div></div>
+        <div class="engage-item"><div class="engage-num">{stats["avg_duration_min"]} min</div><div class="engage-label">Avg Visit Span</div></div>
+        <div class="engage-item"><div class="engage-num">{peak_hour_txt}</div><div class="engage-label">Peak Hour (CST)</div></div>
+    </div>
+</div>
+
 <div class="grid-2">
     <div class="table-box">
-        <div class="section-title">\U0001f4c4 Top Pages</div>
-        <table><thead><tr><th>Path</th><th>Hits</th><th>%</th></tr></thead><tbody>{pages_html}</tbody></table>
+        <div class="section-title">\U0001f4c4 Top Pages by Site (today)</div>
+        <div>{tab_buttons}</div>
+        <table><thead><tr><th>Path</th><th>Hits</th></tr></thead><tbody id="site-pages-body">{site_pages_rows}</tbody></table>
     </div>
     <div class="table-box">
-        <div class="section-title">\U0001f517 Top Referrers</div>
-        <table><thead><tr><th>Source</th><th>Count</th></tr></thead><tbody>{refs_html}</tbody></table>
+        <div class="section-title">\U0001f517 Traffic Sources (today)</div>
+        <table><thead><tr><th>Source</th><th>Visits</th></tr></thead><tbody>{ref_src_html}</tbody></table>
     </div>
 </div>
 
@@ -837,6 +1280,26 @@ td {{ padding: 8px 12px; border-bottom: 1px solid rgba(45,45,61,0.5); font-size:
         {browser_html}
         <div class="section-title" style="margin-top:16px;">\U0001f4f1 Operating Systems</div>
         {os_html}
+        <div class="section-title" style="margin-top:16px;">\U0001f4f2 Device Types</div>
+        {device_html}
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="table-box">
+        <div class="section-title">\U0001f4e1 Status Codes (today)</div>
+        {status_html}
+    </div>
+    <div class="table-box">
+        <div class="section-title">\U0001f6ab Top 404 Paths (today)</div>
+        <table><thead><tr><th>Path</th><th>Count</th></tr></thead><tbody>{p404_html}</tbody></table>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-title">\U0001f464 Most Active Visitors (today, human)</div>
+    <div class="table-box">
+        <table><thead><tr><th>IP</th><th>Requests</th><th>Pages</th><th>Country</th><th>Active Window</th><th>Span</th><th>Browser / OS</th></tr></thead><tbody>{av_html}</tbody></table>
     </div>
 </div>
 
@@ -851,6 +1314,19 @@ td {{ padding: 8px 12px; border-bottom: 1px solid rgba(45,45,61,0.5); font-size:
 </div>
 
 </div>
+
+<script>
+const SITE_PAGES = {site_pages_json};
+function showSite(site, btn) {{
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const rows = SITE_PAGES[site] || [];
+    const esc = s => {{ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }};
+    document.getElementById('site-pages-body').innerHTML = rows.length
+        ? rows.map(r => `<tr><td class="mono">${{esc(r.path)}}</td><td>${{r.count}}</td></tr>`).join('')
+        : '<tr><td colspan="2" class="empty">No data</td></tr>';
+}}
+</script>
 </body>
 </html>"""
 
@@ -864,6 +1340,7 @@ def main():
     print(f"[{datetime.now(CST).strftime('%Y-%m-%d %H:%M:%S')}] Starting nginx stats analysis...")
 
     conn = init_db()
+    migrate_db(conn)
 
     print("1. Ingesting logs...")
     new_count = ingest_logs(conn, full=args.full)
@@ -873,7 +1350,7 @@ def main():
     cleanup_old_hits(conn)
 
     print("3. Updating daily summary...")
-    update_daily_summary(conn)
+    update_daily_summary(conn, full=args.full)
 
     print("4. Rendering dashboard...")
     stats = query_stats(conn)

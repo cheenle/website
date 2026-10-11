@@ -311,9 +311,9 @@
         <div class="section-header">
             <span class="section-label">架构</span>
             <h2 class="section-title">一个入口，一台服务端，十一部电台</h2>
-            <p class="section-subtitle">客户端直连 MRRC Modern 服务端，或经 Cloud Hub 的出站隧道进入——不需要公网 IP。服务端通过 USB 与十一款 Yaesu / Icom 电台对话，运行在 PC、Mac，或一台 125 元的 W103D 盒子上。</p>
+            <p class="section-subtitle">客户端直连 MRRC Modern 服务端，或经 Cloud Hub 的出站隧道进入——不需要公网 IP。服务端通过 USB 与十一款 Yaesu / Icom 电台对话，运行在 Windows、Linux、macOS、树莓派，或一台 125 元的 W103D 盒子上。</p>
         </div>
-        <svg class="arch-svg" viewBox="0 0 1120 610" role="img" aria-label="VLSC 架构：客户端直连或经 Cloud Hub 接入 MRRC Modern 服务端；服务端通过 USB 控制十一款电台；同一镜像可运行在 W103D 盒子上。">
+        <svg class="arch-svg" viewBox="0 0 1120 610" role="img" aria-label="VLSC 架构：客户端直连或经 Cloud Hub 接入 MRRC Modern 服务端；服务端通过 USB 控制十一款电台，运行在 Windows、Linux、macOS、树莓派或 W103D 盒子上。">
             <defs>
                 <marker id="archArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 Z" fill="#0891b2"/></marker>
                 <marker id="archArrowMuted" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 Z" fill="#8899aa" fill-opacity="0.6"/></marker>
@@ -332,12 +332,10 @@
             <text class="a-mono" x="759" y="76" text-anchor="middle">&lt;呼号&gt;.mrrc.vlsc.net</text>
             <text class="a-label" x="759" y="94" text-anchor="middle">公网入口 · 真实 TLS</text>
 
-            <rect class="a-box" x="40" y="200" width="200" height="44" rx="8"/>
-            <text class="a-label" x="140" y="227" text-anchor="middle">浏览器（任意设备）</text>
-            <rect class="a-box" x="40" y="260" width="200" height="44" rx="8"/>
-            <text class="a-label" x="140" y="287" text-anchor="middle">iOS / Android 原生应用</text>
-            <rect class="a-box" x="40" y="320" width="200" height="44" rx="8"/>
-            <text class="a-label" x="140" y="347" text-anchor="middle">Windows / macOS 安装包</text>
+            <rect class="a-box" x="40" y="235" width="200" height="44" rx="8"/>
+            <text class="a-label" x="140" y="262" text-anchor="middle">浏览器（任意设备）</text>
+            <rect class="a-box" x="40" y="295" width="200" height="44" rx="8"/>
+            <text class="a-label" x="140" y="322" text-anchor="middle">iOS / Android 原生应用</text>
 
             <path class="a-edge" d="M240 283 L424 283"/>
             <text class="a-edge-label" x="332" y="271" text-anchor="middle">4+1 WebSocket · Opus</text>
@@ -366,11 +364,11 @@
             <path class="a-edge-muted" d="M170 194 L170 132 L264 132"/>
             <text class="a-edge-label" x="178" y="126">HTTPS 入站（直达呼号入口）</text>
 
-            <rect class="a-box" x="430" y="440" width="270" height="84" rx="10"/>
-            <text class="a-title" x="565" y="470" text-anchor="middle">W103D 盒子（¥125）</text>
-            <text class="a-label" x="565" y="494" text-anchor="middle">同一镜像 · 常驻运行 → 常开电台</text>
-            <path class="a-edge-muted" d="M565 440 L565 386"/>
-            <text class="a-edge-label" x="577" y="414">同一套代码 · img 镜像</text>
+            <path d="M565 410 L565 382" style="stroke:var(--border-hover);stroke-width:1.2;fill:none;"/>
+            <rect class="a-box" x="400" y="410" width="330" height="96" rx="10" stroke-dasharray="5 4"/>
+            <text class="a-title" x="565" y="438" text-anchor="middle" style="font-size:12px;">承载平台（服务端运行于）</text>
+            <text class="a-mono" x="565" y="462" text-anchor="middle">Windows · Linux · macOS</text>
+            <text class="a-mono" x="565" y="484" text-anchor="middle">树莓派 · W103D 盒子（¥125 · 常开）</text>
 
             <text class="a-zone-label" x="40" y="552" style="fill:var(--text-muted);">生态同伴</text>
             <rect class="a-box" x="40" y="560" width="230" height="36" rx="8"/>

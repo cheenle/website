@@ -59,36 +59,39 @@
 
 **不改脚本名** —— 名字被 `CLAUDE.md` 与 `efhw/deploy.sh` 引用，改名是纯 churn。
 
-- [ ] **步骤 1：写失败测试**
+- [ ] **步骤 1：抓基线**
 
-在 `/tmp/test_gate.py` 写一个最小用例，证明当前脚本无法表达「按页配置」：
-
-```python
-import subprocess, sys, os, shutil, tempfile
-
-EFHW = "/Users/cheenle/HAM/website/efhw"
-
-def run_gate(cwd=EFHW):
-    r = subprocess.run([sys.executable, os.path.join(EFHW, "check_baluns.py")],
-                       capture_output=True, text=True, cwd=cwd)
-    return r.returncode, r.stdout
-
-def test_gate_reports_missing_page():
-    """新页尚未创建时，门禁必须明确报错，而不是静默放过。"""
-    stub_dir = tempfile.mkdtemp()
-    os.makedirs(os.path.join(stub_dir, "zh"))
-    code, out = run_gate(stub_dir)
-    assert code == 1, f"expected FAIL on empty tree, got {code}: {out}"
-    assert "rx-noise" in out or "baluns" in out, out
-```
-
-- [ ] **步骤 2：运行测试验证失败**
+改造前必须先拿到两个可对比的实测基线，否则无法证明改造没伤到既有页面。
 
 ```bash
-cd /tmp && python3 -m pytest test_gate.py -v
+cd /Users/cheenle/HAM/website/efhw && python3 check_baluns.py; echo "exit=$?"
 ```
 
-预期：`FAIL` —— 当前脚本在空目录下用 `load()` 吞掉 `OSError` 只 `chk(False, ...)`，但 `sec_ids` 为空字典时 `sec_ids.get()` 返回 `None`，两页相等 → 该条判据**误报通过**；且脚本不知道 `rx-noise.html` 的存在。
+**实测基线（2026-10-14 已跑过，实施时应对上）**：
+
+```
+check_baluns: OK
+exit=0
+```
+
+再抓空树下的行为（注意：脚本用 `HERE = os.path.dirname(os.path.abspath(__file__))` 定位文件，**`cwd` 无关**，必须把脚本栊到空树里跑）：
+
+```bash
+rm -rf /tmp/gate_probe && mkdir -p /tmp/gate_probe/zh
+cp /Users/cheenle/HAM/website/efhw/check_baluns.py /tmp/gate_probe/
+cd /tmp/gate_probe && python3 check_baluns.py; echo "exit=$?"
+```
+
+**实测基线**：`check_baluns: FAILED (34)`，`exit=1`（34 = 2 个 CSS 读失败 + 30 个 CSS 类未定义 + 2 个页面读失败）。
+
+- [ ] **步骤 2：确认基线的含义 —— 并纠正一处预期**
+
+⚠️ **原稿在此处写错了**。原计划声称「当前脚本在空树下会因 `sec_ids` 双 `None` 而误报通过」。实测否定了这个说法：`load()` 在 `OSError` 时调 `chk(False, ...)`，缺失文件本身就会产生 FAIL，脚本正确退出 1。
+
+所以**本次改造的动机是覆盖面，不是修 bug**。任务 1 的验收标准相应定为两条：
+
+1. 改造后 baluns 依旧 `OK` / `exit=0`（回归无伤）
+2. 改造后 `rx-noise.html` 缺失必须被点名（从「不在检查范围内」变成「被拒」）
 
 - [ ] **步骤 3：改为页面配置表**
 
@@ -203,7 +206,11 @@ for spec in PAGES:
 cd /Users/cheenle/HAM/website/efhw && python3 check_baluns.py
 ```
 
-预期：`FAIL: missing page: rx-noise.html` / `FAIL: missing page: zh/rx-noise.html`，**且没有 baluns.html 相关的任何 FAIL**。这一步证明改造没有破坏既有页面的检查。
+预期：**`check_baluns: FAILED`，且全部 FAIL 都是 `missing page: rx-noise.html` 与 `missing page: zh/rx-noise.html` 两条**。
+
+（注：两页缺失会连带触发 `EN/CN anchors differ`——因为 `sec_ids.get()` 双缺时返回两个 `None`。该条 FAIL 此时是**预期噪声**，两页建好后自然消失。不要为了消除它而放宽判据。）
+
+**关键是：不得出现任何 baluns.html 相关的 FAIL**。这是回归无伤的判据。
 
 **dB 豁免机制已于计划阶段实测验证**（2026-10-14，拿真实 `baluns.html` 跑改造后的规则）：
 
@@ -330,7 +337,7 @@ Where received noise<br /><span class="gradient">actually gets in</span>
 cd /Users/cheenle/HAM/website/efhw && python3 check_baluns.py
 ```
 
-预期：仍报 `missing page` 之外的错误应为 **0 条之外的 `EN/CN anchors differ`**（若两页锚点已对齐则无此条）。任何 broken link / duplicate id / dead anchor 都必须当场修掉。
+预期：`check_baluns: OK`，`exit=0`。任务 2 落盘后两页已存在且锚点对齐，`missing page` 与 `anchors differ` 两条都应消失。任何 broken link / duplicate id / dead anchor 都必须当场修掉。
 
 - [ ] **步骤 8：Commit**
 

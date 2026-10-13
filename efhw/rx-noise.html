@@ -72,6 +72,8 @@
         <a href="#localise">01 · Measure first</a>
         <a href="#sources">02 · Sources</a>
         <a href="#cmc">03 · The choke</a>
+        <a href="#other-doors">04 · Other doors</a>
+        <a href="#verify">05 · Verify</a>
       </div>
     </div>
 
@@ -920,6 +922,131 @@
           pipe &mdash; works above about 40 m and does very little below it. With
           no core, its Z_cm is neither high enough nor lossy enough where the
           low bands need it. It is a fine mechanical former and a poor choke.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="other-doors">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">04 · The other three doors</span>
+          <h2 class="section-title">When the choke is the wrong tool</h2>
+          <p class="section-subtitle">
+            Three of the four doors are out of a coax choke&rsquo;s reach. Each
+            has its own signature and its own cure, and none of the cures is a
+            ferrite on the feedline.
+          </p>
+        </div>
+
+        <h3 class="card-title">Door ③: mains and ground loops</h3>
+        <p style="margin-bottom: 1rem">
+          The noise source sits on the same supply as your rig. Its rubbish
+          travels down the wiring, through the power supply, into the chassis
+          &mdash; and the chassis is the reference against which the receiver
+          measures everything. Nothing about this route involves the coax, which
+          is why cut 1 does not clear it.
+        </p>
+        <div class="calc">
+          <b>Signatures.</b> Cut 1 leaves the noise standing (a dummy load
+          changes nothing) and cut 4 changes it. Those two results together are
+          the diagnosis.
+          <br /><br />
+          <b>Cure.</b> The same device you were about to put on the coax, moved
+          to the conductor that is actually carrying the noise: a common-mode
+          choke on the mains lead or on the DC lead. Check the USB and Ethernet
+          runs as well; they are the most commonly missed members of this
+          family.
+        </div>
+        <div class="risk">
+          <b>Never lift the mains protective earth to quieten a noise
+          problem.</b> A common-mode choke passes mains frequency and DC while
+          blocking RF, and that is exactly the behaviour you want: the safety
+          earth stays connected and the noise still gets stopped. Removing the
+          protective earth removes the protection that exists to keep you alive,
+          and in our experience it does not even fix the noise reliably.
+        </div>
+
+        <h3 class="card-title">Door ①: antenna geometry</h3>
+        <p style="margin-bottom: 1rem">
+          An end-fed half wave is fed at a voltage antinode &mdash; the point of
+          maximum electric field on the wire. A high-impedance node is
+          inherently sensitive to near-field electric coupling, which is exactly
+          how lamp drivers and small switching supplies mostly couple. The
+          topology that makes the EFHW convenient to hang is also the topology
+          that makes it a good listener for everything in the building.
+        </p>
+        <div class="calc">
+          <b>Signature.</b> The choke makes almost no difference, but moving the
+          antenna changes the noise substantially. Cut 2 collapses the noise,
+          which tells you the wire is doing the listening rather than the braid.
+          <br /><br />
+          <b>Cure.</b> Geometry, and only geometry: raise it, move it away from
+          the building, change its heading, or add a separate receiving antenna.
+          No amount of ferrite treats this door, and no purchase will either.
+        </div>
+
+        <h3 class="card-title">Door ④: near field</h3>
+        <p style="margin-bottom: 1rem">
+          Your rig, your SDR, a USB lead, an Ethernet run: any of these is a
+          small antenna sitting on your desk, listening to whatever is switching
+          next to it. It is the least exotic door and the easiest to overlook,
+          because the culprit is often something you installed yourself and
+          therefore trust.
+        </p>
+        <div class="calc">
+          <b>Signature.</b> Cut 5 makes the noise follow the device as you walk
+          the house.
+          <br /><br />
+          <b>Cure.</b> Distance first, ferrites second. Moving a switch-mode
+          wall-wart two metres away from the rig routinely outperforms anything
+          you can do to the antenna system.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="verify" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">05 · Prove it worked</span>
+          <h2 class="section-title">How to know, without fooling yourself</h2>
+          <p class="section-subtitle">
+            The two rules from section 01 apply here in full, and they are the
+            whole method. Everything below is about making them easy to obey.
+          </p>
+        </div>
+        <div class="calc">
+          <b>Compare, do not measure absolutely. And hold everything else still
+          while you compare.</b> Same hour, same frequency, same AGC, same
+          preamp, same attenuation. Change one thing at a time and put it back.
+        </div>
+        <h3 class="card-title">Instruments you may already own</h3>
+        <p style="margin-bottom: 1.25rem">
+          You do not need a laboratory. If your station runs through the MRRC
+          stack, you already have an S-meter feed and a DSP spectrum display
+          &mdash; both are sufficient to A/B a choke, provided you keep the
+          receiver settings frozen. A receiver&rsquo;s spectrum display is the
+          better instrument of the two, because it shows you the <em>shape</em>
+          of the noise as well as its level, and a choke that moves a resonance
+          looks obviously different from one that removes a current.
+        </p>
+        <p style="margin-bottom: 1.25rem">
+          For an objective, repeatable number that survives across days, the
+          same PSK Reporter analysis this station uses is available to any
+          station with a callsign and some patience: it produces a noise-floor
+          figure from which stations you can hear, and the method is documented
+          on the
+          <a href="bg1sb-antenna.html">measured antenna profile page</a>. Run it
+          before the change, run it after, and compare the two.
+        </p>
+        <div class="risk">
+          <b>What you may not claim.</b> A single daylight A/B cannot establish
+          an improvement of any specific size, because the ambient noise field
+          changes underneath you between the two halves of the test. What you
+          can claim is bounded and still useful: the noise was reproducibly
+          lower with the choke in, at these frequencies, at this time of day,
+          with settings frozen. Anything stronger than that needs a longer
+          baseline than most of us are willing to collect, and you should
+          distrust anyone who produces a confident figure from one afternoon.
         </div>
       </div>
     </section>

@@ -104,6 +104,9 @@ cd /tmp/gate_probe && python3 check_baluns.py; echo "exit=$?"
 #   max_tag_m          : tag-m（实测徽章）上限。None = 不检查
 #   require_tag_m_zero : 本页不许出现任何实测徽章（无自测数据的页面）
 #   max_labeled_tables : 允许的 data-gate="labeled" 表格数（见 dB 规则）
+#                         rx-noise 页定为 3：§01 BG1SB 反例表（依据：案例研究 §2.5/2.6）、
+#                         §02 标准限值与折算表（依据：GB/T 9254.1-2021）、
+#                         §03 共模分压表（依据：表上方给出的公式）
 PAGES = [
     {
         "en": "baluns.html", "zh": "zh/baluns.html",
@@ -115,7 +118,7 @@ PAGES = [
     {
         "en": "rx-noise.html", "zh": "zh/rx-noise.html",
         "min_na": 0, "max_tag_m": None, "require_tag_m_zero": True,
-        "max_labeled_tables": 2,
+        "max_labeled_tables": 3,
         "cn_forbidden": ("Measure first", "Six sources", "Door ②",
                          "The other three", "Prove it worked",
                          "What a choke cannot fix", "Evidence & Sources"),
@@ -378,7 +381,9 @@ git commit -m "feat(efhw): 接收噪声页骨架 + 四扇门模型与诊断实�
 
 - [ ] **步骤 2：卡 2 开关电源（EN + CN）—— 含全页支点算术**
 
-⚠️ **本卡的两张表都必须带 `data-gate="labeled"`**：dB 正则 `\d+(?:\.\d+)?\s*dB` 会命中 `56 dBμV`，逐行加 illustrative 标记会让表不可读。门禁的任务 1 改造已支持该属性，且 `max_labeled_tables` 对本页设为 2（正好这两张表）。
+⚠️ **本卡的两张表都必须带 `data-gate="labeled"`**：dB 正则 `\d+(?:\.\d+)?\s*dB` 会命中 `56 dBμV`，逐行加 illustrative 标记会让表不可读。门禁的任务 1 改造已支持该属性，`max_labeled_tables` 对本页设为 3（本卡占 1 张，另两张在 §01 与 §03）。
+
+**实施修正（2026-10-14）**：原稿把「限值表」与「dBμV→dBm 折算表」写成两张，会白白多占一个豁免名额。**合并为一张**，列改为：频段 / 限值 (dBμV) / 对应电压 / 折算到 50 Ω。这样既不损失信息，又让全页豁免表数刚好 = 3。
 
 事实清单：
 
@@ -997,3 +1002,55 @@ git commit -m "docs(efhw): 反向链接指向 EFHW 站接收噪声页（发射/�
 **2. 内联执行** —— 在当前会话中使用 executing-plans 执行任务，批量执行并设有检查点。
 
 **选哪种方式？**
+
+---
+
+# 执行记录（2026-10-14，内联执行完成）
+
+**任务 1–9 全部完成并部署，任务 10 待定。** 提交 3b73c8d → 1c7e324 共 9 个。
+
+## 实际结果
+
+| 项 | 计划预期 | 实际 |
+| --- | --- | --- |
+| 页面规模 | 50–60 KB/语言 | EN 61 KB / CN 35 KB |
+| 分节 | 7 节 | 7 节，双语锚点一致 |
+| `tag-m` | 0 | 0 |
+| dB 豁免表 | 3 张（上限 3） | 3 张，EN 豁免 24 条 / CN 25 条 |
+| sitemap | +2 URL | 118 → 120 |
+| 部署 | 线上 curl 回验 | 两页 200；八站根 + 门户抽查无回归；构建工具仍 404 |
+
+## 门禁在真实内容上抓到的四个缺陷
+
+前两个是内容问题，后两个是门禁自身规则的边界问题，都当场修掉：
+
+1. 三处 dB（`−50 / −120 / −100 dBm`）落在 `data-gate="labeled"` 表**外**的散文里 →
+   把噪声底对照并进标准限值表，散文改为只读差距
+2. `edit` 的 oldText 吃掉了 `<script>` 开头的 `toggleMobileMenu` 函数体 →
+   门禁的 `function toggleMobileMenu` 检查立即报错（全局纪律第 2 条的现场复现）
+3. `−23 dB` 反例值会触发 dB 规则 → 标签上限由 2 调到 3，并在配置里逐张写明依据
+4. §07 为解释「本页没有 [M]」而渲染的 `tag-m` 徽章本身触发 `require_tag_m_zero` →
+   改为纯文本 `[M]`。这是该规则第二次在真实内容上生效
+
+## 计划自身的两处修正（执行前已改）
+
+- **`pytest` 本机不可用** → 任务 1 步骤 1–2 从 pytest 用例改为 stdlib 基线抓取
+- **「空树会误报通过」的原假设被实测否掉**：空树实测 34 FAIL / exit 1，脚本正确退出。
+  改造动机因此是覆盖面，不是修 bug
+
+## 两条环境发现（计划外）
+
+- **CLAUDE.md 的 grep 陷阱有未记录的 bash 镜像**：规则按 zsh 写，本工具链跑 bash。
+  bash 里 `$SITES`（不带 `[@]`）只展开数组第一个元素 → 全站 grep 只搜了 `portal/`
+  并返回空，与 zsh 的字符串变量陷阱互为镜像，同样静默假绿。改用 `"${SITES[@]}"`。
+- **`portal/deploy.sh` 现已支持 `--force`**（巴伦那轮之后加的），不再需要 `yes |`。
+  §9 交接里那句「portal 无 --force」已过时。另外 sitemap 属 portal 包，改完必须
+  单独部署 portal —— 只跑 `efhw/deploy.sh` 时线上 sitemap 仍是旧的（本轮实际发生）。
+
+## 未做
+
+- **任务 10**（`mrrc` 仓加一条反向链接）——规格 §9.5 定为可延后，未执行
+- **人眼与键盘关卡**（计划 §6 第 8 条）：用户选择「直接部署，视觉问题上线后修」，
+  故窄屏断点、Tab 顺序、暗色对比度**未经核验**，不得声称视觉正确
+- **既有缺陷未修**（非本次引入）：`portal/tests/test_analytics_coverage.py::test_every_page_loads_a_shared_script`
+  失败，清单内的文件最后分别由 1fffec1 / 5a299b6（九月）与 mrrc 仓改动

@@ -70,6 +70,7 @@
     <div class="subnav">
       <div class="container subnav-inner">
         <a href="#localise">01 · Measure first</a>
+        <a href="#sources">02 · Sources</a>
       </div>
     </div>
 
@@ -327,6 +328,393 @@
           receive, and a loop with a sharp null really can help. But the premise
           does not hold here, so the conclusion does not either. Measure your
           own noise floor before you accept somebody else&rsquo;s cure.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sources">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">02 · Six sources, four doors</span>
+          <h2 class="section-title">The same phrase covers six different things</h2>
+          <p class="section-subtitle">
+            &ldquo;Environmental interference&rdquo; gets used as one problem.
+            It is six. Read the cards as a comparison rather than as six essays:
+            every card uses the same five headings, so the verdict on chokes can
+            be read straight down the column and the differences are the point.
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-bolt"></i> 1 · Power lines
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>Mechanism.</b> Almost all power-line noise comes from a spark or
+            an arc across utility hardware: a gap between two conductors, caused
+            by fittings that are loose, broken or spaced too closely. Current
+            crosses the gap, ionises the air, and radiates broadband energy.
+          </p>
+          <p>
+            <b>Signature.</b> On a 50 Hz grid the arcing fires
+            <b>100 times a second</b>, because every cycle has two voltage peaks
+            and two zero crossings. On a 60 Hz grid it is 120 Hz. On an
+            oscilloscope the noise appears as two horizontal bands drifting
+            slowly upward, one from each half of the cycle. Two free tests
+            confirm it: <b>rain quietens it</b>, because water bridges the gap,
+            and <b>wind makes it vary</b>, because loose hardware moves.
+          </p>
+          <p>
+            <b>A correction worth having.</b> Corona discharge is rarely, if
+            ever, the cause. The ARRL states it plainly: corona is confined to
+            lower frequencies, it is a low-current phenomenon, and it does not
+            propagate far from the source. Blaming corona sends you looking for
+            the wrong thing on the wrong pole.
+          </p>
+          <p>
+            <b>CMC verdict: no.</b> The energy travels along the power wiring
+            and reaches you by radiation into the antenna wire &mdash; door ①. A
+            choke acts on the coax braid&rsquo;s common-mode path, and this noise
+            is not on it.
+          </p>
+          <p>
+            <b>Remedy.</b> Complain, with evidence. This is the one category
+            where the fix belongs to somebody else, and in many jurisdictions
+            that somebody is legally obliged to act.
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            Source: ARRL, <i>Power Line Noise</i> · IEEE Std 1897-2024
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-plug"></i> 2 · Switching supplies
+            <span class="tag tag-c">C</span> <span class="tag tag-c">算式</span>
+          </h3>
+          <p>
+            <b>Mechanism.</b> A switching converter chops DC at tens to hundreds
+            of kilohertz. The harmonics of that chop, and the ringing on every
+            edge, run straight up through the HF spectrum. The noise leaves the
+            box in two forms: <b>differential mode</b> between live and neutral,
+            which an X capacitor suppresses, and <b>common mode</b> between the
+            conductors and earth, which needs a Y capacitor and a common-mode
+            choke. Cheap supplies cut cost by omitting precisely those last two
+            parts &mdash; the only two that work at HF.
+          </p>
+          <p>
+            <b>Signature.</b> A comb of harmonics spaced at the switching
+            frequency, drifting as the supply&rsquo;s load changes. Often
+            accompanied by a slow periodic wobble as the supply enters and
+            leaves burst mode on light load.
+          </p>
+          <p>
+            <b>What compliance actually buys you.</b> Household equipment must
+            meet the Class B conducted-emission limits. Here they are, with the
+            voltage limit converted to the power it represents across 50
+            &Omega;:
+          </p>
+          <table class="spec-table" data-gate="labeled">
+            <caption>
+              Class B conducted disturbance at the mains port, quasi-peak.
+              Basis: GB/T 9254.1-2021, which adopts CISPR 32. Power column is
+              arithmetic: <code>P = 10·log₁₀(V² / 50 Ω / 1 mW)</code>. The two
+              rows marked <i>for reference</i> are typical noise-floor orders of
+              magnitude, not limits, and are labelled as such on purpose.
+            </caption>
+            <thead>
+              <tr>
+                <th>Frequency</th>
+                <th>Limit</th>
+                <th>Voltage</th>
+                <th>Into 50 &Omega;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0.15&ndash;0.5 MHz</td>
+                <td>66 &rarr; 56 dB&mu;V</td>
+                <td>2.00 &rarr; 0.63 mV</td>
+                <td>&minus;41.0 &rarr; &minus;51.0 dBm</td>
+              </tr>
+              <tr>
+                <td>0.5&ndash;5 MHz</td>
+                <td>56 dB&mu;V</td>
+                <td>0.63 mV</td>
+                <td>&minus;51.0 dBm</td>
+              </tr>
+              <tr>
+                <td>5&ndash;30 MHz</td>
+                <td>60 dB&mu;V</td>
+                <td>1.00 mV</td>
+                <td>&minus;47.0 dBm</td>
+              </tr>
+              <tr>
+                <td><i>for reference</i></td>
+                <td>quiet rural HF noise floor</td>
+                <td>typical order of magnitude</td>
+                <td>&asymp; &minus;120 dBm</td>
+              </tr>
+              <tr>
+                <td><i>for reference</i></td>
+                <td>suburban HF noise floor</td>
+                <td>typical order of magnitude</td>
+                <td>&asymp; &minus;100 dBm</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <b>Read the gap, not the rows.</b> A device that passes the standard
+            with no margin is putting a signal at the mains port comparable to
+            the first three rows. A quiet band sits at the last two. That gap is
+            the whole problem, and it is why <b>compliance is not the same thing
+            as not interfering</b> &mdash; the limit is a compromise between
+            commerce and spectrum, not a promise that your HF reception will be
+            usable. The bottom two rows are typical orders of magnitude rather
+            than a standard, which is exactly why they are labelled that way.
+          </p>
+          <p>
+            <b>CMC verdict: no, for the coax.</b> Noise entering on the mains
+            never touches the coax, so a choke there is decoration.
+          </p>
+          <p>
+            <b>Remedy.</b> The same device, on the right conductor: a common-mode
+            choke on the mains lead or the DC lead. Also check USB and Ethernet
+            runs, which are the most commonly missed members of this family.
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            Source: GB/T 9254.1-2021 (&asymp; CISPR 32) · EMC practice for
+            X and Y capacitors and common-mode chokes
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-car-side"></i> 3 · Electric vehicle chargers
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>Mechanism.</b> AC charging runs the mains through an on-board
+            charger in the car &mdash; a switching converter of 3.3 to 11 kW. DC
+            fast charging does the conversion in the post itself, at even higher
+            power, increasingly with silicon-carbide devices and their steeper
+            switching edges. Either way the charging cable is several metres of
+            multi-conductor cable running from a building to a vehicle, and its
+            protective earth conductor is exactly as long as the common-mode
+            antenna it forms. A kilowatt-class switching converter driving a long
+            unshielded conductor, with no RF reference ground at either end, is
+            the mechanism written out in full.
+          </p>
+          <p>
+            <b>Signature.</b> Broadband, strongest while a car is actually
+            charging, and gone when it unplugs. That on/off correlation is the
+            most useful thing about it, because it dates and fingerprints the
+            event even when you cannot see the charger.
+          </p>
+          <div class="risk">
+            <b>No public HF measurement exists for this.</b> Every reachable
+            published case about EV chargers concerns conducted-emission test
+            failures, or the 125 kHz band where charging posts interfere with
+            keyless-entry systems. Nothing we could retrieve measures a charger
+            at 1.8&ndash;30 MHz. What you have just read is mechanism only. We
+            will not print a number we cannot show, and neither should anyone
+            else selling you a solution.
+          </div>
+          <p>
+            <b>CMC verdict: partly.</b> The dominant path is door ① &mdash; the
+            charging cable radiates into your antenna wire. A coax choke reaches
+            only the fraction that arrives on the shield.
+          </p>
+          <p>
+            <b>Remedy.</b> Negotiation and geometry, in that order. Establish
+            the on/off correlation first; that is the evidence that makes a
+            conversation with the owner or the property manager possible. Then
+            move your own antenna further away, or accept the hours.
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            Source: GB/T 18487.1-2015 · published EV-charger EMC remediation
+            literature · 125 kHz keyless-entry case reports
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-solar-panel"></i> 4 · Solar inverters
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>Mechanism.</b> Modern string inverters are usually transformerless,
+            so the panels and the grid share a common-mode path with no
+            isolation between them. Add the long DC run down from the roof, which
+            forms a large common-mode loop, and switching devices with steep
+            edges, and you have a strong common-mode source bolted to the same
+            building as your antenna.
+          </p>
+          <p>
+            <b>Signature.</b> Correlated with daylight and with inverter output.
+            Often strongest at midday, absent at night, and it changes when a
+            cloud crosses.
+          </p>
+          <p>
+            <b>CMC verdict: partly.</b> Mixed paths. The fraction radiated into
+            the antenna is out of reach; the fraction conducted into the building
+            wiring is reachable, but with a choke on the mains, not on the coax.
+          </p>
+          <p>
+            <b>Remedy.</b> Almost entirely source-side, which means not yours:
+            LCL filters, common-mode reactors, active filtering, and gate-drive
+            optimisation all live in the inverter. What you own is the same on/off
+            evidence, and the same conversation.
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            Source: ARRL RFI programme, which lists solar alongside power lines
+            and lighting as its three tracked categories
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-ethernet"></i> 5 · Power-line communication (PLC / BPL)
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>Mechanism.</b> Broadband over Power Line is defined as carrying
+            data over power wiring in the <b>2&ndash;30 MHz</b> band. That is not
+            adjacent to the amateur HF bands. It is the amateur HF bands, plus
+            everything between them.
+          </p>
+          <p>
+            <b>Signature.</b> This is the one entry in this list that is not a
+            by-product. It is a modulated, deliberate signal inside your band,
+            and it sounds like one.
+          </p>
+          <p>
+            <b>CMC verdict: no, and a choke will never help.</b> The signal
+            arrives in band, on the antenna, as the wanted signal would. There is
+            no common-mode path to interrupt.
+          </p>
+          <p>
+            <b>Remedy.</b> Frequency coordination and complaint. This is a
+            regulatory problem, and treating it as an antenna problem wastes
+            money.
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            Source: BPL band definition (2&ndash;30 MHz) · national RFI
+            complaint procedure
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 2.5rem">
+          <h3 class="card-title">
+            <i class="fas fa-lightbulb"></i> 6 · LED lighting and grow lights
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>Mechanism.</b> Every LED lamp has a driver, and the driver is a
+            small switching supply built to the tightest possible budget. The
+            same cost pressure described in card 2 applies, at a smaller scale
+            and with less room for filtering. High-power ballasts for grow lights
+            are the industrial version of the same story, and the ARRL names them
+            as a category it fields a steady stream of questions about.
+          </p>
+          <p>
+            <b>Signature.</b> Tied to a switch. The noise appears when a lamp is
+            on and vanishes when it is off, which makes cut 5 the decisive test
+            and makes this the easiest source on the list to identify.
+          </p>
+          <p>
+            <b>CMC verdict: partly.</b> Whether a choke helps depends entirely on
+            which door the noise used to get in, which is why the diagnostic
+            comes first.
+          </p>
+          <p>
+            <b>Remedy.</b> Replace the lamp with a better-behaved one. Cheaper
+            and more reliable than filtering the consequences.
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            Source: ARRL RFI programme (lighting devices category)
+          </p>
+        </div>
+
+        <h3 class="card-title">The verdict, in one table</h3>
+        <p class="section-subtitle" style="margin-bottom: 1.5rem">
+          Eight rows, and only the last one is where a coax choke does its full
+          job. This is the whole page in one object.
+        </p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Dominant door</th>
+              <th>Does a coax choke help?</th>
+              <th>Where the fix lives</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Power-line arcing</td>
+              <td>① via re-radiation</td>
+              <td class="deny">No</td>
+              <td>Complaint, and antenna geometry</td>
+            </tr>
+            <tr>
+              <td>Your own switching supply</td>
+              <td>③</td>
+              <td class="deny">No</td>
+              <td>A choke on the mains or DC lead</td>
+            </tr>
+            <tr>
+              <td>Your own PC, USB and Ethernet</td>
+              <td>④</td>
+              <td class="deny">No</td>
+              <td>Ferrites on those cables</td>
+            </tr>
+            <tr>
+              <td>A neighbour&rsquo;s LED or supply</td>
+              <td>① mostly</td>
+              <td class="na">Partly</td>
+              <td>Source side, plus geometry</td>
+            </tr>
+            <tr>
+              <td>EV charger</td>
+              <td>① mostly</td>
+              <td class="na">Partly</td>
+              <td>Negotiation, plus geometry</td>
+            </tr>
+            <tr>
+              <td>Solar inverter</td>
+              <td>① and ③</td>
+              <td class="na">Partly</td>
+              <td>Source side, plus the mains</td>
+            </tr>
+            <tr>
+              <td>PLC / BPL</td>
+              <td>① in band</td>
+              <td class="deny">No</td>
+              <td>Frequency coordination, complaint</td>
+            </tr>
+            <tr>
+              <td><b>Near-field noise the braid picks up</b></td>
+              <td><b>②</b></td>
+              <td><b>Yes, fully</b></td>
+              <td><b>The coaxial choke &mdash; this page</b></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>One rule generates the whole table.</b> A choke acts only on the
+          common-mode path in the conductor you put it on. Three consequences
+          follow, and they explain every &ldquo;no&rdquo; above:
+          <br />
+          1. It does nothing about noise the antenna wire picks up directly,
+          because that noise is not on the coax.
+          <br />
+          2. It does nothing about noise conducted in on the mains, because that
+          noise never reaches the coax either.
+          <br />
+          3. It does nothing once mode conversion has already happened, because
+          by then the noise has left the path the choke can reach.
         </div>
       </div>
     </section>

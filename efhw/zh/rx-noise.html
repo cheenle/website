@@ -68,6 +68,7 @@
     <div class="subnav">
       <div class="container subnav-inner">
         <a href="#localise">01 · 先量再买</a>
+        <a href="#sources">02 · 干扰源</a>
       </div>
     </div>
 
@@ -251,6 +252,286 @@
         </table>
         <div class="calc">
           <b>所以结论是什么都别买。而且这是个测出来的结论。</b>流行建议背后的机理没错：台位埋在本地噪声里，接收确实会聋，带尖锐零点的磁环确实能救。但前提在本站不成立，结论也就不成立。先量自己的噪声底，再接受别人的解药。
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sources">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">02 · 六类干扰源，四扇门</span>
+          <h2 class="section-title">同一句话，说的是六件不同的事</h2>
+          <p class="section-subtitle">
+            「环境干扰」常被当成一个问题。它有六种。把六张卡片当对照表读，不要当六篇文章读：每张卡片的五个小标题完全一致，所以扼流圈的裁决可以竖着读下来，差异本身就是结论。
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-bolt"></i> 1 · 电力线路
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>机理。</b>电力线噪声几乎全部来自金具上的火花或电弧：两根导体之间的间隙，由松动、破损或间距不足的金具造成。电流跨过间隙，电离空气，辐射宽带能量。
+          </p>
+          <p>
+            <b>特征。</b>50 Hz 电网下放电每秒发生 <b>100 次</b>，因为每个周期有两个电压峰和两个过零点。60 Hz 电网下是 120 Hz。示波器上噪声呈两条水平带缓慢上漂，一条来自正半周，一条来自负半周。两个不用仪器的判据：<b>雨天噪声变轻</b>，因为雨水跨接了间隙；<b>刮风时噪声变化</b>，因为松动金具在动。
+          </p>
+          <p>
+            <b>一条值得记住的纠正。</b>电晕放电基本不是元凶。ARRL
+            说得直白：电晕局限在低频，属低电流现象，传播不远。把它当元凶，你会找错对象、爬错杆。
+          </p>
+          <p>
+            <b>CMC 裁决：无效。</b>能量沿电力线传播，再辐射进天线导线，走的是门①。扼流圈作用在同轴编织层的共模路径上，这条噪声不在这儿。
+          </p>
+          <p>
+            <b>解药。</b>带证据去投诉。这是唯一一类归别人修的问题，而且很多地区那个人在法律上有义务处理。
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            来源：ARRL《Power Line Noise》· IEEE Std 1897-2024
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-plug"></i> 2 · 开关电源
+            <span class="tag tag-c">C</span> <span class="tag tag-c">算式</span>
+          </h3>
+          <p>
+            <b>机理。</b>开关变换器以几十到几百 kHz 斩波。斩波的谐波，加上每个边沿的振铃，一路升到短波频段。噪声以两种形式出机箱：<b>差模</b>存在于火线与零线之间，靠 X 电容抑制；<b>共模</b>存在于导线与地之间，需要 Y 电容和共模扼流圈。劣质电源省钱就省这后两件，而它们恰好是高频段唯一有效的两件。
+          </p>
+          <p>
+            <b>特征。</b>以开关频率为间隔的谐波梳，随电源负载变化而漂移。轻载时电源进出突发模式，还会叠加慢速周期性起伏。
+          </p>
+          <p>
+            <b>合规到底买到了什么。</b>家用设备必须满足 Class B 传导骚扰限值。下表列出限值，并把电压折算成它在 50 &Omega; 上代表的功率。
+          </p>
+          <table class="spec-table" data-gate="labeled">
+            <caption>
+              电源端口 Class B 传导骚扰，准峰值。依据：GB/T 9254.1-2021（等同采用
+              CISPR 32）。功率列是算术：<code>P = 10·log₁₀(V² / 50 Ω / 1 mW)</code>。
+              标「仅作参考」的两行是噪声底的量级估计，不是限值，表里明确标出来。
+            </caption>
+            <thead>
+              <tr>
+                <th>频段</th>
+                <th>限值</th>
+                <th>对应电压</th>
+                <th>折算到 50 &Omega;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0.15&ndash;0.5 MHz</td>
+                <td>66 &rarr; 56 dB&mu;V</td>
+                <td>2.00 &rarr; 0.63 mV</td>
+                <td>&minus;41.0 &rarr; &minus;51.0 dBm</td>
+              </tr>
+              <tr>
+                <td>0.5&ndash;5 MHz</td>
+                <td>56 dB&mu;V</td>
+                <td>0.63 mV</td>
+                <td>&minus;51.0 dBm</td>
+              </tr>
+              <tr>
+                <td>5&ndash;30 MHz</td>
+                <td>60 dB&mu;V</td>
+                <td>1.00 mV</td>
+                <td>&minus;47.0 dBm</td>
+              </tr>
+              <tr>
+                <td><i>仅作参考</i></td>
+                <td>安静乡村短波噪声底</td>
+                <td>量级估计</td>
+                <td>&asymp; &minus;120 dBm</td>
+              </tr>
+              <tr>
+                <td><i>仅作参考</i></td>
+                <td>郊区短波噪声底</td>
+                <td>量级估计</td>
+                <td>&asymp; &minus;100 dBm</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <b>读那道差距，不要只读行。</b>一个毫无余量、刚好达标的设备，机箱电源口上的信号和前三行相当。安静的频段在后两行。这道差距就是全部问题所在，也是为什么<b>合规不等于不干扰</b>。限值是商业与频谱之间的折中，不是「你的短波能用」的承诺。
+          </p>
+          <p>
+            <b>CMC 裁决：同轴上无效。</b>从市电进来的噪声根本碰不到同轴，扼流圈装在那儿只是装饰。
+          </p>
+          <p>
+            <b>解药。</b>同一种器件，装到对的导体上：市电线上或直流线上加共模扼流圈。USB 与网线也要查，它们是这一类里最常被漏掉的成员。
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            来源：GB/T 9254.1-2021（≈ CISPR 32）· X 电容、Y 电容与共模扼流圈的 EMC 工程通识
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-car-side"></i> 3 · 电动汽车充电器
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>机理。</b>交流慢充让市电穿过车上的车载充电机，那是一台 3.3 到 11 kW 的开关变换器。直流快充把变换放在桩里，功率更高，越来越多用碳化硅器件，开关边沿更陡。两种情况下，充电电缆都是几米长的多导体电缆，从建筑拉到车上。它的保护导体有多长，形成的共模天线就有多长。千瓦级开关变换器驱动一根长导体，两端都没有射频参考地，这就是机理的完整写法。
+          </p>
+          <p>
+            <b>特征。</b>宽带，车在充电时才强，拔枪就消失。这个开关相关性是它最有用的地方：即使你看不见充电桩，也能凭它给事件定时和留指纹。
+          </p>
+          <div class="risk">
+            <b>这个源没有公开的短波实测。</b>能检索到的充电桩公开案例，不是在讲传导发射测试超标，就是在讲
+            125 kHz 频段干扰无钥匙进入系统。我们拿不到任何一份在 1.8–30 MHz
+            测过充电桩的资料。上面写的只有机理。我们不会印一个拿不出证据的数字，卖你解决方案的人也不该。
+          </div>
+          <p>
+            <b>CMC 裁决：部分有效。</b>主路径是门①，充电电缆直接辐射进你的天线导线。同轴扼流圈只够得着经屏蔽层进来的那一小部分。
+          </p>
+          <p>
+            <b>解药。</b>先交涉，再改几何。第一步是坐实开关相关性，那是让车主或物业愿意谈的证据。然后把天线挪远，或者认下那几个小时。
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            来源：GB/T 18487.1-2015 · 公开的充电桩 EMC 整改文献 · 125 kHz 无钥匙进入干扰案例
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-solar-panel"></i> 4 · 光伏逆变器
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>机理。</b>现代组串式逆变器多是无变压器拓扑，光伏板和电网共用一条共模路径，中间没有隔离。再加上从屋顶下来的长直流电缆，它构成很大的共模环路；再加上开关边沿很陡的器件。结果是，和你天线同一栋楼上挂着一个强共模源。
+          </p>
+          <p>
+            <b>特征。</b>跟着日光和逆变器出力走。中午最强，夜里没有，一片云过去它就变。
+          </p>
+          <p>
+            <b>CMC 裁决：部分有效。</b>路径混杂。辐射进天线的那部分够不着；传导进楼内布线的那部分够得着，但要装在市电线上，不是同轴上。
+          </p>
+          <p>
+            <b>解药。</b>几乎全在源头侧，也就是不归你：LCL 滤波器、共模电抗器、有源滤波、门极驱动优化，都在逆变器里。归你的还是那份开关证据，和同一场对话。
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            来源：ARRL RFI 项目，把光伏与电力线、照明并列为它跟踪的三大类
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 1.25rem">
+          <h3 class="card-title">
+            <i class="fas fa-ethernet"></i> 5 · 电力线载波通信（PLC / BPL）
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>机理。</b>宽带电力线通信，定义就是在 <b>2 到 30 MHz</b> 上传数据。这不是紧挨着业余短波频段。它就是你那份短波频段，还包括频段之间的空隙。
+          </p>
+          <p>
+            <b>特征。</b>这是本表里唯一不是副产物的条目。它是有调制的、有意发射的带内信号，听起来也像。
+          </p>
+          <p>
+            <b>CMC 裁决：无效，而且扼流圈永远帮不上。</b>信号带内到达天线，和有用信号走同一条路。没有共模路径可供切断。
+          </p>
+          <p>
+            <b>解药。</b>频率协调和投诉。这是监管问题，当天线问题来治只会白花钱。
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            来源：BPL 频段定义（2–30 MHz）· 国家无线电干扰投诉流程
+          </p>
+        </div>
+
+        <div class="feature-card" style="margin-bottom: 2.5rem">
+          <h3 class="card-title">
+            <i class="fas fa-lightbulb"></i> 6 · LED 照明与生长灯
+            <span class="tag tag-c">C</span>
+          </h3>
+          <p>
+            <b>机理。</b>每个 LED 灯都有一颗驱动，那是一台成本压到极限的小型开关电源。第 2 张卡片的成本压力在这里同样成立，规模更小，留给滤波的空间也更少。高强度生长灯的高功率镇流器是同一个故事的工业版，ARRL 把它列为持续收到大量咨询的一类。
+          </p>
+          <p>
+            <b>特征。</b>跟着开关走。灯亮噪声来，灯灭噪声走。这让第 5 刀成为决定性实验，也让它成为本表里最好认的源。
+          </p>
+          <p>
+            <b>CMC 裁决：部分有效。</b>扼流圈有没有用，完全取决于噪声走哪扇门进来。这也是为什么诊断要排在前面。
+          </p>
+          <p>
+            <b>解药。</b>换一只行为好的灯。比事后滤波更便宜，也更可靠。
+          </p>
+          <p class="section-label" style="margin-bottom: 0">
+            来源：ARRL RFI 项目（照明设备类）
+          </p>
+        </div>
+
+        <h3 class="card-title">裁决，一张表</h3>
+        <p class="section-subtitle" style="margin-bottom: 1.5rem">
+          八行，只有最后一行是同轴扼流圈能全力干活的地方。这一行就是整页的答案。
+        </p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>源</th>
+              <th>主路径</th>
+              <th>同轴扼流圈有用吗</th>
+              <th>解药在哪</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>电力线放电</td>
+              <td>① 再辐射</td>
+              <td class="deny">无效</td>
+              <td>投诉，加天线几何</td>
+            </tr>
+            <tr>
+              <td>自家开关电源</td>
+              <td>③</td>
+              <td class="deny">无效</td>
+              <td>市电线或直流线上的扼流圈</td>
+            </tr>
+            <tr>
+              <td>自家电脑、USB、网线</td>
+              <td>④</td>
+              <td class="deny">无效</td>
+              <td>那些线缆上加磁环</td>
+            </tr>
+            <tr>
+              <td>邻居的 LED 或电源</td>
+              <td>① 为主</td>
+              <td class="na">部分</td>
+              <td>源侧，加几何</td>
+            </tr>
+            <tr>
+              <td>电动汽车充电器</td>
+              <td>① 为主</td>
+              <td class="na">部分</td>
+              <td>交涉，加几何</td>
+            </tr>
+            <tr>
+              <td>光伏逆变器</td>
+              <td>① 与 ③</td>
+              <td class="na">部分</td>
+              <td>源侧，加市电侧</td>
+            </tr>
+            <tr>
+              <td>PLC / BPL</td>
+              <td>① 带内</td>
+              <td class="deny">无效</td>
+              <td>频率协调、投诉</td>
+            </tr>
+            <tr>
+              <td><b>编织层拾取的近场噪声</b></td>
+              <td><b>②</b></td>
+              <td><b>完全有效</b></td>
+              <td><b>同轴扼流圈，本页主题</b></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>一条规则生成整张表。</b>扼流圈只作用于「装了它的那根导体上的共模路径」。三条推论解释了表里每一个「无效」：
+          <br />
+          一、天线导线直接拾取的噪声，它管不了，因为那噪声不在同轴上。
+          <br />
+          二、市电传导进来的噪声，它管不了，因为那噪声同样到不了同轴。
+          <br />
+          三、噪声一旦完成模式转换，它管不了，因为那时噪声已经离开了它够得着的那条路。
         </div>
       </div>
     </section>

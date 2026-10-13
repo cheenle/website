@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="接收噪声到底从哪扇门进来：四扇门诊断模型（天线本体、馈线屏蔽层、市电、近场），逐类干扰源裁决共模扼流圈有没有用，以及花钱之前怎么在自己的台位上证明噪声走哪条路。"
+    />
+    <meta
+      name="keywords"
+      content="接收噪声, QRM, 共模扼流圈, CMC, EFHW, 端馈半波, 馈线, 同轴屏蔽层, 共模电流, 电力线噪声, 开关电源, 充电桩, 光伏逆变器, 噪声底"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta name="theme-color" content="#0a0e14" />
+    <link rel="alternate" hreflang="en" href="../rx-noise.html" />
+    <link rel="alternate" hreflang="zh-CN" href="rx-noise.html" />
+    <title>接收噪声 — 它到底从哪扇门进来 — EFHW Projects</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/octen.css?v=6" />
+    <link rel="stylesheet" href="../css/efhw.css?v=2" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>🔊</text></svg>"
+    />
+  </head>
+  <body data-site="efhw">
+    <nav class="navbar">
+      <div class="container navbar-content">
+        <a href="../index.html" class="logo">
+          <span class="logo-icon"><i class="fas fa-broadcast-tower"></i></span>
+          <span>EFHW<span style="color: var(--accent)">Projects</span></span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="../index.html#research-hub">研究方向</a></li>
+          <li><a href="../index.html#features">工程实现</a></li>
+          <li><a href="#localise">先诊断</a></li>
+          <li><a href="../baluns.html">巴伦</a></li>
+          <li><a href="../index.html#research">深度研究</a></li>
+          <li>
+            <a
+              href="https://github.com/cheenle/efhw-knowledge"
+              target="_blank"
+              rel="noopener"
+              class="nav-cta"
+              ><i class="fab fa-github"></i> GitHub</a
+            >
+          </li>
+        </ul>
+        <div class="nav-actions">
+          <a href="rx-noise.html" class="lang-btn">EN</a>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="subnav">
+      <div class="container subnav-inner">
+        <a href="#localise">01 · 先量再买</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-volume-high"></i>
+          <span>先诊断，再花钱 · 扼流圈的分源裁决</span>
+        </div>
+        <h1 class="hero-title">
+          接收噪声<br />
+          <span class="gradient">到底从哪扇门进来</span>
+        </h1>
+        <p class="hero-subtitle">
+          每一分贝接收噪声都从四扇门之一进来。四扇门成因不同，特征不同，解药也不同，而共模扼流圈只够得着其中一扇。这一页要你先查清噪声走哪扇门，再决定要不要花钱。安静的台位上，诚实的答案是什么都别买。每条说法都带
+          <span class="tag tag-c">C</span>（有可查来源）或
+          <span class="tag tag-c">算式</span>（可以拿笔复算）。
+        </p>
+        <div class="hero-actions">
+          <a href="#localise" class="btn btn-primary btn-large"
+            ><i class="fas fa-stethoscope"></i> 从五刀开始</a
+          >
+          <a href="../index.html#research-hub" class="btn btn-secondary btn-large"
+            ><i class="fas fa-diagram-project"></i> 研究方向</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="localise">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">01 · 先量，再买</span>
+          <h2 class="section-title">四扇门，以及分开它们的五刀</h2>
+          <p class="section-subtitle">
+            接收噪声经四条路径进到 EFHW 台位。ARRL
+            自己给的排查指导是先问「从哪儿来」，再问「是什么」。这里同样管用：不知路径，选不出对路的解药。
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>门</th>
+              <th>路径</th>
+              <th>耦合方式</th>
+              <th>表现</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>① 天线本体</b></td>
+              <td>天线导线直接拾取噪声。</td>
+              <td>近场电场，以及远场</td>
+              <td class="na">第 2 刀几乎不动它</td>
+            </tr>
+            <tr>
+              <td><b>② 馈线屏蔽层</b></td>
+              <td>
+                同轴编织层外表面的共模电流。它从馈电点一路穿过噪声场，走到小屋。
+              </td>
+              <td>沿编织层传导，兼有场耦合</td>
+              <td class="na">第 2 刀让它塌掉；夹式磁环能改变它</td>
+            </tr>
+            <tr>
+              <td><b>③ 市电</b></td>
+              <td>噪声经供电线路传导进来，穿过电源，进到接收机的接地参考。</td>
+              <td>传导</td>
+              <td class="na">第 4 刀能改变它</td>
+            </tr>
+            <tr>
+              <td><b>④ 近场</b></td>
+              <td>电台、SDR、USB 线或网线自己就是接收天线。</td>
+              <td>近场</td>
+              <td class="na">第 5 刀让噪声跟着设备走</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>最后一列是指针，不是证明。</b>每一刀只砍掉候选，没有哪一刀能单独指认元凶。你要做的是逐刀排除，直到只剩一扇门站着。
+        </div>
+
+        <h3 class="card-title" style="margin-top: 2.5rem">五刀，按收益排序</h3>
+        <p class="section-subtitle" style="margin-bottom: 1.5rem">
+          五刀一个下午做完，不需要添置任何东西。第 1 刀每分钟的信息量最大，先做它；哪扇门被排除就停下。
+        </p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>刀</th>
+              <th>做法</th>
+              <th>读数的含义</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1</b></td>
+              <td>天线口拧上 50 &Omega; 假负载，同频段再听一次。</td>
+              <td>
+                噪声<em>消失</em>，说明它经天线系统进来（门①②）。噪声<em>仍在</em>，说明它从市电或近场进来（门③④）。这一刀把搜索空间砍一半。
+              </td>
+            </tr>
+            <tr>
+              <td><b>2</b></td>
+              <td>
+                在变压器处断开天线导线，同轴保持连通并照旧拉回小屋。
+              </td>
+              <td>
+                噪声<em>仍在</em>，说明是编织层在收，扼流圈有靶子（门②）。噪声<em>塌掉</em>，说明是天线导线自己在听，扼流圈帮不上（门①）。
+              </td>
+            </tr>
+            <tr>
+              <td><b>3</b></td>
+              <td>同轴上夹一个铁氧体磁珠，反复进出做 A/B。</td>
+              <td>
+                电平<em>跟着磁珠跳</em>，确认了共模路径，值得做一个固定扼流圈。电平<em>移动但不回来</em>，或只在部分频段动，说明你搬走了谐振点，没消掉电流。
+              </td>
+            </tr>
+            <tr>
+              <td><b>4</b></td>
+              <td>
+                电台改用电池供电，拔掉屋里每一个充电器、电源适配器和网线。
+              </td>
+              <td>
+                噪声<em>变了</em>，属门③。解药该装在市电线上，不在同轴上。
+              </td>
+            </tr>
+            <tr>
+              <td><b>5</b></td>
+              <td>拿便携短波接收机在屋里走动，贴近可疑设备。</td>
+              <td>
+                靠近某个设备时噪声<em>陡升</em>，属门④，元凶也找到了。走到哪儿都一样，说明还得回到门①②③。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>两条纪律。缺了它们，下面全部不可信。</b>
+          <br />
+          <b>一、只做相对比较。</b>S 表读数不是噪声功率计。它随 AGC
+          变化，随前置放大与衰减设置变化，还有一条最容易被忽略：它随接收机看到的源阻抗变化。换成假负载本身就改变了源阻抗，所以第
+          1 刀里有一部分电平变化根本不是噪声变化。只比较，不做绝对测量。
+          <br />
+          <b>二、同一时段、同一频率、同一设置。</b>环境噪声场在几分钟到几小时内就会变。跨两晚做的
+          A/B 什么都证明不了。
+        </div>
+
+        <h3 class="card-title" style="margin-top: 2.5rem">本站的一条反例</h3>
+        <p class="section-subtitle" style="margin-bottom: 1.5rem">
+          「每个 EFHW 都得配接收磁环」这句话到处被当成常识转述。在本站，事实相反。值得展示的是：这件事该由测量裁决，不该由口碑裁决。下表取自
+          BG1SB（网格 ON80da）一整年的 PSK Reporter 记录分析，只描述本站点。
+        </p>
+        <table class="spec-table" data-gate="labeled">
+          <caption>
+            依据：<code>efhw-knowledge/measurements/bg1sb_20m_efhw_case_study.md</code>
+            第 2.5 与 2.6 节（2026-06-14）。相对值来自 PSK Reporter，不是绝对噪声功率。
+          </caption>
+          <thead>
+            <tr>
+              <th>量</th>
+              <th>实测值</th>
+              <th>读法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>可解码的最弱信号（最安静方向）</td>
+              <td>&minus;23 dB SNR</td>
+              <td>FT8 解码极限约 &minus;24 dB，本站距理论灵敏度不到 1 dB</td>
+            </tr>
+            <tr>
+              <td>各方位噪声底</td>
+              <td>均匀，无方向性噪声源</td>
+              <td>没有任何方向被本地噪声源吞掉</td>
+            </tr>
+            <tr>
+              <td>DX 占比：接收对发射</td>
+              <td>接收 29.9%，发射 20.6%</td>
+              <td>收得比打得还远，接收不是瓶颈</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>所以结论是什么都别买。而且这是个测出来的结论。</b>流行建议背后的机理没错：台位埋在本地噪声里，接收确实会聋，带尖锐零点的磁环确实能救。但前提在本站不成立，结论也就不成立。先量自己的噪声底，再接受别人的解药。
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function toggleMobileMenu() {
+        document.querySelector(".nav-links").classList.toggle("active");
+      }
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const t = document.querySelector(a.getAttribute("href"));
+          if (t) {
+            e.preventDefault();
+            t.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+      const nav = document.querySelector(".navbar");
+      window.addEventListener("scroll", () => {
+        nav.style.background =
+          window.scrollY > 50 ? "rgba(10,14,20,0.98)" : "rgba(10,14,20,0.92)";
+      });
+    </script>
+    <script src="../js/global-nav.js?v=9" defer data-gn="1"></script>
+  </body>
+</html>

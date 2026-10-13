@@ -86,7 +86,13 @@ PAGES = [
     {
         "en": "rx-noise.html", "zh": "zh/rx-noise.html",
         "min_na": 0, "max_tag_m": None, "require_tag_m_zero": True,
-        "max_labeled_tables": 2,
+        # Exactly three tables on this page state their own basis and are
+        # therefore exempt from the per-line dB rule (not a blank cheque —
+        # the cap is the count, and the gate prints how many claims it waived):
+        #   §01  BG1SB counter-example  — basis: measurements/…case_study §2.5/2.6
+        #   §02  Class B limits + dBuV→dBm conversion — basis: GB/T 9254.1-2021
+        #   §03  common-mode divider table — basis: the formula stated above it
+        "max_labeled_tables": 3,
         "cn_forbidden": ("Measure first", "Six sources", "The other three",
                          "Prove it worked", "What a choke cannot fix",
                          "Where the noise", "No number on this page"),

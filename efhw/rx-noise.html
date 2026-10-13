@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Where received noise actually gets in: a four-door diagnostic model for HF receive noise (antenna, feedline shield, mains, near field), a source-by-source verdict on whether a common-mode choke helps for each, and how to prove on your own station which door the noise uses before you spend money."
+    />
+    <meta
+      name="keywords"
+      content="receive noise, RFI, QRM, common mode choke, CMC, EFHW, end-fed half wave, feedline, coax shield, common mode current, power line noise, switching supply, EV charger, solar inverter, PLC, BPL, noise floor"
+    />
+    <meta name="author" content="BG1SB" />
+    <meta name="theme-color" content="#0a0e14" />
+    <link rel="alternate" hreflang="zh-CN" href="zh/rx-noise.html" />
+    <link rel="alternate" hreflang="en" href="rx-noise.html" />
+    <title>
+      Receive Noise — Where It Actually Gets In — EFHW Projects
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/octen.css?v=6" />
+    <link rel="stylesheet" href="css/efhw.css?v=2" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2310b981' width='100' height='100' rx='20'/><text y='.9em' x='50%' text-anchor='middle' font-size='60'>🔊</text></svg>"
+    />
+  </head>
+  <body data-site="efhw">
+    <nav class="navbar">
+      <div class="container navbar-content">
+        <a href="index.html" class="logo">
+          <span class="logo-icon"><i class="fas fa-broadcast-tower"></i></span>
+          <span>EFHW<span style="color: var(--accent)">Projects</span></span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html#research-hub">Directions</a></li>
+          <li><a href="index.html#features">Engineering</a></li>
+          <li><a href="#localise">Diagnose</a></li>
+          <li><a href="baluns.html">Baluns</a></li>
+          <li><a href="index.html#research">Deep Research</a></li>
+          <li>
+            <a
+              href="https://github.com/cheenle/efhw-knowledge"
+              target="_blank"
+              rel="noopener"
+              class="nav-cta"
+              ><i class="fab fa-github"></i> GitHub</a
+            >
+          </li>
+        </ul>
+        <div class="nav-actions">
+          <a href="zh/rx-noise.html" class="lang-btn">中文</a>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="subnav">
+      <div class="container subnav-inner">
+        <a href="#localise">01 · Measure first</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-volume-high"></i>
+          <span
+            >Diagnose before you buy · the source-by-source verdict on
+            chokes</span
+          >
+        </div>
+        <h1 class="hero-title">
+          Where received noise<br />
+          <span class="gradient">actually gets in</span>
+        </h1>
+        <p class="hero-subtitle">
+          Every dB of received noise enters through one of four doors. They have
+          different causes, different signatures and different cures, and a
+          common-mode choke only reaches one of them. This page is about
+          finding out which door your noise uses <em>before</em> you spend
+          money, because on a quiet station the honest answer is that you should
+          buy nothing at all. Every claim carries a
+          <span class="tag tag-c">C</span> for a checkable source or an
+          <span class="tag tag-c">算式</span> for arithmetic you can redo on
+          paper.
+        </p>
+        <div class="hero-actions">
+          <a href="#localise" class="btn btn-primary btn-large"
+            ><i class="fas fa-stethoscope"></i> Start with five cuts</a
+          >
+          <a href="index.html#research-hub" class="btn btn-secondary btn-large"
+            ><i class="fas fa-diagram-project"></i> Research directions</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="localise">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">01 · Measure first, buy later</span>
+          <h2 class="section-title">
+            Four doors, and the cuts that separate them
+          </h2>
+          <p class="section-subtitle">
+            Received noise enters an EFHW station through four paths. The
+            ARRL&rsquo;s own guidance for interference hunting is to ask
+            &ldquo;where is this coming from&rdquo; before asking &ldquo;what is
+            producing it&rdquo;, and the same discipline pays here: you cannot
+            pick the right cure until you know the path.
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Door</th>
+              <th>Path</th>
+              <th>Coupling</th>
+              <th>How it shows up</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>① Element</b></td>
+              <td>The antenna wire picks the noise up directly.</td>
+              <td>Near-field electric, and far field</td>
+              <td class="na">Cut 2 barely changes it</td>
+            </tr>
+            <tr>
+              <td><b>② Shield</b></td>
+              <td>
+                Common-mode current on the outside of the coax braid, running
+                through the noise field all the way from the feedpoint to the
+                shack.
+              </td>
+              <td>Conducted along the braid, plus field coupling</td>
+              <td class="na">Cut 2 collapses it; a clip-on bead changes it</td>
+            </tr>
+            <tr>
+              <td><b>③ Mains</b></td>
+              <td>
+                Noise conducted in on the supply wiring, through the PSU, into
+                the receiver&rsquo;s ground reference.
+              </td>
+              <td>Conducted</td>
+              <td class="na">Cut 4 changes it</td>
+            </tr>
+            <tr>
+              <td><b>④ Near field</b></td>
+              <td>
+                The rig, the SDR, a USB lead or an Ethernet run is itself the
+                receiving antenna.
+              </td>
+              <td>Near-field</td>
+              <td class="na">Cut 5 makes the noise follow the device</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>Read the last column as a pointer, not a proof.</b> Each cut
+          narrows the candidates; none of them identifies a culprit on its own.
+          You are eliminating doors, one at a time, until one is left standing.
+        </div>
+
+        <h3 class="card-title" style="margin-top: 2.5rem">
+          Five cuts, in the order they pay
+        </h3>
+        <p class="section-subtitle" style="margin-bottom: 1.5rem">
+          All five fit in one afternoon and need nothing you do not already own.
+          Cut 1 carries the most information per minute, so start there and stop
+          as soon as a door is eliminated.
+        </p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Cut</th>
+              <th>What you do</th>
+              <th>What the reading means</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1</b></td>
+              <td>
+                Screw a 50 &Omega; dummy load onto the antenna port and listen on
+                the same frequency.
+              </td>
+              <td>
+                Noise <em>disappears</em> &rarr; it arrives via the antenna
+                system (door ① or ②). Noise <em>stays</em> &rarr; it comes in on
+                the mains or from the near field (door ③ or ④). This one cut
+                halves the search space.
+              </td>
+            </tr>
+            <tr>
+              <td><b>2</b></td>
+              <td>
+                Disconnect the antenna <em>wire</em> at the transformer but leave
+                the coax connected and running to the shack.
+              </td>
+              <td>
+                Noise <em>stays</em> &rarr; the braid is receiving it, and a
+                choke has a target (door ②). Noise <em>collapses</em> &rarr; the
+                antenna wire itself is doing the listening, and no choke will
+                help (door ①).
+              </td>
+            </tr>
+            <tr>
+              <td><b>3</b></td>
+              <td>
+                Clip a ferrite bead onto the coax and A/B it in and out, several
+                times.
+              </td>
+              <td>
+                Level <em>steps</em> with the bead &rarr; you have confirmed a
+                common-mode path, and a permanent choke is worth building. Level
+                <em>moves but not back</em>, or moves only at some frequencies
+                &rarr; you are shifting a resonance, not removing a current (see
+                the divider section).
+              </td>
+            </tr>
+            <tr>
+              <td><b>4</b></td>
+              <td>
+                Run the radio from a battery and unplug every charger, every
+                wall-wart and every Ethernet run in the room.
+              </td>
+              <td>
+                Noise <em>changes</em> &rarr; door ③, and the cure belongs on
+                the mains lead, not on the coax.
+              </td>
+            </tr>
+            <tr>
+              <td><b>5</b></td>
+              <td>
+                Walk the house with a portable shortwave receiver, holding it
+                close to suspect devices.
+              </td>
+              <td>
+                Noise <em>rises sharply</em> near one device &rarr; door ④, and
+                you have found the culprit. Noise that is uniform everywhere
+                points back at doors ①, ② or ③.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>Two rules, or nothing below this line is trustworthy.</b>
+          <br />
+          <b>1. Relative readings only.</b> An S-meter reading is not a noise
+          power measurement. It moves with AGC, with preamp and attenuator
+          settings, and &mdash; the part people miss &mdash; with the source
+          impedance the receiver is looking at. Swapping in a dummy load changes
+          that impedance, so part of the level shift in cut 1 is not a noise
+          change at all. Compare, never measure absolutely.
+          <br />
+          <b>2. Same hour, same frequency, same settings.</b> The ambient noise
+          field moves over minutes and hours as appliances and neighbours come
+          and go. An A/B split across two evenings proves nothing.
+        </div>
+
+        <h3 class="card-title" style="margin-top: 2.5rem">
+          A worked counter-example from this station
+        </h3>
+        <p class="section-subtitle" style="margin-bottom: 1.5rem">
+          The advice to add a receiving loop is repeated everywhere as if every
+          EFHW station needs one. On this station the opposite is true, and it
+          is worth showing how a measurement settles the question rather than a
+          reputation. Values below are from a full year of PSK Reporter records
+          analysed for BG1SB (grid ON80da), and they describe
+          <em>this site only</em>.
+        </p>
+        <table class="spec-table" data-gate="labeled">
+          <caption>
+            Basis: <code>efhw-knowledge/measurements/bg1sb_20m_efhw_case_study.md</code>
+            §2.5 and §2.6 (2026-06-14). Relative values from PSK Reporter, not
+            absolute noise power.
+          </caption>
+          <thead>
+            <tr>
+              <th>Quantity</th>
+              <th>Measured value</th>
+              <th>Reading</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Weakest signal decoded, quietest direction</td>
+              <td>&minus;23 dB SNR</td>
+              <td>
+                The FT8 decoder&rsquo;s limit is about &minus;24 dB, so the
+                station is within a dB of theoretical sensitivity
+              </td>
+            </tr>
+            <tr>
+              <td>Noise floor by direction</td>
+              <td>Uniform, no directional source</td>
+              <td>No direction is being swallowed by a local noise source</td>
+            </tr>
+            <tr>
+              <td>DX share, receive vs transmit</td>
+              <td>29.9% RX against 20.6% TX</td>
+              <td>
+                Receive reaches <em>further</em> than transmit, so receive is
+                not the bottleneck
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>So the conclusion is &ldquo;buy nothing&rdquo;, and it is a
+          measured conclusion.</b> The mechanism behind the popular advice is
+          sound &mdash; a station buried in local noise really is deaf on
+          receive, and a loop with a sharp null really can help. But the premise
+          does not hold here, so the conclusion does not either. Measure your
+          own noise floor before you accept somebody else&rsquo;s cure.
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function toggleMobileMenu() {
+        document.querySelector(".nav-links").classList.toggle("active");
+      }
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const t = document.querySelector(a.getAttribute("href"));
+          if (t) {
+            e.preventDefault();
+            t.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+      const nav = document.querySelector(".navbar");
+      window.addEventListener("scroll", () => {
+        nav.style.background =
+          window.scrollY > 50 ? "rgba(10,14,20,0.98)" : "rgba(10,14,20,0.92)";
+      });
+    </script>
+    <script src="js/global-nav.js?v=9" defer data-gn="1"></script>
+  </body>
+</html>

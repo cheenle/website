@@ -19,13 +19,27 @@ echo "=========================================="
 echo ""
 
 # Check required files
-for f in "index.html" "baluns.html" "zh/baluns.html" "css/octen.css" "js/global-nav.js"; do
+for f in "index.html" "baluns.html" "zh/baluns.html" \
+         "rx-noise.html" "zh/rx-noise.html" \
+         "css/octen.css" "js/global-nav.js"; do
     if [ ! -f "${LOCAL_WEBSITE_DIR}/${f}" ]; then
         echo "ERROR: Required file not found: ${LOCAL_WEBSITE_DIR}/${f}"
         exit 1
     fi
 done
 echo "[OK] Required files present."
+
+# Publish gate. This script tars the whole efhw/ directory, so a half-written page
+# would ship with any deploy. Run the page gate first and refuse to package on
+# failure — that makes "no half-finished page goes live" a mechanical constraint
+# rather than something someone has to remember.
+# Precedent: mrrc_hub/website/deploy.sh runs its golden-rule gate the same way.
+echo "[..] Running publish gate (check_baluns.py)..."
+if ! python3 "${LOCAL_WEBSITE_DIR}/check_baluns.py"; then
+    echo "ERROR: publish gate failed — refusing to package. Fix the FAILs above."
+    exit 1
+fi
+echo "[OK] Publish gate passed."
 
 # Create tarball
 echo "[..] Creating tarball..."

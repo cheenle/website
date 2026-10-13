@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Where received noise actually gets in: a four-door diagnostic model for HF receive noise (antenna, feedline shield, mains, near field), a source-by-source verdict on whether a common-mode choke helps for each, and how to prove on your own station which door the noise uses before you spend money."
+      content="Where HF receive noise gets in: four paths, how to tell which one your noise uses before you buy anything, and a source-by-source answer on whether a common-mode choke helps."
     />
     <meta
       name="keywords"
@@ -15,9 +15,7 @@
     <meta name="theme-color" content="#0a0e14" />
     <link rel="alternate" hreflang="zh-CN" href="zh/rx-noise.html" />
     <link rel="alternate" hreflang="en" href="rx-noise.html" />
-    <title>
-      Receive Noise — Where It Actually Gets In — EFHW Projects
-    </title>
+    <title>Receive Noise — Where It Gets In — EFHW Projects</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -69,10 +67,10 @@
     </nav>
     <div class="subnav">
       <div class="container subnav-inner">
-        <a href="#localise">01 · Measure first</a>
-        <a href="#sources">02 · Sources</a>
+        <a href="#localise">01 · Check first</a>
+        <a href="#sources">02 · Noise sources</a>
         <a href="#cmc">03 · The choke</a>
-        <a href="#other-doors">04 · Other doors</a>
+        <a href="#other-doors">04 · Other paths</a>
         <a href="#verify">05 · Verify</a>
         <a href="#limits">06 · Limits</a>
         <a href="#sources-evidence">Evidence</a>
@@ -83,29 +81,24 @@
       <div class="hero-content">
         <div class="hero-badge">
           <i class="fas fa-volume-high"></i>
-          <span
-            >Diagnose before you buy · the source-by-source verdict on
-            chokes</span
-          >
+          <span>Find the path first. Then buy something — or nothing.</span>
         </div>
         <h1 class="hero-title">
-          Where received noise<br />
+          Where receive noise<br />
           <span class="gradient">actually gets in</span>
         </h1>
         <p class="hero-subtitle">
-          Every dB of received noise enters through one of four doors. They have
-          different causes, different signatures and different cures, and a
-          common-mode choke only reaches one of them. This page is about
-          finding out which door your noise uses <em>before</em> you spend
-          money, because on a quiet station the honest answer is that you should
-          buy nothing at all. Every claim carries a
-          <span class="tag tag-c">C</span> for a checkable source or an
-          <span class="tag tag-c">算式</span> for arithmetic you can redo on
-          paper.
+          Noise reaches your receiver by four different paths. They come from
+          different places and need different fixes, and a common-mode choke
+          reaches only one of them. So measure first — on a quiet station the
+          right answer is to buy nothing at all. Every number below is marked
+          <span class="tag tag-c">C</span> when you can look up the source, or
+          <span class="tag tag-c">算式</span> when you can redo the arithmetic
+          yourself.
         </p>
         <div class="hero-actions">
           <a href="#localise" class="btn btn-primary btn-large"
-            ><i class="fas fa-stethoscope"></i> Start with five cuts</a
+            ><i class="fas fa-stethoscope"></i> Start here</a
           >
           <a href="index.html#research-hub" class="btn btn-secondary btn-large"
             ><i class="fas fa-diagram-project"></i> Research directions</a
@@ -117,49 +110,45 @@
     <section class="section" id="localise">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">01 · Measure first, buy later</span>
-          <h2 class="section-title">
-            Four doors, and the cuts that separate them
-          </h2>
+          <span class="section-label">01 · Check first, buy later</span>
+          <h2 class="section-title">Four paths, and five cuts that tell them apart</h2>
           <p class="section-subtitle">
-            Received noise enters an EFHW station through four paths. The
-            ARRL&rsquo;s own guidance for interference hunting is to ask
-            &ldquo;where is this coming from&rdquo; before asking &ldquo;what is
-            producing it&rdquo;, and the same discipline pays here: you cannot
-            pick the right cure until you know the path.
+            You cannot pick the right fix until you know how the noise gets in.
+            The ARRL gives its own interference hunters the same instruction:
+            work out <em>where</em> it is coming from before worrying about
+            <em>what</em> is making it.
           </p>
         </div>
         <table class="spec-table">
           <thead>
             <tr>
-              <th>Door</th>
               <th>Path</th>
-              <th>Coupling</th>
-              <th>How it shows up</th>
+              <th>What it is</th>
+              <th>How it couples</th>
+              <th>What it looks like</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><b>① Element</b></td>
-              <td>The antenna wire picks the noise up directly.</td>
-              <td>Near-field electric, and far field</td>
-              <td class="na">Cut 2 barely changes it</td>
+              <td><b>① Antenna wire</b></td>
+              <td>The antenna picks the noise up the same way it picks up signals.</td>
+              <td>Near-field electric field, and far field</td>
+              <td class="na">Cut 2 leaves it almost unchanged</td>
             </tr>
             <tr>
-              <td><b>② Shield</b></td>
+              <td><b>② Coax shield</b></td>
               <td>
-                Common-mode current on the outside of the coax braid, running
-                through the noise field all the way from the feedpoint to the
-                shack.
+                Current on the outside of the braid, flowing along the whole
+                length of coax between feedpoint and shack.
               </td>
-              <td>Conducted along the braid, plus field coupling</td>
-              <td class="na">Cut 2 collapses it; a clip-on bead changes it</td>
+              <td>Along the braid, and from nearby fields</td>
+              <td class="na">Cut 2 kills it; a clip-on bead changes it</td>
             </tr>
             <tr>
-              <td><b>③ Mains</b></td>
+              <td><b>③ Mains wiring</b></td>
               <td>
-                Noise conducted in on the supply wiring, through the PSU, into
-                the receiver&rsquo;s ground reference.
+                Noise arrives on the power line, goes through the supply, and
+                ends up on the chassis the receiver measures against.
               </td>
               <td>Conducted</td>
               <td class="na">Cut 4 changes it</td>
@@ -167,139 +156,134 @@
             <tr>
               <td><b>④ Near field</b></td>
               <td>
-                The rig, the SDR, a USB lead or an Ethernet run is itself the
-                receiving antenna.
+                The rig, the SDR, a USB lead or a network cable is picking it up
+                directly.
               </td>
-              <td>Near-field</td>
+              <td>Near field</td>
               <td class="na">Cut 5 makes the noise follow the device</td>
             </tr>
           </tbody>
         </table>
         <div class="calc">
-          <b>Read the last column as a pointer, not a proof.</b> Each cut
-          narrows the candidates; none of them identifies a culprit on its own.
-          You are eliminating doors, one at a time, until one is left standing.
+          <b>These readings narrow the field. They do not name a culprit.</b>
+          Each cut rules out half of what is left. Keep going until one path is
+          all that remains.
         </div>
 
         <h3 class="card-title" style="margin-top: 2.5rem">
-          Five cuts, in the order they pay
+          Five cuts, most useful first
         </h3>
         <p class="section-subtitle" style="margin-bottom: 1.5rem">
-          All five fit in one afternoon and need nothing you do not already own.
-          Cut 1 carries the most information per minute, so start there and stop
-          as soon as a door is eliminated.
+          All five fit into an afternoon, and none of them needs equipment you
+          do not already own.
         </p>
         <table class="spec-table">
           <thead>
             <tr>
               <th>Cut</th>
               <th>What you do</th>
-              <th>What the reading means</th>
+              <th>What it tells you</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><b>1</b></td>
               <td>
-                Screw a 50 &Omega; dummy load onto the antenna port and listen on
-                the same frequency.
+                Screw a 50 &Omega; dummy load onto the antenna socket and listen
+                on the same frequency.
               </td>
               <td>
-                Noise <em>disappears</em> &rarr; it arrives via the antenna
-                system (door ① or ②). Noise <em>stays</em> &rarr; it comes in on
-                the mains or from the near field (door ③ or ④). This one cut
-                halves the search space.
+                Noise gone &rarr; it arrives through the antenna system (paths ①
+                and ②). Noise still there &rarr; it comes in on the mains or
+                from nearby equipment (③ and ④). This one cut halves the search.
               </td>
             </tr>
             <tr>
               <td><b>2</b></td>
               <td>
-                Disconnect the antenna <em>wire</em> at the transformer but leave
-                the coax connected and running to the shack.
+                Disconnect the antenna wire at the transformer. Leave the coax
+                connected and running back to the shack.
               </td>
               <td>
-                Noise <em>stays</em> &rarr; the braid is receiving it, and a
-                choke has a target (door ②). Noise <em>collapses</em> &rarr; the
-                antenna wire itself is doing the listening, and no choke will
-                help (door ①).
+                Noise still there &rarr; the braid is receiving it, and a choke
+                has something to bite on (②). Noise collapses &rarr; the antenna
+                wire is doing the listening and no choke will help (①).
               </td>
             </tr>
             <tr>
               <td><b>3</b></td>
               <td>
-                Clip a ferrite bead onto the coax and A/B it in and out, several
+                Clip a ferrite bead on the coax and take it off again, several
                 times.
               </td>
               <td>
-                Level <em>steps</em> with the bead &rarr; you have confirmed a
-                common-mode path, and a permanent choke is worth building. Level
-                <em>moves but not back</em>, or moves only at some frequencies
-                &rarr; you are shifting a resonance, not removing a current (see
-                the divider section).
+                Level steps with the bead &rarr; you have found a common-mode
+                path and a permanent choke is worth building. Level moves but
+                does not come back, or only moves on some bands &rarr; you are
+                moving a resonance, not removing a current. Section 03 explains
+                why.
               </td>
             </tr>
             <tr>
               <td><b>4</b></td>
               <td>
-                Run the radio from a battery and unplug every charger, every
-                wall-wart and every Ethernet run in the room.
+                Run the radio from a battery, and unplug every charger, wall
+                adapter and network cable in the room.
               </td>
               <td>
-                Noise <em>changes</em> &rarr; door ③, and the cure belongs on
-                the mains lead, not on the coax.
+                Noise changes &rarr; it is coming in on the mains (③), and the
+                fix belongs on the power lead, not on the coax.
               </td>
             </tr>
             <tr>
               <td><b>5</b></td>
               <td>
-                Walk the house with a portable shortwave receiver, holding it
-                close to suspect devices.
+                Walk around with a portable shortwave receiver and hold it close
+                to things that might be guilty.
               </td>
               <td>
-                Noise <em>rises sharply</em> near one device &rarr; door ④, and
-                you have found the culprit. Noise that is uniform everywhere
-                points back at doors ①, ② or ③.
+                Noise jumps near one device &rarr; you have found it, and it is
+                path ④. Noise is the same everywhere &rarr; go back to ①, ② or
+                ③.
               </td>
             </tr>
           </tbody>
         </table>
         <div class="calc">
-          <b>Two rules, or nothing below this line is trustworthy.</b>
-          <br />
-          <b>1. Relative readings only.</b> An S-meter reading is not a noise
-          power measurement. It moves with AGC, with preamp and attenuator
-          settings, and &mdash; the part people miss &mdash; with the source
-          impedance the receiver is looking at. Swapping in a dummy load changes
-          that impedance, so part of the level shift in cut 1 is not a noise
-          change at all. Compare, never measure absolutely.
-          <br />
-          <b>2. Same hour, same frequency, same settings.</b> The ambient noise
-          field moves over minutes and hours as appliances and neighbours come
-          and go. An A/B split across two evenings proves nothing.
+          <b>Two rules. Without them nothing else on this page means
+          anything.</b>
+          <br /><br />
+          <b>1. Compare, never measure.</b> An S-meter reading is not a noise
+          power measurement. It changes with AGC, with the preamp and attenuator,
+          and — the part people forget — with whatever impedance the receiver is
+          looking at. Fitting a dummy load changes that impedance, so part of
+          what you see in cut 1 is not a change in noise at all.
+          <br /><br />
+          <b>2. Same hour, same frequency, same settings.</b> The noise around
+          you moves over minutes and hours as appliances and neighbours come and
+          go. An A/B split across two evenings proves nothing.
         </div>
 
         <h3 class="card-title" style="margin-top: 2.5rem">
-          A worked counter-example from this station
+          Our own station, measured
         </h3>
         <p class="section-subtitle" style="margin-bottom: 1.5rem">
-          The advice to add a receiving loop is repeated everywhere as if every
-          EFHW station needs one. On this station the opposite is true, and it
-          is worth showing how a measurement settles the question rather than a
-          reputation. Values below are from a full year of PSK Reporter records
-          analysed for BG1SB (grid ON80da), and they describe
-          <em>this site only</em>.
+          You will read everywhere that an EFHW station needs a separate
+          receiving loop. On this station it does not, and the numbers say so.
+          They come from a year of PSK Reporter records analysed for BG1SB (grid
+          ON80da), and they describe <em>this site only</em>.
         </p>
         <table class="spec-table" data-gate="labeled">
           <caption>
             Basis: <code>efhw-knowledge/measurements/bg1sb_20m_efhw_case_study.md</code>
-            §2.5 and §2.6 (2026-06-14). Relative values from PSK Reporter, not
-            absolute noise power.
+            sections 2.5 and 2.6. These are relative values from PSK Reporter —
+            not absolute noise power.
           </caption>
           <thead>
             <tr>
-              <th>Quantity</th>
-              <th>Measured value</th>
-              <th>Reading</th>
+              <th>What was measured</th>
+              <th>Result</th>
+              <th>What it means</th>
             </tr>
           </thead>
           <tbody>
@@ -307,32 +291,32 @@
               <td>Weakest signal decoded, quietest direction</td>
               <td>&minus;23 dB SNR</td>
               <td>
-                The FT8 decoder&rsquo;s limit is about &minus;24 dB, so the
-                station is within a dB of theoretical sensitivity
+                The FT8 decoder stops around &minus;24 dB, so the station is
+                within a hair of theoretical sensitivity
               </td>
             </tr>
             <tr>
               <td>Noise floor by direction</td>
-              <td>Uniform, no directional source</td>
-              <td>No direction is being swallowed by a local noise source</td>
+              <td>Even, with no direction worse than the rest</td>
+              <td>No local noise source is swallowing any part of the sky</td>
             </tr>
             <tr>
-              <td>DX share, receive vs transmit</td>
-              <td>29.9% RX against 20.6% TX</td>
+              <td>Share of long-distance contacts, receive vs transmit</td>
+              <td>29.9% receive against 20.6% transmit</td>
               <td>
-                Receive reaches <em>further</em> than transmit, so receive is
-                not the bottleneck
+                The station hears further than it talks, so receiving is not the
+                weak link
               </td>
             </tr>
           </tbody>
         </table>
         <div class="calc">
-          <b>So the conclusion is &ldquo;buy nothing&rdquo;, and it is a
-          measured conclusion.</b> The mechanism behind the popular advice is
-          sound &mdash; a station buried in local noise really is deaf on
-          receive, and a loop with a sharp null really can help. But the premise
-          does not hold here, so the conclusion does not either. Measure your
-          own noise floor before you accept somebody else&rsquo;s cure.
+          <b>So on this station, buy nothing — and that is a measured
+          conclusion, not an opinion.</b> The advice about receiving loops is
+          not wrong. A station buried in local noise really is deaf, and a loop
+          with a sharp null really does help. The problem here is that the
+          premise does not hold, so the cure does not apply. Measure your own
+          noise floor before you accept somebody else's answer.
         </div>
       </div>
     </section>
@@ -340,13 +324,13 @@
     <section class="section" id="sources">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">02 · Six sources, four doors</span>
-          <h2 class="section-title">The same phrase covers six different things</h2>
+          <span class="section-label">02 · Six sources</span>
+          <h2 class="section-title">
+            "Environmental interference" is six different problems
+          </h2>
           <p class="section-subtitle">
-            &ldquo;Environmental interference&rdquo; gets used as one problem.
-            It is six. Read the cards as a comparison rather than as six essays:
-            every card uses the same five headings, so the verdict on chokes can
-            be read straight down the column and the differences are the point.
+            Each card below follows the same four headings, so you can read the
+            choke verdict straight down the column and see where it differs.
           </p>
         </div>
 
@@ -356,66 +340,67 @@
             <span class="tag tag-c">C</span>
           </h3>
           <p>
-            <b>Mechanism.</b> Almost all power-line noise comes from a spark or
-            an arc across utility hardware: a gap between two conductors, caused
-            by fittings that are loose, broken or spaced too closely. Current
-            crosses the gap, ionises the air, and radiates broadband energy.
+            <b>Where it comes from.</b> Arcing across the utility's own
+            hardware. A gap opens between two conductors — usually because
+            fittings are loose, broken or spaced too closely — current crosses
+            it, the air ionises, and broadband energy radiates away.
           </p>
           <p>
-            <b>Signature.</b> On a 50 Hz grid the arcing fires
-            <b>100 times a second</b>, because every cycle has two voltage peaks
-            and two zero crossings. On a 60 Hz grid it is 120 Hz. On an
-            oscilloscope the noise appears as two horizontal bands drifting
-            slowly upward, one from each half of the cycle. Two free tests
-            confirm it: <b>rain quietens it</b>, because water bridges the gap,
-            and <b>wind makes it vary</b>, because loose hardware moves.
+            <b>How to recognise it.</b> On a 50 Hz grid it fires 100 times a
+            second, because every cycle has two voltage peaks and two
+            zero-crossings. On 60 Hz it is 120 Hz. On a scope you see two bands
+            of noise drifting slowly upward, one from each half of the cycle.
+            Two tests need no equipment at all: <b>it goes quiet in the
+            rain</b>, because water bridges the gap, and <b>it varies in the
+            wind</b>, because loose hardware moves.
           </p>
           <p>
-            <b>A correction worth having.</b> Corona discharge is rarely, if
-            ever, the cause. The ARRL states it plainly: corona is confined to
-            lower frequencies, it is a low-current phenomenon, and it does not
-            propagate far from the source. Blaming corona sends you looking for
-            the wrong thing on the wrong pole.
+            <b>A common mistake worth correcting.</b> Corona discharge is
+            almost never the cause. The ARRL is explicit: corona sits at low
+            frequencies, it is a low-current effect, and it does not travel far.
+            Blame corona and you will spend the day looking at the wrong thing,
+            on the wrong pole.
           </p>
           <p>
-            <b>CMC verdict: no.</b> The energy travels along the power wiring
-            and reaches you by radiation into the antenna wire &mdash; door ①. A
-            choke acts on the coax braid&rsquo;s common-mode path, and this noise
-            is not on it.
+            <b>Does a choke help? No.</b> The energy runs along the power wiring
+            and reaches you by radiating into the antenna wire — path ①. A coax
+            choke works on the braid's common-mode path, and the noise is not
+            on it.
           </p>
           <p>
-            <b>Remedy.</b> Complain, with evidence. This is the one category
-            where the fix belongs to somebody else, and in many jurisdictions
-            that somebody is legally obliged to act.
+            <b>What to do.</b> Complain, with evidence. This is the one category
+            where somebody else has to do the work, and in many places they are
+            legally obliged to.
           </p>
           <p class="section-label" style="margin-bottom: 0">
-            Source: ARRL, <i>Power Line Noise</i> · IEEE Std 1897-2024
+            Sources: ARRL, <i>Power Line Noise</i> · IEEE Std 1897-2024
           </p>
         </div>
 
         <div class="feature-card" style="margin-bottom: 1.25rem">
           <h3 class="card-title">
-            <i class="fas fa-plug"></i> 2 · Switching supplies
+            <i class="fas fa-plug"></i> 2 · Switch-mode power supplies
             <span class="tag tag-c">C</span> <span class="tag tag-c">算式</span>
           </h3>
           <p>
-            <b>Mechanism.</b> A switching converter chops DC at tens to hundreds
-            of kilohertz. The harmonics of that chop, and the ringing on every
-            edge, run straight up through the HF spectrum. The noise leaves the
-            box in two forms: <b>differential mode</b> between live and neutral,
-            which an X capacitor suppresses, and <b>common mode</b> between the
-            conductors and earth, which needs a Y capacitor and a common-mode
-            choke. Cheap supplies cut cost by omitting precisely those last two
-            parts &mdash; the only two that work at HF.
+            <b>Where it comes from.</b> A switching supply chops DC tens or
+            hundreds of thousands of times a second. The harmonics of that
+            chopping, plus the ringing on every edge, run right up through HF.
+            The noise leaves through two routes: <b>differential</b>, between
+            live and neutral, which an X capacitor suppresses; and
+            <b>common mode</b>, between the conductors and earth, which needs a
+            Y capacitor and a common-mode choke. Cheap supplies save money by
+            leaving out those last two parts — the only two that do anything at
+            HF.
           </p>
           <p>
-            <b>Signature.</b> A comb of harmonics spaced at the switching
-            frequency, drifting as the supply&rsquo;s load changes. Often
-            accompanied by a slow periodic wobble as the supply enters and
-            leaves burst mode on light load.
+            <b>How to recognise it.</b> A comb of harmonics spaced at the
+            switching frequency, drifting around as the load changes. On light
+            load you often hear a slow wobble as the supply enters and leaves
+            burst mode.
           </p>
           <p>
-            <b>What compliance actually buys you.</b> Household equipment must
+            <b>What "compliant" actually means.</b> Household equipment has to
             meet the Class B conducted-emission limits. Here they are, with the
             voltage limit converted to the power it represents across 50
             &Omega;:
@@ -423,10 +408,10 @@
           <table class="spec-table" data-gate="labeled">
             <caption>
               Class B conducted disturbance at the mains port, quasi-peak.
-              Basis: GB/T 9254.1-2021, which adopts CISPR 32. Power column is
-              arithmetic: <code>P = 10·log₁₀(V² / 50 Ω / 1 mW)</code>. The two
-              rows marked <i>for reference</i> are typical noise-floor orders of
-              magnitude, not limits, and are labelled as such on purpose.
+              Basis: GB/T 9254.1-2021, which adopts CISPR 32. The power column
+              is arithmetic: <code>P = 10·log₁₀(V² / 50 Ω / 1 mW)</code>. The
+              two rows marked <i>for reference</i> are typical noise-floor
+              levels, not limits.
             </caption>
             <thead>
               <tr>
@@ -458,39 +443,39 @@
               <tr>
                 <td><i>for reference</i></td>
                 <td>quiet rural HF noise floor</td>
-                <td>typical order of magnitude</td>
+                <td>typical level</td>
                 <td>&asymp; &minus;120 dBm</td>
               </tr>
               <tr>
                 <td><i>for reference</i></td>
                 <td>suburban HF noise floor</td>
-                <td>typical order of magnitude</td>
+                <td>typical level</td>
                 <td>&asymp; &minus;100 dBm</td>
               </tr>
             </tbody>
           </table>
           <p>
-            <b>Read the gap, not the rows.</b> A device that passes the standard
-            with no margin is putting a signal at the mains port comparable to
-            the first three rows. A quiet band sits at the last two. That gap is
-            the whole problem, and it is why <b>compliance is not the same thing
-            as not interfering</b> &mdash; the limit is a compromise between
-            commerce and spectrum, not a promise that your HF reception will be
-            usable. The bottom two rows are typical orders of magnitude rather
-            than a standard, which is exactly why they are labelled that way.
+            <b>Compare the top three rows with the bottom two.</b> A device that
+            scrapes through with no margin puts about the same level on its
+            mains port as a quiet band puts at your receiver. Even after the
+            house wiring re-radiates that at a small fraction of its conducted
+            level, it can still be far above a quiet band.
+            <b>Passing the standard is not the same as not interfering.</b> The
+            limit is a deal between manufacturers and spectrum managers, not a
+            promise that your HF reception will work.
           </p>
           <p>
-            <b>CMC verdict: no, for the coax.</b> Noise entering on the mains
-            never touches the coax, so a choke there is decoration.
+            <b>Does a choke help? Not on the coax.</b> Noise arriving on the
+            mains never touches the coax, so a choke there does nothing at all.
           </p>
           <p>
-            <b>Remedy.</b> The same device, on the right conductor: a common-mode
-            choke on the mains lead or the DC lead. Also check USB and Ethernet
-            runs, which are the most commonly missed members of this family.
+            <b>What to do.</b> Move the same component to the right conductor: a
+            common-mode choke on the mains lead or the DC lead. Then check the
+            USB and network cables, which are the ones most often overlooked.
           </p>
           <p class="section-label" style="margin-bottom: 0">
-            Source: GB/T 9254.1-2021 (&asymp; CISPR 32) · EMC practice for
-            X and Y capacitors and common-mode chokes
+            Sources: GB/T 9254.1-2021 (&asymp; CISPR 32) · standard EMC practice
+            for X and Y capacitors and common-mode chokes
           </p>
         </div>
 
@@ -500,46 +485,47 @@
             <span class="tag tag-c">C</span>
           </h3>
           <p>
-            <b>Mechanism.</b> AC charging runs the mains through an on-board
-            charger in the car &mdash; a switching converter of 3.3 to 11 kW. DC
-            fast charging does the conversion in the post itself, at even higher
-            power, increasingly with silicon-carbide devices and their steeper
-            switching edges. Either way the charging cable is several metres of
-            multi-conductor cable running from a building to a vehicle, and its
-            protective earth conductor is exactly as long as the common-mode
-            antenna it forms. A kilowatt-class switching converter driving a long
-            unshielded conductor, with no RF reference ground at either end, is
-            the mechanism written out in full.
+            <b>Where it comes from.</b> Slow charging runs the mains through a
+            charger inside the car: a switching converter of 3.3 to 11 kW. Fast
+            charging does the conversion inside the charging post, at higher
+            power and increasingly with silicon-carbide devices that switch
+            even faster. Either way, the charging cable is several metres of
+            multi-conductor cable running from a building to a vehicle — and its
+            protective earth conductor is exactly as long as the antenna it
+            forms. A kilowatt-class switching converter driving a long
+            unshielded conductor, with no RF ground at either end.
           </p>
           <p>
-            <b>Signature.</b> Broadband, strongest while a car is actually
-            charging, and gone when it unplugs. That on/off correlation is the
-            most useful thing about it, because it dates and fingerprints the
-            event even when you cannot see the charger.
+            <b>How to recognise it.</b> Broadband, strong while a car is
+            charging, gone when the plug comes out. That in-and-out
+            relationship is the useful part: it dates the interference and
+            identifies the source even when you cannot see the charger.
           </p>
           <div class="risk">
-            <b>No public HF measurement exists for this.</b> Every reachable
-            published case about EV chargers concerns conducted-emission test
-            failures, or the 125 kHz band where charging posts interfere with
-            keyless-entry systems. Nothing we could retrieve measures a charger
-            at 1.8&ndash;30 MHz. What you have just read is mechanism only. We
-            will not print a number we cannot show, and neither should anyone
-            else selling you a solution.
+            <b>Nobody has published a shortwave measurement of one of
+            these.</b> Every case report we could reach is about conducted-
+            emission test failures, or about the 125 kHz band where charging
+            posts interfere with keyless entry. We could not find a single
+            measurement of a charger between 1.8 and 30 MHz. So what you have
+            just read is mechanism, not measurement. We are not going to print a
+            number we cannot show you, and you should be suspicious of anyone
+            who does.
           </div>
           <p>
-            <b>CMC verdict: partly.</b> The dominant path is door ① &mdash; the
-            charging cable radiates into your antenna wire. A coax choke reaches
-            only the fraction that arrives on the shield.
+            <b>Does a choke help? Partly.</b> Most of it arrives through path ①,
+            radiating from the charging cable into your antenna wire. A coax
+            choke only reaches the small share that arrives on the shield.
           </p>
           <p>
-            <b>Remedy.</b> Negotiation and geometry, in that order. Establish
-            the on/off correlation first; that is the evidence that makes a
-            conversation with the owner or the property manager possible. Then
-            move your own antenna further away, or accept the hours.
+            <b>What to do.</b> Talk to somebody, and change your own geometry.
+            Establish the charging-times correlation first — that is the
+            evidence that makes a conversation with the owner or the building
+            manager possible. Then move the antenna, or accept those hours as
+            lost.
           </p>
           <p class="section-label" style="margin-bottom: 0">
-            Source: GB/T 18487.1-2015 · published EV-charger EMC remediation
-            literature · 125 kHz keyless-entry case reports
+            Sources: GB/T 18487.1-2015 · published EV-charger EMC remediation
+            case reports · the 125 kHz keyless-entry reports
           </p>
         </div>
 
@@ -549,64 +535,65 @@
             <span class="tag tag-c">C</span>
           </h3>
           <p>
-            <b>Mechanism.</b> Modern string inverters are usually transformerless,
-            so the panels and the grid share a common-mode path with no
-            isolation between them. Add the long DC run down from the roof, which
-            forms a large common-mode loop, and switching devices with steep
-            edges, and you have a strong common-mode source bolted to the same
-            building as your antenna.
+            <b>Where it comes from.</b> Most modern string inverters have no
+            transformer, so the panels and the grid share a common-mode path
+            with nothing in between. Add the long DC run down from the roof,
+            which forms a big loop, and switching devices with fast edges, and
+            you have a strong common-mode source bolted to the same building as
+            your antenna.
           </p>
           <p>
-            <b>Signature.</b> Correlated with daylight and with inverter output.
-            Often strongest at midday, absent at night, and it changes when a
-            cloud crosses.
+            <b>How to recognise it.</b> It follows the sun and the inverter's
+            output. Strongest around midday, gone at night, and it changes when
+            a cloud passes.
           </p>
           <p>
-            <b>CMC verdict: partly.</b> Mixed paths. The fraction radiated into
-            the antenna is out of reach; the fraction conducted into the building
-            wiring is reachable, but with a choke on the mains, not on the coax.
+            <b>Does a choke help? Partly.</b> The paths are mixed. The part
+            radiated into your antenna is out of reach. The part conducted into
+            the building wiring can be dealt with, but with a choke on the
+            mains, not on the coax.
           </p>
           <p>
-            <b>Remedy.</b> Almost entirely source-side, which means not yours:
-            LCL filters, common-mode reactors, active filtering, and gate-drive
-            optimisation all live in the inverter. What you own is the same on/off
-            evidence, and the same conversation.
+            <b>What to do.</b> Almost all of it is source-side work, which means
+            not yours: LCL filters, common-mode reactors, active filtering and
+            gate-drive tuning all live inside the inverter. What is yours is the
+            same on/off evidence, and the same conversation.
           </p>
           <p class="section-label" style="margin-bottom: 0">
-            Source: ARRL RFI programme, which lists solar alongside power lines
-            and lighting as its three tracked categories
+            Sources: ARRL RFI programme, which tracks solar alongside power
+            lines and lighting
           </p>
         </div>
 
         <div class="feature-card" style="margin-bottom: 1.25rem">
           <h3 class="card-title">
-            <i class="fas fa-ethernet"></i> 5 · Power-line communication (PLC / BPL)
+            <i class="fas fa-ethernet"></i> 5 · Power-line communication
             <span class="tag tag-c">C</span>
           </h3>
           <p>
-            <b>Mechanism.</b> Broadband over Power Line is defined as carrying
-            data over power wiring in the <b>2&ndash;30 MHz</b> band. That is not
-            adjacent to the amateur HF bands. It is the amateur HF bands, plus
-            everything between them.
+            <b>Where it comes from.</b> Broadband over Power Line is defined as
+            carrying data over power wiring between 2 and 30 MHz. That is not
+            near the amateur HF bands. It <em>is</em> the amateur HF bands, plus
+            everything in between.
           </p>
           <p>
-            <b>Signature.</b> This is the one entry in this list that is not a
-            by-product. It is a modulated, deliberate signal inside your band,
-            and it sounds like one.
+            <b>How to recognise it.</b> This is the only entry here that is not
+            a by-product. It is a modulated signal transmitted on purpose,
+            inside your band, and it sounds like one.
           </p>
           <p>
-            <b>CMC verdict: no, and a choke will never help.</b> The signal
-            arrives in band, on the antenna, as the wanted signal would. There is
-            no common-mode path to interrupt.
+            <b>Does a choke help? No, and it never will.</b> The signal arrives
+            in band, on the antenna, exactly where a wanted signal would arrive.
+            There is no common-mode path to interrupt.
           </p>
           <p>
-            <b>Remedy.</b> Frequency coordination and complaint. This is a
-            regulatory problem, and treating it as an antenna problem wastes
+            <b>What to do.</b> Frequency coordination, or a complaint. This is a
+            regulatory problem, and treating it as an antenna problem just costs
             money.
           </p>
           <p class="section-label" style="margin-bottom: 0">
-            Source: BPL band definition (2&ndash;30 MHz) · national RFI
-            complaint procedure
+            Sources: the BPL band definition (2&ndash;30 MHz) · the national
+            radio-interference complaint procedure
           </p>
         </div>
 
@@ -616,52 +603,50 @@
             <span class="tag tag-c">C</span>
           </h3>
           <p>
-            <b>Mechanism.</b> Every LED lamp has a driver, and the driver is a
-            small switching supply built to the tightest possible budget. The
-            same cost pressure described in card 2 applies, at a smaller scale
-            and with less room for filtering. High-power ballasts for grow lights
-            are the industrial version of the same story, and the ARRL names them
-            as a category it fields a steady stream of questions about.
+            <b>Where it comes from.</b> Every LED lamp contains a driver, and
+            that driver is a small switching supply built to the tightest
+            possible budget. The same cost pressure as card 2, at a smaller
+            scale and with less room for filtering. High-power ballasts for grow
+            lights are the industrial version of the same thing; the ARRL lists
+            them as a category it gets a steady stream of questions about.
           </p>
           <p>
-            <b>Signature.</b> Tied to a switch. The noise appears when a lamp is
-            on and vanishes when it is off, which makes cut 5 the decisive test
-            and makes this the easiest source on the list to identify.
+            <b>How to recognise it.</b> It follows a switch. Noise appears when
+            the lamp is on and disappears when it is off, which makes cut 5
+            decisive and makes this the easiest source on the list to identify.
           </p>
           <p>
-            <b>CMC verdict: partly.</b> Whether a choke helps depends entirely on
-            which door the noise used to get in, which is why the diagnostic
-            comes first.
+            <b>Does a choke help? Partly.</b> It depends entirely on which path
+            the noise used, which is why the checking comes before the buying.
           </p>
           <p>
-            <b>Remedy.</b> Replace the lamp with a better-behaved one. Cheaper
+            <b>What to do.</b> Replace the lamp with one that behaves. Cheaper
             and more reliable than filtering the consequences.
           </p>
           <p class="section-label" style="margin-bottom: 0">
-            Source: ARRL RFI programme (lighting devices category)
+            Sources: ARRL RFI programme (lighting devices category)
           </p>
         </div>
 
-        <h3 class="card-title">The verdict, in one table</h3>
+        <h3 class="card-title">All six, side by side</h3>
         <p class="section-subtitle" style="margin-bottom: 1.5rem">
-          Eight rows, and only the last one is where a coax choke does its full
-          job. This is the whole page in one object.
+          Eight rows. Only the last one is a job a coax choke can do properly.
         </p>
         <table class="spec-table">
           <thead>
             <tr>
               <th>Source</th>
-              <th>Dominant door</th>
+              <th>Main path</th>
               <th>Does a coax choke help?</th>
-              <th>Where the fix lives</th>
+              <th>Where the fix is</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Power-line arcing</td>
-              <td>① via re-radiation</td>
+              <td>①, by re-radiation</td>
               <td class="deny">No</td>
-              <td>Complaint, and antenna geometry</td>
+              <td>Complaint, and antenna position</td>
             </tr>
             <tr>
               <td>Your own switching supply</td>
@@ -670,56 +655,55 @@
               <td>A choke on the mains or DC lead</td>
             </tr>
             <tr>
-              <td>Your own PC, USB and Ethernet</td>
+              <td>Your own PC, USB and network cables</td>
               <td>④</td>
               <td class="deny">No</td>
               <td>Ferrites on those cables</td>
             </tr>
             <tr>
-              <td>A neighbour&rsquo;s LED or supply</td>
-              <td>① mostly</td>
+              <td>A neighbour's LED or supply</td>
+              <td>①, mostly</td>
               <td class="na">Partly</td>
-              <td>Source side, plus geometry</td>
+              <td>At the source, plus antenna position</td>
             </tr>
             <tr>
               <td>EV charger</td>
-              <td>① mostly</td>
+              <td>①, mostly</td>
               <td class="na">Partly</td>
-              <td>Negotiation, plus geometry</td>
+              <td>A conversation, plus antenna position</td>
             </tr>
             <tr>
               <td>Solar inverter</td>
               <td>① and ③</td>
               <td class="na">Partly</td>
-              <td>Source side, plus the mains</td>
+              <td>At the source, plus the mains</td>
             </tr>
             <tr>
               <td>PLC / BPL</td>
-              <td>① in band</td>
+              <td>①, in band</td>
               <td class="deny">No</td>
               <td>Frequency coordination, complaint</td>
             </tr>
             <tr>
-              <td><b>Near-field noise the braid picks up</b></td>
+              <td><b>Noise the shield picks up</b></td>
               <td><b>②</b></td>
-              <td><b>Yes, fully</b></td>
-              <td><b>The coaxial choke &mdash; this page</b></td>
+              <td><b>Yes, completely</b></td>
+              <td><b>A coax choke. This is what it is for.</b></td>
             </tr>
           </tbody>
         </table>
         <div class="calc">
-          <b>One rule generates the whole table.</b> A choke acts only on the
-          common-mode path in the conductor you put it on. Three consequences
-          follow, and they explain every &ldquo;no&rdquo; above:
-          <br />
-          1. It does nothing about noise the antenna wire picks up directly,
-          because that noise is not on the coax.
-          <br />
-          2. It does nothing about noise conducted in on the mains, because that
-          noise never reaches the coax either.
-          <br />
-          3. It does nothing once mode conversion has already happened, because
-          by then the noise has left the path the choke can reach.
+          <b>One sentence produces this whole table.</b> A choke only acts on
+          the common-mode path in the conductor you put it on. That has three
+          consequences, and they account for every "no" above:
+          <br /><br />
+          1. It cannot touch noise the antenna wire picks up, because that noise
+          is not on the coax.<br />
+          2. It cannot touch noise arriving on the mains, because that noise
+          never reaches the coax either.<br />
+          3. It cannot touch noise that has already got onto the inner
+          conductor, because by then the noise has left the path the choke can
+          reach.
         </div>
       </div>
     </section>
@@ -727,63 +711,70 @@
     <section class="section" id="cmc" style="background: var(--bg-secondary)">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">03 · Door ②: the feedline shield</span>
-          <h2 class="section-title">A choke is a mode selector, not a filter</h2>
+          <span class="section-label">03 · Path ②: the coax shield</span>
+          <h2 class="section-title">
+            A choke does not care about frequency. It cares about which
+            conductor.
+          </h2>
           <p class="section-subtitle">
-            This is the section that most choke articles skip, and it is the one
-            that decides whether the device can work at all. Get the mechanism
-            right and the placements, the failures and the recipes all follow
-            from it.
+            Get this part right and everything else follows: where to fit the
+            choke, why one sometimes makes things worse, and how many turns to
+            wind.
           </p>
         </div>
 
-        <h3 class="card-title">The sentence that explains everything</h3>
+        <h3 class="card-title">Two things travel on a coax</h3>
         <p style="margin-bottom: 1.25rem">
-          A receiver responds to one thing only: the <b>differential</b> voltage
-          between the inner conductor and the inside surface of the braid.
-          Common-mode current flowing on the <em>outside</em> of the braid
-          cannot reach the receiver by itself. It first has to be converted into
-          a differential voltage, and that conversion happens at an
-          <b>asymmetry</b> &mdash; the imperfect balance of the 49:1 transformer,
-          the feedpoint, the rig&rsquo;s chassis ground. The braid is a receiving
-          antenna that is wired straight into a mode converter you cannot remove.
+          One is your signal: a voltage difference between the inner conductor
+          and the inside of the shield. The receiver sees that and nothing else.
+          The other is current on the <em>outside</em> of the shield — your
+          feedline acting as an antenna, picking up whatever is around it.
         </p>
         <p style="margin-bottom: 1.25rem">
-          An ideal choke presents almost zero impedance to differential mode and
-          a high impedance to common mode. Your wanted signal travels in
-          differential mode and passes through untouched. The noise riding on the
-          braid is blocked. <b>That is the whole mechanism.</b> It also explains
-          what a choke does not do: it does not improve your match, raise
-          efficiency or change SWR, because none of those have anything to do
-          with the common-mode path. A choke that changed your SWR was changing
-          something else, and you should find out what.
+          That second current cannot walk into the receiver on its own.
+          Something has to turn it into a voltage difference first, and the
+          turning happens wherever your system is unbalanced: the 49:1
+          transformer, the feedpoint, the chassis ground. Your feedline is an
+          antenna wired into a converter you cannot remove.
+        </p>
+        <p style="margin-bottom: 1.25rem">
+          A common-mode choke does one thing. It puts a high impedance in the
+          path along the outside of the shield, so less current flows there.
+          Your signal runs on the other side of the shield and is unaffected.
+          <b>The choke does not select a frequency, it selects a conductor.</b>
+        </p>
+        <p style="margin-bottom: 1.25rem">
+          That is also why it does nothing else. It will not improve your match,
+          raise efficiency, or change SWR, because none of those depend on the
+          common-mode path. If your SWR moved after you fitted a choke,
+          something else moved — and it is worth finding out what.
         </p>
 
-        <h3 class="card-title">How much it actually removes</h3>
+        <h3 class="card-title">How much noise it actually removes</h3>
         <p style="margin-bottom: 1rem">
-          Inserting a series impedance into the common-mode loop divides the
-          current down. To first order:
+          Put an impedance in the common-mode loop and less current flows. To a
+          first approximation:
         </p>
         <div class="calc">
           <code>A &asymp; 20 · log₁₀( 1 + Z_cm / Z_loop )</code>
           <br /><br />
-          <b>Z_loop is not 50 &Omega;.</b> It is the impedance of the noise
-          source&rsquo;s own common-mode loop &mdash; the house wiring, the
-          neighbour&rsquo;s appliance, the building&rsquo;s ground path. It varies
-          wildly with frequency and you usually do not know it. The table below
-          is therefore a <b>divider calculation, not a measurement</b>; every
-          cell is that formula evaluated, and you can redo any of them.
+          <b>Z_loop is not 50 &Omega;.</b> It is the impedance of the loop the
+          noise came from: the house wiring, the neighbour's appliance, the
+          building's earth path. It changes a lot with frequency and you will
+          usually not know it. So treat the table below as a
+          <b>division sum, not a measurement</b>. Every cell is the formula
+          above, and you can check any of them yourself.
         </div>
         <table class="spec-table" data-gate="labeled">
           <caption>
-            Basis: the divider formula above, evaluated at Z_loop = 50 &Omega;
-            and 200 &Omega;. Arithmetic only &mdash; no measurement is implied.
+            Basis: the formula above, worked at Z_loop = 50 &Omega; and
+            200 &Omega;. Arithmetic only — no measurement is implied.
           </caption>
           <thead>
             <tr>
-              <th>Z_cm of the choke</th>
-              <th>Noise reduction, Z_loop = 50 &Omega;</th>
-              <th>Noise reduction, Z_loop = 200 &Omega;</th>
+              <th>Choke impedance</th>
+              <th>Reduction, Z_loop = 50 &Omega;</th>
+              <th>Reduction, Z_loop = 200 &Omega;</th>
             </tr>
           </thead>
           <tbody>
@@ -797,44 +788,44 @@
           </tbody>
         </table>
         <div class="calc">
-          <b>Read the left column as a shopping warning.</b> A clip-on bead has
-          a Z_cm in the tens of ohms across most of HF. Look at the top row: that
-          buys you a handful of dB at best. To do anything serious the choke
-          needs a Z_cm in the <b>kilohm</b> range, and that means a proper core
-          with a proper number of turns.
+          <b>Before you buy anything, look at the left column.</b> A clip-on
+          bead sits in the tens of ohms across most of HF. That is the top row:
+          a few dB at best. To make a real difference a choke needs to reach
+          <b>kilohms</b>, and that means a proper core with a proper number of
+          turns through it.
         </div>
 
-        <h3 class="card-title">Three limits of that model</h3>
+        <h3 class="card-title">Where that sum stops being true</h3>
         <p style="margin-bottom: 1rem">
-          The divider is a first-order picture and it is wrong in three
-          directions that matter in the field.
+          The division sum is a rough picture. It gets three things wrong, and
+          all three matter in the field.
         </p>
         <div class="calc">
-          <b>1. Z_cm is complex.</b> It is <code>R + jX</code>, and the resistive
-          part is the useful part. A choke that is purely reactive absorbs
-          nothing; it stores energy and returns it somewhere else, which is how
-          you get resonances rather than attenuation.
+          <b>1. A choke's impedance is not a plain resistance.</b> It is a
+          resistance plus a reactance, and the resistance is the useful part. A
+          purely reactive choke absorbs nothing. It stores energy and hands it
+          back somewhere else, which is how you end up with a resonance instead
+          of attenuation.
           <br /><br />
-          <b>2. Inserting Z_cm changes the current distribution.</b> The model
-          pretends the loop is fixed and you are just adding a resistor. In
-          reality the coax is electrically long, current maxima move, and a
-          single choke often <b>relocates a resonance instead of removing a
-          current</b>. The classic symptom is &ldquo;it is better on 7 MHz and
-          now worse on 5 MHz&rdquo;. If you see that, you moved the problem, you
-          did not solve it.
+          <b>2. Fitting a choke changes where the current goes.</b> The sum
+          pretends you are just adding a resistance to a fixed loop. In reality
+          the coax is a significant fraction of a wavelength, the current peaks
+          move, and a single choke often <b>moves a resonance rather than
+          removing a current</b>. The classic symptom is "much better on 7 MHz
+          and now worse on 5 MHz". If that happens, you moved the problem.
           <br /><br />
-          <b>3. Which is why there are two chokes, not two options.</b> One at
-          the feedpoint, one where the coax enters the shack. Between them the
-          line is broken into sections, and if each section is shorter than a
-          quarter wave none of them can resonate. The two are not
-          alternatives; they do different jobs.
+          <b>3. So fit two, not one.</b> One at the feedpoint, one where the
+          coax comes into the shack. That cuts the line into sections, and if
+          each section is shorter than a quarter wave none of them can resonate.
+          The two are not alternatives — they do different jobs.
         </div>
 
-        <h3 class="card-title">Z_cm is a function of frequency, and it is not flat</h3>
+        <h3 class="card-title">A choke is not equally effective on every band</h3>
         <p style="margin-bottom: 1rem">
-          Turns give you impedance as Z_cm &prop; N², but the material&rsquo;s
-          permeability is itself a function of frequency. Measured values from
-          the Fair-Rite material data, for the two mixes you will actually use:
+          More turns give more impedance — it goes up with the square of the
+          turn count. But the ferrite's permeability also changes with
+          frequency. Measured values for the two mixes you are most likely to
+          use:
         </p>
         <table class="spec-table">
           <thead>
@@ -855,75 +846,72 @@
           </tbody>
         </table>
         <div class="calc">
-          <b>One choke covering 1.8&ndash;30 MHz is a fiction.</b> Note where
-          Mix 43 goes: from about 7 MHz upward, &mu;&Prime; &mdash; the loss term
-          &mdash; approaches and then exceeds &mu;&prime;. For a transformer that
-          is bad news. <b>For a choke it is good news</b>, because a lossy choke
-          absorbs the energy instead of storing and returning it, which is
-          exactly the behaviour you want at point 1 above. Different job,
-          different verdict on the same material.
+          <b>So "one choke for 1.8–30 MHz" does not exist.</b> Look at Mix 43:
+          from about 7 MHz upward, &mu;&Prime; — the loss term — catches up with
+          and passes &mu;&prime;. In a transformer that is bad news. In a choke
+          it is <b>good</b> news, because a lossy choke absorbs the energy
+          instead of storing and returning it, which is exactly what point 1
+          above asked for. Same material, different job, opposite verdict.
         </div>
 
-        <h3 class="card-title">The asymmetry that receive work hands you</h3>
+        <h3 class="card-title">Receiving gives you one free advantage</h3>
         <div class="calc">
-          Received levels are microvolts. <b>A ferrite on a receive path never
-          saturates</b>, so the entire power-handling and heating discipline that
-          governs transmitter-side chokes simply does not apply.
+          Received signals are microvolts. <b>A ferrite on a receive path never
+          saturates</b>, so none of the power-handling and heating rules that
+          govern transmitting chokes apply here.
           <br /><br />
-          That cuts both ways. If a choke serves <em>only</em> receive &mdash; a
-          separate receiving antenna, a T/R-split front end &mdash; you can pile
-          on turns and use a high-permeability mix, and reach a Z_cm far above
-          anything a transmit path could survive. If the choke sits in the main
-          path it must carry transmit current too, and it is bound by saturation
-          and heat.
+          That cuts both ways. If a choke serves receive only — a separate
+          receiving antenna, a T/R-split front end — you can wind on as many
+          turns as you like and use a high-permeability mix, reaching an
+          impedance no transmit path would survive. If the choke also carries
+          your transmitter, it is limited by saturation and heat.
           <br /><br />
-          <b>The best choke for receive may be one that would burn on
-          transmit.</b> Keep that in mind before copying somebody&rsquo;s recipe:
-          ask which side of the T/R switch their numbers came from.
+          <b>The best choke for receive may be one that would burn up on
+          transmit.</b> Before you copy somebody's recipe, ask which side of the
+          T/R switch their numbers came from.
         </div>
 
-        <h3 class="card-title">Counterpoise is a premise, not an option</h3>
+        <h3 class="card-title">You need a counterpoise before you need a choke</h3>
         <div class="risk">
-          <b>First the counterpoise, then the choke.</b> An end-fed antenna needs
-          a return path. With no return path, adding a choke just turns the choke
-          into part of the antenna&rsquo;s load, and the common-mode current finds
-          a third route out &mdash; through the chassis, down the mains, into
-          everything you were trying to protect. A choke does not replace a
-          counterpoise; a counterpoise is what lets a choke do its job.
+          <b>An end-fed antenna needs a return path.</b> With no return path,
+          fitting a choke just makes the choke part of the antenna's load, and
+          the current finds a third route out — through the chassis, down the
+          mains, into everything you were trying to protect. A choke does not
+          replace a counterpoise. The counterpoise is what lets the choke work.
         </div>
         <div class="risk">
-          <b>The feedpoint trap.</b> If the coax itself is the counterpoise, then
-          choking at the feedpoint cuts the antenna&rsquo;s own return path: SWR
-          shifts and efficiency drops. In that arrangement the choke has to sit
-          away from the feedpoint &mdash; the ARRL Handbook figure is at least 10
-          feet, about 3 m. If instead you have a <em>separate</em> counterpoise
-          wire, the feedpoint is the best place to choke, because the current you
-          are intercepting is exactly the current the antenna wanted to drive
-          onto the braid.
+          <b>And do not choke at the feedpoint if the coax is your
+          counterpoise.</b> Do that and you cut the antenna's own return path:
+          SWR shifts and efficiency drops. In that arrangement the choke has to
+          sit away from the feedpoint — the ARRL Handbook figure is at least 10
+          feet, about 3 m. If you have a <em>separate</em> counterpoise wire,
+          the opposite is true: the feedpoint is the best place to choke,
+          because the current you are blocking is exactly the current the
+          antenna wanted to send down the braid.
         </div>
         <p style="margin: 1.25rem 0 1rem">
-          Working recipes, all of them quoted rather than invented:
+          Windings that are known to work. These are quoted, not invented:
         </p>
         <table class="spec-table">
           <thead>
             <tr>
               <th>Covers</th>
               <th>Mix</th>
-              <th>Form</th>
+              <th>How</th>
             </tr>
           </thead>
           <tbody>
             <tr><td>80&ndash;20 m</td><td>Mix 31</td><td>FT240-31, 5&ndash;9 turns of RG-8X</td></tr>
             <tr><td>40&ndash;10 m</td><td>Mix 43</td><td>FT240-43, 6&ndash;10 turns of RG-8X</td></tr>
-            <tr><td>Portable</td><td>Snap-on Mix 31</td><td>3&ndash;5 spaced along the coax &mdash; convenient, and markedly worse</td></tr>
+            <tr><td>Portable</td><td>Snap-on Mix 31</td><td>3&ndash;5 spaced along the coax. Convenient, and clearly worse</td></tr>
           </tbody>
         </table>
         <div class="calc">
-          <b>And one design that keeps coming back, which does not work.</b> The
-          air-wound choke &mdash; six to eight turns of coax on a 4 to 6 inch PVC
-          pipe &mdash; works above about 40 m and does very little below it. With
-          no core, its Z_cm is neither high enough nor lossy enough where the
-          low bands need it. It is a fine mechanical former and a poor choke.
+          <b>One design keeps coming back, and it does not work well.</b> The
+          air-wound choke — six to eight turns of coax on a 4 to 6 inch PVC
+          pipe — works above about 40 m and does very little below it. With no
+          core, its impedance is neither high enough nor lossy enough where the
+          low bands need it. Fine as a former. Poor as a choke.
         </div>
       </div>
     </section>
@@ -931,77 +919,72 @@
     <section class="section" id="other-doors">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">04 · The other three doors</span>
-          <h2 class="section-title">When the choke is the wrong tool</h2>
+          <span class="section-label">04 · The other three paths</span>
+          <h2 class="section-title">When a choke is the wrong tool</h2>
           <p class="section-subtitle">
-            Three of the four doors are out of a coax choke&rsquo;s reach. Each
-            has its own signature and its own cure, and none of the cures is a
-            ferrite on the feedline.
+            Three of the four paths are out of a coax choke's reach. Each has
+            its own giveaway, and none of the fixes is a ferrite on the
+            feedline.
           </p>
         </div>
 
-        <h3 class="card-title">Door ③: mains and ground loops</h3>
+        <h3 class="card-title">Path ③: mains and earth loops</h3>
         <p style="margin-bottom: 1rem">
-          The noise source sits on the same supply as your rig. Its rubbish
-          travels down the wiring, through the power supply, into the chassis
-          &mdash; and the chassis is the reference against which the receiver
-          measures everything. Nothing about this route involves the coax, which
-          is why cut 1 does not clear it.
+          The noise source shares a supply with your rig. Its rubbish travels
+          down the wiring, through the power supply, and onto the chassis — and
+          the chassis is what the receiver measures against. None of this route
+          involves the coax, which is why cut 1 does not clear it.
         </p>
         <div class="calc">
-          <b>Signatures.</b> Cut 1 leaves the noise standing (a dummy load
-          changes nothing) and cut 4 changes it. Those two results together are
-          the diagnosis.
+          <b>How to recognise it.</b> Cut 1 leaves it standing, and cut 4 changes
+          it. Those two results together are the diagnosis.
           <br /><br />
-          <b>Cure.</b> The same device you were about to put on the coax, moved
-          to the conductor that is actually carrying the noise: a common-mode
-          choke on the mains lead or on the DC lead. Check the USB and Ethernet
-          runs as well; they are the most commonly missed members of this
-          family.
+          <b>What to do.</b> Take the choke you were about to put on the coax
+          and put it on the conductor that is actually carrying the noise: the
+          mains lead or the DC lead. Check USB and network cables too.
         </div>
         <div class="risk">
-          <b>Never lift the mains protective earth to quieten a noise
+          <b>Never disconnect the mains safety earth to quieten a noise
           problem.</b> A common-mode choke passes mains frequency and DC while
-          blocking RF, and that is exactly the behaviour you want: the safety
-          earth stays connected and the noise still gets stopped. Removing the
-          protective earth removes the protection that exists to keep you alive,
-          and in our experience it does not even fix the noise reliably.
+          blocking RF, which is exactly what you want: the safety earth stays
+          connected and the noise is still stopped. Disconnecting it removes the
+          protection that keeps you alive, and in our experience it does not
+          even fix the noise reliably.
         </div>
 
-        <h3 class="card-title">Door ①: antenna geometry</h3>
+        <h3 class="card-title">Path ①: antenna position</h3>
         <p style="margin-bottom: 1rem">
-          An end-fed half wave is fed at a voltage antinode &mdash; the point of
-          maximum electric field on the wire. A high-impedance node is
-          inherently sensitive to near-field electric coupling, which is exactly
-          how lamp drivers and small switching supplies mostly couple. The
-          topology that makes the EFHW convenient to hang is also the topology
-          that makes it a good listener for everything in the building.
+          An end-fed half wave is fed at the point of highest voltage on the
+          wire. A high-voltage point is naturally sensitive to nearby electric
+          fields, which is how lamp drivers and small switching supplies mostly
+          couple. The shape that makes an EFHW convenient to hang is also the
+          shape that makes it a good listener for everything in the building.
         </p>
         <div class="calc">
-          <b>Signature.</b> The choke makes almost no difference, but moving the
-          antenna changes the noise substantially. Cut 2 collapses the noise,
-          which tells you the wire is doing the listening rather than the braid.
+          <b>How to recognise it.</b> A choke changes nothing, but moving the
+          antenna changes the noise a lot. Cut 2 clears the noise, telling you
+          the wire is doing the listening rather than the braid.
           <br /><br />
-          <b>Cure.</b> Geometry, and only geometry: raise it, move it away from
-          the building, change its heading, or add a separate receiving antenna.
-          No amount of ferrite treats this door, and no purchase will either.
+          <b>What to do.</b> Position, and only position: higher, further from
+          the building, a different direction, or a separate receiving antenna.
+          No amount of ferrite fixes this, and no purchase will either.
         </div>
 
-        <h3 class="card-title">Door ④: near field</h3>
+        <h3 class="card-title">Path ④: near field</h3>
         <p style="margin-bottom: 1rem">
-          Your rig, your SDR, a USB lead, an Ethernet run: any of these is a
+          Your rig, your SDR, a USB lead, a network cable: any of these is a
           small antenna sitting on your desk, listening to whatever is switching
-          next to it. It is the least exotic door and the easiest to overlook,
-          because the culprit is often something you installed yourself and
+          next to it. It is the least exotic path and the easiest to overlook,
+          because the culprit is usually something you installed yourself and
           therefore trust.
         </p>
         <div class="calc">
-          <b>Signature.</b> Cut 5 makes the noise follow the device as you walk
-          the house.
+          <b>How to recognise it.</b> Cut 5 makes the noise follow the device as
+          you walk around the house.
           <br /><br />
-          <b>Cure.</b> Distance first, ferrites second. Moving a switch-mode
-          wall-wart two metres away from the rig routinely outperforms anything
-          you can do to the antenna system.
+          <b>What to do.</b> Distance first, ferrites second. Moving a
+          switch-mode adapter two metres away from the rig usually beats
+          anything you can do to the antenna system.
         </div>
       </div>
     </section>
@@ -1012,43 +995,42 @@
           <span class="section-label">05 · Prove it worked</span>
           <h2 class="section-title">How to know, without fooling yourself</h2>
           <p class="section-subtitle">
-            The two rules from section 01 apply here in full, and they are the
-            whole method. Everything below is about making them easy to obey.
+            The two rules from section 01 are still in force. Everything here is
+            about making them easy to follow.
           </p>
         </div>
         <div class="calc">
-          <b>Compare, do not measure absolutely. And hold everything else still
-          while you compare.</b> Same hour, same frequency, same AGC, same
-          preamp, same attenuation. Change one thing at a time and put it back.
+          <b>Compare, never measure. And change one thing at a time.</b> Same
+          hour, same frequency, same AGC, same preamp, same attenuator. Put
+          everything back the way it was before you try the next thing.
         </div>
-        <h3 class="card-title">Instruments you may already own</h3>
+        <h3 class="card-title">Equipment you may already have</h3>
         <p style="margin-bottom: 1.25rem">
           You do not need a laboratory. If your station runs through the MRRC
-          stack, you already have an S-meter feed and a DSP spectrum display
-          &mdash; both are sufficient to A/B a choke, provided you keep the
-          receiver settings frozen. A receiver&rsquo;s spectrum display is the
-          better instrument of the two, because it shows you the <em>shape</em>
-          of the noise as well as its level, and a choke that moves a resonance
-          looks obviously different from one that removes a current.
+          stack you already have an S-meter feed and a DSP spectrum display, and
+          both are enough to A/B a choke as long as you freeze the receiver
+          settings. The spectrum display is the better of the two, because it
+          shows the <em>shape</em> of the noise as well as its level — and a
+          choke that moves a resonance looks completely different from one that
+          removes a current.
         </p>
         <p style="margin-bottom: 1.25rem">
-          For an objective, repeatable number that survives across days, the
-          same PSK Reporter analysis this station uses is available to any
-          station with a callsign and some patience: it produces a noise-floor
-          figure from which stations you can hear, and the method is documented
-          on the
+          For a number you can compare across days, the PSK Reporter analysis
+          this station uses is open to anyone with a callsign and some patience.
+          It works out a noise floor from which stations you can hear, and the
+          method is written up on the
           <a href="bg1sb-antenna.html">measured antenna profile page</a>. Run it
-          before the change, run it after, and compare the two.
+          before the change and again after, then compare.
         </p>
         <div class="risk">
-          <b>What you may not claim.</b> A single daylight A/B cannot establish
-          an improvement of any specific size, because the ambient noise field
-          changes underneath you between the two halves of the test. What you
-          can claim is bounded and still useful: the noise was reproducibly
-          lower with the choke in, at these frequencies, at this time of day,
-          with settings frozen. Anything stronger than that needs a longer
-          baseline than most of us are willing to collect, and you should
-          distrust anyone who produces a confident figure from one afternoon.
+          <b>What you cannot claim.</b> One daytime A/B cannot pin down how much
+          you improved, because the noise around you changes between the two
+          halves of the test. What you can claim is narrower and still worth
+          having: with settings frozen, at these frequencies and this time of
+          day, the noise was repeatably lower with the choke fitted. Anything
+          stronger than that needs a longer baseline than most of us will
+          collect — and be careful of anyone who produces a confident figure
+          from one afternoon.
         </div>
       </div>
     </section>
@@ -1059,80 +1041,79 @@
           <span class="section-label">06 · What a choke cannot fix</span>
           <h2 class="section-title">The same rule, seen from the other side</h2>
           <p class="section-subtitle">
-            Section 02 built a verdict table. This is the same table read as a
-            list of things not to waste a ferrite on.
+            Section 02 gave you a table. This is the same table read as a list
+            of things not to waste a ferrite on.
           </p>
         </div>
         <ul>
           <li>
-            <b>Noise the antenna wire picks up directly.</b> It is not on the
-            coax, so it is not in reach.
+            <b>Noise the antenna wire picks up.</b> Not on the coax, so out of
+            reach.
           </li>
           <li>
-            <b>Noise conducted in on the mains.</b> Same reason, different
+            <b>Noise arriving on the mains.</b> Same reason, different
             conductor.
           </li>
           <li>
-            <b>Noise that has already completed mode conversion.</b> By then it
-            has left the path a choke can reach.
+            <b>Noise already on the inner conductor.</b> By then it has left the
+            path a choke can reach.
           </li>
           <li>
-            <b>In-band interference such as PLC or BPL.</b> There is no
-            common-mode path to interrupt. It is a signal in your band, and it
-            needs a regulator, not a core.
+            <b>In-band signals such as PLC or BPL.</b> There is no common-mode
+            path to interrupt. It is a signal in your band, and it needs a
+            regulator rather than a core.
           </li>
         </ul>
 
         <h3 class="card-title" style="margin-top: 2.5rem">
-          The honest case for a second antenna
+          When a second antenna is the honest answer
         </h3>
         <p style="margin-bottom: 1.25rem">
-          The standard answer for a station buried in local noise is to split
-          transmit from receive: keep the EFHW for transmitting, add an active
-          magnetic loop for receiving, aim its null at the noise source, and
-          switch between them with a T/R relay or the rig&rsquo;s own receive
-          antenna port. It works, it is well established, and the products
-          exist.
+          If your station really is buried in local noise, the standard answer
+          is to split transmit from receive: keep the EFHW for transmitting, add
+          an active magnetic loop for receiving, point its null at the noise,
+          and switch between them with a T/R relay or the rig's own receive
+          antenna socket. It works. The products exist.
         </p>
         <div class="calc">
-          <b>But it only helps if you have the disease.</b> Section 01 shows a
+          <b>But only if you actually have the problem.</b> Section 01 shows a
           station that measured its own noise floor, found it clean, and
-          concluded &mdash; from data &mdash; that a receiving loop would have
-          been money spent on a problem it did not have. Do that measurement
-          before you buy anything. It costs less than the loop, and it might save
-          you the whole purchase.
+          concluded from the data that a receiving loop would have been money
+          spent on a disease it did not have. Do that measurement before you buy
+          anything. It costs less than the loop, and it might save you the whole
+          purchase.
         </div>
 
         <h3 class="card-title" style="margin-top: 2.5rem">
           When the fix belongs to somebody else
         </h3>
         <p style="margin-bottom: 1.25rem">
-          Power-line arcing and a neighbour&rsquo;s charger are the two
-          categories where you cannot treat the source yourself. Both need
-          evidence and a channel. In China the channel is the
-          <b>12381</b> hotline, opened on 20 March 2023 as the radio-interference
-          complaint centre under the MIIT public-service platform.
+          Power-line arcing and a neighbour's charger are the two cases you
+          cannot fix at the source yourself. Both need evidence and a channel.
+          In China that channel is the <b>12381</b> hotline, opened on 20 March
+          2023 as the radio-interference complaint centre under the MIIT
+          public-service platform.
         </p>
         <div class="risk">
-          <b>The detail that decides whether your complaint goes anywhere:</b>
+          <b>One detail decides whether your complaint goes anywhere:</b>
           shortwave and satellite complaints are not handled by local radio
-          administrations. Local offices forward them to the National Radio
-          Monitoring Center and the ministry&rsquo;s radio bureau. An HF
-          complaint travels upward, not sideways.
+          offices. The local office forwards them to the National Radio
+          Monitoring Center and the ministry's radio bureau. An HF complaint
+          travels upward, not sideways.
         </div>
         <p style="margin: 1.25rem 0">
           Build the log before you call: when it started, which bands, which
           modes, what it sounds like, and a 30 to 60 second recording in both AM
           and SSB. This is the same list the ARRL recommends to its own members,
-          and it is what turns &ldquo;my radio is noisy&rdquo; into a case.
+          and it is what turns "my radio is noisy" into a case.
         </p>
 
         <div class="risk">
-          <b>The one rule with no exceptions.</b> Never lift the mains
-          protective earth, and never advise anyone else to. Every cure on this
-          page works with the safety ground intact, because a choke passes mains
-          frequency and DC while blocking RF. Anything that requires defeating
-          the protective earth is not a cure; it is a hazard.
+          <b>The one rule with no exceptions.</b> Never disconnect the mains
+          safety earth, and never suggest it to anyone else. Every fix on this
+          page works with the safety earth connected, because a choke passes
+          mains frequency and DC while blocking RF. Anything that needs the
+          safety earth out of the way is not a fix. It is a hazard.
         </div>
       </div>
     </section>
@@ -1145,10 +1126,9 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">Evidence &amp; sources</span>
-          <h2 class="section-title">How to read the labels on this page</h2>
+          <h2 class="section-title">What the labels mean</h2>
           <p class="section-subtitle">
-            Every quantitative statement above carries one of two labels, or it
-            carries a dash.
+            Every number above carries one of two labels, or a dash.
           </p>
         </div>
         <table class="spec-table">
@@ -1162,15 +1142,15 @@
             <tr>
               <td><span class="tag tag-c">C</span></td>
               <td>
-                An engineering claim with a checkable source. The sources are
+                An engineering claim with a source you can check. They are all
                 listed below.
               </td>
             </tr>
             <tr>
               <td><span class="tag tag-c">算式</span></td>
               <td>
-                Arithmetic you can redo. The formula is always printed next to
-                the numbers, so you can reproduce every cell yourself.
+                Arithmetic you can redo. The formula is printed next to the
+                numbers, so you can work out every cell yourself.
               </td>
             </tr>
             <tr>
@@ -1180,10 +1160,10 @@
           </tbody>
         </table>
         <div class="calc">
-          <b>There is no [M] on this page.</b> We did not measure a choke here,
-          so we do not display a measured badge. The one place we cite our own
-          measurements is section 01, and it is labelled with its source file
-          rather than with a badge &mdash; which is the honest way round.
+          <b>There is no [M] on this page.</b> We have not measured a choke, so
+          we do not show a measured badge. The one place we cite our own
+          measurements is section 01, and it is labelled with the source file
+          instead.
         </div>
 
         <h3 class="card-title" style="margin-top: 2rem">Sources</h3>
@@ -1201,7 +1181,7 @@
           <li>
             IEEE Std 1897&trade;-2024, <i>Recommended Practice for Locating
             Sources of Radio Frequency Interference from Power Lines</i>
-            (released 20 September 2024)
+            (published 20 September 2024)
           </li>
           <li>
             GB/T 9254.1-2021, <i>Information technology equipment, multimedia
@@ -1227,19 +1207,16 @@
           </li>
           <li>
             PA9X, <i>Endfed Antennas, QRM, and How to Improve Your Reception</i>
-            (2025)&nbsp;&mdash; the transmit/receive split this page argues
-            about
+            (2025) &mdash; the transmit/receive split this page argues with
           </li>
           <li>
             W8JI and Practical Antennas on the feedline as part of the antenna
             system
           </li>
+          <li>Broadband over Power Line band definition, 2&ndash;30 MHz</li>
           <li>
-            Broadcast over Power Line band definition, 2&ndash;30 MHz
-          </li>
-          <li>
-            Published EV-charger EMC remediation case literature, and the
-            125 kHz keyless-entry interference reports
+            Published EV-charger EMC remediation case reports, and the 125 kHz
+            keyless-entry interference reports
           </li>
           <li>
             Our own working notes, with the reachability of every source
@@ -1249,9 +1226,8 @@
         </ul>
         <div class="calc">
           <b>No number on this page was invented.</b> Where we could not find a
-          source, we said so in the card rather than filling the gap &mdash; the
-          electric-vehicle section is the clearest example, and it is written
-          that way on purpose.
+          source we said so instead of filling the gap — the electric-vehicle
+          card is the clearest example, and it is written that way on purpose.
         </div>
       </div>
     </section>
@@ -1269,12 +1245,12 @@
           <div class="footer-section">
             <h4>This page</h4>
             <ul>
-              <li><a href="#localise">01 · Measure first</a></li>
-              <li><a href="#sources">02 · Six sources</a></li>
+              <li><a href="#localise">01 · Check first</a></li>
+              <li><a href="#sources">02 · Noise sources</a></li>
               <li><a href="#cmc">03 · The choke</a></li>
-              <li><a href="#other-doors">04 · The other doors</a></li>
-              <li><a href="#verify">05 · Prove it worked</a></li>
-              <li><a href="#limits">06 · What it cannot fix</a></li>
+              <li><a href="#other-doors">04 · Other paths</a></li>
+              <li><a href="#verify">05 · Verify</a></li>
+              <li><a href="#limits">06 · Limits</a></li>
               <li><a href="#sources-evidence">Evidence &amp; sources</a></li>
             </ul>
           </div>

@@ -69,6 +69,7 @@
       <div class="container subnav-inner">
         <a href="#localise">01 · 先量再买</a>
         <a href="#sources">02 · 干扰源</a>
+        <a href="#cmc">03 · 扼流圈</a>
       </div>
     </div>
 
@@ -532,6 +533,146 @@
           二、市电传导进来的噪声，它管不了，因为那噪声同样到不了同轴。
           <br />
           三、噪声一旦完成模式转换，它管不了，因为那时噪声已经离开了它够得着的那条路。
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cmc" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">03 · 门②：馈线屏蔽层</span>
+          <h2 class="section-title">扼流圈是模式选择器，不是滤波器</h2>
+          <p class="section-subtitle">
+            大部分扼流圈文章跳过这一节，而它决定这件器件有没有可能起效。机理弄对，装位、失效和配方会自己浮出来。
+          </p>
+        </div>
+
+        <h3 class="card-title">一句话解释全部</h3>
+        <p style="margin-bottom: 1.25rem">
+          接收机只响应一件事：内导体与编织层内表面之间的<b>差分</b>电压。流在编织层<em>外表面</em>的共模电流，自己进不了接收机。它必须先被转换成差分电压，而转换发生在一个<b>不对称点</b>上：49:1
+          变压器的不完美平衡、馈电点、机箱接地。编织层是一副接收天线，它被直接接进了一个你拆不掉的模式转换器。
+        </p>
+        <p style="margin-bottom: 1.25rem">
+          理想扼流圈对差分模几乎零阻抗，对共模模高阻抗。有用信号走差分模，原样通过。骑在编织层上的噪声被拦住。<b>这就是全部机理。</b>它也解释了扼流圈不做什么：不改善匹配，不提高效率，不改变驻波，因为这些都和共模路径无关。一只扼流圈如果改变了你的驻波，那它改变的是别的东西，你该查清是什么。
+        </p>
+
+        <h3 class="card-title">它到底去掉多少</h3>
+        <p style="margin-bottom: 1rem">
+          往共模回路里串一个阻抗，把电流分下去。一阶近似是：
+        </p>
+        <div class="calc">
+          <code>A &asymp; 20 · log₁₀( 1 + Z_cm / Z_loop )</code>
+          <br /><br />
+          <b>Z_loop 不是 50 &Omega;。</b>它是噪声源自己那条共模回路的阻抗：楼内布线、邻居的电器、建筑的地路径。它随频率剧烈变化，而你通常不知道它。所以下表是一次<b>分压计算，不是测量</b>；每个格子都是上面那个公式算出来的，你可以自己复算任何一个。
+        </div>
+        <table class="spec-table" data-gate="labeled">
+          <caption>
+            依据：上方分压公式，在 Z_loop = 50 &Omega; 与 200 &Omega; 两档下取值。
+            纯算术，不含任何实测含义。
+          </caption>
+          <thead>
+            <tr>
+              <th>扼流圈 Z_cm</th>
+              <th>降噪量，Z_loop = 50 &Omega;</th>
+              <th>降噪量，Z_loop = 200 &Omega;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>50 &Omega;</td><td>6.0 dB</td><td>1.9 dB</td></tr>
+            <tr><td>100 &Omega;</td><td>9.5 dB</td><td>3.5 dB</td></tr>
+            <tr><td>250 &Omega;</td><td>15.6 dB</td><td>7.0 dB</td></tr>
+            <tr><td>500 &Omega;</td><td>20.8 dB</td><td>10.9 dB</td></tr>
+            <tr><td>1000 &Omega;</td><td>26.4 dB</td><td>15.6 dB</td></tr>
+            <tr><td>2000 &Omega;</td><td>32.3 dB</td><td>20.8 dB</td></tr>
+            <tr><td>5000 &Omega;</td><td>40.1 dB</td><td>28.3 dB</td></tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>读左列，当成购物警告。</b>夹式磁珠在短波大部分频段上的 Z_cm 只有几十欧。看第一行：那最多买到几个
+          dB。要做成事，扼流圈的 Z_cm 得进到<b>千欧</b>量级，那意味着正经的磁芯加正经的匝数。
+        </div>
+
+        <h3 class="card-title">这个模型的三条局限</h3>
+        <p style="margin-bottom: 1rem">
+          分压是一阶图像，在现场有三个方向上是错的。
+        </p>
+        <div class="calc">
+          <b>一、Z_cm 是复数。</b>它是 <code>R + jX</code>，而有用的部分是有阻部分。纯电抗的扼流圈什么都不吸收；它存能量再从别处还回去，于是你得到谐振而不是衰减。
+          <br /><br />
+          <b>二、串入 Z_cm 会改变电流分布。</b>模型假装回路是固定的，你只是在加电阻。实际上同轴有电长度，电流腹点会移动，单只扼流圈常常<b>搬走一个谐振点，而不是消掉一个电流</b>。典型症状是「7
+          MHz 好了，5 MHz 倒更糟」。看到这个，说明你搬了问题，没解决它。
+          <br /><br />
+          <b>三、所以要两个扼流圈，不是两个选项。</b>一个在馈电点，一个在同轴进小屋处。两者之间馈线被切成若干段，每段短于四分之一波长就谁也谐振不了。这两个不是二选一，它们干的是不同的活。
+        </div>
+
+        <h3 class="card-title">Z_cm 是频率的函数，而且不平坦</h3>
+        <p style="margin-bottom: 1rem">
+          匝数按 Z_cm &prop; N² 给你阻抗，但材料磁导率本身就是频率的函数。下面是你会真正用到的两种材料，数据取自
+          Fair-Rite 材料实测：
+        </p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>频率</th>
+              <th>Mix 43 &mu;&prime;</th>
+              <th>Mix 43 &mu;&Prime;</th>
+              <th>Mix 51 &mu;&prime;</th>
+              <th>Mix 51 &mu;&Prime;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>7 MHz</td><td class="na">—</td><td class="na">—</td><td>364</td><td>156</td></tr>
+            <tr><td>10 MHz</td><td>293</td><td>340</td><td class="na">—</td><td class="na">—</td></tr>
+            <tr><td>14 MHz</td><td class="na">—</td><td class="na">—</td><td>235</td><td>186</td></tr>
+            <tr><td>28.6 MHz</td><td class="na">—</td><td class="na">—</td><td>129</td><td>163</td></tr>
+            <tr><td>30 MHz</td><td>117</td><td>202</td><td class="na">—</td><td class="na">—</td></tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>一个扼流圈覆盖 1.8–30 MHz 是虚构。</b>注意 Mix 43 的走向：从约 7 MHz
+          往上，&mu;&Prime;（损耗项）接近并超过 &mu;&prime;。对变压器这是坏消息。对扼流圈是<b>好消息</b>，因为有损扼流圈吸收能量，而不是存起来再还回去，恰好就是上面第一条要的行为。同一材料，不同活计，不同结论。
+        </div>
+
+        <h3 class="card-title">接收端亲手交给你的那个不对称</h3>
+        <div class="calc">
+          接收电平是微伏级。<b>接收通路上的铁氧体永远不会饱和</b>，所以管发射侧扼流圈的那整套功率与发热纪律，在这里完全不适用。
+          <br /><br />
+          这是个双向结论。如果扼流圈只服务接收，比如独立接收天线、T/R
+          分离前端，你可以堆匝数、用高磁导率材料，拿到远高于任何发射通路能承受的 Z_cm。如果扼流圈在主路上，它必须同时扛发射电流，就受饱和与发热约束。
+          <br /><br />
+          <b>接收上最好的扼流圈，可能恰恰是发射上会烧掉的那只。</b>抄别人配方之前先记住这句：问清楚他那些数字出自
+          T/R 开关的哪一侧。
+        </div>
+
+        <h3 class="card-title">地网是前提，不是选项</h3>
+        <div class="risk">
+          <b>先有地网，再有扼流圈。</b>端馈天线需要一条回流路。没有回流路时，加扼流圈只是把扼流圈变成天线负载的一部分，共模电流会另找第三条路出去：穿过机箱，沿市电下去，进到你正想保护的一切里。扼流圈不替代地网；地网才是让扼流圈干成活的前提。
+        </div>
+        <div class="risk">
+          <b>馈电点陷阱。</b>如果同轴本身就是地网，那么在馈电点扼流等于切断天线自己的回流路：驻波偏移，效率下降。这种安排下扼流圈必须离开馈电点，ARRL
+          手册给的数是至少 10 英尺，约 3 米。反过来说，如果你有<em>独立的</em>地网导线，馈电点就是最好的扼流位置，因为你拦下的电流恰好就是天线想驱动到编织层上的那条。
+        </div>
+        <p style="margin: 1.25rem 0 1rem">
+          可直接用的配方，全部是引述不是编造：
+        </p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>覆盖</th>
+              <th>材料</th>
+              <th>做法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>80–20 m</td><td>Mix 31</td><td>FT240-31 上绕 5–9 圈 RG-8X</td></tr>
+            <tr><td>40–10 m</td><td>Mix 43</td><td>FT240-43 上绕 6–10 圈 RG-8X</td></tr>
+            <tr><td>便携</td><td>夹式 Mix 31</td><td>沿同轴间隔 3–5 个——方便，但明显更差</td></tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>还有一种反复出现、但并不好用的做法。</b>空心扼流圈，在 4 到 6 英寸
+          PVC 管上绕 6 到 8 圈同轴，在 40 米以上有效，再往下就几乎没有作用。没有磁芯，它的
+          Z_cm 在低频段既不够高，也不够有损。它是个好骨架，是个差扼流圈。
         </div>
       </div>
     </section>

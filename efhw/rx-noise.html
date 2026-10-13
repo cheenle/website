@@ -71,6 +71,7 @@
       <div class="container subnav-inner">
         <a href="#localise">01 · Measure first</a>
         <a href="#sources">02 · Sources</a>
+        <a href="#cmc">03 · The choke</a>
       </div>
     </div>
 
@@ -715,6 +716,210 @@
           <br />
           3. It does nothing once mode conversion has already happened, because
           by then the noise has left the path the choke can reach.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cmc" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">03 · Door ②: the feedline shield</span>
+          <h2 class="section-title">A choke is a mode selector, not a filter</h2>
+          <p class="section-subtitle">
+            This is the section that most choke articles skip, and it is the one
+            that decides whether the device can work at all. Get the mechanism
+            right and the placements, the failures and the recipes all follow
+            from it.
+          </p>
+        </div>
+
+        <h3 class="card-title">The sentence that explains everything</h3>
+        <p style="margin-bottom: 1.25rem">
+          A receiver responds to one thing only: the <b>differential</b> voltage
+          between the inner conductor and the inside surface of the braid.
+          Common-mode current flowing on the <em>outside</em> of the braid
+          cannot reach the receiver by itself. It first has to be converted into
+          a differential voltage, and that conversion happens at an
+          <b>asymmetry</b> &mdash; the imperfect balance of the 49:1 transformer,
+          the feedpoint, the rig&rsquo;s chassis ground. The braid is a receiving
+          antenna that is wired straight into a mode converter you cannot remove.
+        </p>
+        <p style="margin-bottom: 1.25rem">
+          An ideal choke presents almost zero impedance to differential mode and
+          a high impedance to common mode. Your wanted signal travels in
+          differential mode and passes through untouched. The noise riding on the
+          braid is blocked. <b>That is the whole mechanism.</b> It also explains
+          what a choke does not do: it does not improve your match, raise
+          efficiency or change SWR, because none of those have anything to do
+          with the common-mode path. A choke that changed your SWR was changing
+          something else, and you should find out what.
+        </p>
+
+        <h3 class="card-title">How much it actually removes</h3>
+        <p style="margin-bottom: 1rem">
+          Inserting a series impedance into the common-mode loop divides the
+          current down. To first order:
+        </p>
+        <div class="calc">
+          <code>A &asymp; 20 · log₁₀( 1 + Z_cm / Z_loop )</code>
+          <br /><br />
+          <b>Z_loop is not 50 &Omega;.</b> It is the impedance of the noise
+          source&rsquo;s own common-mode loop &mdash; the house wiring, the
+          neighbour&rsquo;s appliance, the building&rsquo;s ground path. It varies
+          wildly with frequency and you usually do not know it. The table below
+          is therefore a <b>divider calculation, not a measurement</b>; every
+          cell is that formula evaluated, and you can redo any of them.
+        </div>
+        <table class="spec-table" data-gate="labeled">
+          <caption>
+            Basis: the divider formula above, evaluated at Z_loop = 50 &Omega;
+            and 200 &Omega;. Arithmetic only &mdash; no measurement is implied.
+          </caption>
+          <thead>
+            <tr>
+              <th>Z_cm of the choke</th>
+              <th>Noise reduction, Z_loop = 50 &Omega;</th>
+              <th>Noise reduction, Z_loop = 200 &Omega;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>50 &Omega;</td><td>6.0 dB</td><td>1.9 dB</td></tr>
+            <tr><td>100 &Omega;</td><td>9.5 dB</td><td>3.5 dB</td></tr>
+            <tr><td>250 &Omega;</td><td>15.6 dB</td><td>7.0 dB</td></tr>
+            <tr><td>500 &Omega;</td><td>20.8 dB</td><td>10.9 dB</td></tr>
+            <tr><td>1000 &Omega;</td><td>26.4 dB</td><td>15.6 dB</td></tr>
+            <tr><td>2000 &Omega;</td><td>32.3 dB</td><td>20.8 dB</td></tr>
+            <tr><td>5000 &Omega;</td><td>40.1 dB</td><td>28.3 dB</td></tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>Read the left column as a shopping warning.</b> A clip-on bead has
+          a Z_cm in the tens of ohms across most of HF. Look at the top row: that
+          buys you a handful of dB at best. To do anything serious the choke
+          needs a Z_cm in the <b>kilohm</b> range, and that means a proper core
+          with a proper number of turns.
+        </div>
+
+        <h3 class="card-title">Three limits of that model</h3>
+        <p style="margin-bottom: 1rem">
+          The divider is a first-order picture and it is wrong in three
+          directions that matter in the field.
+        </p>
+        <div class="calc">
+          <b>1. Z_cm is complex.</b> It is <code>R + jX</code>, and the resistive
+          part is the useful part. A choke that is purely reactive absorbs
+          nothing; it stores energy and returns it somewhere else, which is how
+          you get resonances rather than attenuation.
+          <br /><br />
+          <b>2. Inserting Z_cm changes the current distribution.</b> The model
+          pretends the loop is fixed and you are just adding a resistor. In
+          reality the coax is electrically long, current maxima move, and a
+          single choke often <b>relocates a resonance instead of removing a
+          current</b>. The classic symptom is &ldquo;it is better on 7 MHz and
+          now worse on 5 MHz&rdquo;. If you see that, you moved the problem, you
+          did not solve it.
+          <br /><br />
+          <b>3. Which is why there are two chokes, not two options.</b> One at
+          the feedpoint, one where the coax enters the shack. Between them the
+          line is broken into sections, and if each section is shorter than a
+          quarter wave none of them can resonate. The two are not
+          alternatives; they do different jobs.
+        </div>
+
+        <h3 class="card-title">Z_cm is a function of frequency, and it is not flat</h3>
+        <p style="margin-bottom: 1rem">
+          Turns give you impedance as Z_cm &prop; N², but the material&rsquo;s
+          permeability is itself a function of frequency. Measured values from
+          the Fair-Rite material data, for the two mixes you will actually use:
+        </p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Frequency</th>
+              <th>Mix 43 &mu;&prime;</th>
+              <th>Mix 43 &mu;&Prime;</th>
+              <th>Mix 51 &mu;&prime;</th>
+              <th>Mix 51 &mu;&Prime;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>7 MHz</td><td class="na">—</td><td class="na">—</td><td>364</td><td>156</td></tr>
+            <tr><td>10 MHz</td><td>293</td><td>340</td><td class="na">—</td><td class="na">—</td></tr>
+            <tr><td>14 MHz</td><td class="na">—</td><td class="na">—</td><td>235</td><td>186</td></tr>
+            <tr><td>28.6 MHz</td><td class="na">—</td><td class="na">—</td><td>129</td><td>163</td></tr>
+            <tr><td>30 MHz</td><td>117</td><td>202</td><td class="na">—</td><td class="na">—</td></tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>One choke covering 1.8&ndash;30 MHz is a fiction.</b> Note where
+          Mix 43 goes: from about 7 MHz upward, &mu;&Prime; &mdash; the loss term
+          &mdash; approaches and then exceeds &mu;&prime;. For a transformer that
+          is bad news. <b>For a choke it is good news</b>, because a lossy choke
+          absorbs the energy instead of storing and returning it, which is
+          exactly the behaviour you want at point 1 above. Different job,
+          different verdict on the same material.
+        </div>
+
+        <h3 class="card-title">The asymmetry that receive work hands you</h3>
+        <div class="calc">
+          Received levels are microvolts. <b>A ferrite on a receive path never
+          saturates</b>, so the entire power-handling and heating discipline that
+          governs transmitter-side chokes simply does not apply.
+          <br /><br />
+          That cuts both ways. If a choke serves <em>only</em> receive &mdash; a
+          separate receiving antenna, a T/R-split front end &mdash; you can pile
+          on turns and use a high-permeability mix, and reach a Z_cm far above
+          anything a transmit path could survive. If the choke sits in the main
+          path it must carry transmit current too, and it is bound by saturation
+          and heat.
+          <br /><br />
+          <b>The best choke for receive may be one that would burn on
+          transmit.</b> Keep that in mind before copying somebody&rsquo;s recipe:
+          ask which side of the T/R switch their numbers came from.
+        </div>
+
+        <h3 class="card-title">Counterpoise is a premise, not an option</h3>
+        <div class="risk">
+          <b>First the counterpoise, then the choke.</b> An end-fed antenna needs
+          a return path. With no return path, adding a choke just turns the choke
+          into part of the antenna&rsquo;s load, and the common-mode current finds
+          a third route out &mdash; through the chassis, down the mains, into
+          everything you were trying to protect. A choke does not replace a
+          counterpoise; a counterpoise is what lets a choke do its job.
+        </div>
+        <div class="risk">
+          <b>The feedpoint trap.</b> If the coax itself is the counterpoise, then
+          choking at the feedpoint cuts the antenna&rsquo;s own return path: SWR
+          shifts and efficiency drops. In that arrangement the choke has to sit
+          away from the feedpoint &mdash; the ARRL Handbook figure is at least 10
+          feet, about 3 m. If instead you have a <em>separate</em> counterpoise
+          wire, the feedpoint is the best place to choke, because the current you
+          are intercepting is exactly the current the antenna wanted to drive
+          onto the braid.
+        </div>
+        <p style="margin: 1.25rem 0 1rem">
+          Working recipes, all of them quoted rather than invented:
+        </p>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Covers</th>
+              <th>Mix</th>
+              <th>Form</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>80&ndash;20 m</td><td>Mix 31</td><td>FT240-31, 5&ndash;9 turns of RG-8X</td></tr>
+            <tr><td>40&ndash;10 m</td><td>Mix 43</td><td>FT240-43, 6&ndash;10 turns of RG-8X</td></tr>
+            <tr><td>Portable</td><td>Snap-on Mix 31</td><td>3&ndash;5 spaced along the coax &mdash; convenient, and markedly worse</td></tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>And one design that keeps coming back, which does not work.</b> The
+          air-wound choke &mdash; six to eight turns of coax on a 4 to 6 inch PVC
+          pipe &mdash; works above about 40 m and does very little below it. With
+          no core, its Z_cm is neither high enough nor lossy enough where the
+          low bands need it. It is a fine mechanical former and a poor choke.
         </div>
       </div>
     </section>

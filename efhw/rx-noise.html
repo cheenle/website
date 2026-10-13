@@ -74,6 +74,8 @@
         <a href="#cmc">03 · The choke</a>
         <a href="#other-doors">04 · Other doors</a>
         <a href="#verify">05 · Verify</a>
+        <a href="#limits">06 · Limits</a>
+        <a href="#sources-evidence">Evidence</a>
       </div>
     </div>
 
@@ -1050,6 +1052,252 @@
         </div>
       </div>
     </section>
+
+    <section class="section" id="limits">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">06 · What a choke cannot fix</span>
+          <h2 class="section-title">The same rule, seen from the other side</h2>
+          <p class="section-subtitle">
+            Section 02 built a verdict table. This is the same table read as a
+            list of things not to waste a ferrite on.
+          </p>
+        </div>
+        <ul>
+          <li>
+            <b>Noise the antenna wire picks up directly.</b> It is not on the
+            coax, so it is not in reach.
+          </li>
+          <li>
+            <b>Noise conducted in on the mains.</b> Same reason, different
+            conductor.
+          </li>
+          <li>
+            <b>Noise that has already completed mode conversion.</b> By then it
+            has left the path a choke can reach.
+          </li>
+          <li>
+            <b>In-band interference such as PLC or BPL.</b> There is no
+            common-mode path to interrupt. It is a signal in your band, and it
+            needs a regulator, not a core.
+          </li>
+        </ul>
+
+        <h3 class="card-title" style="margin-top: 2.5rem">
+          The honest case for a second antenna
+        </h3>
+        <p style="margin-bottom: 1.25rem">
+          The standard answer for a station buried in local noise is to split
+          transmit from receive: keep the EFHW for transmitting, add an active
+          magnetic loop for receiving, aim its null at the noise source, and
+          switch between them with a T/R relay or the rig&rsquo;s own receive
+          antenna port. It works, it is well established, and the products
+          exist.
+        </p>
+        <div class="calc">
+          <b>But it only helps if you have the disease.</b> Section 01 shows a
+          station that measured its own noise floor, found it clean, and
+          concluded &mdash; from data &mdash; that a receiving loop would have
+          been money spent on a problem it did not have. Do that measurement
+          before you buy anything. It costs less than the loop, and it might save
+          you the whole purchase.
+        </div>
+
+        <h3 class="card-title" style="margin-top: 2.5rem">
+          When the fix belongs to somebody else
+        </h3>
+        <p style="margin-bottom: 1.25rem">
+          Power-line arcing and a neighbour&rsquo;s charger are the two
+          categories where you cannot treat the source yourself. Both need
+          evidence and a channel. In China the channel is the
+          <b>12381</b> hotline, opened on 20 March 2023 as the radio-interference
+          complaint centre under the MIIT public-service platform.
+        </p>
+        <div class="risk">
+          <b>The detail that decides whether your complaint goes anywhere:</b>
+          shortwave and satellite complaints are not handled by local radio
+          administrations. Local offices forward them to the National Radio
+          Monitoring Center and the ministry&rsquo;s radio bureau. An HF
+          complaint travels upward, not sideways.
+        </div>
+        <p style="margin: 1.25rem 0">
+          Build the log before you call: when it started, which bands, which
+          modes, what it sounds like, and a 30 to 60 second recording in both AM
+          and SSB. This is the same list the ARRL recommends to its own members,
+          and it is what turns &ldquo;my radio is noisy&rdquo; into a case.
+        </p>
+
+        <div class="risk">
+          <b>The one rule with no exceptions.</b> Never lift the mains
+          protective earth, and never advise anyone else to. Every cure on this
+          page works with the safety ground intact, because a choke passes mains
+          frequency and DC while blocking RF. Anything that requires defeating
+          the protective earth is not a cure; it is a hazard.
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="section"
+      id="sources-evidence"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Evidence &amp; sources</span>
+          <h2 class="section-title">How to read the labels on this page</h2>
+          <p class="section-subtitle">
+            Every quantitative statement above carries one of two labels, or it
+            carries a dash.
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Label</th>
+              <th>Means</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag tag-c">C</span></td>
+              <td>
+                An engineering claim with a checkable source. The sources are
+                listed below.
+              </td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-c">算式</span></td>
+              <td>
+                Arithmetic you can redo. The formula is always printed next to
+                the numbers, so you can reproduce every cell yourself.
+              </td>
+            </tr>
+            <tr>
+              <td class="na">—</td>
+              <td>Not measured, and not guessed at either.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>There is no [M] on this page.</b> We did not measure a choke here,
+          so we do not display a measured badge. The one place we cite our own
+          measurements is section 01, and it is labelled with its source file
+          rather than with a badge &mdash; which is the honest way round.
+        </div>
+
+        <h3 class="card-title" style="margin-top: 2rem">Sources</h3>
+        <ul>
+          <li>
+            ARRL, <i>Power Line Noise</i>, including the sections by Mike
+            Gruber, Ed Hare and Mike Martin &mdash;
+            <a href="https://www.arrl.org/power-line-noise" target="_blank" rel="noopener">arrl.org/power-line-noise</a>
+          </li>
+          <li>
+            ARRL, <i>Radio Frequency Interference (RFI)</i> programme and
+            investigation guidance &mdash;
+            <a href="https://www.arrl.org/radio-frequency-interference" target="_blank" rel="noopener">arrl.org/radio-frequency-interference</a>
+          </li>
+          <li>
+            IEEE Std 1897&trade;-2024, <i>Recommended Practice for Locating
+            Sources of Radio Frequency Interference from Power Lines</i>
+            (released 20 September 2024)
+          </li>
+          <li>
+            GB/T 9254.1-2021, <i>Information technology equipment, multimedia
+            equipment and receivers &mdash; Electromagnetic compatibility &mdash;
+            Part 1: Emission requirements</i>, which adopts CISPR 32
+          </li>
+          <li>
+            GB/T 18487.1-2015, <i>Electric vehicle conductive charging system
+            &mdash; Part 1: General requirements</i>
+          </li>
+          <li>
+            MIIT radio-interference complaint centre, hotline 12381 (opened
+            20 March 2023), and the <i>Implementing Rules for the Handling of
+            Radio Interference Complaints and Investigations</i> (2018)
+          </li>
+          <li>
+            Fair-Rite material data, complex permeability curves for Mix 43 and
+            Mix 51
+          </li>
+          <li>
+            VE3IPS, common-mode choke practice for end-fed half waves, including
+            the ARRL Handbook placement figure of at least 10 feet
+          </li>
+          <li>
+            PA9X, <i>Endfed Antennas, QRM, and How to Improve Your Reception</i>
+            (2025)&nbsp;&mdash; the transmit/receive split this page argues
+            about
+          </li>
+          <li>
+            W8JI and Practical Antennas on the feedline as part of the antenna
+            system
+          </li>
+          <li>
+            Broadcast over Power Line band definition, 2&ndash;30 MHz
+          </li>
+          <li>
+            Published EV-charger EMC remediation case literature, and the
+            125 kHz keyless-entry interference reports
+          </li>
+          <li>
+            Our own working notes, with the reachability of every source
+            recorded on the day it was checked &mdash;
+            <a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">github.com/cheenle/efhw-knowledge</a>
+          </li>
+        </ul>
+        <div class="calc">
+          <b>No number on this page was invented.</b> Where we could not find a
+          source, we said so in the card rather than filling the gap &mdash; the
+          electric-vehicle section is the clearest example, and it is written
+          that way on purpose.
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-section">
+            <h4>EFHW Projects</h4>
+            <p>
+              End-Fed Half-Wave Antenna Research<br />&amp; Practice Hub<br />V3.0
+              · CERN-OHL-S 2.0 / GPL-3.0
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>This page</h4>
+            <ul>
+              <li><a href="#localise">01 · Measure first</a></li>
+              <li><a href="#sources">02 · Six sources</a></li>
+              <li><a href="#cmc">03 · The choke</a></li>
+              <li><a href="#other-doors">04 · The other doors</a></li>
+              <li><a href="#verify">05 · Prove it worked</a></li>
+              <li><a href="#limits">06 · What it cannot fix</a></li>
+              <li><a href="#sources-evidence">Evidence &amp; sources</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Ecosystem</h4>
+            <ul>
+              <li><a href="index.html">EFHW home</a></li>
+              <li><a href="baluns.html">Baluns &amp; ununs</a></li>
+              <li><a href="bg1sb-antenna.html">Measured antenna profile</a></li>
+              <li><a href="zh/rx-noise.html">中文</a></li>
+              <li><a href="/mrrc/efhw/">Deep research (MRRC)</a></li>
+              <li><a href="/">VLSC projects</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            © 2026 BG1SB · Content: CERN-OHL-S 2.0 / GPL-3.0 · No number on this
+            page was invented.
+          </p>
+        </div>
+      </div>
+    </footer>
 
     <script>
       function toggleMobileMenu() {

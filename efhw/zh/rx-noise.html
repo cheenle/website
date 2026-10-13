@@ -72,6 +72,8 @@
         <a href="#cmc">03 · 扼流圈</a>
         <a href="#other-doors">04 · 其余三门</a>
         <a href="#verify">05 · 验证</a>
+        <a href="#limits">06 · 边界</a>
+        <a href="#sources-evidence">证据</a>
       </div>
     </div>
 
@@ -760,6 +762,191 @@
         </div>
       </div>
     </section>
+
+    <section class="section" id="limits">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">06 · 扼流圈治不了什么</span>
+          <h2 class="section-title">同一条规则，从另一面读</h2>
+          <p class="section-subtitle">
+            第 02 节给出了裁决表。这里把同一张表读成一份「别往这些东西上浪费磁环」的清单。
+          </p>
+        </div>
+        <ul>
+          <li>
+            <b>天线导线直接拾取的噪声。</b>它不在同轴上，够不着。
+          </li>
+          <li><b>市电传导进来的噪声。</b>同一个道理，不同的导体。</li>
+          <li>
+            <b>已经完成模式转换的噪声。</b>那时它已经离开了扼流圈够得着的那条路。
+          </li>
+          <li>
+            <b>PLC、BPL 这类带内干扰。</b>没有共模路径可供切断。它是你频段里的一个信号，它需要监管者，不是磁芯。
+          </li>
+        </ul>
+
+        <h3 class="card-title" style="margin-top: 2.5rem">
+          第二副天线的诚实理由
+        </h3>
+        <p style="margin-bottom: 1.25rem">
+          台位埋在本地噪声里，标准答案是收发分离：EFHW 留着发射，另加有源磁环接收，把零点对准噪声源，用
+          T/R 继电器或电台自带的接收天线口切换。这法子有效，成熟，产品也有。
+        </p>
+        <div class="calc">
+          <b>但它只在你真有这个病的时候有用。</b>第 01
+          节展示了一个台位：量了自己的噪声底，发现是干净的，于是用数据得出「接收磁环等于是把钱花在自己没有的病上」。买任何东西之前先做那次测量。它比磁环便宜，而且可能让你省下整笔开销。
+        </div>
+
+        <h3 class="card-title" style="margin-top: 2.5rem">当解药归别人</h3>
+        <p style="margin-bottom: 1.25rem">
+          电力线放电和邻居的充电桩，是两类你没法自己治的源。两类都需要证据和一条渠道。国内的渠道是
+          <b>12381</b> 热线，2023 年 3 月 20
+          日开通，设在工信部公共服务平台下的无线电干扰投诉受理中心。
+        </p>
+        <div class="risk">
+          <b>决定你的投诉走不走得动的那个细节：</b>短波和卫星业务的投诉不由地方无线电管理机构受理。地方机构会转报国家无线电监测中心和部无线电管理局。短波投诉是往上走，不是往旁边走。
+        </div>
+        <p style="margin: 1.25rem 0">
+          打电话之前先把记录攒好：什么时候开始的、哪些波段、哪些模式、听起来什么样，外加一段
+          30 到 60 秒的 AM 与 SSB 录音。这份清单和 ARRL
+          给自己会员的建议一致，它也是把「我的电台有噪声」变成一桩案子的东西。
+        </p>
+
+        <div class="risk">
+          <b>唯一没有例外的一条。</b>绝不能拆掉市电保护地，也绝不要建议别人拆。本页每一个解药都在保护地完好的前提下工作，因为扼流圈通过工频和直流、挡住射频。任何需要先废掉保护地才能成立的做法都不是解药，是隐患。
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="section"
+      id="sources-evidence"
+      style="background: var(--bg-secondary)"
+    >
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">证据与来源</span>
+          <h2 class="section-title">本页的标签怎么读</h2>
+          <p class="section-subtitle">
+            上面每一句量化陈述都带两个标签之一，或者带一个破折号。
+          </p>
+        </div>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>标签</th>
+              <th>含义</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag tag-c">C</span></td>
+              <td>有可查来源的工程论断。来源列在下面。</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-c">算式</span></td>
+              <td>你可以复算的算术。公式永远印在数字旁边，每个格子你都能自己重现。</td>
+            </tr>
+            <tr>
+              <td class="na">—</td>
+              <td>没测，也没猜。</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="calc">
+          <b>本页没有 [M]。</b>我们没在这里测过扼流圈，所以不显示实测徽章。唯一引用我们自己测量的地方是第
+          01 节，那里标的是来源文件，不是徽章。这样才是诚实的方向。
+        </div>
+
+        <h3 class="card-title" style="margin-top: 2rem">来源</h3>
+        <ul>
+          <li>
+            ARRL《Power Line Noise》，含 Mike Gruber、Ed Hare 与 Mike Martin
+            撰写的三部分 &mdash;
+            <a href="https://www.arrl.org/power-line-noise" target="_blank" rel="noopener">arrl.org/power-line-noise</a>
+          </li>
+          <li>
+            ARRL《Radio Frequency Interference (RFI)》项目与排查指导 &mdash;
+            <a href="https://www.arrl.org/radio-frequency-interference" target="_blank" rel="noopener">arrl.org/radio-frequency-interference</a>
+          </li>
+          <li>
+            IEEE Std 1897&trade;-2024《电力线间隙干扰源定位建议规范》（2024 年 9 月
+            20 日发布）
+          </li>
+          <li>
+            GB/T 9254.1-2021《信息技术设备、多媒体设备和接收机
+            电磁兼容 第 1 部分：发射要求》，等同采用 CISPR 32
+          </li>
+          <li>GB/T 18487.1-2015《电动汽车传导充电系统 第 1 部分：通用要求》</li>
+          <li>
+            工信部无线电干扰投诉受理中心，热线 12381（2023 年 3 月 20
+            日开通），及《无线电干扰投诉和查处工作实施细则》（2018）
+          </li>
+          <li>Fair-Rite 材料数据，Mix 43 与 Mix 51 的复磁导率曲线</li>
+          <li>
+            VE3IPS，端馈半波的共模扼流圈实作，包括 ARRL
+            手册给出的至少 10 英尺装位
+          </li>
+          <li>
+            PA9X《Endfed Antennas, QRM, and How to Improve Your
+            Reception》（2025）——本页与它争论的那套收发分离方案
+          </li>
+          <li>W8JI 与 Practical Antennas，关于馈线是天線系统的一部分</li>
+          <li>宽带电力线通信的频段定义，2–30 MHz</li>
+          <li>公开的充电桩 EMC 整改案例文献，及 125 kHz 无钥匙进入干扰报告</li>
+          <li>
+            我们自己的工作笔记，每条来源的当日可达性都记了下来
+            &mdash;
+            <a href="https://github.com/cheenle/efhw-knowledge" target="_blank" rel="noopener">github.com/cheenle/efhw-knowledge</a>
+          </li>
+        </ul>
+        <div class="calc">
+          <b>本页没有任何一个数字是编的。</b>找不到来源的地方，我们在卡片里明说，而不是把空填上。电动汽车那一节是最清楚的例子，那是故意写成那样的。
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-section">
+            <h4>EFHW Projects</h4>
+            <p>
+              端馈半波天线研究<br />与实践中心<br />V3.0 · CERN-OHL-S 2.0 /
+              GPL-3.0
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>本页</h4>
+            <ul>
+              <li><a href="#localise">01 · 先量再买</a></li>
+              <li><a href="#sources">02 · 六类干扰源</a></li>
+              <li><a href="#cmc">03 · 扼流圈</a></li>
+              <li><a href="#other-doors">04 · 其余三门</a></li>
+              <li><a href="#verify">05 · 验证</a></li>
+              <li><a href="#limits">06 · 治不了什么</a></li>
+              <li><a href="#sources-evidence">证据与来源</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>生态</h4>
+            <ul>
+              <li><a href="../index.html">EFHW 首页</a></li>
+              <li><a href="../baluns.html">巴伦与平衡不平衡转换器</a></li>
+              <li><a href="../bg1sb-antenna.html">天线实测画像</a></li>
+              <li><a href="rx-noise.html">English</a></li>
+              <li><a href="/mrrc/efhw/">深度研究（MRRC）</a></li>
+              <li><a href="/">VLSC 项目</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            © 2026 BG1SB · 内容：CERN-OHL-S 2.0 / GPL-3.0 · 本页没有任何一个数字是编的。
+          </p>
+        </div>
+      </div>
+    </footer>
 
     <script>
       function toggleMobileMenu() {
